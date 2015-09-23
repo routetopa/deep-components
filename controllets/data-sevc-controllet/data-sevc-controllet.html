@@ -515,6 +515,16 @@
                    this.$.datalet_idm_fields_container.innerHTML += '<draggable-element-controllet is-target="true" id="' + input.name + '" heading="' + input.name + '"  description="' + input.description + '" number="' + (i + 1) + '"></draggable-element-controllet><br>';
                }
 
+               if(response.idm.inputs.input.constructor == Object) {
+                   var input = response.idm.inputs.input;
+                   if(input.selection == "*") {
+                       var input_selected_fields = Polymer.dom(this.$.selected_fields_container).querySelectorAll('draggable-element-controllet');
+                       for (var j = 0; j < input_selected_fields.length; j++) {
+                           this.$.datalet_idm_fields_container.innerHTML += '<draggable-element-controllet is-target="true" heading="Field ' + (j + 1) + '"  description="' + input.description + '" number="' + (i + 1) + '"></draggable-element-controllet><br>';
+                       }
+                   }
+               }
+
             },
 
             assignToolbar : function(){
@@ -593,8 +603,8 @@
                 var input_mapped_fields = Polymer.dom(this.$.datalet_idm_fields_container).querySelectorAll('draggable-element-controllet[is-target=true]');
                 this.selected_fields = Array();
 
-                for(var i=0;i<input_mapped_fields.length;i++) {
-                    if(input_mapped_fields[i].value != "") {
+                for (var i = 0; i < input_mapped_fields.length; i++) {
+                    if (input_mapped_fields[i].value != "") {
                         this.selected_fields.push(input_mapped_fields[i].value);
                     }
                 }
