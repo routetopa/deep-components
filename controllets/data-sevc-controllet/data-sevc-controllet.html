@@ -1,0 +1,647 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/paper-styles/color.html">
+
+<link rel="import" href="../../bower_components/neon-animation/neon-animated-pages.html">
+<link rel="import" href="../../bower_components/neon-animation/neon-animatable.html">
+<link rel="import" href="../../bower_components/neon-animation/neon-animations.html">
+
+<link rel="import" href="../../bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="../../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../../bower_components/paper-input/paper-textarea.html">
+<link rel="import" href="../../bower_components/paper-button/paper-button.html">
+
+<link rel="import" href="../../controllets/items-slider-controllet/items-slider-controllet.html">
+<link rel="import" href="../draggable-element-controllet/draggable-element-controllet.html">
+<link rel="import" href="../treeview-controllet/treeview-controllet.html">
+
+
+<dom-module id="data-sevc-controllet">
+    <template>
+        <link rel="stylesheet" href="../shared_js/malihu-custom-scrollbar-plugin-3.0.9/jquery.mCustomScrollbar.css">
+        <style is="custom-style">
+            body {
+                font-family: RobotoDraft, 'Helvetica Neue', Helvetica, Arial;
+                font-size: 1em;
+                margin: 0;
+                padding: 1.5em;
+                -webkit-tap-highlight-color: rgba(0,0,0,0);
+                -webkit-touch-callout: none;
+            }
+
+            #pages{
+                min-width: 1336px;
+                max-width: 1634px;
+            }
+
+            .fields-card-content {
+                padding-left: 1.5em;
+            }
+
+            .fancy .fields-title {
+                /*position: absolute;
+                top: 30px;
+                left: 100px;
+                display: inline-block;*/
+                color: var(--paper-indigo-500);
+            }
+
+             .fancy-content {
+                /*padding: 25px;*/
+            }
+
+             .avatar {
+                display: inline-block;
+                height: 2em;
+                width: 2em;
+                border-radius: 50%;
+                /*background: var(--paper-pink-500);*/
+                background: var(--paper-blue-500);
+                color: white;
+                line-height: 2em;
+                font-size: 1.87em;
+                text-align: center;
+            }
+
+             .fancy .title {
+                /*position: absolute;
+                top: 30px;
+                left: 100px;*/
+                display: inline-block;
+                position: relative;
+                top: .75em;
+                left: .625em;
+                color: var(--paper-indigo-500);
+            }
+
+             .fancy .big {
+                font-size: 1.37em;
+                padding: 0.5em 0 1em;
+                color: var(--google-grey-500);
+            }
+
+             .fancy .medium {
+                font-size: 1em;
+                padding-bottom: 0.5em;
+                color : #000000;
+                font-weight: bold;
+            }
+
+            paper-input {
+                width: 80%;
+            }
+
+            #visualization_slider_area{
+                position:relative;
+                float:left;
+                height: 22vh;
+                /*width: 50%;*/
+                min-width: 670px;
+                min-height: 180px;
+            }
+
+            #datalet_area{
+                position:relative;
+                /*height: 30em;*/
+                width: 46%;
+                min-height: 500px;
+                min-width: 600px;
+                float: right;
+            }
+
+            #fields_mapping_area{
+                position:relative;
+                height: auto;/*70%;*/
+                /*width: 50%;*/
+                float:left;
+                min-width: 670px;
+            }
+
+             #visualization_customization_area{
+                position:relative;
+                /*height:auto;*/
+                width: 46%;
+                float:right;
+                background-color: white;
+            }
+
+            .field-mapping-card{
+                width: 50%;
+                height: 50vh;
+                overflow: auto;
+                position: relative;
+                float: left;
+                overflow: auto;
+            }
+
+            .horizontal-section-container .vertical-section {
+                /*max-width: 130px;*/
+                diplay:block;
+                float: left;
+            }
+
+
+            .colorful {
+                background: #4285f4;
+                color: #fff;
+            }
+
+            .toolbar_button{
+                /*height: 100%;
+                display: inline-block;*/
+                float: left;
+                margin-top: 2em;
+                --iron-icon-height: 32px;
+                --iron-icon-width: 32px;
+            }
+
+            /*paper-iron-button.toolbar_button{
+                height: 34px;
+                width: 34px;
+            }*/
+
+            .toolbar-center{
+                display: inline-block;
+                position: relative;
+                float: left;
+                width: 90%;
+            }
+
+            .toolbar{
+                width: 100%;
+                height : 8em;
+                vertical-align: middle;
+                min-width: 975px;
+            }
+
+
+
+            #datalet_created_idm_fields_container{
+                position: relative;
+                float: left;
+                width: 100%;
+                height: 50vh;
+                overflow: auto;
+            }
+
+            #finish{
+                position: relative;
+                float: left;
+                width: 100%;
+                height : 20%;
+                align-content: center;
+            }
+
+            #datalet_created_placehorder {
+                width: 100%;
+            }
+
+            #finish_button{
+                float: left;
+                margin-top: 2em;
+                --iron-icon-height: 64px;
+                --iron-icon-width: 64px;
+                color: var(--paper-blue-500);
+            }
+
+            #finish_button:hover{
+                --iron-icon : "add-circle-outline"
+            }
+
+           /* #finish_button iron-icon:hover{
+                icon : "add-circle";
+            }
+
+            #finish_button iron-icon{
+                height: 4vh;
+                width: 4vw;
+            }*/
+
+            .area_container{
+                margin : 0.8em;
+                padding : 0.8em;
+                border-width: 1em;
+                border-radius: 0.125rem;
+                box-shadow: 0.125em 0.125em 0.1125em 0.125em rgba(0, 0, 0, 0.25);
+            }
+
+            #fields_placeholder{
+                width: 40%;
+                height: 50vh;
+                float: left;
+                overflow: auto;
+            }
+
+            #table_fields_container{
+                height: 50vh;
+                width: 55%;
+                /*max-width: 100vw;
+                max-height: 50vh;*/
+                float: left;
+                overflow: auto;
+            }
+
+        </style>
+
+        <iron-ajax
+                auto
+                id="data_request"
+                url={{dataUrl}}
+                verbose="true"
+                on-response="handleResponseData"
+                debounce-duration="300">
+        </iron-ajax>
+
+        <iron-ajax
+                id="datales_list_request"
+                auto
+                url={{dataletsListUrl}}
+                handle-as="json"
+                on-response="handleResponseDatalets"
+                debounce-duration="300">
+        </iron-ajax>
+
+        <iron-ajax
+                id="selected_datalet_request"
+                url={{deepUrl}}
+                verbose="true"
+                on-response="handleSelectedDatalet"
+                debounce-duration="300">
+        </iron-ajax>
+
+        <content>
+            <div class="toolbar">
+                <paper-icon-button id="PrevButton" class="toolbar_button x-scope" on-click="_onPrevClick" icon="chevron-left" alt="arrow-back" title="arrow-back"></paper-icon-button>
+                <div class="fancy toolbar-center">
+                    <div class="fancy-content">
+                        <div id="toolbar_number" class="avatar">1</div>
+                        <div class="title">
+                            <div id="toolbar_title" class="big">Dataset source</div>
+                            <div id="toolbar_description" class="small">Copy and paste/drag and drop in the textarea the url of datasource</div>
+                        </div>
+                    </div>
+                </div>
+                <paper-icon-button id="NextButton" class="toolbar_button x-scope" on-click="_onNextClick" icon="chevron-right" alt="arrow-forward" title="arrow-forward"></paper-icon-button>
+            </div>
+
+            <neon-animated-pages id="pages" class="flex" selected="[[selected]]" entry-animation="[[entryAnimation]]" exit-animation="[[exitAnimation]]">
+
+                <neon-animatable>
+
+                    <div class="fancy">
+                        <div class="card-content">
+                             <paper-textarea id="data_url" label="Dataset api data url" floatingLabel value="{{dataUrl}}" on-dragover="_handleDatasourceDragOver"></paper-textarea>
+                        </div>
+                    </div>
+
+                </neon-animatable>
+
+                <neon-animatable>
+
+                    <div class="fancy">
+                        <div class="fancy-content">
+
+                            <div id="fields_placeholder" class="area_container mCustomScrollBox" data-mcs-theme="minimal-dark">
+                                <treeview-controllet id="fields_treeview"></treeview-controllet>
+                            </div>
+                            <div id="table_fields_container" class="area_container mCustomScrollBox" data-mcs-theme="minimal-dark">
+                               <div id="table_component_place_holder"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                </neon-animatable>
+
+                <neon-animatable>
+
+                    <div class='fancy'>
+                        <div class="fancy-content">
+                            <div id="visualization_slider_area" class="area_container"></div>
+
+                            <div id="datalet_area" class="area_container">
+                               <div id="datalet_placeholder"></div>
+                            </div>
+
+                            <div id="fields_mapping_area" class="area_container">
+
+                                    <div class="field-mapping-card mCustomScrollBox" data-mcs-theme="minimal-dark">
+                                        <div class="title">
+                                            <div class="medium">Selected fields</div>
+                                        </div>
+                                        <div id="selected_fields_container" class="area_container mCustomScrollBox" data-mcs-theme="minimal-dark"></div>
+                                    </div>
+
+                                    <div class="field-mapping-card mCustomScrollBox" data-mcs-theme="minimal-dark">
+                                        <div class="title">
+                                            <div class="medium">Datalet fields</div>
+                                        </div>
+                                        <div id="datalet_idm_fields_container" class="area_container mCustomScrollBox" data-mcs-theme="minimal-dark"></div>
+                                    </div>
+                            </div>
+
+                            <div id="visualization_customization_area">
+                                <paper-icon-button id="finish_button" on-click="_onFinish" icon="add-circle" alt="Conforms the creation" title="finish"></paper-icon-button>
+                            </div>
+
+                        </div>
+                    </div>
+
+                </neon-animatable>
+
+                <!--<neon-animatable>
+
+                    <div class="fancy">
+                        <div class="card-content area_container">
+                            <div id="datalet_created_placehorder"></div>
+                        </div>
+                        <div class="card-content area_container">
+                            <paper-icon-button id="finish_button" on-click="_onFinish" icon="add-circle-outline" alt="Conforms the creation" title="finish"></paper-icon-button>
+                        </div>
+                    </div>
+
+                </neon-animatable>-->
+
+            </neon-animated-pages>
+        </content>
+    </template>
+    <script src="../shared_js/bootstrap-3.3.4-dist/js/bootstrap.min.js"></script>
+    <script src="../shared_js/malihu-custom-scrollbar-plugin-3.0.9/jquery.mCustomScrollbar.js"></script>
+    <script src="../../../DEEPCLIENT/js/deepClient.js"></script>
+
+    <script>
+
+        Polymer({
+
+            is : 'data-sevc-controllet',
+
+            listeners : {
+                'items-slider-controllet_item-selected' : '_dataletSelected',
+                'draggable-element-controllet_content-dragged' : '_fieldsMapped',
+                'treeview-controllet-fileds-selected' : '_fieldsSelected'
+            },
+
+            properties : {
+
+                entryAnimation : {
+                    type  : String,
+                    value : ""
+                },
+
+                exitAnimation  : {
+                    type  : String,
+                    value : ""
+                },
+
+                selected       : {
+                    type  : Number,
+                    value : 0
+                },
+
+                /**
+                 * It represent the data url from CKAN api
+                 *
+                 * @attribute dataUrl
+                 * @type string
+                 * @default 'null'
+                 */
+                dataUrl : {
+                    type : String,
+                    value : "http://demo.ckan.org/api/action/datastore_search?resource_id=8324a4c9-66d6-47bf-a898-94237cc39b9f&limit=50",
+                    observer : '_dataUrlChanged'
+                },
+                /**
+                 * It represent the DEEP url to get information about the datalets
+                 *
+                 * @attribute deepUrl
+                 * @type string
+                 * @default 'null'
+                 */
+                deepUrl : {
+                    type : String,
+                    value : "http://demo.ckan.org/api/action/datastore_search?resource_id=8324a4c9-66d6-47bf-a898-94237cc39b9f&limit=50"
+                },
+
+                datalet_query : {
+                    type : String,
+                    value : ""
+                },
+
+                datalets_list : {
+                    type : Array ,
+                    value : []
+                },
+
+                selected_datalet : {
+                    type : String,
+                    value : ""
+                },
+
+                selected_fields : {
+                    type : Array,
+                    value : []
+                }
+
+            },
+
+            ready : function(){
+
+                var scrollbar_options = {
+                    autoHideScrollbar:true,
+                    theme:"rounded"
+                };
+
+                $(this.$.fields_placeholder).mCustomScrollbar(scrollbar_options);
+                $(".field-mapping-card").mCustomScrollbar(scrollbar_options);
+
+                /*$(this.$.table_fields_container).mCustomScrollbar({
+                    autoHideScrollbar:true,
+                    theme:"rounded",
+                    advanced:{autoExpandHorizontalScroll:true},
+                    axis:"yx"
+                });*/
+            },
+
+            /**
+             * Callback to parse the data requested when dataUrl change its value
+             *
+             * @method handleResponseData
+             */
+            handleResponseData : function(e){
+
+                this.$.fields_treeview.init(e.detail.response);
+                var table_params ={
+                    component   : "datatable-datalet",
+                    params      :{
+                        'data-url' : this.dataUrl
+                    },
+                    fields      : [],
+                    placeHolder : this.$.table_component_place_holder
+                };
+
+                ComponentService.deep_url = this.deepUrl;
+                ComponentService.getComponent(table_params);
+
+            },
+
+            /**
+             * Callback to parse the components response object
+             *
+             * @method handleResponseDatalets
+             */
+            handleResponseDatalets : function(e){
+                this.datalets_list = new Array();
+                for(var i=0;i < e.detail.response.length;i++){
+                    var datalet_info = { name : e.detail.response[i].name ,
+                                         image : e.detail.response[i].url + e.detail.response[i].name + ".png"
+                    };
+
+                    this.datalets_list.push(datalet_info);
+                }
+
+                var w = $(this.$.visualization_slider_area).width();
+                var pages = 2;
+                var numItemsPerPage = 3;
+
+                this.$.visualization_slider_area.innerHTML = '<items-slider-controllet items=\'' + JSON.stringify(this.datalets_list) + '\'' +
+                                                             '\'></items-slider-controllet>'
+            },
+
+            handleSelectedDatalet : function(e){
+
+               var response = e.detail.response;
+               //<draggable-element-controllet is-target="true" heading="Field 1"  description="This fields is used for ..." number="1"></draggable-element-controllet>
+               this.$.datalet_idm_fields_container.innerHTML = "";
+               for(var i =0; i < response.idm.inputs.input.length; i++){
+                   var input = response.idm.inputs.input[i];
+                   this.$.datalet_idm_fields_container.innerHTML += '<draggable-element-controllet is-target="true" id="' + input.name + '" heading="' + input.name + '"  description="' + input.description + '" number="' + (i + 1) + '"></draggable-element-controllet><br>';
+               }
+
+            },
+
+            assignToolbar : function(){
+                this.$.toolbar_number.innerHTML = (this.selected + 1);
+                switch(this.selected){
+                   case 0:
+                       this.$.toolbar_title.innerHTML  = "Dataset source";
+                       this.$.toolbar_description.innerHTML = "Copy and paste/drag and drop in the textarea the url of datasource";
+                       break;
+                   case 1:
+                       this.$.toolbar_title.innerHTML  = "Data fields selection";
+                       this.$.toolbar_description.innerHTML = "Select the fields you want to visualize";
+                       break;
+                   case 2:
+                       this.$.toolbar_title.innerHTML  = "Data mapping";
+                       this.$.toolbar_description.innerHTML = "Select the visualization from the slider, drag and drop the selected fields in visualization parameter area, customize the visualization if you need";
+                       break;
+                    case 3:
+                        this.$.toolbar_title.innerHTML  = "Finish";
+                        this.$.toolbar_description.innerHTML = "Confirms the creation of the datalet";
+
+                        break;
+               }
+            },
+
+            _onPrevClick : function() {
+                this.entryAnimation = 'slide-from-left-animation';
+                this.exitAnimation = 'slide-right-animation';
+                this.selected = this.selected === 0 ? 2 : (this.selected - 1);
+                this.assignToolbar();
+            },
+
+            _onNextClick : function() {
+                this.entryAnimation = 'slide-from-right-animation';
+                this.exitAnimation = 'slide-left-animation';
+                this.selected = this.selected === 2 ? 0 : (this.selected + 1);
+                this.assignToolbar();
+            },
+
+            _dataUrlChanged : function(newValue, oldValue){
+                this.$.data_request.generateRequest();
+            },
+
+            _dataletSelected : function(e){
+                this.selected_datalet = e.detail.datalet;
+                this.$.selected_datalet_request.url = this.deepUrl + e.detail.datalet;
+                this.$.selected_datalet_request.generateRequest();
+
+            },
+
+            _fieldsSelected : function(e){
+
+                 this.$.selected_fields_container.innerHTML = "";
+                 for(var i=0;i<e.detail.fields.length;i++) {
+                    this.$.selected_fields_container.innerHTML += '<draggable-element-controllet identifier="' + e.detail.fields[i] +
+                                                                                                 '" label="' + e.detail.fields[i].split(",")[e.detail.fields[i].split(",").length -1] +
+                                                                  '"></draggable-element-controllet><br>';
+                 }
+
+                 var table_params ={
+                     component   : "datatable-datalet",
+                     params      :{
+                        'data-url' : this.dataUrl
+                     },
+                     fields      : e.detail.fields,
+                     placeHolder : this.$.table_component_place_holder
+                 };
+
+                 ComponentService.deep_url = this.deepUrl;
+                 ComponentService.getComponent(table_params);
+
+            },
+
+            _fieldsMapped : function(e){
+
+                var input_mapped_fields = Polymer.dom(this.$.datalet_idm_fields_container).querySelectorAll('draggable-element-controllet[is-target=true]');
+                this.selected_fields = Array();
+
+                for(var i=0;i<input_mapped_fields.length;i++) {
+                    if(input_mapped_fields[i].value != "") {
+                        this.selected_fields.push(input_mapped_fields[i].value);
+                    }
+                }
+
+                var datalet_params ={
+                    component   : this.selected_datalet,
+                    params      :{
+                        'data-url' : this.dataUrl
+                    },
+                    fields      : this.selected_fields,
+                    placeHolder : this.$.datalet_placeholder
+                };
+
+                var datalet_finish_params ={
+                    component   : this.selected_datalet,
+                    params      :{
+                        'data-url' : this.dataUrl
+                    },
+                    fields      : this.selected_fields,
+                    placeHolder : this.$.datalet_created_placehorder
+                };
+
+                ComponentService.deep_url = this.deepUrl;
+
+                ComponentService.getComponent(datalet_params);
+                ComponentService.getComponent(datalet_finish_params);
+
+            },
+
+            _handleDatasourceDragOver : function(e){
+                this.$.data_url.value = "";
+            },
+
+            _onFinish : function(e){
+
+                var data = {
+                    dataUrl : this.dataUrl,
+                    fields : this.selected_fields,
+                    datalet : this.selected_datalet
+                }
+
+                this.fire('data-sevc-controllet.dataletCreated', {data : data});
+
+            }
+
+        });
+
+    </script>
+
+</dom-module>

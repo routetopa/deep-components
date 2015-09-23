@@ -1,0 +1,65 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../highcharts-datalet/highcharts-datalet.html">
+
+<dom-module id="linechart-datalet">
+    <template>
+        <highcharts-datalet id="charts" data-url="{{dataUrl}}" query="{{query}}" fields-order="{{fieldsOrder}}"></highcharts-datalet>
+    </template>
+    <script>
+        var LinechartBehavior = {
+            transformData: function(){
+                //Bluid Highchart element
+                $(this._component.$.charts.$.container).highcharts({
+                    title: {
+                        text: 'Line chart'
+                    },
+                    chart: {
+                		zoomType: 'xy'   
+            		},
+                    xAxis: {
+                        categories: this.properties.categories.value,//this._component.categories,
+                        title: {
+                            text: null
+                        }
+                    },
+                    yAxis: {
+                        title: {
+                            text: 'Units'
+                        },
+                        plotLines: [{
+                            value: 0,
+                            width: 1,
+                            color: '#808080'
+                        }]
+                    },
+                    tooltip: {
+                        valueSuffix: ' units'
+                    },
+                    legend: {
+                        layout: 'vertical',
+                        align: 'right',
+                        verticalAlign: 'top',
+                        x: -40,
+                        y: 100,
+                        floating: true,
+                        borderWidth: 1,
+                        backgroundColor: ((Highcharts.theme && Highcharts.theme.legendBackgroundColor) || '#FFFFFF'),
+                        shadow: true
+                    },
+                    credits: {
+                        enabled: false
+                    },
+                    series: this.properties.series.value//this._component.series
+                });
+            }
+        };
+
+        LinechartDatalet = Polymer({
+            is: 'linechart-datalet',
+            ready: function(){
+                var LinechartComponentBehavior = $.extend(true, {}, HighchartsComponentBehavior, LinechartBehavior);
+                LinechartComponentBehavior.init(this);
+            }
+        });
+    </script>
+</dom-module>

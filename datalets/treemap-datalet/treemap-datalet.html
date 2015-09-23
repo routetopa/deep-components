@@ -1,0 +1,144 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../base-datalet/base-datalet.html">
+
+<dom-module id="treemap-datalet">
+    <template>
+        <style>
+
+            h6 {
+                color: red;
+            }
+
+            #treemap_placeholder {
+                width: 100%;
+                height: 70%;
+                background: #ddd;
+            }
+
+            text {
+                pointer-events: none;
+            }
+
+            .grandparent text {
+                font-weight: bold;
+            }
+
+            rect {
+                fill: none;
+                stroke: #fff;
+            }
+
+            rect.parent,
+            .grandparent rect {
+                stroke-width: 2px;
+            }
+
+            .grandparent rect {
+                fill: orange;
+            }
+
+            .grandparent:hover rect {
+                fill: #ee9700;
+            }
+
+            .children rect.parent,
+            .grandparent rect {
+                cursor: pointer;
+            }
+
+            .children rect.parent {
+                fill: #bbb;
+                fill-opacity: .5;
+            }
+
+            .children:hover rect.child {
+                fill: #bbb;
+            }
+        </style>
+        <div id="treemap_placeholder"></div>
+        <base-datalet data-url="{{dataUrl}}" query="{{query}}" fields-order="{{fieldsOrder}}"></base-datalet>
+    </template>
+
+    <script src="../shared_js/d3.js"></script>
+    <script src="js/buildtreemap.js"></script>
+    <script>
+        var TreemapBehavior = {
+            map : {
+                name : "Expenses",
+                children : []
+            },
+            selectData: function(e){
+                var queries =  this._component.query.split("###");
+
+                if(queries.length > 1) {
+                    for (i = 0; i < queries.length; i++) {
+                        var propName = this.getPropertyName(queries[i]);
+
+                        temp = jsonPath(this.properties.json_results.value, queries[i]);
+                        for (j = 0; j < temp.length; j++) {
+                            if (i == 0) this.properties.data.value[j] = {};
+                            currObj = {};
+                            currObj[propName] = temp[j];
+                            jQuery.extend(this.properties.data.value[j], currObj);
+                        }
+                    }
+                }else{
+                    this.properties.data.value = jsonPath(this.properties.json_results.value, queries[0]);
+                }
+
+                this.map.children = [];
+
+                //var curr_fields_order = this._component.fieldsOrder.split(',');
+                var curr_fields_order = new Array();
+                for(var i = 0; i < queries.length; i++) curr_fields_order.push(i);
+
+                var value_index = curr_fields_order[curr_fields_order.length -1];
+                curr_fields_order.pop();
+
+                for(var i = 0; i < this.properties.data.value.length; i++){
+                    this.checkAggragationField(this.properties.data.value[i], curr_fields_order , value_index);
+                }
+                //var json = JSON.stringify(this.map);
+            },
+            findChild: function(child, category){
+                var children = child.children;
+                for (var i=0; i<children.length; i++) {
+                    if (children[i].name == category)
+                        return children[i];
+                }
+                var nchild = {name : category , children : []};
+                children.push(nchild);
+                return nchild;
+            },
+            checkAggragationField: function(object, cat_index, value_index){
+                var curchild = this.map;
+                var keys = Object.keys(object);
+                for(var level= 0; level < cat_index.length; level++){
+
+                    var child = this.findChild(curchild, object[keys[cat_index[level]]]);
+                    curchild = child;
+                }
+
+                if (curchild.value === undefined)
+                    curchild.value = 0;
+
+                var value = curchild.value + parseFloat(object[keys[value_index]]);
+                curchild.children = null;
+                curchild.value = value;
+            },
+            transformData: function(){
+                build(this.map, "treemap_placeholder");
+            }
+        };
+
+
+        Polymer({
+            is : 'treemap-datalet' ,
+            ready: function(){
+                var TreemapComponentBehavior =  $.extend(true, {}, BaseDataletBehavior, WorkcycleBehavior,AjaxJsonDataRequestBehavior, TreemapBehavior);
+                TreemapComponentBehavior.init(this);
+            }
+
+        });
+    </script>
+</dom-module>

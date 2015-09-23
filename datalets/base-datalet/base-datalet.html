@@ -1,0 +1,61 @@
+<!--
+@group ROUTETOPA Base Web Component
+
+The `base-datalet` is a base-datalet  web component that has built up by using Polymer.
+Pass to this component a data url(CKAN api uri) and a string with one or multiple query in JsonPath format(separated by spaces) and it'll build an object
+you can use to set up the structures for presentation.
+
+### Code
+
+Example
+
+    <base-datalet
+       dataUrl="http://demo.ckan.org/api/action/datastore_search?resource_id=8324a4c9-66d6-47bf-a898-94237cc39b9f&amp;limit=50"
+       query="$.result.records..Supplier $.result.records..Amount">
+    </base-datalet>
+
+### HTML
+
+    <base-datalet
+       dataUrl="http://demo.ckan.org/api/action/datastore_search?resource_id=8324a4c9-66d6-47bf-a898-94237cc39b9f&amp;limit=50"
+       query="$.result.records..Supplier $.result.records..Amount">
+    </base-datalet>
+
+@class base-datalet
+-->
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+
+<dom-module id="base-datalet">
+    <template>
+        <style>
+            #footer {
+                position: relative;
+                bottom: 0;
+                width: 100%;
+                font-size: small;
+            }
+
+            #rtpalogo{
+                height:30px;
+                width: 30px;
+            }
+        </style>
+
+        <b>Source : </b><span id="domain"></span><br><br>
+        <div id="footer">Powered by Route-to-PA&nbsp&nbsp<a href="http://routetopa.eu/"><img src="static/images/rtpalogo.png" id="rtpalogo"></a></div><br>
+    </template>
+
+    <!--<script src="../shared_js/jquery-1.11.2.min.js"></script>-->
+    <script src="../shared_js/jsonpath-0.8.5.js"></script>
+    <script src="../shared_js/behaviors/BaseDataletBehaviors.js"></script>
+    <script src="../shared_js/behaviors/AjaxJsonDataRequestBehavior.js"></script>
+
+    <script>
+        BaseDatalet = Polymer({
+            is: 'base-datalet',
+            ready: function(){
+                this.$.domain.textContent = this.dataUrl.split("/")[0] + "//" + this.dataUrl.split("/")[2];
+            }
+        });
+    </script>
+</dom-module>

@@ -1,0 +1,73 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../highcharts-datalet/highcharts-datalet.html">
+
+<dom-module id="columnchart-datalet">
+    <template>
+        <highcharts-datalet id="charts" data-url="{{dataUrl}}" query="{{query}}" fields-order="{{fieldsOrder}}"></highcharts-datalet>
+    </template>
+    <script>
+        var ColumnchartBehavior = {
+            transformData: function(){
+                //Bluid Highchart element
+                $(this._component.$.charts.$.container).highcharts({
+                    chart: {
+                        type: 'column',
+                        zoomType: 'xy'
+                    },
+                    title: {
+                        text: 'Column chart'
+                    },
+                    xAxis: {
+                        categories: this.properties.categories.value,//this._component.categories,
+                        title: {
+                            text: null
+                        }
+                    },
+                    yAxis: {
+                        min: 0,
+                        title: {
+                            text: 'Units',
+                            align: 'high'
+                        },
+                        labels: {
+                            overflow: 'justify'
+                        }
+                    },
+                    tooltip: {
+                        valueSuffix: ' units'
+                    },
+                    plotOptions: {
+                        bar: {
+                            dataLabels: {
+                                enabled: true
+                            }
+                        }
+                    },
+                    legend: {
+                        layout: 'vertical',
+                        align: 'right',
+                        verticalAlign: 'top',
+                        x: -40,
+                        y: 100,
+                        floating: true,
+                        borderWidth: 1,
+                        backgroundColor: ((Highcharts.theme && Highcharts.theme.legendBackgroundColor) || '#FFFFFF'),
+                        shadow: true
+                    },
+                    credits: {
+                        enabled: false
+                    },
+                    series: this.properties.series.value//this._component.series
+                });
+            }
+        };
+
+        LinechartDatalet = Polymer({
+            is: 'columnchart-datalet',
+            ready: function(){
+                var ColumnchartComponentBehavior = $.extend(true, {}, HighchartsComponentBehavior, ColumnchartBehavior);
+                ColumnchartComponentBehavior.init(this);
+            }
+        });
+    </script>
+</dom-module>

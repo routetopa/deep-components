@@ -1,0 +1,24 @@
+<link rel="import"
+                   href="../../bower_components/polymer/polymer.html">
+<link rel="import"
+      href="test-datalet.html">
+
+<dom-module id="ext-datalet">
+
+    <template>
+        <test-datalet owner="{{owner}}"></test-datalet>
+    </template>
+    <script>
+        Polymer({
+            is: "ext-datalet",
+            behaviors: [BaseBehaviour],
+            setOwner: function(){
+               this.owner = "Specialization";
+            },
+            ready: function() {
+                //Polymer.dom(this.root).appendChild(new TestDatalet(this.owner));
+                this.setOwner()
+            }
+        });
+    </script>
+</dom-module>

@@ -1,0 +1,247 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/paper-styles/color.html">
+<!--<link rel="import" href="../../bower_components/paper-styles/demo.css">-->
+
+<link rel="import" href="../../bower_components/neon-animation/neon-animated-pages.html">
+<link rel="import" href="../../bower_components/neon-animation/neon-animatable.html">
+<link rel="import" href="../../bower_components/neon-animation/neon-animations.html">
+
+<link rel="import" href="../../bower_components/paper-card/paper-card.html">
+<link rel="import" href="../../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../../bower_components/iron-icons/iron-icons.html">
+
+<dom-module id="items-slider-controllet">
+    <template>
+
+        <style is="custom-style">
+            body {
+                margin: 0;
+                padding: 3em;
+                -webkit-tap-highlight-color: rgba(0,0,0,0);
+                -webkit-touch-callout: none;
+                line-height: 0;
+                font-size: 1vw;
+            }
+
+
+            :host ::content .content{
+                position: relative;
+                float: left;
+                margin : .5em;
+                height: 16.5vh;
+                min-height: 134px;
+                min-width: 115px;
+                max-width: 115px;
+                width: 7vw;
+                background: #fff;
+                border-radius: 0.125rem;
+                box-shadow: 0 0.625em 0.5125em 0 rgba(0, 0, 0, 0.25);
+                padding: 1em;
+            }
+
+            :host ::content .content-selected{
+                position: relative;
+                float: left;
+                top : .5em;
+                margin : .5em;
+                height: 16.5vh;
+                width: 7vw;
+                min-height: 134px;
+                min-width: 115px;
+                max-width: 115px;
+                background: #fff;
+                border-style: solid;
+                border-width: 0.03em;
+                border-radius: 0.125rem;
+                box-shadow: 0 1.825em 1.7125em 0 rgba(0, 0, 0, 0.50);
+                padding: 1em;
+            }
+
+           img .card-content{
+                padding: 0.5px 0 0.5px;
+           }
+
+           .title {
+                display: inline-block;
+                position: relative;
+                padding-left: .2em;
+                padding-right: .2em;
+                color: var(--paper-indigo-500);
+           }
+
+           .title .big {
+                /*font-size: 1.1em;*/
+                widht: 100%;
+                font-size: 0.8vw;
+                color: var(--google-grey-500);
+           }
+
+            .toolbar_button{
+                /*height: 100%;
+                display: inline-block;*/
+                float: left;
+                margin-top: 3.5em;
+                --iron-icon-height: 28px;
+                --iron-icon-width: 28px;
+            }
+
+           #pages{
+                position: relative;
+                float:left;
+                display: inline-block;
+                height: 22vh;
+                width: 80%;
+                overflow: hidden;
+                text-align: center;
+                /*margin-left: 3em;*/
+            }
+
+        </style>
+
+        <paper-icon-button id="PrevButton" class="toolbar_button x-scope" on-click="_onPrevClick" icon="chevron-left" alt="arrow-back" title="arrow-back"></paper-icon-button>
+
+        <neon-animated-pages id="pages" class="flex" selected="[[selected]]" entry-animation="[[entryAnimation]]" exit-animation="[[exitAnimation]]">
+
+           <template is="dom-repeat" items="{{itemsPages}}" as="page" index-as="p">
+
+                <neon-animatable>
+                   <template is="dom-repeat" items="{{itemsPerPage}}" as="item" index-as="i">
+                       <template is="dom-if" if="{{getName(p, i) != 0}}">
+                             <div class='fancy content' id="{{getName(p, i)}}" on-click="_cardClick">
+
+                                <div class="card-content">
+                                    <div class="title">
+                                        <div class="big">{{getName(p, i)}}</div>
+                                    </div>
+                                </div>
+                                <br>
+                                <div class="card-content">
+                                    <img width="75px" height="50px" src="{{getImage(p, i)}}" >
+                                </div>
+                            </div>
+                       </template>
+                    </template>
+                 </neon-animatable>
+            </template>
+
+        </neon-animated-pages>
+
+        <paper-icon-button id="NextButton" class="toolbar_button x-scope" on-click="_onNextClick" icon="chevron-right" alt="arrow-forward" title="arrow-forward"></paper-icon-button>
+
+    </template>
+    <script src="../shared_js/bootstrap-3.3.4-dist/js/bootstrap.min.js"></script>
+
+    <script>
+
+        Polymer({
+
+           is : 'items-slider-controllet',
+
+            properties : {
+
+                entryAnimation : {
+                    type  : String,
+                    value : ""
+                },
+
+                exitAnimation  : {
+                    type  : String,
+                    value : ""
+                },
+
+                selected : {
+                    type  : Number,
+                    value : 0
+                },
+
+                /**
+                 * It stores all items to put in the slider
+                 *
+                 * @attribute tools
+                 * @type array
+                 * @default 'null'
+                 */
+                items : {
+                    type: Array,
+                    value: []
+                },
+
+                itemsPages : {
+                   type : Array,
+                   value : []
+                },
+
+                itemsPerPage : {
+                    type : Array,
+                    value : []
+                },
+
+                prevSelectedCard : {
+                    type: Object,
+                    value : null
+                },
+
+                numItemsPerPage : {
+                    type: Number,
+                    value : 4
+                }
+
+            },
+
+            ready : function(){
+
+                var pages = Math.floor(this.items.length / this.numItemsPerPage);
+                var mod = this.items.length % this.numItemsPerPage;
+                if(mod > 0) pages += 1;
+
+
+                for(var i = 0; i < pages; i++){
+                    this.itemsPages.push(i);
+                }
+
+                for(var i = 0; i < this.numItemsPerPage; i++){
+                    this.itemsPerPage.push(i);
+                }
+
+            },
+
+            getPage : function(page){
+               return this.itemsPages[page];
+            },
+
+            getName : function(page, item){
+                return ( ((page * this.itemsPerPage.length) + item) > this.items.length - 1 ) ? 0 : this.items[(page * this.itemsPerPage.length) + item].name.replace("-datalet","");
+            },
+
+            getImage : function(page, item){
+                return ( ((page * this.itemsPerPage.length) + item) > this.items.length - 1 ) ? 0 : this.items[(page * this.itemsPerPage.length) + item].image;
+            },
+
+            _onPrevClick : function() {
+                this.entryAnimation = 'slide-from-left-animation';
+                this.exitAnimation = 'slide-right-animation';
+                this.selected = this.selected === 0 ? (this.itemsPages.length - 1) : (this.selected - 1);
+            },
+
+            _onNextClick : function() {
+                this.entryAnimation = 'slide-from-right-animation';
+                this.exitAnimation = 'slide-left-animation';
+                this.selected = this.selected === (this.itemsPages.length -1) ? 0 : (this.selected + 1);
+            },
+
+            _cardClick : function(e){
+                if(this.prevSelectedCard != null){
+                    this.prevSelectedCard.className = "fancy content";
+
+                }
+                e.currentTarget.className = "fancy content-selected";
+                this.prevSelectedCard = e.currentTarget;
+
+                this.fire('items-slider-controllet_item-selected', {datalet: e.currentTarget.id + "-datalet"});
+
+            }
+        });
+
+    </script>
+
+</dom-module>

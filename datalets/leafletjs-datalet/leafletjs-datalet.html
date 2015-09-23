@@ -1,0 +1,118 @@
+<link rel="import" href="../base-datalet/base-datalet.html">
+
+<dom-module name="leafletjs-datalet">
+    <template>
+
+        <style>
+            #leafletjs { height: 600px; }
+        </style>
+
+        <div id="leafletjs"></div>
+        <base-datalet data-url="{{dataUrl}}" query="{{query}}" fields-order="{{fieldsOrder}}"></base-datalet>
+
+    </template>
+
+    <link rel="stylesheet" href="leafletsjs/leaflet.css" />
+    <script src="leafletsjs/leaflet.js"></script>
+
+    <script>
+
+        $(document).ready(function(){
+/*            var map = L.map("leafletjs").setView([51.505, -0.09], 13);
+
+            L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                maxZoom: 18,
+                attribution: 'Map data © <a href="http://openstreetmap.org">OpenStreetMap</a> contributors'
+            }).addTo(map);*/
+        });
+
+
+        var leafletjsBehavior = {
+
+            selectData: function(){
+
+                var queries =  this._component.query.split("###");
+
+                for (i = 0; i < queries.length; i++) {
+                        /*propsName = queries[i].split(".");
+                        var propName = "" + propsName[propsName.length - 1];*/
+                        var propName = this.getPropertyName(queries[i]);
+
+                        temp = jsonPath(this.properties.json_results.value, queries[i]);
+                        for (j = 0; j < temp.length; j++) {
+                            if (i == 0) this.properties.data.value[j] = {};
+                            currObj = {};
+                            currObj[propName] = temp[j];
+                            jQuery.extend(this.properties.data.value[j], currObj);
+                        }
+               }
+            },
+
+            transformData: function(){
+            	            	             
+				var coordinates = [];
+				var keys = Object.keys(this.properties.data.value[0]);
+				
+                for(var index in this.properties.data.value)
+                {
+                    coordinates.push([parseFloat(this.properties.data.value[index][keys[0]]), parseFloat(this.properties.data.value[index][keys[1]])]);
+                    var marker = L.marker([coordinates[index][0], coordinates[index][1]]).addTo(this._component.map);
+                    var popup = L.popup().setContent('<image height="100" width="100" src="'+this.properties.data.value[index][keys[2]]+'" />');
+                    marker.bindPopup(popup);
+                }
+
+                this._component.map.invalidateSize();
+                this._component.map.fitBounds(coordinates);            	
+            	
+            }
+        };
+
+
+        Polymer({
+
+            is : 'leafletjs-datalet',
+            ready: function(){
+
+				this.map = L.map(this.$.leafletjs).setView([0, 0], 13);
+                //this.map = L.map("leafletjs").setView([0, 0], 13);
+
+                L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                    maxZoom: 18,
+                    attribution: 'Map data © <a href="http://openstreetmap.org">OpenStreetMap</a> contributors'
+                }).addTo(this.map);
+
+                L.Icon.Default.imagePath = 'http://services.routetopa.eu/WebComponentsDEV/COMPONENTS/datalets/leafletjs-datalet/leafletsjs/images';
+
+                var leafletjsComponentBehavior =  $.extend(true, {}, BaseDataletBehavior, WorkcycleBehavior, AjaxJsonDataRequestBehavior, leafletjsBehavior);
+                leafletjsComponentBehavior.init(this);
+            },
+
+            attached : function(){
+
+
+
+            },
+
+            properties : {
+
+                map :
+                {
+                    type: Object,
+                    value:null
+                },
+
+                markers :
+                {
+                    type : Array,
+                    value : []
+                }
+            },
+
+            log : function(item){
+                console.log(item);
+            }
+
+        });
+    </script>
+</dom-module>
+

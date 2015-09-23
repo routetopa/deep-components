@@ -1,0 +1,36 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+
+<dom-module id="base-csv-datalet">
+    <template>
+        <style>
+            #footer {
+                position: relative;
+                bottom: 0;
+                width: 100%;
+                font-size: small;
+            }
+
+            #rtpalogo{
+                height:30px;
+                width: 30px;
+            }
+        </style>
+
+        <b>Source : </b><span id="domain"></span><br><br>
+        <div id="footer">Powered by Route-to-PA&nbsp&nbsp<a href="http://routetopa.eu/"><img src="static/images/rtpalogo.png" id="rtpalogo"></a></div><br>
+    </template>
+
+    <script src="../shared_js/jquery-1.11.2.min.js"></script>
+    <script src="../shared_js/jsonpath-0.8.0.js"></script>
+    <script src="../shared_js/behaviors/BaseDataletBehaviors.js"></script>
+    <script src="../shared_js/behaviors/CSVDataRequestBehavior.js"></script>
+
+    <script>
+        BaseDatalet = Polymer({
+            is: 'base-csv-datalet',
+            ready: function(){
+                this.$.domain.textContent = this.data_url.split("/")[0] + "//" + this.data_url.split("/")[2];
+            }
+        });
+    </script>
+</dom-module>

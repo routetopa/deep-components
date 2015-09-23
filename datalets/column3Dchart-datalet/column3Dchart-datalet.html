@@ -1,0 +1,92 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../highcharts-datalet/highcharts-datalet.html">
+
+<link rel="import" href="../../bower_components/iron-ajax/iron-ajax.html">
+<script src="http://code.highcharts.com/highcharts-3d.js"></script>
+
+
+
+<dom-module name="column3Dchart-datalet">
+
+    <template>
+        <table>
+            <tr><td>Alpha Angle</td><td><input id="R0" type="range" min="0" max="45" value="15"/> <span id="R0-value" class="value"></span></td></tr>
+            <tr><td>Beta Angle</td><td><input id="R1" type="range" min="0" max="45" value="15"/> <span id="R1-value" class="value"></span></td></tr>
+        </table>
+        <highcharts-datalet id="charts" data-url="{{dataUrl}}" query="{{query}}" fields-order="{{fieldsOrder}}"></highcharts-datalet>
+    </template>
+
+    <script>
+        var chart = null;
+
+
+        var column3DchartBehavior = {
+
+
+            transformData: function(){
+                         //Bluid Highchart element
+                         chart = new Highcharts.Chart({
+                             chart: {
+                                 //To Modify renderTo: 'container',
+                                 renderTo: this._component.$.charts.$.container,
+                                 borderColor: '#EBBA95',
+                                 borderWidth: 2,
+                                 zoomType : 'xy',
+                                 type: 'line',
+                                 type: 'column',
+                                 margin: 75,
+                                 options3d: {
+                                     enabled: true,
+                                     alpha: 15,
+                                     beta: 15,
+                                     depth: 50,
+                                     viewDistance: 25
+                                 }
+                             },
+                             xAxis: {
+                                 categories: this.properties.categories.value,//this._component.categories,
+                                 title: {
+                                     text: null
+                                 }
+                             },
+                             title: {
+                                 text: this.properties.title
+                             },
+                             subtitle: {
+                                 text: '3D CHART demo by dragging the sliders below'
+                             },
+                             plotOptions: {
+                                 column: {
+                                     depth: 25
+                                 }
+                             },
+
+                     series: this.properties.series.value
+                });//highcharts
+
+                // Activate the sliders
+                $('#R0').on('change', function () {
+                    chart.options.chart.options3d.alpha = this.value;
+                    chart.redraw(false);
+                });
+
+                $('#R1').on('change', function () {
+                    chart.options.chart.options3d.beta = this.value;
+                    chart.redraw(false);
+                });
+            }
+        };
+
+        //element registration
+        column3DchartDatalet = Polymer({
+            is: 'column3Dchart-datalet',
+
+            ready: function(){
+                var column3DchartComponentBehavior = $.extend({}, HighchartsComponentBehavior, column3DchartBehavior);
+                column3DchartComponentBehavior.properties = $.extend({}, HighchartsComponentBehavior.properties, column3DchartBehavior.properties);
+
+                column3DchartComponentBehavior.init(this);
+            }
+        });
+    </script>
+</dom-module>

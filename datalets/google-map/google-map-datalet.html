@@ -1,0 +1,63 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../base-csv-datalet/base-csv-datalet.html">
+<link rel="import" href="http://www.vm.webcomponents.com/webComp/COMPONENTS/bower_components/google-map/google-map.html">
+
+<dom-module id="google-map-datalet">
+    <template>
+
+        <google-map id="map" fit-to-markers>
+            <template is="dom-repeat" items="{{markers}}">
+                <google-map-marker latitude="{{item.Lat}}" longitude="{{item.Lng}}">
+                </google-map-marker>
+            </template>
+        </google-map>
+
+        <base-datalet data_url="{{data_url}}" query="{{query}}"></base-datalet>
+
+    </template>
+
+    <script src="../shared_js/papa_parse/papaparse.min.js"></script>
+
+    <script>
+        var googleMapBehavior = {
+
+            selectData: function(e){
+            },
+
+            transformData: function(){
+
+                var behavior = this;
+
+                Papa.parse(this.properties.csv_results.value, {
+                    header:true,
+                    skipEmptyLines:true,
+                    complete: function(results, file) {
+                        behavior.properties.data.value = results;
+                        behavior._component.markers = googleMapComponentBehavior.properties.data.value.data;
+                    }
+                });
+            }
+        };
+
+        var googleMapComponentBehavior =  $.extend(true, {}, BaseDataletBehavior, WorkcycleBehavior, CVSDataRequestBehavior, googleMapBehavior);
+
+        Polymer({
+            is : 'google-map-datalet' ,
+
+            ready: function(){
+                googleMapComponentBehavior.init(this);
+            },
+
+            //markers : null
+
+            properties : {
+                markers :
+                {
+                    type : Array,
+                    value : []
+                }
+            }
+        });
+    </script>
+</dom-module>
+
