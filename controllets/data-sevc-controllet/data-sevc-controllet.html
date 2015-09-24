@@ -588,6 +588,11 @@
                 });*/
             },
 
+            detached : function(){
+                $(this.$.fields_placeholder).mCustomScrollbar("destroy");
+                $(".field-mapping-card").mCustomScrollbar("destroy");
+            },
+
             /**
              * Callback to parse the data requested when dataUrl change its value
              *
@@ -665,10 +670,12 @@
                    case 1:
                        this.$.toolbar_title.innerHTML  = "Data fields selection";
                        this.$.toolbar_description.innerHTML = "Select the fields you want to visualize";
+                       $(this.$.fields_placeholder).mCustomScrollbar("update");
                        break;
                    case 2:
                        this.$.toolbar_title.innerHTML  = "Data mapping";
                        this.$.toolbar_description.innerHTML = "Select the visualization from the slider, drag and drop the selected fields in visualization parameter area, customize the visualization if you need";
+                       $(".field-mapping-card").mCustomScrollbar("update");
                        break;
                     case 3:
                         this.$.toolbar_title.innerHTML  = "Finish";
