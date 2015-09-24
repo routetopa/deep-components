@@ -9,6 +9,11 @@
 <link rel="import" href="../../bower_components/paper-input/paper-input.html">
 <link rel="import" href="../../bower_components/paper-input/paper-textarea.html">
 <link rel="import" href="../../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../../bower_components/paper-tabs/paper-tabs.html">
+<link rel="import" href="../../bower_components/paper-tabs/paper-tab.html">
+<link rel="import" href="../../bower_components/iron-pages/iron-pages.html">
+<link rel="import" href="../../bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
+<link rel="import" href="../../bower_components/paper-menu/paper-menu.html">
 
 <link rel="import" href="../../controllets/items-slider-controllet/items-slider-controllet.html">
 <link rel="import" href="../draggable-element-controllet/draggable-element-controllet.html">
@@ -88,6 +93,17 @@
 
             paper-input {
                 width: 80%;
+            }
+
+            paper-dropdown-menu {
+                text-align: left;
+                margin: auto;
+                width: 100%;
+            }
+
+            :host ::content paper-menu-button{
+                display: block;
+                width: 100%;
             }
 
             #visualization_slider_area{
@@ -240,6 +256,25 @@
                 overflow: auto;
             }
 
+            paper-tabs, paper-toolbar {
+                background-color:  var(--paper-blue-500);
+                color: #ffffff;
+                box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.2);
+            }
+
+            paper-toolbar paper-tabs {
+                box-shadow: none;
+                --paper-tabs-selection-bar-color : var(--google-gray-500);
+            }
+
+            paper-tabs[noink][no-bar] paper-tab.iron-selected {
+                background-color: var(--google-gray-500);
+            }
+
+            paper-tabs[align-bottom] {
+                box-shadow: 0px -2px 6px rgba(0, 0, 0, 0.15);
+            }
+
         </style>
 
         <iron-ajax
@@ -287,10 +322,32 @@
 
                 <neon-animatable>
 
-                    <div class="fancy">
-                        <div class="card-content">
-                             <paper-textarea id="data_url" label="Dataset api data url" floatingLabel value="{{dataUrl}}" on-dragover="_handleDatasourceDragOver"></paper-textarea>
-                        </div>
+                    <div class="fancy area_container">
+                        <paper-tabs selected="{{DatasourceTabSelected}}">
+                            <paper-tab>Select data suorce</paper-tab>
+                            <paper-tab>Most popular</paper-tab>
+                            <paper-tab>Search</paper-tab>
+                        </paper-tabs>
+                        <iron-pages selected="{{DatasourceTabSelected}}">
+                            <div>
+                                <div class="card-content">
+                                    <paper-textarea id="data_url" label="Dataset api data url" floatingLabel value="{{dataUrl}}" on-dragover="_handleDatasourceDragOver"></paper-textarea>
+                                </div>
+
+                                <div class="card-content">
+                                    <paper-dropdown-menu id="datasets-sources" label="Available datasets">
+                                        <paper-menu class="dropdown-content">
+                                            <template is="dom-repeat" items="{{datasets}}" as="dataset" index-as="index">
+                                                <paper-item id="{{index}}" on-tap="_datasourceSelected">{{dataset}}</paper-item>
+                                            </template>
+                                        </paper-menu>
+                                    </paper-dropdown-menu>
+                                </div>
+
+                            </div>
+                            <div>Under costruction</div>
+                            <div>Under costruction</div>
+                        </iron-pages>
                     </div>
 
                 </neon-animatable>
@@ -369,6 +426,60 @@
 
     <script>
 
+        var datasetsPrato = {
+            names:[
+                'Consuntivo entrate 2009',
+                'Consuntivo entrate 2010',
+                'Consuntivo entrate 2011',
+                'Consuntivo entrate 2012',
+                'Consuntivo entrate 2014'
+            ],
+            urls: [
+                'http://ckan.routetopa.eu/api/action/datastore_search?resource_id=07843fc3-07e1-4c66-9be4-fed43ca4a26f&limit=10000',
+                'http://ckan.routetopa.eu/api/action/datastore_search?resource_id=48a4db73-d3d4-4639-bbc2-9c797d0e6cda&limit=10000',
+                'http://ckan.routetopa.eu/api/action/datastore_search?resource_id=a14cc2fb-0c24-48d7-9370-834045797d89&limit=10000',
+                'http://ckan.routetopa.eu/api/action/datastore_search?resource_id=fb32fcb6-5e44-4e52-b132-01c6540ddbee&limit=10000',
+                'http://ckan.routetopa.eu/api/action/datastore_search?resource_id=0cb600fc-19ad-4aaf-9794-1e6ea851840a&limit=10000'
+            ]
+        }
+
+        var datasetsGroeningen = {
+            names:[
+                'Vestigingen register gemeente Groningen',
+                'Woonruimte gemeente Groningen'
+            ],
+            urls: [
+                'http://ckan.routetopa.eu/api/action/datastore_search?resource_id=ba554c1f-02a7-4d76-b449-fb9daa1f8bfd&limit=10000',
+                'http://ckan.routetopa.eu/api/action/datastore_search?resource_id=af7b3916-4347-469a-8354-3c2d559bd92f&limit=10000'
+            ]
+        }
+
+        var datasetsDublin = {
+            names:[
+                'SDCC Traffic Cameras',
+                'Derelict Site Register',
+                'Dublin City Council Commencement Notices',
+                'Dublin City Council Planning Applications',
+                'Dun Laoghaire-Rathdown County Council Planning Application 2008-2014',
+                'Fingal Council Planning Applications for last 7 years',
+                'Planning Register',
+                'Fingal Development Plan 2011-2017 Record of Protected Structures'
+            ],
+            urls: [
+                'http://ckan.routetopa.eu/api/action/datastore_search?resource_id=73e02092-85a1-434e-85fe-0c9a43aa9a52&limit=10000',
+                'http://ckan.routetopa.eu/api/action/datastore_search?resource_id=fcbee83e-3d3d-4303-a568-24dd33d02adc&limit=10000',
+                'http://ckan.routetopa.eu/api/action/datastore_search?resource_id=ee00de68-f2e4-482f-a003-3c0561351075&limit=10000',
+                'http://ckan.routetopa.eu/api/action/datastore_search?resource_id=2f4a9d44-b52f-4c8b-a5db-d8f4a676d81e&limit=10000',
+                'http://ckan.routetopa.eu/api/action/datastore_search?resource_id=c479f061-9638-489d-ac55-0c68765548ff&limit=10000',
+                'http://ckan.routetopa.eu/api/action/datastore_search?resource_id=d29a477a-4734-43ef-8002-048c8640d441&limit=10000',
+                'http://ckan.routetopa.eu/api/action/datastore_search?resource_id=2b23f32d-e27e-4eef-af1e-27e05103df7d&limit=10000',
+                'http://ckan.routetopa.eu/api/action/datastore_search?resource_id=5ea813bc-fdf9-4edb-b3b1-0142b593d5c6&limit=10000',
+            ]
+        }
+
+        var AvailableDatasets = [datasetsPrato, datasetsGroeningen, datasetsDublin]
+
+
         Polymer({
 
             is : 'data-sevc-controllet',
@@ -405,7 +516,7 @@
                  */
                 dataUrl : {
                     type : String,
-                    value : "http://demo.ckan.org/api/action/datastore_search?resource_id=8324a4c9-66d6-47bf-a898-94237cc39b9f&limit=50",
+                    value : "",/*"http://demo.ckan.org/api/action/datastore_search?resource_id=8324a4c9-66d6-47bf-a898-94237cc39b9f&limit=50",*/
                     observer : '_dataUrlChanged'
                 },
                 /**
@@ -417,7 +528,7 @@
                  */
                 deepUrl : {
                     type : String,
-                    value : "http://demo.ckan.org/api/action/datastore_search?resource_id=8324a4c9-66d6-47bf-a898-94237cc39b9f&limit=50"
+                    value : ""
                 },
 
                 datalet_query : {
@@ -438,6 +549,23 @@
                 selected_fields : {
                     type : Array,
                     value : []
+                },
+
+                DatasourceTabSelected : {
+                    type : Number,
+                    value : 0
+                },
+
+                datasets :
+                {
+                    type : Array,
+                    value : AvailableDatasets[2].names
+                },
+
+                datasets_urls :
+                {
+                    type : Array,
+                    value :AvailableDatasets[2].urls
                 }
 
             },
@@ -562,6 +690,11 @@
                 this.exitAnimation = 'slide-left-animation';
                 this.selected = this.selected === 2 ? 0 : (this.selected + 1);
                 this.assignToolbar();
+            },
+
+            _datasourceSelected : function(e){
+
+               this.$.data_url.value = this.datasets_urls[parseInt(e.srcElement.id)];
             },
 
             _dataUrlChanged : function(newValue, oldValue){

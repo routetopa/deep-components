@@ -171,8 +171,9 @@
                                             '<div class="panel-title">' + heading + '</div>' +
                                             '<input id="'+ heading +'" type="checkbox" class="checkbox select-all">' +
                                          '</div>' +
-                                         '<br>' +
-                                         '<div class="items-list"></div>';
+                                         '<br>';
+                                         /*'<div class="items-list"></div>';*/
+                ul.innerHTML += (id.indexOf("records") != -1)  ?  '<div class="items-list" style="display:block;"></div>' : '<div class="items-list"></div>';
 
                 return ul;
 
