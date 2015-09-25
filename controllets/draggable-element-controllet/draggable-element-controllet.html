@@ -116,7 +116,7 @@
         </template>
 
         <template is="dom-if" if="{{!isTarget}}">
-            <div class="drag-content-source" draggable="true" on-track="_handleTrack" on-drag="_handleStartDrag">
+            <div class="drag-content-source" draggable="true" on-track="_handleTrack" on-drag="_handleOnDrag" on-dragstart="_handleStartDrag">
                 <div id="{{identifier}}" class='draggable-card unselectable'>{{label}}</div>
             </div>
         </template>
@@ -171,6 +171,11 @@
             },
 
             _handleStartDrag : function(e){
+                /*var target = EventUtil.getCurrentTarget(e);
+                target.style.cursor = 'move';*/
+            },
+
+            _handleOnDrag : function(e){
                 this.targets = document.querySelectorAll('draggable-element-controllet[is-target=true]');
                 for (var i = 0; i < this.targets.length; i++) {
                     this.targets[i].children[0].children[1].className = "onTrackOnTarget dd-content-target unselectable style-scope draggable-element-controllet";
