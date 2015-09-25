@@ -22,7 +22,6 @@
 
 <dom-module id="data-sevc-controllet">
     <template>
-        <!--<link rel="stylesheet" href="../shared_js/malihu-custom-scrollbar-plugin-3.0.9/jquery.mCustomScrollbar.css">-->
         <link rel="stylesheet" href="../shared_js/perfect-scrollbar/css/perfect-scrollbar.min.css">
         <style is="custom-style">
             body {
@@ -423,7 +422,6 @@
         </content>
     </template>
     <script src="../shared_js/bootstrap-3.3.4-dist/js/bootstrap.min.js"></script>
-    <!--<script src="../shared_js/malihu-custom-scrollbar-plugin-3.0.9/jquery.mCustomScrollbar.js"></script>-->
     <script src="../shared_js/perfect-scrollbar/js/min/perfect-scrollbar.jquery.min.js"></script>
     <script src="../../../DEEPCLIENT/js/deepClient.js"></script>
 
@@ -534,6 +532,11 @@
                     value : ""
                 },
 
+                organization : {
+                    type : Number,
+                    value : 0
+                },
+
                 datalet_query : {
                     type : String,
                     value : ""
@@ -562,18 +565,21 @@
                 datasets :
                 {
                     type : Array,
-                    value : AvailableDatasets[2].names
+                    value : AvailableDatasets[0].names
                 },
 
                 datasets_urls :
                 {
                     type : Array,
-                    value :AvailableDatasets[2].urls
+                    value :AvailableDatasets[0].urls
                 }
 
             },
 
             ready : function(){
+
+                this.datasets = AvailableDatasets[this.organization].names;
+                this.datasets_urls = AvailableDatasets[this.organization].urls;
 
                 $(this.$.fields_placeholder).perfectScrollbar();
                 $(this.$.selected_fields_main_container).perfectScrollbar();

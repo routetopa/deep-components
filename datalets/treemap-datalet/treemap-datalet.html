@@ -89,7 +89,8 @@
                 this.map.children = [];
 
                 //var curr_fields_order = this._component.fieldsOrder.split(',');
-                var curr_fields_order = new Array();
+                //var curr_fields_order = new Array();
+                var curr_fields_order = "0,1,2".split(',');
                 for(var i = 0; i < queries.length; i++) curr_fields_order.push(i);
 
                 var value_index = curr_fields_order[curr_fields_order.length -1];
