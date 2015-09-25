@@ -28,11 +28,17 @@
                 position: relative;
                 float: left;
                 margin : .5em;
-                height: 16.5vh;
+
+               /* height: 16.5vh;
                 min-height: 134px;
                 min-width: 115px;
                 max-width: 115px;
-                width: 7vw;
+                width: 7vw;*/
+
+                height: 9em;
+                min-width: 80px;
+                max-width: 115px;
+                width: 9em;
                 background: #fff;
                 border-radius: 0.125rem;
                 box-shadow: 0 0.625em 0.5125em 0 rgba(0, 0, 0, 0.25);
@@ -44,11 +50,17 @@
                 float: left;
                 top : .5em;
                 margin : .5em;
-                height: 16.5vh;
+
+               /* height: 16.5vh;
                 width: 7vw;
                 min-height: 134px;
                 min-width: 115px;
+                max-width: 115px;*/
+                height: 9em;
+                min-width: 80px;
                 max-width: 115px;
+                width: 8em;
+
                 background: #fff;
                 border-style: solid;
                 border-width: 0.03em;
@@ -72,7 +84,7 @@
            .title .big {
                 /*font-size: 1.1em;*/
                 widht: 100%;
-                font-size: 0.8vw;
+                font-size: 0.9em;
                 color: var(--google-grey-500);
            }
 
@@ -194,6 +206,8 @@
                 var mod = this.items.length % this.numItemsPerPage;
                 if(mod > 0) pages += 1;
 
+                this.itemsPages   = new Array();
+                this.itemsPerPage = new Array();
 
                 for(var i = 0; i < pages; i++){
                     this.itemsPages.push(i);

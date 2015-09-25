@@ -22,7 +22,8 @@
 
 <dom-module id="data-sevc-controllet">
     <template>
-        <link rel="stylesheet" href="../shared_js/malihu-custom-scrollbar-plugin-3.0.9/jquery.mCustomScrollbar.css">
+        <!--<link rel="stylesheet" href="../shared_js/malihu-custom-scrollbar-plugin-3.0.9/jquery.mCustomScrollbar.css">-->
+        <link rel="stylesheet" href="../shared_js/perfect-scrollbar/css/perfect-scrollbar.min.css">
         <style is="custom-style">
             body {
                 font-family: RobotoDraft, 'Helvetica Neue', Helvetica, Arial;
@@ -146,7 +147,6 @@
                 overflow: auto;
                 position: relative;
                 float: left;
-                overflow: auto;
             }
 
             .horizontal-section-container .vertical-section {
@@ -243,6 +243,7 @@
             #fields_placeholder{
                 width: 40%;
                 height: 50vh;
+                position: relative;
                 float: left;
                 overflow: auto;
             }
@@ -252,6 +253,7 @@
                 width: 55%;
                 /*max-width: 100vw;
                 max-height: 50vh;*/
+                position: relative;
                 float: left;
                 overflow: auto;
             }
@@ -345,8 +347,8 @@
                                 </div>
 
                             </div>
-                            <div>Under costruction</div>
-                            <div>Under costruction</div>
+                            <div><img src="static/images/UnderConstruction.png" style="position: relative;top: 60%;left: 25%;"></div>
+                            <div><img src="static/images/UnderConstruction.png" style="position: relative;top: 60%;left: 25%;"></div>
                         </iron-pages>
                     </div>
 
@@ -357,10 +359,10 @@
                     <div class="fancy">
                         <div class="fancy-content">
 
-                            <div id="fields_placeholder" class="area_container mCustomScrollBox" data-mcs-theme="minimal-dark">
+                            <div id="fields_placeholder" class="area_container">
                                 <treeview-controllet id="fields_treeview"></treeview-controllet>
                             </div>
-                            <div id="table_fields_container" class="area_container mCustomScrollBox" data-mcs-theme="minimal-dark">
+                            <div id="table_fields_container" class="area_container">
                                <div id="table_component_place_holder"></div>
                             </div>
                         </div>
@@ -380,18 +382,18 @@
 
                             <div id="fields_mapping_area" class="area_container">
 
-                                    <div class="field-mapping-card mCustomScrollBox" data-mcs-theme="minimal-dark">
+                                    <div id="selected_fields_main_container" class="field-mapping-card">
                                         <div class="title">
                                             <div class="medium">Selected fields</div>
                                         </div>
-                                        <div id="selected_fields_container" class="area_container mCustomScrollBox" data-mcs-theme="minimal-dark"></div>
+                                        <div id="selected_fields_container" class="area_container"></div>
                                     </div>
 
-                                    <div class="field-mapping-card mCustomScrollBox" data-mcs-theme="minimal-dark">
+                                    <div id="idm_fields_main_container" class="field-mapping-card">
                                         <div class="title">
                                             <div class="medium">Datalet fields</div>
                                         </div>
-                                        <div id="datalet_idm_fields_container" class="area_container mCustomScrollBox" data-mcs-theme="minimal-dark"></div>
+                                        <div id="datalet_idm_fields_container" class="area_container"></div>
                                     </div>
                             </div>
 
@@ -421,7 +423,8 @@
         </content>
     </template>
     <script src="../shared_js/bootstrap-3.3.4-dist/js/bootstrap.min.js"></script>
-    <script src="../shared_js/malihu-custom-scrollbar-plugin-3.0.9/jquery.mCustomScrollbar.js"></script>
+    <!--<script src="../shared_js/malihu-custom-scrollbar-plugin-3.0.9/jquery.mCustomScrollbar.js"></script>-->
+    <script src="../shared_js/perfect-scrollbar/js/min/perfect-scrollbar.jquery.min.js"></script>
     <script src="../../../DEEPCLIENT/js/deepClient.js"></script>
 
     <script>
@@ -572,25 +575,11 @@
 
             ready : function(){
 
-                var scrollbar_options = {
-                    autoHideScrollbar:true,
-                    theme:"rounded"
-                };
+                $(this.$.fields_placeholder).perfectScrollbar();
+                $(this.$.selected_fields_main_container).perfectScrollbar();
+                $(this.$.idm_fields_main_container).perfectScrollbar();
+                $(this.$.table_fields_container).perfectScrollbar();
 
-                $(this.$.fields_placeholder).mCustomScrollbar(scrollbar_options);
-                $(".field-mapping-card").mCustomScrollbar(scrollbar_options);
-
-                /*$(this.$.table_fields_container).mCustomScrollbar({
-                    autoHideScrollbar:true,
-                    theme:"rounded",
-                    advanced:{autoExpandHorizontalScroll:true},
-                    axis:"yx"
-                });*/
-            },
-
-            detached : function(){
-                $(this.$.fields_placeholder).mCustomScrollbar("destroy");
-                $(".field-mapping-card").mCustomScrollbar("destroy");
             },
 
             /**
@@ -630,12 +619,12 @@
                     this.datalets_list.push(datalet_info);
                 }
 
-                var w = $(this.$.visualization_slider_area).width();
+                /*var w = $(this.$.visualization_slider_area).width();
                 var pages = 2;
-                var numItemsPerPage = 3;
+                var numItemsPerPage = 3;*/
 
                 this.$.visualization_slider_area.innerHTML = '<items-slider-controllet items=\'' + JSON.stringify(this.datalets_list) + '\'' +
-                                                             '\'></items-slider-controllet>'
+                                                             '\'></items-slider-controllet>';
             },
 
             handleSelectedDatalet : function(e){
@@ -670,12 +659,10 @@
                    case 1:
                        this.$.toolbar_title.innerHTML  = "Data fields selection";
                        this.$.toolbar_description.innerHTML = "Select the fields you want to visualize";
-                       $(this.$.fields_placeholder).mCustomScrollbar("update");
                        break;
                    case 2:
                        this.$.toolbar_title.innerHTML  = "Data mapping";
                        this.$.toolbar_description.innerHTML = "Select the visualization from the slider, drag and drop the selected fields in visualization parameter area, customize the visualization if you need";
-                       $(".field-mapping-card").mCustomScrollbar("update");
                        break;
                     case 3:
                         this.$.toolbar_title.innerHTML  = "Finish";
