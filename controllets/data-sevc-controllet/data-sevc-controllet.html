@@ -31,6 +31,7 @@
                 padding: 1.5em;
                 -webkit-tap-highlight-color: rgba(0,0,0,0);
                 -webkit-touch-callout: none;
+                overflow: hidden;
             }
 
             #pages{
@@ -534,7 +535,7 @@
 
                 organization : {
                     type : Number,
-                    value : 0
+                    value : 2
                 },
 
                 datalet_query : {
@@ -680,15 +681,15 @@
 
             _onPrevClick : function() {
                 this.entryAnimation = 'slide-from-left-animation';
-                this.exitAnimation = 'slide-right-animation';
-                this.selected = this.selected === 0 ? 2 : (this.selected - 1);
+                this.exitAnimation  = 'slide-right-animation';
+                this.selected = this.selected === 0 ? 0 : (this.selected - 1);
                 this.assignToolbar();
             },
 
             _onNextClick : function() {
                 this.entryAnimation = 'slide-from-right-animation';
-                this.exitAnimation = 'slide-left-animation';
-                this.selected = this.selected === 2 ? 0 : (this.selected + 1);
+                this.exitAnimation  = 'slide-left-animation';
+                this.selected = this.selected === 2 ? 2 : (this.selected + 1);
                 this.assignToolbar();
             },
 
