@@ -14,79 +14,73 @@
     <template>
 
         <style is="custom-style">
-            body {
+           /* body {
                 margin: 0;
                 padding: 3em;
                 -webkit-tap-highlight-color: rgba(0,0,0,0);
                 -webkit-touch-callout: none;
                 line-height: 0;
                 font-size: 1vw;
-            }
+            }*/
 
 
-            :host ::content .content{
+            ::content .content-card{
                 position: relative;
                 float: left;
                 margin : .5em;
-
-               /* height: 16.5vh;
-                min-height: 134px;
-                min-width: 115px;
-                max-width: 115px;
-                width: 7vw;*/
-
-                height: 9em;
+               /* height: 8em;
+                width: 7em;
                 min-width: 80px;
-                max-width: 115px;
-                width: 9em;
+                max-width: 115px;*/
+                width: 16%;
+                height: 70%;
                 background: #fff;
                 border-radius: 0.125rem;
-                box-shadow: 0 0.625em 0.5125em 0 rgba(0, 0, 0, 0.25);
+                box-shadow:         0 0.625em 0.5125em 0 rgba(0, 0, 0, 0.25);
+                -webkit-box-shadow: 0 0.625em 0.5125em 0 rgba(0, 0, 0, 0.25);
+                -moz-box-shadow:    0 0.625em 0.5125em 0 rgba(0, 0, 0, 0.25);
                 padding: 1em;
             }
 
-            :host ::content .content-selected{
+            ::content .content-selected{
                 position: relative;
                 float: left;
-                top : .5em;
+                top : 0.5%;
                 margin : .5em;
 
-               /* height: 16.5vh;
-                width: 7vw;
-                min-height: 134px;
-                min-width: 115px;
-                max-width: 115px;*/
-                height: 9em;
+                /*height: 8em;
+                width: 7em;
                 min-width: 80px;
-                max-width: 115px;
-                width: 8em;
+                max-width: 115px;*/
+                width: 16.5%;
+                height: 70%;
 
                 background: #fff;
                 border-style: solid;
                 border-width: 0.03em;
+                -moz-border-radius: 0.125rem;; /* Firefox */
+                -webkit-border-radius: 0.125rem;; /* Safari, Chrome */
                 border-radius: 0.125rem;
-                box-shadow: 0 1.825em 1.7125em 0 rgba(0, 0, 0, 0.50);
+                box-shadow:         0 1.825em 1.7125em 0 rgba(0, 0, 0, 0.50);
+                -webkit-box-shadow: 0 1.825em 1.7125em 0 rgba(0, 0, 0, 0.50);
+                -moz-box-shadow:    0 1.825em 1.7125em 0 rgba(0, 0, 0, 0.50);
                 padding: 1em;
             }
 
-           img .card-content{
-                padding: 0.5px 0 0.5px;
-           }
-
-           .title {
+            .title {
                 display: inline-block;
                 position: relative;
                 padding-left: .2em;
                 padding-right: .2em;
                 color: var(--paper-indigo-500);
-           }
+            }
 
-           .title .big {
+            .title .big {
                 /*font-size: 1.1em;*/
                 widht: 100%;
                 font-size: 0.9em;
                 color: var(--google-grey-500);
-           }
+            }
 
             .toolbar_button{
                 /*height: 100%;
@@ -97,7 +91,7 @@
                 --iron-icon-width: 28px;
             }
 
-           #pages{
+            #pages{
                 position: relative;
                 float:left;
                 display: inline-block;
@@ -106,6 +100,11 @@
                 overflow: hidden;
                 text-align: center;
                 /*margin-left: 3em;*/
+            }
+
+            img{
+                height: 80%;
+                width: 80%;
             }
 
         </style>
@@ -119,7 +118,7 @@
                 <neon-animatable>
                    <template is="dom-repeat" items="{{itemsPerPage}}" as="item" index-as="i">
                        <template is="dom-if" if="{{getName(p, i) != 0}}">
-                             <div class='fancy content' id="{{getName(p, i)}}" on-click="_cardClick">
+                             <div class='fancy content-card' id="{{getName(p, i)}}" on-click="_cardClick">
 
                                 <div class="card-content">
                                     <div class="title">
@@ -127,8 +126,8 @@
                                     </div>
                                 </div>
                                 <br>
-                                <div class="card-content">
-                                    <img width="75px" height="50px" src="{{getImage(p, i)}}" >
+                                <div class="card-content-image">
+                                    <img src="{{getImage(p, i)}}">
                                 </div>
                             </div>
                        </template>
@@ -141,7 +140,6 @@
         <paper-icon-button id="NextButton" class="toolbar_button x-scope" on-click="_onNextClick" icon="chevron-right" alt="arrow-forward" title="arrow-forward"></paper-icon-button>
 
     </template>
-    <script src="../shared_js/bootstrap-3.3.4-dist/js/bootstrap.min.js"></script>
 
     <script>
 
@@ -253,6 +251,10 @@
 
                 this.fire('items-slider-controllet_item-selected', {datalet: e.currentTarget.id + "-datalet"});
 
+            },
+
+            attached : function(){
+                this.selected = 1;
             }
         });
 

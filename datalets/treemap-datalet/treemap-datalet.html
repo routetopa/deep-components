@@ -3,56 +3,56 @@
 
 <dom-module id="treemap-datalet">
     <template>
-        <style>
+        <style is="custom-style">
 
-            h6 {
+            :host ::content h6 {
                 color: red;
             }
 
-            #treemap_placeholder {
+            :host ::content #treemap_placeholder {
                 width: 100%;
                 height: 70%;
                 min-height: 500px;
                 background: #ddd;
             }
 
-            text {
+            :host ::content text {
                 pointer-events: none;
             }
 
-            .grandparent text {
+            :host ::content .grandparent text {
                 font-weight: bold;
             }
 
-            rect {
+            :host ::content rect {
                 fill: none;
                 stroke: #fff;
             }
 
-            rect.parent,
+            :host ::content rect.parent,
             .grandparent rect {
                 stroke-width: 2px;
             }
 
-            .grandparent rect {
+            :host ::content .grandparent rect {
                 fill: orange;
             }
 
-            .grandparent:hover rect {
+            :host ::content .grandparent:hover rect {
                 fill: #ee9700;
             }
 
-            .children rect.parent,
+            :host ::content .children rect.parent,
             .grandparent rect {
                 cursor: pointer;
             }
 
-            .children rect.parent {
+            :host ::content .children rect.parent {
                 fill: #bbb;
                 fill-opacity: .5;
             }
 
-            .children:hover rect.child {
+            :host ::content .children:hover rect.child {
                 fill: #bbb;
             }
         </style>
@@ -90,9 +90,9 @@
                 this.map.children = [];
 
                 for(var i = 0; i < this.properties.data.value.length; i++){
-                    this.checkAggragationField(this.properties.data.value[i], queries.length - 1 , queries.length - 1);
+                    this.checkAggragationField(this.properties.data.value[i], queries.length , queries.length - 1);
                 }
-                //var json = JSON.stringify(this.map);
+                var json = JSON.stringify(this.map);
             },
             findChild: function(child, category){
                 var children = child.children;

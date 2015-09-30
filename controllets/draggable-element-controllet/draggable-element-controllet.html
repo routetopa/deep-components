@@ -5,12 +5,12 @@
     <template>
 
         <style is="custom-style">
-            body {
+            /*body {
                 margin: 0;
                 padding: 1.5em;
                 -webkit-tap-highlight-color: rgba(0,0,0,0);
                 -webkit-touch-callout: none;
-            }
+            }*/
 
             .drag-content-target{
                 height: 12.5em;
@@ -19,15 +19,19 @@
             }
 
             .drag-content-source{
-                height: 3.125em;
+                height: 1.5em;
                 width: 12.5em;
+               /* min-height: 20px;
+                min-width: 70px;
+                max-height: 20px;
+                max-width: 70px;*/
             }
 
             .onTrackOnTarget{
                 position: relative;
                 float: left;
                 margin : 0.625em;
-                height: 3.125em;
+                height: 1.6em;
                 width: 13.5em;
                 background: #fff;
                 padding: 1em;
@@ -43,7 +47,7 @@
                 position: relative;
                 float: left;
                 margin : 0.625em;
-                height: 3.125em;
+                height: 1.5em;
                 width: 13.5em;
                 border-width : 0.0625em
                 background: #fff;
@@ -96,10 +100,6 @@
                 user-select: none;
             }
 
-            [draggable=true]  {
-                -khtml-user-drag: element;
-            }
-
         </style>
 
         <template is="dom-if" if="{{isTarget}}">
@@ -116,7 +116,7 @@
         </template>
 
         <template is="dom-if" if="{{!isTarget}}">
-            <div class="drag-content-source" draggable="true" on-track="_handleTrack" on-drag="_handleOnDrag" on-dragstart="_handleStartDrag">
+            <div id="source" class="drag-content-source" draggable="true" ondragstart="event.dataTransfer.setData('text/plain', 'This text may be dragged')" on-track="_handleTrack" on-drag="_handleOnDrag" on-dragstart="_handleStartDrag" on-dragenter="_handleEnterDrag">
                 <div id="{{identifier}}" class='draggable-card unselectable'>{{label}}</div>
             </div>
         </template>
@@ -170,9 +170,29 @@
 
             },
 
+            ready : function(){
+            },
+
             _handleStartDrag : function(e){
                 /*var target = EventUtil.getCurrentTarget(e);
                 target.style.cursor = 'move';*/
+                return true;
+            },
+
+            _handleEnterDrag : function(e){
+                /*var target = e.target;
+                if(target.draggable == false && (target.className.indexOf("dd-content-target") != -1)){
+
+                    target.parentNode.parentNode.value = e.srcElement.id;
+                    target.innerHTML = e.srcElement.innerText;
+
+                    this.fire('draggable-element-controllet_content-dragged', {target: target, source: e.srcElement});
+                }
+
+                for (var i = 0; i < this.targets.length; i++) {
+                    this.targets[i].children[0].children[1].className = "draggable-card dd-content-target unselectable style-scope draggable-element-controllet";
+                }*/
+                return false;
             },
 
             _handleOnDrag : function(e){
@@ -191,13 +211,15 @@
                     case 'track':
                         break;
                     case 'end':
+
                         var target = e.detail.hover();
+
                         if(target.draggable == false && (target.className.indexOf("dd-content-target") != -1)){
 
-                            target.parentNode.parentNode.value = e.srcElement.id;
-                            target.innerHTML = e.srcElement.innerText;
+                            target.parentNode.parentNode.value = e.target.id;
+                            target.innerHTML = e.target.innerHTML;
 
-                            this.fire('draggable-element-controllet_content-dragged', {target: target, source: e.srcElement});
+                            this.fire('draggable-element-controllet_content-dragged', {target: target, source: e.target});
                         }
 
                         for (var i = 0; i < this.targets.length; i++) {

@@ -1,119 +1,144 @@
 <link rel="import" href="../../bower_components/polymer/polymer.html">
 <link rel="import" href="../../bower_components/paper-styles/color.html">
-<link rel="import" href="../../bower_components/paper-item/paper-item.html">
-<link rel="import" href="../../bower_components/paper-card/paper-card.html">
-
-
+<link rel="import" href="../../bower_components/paper-checkbox/paper-checkbox.html">
 
 <dom-module id="treeview-controllet">
     <template>
+
         <style is="custom-style">
 
-            :host ::content .list {
+            ::content .list {
                 margin: .5rem;
                 display: block;
                 list-style-type: none;
             }
 
-            :host ::content .list__item {
+            ::content li{
+                position: relative;
+                float: left;
+                width: 100%;
+            }
+
+            ::content ul{
+                position: relative;
+                float : left   ;
+                width: 100%;
+            }
+
+            ::content .list__item {
                 margin: 0 0 .5rem 0;
                 padding: 0;
             }
 
-            :host ::content .label--checkbox {
+            ::content main   { font-size:16px; }
+            ::content .stuff { padding-top:60px; }
+
+            /* basic css */
+            ::content input[type=checkbox]   { display:none; position:absolute; left:0;}
+            ::content label, p               { padding-left:10px; }
+            ::content .check-awesome         { position:relative; float:left; }
+
+            /* checkbox css */
+            ::content label                  { cursor:pointer; }
+            ::content label span             { display:block; position:absolute; left:0;
+                -webkit-transition-duration:0.3s; -moz-transition-duration:0.3s; transition-duration:0.3s;
+            }
+            ::content label .circle          {
+                background:#FFF;
+                left:-30px;
+                top:-30px;
+                height:80px;
+                width:80px;
+                z-index:-1;
+                border-radius:50%; -moz-border-radius:50%; -webkit-border-radius:50%;
+            }
+            ::content label .box     {
+                border:2px solid #DDDDDD;
+                height:16px;
+                width:16px;
+                z-index:888;
+                -webkit-transition-delay:0.1s; -moz-transition-delay:0.1s; transition-delay:0.1s;
                 position: relative;
-                margin: .5rem;
-                font-family: Arial, sans-serif;
-                line-height: 135%;
-                cursor: pointer;
-                padding-left: 30px;
-                padding-top: 0px;
+                float: left;
+            }
+            ::content label .check         {
+                top: -7px;
+                left: 6px;
+                width: 11px;
+                height: 16px;
+                border:2px solid #2196f3;
+                border-top: none;
+                border-left: none;
+                opacity:0;
+                z-index:888;
+                -webkit-transform:rotate(180deg); -moz-transform:rotate(180deg); transform:rotate(180deg);
+                -webkit-transition-delay:0.1s; -moz-transition-delay:0.1s; transition-delay:0.1s;
             }
 
-            :host ::content .checkbox + label {
-                /*text-indent: -5000px;
-                height: 20px;
-                width: auto;*/
+            /* handling click events */
+
+            /* when checkbox is checked */
+            ::content label .circle {
+                -webkit-animation   :growCircle 0.3s ease;
+                -moz-animation      :growCircle 0.3s ease;
+                animation           :growCircle 0.3s ease;
+            }
+            ::content input[type=checkbox]:checked ~ label .box {
+                opacity:0;
+                -webkit-transform   :scale(0) rotate(-180deg);
+                -moz-transform        :scale(0) rotate(-180deg);
+                transform                 :scale(0) rotate(-180deg);
+            }
+            ::content input[type=checkbox]:checked ~ label .check {
+                opacity:1;
+                -webkit-transform   :scale(1) rotate(45deg);
+                -moz-transform      :scale(1) rotate(45deg);
+                transform           :scale(1) rotate(45deg);
             }
 
-            :host ::content input[type="checkbox"]:not(:checked), :host ::content input[type="checkbox"]:checked {
-                 position: relative;
-                 left: 10px;
-                 visibility: visible;
+            /* bubble animation */
+
+            ::content @-webkit-keyframes growCircle {
+                0%, 100%   { -webkit-transform:scale(0); }
+                70%        { background:#DDD; -webkit-transform:scale(1.25); }
+            }
+            ::content @-moz-keyframes growCircle {
+                0%, 100%   { -moz-transform:scale(0); }
+                70%        { background:#DDD; -moz-transform:scale(1.25); }
+            }
+            ::content @keyframes growCircle {
+                0%, 100%   { transform:scale(0); }
+                70%        { background:#DDD; transform:scale(1.25); }
             }
 
-            :host ::content .checkbox {
-                position: relative;
-                /*top: -0.375rem;*/
-                top: 3px;
-                margin: 0 1rem 0 0;
-                cursor: pointer;
-                min-height: 0;
-                max-height: 0;
-            }
-
-            :host ::content .checkbox:before {
-                -webkit-transition: all 0.3s ease-in-out;
-                -moz-transition: all 0.3s ease-in-out;
-                transition: all 0.3s ease-in-out;
-                content: "";
-                position: absolute;
-                left: 0;
-                z-index: 1;
-                width: 1.2em;
-                height: 1.2em;
-                border: 2px solid #DDDDDD;
-            }
-
-            :host ::content .checkbox:checked:before {
-                -webkit-transform: rotate(-45deg);
-                -moz-transform: rotate(-45deg);
-                -ms-transform: rotate(-45deg);
-                -o-transform: rotate(-45deg);
-                transform: rotate(-45deg);
-                height: 1em;
-                border-color: var(--paper-blue-500);
-                border-top-style: none;
-                border-right-style: none;
-            }
-
-            :host ::content .checkbox:after {
-                content: "";
-                position: absolute;
-                top: -0.125em;
-                left: 0;
-                width: 1.4em;
-                height: 1.4em;
-                background: #fff;
-                cursor: pointer;
-            }
-
-            :host ::content .select-all{
-                position:relative;
+            ::content .select-all{
+               /* position:relative;
                 float:left;
-                left: 20px;
-                top: -3px;
+                left: 20px;*/
             }
 
-            :host ::content div.hiding-panel{
-                width: auto;
-                padding: 3px;
-                height: 30px;
+            ::content div.hiding_panel{
+                width: 100%;
+                height: 15px;
+                margin-bottom: 18px;
+                /*padding: 3px;
+                height: 35px;
                 border: 1px;
                 background: #fff;
                 border-radius: 0.125rem;
-                box-shadow: 0 0.125rem 0.3125rem 0 rgba(0, 0, 0, 0.25);
+                box-shadow: 0 0.125rem 0.3125rem 0 rgba(0, 0, 0, 0.25);*/
             }
 
-            :host ::content div.panel-title{
+            ::content div.panel-title{
                 position: relative;
                 float: left;
                 padding-left: 10px;
+                padding-right: 10px;
                 font-weight: bolder;
                 color: #000000;
             }
 
-            :host ::content iron-icon.panel-hide-trigger {
+            ::content iron-icon.panel-hide-trigger {
                 position: relative;
                 float: left;
                 height: 24px;
@@ -125,12 +150,12 @@
                 line-height: 64px;
             }
 
-            :host ::content iron-icon.panel-hide-trigger:hover {
+            ::content iron-icon.panel-hide-trigger:hover {
                 /*color: var(--google-gray-700);*/
                 color : #000000;
             }
 
-            :host ::content .items-list{
+            ::content .items-list{
                 display: none;
             }
 
@@ -161,7 +186,7 @@
 
             },
 
-            createFieldsContainer : function(id, heading, level){
+            createFieldsContainer : function(id, heading){
 
                 var ul = document.createElement('ul');
                 ul.className     = "list";
@@ -169,9 +194,16 @@
                 ul.innerHTML           = '<div class="hiding_panel">' +
                                             '<iron-icon icon="chevron-right" class="panel-hide-trigger"></iron-icon>' +
                                             '<div class="panel-title">' + heading + '</div>' +
-                                            '<input id="'+ heading +'" type="checkbox" class="checkbox select-all">' +
-                                         '</div>' +
-                                         '<br>';
+                                            /*'<input id="'+ heading +'" type="checkbox" class="checkbox select-all" style="display:block;">' +*/
+                                            /*'<div class="check-awesome">' +
+                                                '<input class="checkbox select-all" type="checkbox" id="'+ heading + '">' +
+                                                    '<label for="'+ heading + '"class="label">' +
+                                                    '<span></span>' +
+                                                    '<span class="check"></span>' +
+                                                    '<span class="box"></span>'+
+                                                '</label>' +
+                                            '</div>' +*/
+                                         '</div>';
                                          /*'<div class="items-list"></div>';*/
                 ul.innerHTML += (id.indexOf("records") != -1)  ?  '<div class="items-list" style="display:block;"></div>' : '<div class="items-list"></div>';
 
@@ -180,10 +212,18 @@
             },
 
             createListItem : function(id, label) {
-                return '<li class="list__item">'
-                            + '<input id="'+ id +'" type="checkbox" class="checkbox">'
-                            + '<div class="label--checkbox">'+ label +'</div>'
-                     + '</li>';
+
+               return '<li class="list__item">' +
+                         '<div class="check-awesome">' +
+                            '<input class="checkbox" type="checkbox" id="'+ id + '">' +
+                            '<label for="'+ id + '" style="padding-left:10px;">' +
+                                '<span></span>' +
+                                '<span class="check"></span>' +
+                                '<span class="box"></span>' +
+                                   label +
+                            '</label>' +
+                         '</div>' +
+                      '</li>';
             },
 
             analyzeObject : function(parent_list, curr_field, object) {
@@ -194,18 +234,18 @@
                     if(object.constructor == Array){//Deal with flat array case
                         if(object[0].constructor != Object){
                             //MATERIAL CHECKBOX UL
-                            this.fieldsMap[parent_list[parent_list.length - 2]].children[2].innerHTML += this.createListItem(parent_list.toString(), curr_field);
+                            this.fieldsMap[parent_list[parent_list.length - 2]].children[1].innerHTML += this.createListItem(parent_list.toString(), curr_field);
                             return;
                         }
                     }
                     if(object.constructor == Array || object.constructor == Object){
-                        var panel = this.createFieldsContainer(curr_field, parent_list[parent_list.length - 1], parent_list.length);
+                        var panel = this.createFieldsContainer(curr_field, parent_list[parent_list.length - 1]);
                         this.fieldsMap[curr_field] = panel;
                         //MATERIAL CHECKBOX UL
                         this.fieldsMap[parent_list[parent_list.length - 2]].appendChild(this.fieldsMap[curr_field]);
                     }else{
                         //MATERIAL CHECKBOX UL
-                        this.fieldsMap[parent_list[parent_list.length - 2]].children[2].innerHTML += this.createListItem(parent_list.toString(), curr_field);
+                        this.fieldsMap[parent_list[parent_list.length - 2]].children[1].innerHTML += this.createListItem(parent_list.toString(), curr_field);
                     }
                 }
                 if(object.constructor == Array || object.constructor == Object) {
@@ -225,9 +265,9 @@
 
             init : function(data){
                 //crete root node and insert it in to shadow dom
-                var mainPanel = this.createFieldsContainer("root", "Data fields", 0);
+                var mainPanel = this.createFieldsContainer("root", "Data fields");
                 //MATERIAL CHECKBOX UL
-                mainPanel.children[2].style.display = "block";
+                mainPanel.children[1].style.display = "block";
 
                 this.$.treeview_placeholder.innerHTML = "";
                 this.$.treeview_placeholder.appendChild(mainPanel);
@@ -251,26 +291,38 @@
             },
 
             _clickHandler : function(e){
+                if(Object.getPrototypeOf(e) !== CustomEvent.prototype) {
+                    e = e[Object.keys(e)[0]];
+                }
+
                 if(!e.target.control) {
                     switch((e.target.className.indexOf("iron-icon") != -1) ? "panel-hide-trigger" : e.target.className){
-                        case 'checkbox':
+                        case 'box':
 
+                            /*var el = e.target.previousSibling.previousSibling;
+                            el.classList = 'circle';
+                            var newone = el.clone(true);
+                            el.before(newone);
+                            $("." + el.attr("class") + ":last").remove();*/
+
+                            break;
+                        case 'checkbox':
                             this.fireSelectedFields();
 
                             break;
                         case 'panel-hide-trigger':
 
-                            if(e.target.parentNode.parentNode.children[2].style.display == "block") {
-                                e.target.parentNode.parentNode.children[2].style.cssText = "display: none;";
+                            if(e.target.parentNode.parentNode.children[1].style.display == "block") {
+                                e.target.parentNode.parentNode.children[1].style.cssText = "display: none;";
                                 e.target.icon = "chevron-right";
 
                             }else{
-                                e.target.parentNode.parentNode.children[2].style.cssText = "display: block;";
+                                e.target.parentNode.parentNode.children[1].style.cssText = "display: block;";
                                 e.target.icon = "expand-more";
                             }
                             break;
                         case 'checkbox select-all':
-                                var childs = e.srcElement.parentNode.parentNode.children[2].childNodes;
+                                var childs = e.srcElement.parentNode.parentNode.children[1].childNodes;
                                 for(var i=0; i < childs.length; i++){
                                     childs[i].children[0].checked = e.srcElement.checked;
                                 }
