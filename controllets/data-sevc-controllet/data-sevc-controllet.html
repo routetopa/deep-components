@@ -546,18 +546,6 @@
 
                 this.$.fields_treeview.init(e.detail.response);
 
-                /*var table_params ={
-                    component   : "datatable-datalet",
-                    params      :{
-                        'data-url' : this.dataUrl
-                    },
-                    fields      : [],
-                    placeHolder : (navigator.userAgent.toLowerCase().indexOf('chrome') > -1 ) ? this.$.table_component_place_holder : this.$.table_component_place_holder[Object.keys(this.$.table_component_place_holder)[0]]
-                };
-
-                ComponentService.deep_url = this.deepUrl;
-                ComponentService.getComponent(table_params);*/
-
             },
 
             /**
@@ -575,10 +563,6 @@
                     this.datalets_list.push(datalet_info);
                 }
 
-                /*var w = $(this.$.visualization_slider_area).width();
-                var pages = 2;
-                var numItemsPerPage = 3;*/
-
                 this.$.visualization_slider_area.innerHTML = '<items-slider-controllet items=\'' + JSON.stringify(this.datalets_list) + '\'' +
                                                              '\'></items-slider-controllet>';
             },
@@ -586,7 +570,6 @@
             handleSelectedDatalet : function(e){
 
                var response = e.detail.response;
-               //<draggable-element-controllet is-target="true" heading="Field 1"  description="This fields is used for ..." number="1"></draggable-element-controllet>
                this.$.datalet_idm_fields_container.innerHTML = "";
 
                if(response.idm.inputs.input.constructor == Object) {
@@ -650,9 +633,10 @@
             },
 
             _datasourceSelected : function(e){
-               if(Object.getPrototypeOf(e) !== CustomEvent.prototype) {
+
+               /*if(Object.getPrototypeOf(e) !== CustomEvent.prototype) {
                   e = e[Object.keys(e)[0]];
-               }
+               }*/
 
                this.$.data_url.value = this.datasets_urls[parseInt(e.target.id)];
             },

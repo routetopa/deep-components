@@ -250,7 +250,9 @@
             },
 
             attached : function(){
-                /*this.selected = 1;*/
+                this.selected = 1;
+                this.$.pages.notifyResize();
+                this.selected = 0;
                 this.$.pages.notifyResize();
             }
         });
