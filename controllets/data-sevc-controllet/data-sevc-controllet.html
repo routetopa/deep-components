@@ -29,6 +29,37 @@
 
         <style is="custom-style">
 
+            /*TEST FOR CROSS BROWSER FLEX LAYOUT BUG FIXING --- PEZZOTS */
+            .layout.horizontal.data-sevc-controllet, .layout.horizontal-reverse.data-sevc-controllet, .layout.vertical.data-sevc-controllet, .layout.vertical-reverse.data-sevc-controllet {
+                display: flex;
+            }
+            .layout.vertical.data-sevc-controllet {
+                flex-direction: column;
+            }
+            .layout.justified {
+                justify-content: space-between;
+            }
+            .layout.vertical {
+                flex-direction: column;
+            }
+            .layout.horizontal, .layout.horizontal-reverse, .layout.vertical, .layout.vertical-reverse {
+                display: flex;
+            }
+
+            .layout.horizontal.data-sevc-controllet.data-sevc-controllet, .layout.horizontal-reverse.data-sevc-controllet.data-sevc-controllet, .layout.vertical.data-sevc-controllet.data-sevc-controllet, .layout.vertical-reverse.data-sevc-controllet.data-sevc-controllet {
+                display: flex;
+            }
+            .layout.horizontal.data-sevc-controllet, .layout.horizontal-reverse.data-sevc-controllet, .layout.vertical.data-sevc-controllet, .layout.vertical-reverse.data-sevc-controllet {
+                display: flex;
+            }
+            .layout.horizontal {
+                flex-direction: row;
+            }
+            .layout.horizontal, .layout.horizontal-reverse, .layout.vertical, .layout.vertical-reverse {
+                display: flex;
+            }
+            /*END TEST*/
+
             .flexchild
             {
             @apply(--layout-flex);
@@ -634,10 +665,6 @@
 
             _datasourceSelected : function(e){
 
-               /*if(Object.getPrototypeOf(e) !== CustomEvent.prototype) {
-                  e = e[Object.keys(e)[0]];
-               }*/
-
                this.$.data_url.value = this.datasets_urls[parseInt(e.target.id)];
             },
 
@@ -718,6 +745,12 @@
             },
 
             _onFinish : function(e){
+
+                if(this.selected_fields.length == 0 || this.selected_datalet == ""){
+                    this.$.message.text = "You have to map the selected fields with datalets fields(by dragging) and select a datalet to export a new visualization.";
+                    this.$.message.show();
+                    return;
+                }
 
                 var data = {
                     dataUrl : this.dataUrl,
