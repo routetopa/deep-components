@@ -28,16 +28,6 @@
         <link rel="stylesheet" href="../shared_js/perfect-scrollbar/css/perfect-scrollbar.min.css">
 
         <style is="custom-style">
-           /* body
-            {
-                font-family: RobotoDraft, 'Helvetica Neue', Helvetica, Arial;
-                font-size: 1em;
-                margin: 0;
-                padding: 1.5em;
-                -webkit-tap-highlight-color: rgba(0,0,0,0);
-                -webkit-touch-callout: none;
-                overflow: hidden;
-            }*/
 
             .flexchild
             {
@@ -103,7 +93,7 @@
                 width: 100%;
             }
 
-            :host ::content paper-menu-button
+            ::content paper-menu-button
             {
                 display: block;
                 width: 100%;
@@ -269,10 +259,6 @@
                             <iron-pages selected="{{DatasourceTabSelected}}">
                                 <div>
                                     <div class="card-content">
-                                        <paper-textarea id="data_url" label="Dataset api data url" floatingLabel value="{{dataUrl}}" on-dragover="_handleDatasourceDragOver"></paper-textarea>
-                                    </div>
-
-                                    <div class="card-content">
                                         <paper-dropdown-menu id="datasets-sources" label="Available datasets">
                                             <paper-menu class="dropdown-content">
                                                 <template is="dom-repeat" items="{{datasets}}" as="dataset" index-as="index">
@@ -281,6 +267,13 @@
                                             </paper-menu>
                                         </paper-dropdown-menu>
                                     </div>
+
+                                    <div><img src="static/images/or.png" style="position: relative;left: 50%;padding-top:20px"></div>
+
+                                    <div class="card-content">
+                                        <paper-textarea id="data_url" label="Dataset api data url" floatingLabel value="{{dataUrl}}" on-dragover="_handleDatasourceDragOver"></paper-textarea>
+                                    </div>
+
 
                                 </div>
                                 <div><img src="static/images/UnderConstruction.png" style="position: relative;top: 60%;left: 25%;"></div>
