@@ -17,6 +17,7 @@
 <link rel="import" href="../../bower_components/paper-item/paper-item.html">
 <link rel="import" href="../../bower_components/paper-toast/paper-toast.html">
 
+
 <link rel="import" href="../items-slider-controllet/items-slider-controllet.html">
 <link rel="import" href="../draggable-element-controllet/draggable-element-controllet.html">
 <link rel="import" href="../treeview-controllet/treeview-controllet.html">
@@ -612,29 +613,6 @@
 
             },
 
-            assignToolbar : function(){
-                this.$.toolbar_number.innerHTML = (this.selected + 1);
-                switch(this.selected){
-                   case 0:
-                       this.$.toolbar_title.innerHTML  = "Dataset source";
-                       this.$.toolbar_description.innerHTML = "Copy and paste/drag and drop in the textarea the url of datasource";
-                       break;
-                   case 1:
-                       this.$.toolbar_title.innerHTML  = "Data fields selection";
-                       this.$.toolbar_description.innerHTML = "Select the fields you want to visualize";
-                       break;
-                   case 2:
-                       this.$.toolbar_title.innerHTML  = "Data mapping";
-                       this.$.toolbar_description.innerHTML = "Select the visualization from the slider, drag and drop the selected fields in visualization parameter area, customize the visualization if you need";
-                       break;
-                    case 3:
-                        this.$.toolbar_title.innerHTML  = "Finish";
-                        this.$.toolbar_description.innerHTML = "Confirms the creation of the datalet";
-
-                        break;
-               }
-            },
-
             validateCurrentPass : function(next_selected_pass){
 
                 switch(next_selected_pass){
@@ -667,7 +645,6 @@
                 this.entryAnimation = 'slide-from-left-animation';
                 this.exitAnimation  = 'slide-right-animation';
                 this.selected = this.selected === 0 ? 0 : (this.selected - 1);
-                //this.assignToolbar();
             },
 
             _onNextClick : function() {
@@ -677,7 +654,6 @@
                 this.entryAnimation = 'slide-from-right-animation';
                 this.exitAnimation  = 'slide-left-animation';
                 this.selected = this.selected === 2 ? 2 : (this.selected + 1);
-                //this.assignToolbar();
             },
 
             _datasourceSelected : function(e){

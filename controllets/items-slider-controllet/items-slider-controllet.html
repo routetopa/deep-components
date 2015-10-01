@@ -35,6 +35,8 @@
                 width: 16%;
                 height: 70%;
                 background: #fff;
+                -moz-border-radius: 0.125rem;; /* Firefox */
+                -webkit-border-radius: 0.125rem;; /* Safari, Chrome */
                 border-radius: 0.125rem;
                 box-shadow:         0 0.625em 0.5125em 0 rgba(0, 0, 0, 0.25);
                 -webkit-box-shadow: 0 0.625em 0.5125em 0 rgba(0, 0, 0, 0.25);
@@ -45,7 +47,7 @@
             ::content .content-selected{
                 position: relative;
                 float: left;
-                top : 0.5%;
+                top : 5%;
                 margin : .5em;
 
                 /*height: 8em;
@@ -86,7 +88,8 @@
                 /*height: 100%;
                 display: inline-block;*/
                 float: left;
-                margin-top: 3.5em;
+                margin-top: 10%;
+                width: 10px;
                 --iron-icon-height: 28px;
                 --iron-icon-width: 28px;
             }
@@ -95,8 +98,8 @@
                 position: relative;
                 float:left;
                 display: inline-block;
-                height: 22vh;
-                width: 80%;
+                height: 25vh;
+                width: 100%;
                 overflow: hidden;
                 text-align: center;
                 /*margin-left: 3em;*/
@@ -109,18 +112,19 @@
 
         </style>
 
-        <paper-icon-button id="PrevButton" class="toolbar_button x-scope" on-click="_onPrevClick" icon="chevron-left" alt="arrow-back" title="arrow-back"></paper-icon-button>
-
         <neon-animated-pages id="pages" class="flex" selected="[[selected]]" entry-animation="[[entryAnimation]]" exit-animation="[[exitAnimation]]">
 
            <template is="dom-repeat" items="{{itemsPages}}" as="page" index-as="p">
 
                 <neon-animatable>
-                   <template is="dom-repeat" items="{{itemsPerPage}}" as="item" index-as="i">
-                       <template is="dom-if" if="{{getName(p, i) != 0}}">
-                             <div class='fancy content-card' id="{{getName(p, i)}}" on-click="_cardClick">
 
-                                <div class="card-content">
+                   <paper-icon-button class="toolbar_button x-scope" on-click="_onPrevClick" icon="chevron-left" alt="arrow-back" title="arrow-back"></paper-icon-button>
+
+                    <template is="dom-repeat" items="{{itemsPerPage}}" as="item" index-as="i">
+                       <template is="dom-if" if="{{getName(p, i) != 0}}">
+                             <div class='content-card' id="{{getName(p, i)}}" on-click="_cardClick">
+
+                                <div>
                                     <div class="title">
                                         <div class="big">{{getName(p, i)}}</div>
                                     </div>
@@ -132,12 +136,13 @@
                             </div>
                        </template>
                     </template>
+
+                    <paper-icon-button  class="toolbar_button x-scope" on-click="_onNextClick" icon="chevron-right" alt="arrow-forward" title="arrow-forward"></paper-icon-button>
+
                  </neon-animatable>
             </template>
 
         </neon-animated-pages>
-
-        <paper-icon-button id="NextButton" class="toolbar_button x-scope" on-click="_onNextClick" icon="chevron-right" alt="arrow-forward" title="arrow-forward"></paper-icon-button>
 
     </template>
 
@@ -238,15 +243,15 @@
             _onNextClick : function() {
                 this.entryAnimation = 'slide-from-right-animation';
                 this.exitAnimation = 'slide-left-animation';
-                this.selected = this.selected === (this.itemsPages.length -1) ? 0 : (this.selected + 1);
+                this.selected = this.selected === (this.itemsPages.length - 1) ? 0 : (this.selected + 1);
             },
 
             _cardClick : function(e){
                 if(this.prevSelectedCard != null){
-                    this.prevSelectedCard.className = "fancy content";
+                    this.prevSelectedCard.className = "content-card";
 
                 }
-                e.currentTarget.className = "fancy content-selected";
+                e.currentTarget.className = "content-selected";
                 this.prevSelectedCard = e.currentTarget;
 
                 this.fire('items-slider-controllet_item-selected', {datalet: e.currentTarget.id + "-datalet"});
@@ -254,7 +259,8 @@
             },
 
             attached : function(){
-                this.selected = 1;
+                /*this.selected = 1;*/
+                this.$.pages.notifyResize();
             }
         });
 
