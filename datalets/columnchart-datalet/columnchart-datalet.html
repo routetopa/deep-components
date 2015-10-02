@@ -22,7 +22,6 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 -->
 
-<link rel="import" href="../../bower_components/polymer/polymer.html">
 <link rel="import" href="../highcharts-datalet/highcharts-datalet.html">
 
 <!--
@@ -39,7 +38,7 @@ Example:
 
 <dom-module id="columnchart-datalet">
     <template>
-        <highcharts-datalet id="charts" data-url="{{dataUrl}}" query="{{query}}" fields-order="{{fieldsOrder}}"></highcharts-datalet>
+        <highcharts-datalet id="charts" data-url="{{dataUrl}}" fields="{{fields}}"></highcharts-datalet>
     </template>
     <script>
         var ColumnchartBehavior = {

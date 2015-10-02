@@ -39,7 +39,9 @@ var AjaxJsonDataRequestBehavior ={
         this.properties.json_results.value = e;
         this.runWorkcycle();
     },
+
     getPropertyName: function(query){
         return query.substring(query.lastIndexOf("['") + 2, query.lastIndexOf("']") );
     }
+
 }

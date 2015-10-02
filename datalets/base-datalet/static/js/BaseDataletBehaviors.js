@@ -37,6 +37,7 @@ var BaseDataletBehavior ={
             type: String,
             value: ""
         },
+
         /**
          * It represents one or multiple fields selected by user
          *
@@ -44,10 +45,11 @@ var BaseDataletBehavior ={
          * @type Array
          * @default empty
          */
-        fields:{
-            type: Array,
-            value: []
+        fields: {
+            type: String,
+            value: ""
         },
+
         /**
          * The selected and transformed data you can use in presentation phase
          *
@@ -64,7 +66,7 @@ var BaseDataletBehavior ={
 
     factoryImpl: function(data_url, fields) {
         this.data_url = data_url;
-        this.fields    = fields;
+        this.fields   = fields;
     }
 
 };

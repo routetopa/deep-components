@@ -16,64 +16,44 @@ Example
 
 @class datatables-datalet
 -->
-<link rel="import" href="../../bower_components/polymer/polymer.html">
-<link rel="import" href="../base-datalet/base-datalet.html">
+<link rel="import" href="../base-ajax-json-jsonpath-datalet/base-ajax-json-jsonpath-datalet.html">
 
 <dom-module id="datatable-datalet">
     <template>
-        <!--<link rel="stylesheet" href="../shared_js/bootstrap-3.3.4-dist/css/bootstrap.css">
-        <link rel="stylesheet" href="js/DataTables-master/media/css/dataTables.bootstrap.css">-->
-        <link rel="stylesheet" href="js/DataTables-1.10.5/media/css/jquery.dataTables.min.css">
+        <link rel="stylesheet" href="js/DataTables-master/media/css/jquery.dataTables.min.css">
 
         <table id="datatable" class="table table-striped table-bordered" cellspacing="0" style="height: auto; width: auto;">
         </table>
-        <base-datalet data-url="{{dataUrl}}" query="{{query}}"></base-datalet>
+        <base-ajax-json-jsonpath-datalet data-url="{{dataUrl}}" fields="{{fields}}"></base-ajax-json-jsonpath-datalet>
     </template>
 
     <script src="js/DataTables-master/media/js/jquery.dataTables.js"></script>
-    <!--<script src="js/DataTables-master/media/js/dataTables.bootstrap.js"></script>-->
 
     <script>
         var DatatableBehavior = {
-            tempData : null,
-            selectData: function(e){
-                var queries =  this._component.query.split("###");
 
-                for (i = 0; i < queries.length; i++) {
-                    var propName = this.getPropertyName(queries[i]);
-
-                    this.tempData = jsonPath(this.properties.json_results.value, queries[i]);
-                    if(!this.tempData || this.tempData == undefined) return;
-                    for (j = 0; j < this.tempData.length; j++) {
-                        if (i == 0) this.properties.data.value[j] = {};
-                        currObj = {};
-                        currObj[propName] = this.tempData[j];
-                        jQuery.extend(this.properties.data.value[j], currObj);
-                    }
-                }
-            },
             transformData: function(){
-                if(!this.tempData || this.tempData == undefined) return;
+                if(!this.data || this.data == undefined) return;
                 html = "";
                 html += '<thead>'+
                            '<tr>';
-                for(value in this.properties.data.value[0]){
-                   html += '<th>' + value + '</th>';
+                for(var x = 0; x<this.data.length; x++){
+                   html += '<th>' + this.data[x].name + '</th>';
                 }
                 html +=  '</tr>' +
                          '</thead>' +
                          '<tfoot>' +
                          '<tr>';
-                for(value in this.properties.data.value[0]){
-                    html += '<th>' + value + '</th>';
+                for(var x = 0; x<this.data.length; x++){
+                    html += '<th>' + this.data[x].name + '</th>';
                 }
                 html += '</tr>' +
                         '</tfoot>' +
                         '<tbody>';
-                for(key in this.properties.data.value){
+                for(var i = 0; i<this.data[0].data.length; i++){
                     html += '<tr>';
-                    for(value in this.properties.data.value[0]) {
-                      html += '<td>' + this.properties.data.value[key][value] + '</td>';
+                    for(var x = 0; x<this.data.length; x++){
+                      html += '<td>' + this.data[x].data[i] + '</td>';
                     }
                     html += '</tr>';
                 }
@@ -87,7 +67,7 @@ Example
         Polymer({
             is : 'datatable-datalet' ,
             ready: function(){
-                var DatatableComponentBehavior =  $.extend(true, {}, BaseDataletBehavior, WorkcycleBehavior,AjaxJsonDataRequestBehavior, DatatableBehavior);
+                var DatatableComponentBehavior =  $.extend(true, {}, BaseDataletBehavior, WorkcycleBehavior, AjaxJsonJsonPathBehavior, DatatableBehavior);
                 DatatableComponentBehavior.init(this);
             }
 

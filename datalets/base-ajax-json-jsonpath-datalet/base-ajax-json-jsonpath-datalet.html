@@ -22,7 +22,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 -->
 
-<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../base-datalet/base-datalet.html">
 
 <!--
 @group ROUTETOPA Base Web Component
@@ -50,34 +50,17 @@ Example
 @class base-datalet
 -->
 
-<dom-module id="base-datalet">
+<dom-module id="base-ajax-json-jsonpath-datalet">
     <template>
-        <style>
-            #footer {
-                position: relative;
-                bottom: 0;
-                width: 100%;
-                font-size: small;
-            }
-
-            #rtpalogo{
-                height:30px;
-                width: 30px;
-            }
-        </style>
-
-        <b>Source : </b><span id="domain"></span><br><br>
-        <div id="footer">Powered by Route-to-PA&nbsp&nbsp<a href="http://routetopa.eu/"><img src="static/images/rtpalogo.png" id="rtpalogo"></a></div><br>
+        <base-datalet data-url="{{dataUrl}}" fields="{{fields}}"></base-datalet>
     </template>
 
-    <script src="static/js/BaseDataletBehaviors.js"></script>
+    <script src="static/js/vendor/jsonpath-0.8.5.js"></script>
+    <script src="static/js/AjaxJsonJsonPathBehavior.js"></script>
 
     <script>
         BaseDatalet = Polymer({
-            is: 'base-datalet',
-            ready: function(){
-                this.$.domain.textContent = this.dataUrl.split("/")[0] + "//" + this.dataUrl.split("/")[2];
-            }
+            is: 'base-ajax-json-jsonpath-datalet'
         });
     </script>
 </dom-module>

@@ -22,7 +22,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 -->
 
-<link rel="import" href="../base-datalet/base-datalet.html">
+<link rel="import" href="../base-ajax-json-jsonpath-datalet/base-ajax-json-jsonpath-datalet.html">
 
 <!--
 
@@ -44,7 +44,7 @@ Example:
         </style>
 
         <div id="leafletjs"></div>
-        <base-datalet data-url="{{dataUrl}}" query="{{query}}" fields-order="{{fieldsOrder}}"></base-datalet>
+        <base-ajax-json-jsonpath-datalet data-url="{{dataUrl}}" fields="{{fields}}"></base-ajax-json-jsonpath-datalet>
 
     </template>
 
@@ -55,28 +55,6 @@ Example:
         var leafletjsBehavior = {
 
             /**
-             * Extract all the data from the dataset according to the queries.
-             *
-             * @method selectData
-             */
-            selectData: function(){
-
-                var queries =  this._component.query.split("###");
-
-                for (var i = 0; i < queries.length; i++) {
-                        var propName = this.getPropertyName(queries[i]);
-
-                        temp = jsonPath(this.properties.json_results.value, queries[i]);
-                        for (j = 0; j < temp.length; j++) {
-                            if (i == 0) this.properties.data.value[j] = {};
-                            currObj = {};
-                            currObj[propName] = temp[j];
-                            jQuery.extend(this.properties.data.value[j], currObj);
-                        }
-               }
-            },
-
-            /**
              * Read markers coordinates from the data object and add the marker to the map.
              * Call a method for the map redraw and set the viewport in order to fit all the markers in the viewport.
              *
@@ -85,14 +63,18 @@ Example:
             transformData: function(){
             	            	             
 				var coordinates = [];
-				var keys = Object.keys(this.properties.data.value[0]);
-				
-                for(var index in this.properties.data.value)
+				//var keys = Object.keys(this.properties.data.value[0]);
+
+                for(var i=0; i<this.data[0].data.length; i++)
                 {
-                    coordinates.push([parseFloat(this.properties.data.value[index][keys[0]]), parseFloat(this.properties.data.value[index][keys[1]])]);
-                    var marker = L.marker([coordinates[index][0], coordinates[index][1]]).addTo(this._component.map);
-                    var popup = L.popup().setContent('<image height="100" width="100" src="'+this.properties.data.value[index][keys[2]]+'" />');
-                    marker.bindPopup(popup);
+                    coordinates.push([parseFloat(this.data[0].data[i]), parseFloat(this.data[1].data[i])]);
+                    var marker = L.marker([coordinates[i][0], coordinates[i][1]]).addTo(this._component.map);
+
+                    if(this.data[2])
+                    {
+                        var popup = L.popup().setContent('<image height="100" width="100" src="' + this.data[2].data[i] + '" />');
+                        marker.bindPopup(popup);
+                    }
                 }
 
                 this._component.map.invalidateSize();
@@ -149,7 +131,7 @@ Example:
 
                 L.Icon.Default.imagePath = 'http://services.routetopa.eu/DEEalerProvider/COMPONENTS/datalets/leafletjs-datalet/leafletsjs/images';
 
-                var leafletjsComponentBehavior =  $.extend(true, {}, BaseDataletBehavior, WorkcycleBehavior, AjaxJsonDataRequestBehavior, leafletjsBehavior);
+                var leafletjsComponentBehavior =  $.extend(true, {}, BaseDataletBehavior, WorkcycleBehavior, AjaxJsonJsonPathBehavior, leafletjsBehavior);
                 leafletjsComponentBehavior.init(this);
             }
         });

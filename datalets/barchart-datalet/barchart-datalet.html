@@ -22,7 +22,6 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 -->
 
-<link rel="import" href="../../bower_components/polymer/polymer.html">
 <link rel="import" href="../highcharts-datalet/highcharts-datalet.html">
 
 <!--
@@ -32,14 +31,14 @@ THE SOFTWARE.
 Example:
 
 <barchart-datalet data-url="http://ckan.routetopa.eu/api/action/datastore_search?resource_id=73e02092-85a1-434e-85fe-0c9a43aa9a52&amp;limit=10000"
-                  query="$['result']['records'][*]['Lat']###$['result']['records'][*]['Lng']">
+                     fields='["result,records,Lat","result,records,Lng"]'></barchart-datalet>
 
 
 -->
 
 <dom-module name="barchart-datalet">
     <template>
-        <highcharts-datalet id="charts" data-url="{{dataUrl}}" query="{{query}}" fields-order="{{fieldsOrder}}"></highcharts-datalet>
+        <highcharts-datalet id="charts" data-url="{{dataUrl}}" fields="{{fields}}"></highcharts-datalet>
     </template>
     <script>
         var BarchartBehavior = {

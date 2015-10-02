@@ -22,8 +22,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 -->
 
-<link rel="import" href="../../bower_components/polymer/polymer.html">
-<link rel="import" href="../base-datalet/base-datalet.html">
+<link rel="import" href="../base-ajax-json-jsonpath-datalet/base-ajax-json-jsonpath-datalet.html">
 
 <dom-module id="treemap-datalet">
     <template>
@@ -81,40 +80,42 @@ THE SOFTWARE.
             }
         </style>
         <div id="treemap_placeholder"></div>
-        <base-datalet data-url="{{dataUrl}}" query="{{query}}"></base-datalet>
+        <base-ajax-json-jsonpath-datalet data-url="{{dataUrl}}" fields="{{fields}}"></base-ajax-json-jsonpath-datalet>
     </template>
 
     <script src="../shared_js/d3.js"></script>
     <script src="js/buildtreemap.js"></script>
     <script>
+
         var TreemapBehavior = {
             map : {
                 name : "Expenses",
                 children : []
             },
-            selectData: function(e){
-                var queries =  this._component.query.split("###");
+            selectData: function(e)
+            {
+                var treemapData = [];
 
-                if(queries.length > 1) {
-                    for (i = 0; i < queries.length; i++) {
-                        var propName = this.getPropertyName(queries[i]);
 
-                        temp = jsonPath(this.properties.json_results.value, queries[i]);
-                        for (j = 0; j < temp.length; j++) {
-                            if (i == 0) this.properties.data.value[j] = {};
+                if(this.data.length > 1) {
+                    for (i = 0; i < this.data.length; i++) {
+                        var propName = this.data[i].name;
+
+                        for (var j = 0; j < this.data[i].data.length; j++) {
+                            if (i == 0) treemapData[j] = {};
                             currObj = {};
-                            currObj[propName] = temp[j];
-                            jQuery.extend(this.properties.data.value[j], currObj);
+                            currObj[propName] = this.data[i].data[j];
+                            jQuery.extend(treemapData[j], currObj);
                         }
                     }
                 }else{
-                    this.properties.data.value = jsonPath(this.properties.json_results.value, queries[0]);
+                    treemapData = this.data[0].data;
                 }
 
                 this.map.children = [];
 
-                for(var i = 0; i < this.properties.data.value.length; i++){
-                    this.checkAggragationField(this.properties.data.value[i], queries.length , queries.length - 1);
+                for(var i = 0; i < treemapData.length; i++){
+                    this.checkAggragationField(treemapData[i], this._component.fields.length , this._component.fields.length - 1);
                 }
                 var json = JSON.stringify(this.map);
             },
@@ -152,8 +153,9 @@ THE SOFTWARE.
 
         Polymer({
             is : 'treemap-datalet' ,
+
             ready: function(){
-                var TreemapComponentBehavior =  $.extend(true, {}, BaseDataletBehavior, WorkcycleBehavior,AjaxJsonDataRequestBehavior, TreemapBehavior);
+                var TreemapComponentBehavior =  $.extend(true, {}, BaseDataletBehavior, WorkcycleBehavior, AjaxJsonJsonPathBehavior, TreemapBehavior);
                 TreemapComponentBehavior.init(this);
             }
 

@@ -1,61 +1,59 @@
-<link rel="import" href="../../bower_components/polymer/polymer.html">
-<link rel="import" href="../base-datalet/base-datalet.html">
+<link rel="import" href="../base-ajax-json-jsonpath-datalet/base-ajax-json-jsonpath-datalet.html">
 
 <dom-module id="highcharts-datalet">
+
     <template>
         <div id="container" style="width:auto; height:auto;"></div>
-        <base-datalet data-url="{{dataUrl}}" query="{{query}}" fields-order="{{fieldsOrder}}"></base-datalet>
+        <base-ajax-json-jsonpath-datalet data-url="{{dataUrl}}" fields="{{fields}}"></base-ajax-json-jsonpath-datalet>
     </template>
+
     <script src="http://code.highcharts.com/highcharts.js"></script>
     <script src="http://code.highcharts.com/modules/exporting.js"></script>
+
     <script>
         var HighchartsBehavior = {
-            tempData : null,
+
             properties: {
+
                 categories: {
                     type: Array,
                     value: []
                 },
+
                 series: {
                     type: Array,
                     value: []
                 },
+
                 series_type:{
                     type: String,
                     value: "line"//spline,time
                 }
             },
+
             selectData: function () {
-                this.properties.series.value = new Array();
-                var queries = this._component.query.split("###");
 
-                for (i = 0; i < queries.length; i++) {
-                    var propName = this.getPropertyName(queries[i]);
-                    this.tempData = jsonPath(this.properties.json_results.value, queries[i]);
-                    if(this.tempData == false || this.tempData == undefined) return;
-                    if (i == /*this._component.fieldsOrder.split(",")[0]*/ 0) {
-                        this.properties.categories.value = this.tempData;
+                this.properties.categories.value = this.data[0].data;
 
-                    } else {
-                        currSerie = {};
-                        currSerie["name"] = propName;
-                        this.tempData.every(function (element, index, array) {
-                            try {
-                                (isNaN(parseFloat(element))) ? array[index] = parseFloat(element.match(/[0-9]+/g).join(".")) :
-                                        array[index] = parseFloat(element);
-                            }catch(e){
-                                //console.log("Parsing data error. Highchart-datalet.selectData");
-                            }
-                            return true;
-                        });
-                        currSerie["data"] = this.tempData;
-                        this.properties.series.value.push(currSerie);
-                    }
+                for (var i = 1; i < this.data.length; i++)
+                {
+
+                    this.data[i].data.every(function (element, index, array) {
+                        try {
+                            (isNaN(parseFloat(element))) ? array[index] = parseFloat(element.match(/[0-9]+/g).join(".")) :
+                                    array[index] = parseFloat(element);
+                        }catch(e){
+                            //console.log("Parsing data error. Highchart-datalet.selectData");
+                        }
+                        return true;
+                    });
+
+                    this.properties.series.value.push(this.data[i]);
                 }
             }
         };
 
-        var HighchartsComponentBehavior = $.extend(true, {}, BaseDataletBehavior, WorkcycleBehavior, AjaxJsonDataRequestBehavior, HighchartsBehavior);
+        var HighchartsComponentBehavior = $.extend(true, {}, BaseDataletBehavior, WorkcycleBehavior, AjaxJsonJsonPathBehavior, HighchartsBehavior);
 
         HighchartsDatalet = Polymer({
             is : 'highcharts-datalet'

@@ -23,7 +23,6 @@ THE SOFTWARE.
 -->
 
 
-<link rel="import" href="../../bower_components/polymer/polymer.html">
 <link rel="import" href="../highcharts-datalet/highcharts-datalet.html">
 <script src="http://code.highcharts.com/highcharts-3d.js"></script>
 
@@ -48,7 +47,7 @@ Example:
             <tr><td>Alpha Angle</td><td><input id="R0" type="range" min="0" max="45" value="15"/> <span id="R0-value" class="value"></span></td></tr>
             <tr><td>Beta Angle</td><td><input id="R1" type="range" min="0" max="45" value="15"/> <span id="R1-value" class="value"></span></td></tr>
         </table>
-        <highcharts-datalet id="charts" data-url="{{dataUrl}}" query="{{query}}" fields-order="{{fieldsOrder}}"></highcharts-datalet>
+        <highcharts-datalet id="charts" data-url="{{dataUrl}}" fields="{{fields}}"></highcharts-datalet>
     </template>
 
     <script>
@@ -125,9 +124,7 @@ Example:
              * @method ready
              */
             ready: function(){
-                var column3DchartComponentBehavior = $.extend({}, HighchartsComponentBehavior, column3DchartBehavior);
-                column3DchartComponentBehavior.properties = $.extend({}, HighchartsComponentBehavior.properties, column3DchartBehavior.properties);
-
+                var column3DchartComponentBehavior = $.extend(true, {}, HighchartsComponentBehavior, column3DchartBehavior);
                 column3DchartComponentBehavior.init(this);
             }
         });
