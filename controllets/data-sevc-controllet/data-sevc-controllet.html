@@ -1,64 +1,38 @@
 <link rel="import" href="../../bower_components/polymer/polymer.html">
-<link rel="import" href="../../bower_components/paper-styles/color.html">
+            <link rel="import" href="../../bower_components/paper-styles/color.html">
 
-<link rel="import" href="../../bower_components/neon-animation/neon-animated-pages.html">
-<link rel="import" href="../../bower_components/neon-animation/neon-animatable.html">
-<link rel="import" href="../../bower_components/neon-animation/neon-animations.html">
+            <link rel="import" href="../../bower_components/neon-animation/neon-animated-pages.html">
+            <link rel="import" href="../../bower_components/neon-animation/neon-animatable.html">
+            <link rel="import" href="../../bower_components/neon-animation/neon-animations.html">
 
-<link rel="import" href="../../bower_components/iron-ajax/iron-ajax.html">
-<link rel="import" href="../../bower_components/paper-input/paper-input.html">
-<link rel="import" href="../../bower_components/paper-input/paper-textarea.html">
-<link rel="import" href="../../bower_components/paper-button/paper-button.html">
-<link rel="import" href="../../bower_components/paper-tabs/paper-tabs.html">
-<link rel="import" href="../../bower_components/paper-tabs/paper-tab.html">
-<link rel="import" href="../../bower_components/iron-pages/iron-pages.html">
-<link rel="import" href="../../bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
-<link rel="import" href="../../bower_components/paper-menu/paper-menu.html">
-<link rel="import" href="../../bower_components/paper-item/paper-item.html">
-<link rel="import" href="../../bower_components/paper-toast/paper-toast.html">
-
-
-<link rel="import" href="../items-slider-controllet/items-slider-controllet.html">
-<link rel="import" href="../draggable-element-controllet/draggable-element-controllet.html">
-<link rel="import" href="../treeview-controllet/treeview-controllet.html">
+            <link rel="import" href="../../bower_components/iron-ajax/iron-ajax.html">
+            <link rel="import" href="../../bower_components/paper-input/paper-input.html">
+            <link rel="import" href="../../bower_components/paper-input/paper-textarea.html">
+            <link rel="import" href="../../bower_components/paper-button/paper-button.html">
+            <link rel="import" href="../../bower_components/paper-tabs/paper-tabs.html">
+            <link rel="import" href="../../bower_components/paper-tabs/paper-tab.html">
+            <link rel="import" href="../../bower_components/iron-pages/iron-pages.html">
+            <link rel="import" href="../../bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
+            <link rel="import" href="../../bower_components/paper-menu/paper-menu.html">
+            <link rel="import" href="../../bower_components/paper-item/paper-item.html">
+            <link rel="import" href="../../bower_components/paper-toast/paper-toast.html">
 
 
-<dom-module id="data-sevc-controllet">
-    <template>
-        <link rel="stylesheet" href="../shared_js/perfect-scrollbar/css/perfect-scrollbar.min.css">
+            <link rel="import" href="../items-slider-controllet/items-slider-controllet.html">
+            <link rel="import" href="../draggable-element-controllet/draggable-element-controllet.html">
+            <link rel="import" href="../treeview-controllet/treeview-controllet.html">
 
-        <style is="custom-style">
 
-            /*TEST FOR CROSS BROWSER FLEX LAYOUT BUG FIXING --- PEZZOTS */
-            .layout.horizontal.data-sevc-controllet, .layout.horizontal-reverse.data-sevc-controllet, .layout.vertical.data-sevc-controllet, .layout.vertical-reverse.data-sevc-controllet {
-                display: flex;
-            }
-            .layout.vertical.data-sevc-controllet {
-                flex-direction: column;
-            }
-            .layout.justified {
-                justify-content: space-between;
-            }
-            .layout.vertical {
-                flex-direction: column;
-            }
-            .layout.horizontal, .layout.horizontal-reverse, .layout.vertical, .layout.vertical-reverse {
-                display: flex;
-            }
+            <dom-module id="data-sevc-controllet">
+            <template>
+             <link rel="stylesheet" href="../shared_js/perfect-scrollbar/css/perfect-scrollbar.min.css">
+            <link rel="stylesheet" href="static/css/reset.css">
 
-            .layout.horizontal.data-sevc-controllet.data-sevc-controllet, .layout.horizontal-reverse.data-sevc-controllet.data-sevc-controllet, .layout.vertical.data-sevc-controllet.data-sevc-controllet, .layout.vertical-reverse.data-sevc-controllet.data-sevc-controllet {
-                display: flex;
+            <style is="custom-style">
+
+            ::content body {
+                font-family: 'Roboto', sans-serif;
             }
-            .layout.horizontal.data-sevc-controllet, .layout.horizontal-reverse.data-sevc-controllet, .layout.vertical.data-sevc-controllet, .layout.vertical-reverse.data-sevc-controllet {
-                display: flex;
-            }
-            .layout.horizontal {
-                flex-direction: row;
-            }
-            .layout.horizontal, .layout.horizontal-reverse, .layout.vertical, .layout.vertical-reverse {
-                display: flex;
-            }
-            /*END TEST*/
 
             .flexchild
             {
@@ -185,14 +159,14 @@
 
             #fields_placeholder{
                 width: 40%;
-                height: 50vh;
+                height: 75vh;
                 position: relative;
                 float: left;
                 overflow: auto;
             }
 
             #table_fields_container{
-                height: 50vh;
+                height: 75vh;
                 width: 55%;
                 position: relative;
                 float: left;
