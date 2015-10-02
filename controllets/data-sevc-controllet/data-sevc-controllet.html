@@ -210,6 +210,12 @@
                 width: 100%;
             }
 
+            ::content .leaflet-map-pane, .leaflet-tile, .leaflet-marker-icon, .leaflet-marker-shadow, .leaflet-tile-pane, .leaflet-tile-container, .leaflet-overlay-pane, .leaflet-shadow-pane, .leaflet-marker-pane, .leaflet-popup-pane, .leaflet-overlay-pane svg, .leaflet-zoom-box, .leaflet-image-layer, .leaflet-layer {
+                position: absolute;
+                left: 0;
+                top: 0;
+            }
+
         </style>
 
         <iron-ajax
@@ -357,11 +363,8 @@
                                 </div>
                             </div>
 
-                            <div class="datalet_right_container">
-                                <div class="vertical justified layout">
-                                    <div id="datalet_placeholder" class=""></div>
-                                </div>
-                            </div>
+                            <div id="datalet_placeholder" style="width: 100%;"></div>
+
 
                         </div>
 
@@ -698,19 +701,9 @@
                     placeHolder : this.$.datalet_placeholder
                 };
 
-                var datalet_finish_params ={
-                    component   : this.selected_datalet,
-                    params      :{
-                        'data-url' : this.dataUrl
-                    },
-                    fields      : this.selected_fields,
-                    placeHolder : this.$.datalet_created_placehorder
-                };
 
                 ComponentService.deep_url = this.deepUrl;
-
                 ComponentService.getComponent(datalet_params);
-                ComponentService.getComponent(datalet_finish_params);
 
             },
 
