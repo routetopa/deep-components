@@ -1,9 +1,44 @@
+<!--
+The MIT License (MIT)
+
+Copyright (c) 2015 ROUTE-TO-PA CONSORTIUM
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+-->
+
+
 <link rel="import" href="../../bower_components/polymer/polymer.html">
 <link rel="import" href="../highcharts-datalet/highcharts-datalet.html">
-
-<link rel="import" href="../../bower_components/iron-ajax/iron-ajax.html">
 <script src="http://code.highcharts.com/highcharts-3d.js"></script>
 
+
+<!--
+
+`column3Dchart-datalet` is a column3Dchart datalet based on highcharts project <http://www.highcharts.com/>
+
+Example:
+
+<column3dchart-datalet data-url="http://ckan.routetopa.eu/api/action/datastore_search?resource_id=73e02092-85a1-434e-85fe-0c9a43aa9a52&amp;limit=10000"
+                       query="$['result']['records'][*]['Lat']###$['result']['records'][*]['Lng']">
+
+
+-->
 
 
 <dom-module name="column3Dchart-datalet">
@@ -22,12 +57,14 @@
 
         var column3DchartBehavior = {
 
-
+            /**
+             * Bluid Highchart object
+             *
+             * @method transformData
+             */
             transformData: function(){
-                         //Bluid Highchart element
                          chart = new Highcharts.Chart({
                              chart: {
-                                 //To Modify renderTo: 'container',
                                  renderTo: this._component.$.charts.$.container,
                                  borderColor: '#EBBA95',
                                  borderWidth: 2,
@@ -44,7 +81,7 @@
                                  }
                              },
                              xAxis: {
-                                 categories: this.properties.categories.value,//this._component.categories,
+                                 categories: this.properties.categories.value,
                                  title: {
                                      text: null
                                  }
@@ -62,7 +99,7 @@
                              },
 
                      series: this.properties.series.value
-                });//highcharts
+                });
 
                 // Activate the sliders
                 $('#R0').on('change', function () {
@@ -81,6 +118,12 @@
         column3DchartDatalet = Polymer({
             is: 'column3Dchart-datalet',
 
+            /**
+             * 'ready' callback extend the column3DchartComponentBehavior with HighchartsComponentBehavior and column3DchartBehavior
+             * and run the Datalet workcycle.
+             *
+             * @method ready
+             */
             ready: function(){
                 var column3DchartComponentBehavior = $.extend({}, HighchartsComponentBehavior, column3DchartBehavior);
                 column3DchartComponentBehavior.properties = $.extend({}, HighchartsComponentBehavior.properties, column3DchartBehavior.properties);

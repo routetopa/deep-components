@@ -1,4 +1,40 @@
+<!--
+The MIT License (MIT)
+
+Copyright (c) 2015 ROUTE-TO-PA CONSORTIUM
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+-->
+
 <link rel="import" href="../base-datalet/base-datalet.html">
+
+<!--
+
+`leafletjs-datalet` is a map datalet based on open source project leafletjs <http://leafletjs.com/>
+
+Example:
+
+<leafletjs-datalet data-url="http://ckan.routetopa.eu/api/action/datastore_search?resource_id=73e02092-85a1-434e-85fe-0c9a43aa9a52&amp;limit=10000"
+                   query="$['result']['records'][*]['Lat']###$['result']['records'][*]['Lng']###$['result']['records'][*]['Link']">
+
+
+-->
 
 <dom-module name="leafletjs-datalet">
     <template>
@@ -16,25 +52,18 @@
 
     <script>
 
-        $(document).ready(function(){
-/*            var map = L.map("leafletjs").setView([51.505, -0.09], 13);
-
-            L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                maxZoom: 18,
-                attribution: 'Map data © <a href="http://openstreetmap.org">OpenStreetMap</a> contributors'
-            }).addTo(map);*/
-        });
-
-
         var leafletjsBehavior = {
 
+            /**
+             * Extract all the data from the dataset according to the queries.
+             *
+             * @method selectData
+             */
             selectData: function(){
 
                 var queries =  this._component.query.split("###");
 
-                for (i = 0; i < queries.length; i++) {
-                        /*propsName = queries[i].split(".");
-                        var propName = "" + propsName[propsName.length - 1];*/
+                for (var i = 0; i < queries.length; i++) {
                         var propName = this.getPropertyName(queries[i]);
 
                         temp = jsonPath(this.properties.json_results.value, queries[i]);
@@ -47,6 +76,12 @@
                }
             },
 
+            /**
+             * Read markers coordinates from the data object and add the marker to the map.
+             * Call a method for the map redraw and set the viewport in order to fit all the markers in the viewport.
+             *
+             * @method transformData
+             */
             transformData: function(){
             	            	             
 				var coordinates = [];
@@ -70,10 +105,42 @@
         Polymer({
 
             is : 'leafletjs-datalet',
+
+            properties : {
+
+                /**
+                 * Store a reference to the leafletjs map object created in 'ready' callback
+                 * @attribute map
+                 * @type Object
+                 */
+                map :
+                {
+                    type: Object,
+                    value:null
+                },
+
+                /**
+                 * An Array with all the markers extracted from the dataset
+                 * @attribute markers
+                 * @type Array
+                 */
+                markers :
+                {
+                    type : Array,
+                    value : []
+                }
+            },
+
+            /**
+             * 'ready' callback create the map object, set the tileLayer to openstreetmap and the default icon image path.
+             * Moreover extend the leafletjsComponentBehavior with BaseDataletBehavior, WorkcycleBehavior and leafletjsBehavior
+             * and run the Datalet workcycle.
+             *
+             * @method ready
+             */
             ready: function(){
 
 				this.map = L.map(this.$.leafletjs).setView([0, 0], 13);
-                //this.map = L.map("leafletjs").setView([0, 0], 13);
 
                 L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                     maxZoom: 18,
@@ -84,33 +151,7 @@
 
                 var leafletjsComponentBehavior =  $.extend(true, {}, BaseDataletBehavior, WorkcycleBehavior, AjaxJsonDataRequestBehavior, leafletjsBehavior);
                 leafletjsComponentBehavior.init(this);
-            },
-
-            attached : function(){
-
-
-
-            },
-
-            properties : {
-
-                map :
-                {
-                    type: Object,
-                    value:null
-                },
-
-                markers :
-                {
-                    type : Array,
-                    value : []
-                }
-            },
-
-            log : function(item){
-                console.log(item);
             }
-
         });
     </script>
 </dom-module>
