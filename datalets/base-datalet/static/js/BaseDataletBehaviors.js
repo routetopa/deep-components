@@ -80,7 +80,6 @@ var WorkcycleBehavior = {
      * @method requestData
      */
     requestData: function(){
-
     },
 
     /**
@@ -110,6 +109,15 @@ var WorkcycleBehavior = {
     },
 
     /**
+     * Build the object/s for presentation layer.
+     *
+     * @method presentData
+     */
+    presentData: function(){
+
+    },
+
+    /**
      * Called when iron-ajax component receive the json data from called url. It is responsible to
      * extract data from response, coded in json, and refine it by using JsonPath queries in the query attribute.
      * After this phase it parses the resulting object to populate the structure(keys,values) to fill the final table by using
@@ -121,6 +129,7 @@ var WorkcycleBehavior = {
         this.selectData();
         this.filterData();
         this.transformData();
+        this.presentData();
     },
 
     init: function(component){

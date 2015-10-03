@@ -62,11 +62,10 @@ var AjaxJsonJsonPathBehavior = {
      */
     handleResponse: function(e) {
         this.properties.json_results.value = e;
-        this.createDataObject();
         this.runWorkcycle();
     },
 
-    createDataObject : function(){
+    selectData : function(){
 
         this.data = [];
         this._component.fields = JSON.parse(this._component.fields);

@@ -88,11 +88,13 @@ THE SOFTWARE.
     <script>
 
         var TreemapBehavior = {
+
             map : {
                 name : "Expenses",
                 children : []
             },
-            selectData: function(e)
+
+            transformData: function(e)
             {
                 var treemapData = [];
 
@@ -117,8 +119,11 @@ THE SOFTWARE.
                 for(var i = 0; i < treemapData.length; i++){
                     this.checkAggragationField(treemapData[i], this._component.fields.length , this._component.fields.length - 1);
                 }
+
                 var json = JSON.stringify(this.map);
+
             },
+
             findChild: function(child, category){
                 var children = child.children;
                 for (var i=0; i<children.length; i++) {
@@ -129,6 +134,7 @@ THE SOFTWARE.
                 children.push(nchild);
                 return nchild;
             },
+
             checkAggragationField: function(object, levels, value_index){
                 var curchild = this.map;
                 var keys = Object.keys(object);
@@ -145,7 +151,8 @@ THE SOFTWARE.
                 curchild.children = null;
                 curchild.value = value;
             },
-            transformData: function(){
+
+            presentData: function(){
                 build(this.map, "treemap_placeholder");
             }
         };
