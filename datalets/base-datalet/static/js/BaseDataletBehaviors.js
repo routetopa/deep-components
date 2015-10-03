@@ -1,7 +1,8 @@
 /*
+@license
     The MIT License (MIT)
 
-    Copyright (c) 2015 ROUTE-TO-PA CONSORTIUM
+    Copyright (c) 2015 Dipartimento di Informatica - Università di Salerno - Italy
 
     Permission is hereby granted, free of charge, to any person obtaining a copy
     of this software and associated documentation files (the "Software"), to deal
@@ -74,6 +75,7 @@ var BaseDataletBehavior ={
 var WorkcycleBehavior = {
 
     _component: null,
+
     /**
      * Request data from source(e.g. CKAN by api) using some kind of technology(e.g. Ajax)
      *
@@ -118,12 +120,9 @@ var WorkcycleBehavior = {
     },
 
     /**
-     * Called when iron-ajax component receive the json data from called url. It is responsible to
-     * extract data from response, coded in json, and refine it by using JsonPath queries in the query attribute.
-     * After this phase it parses the resulting object to populate the structure(keys,values) to fill the final table by using
-     * angularJs syntax.
+     * This method represents the entire datalet workcycle.
      *
-     * @method handleResponse
+     * @method runWorkcycle
      */
     runWorkcycle: function() {
         this.selectData();
@@ -132,6 +131,11 @@ var WorkcycleBehavior = {
         this.presentData();
     },
 
+    /**
+     * This method save the reference to the polymer object related to the datalet.
+     *
+     * @method init
+     */
     init: function(component){
         this._component = component;
         this.requestData();
