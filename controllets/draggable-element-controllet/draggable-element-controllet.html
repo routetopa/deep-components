@@ -1,5 +1,51 @@
+<!--
+@license
+
+The MIT License (MIT)
+
+Copyright (c) 2015 ROUTE-TO-PA CONSORTIUM
+
+    Permission is hereby granted, free of charge, to any person obtaining a copy
+    of this software and associated documentation files (the "Software"), to deal
+    in the Software without restriction, including without limitation the rights
+    to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+    copies of the Software, and to permit persons to whom the Software is
+    furnished to do so, subject to the following conditions:
+
+    The above copyright notice and this permission notice shall be included in
+    all copies or substantial portions of the Software.
+
+    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+    IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+    FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+    AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+    LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+    THE SOFTWARE.
+-->
+
 <link rel="import" href="../../bower_components/polymer/polymer.html">
 <link rel="import" href="../../bower_components/paper-styles/color.html">
+
+<!--
+`draggable-element-controllet` is a controllet that represents a draggable element. It can be a target or source. When it's a suorce is possible to drag the content in to a
+ container( a draggable-element-controllet with target feature active). When it's a target it manage the drag-and event to get the the text and id value of the source content.
+ During the dragging phase all the target border will be emphasize to facilitate the drop phase.
+
+Example:
+
+    <data-sevc-controllet deep-url="http://192.168.214.128/DEEalerProvider/DEEP/"
+                          datalets-list-url="http://192.168.214.128/DEEalerProvider/DEEP/datalets-list"
+                          organization="2" >
+    </data-sevc-controllet>
+
+
+@element draggable-element-controllet
+@status beta
+@homepage
+@group controllets
+-->
+
 
 <dom-module id="draggable-element-controllet">
     <template>
@@ -123,35 +169,77 @@
 
             is: 'draggable-element-controllet',
 
+            /**
+             * Fired when the user drags a suorce in to a target element.
+             *
+             * @event draggable-element-controllet_content-dragged
+             */
+
             targets : null,
 
             properties: {
-
+                /**
+                 * It's a boolean flag to give to the controllet the role of target.
+                 *
+                 * @attribute isTarget
+                 * @type Boolean
+                 * @default false
+                 */
                 isTarget : {
                     type : Boolean,
                     value: false
                 },
-
+                /**
+                 * It's a string value the represent the current number of target. It will be use in the label section.
+                 *
+                 * @attribute number
+                 * @type Strig
+                 * @default '0'
+                 */
                 number: {
                     type: String,
                     value : "0"
                 },
-
+                /**
+                 * It's the name of the target field
+                 *
+                 * @attribute heading
+                 * @type Strig
+                 * @default 'Heading'
+                 */
                 heading : {
                     type : String,
                     value : "Heading"
                 },
-
+                /**
+                 * It's the description of the target field
+                 *
+                 * @attribute description
+                 * @type Strig
+                 * @default 'Description'
+                 */
                 description: {
                     type: String,
                     value: "Description"
                 },
-
+                /**
+                 * It's the value of the source field
+                 *
+                 * @attribute label
+                 * @type Strig
+                 * @default 'Label'
+                 */
                 label : {
                     type : String,
                     value : "Label"
                 },
-
+                /**
+                 * It's the identifier associated to the source field element
+                 *
+                 * @attribute identifier
+                 * @type Strig
+                 * @default ''
+                 */
                 identifier : {
                     type : String,
                     value : ""
@@ -188,7 +276,13 @@
                 }*/
                 return false;
             },
-
+            /**
+             * Callback associated to event on-drag for the source element. When the user is dragging a source element all the target border will be emphasized.
+             *
+             * @method _handleOnDrag
+             *
+             * @param {Event} e
+             */
             _handleOnDrag : function(e){
                 this.targets = document.querySelectorAll('draggable-element-controllet[is-target=true]');
                 for (var i = 0; i < this.targets.length; i++) {
@@ -196,7 +290,14 @@
                 }
 
             },
-
+            /**
+             * Callback associated to event on-trak for the source element. When the user stops dragging a source element the relative target is recognized and an event will be
+             * fired to broadcast to all listeners the information about the current dragging operation.
+             *
+             * @method _handleTrack
+             *
+             * @param {Event} e
+             */
             _handleTrack : function(e) {
 
                 switch(e.detail.state) {
