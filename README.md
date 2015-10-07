@@ -8,8 +8,6 @@ COMPONENTS is a repositiory of datalet and controllet, maintained by the [UNISA 
 * [Quick start](#quick-start)
 * [Bugs and feature requests](#bugs-and-feature-requests)
 * [Documentation](#documentation)
-* [Contributing](#contributing)
-* [Community](#community)
 * [Versioning](#versioning)
 * [Creators](#creators)
 * [Copyright and license](#copyright-and-license)
@@ -45,13 +43,6 @@ Send a mail to developers@routetopa.eu
 ## Documentation
 
 Every datalet/controllet has a doc.html file in datalet/controllet root directory
-
-## Contributing
-
-
-## Community
-
-Get updates on COMPONENTS's development and chat with the project maintainers and community members.
 
 ## Versioning
 v0.1
