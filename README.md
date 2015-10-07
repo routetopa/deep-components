@@ -1,4 +1,4 @@
-# [COMPONENTS]
+# COMPONENTS
 
 COMPONENTS is a repositiory of datalet and controllet, maintained by the [UNISA TEAM](http://www.isislab.it/) for the [ROUTE-TO-PA PROJECT](http://www.routetopa.eu/).
 
