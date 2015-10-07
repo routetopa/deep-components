@@ -17,10 +17,7 @@ COMPONENTS is a repositiory of datalet and controllet, maintained by the [UNISA 
 
 ## Quick start
 
-Several quick start options are available:
-
-* [Download the latest release](https://github.com/twbs/bootstrap/archive/v3.3.5.zip).
-* Clone the repo: `git clone https://github.com/twbs/bootstrap.git`.
+Clone the repo: `git clone http://service.routetopa.eu:7480/WebCompDev/COMPONENTS.git`.
 
 ### What's included
 
