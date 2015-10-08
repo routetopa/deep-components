@@ -1,6 +1,6 @@
-# [COMPONENTS](http://www.routetopa.eu)
+# COMPONENTS
 
-COMPONENTS is a repositiory of datalet and controllet, maintained by the [UNISA TEAM](http://www.isislab.it/) for the ROUTE-TO-PA PROJECT.
+COMPONENTS is a repositiory of datalet and controllet, maintained by the [UNISA TEAM](http://www.isislab.it/) for the [ROUTE-TO-PA PROJECT](http://www.routetopa.eu/).
 
 
 ## Table of contents
@@ -8,8 +8,6 @@ COMPONENTS is a repositiory of datalet and controllet, maintained by the [UNISA 
 * [Quick start](#quick-start)
 * [Bugs and feature requests](#bugs-and-feature-requests)
 * [Documentation](#documentation)
-* [Contributing](#contributing)
-* [Community](#community)
 * [Versioning](#versioning)
 * [Creators](#creators)
 * [Copyright and license](#copyright-and-license)
@@ -17,59 +15,40 @@ COMPONENTS is a repositiory of datalet and controllet, maintained by the [UNISA 
 
 ## Quick start
 
-Several quick start options are available:
-
-* [Download the latest release](https://github.com/twbs/bootstrap/archive/v3.3.5.zip).
-* Clone the repo: `git clone https://github.com/twbs/bootstrap.git`.
+Clone the repo: `git clone http://service.routetopa.eu:7480/WebCompDev/COMPONENTS.git`.
 
 ### What's included
 
-Within the download you'll find the following directories and files, logically grouping common assets and providing both compiled and minified variations. You'll see something like this:
+Within the download you'll find the following directories and files. You'll see something like this:
 
 ```
-bootstrap/
-├── css/
-│   ├── bootstrap.css
-│   ├── bootstrap.css.map
-│   ├── bootstrap.min.css
-│   ├── bootstrap.min.css.map
-│   ├── bootstrap-theme.css
-│   ├── bootstrap-theme.css.map
-│   ├── bootstrap-theme.min.css
-│   └── bootstrap-theme.min.css.map
-├── js/
-│   ├── bootstrap.js
-│   └── bootstrap.min.js
-└── fonts/
-    ├── glyphicons-halflings-regular.eot
-    ├── glyphicons-halflings-regular.svg
-    ├── glyphicons-halflings-regular.ttf
-    ├── glyphicons-halflings-regular.woff
-    └── glyphicons-halflings-regular.woff2
+COMPONENTS/
+├── bower_components/
+│   ├── ...
+├── controllets/
+│   ├── ...
+│   └── ...
+├── datalets/
+│   ├── ...
+│   └── ...
+└── docs/
+    ├── docs.html
 ```
-
 
 ## Bugs and feature requests
 
-Have a bug or a feature request?
+Have a bug or a feature request? 
+Send a mail to developers@routetopa.eu
 
 ## Documentation
 
-COMPONENTS documentation.
-
-### Running documentation locally
-
-### Documentation for previous releases
-
-## Contributing
-
-## Community
-
-Get updates on COMPONENTS's development and chat with the project maintainers and community members.
+Every datalet/controllet has a doc.html file in datalet/controllet root directory
 
 ## Versioning
+v0.1
 
 ## Creators
+UNISA Team - Dipartimento di Informatica - Università degli studi di Salerno - Italy
 
 ## Copyright and license
 
