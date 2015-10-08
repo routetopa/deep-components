@@ -1,0 +1,10 @@
+<element name="super-tick-tock-clock" extends="tick-tock-clock">
+  <script>
+    ({
+      tick: function () {
+        this._super.tick.call(this);
+        console.log('tick');
+      }
+    });
+  </script>
+</element>
