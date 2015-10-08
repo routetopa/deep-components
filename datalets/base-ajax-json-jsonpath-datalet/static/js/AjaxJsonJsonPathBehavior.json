@@ -1,0 +1,47 @@
+{
+  "elements": [],
+  "elementsByTagName": {},
+  "behaviors": [
+    {
+      "type": "behaviour",
+      "desc": "Defined in `AjaxJsonJsonPathBehaviour.js`. Itos a specific implemetation that uses Ajax to get the data in Json format and uses JsonPath to select and filtering the data",
+      "events": [],
+      "properties": [
+        {
+          "name": "json_results",
+          "type": "Object",
+          "desc": "It contains the json data from async xhr call returned from core-ajax core component",
+          "published": true
+        },
+        {
+          "name": "requestData",
+          "type": "Function",
+          "desc": "Make an AJAX call to the dataset URL",
+          "params": [
+          ],
+          "published": true,
+          "function": true
+        },
+        {
+          "name": "handleResponse",
+          "type": "Function",
+          "desc": "Called when core-ajax component receive the json data from called url.",
+          "params": [
+          ],
+          "published": true,
+          "function": true
+        },
+        {
+          "name": "selectData",
+          "type": "Function",
+          "desc": "selectData built a JSONPATH query based on the user selected fields then extract data from the JSON response. This method built an objects <name, data> for every user selected field and push it into the data array.",
+          "params": [
+          ],
+          "published": true,
+          "function": true
+        }
+      ],
+      "is": "AjaxJsonJsonPathBehaviour"
+    }
+  ]
+}

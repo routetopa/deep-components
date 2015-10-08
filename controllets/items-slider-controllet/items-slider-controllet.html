@@ -1,9 +1,8 @@
 <!--
 @license
+    The MIT License (MIT)
 
-The MIT License (MIT)
-
-Copyright (c) 2015 ROUTE-TO-PA CONSORTIUM
+    Copyright (c) 2015 Dipartimento di Informatica - Università di Salerno - Italy
 
     Permission is hereby granted, free of charge, to any person obtaining a copy
     of this software and associated documentation files (the "Software"), to deal
@@ -34,6 +33,23 @@ Copyright (c) 2015 ROUTE-TO-PA CONSORTIUM
 <link rel="import" href="../../bower_components/paper-card/paper-card.html">
 <link rel="import" href="../../bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="../../bower_components/iron-icons/iron-icons.html">
+
+<!--
+ `items-slider-controllet` is a carousel of cards with a title and an image. Pass to it an array of objects with name and image fields and
+ a responsive slider will be created. Every time the user click on a card an event will be generate in order to get the card clicked information to
+ the component that use the slider.
+
+Example:
+
+    <items-slider-controllet items='[{name : "myObject1", image : "pathToMyImage1"},...,{name : "myObjectN", image : "pathToMyImageN"}]' \>
+    </items-slider-controllet>
+
+
+@element items-slider-controllet
+@status beta
+@homepage index.html
+@group controllets
+-->
 
 <dom-module id="items-slider-controllet">
     <template>
@@ -166,7 +182,13 @@ Copyright (c) 2015 ROUTE-TO-PA CONSORTIUM
 
         Polymer({
 
-           is : 'items-slider-controllet',
+            is : 'items-slider-controllet',
+
+            /**
+             * Fired when the user selects a card from slider by clicking on it.
+             *
+             * @event items-slider-controllet_item-selected
+             */
 
             properties : {
 
@@ -188,15 +210,11 @@ Copyright (c) 2015 ROUTE-TO-PA CONSORTIUM
                 /**
                  * It stores all items to put in the slider
                  *
-                 * @attribute tools
-                 * @type array
-                 * @default 'null'
                  */
                 items : {
                     type: Array,
                     value: []
                 },
-
                 itemsPages : {
                    type : Array,
                    value : []

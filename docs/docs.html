@@ -3,49 +3,111 @@
 <head>
     <link rel="import"  href="../bower_components/iron-component-page/iron-component-page.html">
     <link rel="import"  href="../bower_components/paper-drawer-panel/paper-drawer-panel.html">
+    <link rel="import"  href="../bower_components/paper-menu/paper-menu.html">
+    <link rel="import"  href="../bower_components/paper-item/paper-item.html">
+    <link rel="import"  href="../bower_components/paper-icon-button/paper-icon-button.html">
+
+    <script type="text/javascript" src="../datalets/shared_js/jquery-1.11.2.min.js"></script>
 
     <meta charset="UTF-8">
+
+
+    <script type="text/javascript">
+        selected_component_url = "";
+
+        $(document).ready(function () {
+            $("paper-item").bind('click', function () {
+                switch($(this).attr('class').split(" ")[0]){
+                    case 'datalet':
+                        //$("#main-content").html('<iron-component-page src="../datalets/' + $(this).html().trim()  + '/' + $(this).html().trim()  + '.html"></iron-component-page>');
+                        $("#main-content").html('<iframe src="../datalets/' + $(this).html().trim()  + '/docs.html" style="position: absolute;top: 0;bottom: 0;left: 0;right: 0;height: 100%;width: 100%;"></iframe>');
+                        break;
+                    case 'controllet':
+                        $("#main-content").html('<iron-component-page src="../controllets/' + $(this).html().trim()  + '/' + $(this).html().trim()  + '.html"></iron-component-page>');
+                        break;
+                    case 'behaviour':
+                        $("#main-content").html('<iron-component-page doc-src="../datalets/' + $(this).attr('class').split(" ")[1]  + '/static/js/' + $(this).html().trim()  + '.json"></iron-component-page>');
+                        break;
+                }
+            });
+
+            $('#general-documentation').bind('click', function(){
+                $("#main-content").html('<iframe src="ROUTETOPADeveloperGuidev0.1.html" style="position: absolute;top: 0;bottom: 0;left: 0;right: 0;height: 100%;width: 100%;"></iframe>');
+            });
+        });
+    </script>
+    <style>
+        .avatar
+        {
+            display: inline-block;
+            height: 0.5em;
+            width: 0.5em;
+            border-radius: 50%;
+            background: #3f51b5;
+            color: white;
+            line-height: 2em;
+            font-size: 1.87em;
+            text-align: center;
+            margin-right: 5px;
+        }
+    </style>
 </head>
 <body>
 
 <paper-drawer-panel>
     <paper-header-panel drawer>
         <paper-toolbar>
-            <div>Components</div>
+            <div><h3>Components</h3></div>
         </paper-toolbar>
         <div style="margin: 20px;">
             <div class="horizontal-section-container">
                 <div>
-                    <h3><b>Controllets</b></h3>
+                    <h3><paper-menu><paper-item  id="general-documentation"><h3><span class="avatar"></span>General documentation</h3></paper-item></paper-menu></h3>
+                    <h3><span class="avatar"></span>Controllets</h3>
                     <div class="horizontal-section">
                         <paper-menu>
-                            <paper-item>Inbox</paper-item>
-                            <paper-item>Starred</paper-item>
-                            <paper-item>Sent mail</paper-item>
-                            <paper-item>Drafts</paper-item>
+                            <paper-item class="controllet">data-sevc-controllet</paper-item>
+                            <paper-item class="controllet">draggable-element-controllet</paper-item>
+                            <paper-item class="controllet">items-slider-controllet</paper-item>
+                            <paper-item class="controllet">treeview-controllet</paper-item>
                         </paper-menu>
                     </div>
                 </div>
                 <div>
-                    <h3><b>Datalets</b></h3>
+                    <h3><span class="avatar"></span>Datalets</h3>
                     <div class="horizontal-section">
                         <paper-menu>
-                            <paper-item>Inbox</paper-item>
-                            <paper-item>Starred</paper-item>
-                            <paper-item>Sent mail</paper-item>
-                            <paper-item>Drafts</paper-item>
+                            <paper-item class="datalet">base-datalet</paper-item>
+                            <paper-item class="datalet">base-ajax-json-jsonpath-datalet</paper-item>
+                            <paper-item class="datalet">highcharts-datalet</paper-item>
+                            <paper-item class="datalet">column3Dchart-datalet</paper-item>
+                            <paper-item class="datalet">columnchart-datalet</paper-item>
+                            <paper-item class="datalet">barchart-datalet</paper-item>
+                            <paper-item class="datalet">linechart-datalet</paper-item>
+                            <paper-item class="datalet">datatable-datalet</paper-item>
+                            <paper-item class="datalet">treemap-datalet</paper-item>
+                            <paper-item class="datalet">leafletjs-datalet</paper-item>
                         </paper-menu>
                     </div>
                 </div>
+                <h3><span class="avatar"></span>Behaviors</h3>
+                <div class="horizontal-section">
+                    <paper-menu>
+                        <paper-item class="behaviour base-datalet">BaseDataletBehavior</paper-item>
+                        <paper-item class="behaviour base-datalet">WorkcycleBehavior</paper-item>
+                        <paper-item class="behaviour base-ajax-json-jsonpath-datalet">AjaxJsonJsonPathBehavior</paper-item>
+                    </paper-menu>
+                </div>
+            </div>
              </div>
         </div>
     </paper-header-panel>
     <paper-header-panel main>
         <paper-toolbar>
-            <paper-icon-button icon="menu" paper-drawer-toggle></paper-icon-button>
-            <div>Documentation</div>
+            <div><h3>Documentation</h3></div>
+            <div style="position: absolute;right:30px; top:10px;"><paper-icon-button style="background-color: white; border-radius: 50%;" src="images/source-code.png"></paper-icon-button></div>
         </paper-toolbar>
-        <div><iron-component-page src="../controllets/data-sevc-controllet/data-sevc-controllet.html"></iron-component-page></div>
+        <div id="main-content" style="height: 100%; width: 100%"><iframe src="ROUTETOPADeveloperGuidev0.1.html" style="position: absolute;top: 0;bottom: 0;left: 0;right: 0;height: 100%;width: 100%;"></iframe></div>
     </paper-header-panel>
 </paper-drawer-panel>
 

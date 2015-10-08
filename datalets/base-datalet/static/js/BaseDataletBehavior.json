@@ -1,0 +1,53 @@
+{
+  "elements": [],
+  "elementsByTagName": {},
+  "behaviors": [
+    {
+      "type": "behaviour",
+      "desc": "Defined in `BaseDataletBehaviours.js`. It is the base behavior for all datalets. it contains the main properties common in all visualization : Dataset url, fields and transformed data array",
+      "events": [],
+      "properties": [
+        {
+          "name": "dataUrl",
+          "type": "String",
+          "desc": "It represent the dataset api url",
+          "published": true
+        },
+        {
+          "name": "fields",
+          "type": "Array",
+          "desc": "It represents one or multiple fields selected by user",
+          "published": true
+        },
+        {
+          "name": "data",
+          "type": "Array",
+          "desc": "The selected and transformed data you can use in presentation phase",
+          "published": true
+        },
+        {
+          "name": "factoryImpl",
+          "type": "Function",
+          "desc": "Contructor to create the datalet via javascript",
+          "params": [
+            {
+              "name": "data_url",
+              "type": "String",
+              "desc": "",
+              "published": true
+            },
+            {
+              "name": "fields",
+              "type": "Array",
+              "desc": "",
+              "published": true
+            }
+          ],
+          "private": true,
+          "function": true
+        }
+      ],
+      "is": "BaseDataletBehaviour"
+    }
+  ]
+}

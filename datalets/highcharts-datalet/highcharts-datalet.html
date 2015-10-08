@@ -77,7 +77,27 @@ Example :
                     value: "line"//spline,time
                 }
             },
+            /**
+             * Normalizes a number in agreement with javascript's conventions. Delete all NaN characters. Exception: number representing lat & long remain unchanged.
+             */
+            jNumConverter: function(num) {
+                //lat-long
+                if(num.charAt(num.length-7) == "." && (num.match(/[\.,]/g) || []).length == 1)
+                    return num;
 
+                var jNum = "";
+                for (var i = 0; i < num.length; i++) {
+                    if(num[i].match(/[\.,]/g))
+                        if (i == num.length - 3)
+                            jNum += ".";
+                        else
+                            ;
+                    else if (!isNaN(num[i]))
+                        jNum += num[i];
+                }
+
+                return jNum;
+            },
             /**
              * Populate the categories and the series array.
              *
@@ -94,8 +114,8 @@ Example :
 
                     this.data[i].data.every(function (element, index, array) {
                         try {
-                            // TODO fix this parsing mechanism
-                            (isNaN(parseFloat(element))) ? array[index] = parseFloat(element.match(/[0-9]+/g).join(".")) :
+                            var e = HighchartsBehavior.jNumConverter(element);
+                            (isNaN(element)) ? array[index] = parseFloat(HighchartsBehavior.jNumConverter(element)) :
                                     array[index] = parseFloat(element);
                         }catch(e){
                             //console.log("Parsing data error. Highchart-datalet.selectData");

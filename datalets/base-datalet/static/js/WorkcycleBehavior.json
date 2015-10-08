@@ -1,0 +1,76 @@
+{
+  "elements": [],
+  "elementsByTagName": {},
+  "behaviors": [
+    {
+      "type": "behaviour",
+      "desc": "Defined in `BaseDataletBehaviours.js`. It represents the datalet lifecycle and contains all methods that the specific implementation will override to define a way to get, select, filter, transform and present the data",
+      "events": [],
+      "properties": [
+        {
+          "name": "_component",
+          "type": "Object",
+          "desc": "A reference to Polymer object",
+          "published": true
+        },
+        {
+          "name": "requestData",
+          "type": "Function",
+          "desc": "Request data from source(e.g. CKAN by api) using some kind of technology(e.g. Ajax)",
+          "params": [],
+          "published": true,
+          "function": true
+        },
+        {
+          "name": "selectData",
+          "type": "Function",
+          "desc": "Select the fields from data(typically json) previously retrieved by ajax request. The selection could be done by jsonPath but it depends on the representation data format(CKAN apies return a json representation of the dataset).",
+          "params": [],
+          "published": true,
+          "function": true
+        },
+        {
+          "name": "filterData",
+          "type": "Function",
+          "desc": "Filter data previously selected. An example of filterting could be an expression such \"fields > 30\" or \"fields = 'AAA'\" If you are using jsonPath to select the datas you can apply an expression directly in the jsonPath query string.",
+          "params": [],
+          "published": true,
+          "function": true
+        },
+        {
+          "name": "transformData",
+          "type": "Function",
+          "desc": "Transform the selected data in order to build the structure that the presentation phase needs.",
+          "params": [],
+          "published": true,
+          "function": true
+        },
+        {
+          "name": "presentData",
+          "type": "Function",
+          "desc": "Build the object/s for presentation layer.",
+          "params": [],
+          "published": true,
+          "function": true
+        },
+        {
+          "name": "runWorkcycle",
+          "type": "Function",
+          "desc": "This method represents the entire datalet workcycle.",
+          "params": [],
+          "published": true,
+          "function": true
+        },
+        {
+          "name": "init",
+          "type": "Function",
+          "desc": "This method save the reference to the polymer object related to the datalet.",
+          "params": [],
+          "published": true,
+          "function": true
+        }
+      ],
+      "is": "WorkcycleBehavior"
+    }
+  ]
+}

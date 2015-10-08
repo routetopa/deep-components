@@ -1,7 +1,8 @@
 <!--
-The MIT License (MIT)
+@license
+    The MIT License (MIT)
 
-Copyright (c) 2015 ROUTE-TO-PA CONSORTIUM
+    Copyright (c) 2015 Dipartimento di Informatica - Università di Salerno - Italy
 
     Permission is hereby granted, free of charge, to any person obtaining a copy
     of this software and associated documentation files (the "Software"), to deal
@@ -25,6 +26,26 @@ Copyright (c) 2015 ROUTE-TO-PA CONSORTIUM
 <link rel="import" href="../../bower_components/polymer/polymer.html">
 <link rel="import" href="../../bower_components/paper-styles/color.html">
 <link rel="import" href="../../bower_components/paper-checkbox/paper-checkbox.html">
+
+<!--
+ `treeview-controllet` build a treeview from an input object. Each leaf fields of the object has a material design checkbox. When the user select a field
+  an event will broadcast in order to make the component that use the treeview to get the current selected filed.
+  After insert the `treeview-controllet` in the DOM you have to initialize it with the object you want put in the tree because of to make this component able
+  to work with async object request.
+
+Example:
+
+    <treeview-controllet id="treeviewID"></treeview-controllet>
+
+    in the javascript code:
+
+       this.$.treeviewID.init(object);
+
+@element items-slider-controllet
+@status beta
+@homepage index.html
+@group controllets
+-->
 
 <dom-module id="treeview-controllet">
     <template>
@@ -204,14 +225,20 @@ Copyright (c) 2015 ROUTE-TO-PA CONSORTIUM
             },
 
             properties : {
-
+                /**
+                 * It stores the fields structure of the tree
+                 *
+                 */
                 fieldsMap : {
                     type : Map,
                     value : null
                 }
 
             },
-
+            /**
+             * Create the container for all leaf node fields when a field has a children set.
+             *
+             */
             createFieldsContainer : function(id, heading){
 
                 var ul = document.createElement('ul');
@@ -236,7 +263,10 @@ Copyright (c) 2015 ROUTE-TO-PA CONSORTIUM
                 return ul;
 
             },
-
+            /**
+             * Create the checkbox for current leaf node field.
+             *
+             */
             createListItem : function(id, label) {
 
                return '<li class="list__item">' +
@@ -251,7 +281,10 @@ Copyright (c) 2015 ROUTE-TO-PA CONSORTIUM
                          '</div>' +
                       '</li>';
             },
-
+            /**
+             * Recursively analyze the input object and build the treeview
+             *
+             */
             analyzeObject : function(parent_list, curr_field, object) {
                 if(object == null) return;
                 if(curr_field != null){
@@ -288,7 +321,11 @@ Copyright (c) 2015 ROUTE-TO-PA CONSORTIUM
                     }
                 }
             },
-
+            /**
+             * Initialize treeview with the object you want put in the tree because of to make this component able
+             * to work with async object request.
+             *
+             */
             init : function(data){
                 //crete root node and insert it in to shadow dom
                 var mainPanel = this.createFieldsContainer("root", "Data fields");
@@ -303,7 +340,10 @@ Copyright (c) 2015 ROUTE-TO-PA CONSORTIUM
                 this.analyzeObject(new Array("root"), null, data);
 
             },
-
+            /**
+             * When a user click on a checkbox it retrieves all checked fields and fire an event with this information.
+             *
+             */
             fireSelectedFields : function(){
 
                 var cbs = Polymer.dom(this.$.treeview_placeholder).querySelectorAll('input[type=checkbox]:checked');

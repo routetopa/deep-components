@@ -28,7 +28,7 @@ var BaseDataletBehavior ={
     properties: {
 
         /**
-         * It represent the data url from CKAN api
+         * It represent the dataset api url
          *
          * @attribute dataUrl
          * @type string
@@ -73,7 +73,10 @@ var BaseDataletBehavior ={
 };
 
 var WorkcycleBehavior = {
-
+    /**
+     * A reference to Polymer object
+     *
+     */
     _component: null,
 
     /**
