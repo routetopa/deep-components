@@ -41,7 +41,8 @@
 <link rel="import" href="../../bower_components/paper-menu/paper-menu.html">
 <link rel="import" href="../../bower_components/paper-item/paper-item.html">
 <link rel="import" href="../../bower_components/paper-toast/paper-toast.html">
-
+<link rel="import" href="../../bower_components/paper-dialog/paper-dialog.html">
+<link rel="import" href="../../bower_components/paper-dialog-scrollable/paper-dialog-scrollable.html">
 
 <link rel="import" href="../items-slider-controllet/items-slider-controllet.html">
 <link rel="import" href="../draggable-element-controllet/draggable-element-controllet.html">
@@ -256,6 +257,15 @@ Example:
                     width: 100%;
                 }
 
+                paper-dialog {
+                    position: fixed;
+                    top: 16px;
+                    width: auto;
+                    height: auto;
+                    overflow: auto;
+                    padding : 30px;
+                }
+
             </style>
 
             <iron-ajax
@@ -317,6 +327,7 @@ Example:
                                                     </template>
                                                 </paper-menu>
                                             </paper-dropdown-menu>
+                                            <paper-icon-button id="infoButton" on-click="_onInfoClick" icon="info-outline" alt="Information about selected dataset" title="info-button" style="color:#9e9e9e;"></paper-icon-button>
                                         </div>
 
                                         <div><img src="static/images/or.png" style="position: relative;left: 50%;padding-top:20px"></div>
@@ -415,6 +426,12 @@ Example:
                 </neon-animated-pages>
 
                 <paper-toast id="message" text=""></paper-toast>
+
+                <paper-dialog id="infoDialog">
+                    <h2 id="infoDialogTitle"></h2>
+                    <paper-dialog-scrollable id="infoDialogContent">
+                    </paper-dialog-scrollable>
+                </paper-dialog>
 
             </content>
     </template>
@@ -688,7 +705,7 @@ Example:
                 this.selected = this.selected === 0 ? 0 : (this.selected - 1);
             },
             /**
-             * Callback for manage the next pass button
+             * Callback to manage the next pass button
              *
              * @method _onNextClick
              *
@@ -702,6 +719,15 @@ Example:
                 this.selected = this.selected === 2 ? 2 : (this.selected + 1);
             },
             /**
+             * Callback to manage InfoButton click to give user information about the selected dataset
+             *
+             */
+            _onInfoClick : function(){
+
+                this.$.infoDialog.open();
+
+            },
+            /**
              * Callback related to datasource selection from select menu
              *
              * @method _datasourceSelected
@@ -711,6 +737,9 @@ Example:
             _datasourceSelected : function(e){
 
                this.$.data_url.value = this.datasets[parseInt(e.target.id)].url;
+               this.$.infoDialogTitle.innerHTML = this.datasets[parseInt(e.target.id)].name;
+               this.$.infoDialogContent.innerHTML = this.datasets[parseInt(e.target.id)].description;
+
             },
             /**
              * Callback related to data url change
