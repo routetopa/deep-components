@@ -80,9 +80,12 @@ Example:
 
                     var marker = L.marker([coordinates[i][0], coordinates[i][1]]).addTo(this._component.map);
 
-                    if(this.data[2])
+                    if(this.data.length > 1)
                     {
-                        var popup = L.popup().setContent('<image height="100" width="100" src="' + this.data[2].data[i] + '" />');
+                        if(this.data[this.data.length - 1].data[i].match(new RegExp("^(http[s]?:\\/\\/(www\\.)?|ftp:\\/\\/(www\\.)?|www\\.){1}([0-9A-Za-z-\\.@:%_\+~#=]+)+((\\.[a-zA-Z]{2,3})+)(/(.)*)?(\\?(.)*)?")))
+                           var popup = L.popup().setContent('<image height="100" width="100" src="' + this.data[this.data.length - 1].data[i] + '" />');
+                        else
+                            var popup = L.popup().setContent('<span>' + this.data[this.data.length - 1].data[i] + '</span>');
                         marker.bindPopup(popup);
                     }
                 }
