@@ -58,7 +58,7 @@ Example:
 
     <data-sevc-controllet deep-url="http://192.168.214.128/DEEalerProvider/DEEP/"
                           datalets-list-url="http://192.168.214.128/DEEalerProvider/DEEP/datalets-list"
-                          organization="2" >
+                          datasets='{[{name : 'dataset1', url : dataset1Urls}, ... , {name : 'datasetN', url : datasetNUrls}]' >
     </data-sevc-controllet>
 
 
@@ -313,7 +313,7 @@ Example:
                                             <paper-dropdown-menu id="datasets-sources" label="Available datasets">
                                                 <paper-menu class="dropdown-content">
                                                     <template is="dom-repeat" items="{{datasets}}" as="dataset" index-as="index">
-                                                        <paper-item id="{{index}}" on-tap="_datasourceSelected">{{dataset}}</paper-item>
+                                                        <paper-item id="{{index}}" on-tap="_datasourceSelected">{{dataset.name}}</paper-item>
                                                     </template>
                                                 </paper-menu>
                                             </paper-dropdown-menu>
@@ -424,60 +424,6 @@ Example:
 
     <script>
 
-        var datasetsPrato = {
-            names:[
-                'Consuntivo entrate 2009',
-                'Consuntivo entrate 2010',
-                'Consuntivo entrate 2011',
-                'Consuntivo entrate 2012',
-                'Consuntivo entrate 2014'
-            ],
-            urls: [
-                'http://ckan.routetopa.eu/api/action/datastore_search?resource_id=07843fc3-07e1-4c66-9be4-fed43ca4a26f&limit=10000',
-                'http://ckan.routetopa.eu/api/action/datastore_search?resource_id=48a4db73-d3d4-4639-bbc2-9c797d0e6cda&limit=10000',
-                'http://ckan.routetopa.eu/api/action/datastore_search?resource_id=a14cc2fb-0c24-48d7-9370-834045797d89&limit=10000',
-                'http://ckan.routetopa.eu/api/action/datastore_search?resource_id=fb32fcb6-5e44-4e52-b132-01c6540ddbee&limit=10000',
-                'http://ckan.routetopa.eu/api/action/datastore_search?resource_id=0cb600fc-19ad-4aaf-9794-1e6ea851840a&limit=10000'
-            ]
-        }
-
-        var datasetsGroeningen = {
-            names:[
-                'Vestigingen register gemeente Groningen',
-                'Woonruimte gemeente Groningen'
-            ],
-            urls: [
-                'http://ckan.routetopa.eu/api/action/datastore_search?resource_id=ba554c1f-02a7-4d76-b449-fb9daa1f8bfd&limit=10000',
-                'http://ckan.routetopa.eu/api/action/datastore_search?resource_id=af7b3916-4347-469a-8354-3c2d559bd92f&limit=10000'
-            ]
-        }
-
-        var datasetsDublin = {
-            names:[
-                'SDCC Traffic Cameras',
-                'Derelict Site Register',
-                'Dublin City Council Commencement Notices',
-                'Dublin City Council Planning Applications',
-                'Dun Laoghaire-Rathdown County Council Planning Application 2008-2014',
-                'Fingal Council Planning Applications for last 7 years',
-                'Planning Register',
-                'Fingal Development Plan 2011-2017 Record of Protected Structures'
-            ],
-            urls: [
-                'http://ckan.routetopa.eu/api/action/datastore_search?resource_id=73e02092-85a1-434e-85fe-0c9a43aa9a52&limit=10000',
-                'http://ckan.routetopa.eu/api/action/datastore_search?resource_id=fcbee83e-3d3d-4303-a568-24dd33d02adc&limit=10000',
-                'http://ckan.routetopa.eu/api/action/datastore_search?resource_id=ee00de68-f2e4-482f-a003-3c0561351075&limit=10000',
-                'http://ckan.routetopa.eu/api/action/datastore_search?resource_id=2f4a9d44-b52f-4c8b-a5db-d8f4a676d81e&limit=10000',
-                'http://ckan.routetopa.eu/api/action/datastore_search?resource_id=c479f061-9638-489d-ac55-0c68765548ff&limit=10000',
-                'http://ckan.routetopa.eu/api/action/datastore_search?resource_id=d29a477a-4734-43ef-8002-048c8640d441&limit=10000',
-                'http://ckan.routetopa.eu/api/action/datastore_search?resource_id=2b23f32d-e27e-4eef-af1e-27e05103df7d&limit=10000',
-                'http://ckan.routetopa.eu/api/action/datastore_search?resource_id=5ea813bc-fdf9-4edb-b3b1-0142b593d5c6&limit=10000',
-            ]
-        }
-
-        var AvailableDatasets = [datasetsPrato, datasetsGroeningen, datasetsDublin]
-
-
         Polymer({
 
             is : 'data-sevc-controllet',
@@ -544,7 +490,7 @@ Example:
                  */
                 dataUrl : {
                     type : String,
-                    value : "",/*"http://demo.ckan.org/api/action/datastore_search?resource_id=8324a4c9-66d6-47bf-a898-94237cc39b9f&limit=50",*/
+                    value : "",
                     observer : '_dataUrlChanged'
                 },
                 /**
@@ -557,17 +503,6 @@ Example:
                 deepUrl : {
                     type : String,
                     value : ""
-                },
-                /**
-                 * It represents the organization related to datesets available for the user. It will be set at runtime based on the country of the user
-                 *
-                 * @attribute organization
-                 * @type Number
-                 * @default 2
-                 */
-                organization : {
-                    type : Number,
-                    value : 2
                 },
                 /**
                  * It's used to store the list of datalets returned from DEEP
@@ -623,19 +558,7 @@ Example:
                 datasets :
                 {
                     type : Array,
-                    value : AvailableDatasets[0].names
-                },
-                /**
-                 * It's used to store the datasets urls
-                 *
-                 * @attribute datasets
-                 * @type Array
-                 * @default empty
-                 */
-                datasets_urls :
-                {
-                    type : Array,
-                    value :AvailableDatasets[0].urls
+                    value : []
                 }
 
             },
@@ -649,9 +572,6 @@ Example:
              */
 
             ready : function(){
-
-                this.datasets = AvailableDatasets[this.organization].names;
-                this.datasets_urls = AvailableDatasets[this.organization].urls;
 
                 $(this.$.fields_placeholder).perfectScrollbar();
                 $(this.$.selected_fields_main_container).perfectScrollbar();
@@ -790,7 +710,7 @@ Example:
              */
             _datasourceSelected : function(e){
 
-               this.$.data_url.value = this.datasets_urls[parseInt(e.target.id)];
+               this.$.data_url.value = this.datasets[parseInt(e.target.id)].url;
             },
             /**
              * Callback related to data url change

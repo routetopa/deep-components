@@ -68,6 +68,21 @@ var AjaxJsonJsonPathBehavior = {
         this.properties.json_results.value = e;
         this.runWorkcycle();
     },
+    /**
+     * Check if input field(passed as an array of separated value that mach with field path in received object) is an array of objet.
+     * The field is checked on current json object retrieved from the async request.
+     *
+     * @param field
+     */
+    isFieldArray : function(field){
+       if(field.length == 0) return false;
+       var obj = this.properties.json_results.value[field[0]];
+       for(var i=1; i < field.length; i++){
+          obj = (obj.constructor == Array) ? obj[0][field[i]] : obj[field[i]];
+       }
+
+       return (obj.constructor === Array && obj[0].constructor == Object) ? true : false;
+    },
 
     /**
      * selectData built a JSONPATH query based on the user selected fields then extract data from the JSON response.
@@ -83,10 +98,12 @@ var AjaxJsonJsonPathBehavior = {
         for(var i=0;i < this._component.fields.length; i++){
             var query = "$";
             var query_elements = this._component.fields[i].split(',');
-            for(var j=0; j < query_elements.length - 1;j++){
+            for(var j=0; j < query_elements.length;j++){
                 query += "['" + query_elements[j] + "']";
+                if(this.isFieldArray(query_elements.slice(0,j+1))){
+                    query += "[*]";
+                }
             }
-            query += "[*]" + "['" + query_elements[query_elements.length - 1] + "']";
             this.data.push({name : query_elements[query_elements.length - 1], data : jsonPath(this.properties.json_results.value, query)});
         }
     }

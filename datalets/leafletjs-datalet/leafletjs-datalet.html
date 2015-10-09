@@ -69,11 +69,15 @@ Example:
             presentData: function(){
             	            	             
 				var coordinates = [];
-				//var keys = Object.keys(this.properties.data.value[0]);
+                var isArray = (this.data[0].data[0].constructor === Array) ? true : false;
 
                 for(var i=0; i<this.data[0].data.length; i++)
                 {
-                    coordinates.push([parseFloat(this.data[0].data[i]), parseFloat(this.data[1].data[i])]);
+                    if(isArray)
+                        coordinates.push([parseFloat(this.data[0].data[i][0]), parseFloat(this.data[0].data[i][1])]);
+                    else
+                        coordinates.push([parseFloat(this.data[0].data[i]), parseFloat(this.data[1].data[i])]);
+
                     var marker = L.marker([coordinates[i][0], coordinates[i][1]]).addTo(this._component.map);
 
                     if(this.data[2])
