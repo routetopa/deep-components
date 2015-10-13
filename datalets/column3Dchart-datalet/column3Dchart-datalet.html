@@ -57,8 +57,8 @@ Example:
     </template>
 
     <script>
-        var chart = null;
 
+        var chart = null;
 
         var column3DchartBehavior = {
 
@@ -68,42 +68,45 @@ Example:
              * @method transformData
              */
             presentData: function(){
-                         chart = new Highcharts.Chart({
-                             chart: {
-                                 renderTo: this._component.$.charts.$.container,
-                                 borderColor: '#EBBA95',
-                                 borderWidth: 2,
-                                 zoomType : 'xy',
-                                 type: 'line',
-                                 type: 'column',
-                                 margin: 75,
-                                 options3d: {
-                                     enabled: true,
-                                     alpha: 15,
-                                     beta: 15,
-                                     depth: 50,
-                                     viewDistance: 25
-                                 }
-                             },
-                             xAxis: {
-                                 categories: this.properties.categories.value,
-                                 title: {
-                                     text: null
-                                 }
-                             },
-                             title: {
-                                 text: this.properties.title
-                             },
-                             subtitle: {
-                                 text: '3D CHART demo by dragging the sliders below'
-                             },
-                             plotOptions: {
-                                 column: {
-                                     depth: 25
-                                 }
-                             },
+                chart = new Highcharts.Chart({
+                    chart: {
+                        renderTo: this._component.$.charts.$.container,
+                        borderColor: '#EBBA95',
+                        borderWidth: 2,
+                        zoomType : 'xy',
+                        type: 'line',
+                        type: 'column',
+                        margin: 75,
+                        options3d: {
+                            enabled: true,
+                            alpha: 15,
+                            beta: 15,
+                            depth: 50,
+                            viewDistance: 25
+                        }
+                    },
+                    title: {
+                        text: this._component.title
+                    },
+                    xAxis: {
+                        categories: this.properties.categories.value,
+                        title: {
+                            text: this._component.xAxislabel
+                        }
+                    },
+                    title: {
+                        text: this.properties.title
+                    },
+                    subtitle: {
+                        text: this._component.title
+                    },
+                    plotOptions: {
+                        column: {
+                            depth: 25
+                        }
+                    },
 
-                     series: this.properties.series.value
+                    series: this.properties.series.value
                 });
 
                 // Activate the sliders
@@ -123,6 +126,42 @@ Example:
         column3DchartDatalet = Polymer({
             is: 'column3Dchart-datalet',
 
+            properties: {
+                /**
+                 * It's the label for X axis
+                 *
+                 * @attribute xAxisLabel
+                 * @type String
+                 * @default ''
+                 */
+                xAxisLabel: {
+                    type: String,
+                    value: ""
+                },
+                /**
+                 * It's the label for Y axis
+                 *
+                 * @attribute yAxisLabel
+                 * @type String
+                 * @default ''
+                 */
+                yAxisLabel: {
+                    type: String,
+                    value: ""
+                },
+                /**
+                 * It's the title of the chart
+                 *
+                 * @attribute title
+                 * @type Strig
+                 * @default ''
+                 */
+                title: {
+                    type: String,
+                    value: "Heading"
+                }
+            },
+
             /**
              * 'ready' callback extend the column3DchartComponentBehavior with HighchartsComponentBehavior and column3DchartBehavior
              * and run the Datalet workcycle.
@@ -130,6 +169,7 @@ Example:
              * @method ready
              */
             ready: function(){
+
                 var column3DchartComponentBehavior = $.extend(true, {}, HighchartsComponentBehavior, column3DchartBehavior);
                 column3DchartComponentBehavior.init(this);
             }

@@ -47,6 +47,7 @@ Example:
         <highcharts-datalet id="charts" data-url="{{dataUrl}}" fields="{{fields}}"></highcharts-datalet>
     </template>
     <script>
+
         var BarchartBehavior = {
 
 
@@ -63,18 +64,18 @@ Example:
                         zoomType: 'xy'
                     },
                     title: {
-                        text: 'Bar chart'
+                        text: this._component.title
                     },
                     xAxis: {
                         categories: this.properties.categories.value,
                         title: {
-                            text: null
+                            text: this._component.xAxisLabel
                         }
                     },
                     yAxis: {
                         min: 0,
                         title: {
-                            text: 'Foreclosure (units)',
+                            text: this._component.yAxisLabel,
                             align: 'high'
                         },
                         labels: {
@@ -82,7 +83,7 @@ Example:
                         }
                     },
                     tooltip: {
-                        valueSuffix: ' units'
+                        valueSuffix: ' ' + this._component.suffix
                     },
                     plotOptions: {
                         bar: {
@@ -110,8 +111,56 @@ Example:
             }
         };
 
+
         BarchartDatalet = Polymer({
             is: 'barchart-datalet',
+
+            properties: {
+                /**
+                 * It's the label for X axis
+                 *
+                 * @attribute xAxisLabel
+                 * @type String
+                 * @default ''
+                 */
+                xAxisLabel: {
+                    type: String,
+                    value: ""
+                },
+                /**
+                 * It's the label for Y axis
+                 *
+                 * @attribute yAxisLabel
+                 * @type String
+                 * @default ''
+                 */
+                yAxisLabel: {
+                    type: String,
+                    value: ""
+                },
+                /**
+                 * It's the title of the chart
+                 *
+                 * @attribute title
+                 * @type Strig
+                 * @default ''
+                 */
+                title: {
+                    type: String,
+                    value: "Heading"
+                },
+                /**
+                 * It's the values suffix
+                 *
+                 * @attribute suffix
+                 * @type Strig
+                 * @default 'units'
+                 */
+                suffix : {
+                    type : String,
+                    value : "units"
+                }
+            },
 
             /**
              * 'ready' callback extend the BarchartComponentBehavior with HighchartsComponentBehavior and BarchartBehavior

@@ -47,6 +47,7 @@
 <link rel="import" href="../items-slider-controllet/items-slider-controllet.html">
 <link rel="import" href="../draggable-element-controllet/draggable-element-controllet.html">
 <link rel="import" href="../treeview-controllet/treeview-controllet.html">
+<link rel="import" href="../text-element-controllet/text-element-controllet.html">
 
 <!--
  `data-sevc-controllet` is a controllet to generate visualization from a dataset accessible through api. A json response is required.
@@ -253,6 +254,11 @@ Example:
                     height: 50vh;
                 }
 
+                #idm_layout_main_container{
+                    position: relative;
+                    height: 25vh;
+                }
+
                 paper-menu{
                     width: 100%;
                 }
@@ -411,6 +417,13 @@ Example:
                                             </div>
                                             <div id="datalet_idm_fields_container" class="area_container"></div>
                                         </div>
+
+                                        <div id="idm_layout_main_container" class="area_container">
+                                            <div class="title">
+                                                <div class="medium">Layout fields</div>
+                                            </div>
+                                            <div id="idm_layout_container" class="area_container"></div>
+                                        </div>
                                     </div>
                                 </div>
 
@@ -470,6 +483,12 @@ Example:
              */
 
             /**
+             * Received when the user change text value of the selected datalet layout inputs
+             *
+             * @event text-element-controllet_content-changed
+             */
+
+            /**
              * Fired when the user press to finish button. At this event are attached all information about the visualization currently created
              *
              * @event data-sevc-controllet.dataletCreated
@@ -478,7 +497,8 @@ Example:
             listeners : {
                 'items-slider-controllet_item-selected' : '_dataletSelected',
                 'draggable-element-controllet_content-dragged' : '_fieldsMapped',
-                'treeview-controllet-fileds-selected' : '_fieldsSelected'
+                'treeview-controllet_fileds-selected' : '_fieldsSelected',
+                'text-element-controllet_content-changed' : '_textElementChanged'
             },
 
             properties : {
@@ -555,6 +575,17 @@ Example:
                     value : []
                 },
                 /**
+                 * It's used to store the params to give to datalet. This kind of params will not processed by selection step
+                 *
+                 * @attribute params_fields
+                 * @type Object
+                 * @default empty
+                 */
+                params_fields:{
+                  type: Object,
+                  value: {}
+                },
+                /**
                  * It's used to store the tab index in the first pass
                  *
                  * @attribute DatasourceTabSelected
@@ -577,7 +608,6 @@ Example:
                     type : Array,
                     value : []
                 }
-
             },
             /**
              * It is called after the element’s template has been stamped and all elements inside the element’s local DOM have been configured (with values bound from parents, deserialized attributes, or else default values) and had their ready method called.
@@ -593,6 +623,7 @@ Example:
                 $(this.$.fields_placeholder).perfectScrollbar();
                 $(this.$.selected_fields_main_container).perfectScrollbar();
                 $(this.$.idm_fields_main_container).perfectScrollbar();
+                $(this.$.idm_layout_main_container).perfectScrollbar();
                 $(this.$.table_fields_container).perfectScrollbar();
 
             },
@@ -642,6 +673,7 @@ Example:
 
                var response = e.detail.response;
                this.$.datalet_idm_fields_container.innerHTML = "";
+               this.$.idm_layout_container.innerHTML = "";
 
                if(response.idm.inputs.input.constructor == Object) {
                    var input = response.idm.inputs.input;
@@ -657,6 +689,58 @@ Example:
                        this.$.datalet_idm_fields_container.innerHTML += '<draggable-element-controllet is-target="true" id="' + input.name + '" heading="' + input.name + '"  description="' + input.description + '" number="' + (i + 1) + '"></draggable-element-controllet><br>';
                    }
                }
+
+               if(response.idm.inputs.layouts.input.constructor == Object) {
+                   var input = response.idm.inputs.layouts.input;
+                   this.$.idm_layout_container.innerHTML += '<text-element-controllet heading="' + input.name + '" description="' + input.description + '" number="1"></text-element-controllet>';
+               }else{
+                   for(var i =0; i < response.idm.inputs.layouts.input.length; i++){
+                       var input = response.idm.inputs.layouts.input[i];
+                       this.$.idm_layout_container.innerHTML += '<text-element-controllet heading="' + input.name + '" ' +
+                                                                                         'description="' + input.description + '" ' +
+                                                                                         'number="' + (i+1) + '">' +
+                                                                '</text-element-controllet>';
+                   }
+
+               }
+
+            },
+            /**
+             * Generate the datalet preview when user mapped fields. it even retrieves the value of layout inputs values.
+             *
+             * @method generateDataletPreview
+             */
+            generateDataletPreview : function(){
+
+                var input_mapped_fields = Polymer.dom(this.$.datalet_idm_fields_container).querySelectorAll('draggable-element-controllet[is-target=true]');
+                this.selected_fields = Array();
+
+                for (var i = 0; i < input_mapped_fields.length; i++) {
+                    if (input_mapped_fields[i].value != "") {
+                        this.selected_fields.push(input_mapped_fields[i].value);
+                    }
+                }
+
+                var input_layouts_fields = Polymer.dom(this.$.idm_layout_container).querySelectorAll('text-element-controllet');
+                this.params_fields = {'data-url' : this.dataUrl};
+
+                for (var i = 0; i < input_layouts_fields.length; i++) {
+                    if (input_layouts_fields[i].value != "") {
+                        this.params_fields[input_layouts_fields[i].heading]  =  input_layouts_fields[i].value;
+                    }
+                }
+
+
+                var datalet_params ={
+                    component   : this.selected_datalet,
+                    params      : this.params_fields,
+                    fields      : this.selected_fields,
+                    placeHolder : this.$.datalet_placeholder
+                };
+
+
+                ComponentService.deep_url = this.deepUrl;
+                ComponentService.getComponent(datalet_params);
 
             },
             /**
@@ -804,28 +888,18 @@ Example:
              */
             _fieldsMapped : function(e){
 
-                var input_mapped_fields = Polymer.dom(this.$.datalet_idm_fields_container).querySelectorAll('draggable-element-controllet[is-target=true]');
-                this.selected_fields = Array();
+                this.generateDataletPreview();
 
-                for (var i = 0; i < input_mapped_fields.length; i++) {
-                    if (input_mapped_fields[i].value != "") {
-                        this.selected_fields.push(input_mapped_fields[i].value);
-                    }
-                }
-
-                var datalet_params ={
-                    component   : this.selected_datalet,
-                    params      :{
-                        'data-url' : this.dataUrl
-                    },
-                    fields      : this.selected_fields,
-                    placeHolder : this.$.datalet_placeholder
-                };
-
-
-                ComponentService.deep_url = this.deepUrl;
-                ComponentService.getComponent(datalet_params);
-
+            },
+            /**
+             * Callback related to event 'text-element-controllet_content-changed' fired by text-element-controllet when the user change the value of text
+             *
+             * @method _textElementChanged
+             *
+             * @param {Event} e
+             */
+            _textElementChanged : function(e){
+                this.generateDataletPreview();
             },
             /**
              * Callback related to the drag operation in the dataUrl input area. It's used to delete previous value.
@@ -846,7 +920,7 @@ Example:
              */
             _onFinish : function(e){
 
-                if(this.selected_fields.length == 0 || this.selected_datalet == ""){
+                if((this.selected_fields.length == 0) || this.selected_datalet == ""){
                     this.$.message.text = "You have to map the selected fields with datalets fields(by dragging) and select a datalet to export a new visualization.";
                     this.$.message.show();
                     return;
@@ -854,7 +928,8 @@ Example:
 
                 var data = {
                     dataUrl : this.dataUrl,
-                    fields : this.selected_fields,
+                    params :  this.params_fields,
+                    fields :  this.selected_fields,
                     datalet : this.selected_datalet
                 }
 

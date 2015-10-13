@@ -84,6 +84,13 @@ Example :
              */
             ready: function(){
                 this.$.domain.textContent = this.dataUrl.split("/")[0] + "//" + this.dataUrl.split("/")[2];
+            },
+            /**
+             * Set the domain url to show in the footer
+             */
+            setDomain: function(url){
+                this.$.domain.textContent = url;
+
             }
         });
     </script>

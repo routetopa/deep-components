@@ -220,6 +220,12 @@ Example:
 
             is : 'treeview-controllet',
 
+            /**
+             * Fired when the user check a checkbox
+             *
+             * @event treeview-controllet_fileds-selected
+             * */
+
             listeners : {
                 'tap' : '_clickHandler'
             },
@@ -353,7 +359,7 @@ Example:
                     fields.push(cbs[i].id.replace("root,",""));
                 }
 
-                this.fire('treeview-controllet-fileds-selected', {fields : fields});
+                this.fire('treeview-controllet_fileds-selected', {fields : fields});
             },
 
             _clickHandler : function(e){

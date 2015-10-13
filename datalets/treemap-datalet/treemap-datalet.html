@@ -109,7 +109,7 @@ Example:
         var TreemapBehavior = {
 
             map : {
-                name : "Expenses",
+                name : this._component.name,
                 children : []
             },
 
@@ -179,6 +179,20 @@ Example:
 
         Polymer({
             is : 'treemap-datalet' ,
+
+            properties: {
+                /**
+                 * It's the name for treemap
+                 *
+                 * @attribute name
+                 * @type String
+                 * @default ''
+                 */
+                name: {
+                    type: String,
+                    value: ""
+                }
+            },
 
             ready: function(){
                 var TreemapComponentBehavior =  $.extend(true, {}, BaseDataletBehavior, WorkcycleBehavior, AjaxJsonJsonPathBehavior, TreemapBehavior);

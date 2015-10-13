@@ -59,20 +59,20 @@ Example:
 
                 $(this._component.$.charts.$.container).highcharts({
                     title: {
-                        text: 'Line chart'
+                        text: "" + this._component.title
                     },
                     chart: {
-                		zoomType: 'xy'
-            		},
+                        zoomType: 'xy'
+                    },
                     xAxis: {
                         categories: this.properties.categories.value,//this._component.categories,
                         title: {
-                            text: null
+                            text: this._component.xAxisLabel
                         }
                     },
                     yAxis: {
                         title: {
-                            text: 'Units'
+                            text: this._component.yAxisLabel
                         },
                         plotLines: [{
                             value: 0,
@@ -81,7 +81,7 @@ Example:
                         }]
                     },
                     tooltip: {
-                        valueSuffix: ' units'
+                        valueSuffix: ' ' + this._component.suffix
                     },
                     legend: {
                         layout: 'vertical',
@@ -102,8 +102,56 @@ Example:
             }
         };
 
+
         LinechartDatalet = Polymer({
             is: 'linechart-datalet',
+
+            properties: {
+                /**
+                 * It's the label for X axis
+                 *
+                 * @attribute xAxisLabel
+                 * @type String
+                 * @default ''
+                 */
+                xAxisLabel: {
+                    type: String,
+                    value: ""
+                },
+                /**
+                 * It's the label for Y axis
+                 *
+                 * @attribute yAxisLabel
+                 * @type String
+                 * @default ''
+                 */
+                yAxisLabel: {
+                    type: String,
+                    value: ""
+                },
+                /**
+                 * It's the title of the chart
+                 *
+                 * @attribute title
+                 * @type Strig
+                 * @default ''
+                 */
+                title: {
+                    type: String,
+                    value: "Heading"
+                },
+                /**
+                 * It's the values suffix
+                 *
+                 * @attribute suffix
+                 * @type Strig
+                 * @default 'units'
+                 */
+                suffix : {
+                    type : String,
+                    value : "units"
+                }
+            },
 
             /**
              * 'ready' callback extend the LinechartComponentBehavior with HighchartsComponentBehavior and LinechartBehavior
