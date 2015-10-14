@@ -6,111 +6,187 @@
     <link rel="import"  href="../bower_components/paper-menu/paper-menu.html">
     <link rel="import"  href="../bower_components/paper-item/paper-item.html">
     <link rel="import"  href="../bower_components/paper-icon-button/paper-icon-button.html">
+    <link rel="import"  href="../bower_components/paper-menu-button/paper-menu-button.html">
 
     <script type="text/javascript" src="../datalets/shared_js/jquery-1.11.2.min.js"></script>
+    <script type="text/javascript" src="../../static/js/editarea_0_8_2/edit_area/edit_area_full.js"></script>
+    <script type="text/javascript" src="../bower_components/webcomponentsjs/webcomponents-lite.min.js"></script>
+
+
 
     <meta charset="UTF-8">
 
 
     <script type="text/javascript">
-        selected_component_url = "";
-
-        $(document).ready(function () {
-            $("paper-item").bind('click', function () {
-                switch($(this).attr('class').split(" ")[0]){
-                    case 'datalet':
-                        //$("#main-content").html('<iron-component-page src="../datalets/' + $(this).html().trim()  + '/' + $(this).html().trim()  + '.html"></iron-component-page>');
-                        $("#main-content").html('<iframe src="../datalets/' + $(this).html().trim()  + '/docs.html" style="position: absolute;top: 0;bottom: 0;left: 0;right: 0;height: 100%;width: 100%;"></iframe>');
-                        break;
-                    case 'controllet':
-                        $("#main-content").html('<iron-component-page src="../controllets/' + $(this).html().trim()  + '/' + $(this).html().trim()  + '.html"></iron-component-page>');
-                        break;
-                    case 'behaviour':
-                        $("#main-content").html('<iron-component-page doc-src="../datalets/' + $(this).attr('class').split(" ")[1]  + '/static/js/' + $(this).html().trim()  + '.json"></iron-component-page>');
-                        break;
-                }
-            });
-
-            $('#general-documentation').bind('click', function(){
-                $("#main-content").html('<iframe src="ROUTETOPADeveloperGuidev0.1.html" style="position: absolute;top: 0;bottom: 0;left: 0;right: 0;height: 100%;width: 100%;"></iframe>');
-            });
-        });
     </script>
     <style>
+        body{
+            font-family: 'Roboto', 'Noto', sans-serif;
+            -webkit-font-smoothing: antialiased;
+            text-rendering: optimizeLegibility;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            font-size: 20px;
+            /*font-weight: 500;*/
+            line-height: 28px;
+            -ms-flex: 1 1 0.000000001px;
+            -webkit-flex: 1;
+            flex: 1;
+            -webkit-flex-basis: 0.000000001px;
+            flex-basis: 0.000000001px;
+        }
         .avatar
         {
             display: inline-block;
             height: 0.5em;
             width: 0.5em;
             border-radius: 50%;
-            background: #3f51b5;
+            background: #2196F3;
             color: white;
             line-height: 2em;
             font-size: 1.87em;
             text-align: center;
             margin-right: 5px;
         }
+
+        #toolbar{
+            background: #2196F3 ;
+        }
     </style>
 </head>
 <body>
 
-<paper-drawer-panel>
-    <paper-header-panel drawer>
-        <paper-toolbar>
-            <div><h3>Components</h3></div>
-        </paper-toolbar>
-        <div style="margin: 20px;">
-            <div class="horizontal-section-container">
-                <div>
-                    <h3><paper-menu><paper-item  id="general-documentation"><h3><span class="avatar"></span>General documentation</h3></paper-item></paper-menu></h3>
-                    <h3><span class="avatar"></span>Controllets</h3>
-                    <div class="horizontal-section">
-                        <paper-menu>
-                            <paper-item class="controllet">data-sevc-controllet</paper-item>
-                            <paper-item class="controllet">draggable-element-controllet</paper-item>
-                            <paper-item class="controllet">items-slider-controllet</paper-item>
-                            <paper-item class="controllet">treeview-controllet</paper-item>
-                        </paper-menu>
-                    </div>
-                </div>
-                <div>
-                    <h3><span class="avatar"></span>Datalets</h3>
-                    <div class="horizontal-section">
-                        <paper-menu>
-                            <paper-item class="datalet">base-datalet</paper-item>
-                            <paper-item class="datalet">base-ajax-json-jsonpath-datalet</paper-item>
-                            <paper-item class="datalet">highcharts-datalet</paper-item>
-                            <paper-item class="datalet">column3Dchart-datalet</paper-item>
-                            <paper-item class="datalet">columnchart-datalet</paper-item>
-                            <paper-item class="datalet">barchart-datalet</paper-item>
-                            <paper-item class="datalet">linechart-datalet</paper-item>
-                            <paper-item class="datalet">datatable-datalet</paper-item>
-                            <paper-item class="datalet">treemap-datalet</paper-item>
-                            <paper-item class="datalet">leafletjs-datalet</paper-item>
-                        </paper-menu>
-                    </div>
-                </div>
-                <h3><span class="avatar"></span>Behaviors</h3>
-                <div class="horizontal-section">
-                    <paper-menu>
-                        <paper-item class="behaviour base-datalet">BaseDataletBehavior</paper-item>
-                        <paper-item class="behaviour base-datalet">WorkcycleBehavior</paper-item>
-                        <paper-item class="behaviour base-ajax-json-jsonpath-datalet">AjaxJsonJsonPathBehavior</paper-item>
-                    </paper-menu>
-                </div>
-            </div>
-             </div>
-        </div>
-    </paper-header-panel>
-    <paper-header-panel main>
-        <paper-toolbar>
-            <div><h3>Documentation</h3></div>
-            <div style="position: absolute;right:30px; top:10px;"><paper-icon-button style="background-color: white; border-radius: 50%;" src="images/source-code.png"></paper-icon-button></div>
-        </paper-toolbar>
-        <div id="main-content" style="height: 100%; width: 100%"><iframe src="ROUTETOPADeveloperGuidev0.1.html" style="position: absolute;top: 0;bottom: 0;left: 0;right: 0;height: 100%;width: 100%;"></iframe></div>
-    </paper-header-panel>
-</paper-drawer-panel>
+<template id="Doc" is="dom-bind">
 
+    <paper-drawer-panel>
+        <paper-header-panel drawer>
+            <paper-toolbar id="toolbar">
+                <paper-menu-button>
+                    <paper-icon-button icon="menu" class="dropdown-trigger"></paper-icon-button>
+                    <paper-menu class="dropdown-content">
+                        <paper-item><a href="http://routetopa.eu/" target="_blank">ROUTE-TO PA European Project</a></paper-item>
+                        <paper-item><a href="../../index.html" target="_blank">DEEP Index</a></paper-item>
+                    </paper-menu>
+                </paper-menu-button>
+                <div>Components</div>
+            </paper-toolbar>
+            <div style="margin: 20px;">
+                <div class="horizontal-section-container">
+                    <div>
+                        <paper-menu><paper-item  id="general-documentation" on-click="_onGeneralClick"><h4><span class="avatar"></span>General documentation</h4></paper-item></paper-menu>
+                        <h4><span class="avatar"></span>Controllets</h4>
+                        <div class="horizontal-section">
+                            <paper-menu>
+                                <template is="dom-repeat" items="[[controllets]]" as="controllet">
+                                    <paper-item class="controllet" on-click="_onItemClick">[[controllet]]</paper-item>
+                                </template>
+                            </paper-menu>
+                        </div>
+                    </div>
+                    <div>
+                        <h4><span class="avatar"></span>Datalets</h4>
+                        <div class="horizontal-section">
+                            <paper-menu>
+                                <template is="dom-repeat" items="[[datalets]]" as="datalet">
+                                    <paper-item class="datalet" on-click="_onItemClick">[[datalet]]</paper-item>
+                                </template>
+                            </paper-menu>
+                        </div>
+                    </div>
+                    <h4><span class="avatar"></span>Behaviors</h4>
+                    <div class="horizontal-section">
+                        <paper-menu>
+                            <paper-item class="behaviour base-datalet" on-click="_onItemClick">BaseDataletBehavior</paper-item>
+                            <paper-item class="behaviour base-datalet" on-click="_onItemClick">WorkcycleBehavior</paper-item>
+                            <paper-item class="behaviour base-ajax-json-jsonpath-datalet" on-click="_onItemClick">AjaxJsonJsonPathBehavior</paper-item>
+                        </paper-menu>
+                    </div>
+                </div>
+                 </div>
+            </div>
+        </paper-header-panel>
+        <paper-header-panel main>
+            <paper-toolbar id="toolbar">
+                <div>Documentation</div>
+                <div style="position: absolute;right:30px; top:10px;"><paper-icon-button style="background-color: white; border-radius: 50%;" src="images/source-code.png" on-click="_onSourceClick"></paper-icon-button></div>
+            </paper-toolbar>
+            <div id="main_content" style="height: 100%; width: 100%"><iframe src="ROUTETOPADeveloperGuidev0.1.html" style="position: absolute;top: 0;bottom: 0;left: 0;right: 0;height: 100%;width: 100%;"></iframe></div>
+        </paper-header-panel>
+    </paper-drawer-panel>
+</template>
+
+<script>
+    Doc.controllets = [
+       "data-sevc-controllet",
+       "draggable-element-controllet",
+       "items-slider-controllet",
+       "treeview-controllet",
+       "text-element-controllet"
+    ];
+
+    Doc.datalets = [
+        "base-datalet",
+        "base-ajax-json-jsonpath-datalet",
+        "highcharts-datalet",
+        "column3Dchart-datalet",
+        "columnchart-datalet",
+        "barchart-datalet",
+        "linechart-datalet",
+        "datatable-datalet",
+        "treemap-datalet",
+        "leafletjs-datalet"
+    ];
+
+    Doc.selectedSource = "";
+
+    /*Doc.behaviours = [
+          { name : "BaseDataletBehavior", refcomp : "base-datalet" },
+          { name : "WorkcycleBehavior", refcomp : "base-datalet" },
+          { name : "AjaxJsonJsonPathBehavior", refcomp : "base-ajax-json-jsonpath-datalet"},
+    ];*/
+
+    Doc._onItemClick = function(event){
+
+        switch(event.target.className.split(" ")[0]) {
+            case 'datalet':
+                Doc.selectedSource = '../datalets/' + event.target.innerHTML.trim() + '/' + event.target.innerHTML.trim() + '.html';
+                Doc.$.main_content.innerHTML = '<iframe src="../datalets/' + event.target.innerHTML.trim() + '/docs.html" style="position: absolute;top: 0;bottom: 0;left: 0;right: 0;height: 100%;width: 100%;"></iframe>';
+                break;
+            case 'controllet':
+                Doc.selectedSource = '../controllets/' + event.target.innerHTML.trim() + '/' + event.target.innerHTML.trim() + '.html';
+                Doc.$.main_content.innerHTML = '<iron-component-page src="' + Doc.selectedSource + '"></iron-component-page>';
+                break;
+            case 'behaviour':
+                Doc.selectedSource = '../datalets/' + event.target.className.split(" ")[1] + '/static/js/' + event.target.innerHTML.trim() + '.js';
+                Doc.$.main_content.innerHTML = '<iron-component-page doc-src="../datalets/' + event.target.className.split(" ")[1] + '/static/js/' + event.target.innerHTML.trim() + '.json"></iron-component-page>';
+                break;
+        }
+    };
+
+    Doc._onGeneralClick = function(event){
+        Doc.$.main_content.innerHTML = '<iframe src="ROUTETOPADeveloperGuidev0.1.html" style="position: absolute;top: 0;bottom: 0;left: 0;right: 0;height: 100%;width: 100%;"></iframe>';
+    };
+
+    Doc._onSourceClick = function(event){
+
+        Doc.$.main_content.innerHTML = '<textarea id="code" style="position:relative;width: 100%;height: 80vh;" style="" rows="4" cols="50"></textarea>';
+        $.get(Doc.selectedSource, function(data) {
+            $("#code").val(data);
+
+            editAreaLoader.init({
+                id : "code"       // textarea id
+                ,syntax: "html"          // syntax to be uses for highgliting
+                ,start_highlight: true      // to display with highlight mode on start-up
+                ,replace_tab_by_spaces: 4,
+                isEditable : false
+            });
+
+        });
+
+    };
+
+</script>
 
 </body>
 </html>

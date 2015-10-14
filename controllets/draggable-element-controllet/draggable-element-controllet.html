@@ -33,10 +33,21 @@
 
 Example:
 
-    <data-sevc-controllet deep-url="http://192.168.214.128/DEEalerProvider/DEEP/"
-                          datalets-list-url="http://192.168.214.128/DEEalerProvider/DEEP/datalets-list"
-                          organization="2" >
-    </data-sevc-controllet>
+    SOURCE
+
+    <draggable-element-controllet
+       identifier="MyId"
+       label="MyLablel">
+    </draggable-element-controllet>
+
+    TARGET
+
+    <draggable-element-controllet
+       is-target="true"
+       heading="MyHeading"
+       description="MyDescription"
+       number="MyIndex">
+    </draggable-element-controllet>
 
 
 @element draggable-element-controllet

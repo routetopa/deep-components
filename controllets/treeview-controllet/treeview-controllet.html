@@ -296,21 +296,23 @@ Example:
                 if(curr_field != null){
                     if(object == null) object = "";
 
+                    var curr_map_parent_list = parent_list.slice();
+                    curr_map_parent_list.splice(-1);
                     if(object.constructor == Array){//Deal with flat array case
                         if(object[0].constructor != Object){
                             //MATERIAL CHECKBOX UL
-                            this.fieldsMap[parent_list[parent_list.length - 2]].children[1].innerHTML += this.createListItem(parent_list.toString(), curr_field);
+                            this.fieldsMap[curr_map_parent_list.toString()].children[1].innerHTML += this.createListItem(parent_list.toString(), curr_field);
                             return;
                         }
                     }
                     if(object.constructor == Array || object.constructor == Object){
                         var panel = this.createFieldsContainer(curr_field, parent_list[parent_list.length - 1]);
-                        this.fieldsMap[curr_field] = panel;
+                        this.fieldsMap[/*curr_field*/parent_list.toString()] = panel;
                         //MATERIAL CHECKBOX UL
-                        this.fieldsMap[parent_list[parent_list.length - 2]].appendChild(this.fieldsMap[curr_field]);
+                        this.fieldsMap[curr_map_parent_list.toString()].appendChild(this.fieldsMap[parent_list.toString()]);
                     }else{
                         //MATERIAL CHECKBOX UL
-                        this.fieldsMap[parent_list[parent_list.length - 2]].children[1].innerHTML += this.createListItem(parent_list.toString(), curr_field);
+                        this.fieldsMap[curr_map_parent_list.toString()].children[1].innerHTML += this.createListItem(parent_list.toString(), curr_field);
                     }
                 }
                 if(object.constructor == Array || object.constructor == Object) {

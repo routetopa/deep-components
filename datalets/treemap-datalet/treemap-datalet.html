@@ -109,14 +109,14 @@ Example:
         var TreemapBehavior = {
 
             map : {
-                name : this._component.name,
+                name : "",
                 children : []
             },
 
             transformData: function(e)
             {
                 var treemapData = [];
-
+                TreemapBehavior.map.name = this._component.name;
 
                 if(this.data.length > 1) {
                     for (i = 0; i < this.data.length; i++) {
