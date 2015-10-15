@@ -1,0 +1,61 @@
+<!--
+@license
+    The MIT License (MIT)
+
+    Copyright (c) 2015 Dipartimento di Informatica - Università di Salerno - Italy
+
+    Permission is hereby granted, free of charge, to any person obtaining a copy
+    of this software and associated documentation files (the "Software"), to deal
+    in the Software without restriction, including without limitation the rights
+    to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+    copies of the Software, and to permit persons to whom the Software is
+    furnished to do so, subject to the following conditions:
+
+    The above copyright notice and this permission notice shall be included in
+    all copies or substantial portions of the Software.
+
+    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+    IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+    FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+    AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+    LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+    THE SOFTWARE.
+-->
+
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+
+<dom-module id="base-csv-datalet">
+    <template>
+        <style>
+            #footer {
+                position: relative;
+                bottom: 0;
+                width: 100%;
+                font-size: small;
+            }
+
+            #rtpalogo{
+                height:30px;
+                width: 30px;
+            }
+        </style>
+
+        <b>Source : </b><span id="domain"></span><br><br>
+        <div id="footer">Powered by Route-to-PA&nbsp&nbsp<a href="http://routetopa.eu/"><img src="static/images/rtpalogo.png" id="rtpalogo"></a></div><br>
+    </template>
+
+    <script src="../shared_js/jquery-1.11.2.min.js"></script>
+    <script src="../shared_js/jsonpath-0.8.0.js"></script>
+    <script src="../shared_js/behaviors/BaseDataletBehaviors.js"></script>
+    <script src="../shared_js/behaviors/CSVDataRequestBehavior.js"></script>
+
+    <script>
+        BaseDatalet = Polymer({
+            is: 'base-csv-datalet',
+            ready: function(){
+                this.$.domain.textContent = this.data_url.split("/")[0] + "//" + this.data_url.split("/")[2];
+            }
+        });
+    </script>
+</dom-module>

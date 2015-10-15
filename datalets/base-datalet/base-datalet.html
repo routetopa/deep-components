@@ -1,0 +1,98 @@
+<!--
+@license
+    The MIT License (MIT)
+
+    Copyright (c) 2015 Dipartimento di Informatica - Università di Salerno - Italy
+
+    Permission is hereby granted, free of charge, to any person obtaining a copy
+    of this software and associated documentation files (the "Software"), to deal
+    in the Software without restriction, including without limitation the rights
+    to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+    copies of the Software, and to permit persons to whom the Software is
+    furnished to do so, subject to the following conditions:
+
+    The above copyright notice and this permission notice shall be included in
+    all copies or substantial portions of the Software.
+
+    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+    IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+    FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+    AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+    LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+    THE SOFTWARE.
+-->
+
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+
+<!--
+The `base-datalet` is the base component that includes datalet footer (with information about dataset domain and ROUTE-TO-PA project).
+Base datalet includes polymer.html and the BaseDataletBehaviors javascript file that define the datalet workcycle and the datalet base properties : dataUrl, fields and data.
+Every datalet must include this one in its `<template>` section.
+
+Example :
+
+    <dom-module id="every-datalet">
+        <template>
+            ...
+            <base-datalet data-url="{{dataUrl}}" fields="{{fields}}"></base-datalet>
+            ...
+        </template>
+    </dom-module>
+
+@element base-datalet
+@status v0.1
+@homepage
+@group datalets
+-->
+
+<dom-module id="base-datalet">
+    <template>
+        <style>
+            #footer {
+                position: relative;
+                bottom: 0;
+                width: 100%;
+                font-size: small;
+            }
+
+            #rtpalogo{
+                height:30px;
+                width: 30px;
+            }
+        </style>
+
+        <b>Source : </b><span id="domain"></span><br><br>
+        <div id="footer">Powered by Route-to-PA&nbsp&nbsp<a href="http://routetopa.eu/"><img src="static/images/rtpalogo.png" id="rtpalogo"></a></div><br>
+    </template>
+
+    <script src="static/js/BaseDataletBehavior.js"></script>
+    <script src="static/js/WorkcycleBehavior.js"></script>
+
+    <script>
+        BaseDatalet = Polymer({
+            is: 'base-datalet',
+
+            /**
+             * It is called after the element’s template has been stamped and all elements inside the element’s local
+             * DOM have been configured (with values bound from parents, deserialized attributes, or else default values)
+             * and had their ready method called.
+             *
+             * Extract the dataset domain from the entire URL and set the text content of the datalet footer.
+             *
+             * @method ready
+             *
+             */
+            ready: function(){
+                this.$.domain.textContent = this.dataUrl.split("/")[0] + "//" + this.dataUrl.split("/")[2];
+            },
+            /**
+             * Set the domain url to show in the footer
+             */
+            setDomain: function(url){
+                this.$.domain.textContent = url;
+
+            }
+        });
+    </script>
+</dom-module>

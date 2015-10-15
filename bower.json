@@ -1,0 +1,20 @@
+{
+  "name": "COMPONENT",
+  "version": "1.0.0",
+  "authors": [
+    "Luigi Serra"
+  ],
+  "description": "Datalet and Controllet repository",
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "polymer": "Polymer/polymer#^1.0.0",
+    "google-map": "GoogleWebComponents/google-map#^1.0.0"
+  }
+}

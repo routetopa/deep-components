@@ -1,0 +1,168 @@
+<!--
+@license
+    The MIT License (MIT)
+
+    Copyright (c) 2015 Dipartimento di Informatica - Università di Salerno - Italy
+
+    Permission is hereby granted, free of charge, to any person obtaining a copy
+    of this software and associated documentation files (the "Software"), to deal
+    in the Software without restriction, including without limitation the rights
+    to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+    copies of the Software, and to permit persons to whom the Software is
+    furnished to do so, subject to the following conditions:
+
+    The above copyright notice and this permission notice shall be included in
+    all copies or substantial portions of the Software.
+
+    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+    IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+    FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+    AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+    LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+    THE SOFTWARE.
+-->
+
+<link rel="import" href="../highcharts-datalet/highcharts-datalet.html">
+
+<!--
+
+`linechart-datalet` is a linechart datalet based on highcharts project <http://www.highcharts.com/>
+
+Example:
+
+    <linechart-datalet
+        data-url="http://ckan.routetopa.eu/api/action/datastore_search?resource_id=#"
+        fields='["field1","field2"]'>
+    </linechart-datalet>
+
+@element linechart-datalet
+@status v0.1
+@demo demo/index.html
+@group datalets
+-->
+
+<dom-module id="linechart-datalet">
+    <template>
+        <highcharts-datalet id="charts" data-url="{{dataUrl}}" fields="{{fields}}"></highcharts-datalet>
+    </template>
+    <script>
+
+        var LinechartBehavior = {
+
+            /**
+             * Bluid Highchart object
+             *
+             * @method presentData
+             */
+            presentData: function(){
+
+                $(this._component.$.charts.$.container).highcharts({
+                    title: {
+                        text: "" + this._component.title
+                    },
+                    chart: {
+                        zoomType: 'xy'
+                    },
+                    xAxis: {
+                        categories: this.properties.categories.value,//this._component.categories,
+                        title: {
+                            text: this._component.xAxisLabel
+                        }
+                    },
+                    yAxis: {
+                        title: {
+                            text: this._component.yAxisLabel
+                        },
+                        plotLines: [{
+                            value: 0,
+                            width: 1,
+                            color: '#808080'
+                        }]
+                    },
+                    tooltip: {
+                        valueSuffix: ' ' + this._component.suffix
+                    },
+                    legend: {
+                        layout: 'vertical',
+                        align: 'right',
+                        verticalAlign: 'top',
+                        x: -40,
+                        y: 100,
+                        floating: true,
+                        borderWidth: 1,
+                        backgroundColor: ((Highcharts.theme && Highcharts.theme.legendBackgroundColor) || '#FFFFFF'),
+                        shadow: true
+                    },
+                    credits: {
+                        enabled: false
+                    },
+                    series: this.properties.series.value
+                });
+            }
+        };
+
+
+        LinechartDatalet = Polymer({
+            is: 'linechart-datalet',
+
+            properties: {
+                /**
+                 * It's the label for X axis
+                 *
+                 * @attribute xAxisLabel
+                 * @type String
+                 * @default ''
+                 */
+                xAxisLabel: {
+                    type: String,
+                    value: ""
+                },
+                /**
+                 * It's the label for Y axis
+                 *
+                 * @attribute yAxisLabel
+                 * @type String
+                 * @default ''
+                 */
+                yAxisLabel: {
+                    type: String,
+                    value: ""
+                },
+                /**
+                 * It's the title of the chart
+                 *
+                 * @attribute title
+                 * @type Strig
+                 * @default ''
+                 */
+                title: {
+                    type: String,
+                    value: "Heading"
+                },
+                /**
+                 * It's the values suffix
+                 *
+                 * @attribute suffix
+                 * @type Strig
+                 * @default 'units'
+                 */
+                suffix : {
+                    type : String,
+                    value : "units"
+                }
+            },
+
+            /**
+             * 'ready' callback extend the LinechartComponentBehavior with HighchartsComponentBehavior and LinechartBehavior
+             * and run the Datalet workcycle.
+             *
+             * @method ready
+             */
+            ready: function(){
+                var LinechartComponentBehavior = $.extend(true, {}, HighchartsComponentBehavior, LinechartBehavior);
+                LinechartComponentBehavior.init(this);
+            }
+        });
+    </script>
+</dom-module>

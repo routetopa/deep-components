@@ -1,0 +1,204 @@
+<!--
+@license
+    The MIT License (MIT)
+
+    Copyright (c) 2015 Dipartimento di Informatica - Università di Salerno - Italy
+
+    Permission is hereby granted, free of charge, to any person obtaining a copy
+    of this software and associated documentation files (the "Software"), to deal
+    in the Software without restriction, including without limitation the rights
+    to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+    copies of the Software, and to permit persons to whom the Software is
+    furnished to do so, subject to the following conditions:
+
+    The above copyright notice and this permission notice shall be included in
+    all copies or substantial portions of the Software.
+
+    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+    IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+    FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+    AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+    LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+    THE SOFTWARE.
+-->
+
+<link rel="import" href="../base-ajax-json-jsonpath-datalet/base-ajax-json-jsonpath-datalet.html">
+
+<!--
+
+`treemap-datalet` is a treemap datalet based on d3js treemap project http://bl.ocks.org/mbostock/4063582
+A treemap recursively subdivides area into rectangles; the area of any node in the tree corresponds to its value.
+
+Example:
+
+    <treemap-datalet
+        data-url="http://ckan.routetopa.eu/api/action/datastore_search?resource_id=#"
+        fields='["field1","field2"]'>
+    </treemap-datalet>
+
+@element barchart-datalet
+@status v0.1
+@demo demo/index.html
+@group datalets
+-->
+
+<dom-module id="treemap-datalet">
+    <template>
+        <style is="custom-style">
+
+            :host ::content h6 {
+                color: red;
+            }
+
+            :host ::content #treemap_placeholder {
+                width: 100%;
+                height: 70%;
+                min-height: 500px;
+                background: #ddd;
+            }
+
+            :host ::content text {
+                pointer-events: none;
+            }
+
+            :host ::content .grandparent text {
+                font-weight: bold;
+            }
+
+            :host ::content rect {
+                fill: none;
+                stroke: #fff;
+            }
+
+            :host ::content rect.parent,
+            .grandparent rect {
+                stroke-width: 2px;
+            }
+
+            :host ::content .grandparent rect {
+                fill: orange;
+            }
+
+            :host ::content .grandparent:hover rect {
+                fill: #ee9700;
+            }
+
+            :host ::content .children rect.parent,
+            .grandparent rect {
+                cursor: pointer;
+            }
+
+            :host ::content .children rect.parent {
+                fill: #bbb;
+                fill-opacity: .5;
+            }
+
+            :host ::content .children:hover rect.child {
+                fill: #bbb;
+            }
+        </style>
+        <div id="treemap_placeholder"></div>
+        <base-ajax-json-jsonpath-datalet data-url="{{dataUrl}}" fields="{{fields}}"></base-ajax-json-jsonpath-datalet>
+    </template>
+
+    <script src="../shared_js/d3.js"></script>
+    <script src="js/buildtreemap.js"></script>
+    <script>
+
+        var TreemapBehavior = {
+
+            map : {
+                name : "",
+                children : []
+            },
+
+            transformData: function(e)
+            {
+                var treemapData = [];
+                TreemapBehavior.map.name = this._component.name;
+
+                if(this.data.length > 1) {
+                    for (i = 0; i < this.data.length; i++) {
+                        var propName = this.data[i].name;
+
+                        for (var j = 0; j < this.data[i].data.length; j++) {
+                            if (i == 0) treemapData[j] = {};
+                            currObj = {};
+                            currObj[propName] = this.data[i].data[j];
+                            jQuery.extend(treemapData[j], currObj);
+                        }
+                    }
+                }else{
+                    treemapData = this.data[0].data;
+                }
+
+                this.map.children = [];
+
+                for(var i = 0; i < treemapData.length; i++){
+                    this.checkAggragationField(treemapData[i], this._component.fields.length , this._component.fields.length - 1);
+                }
+
+                var json = JSON.stringify(this.map);
+
+            },
+
+            findChild: function(child, category){
+                var children = child.children;
+                for (var i=0; i<children.length; i++) {
+                    if (children[i].name == category)
+                        return children[i];
+                }
+                var nchild = {name : category , children : []};
+                children.push(nchild);
+                return nchild;
+            },
+
+            checkAggragationField: function(object, levels, value_index){
+                var curchild = this.map;
+                var keys = Object.keys(object);
+                for(var level= 0; level < levels; level++){
+
+                    var child = this.findChild(curchild, object[keys[level]]);
+                    curchild = child;
+                }
+
+                if (curchild.value === undefined)
+                    curchild.value = 0;
+
+                var value = curchild.value + parseFloat(object[keys[value_index]]);
+                curchild.children = null;
+                curchild.value = value;
+            },
+
+            presentData: function(){
+                build(this.map, "treemap_placeholder");
+            }
+        };
+
+
+        Polymer({
+            is : 'treemap-datalet' ,
+
+            properties: {
+                /**
+                 * It's the name for treemap
+                 *
+                 * @attribute name
+                 * @type String
+                 * @default ''
+                 */
+                name: {
+                    type: String,
+                    value: ""
+                }
+            },
+
+            ready: function(){
+                var TreemapComponentBehavior =  $.extend(true, {}, BaseDataletBehavior, WorkcycleBehavior, AjaxJsonJsonPathBehavior, TreemapBehavior);
+                TreemapComponentBehavior.init(this);
+            }
+
+        });
+    </script>
+</dom-module>
