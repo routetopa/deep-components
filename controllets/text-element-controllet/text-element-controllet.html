@@ -123,8 +123,6 @@ Example:
              * @event text-element-controllet_content-changed
              */
 
-            targets : null,
-
             properties: {
                 /**
                  * It's the name of the elelent
@@ -159,10 +157,16 @@ Example:
                     type: String,
                     value : "0"
                 },
+
                 value :{
                     type: String,
                     value: "",
                     observer : '_valueChanged'
+                },
+
+                timer :{
+                    type: Number,
+                    value : 0
                 }
             },
             /**
@@ -173,7 +177,8 @@ Example:
              * @param {Event} e
              */
             _valueChanged : function(oldvalue, newValue){
-                this.fire('text-element-controllet_content-changed', {newValue: newValue});
+                clearTimeout (this.timer);
+                this.timer = setTimeout(this.fire('text-element-controllet_content-changed', {newValue: newValue}), 2000);
             },
             /**
              * It returns the value in text area

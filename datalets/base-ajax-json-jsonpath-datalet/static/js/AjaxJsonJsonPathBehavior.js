@@ -100,6 +100,7 @@ var AjaxJsonJsonPathBehavior = {
     selectData : function(){
 
         this.data = [];
+
         this._component.fields = JSON.parse(this._component.fields);
 
         for(var i=0;i < this._component.fields.length; i++){
