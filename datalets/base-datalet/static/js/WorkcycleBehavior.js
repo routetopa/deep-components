@@ -23,9 +23,12 @@
  THE SOFTWARE.
  */
 
-/**
- * Created by Luigi Serra.
- */
+/** Created by :
+* Luigi Serra - luigser@gmail.com
+* Andrea Petta - andrpet@gmail.com
+*
+* Copyright (c) 2015 Dipartimento di Informatica - Università di Salerno - Italy
+*/
 var WorkcycleBehavior = {
     /**
      * A reference to Polymer object
