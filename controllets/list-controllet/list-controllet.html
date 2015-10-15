@@ -1,0 +1,64 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/paper-styles/paper-styles.html">
+<link rel="import" href="../../bower_components/paper-toolbar/paper-toolbar.html">
+<link rel="import" href="../../bower_components/neon-animation/neon-animated-pages.html">
+<link rel="import" href="../../bower_components/neon-animation/neon-animations.html">
+<link rel="import" href="../list-view-controllet/list-view-controllet.html">
+<link rel="import" href="../full-view-controllet/full-view-controllet.html">
+
+<dom-module id="list-controllet">
+
+  <style>
+
+    :host {
+      display: block;
+    }
+
+    neon-animated-pages {
+      height: 100%;
+    }
+
+  </style>
+
+  <template>
+
+    <neon-animated-pages id="pages" selected="0">
+
+      <list-view-controllet data="[[data]]" on-item-click="_onItemClick"></list-view-controllet>
+
+      <full-view-controllet id="view" on-close="_onClose" datalet="{{selected}}"></full-view-controllet>
+
+    </neon-animated-pages>
+
+  </template>
+
+</dom-module>
+
+
+
+<script>
+
+  Polymer({
+
+    is: 'list-controllet',
+
+    properties: {
+
+      data: {
+        type: Array,
+        value: []
+      }
+    },
+
+    _onItemClick: function(e) {
+      this.$.pages.selected = 1;
+      this.$.view.$.main.innerHTML = this.data[parseInt(e.detail.item.id)].html;
+    },
+
+    _onClose: function() {
+      this.$.pages.selected = 0;
+    }
+
+  });
+
+</script>

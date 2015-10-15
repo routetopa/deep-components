@@ -56,23 +56,23 @@
 <link rel="import" href="../text-element-controllet/text-element-controllet.html">
 
 <!--
- `data-sevc-controllet` is a controllet to generate visualization from a dataset accessible through api. A json response is required.
-  It's composed by three pass. First, user have to select a datasource to access to a dataset. He can copy and paste/drag and drop an url(an api url with json response) or select
-  from select contextual menu an available one. Second, the user selects the fields he want to visualize from a treeview by checking on it. A table preview of selected fields will show
-  the currently selected values. Third, the users selects a visualization(datalet) from a slider and drags the previous selected fields in to the input data model fields area. A preview
-  is available every time a fields is dragged in the input data model fields area.
+The `data-sevc-controllet` is a controllet to generate visualization from a dataset accessible through api. A json response is required.
+It's composed by three steps. First, user have to select a datasource to access to a dataset. He can copy and paste/drag and drop an url(an api url with json response) or select
+from select contextual menu an available one. Second, the user selects the fields he want to visualize from a treeview by checking on it. A table preview of selected fields will show
+the currently selected values. Third, the users selects a visualization(datalet) from a slider and drags the previous selected fields in to the input data model fields area. A preview
+is available every time a fields is dragged in the input data model fields area.
 
 Example:
 
     <data-sevc-controllet deep-url="http://192.168.214.128/DatalEts-Ecosystem-Provider/DEEP/"
                           datalets-list-url="http://192.168.214.128/DatalEts-Ecosystem-Provider/DEEP/datalets-list"
-                          datasets='{[{name : 'dataset1', url : dataset1Urls}, ... , {name : 'datasetN', url : datasetNUrls}]' >
+                          datasets='{[{name : 'dataset1', url : dataset1Urls}, ... , {name : 'datasetN', url : datasetNUrls}]'>
     </data-sevc-controllet>
 
 
 @element data-sevc-controllet
 @status beta
-@homepage index.html
+@homepage
 @group controllets
 -->
 
