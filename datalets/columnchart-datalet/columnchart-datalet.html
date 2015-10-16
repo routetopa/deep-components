@@ -164,6 +164,17 @@ Example:
                 suffix : {
                     type : String,
                     value : "units"
+                },
+                /**
+                 * It's the component behavior
+                 *
+                 * @attribute behavior
+                 * @type Object
+                 * @default {}
+                 */
+                behavior : {
+                    type : Object,
+                    value : {}
                 }
             },
 
@@ -174,8 +185,8 @@ Example:
              * @method ready
              */
             ready: function(){
-                var ColumnchartComponentBehavior = $.extend(true, {}, HighchartsComponentBehavior, ColumnchartBehavior);
-                ColumnchartComponentBehavior.init(this);
+                this.behavior = $.extend(true, {}, HighchartsComponentBehavior, ColumnchartBehavior);
+                this.behavior.init(this);
             }
         });
     </script>

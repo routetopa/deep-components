@@ -103,7 +103,6 @@ var AjaxJsonJsonPathBehavior = {
         //Deal the fields with "'" char
         //this._component.fields = this._component.fields.replace(/#/g,"'");
 
-
         this._component.fields = JSON.parse(this._component.fields);
 
         for(var i=0;i < this._component.fields.length; i++){

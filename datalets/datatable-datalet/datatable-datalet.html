@@ -96,12 +96,27 @@ Example:
 
         Polymer({
             is : 'datatable-datalet' ,
-            ready: function(){
-                var DatatableComponentBehavior =  $.extend(true, {}, BaseDataletBehavior, WorkcycleBehavior, AjaxJsonJsonPathBehavior, DatatableBehavior);
-                DatatableComponentBehavior.init(this);
-            }
 
+            properties: {
+                /**
+                 * It's the component behavior
+                 *
+                 * @attribute behavior
+                 * @type Object
+                 * @default {}
+                 */
+                behavior : {
+                    type : Object,
+                    value : {}
+                }
+            },
+
+            ready: function(){
+                this.behavior =  $.extend(true, {}, BaseDataletBehavior, WorkcycleBehavior, AjaxJsonJsonPathBehavior, DatatableBehavior);
+                this.behavior.init(this);
+            }
         });
+
     </script>
 </dom-module>
 

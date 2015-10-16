@@ -108,7 +108,6 @@ Example:
             is : 'leafletjs-datalet',
 
             properties : {
-
                 /**
                  * Store a reference to the leafletjs map object created in 'ready' callback
                  * @attribute map
@@ -119,7 +118,6 @@ Example:
                     type: Object,
                     value:null
                 },
-
                 /**
                  * An Array with all the markers extracted from the dataset
                  * @attribute markers
@@ -129,6 +127,17 @@ Example:
                 {
                     type : Array,
                     value : []
+                },
+                /**
+                 * It's the component behavior
+                 *
+                 * @attribute behavior
+                 * @type Object
+                 * @default {}
+                 */
+                behavior : {
+                    type : Object,
+                    value : {}
                 }
             },
 
@@ -150,8 +159,8 @@ Example:
 
                 L.Icon.Default.imagePath = 'http://services.routetopa.eu/DEEalerProvider/COMPONENTS/datalets/leafletjs-datalet/leafletsjs/images';
 
-                var leafletjsComponentBehavior =  $.extend(true, {}, BaseDataletBehavior, WorkcycleBehavior, AjaxJsonJsonPathBehavior, leafletjsBehavior);
-                leafletjsComponentBehavior.init(this);
+                this.behavior =  $.extend(true, {}, BaseDataletBehavior, WorkcycleBehavior, AjaxJsonJsonPathBehavior, leafletjsBehavior);
+                this.behavior.init(this);
             }
         });
     </script>

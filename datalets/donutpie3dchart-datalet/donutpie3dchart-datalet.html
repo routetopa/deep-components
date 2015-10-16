@@ -70,7 +70,6 @@ Example:
                     DonutPie3DSeries[0].data.push(DonutPie3DArr);
                 }
 
-                var titleDataset = "";
                 //Build Highchart element
                 $(this._component.$.charts.$.container).highcharts({
                     chart: {
@@ -114,10 +113,24 @@ Example:
             }
         };
 
-        var DonutPiechartComponentBehavior = $.extend(true, {}, HighchartsComponentBehavior, DonutPiechartBehavior);
 
         DonutPiechartDatalet = Polymer({
             is: 'donutpie3dchart-datalet',
+
+            properties: {
+                /**
+                 * It's the component behavior
+                 *
+                 * @attribute behavior
+                 * @type Object
+                 * @default {}
+                 */
+                behavior : {
+                    type : Object,
+                    value : {}
+                }
+            },
+
             /**
              * 'ready' callback extend the DonutPiechartComponentBehavior with HighchartsComponentBehavior and DonutPiechartBehavior
              * and run the Datalet workcycle.
@@ -125,7 +138,8 @@ Example:
              * @method ready
              */
             ready: function(){
-                DonutPiechartComponentBehavior.init(this);
+                this.behavior = $.extend(true, {}, HighchartsComponentBehavior, DonutPiechartBehavior);
+                this.behavior.init(this);
             }
         });
     </script>

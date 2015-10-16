@@ -165,6 +165,17 @@ Example:
                 title: {
                     type: String,
                     value: "Heading"
+                },
+                /**
+                 * It's the component behavior
+                 *
+                 * @attribute behavior
+                 * @type Object
+                 * @default {}
+                 */
+                behavior : {
+                    type : Object,
+                    value : {}
                 }
             },
 
@@ -175,9 +186,8 @@ Example:
              * @method ready
              */
             ready: function(){
-
-                var column3DchartComponentBehavior = $.extend(true, {}, HighchartsComponentBehavior, column3DchartBehavior);
-                column3DchartComponentBehavior.init(this);
+                this.behavior = $.extend(true, {}, HighchartsComponentBehavior, column3DchartBehavior);
+                this.behavior.init(this);
             }
         });
     </script>
