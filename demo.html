@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="import"  href="bower_components/iron-component-page/iron-component-page.html">
+    <link rel="import"  href="bower_components/paper-drawer-panel/paper-drawer-panel.html">
+    <link rel="import"  href="bower_components/paper-menu/paper-menu.html">
+    <link rel="import"  href="bower_components/paper-item/paper-item.html">
+    <link rel="import"  href="bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
+    <link rel="import"  href="bower_components/paper-icon-button/paper-icon-button.html">
+    <link rel="import" href="bower_components/paper-styles/color.html">
+    <link rel="import" href="bower_components/paper-input/paper-textarea.html">
+    <link rel="import" href="bower_components/iron-flex-layout/iron-flex-layout.html">
+    <link rel="import" href="bower_components/iron-ajax/iron-ajax.html">
+
+    <link rel="import" href="controllets/items-slider-controllet/items-slider-controllet.html">
+    <link rel="import" href="controllets/draggable-element-controllet/draggable-element-controllet.html">
+    <link rel="import" href="controllets/treeview-controllet/treeview-controllet.html">
+    <link rel="import" href="controllets/text-element-controllet/text-element-controllet.html">
+
+    <script type="text/javascript" src="datalets/shared_js/jquery-1.11.2.min.js"></script>
+    <script type="text/javascript" src="bower_components/webcomponentsjs/webcomponents-lite.min.js"></script>
+    <script src="controllets/shared_js/perfect-scrollbar/js/min/perfect-scrollbar.jquery.min.js"></script>
+    <script src="../DEEPCLIENT/js/deepClient.js"></script>
+    <script type="text/javascript" src="docs/js/editarea_0_8_2/edit_area/edit_area_full.js"></script>
+
+    <link rel="stylesheet" href="controllets/shared_js/perfect-scrollbar/css/perfect-scrollbar.min.css">
+    <link rel="import" href="bower_components/paper-menu-button/paper-menu-button.html">
+    <meta charset="UTF-8">
+
+
+    <script type="text/javascript">
+        selected_component_url = "";
+
+        $(document).ready(function () {
+            window.addEventListener("treeview-controllet_fileds-selected", DEEP._fieldsSelected, false);
+            window.addEventListener("items-slider-controllet_item-selected", DEEP._dataletSelected, false);
+            window.addEventListener("draggable-element-controllet_content-dragged", DEEP._fieldsMapped, false);
+            window.addEventListener("text-element-controllet_content-changed", DEEP._textElementChanged, false);
+
+            editAreaLoader.init({
+                id : "sbiricuda"       // textarea id
+                ,syntax: "html"          // syntax to be uses for highgliting
+                ,start_highlight: true      // to display with highlight mode on start-up
+                ,syntax: "html"
+                ,replace_tab_by_spaces: 4,
+                isEditable : false,
+            });
+        });
+    </script>
+
+    <style>
+        .avatar
+        {
+            display: inline-block;
+            height: 0.5em;
+            width: 0.5em;
+            border-radius: 50%;
+            /*background: #3f51b5;*/
+            color: white;
+            line-height: 2em;
+            font-size: 1.87em;
+            text-align: center;
+            margin-right: 5px;
+        }
+
+        #toolbar{
+            background: #2196F3 ;
+        }
+        #logo{
+            width: 56px;
+            height: 56px;
+            background-image: url("http://spod.routetopa.eu/ow_static/themes/rtpa_matter/images/logo.png");
+            background-size: auto 41px;
+            background-repeat: no-repeat;
+            background-position: center center;
+
+        }
+        .area_container
+        {
+            overflow: hidden;
+            margin : 0.8em;
+            padding : 0.8em;
+            border-width: 1em;
+            border-radius: 0.125rem;
+            box-shadow: 0.125em 0.125em 0.1125em 0.125em rgba(0, 0, 0, 0.25);
+        }
+
+        #visualization_slider_area
+        {
+            min-width: 566px;
+            min-height: 200px;
+            height: 175px;
+        }
+        .content-card {
+            position: relative;
+            float: left;
+            margin: .2em;
+            width: 14%;
+            min-height: 100px;
+            height: 40%;
+            background: #fff;
+            -moz-border-radius: 0.125rem;
+            -webkit-border-radius: 0.125rem;
+            border-radius: 0.125rem;
+            box-shadow: 0 0.625em 0.5125em 0 rgba(0, 0, 0, 0.25);
+            -webkit-box-shadow: 0 0.625em 0.5125em 0 rgba(0, 0, 0, 0.25);
+            -moz-box-shadow: 0 0.625em 0.5125em 0 rgba(0, 0, 0, 0.25);
+            padding: 1em;
+        }
+
+        .content-selected{
+            position: relative;
+            float: left;
+            top : 5%;
+            margin : .2em;
+            width: 14%;
+            height: 40%;
+
+            background: #fff;
+            border-style: solid;
+            border-width: 0.03em;
+            -moz-border-radius: 0.125rem;; /* Firefox */
+            -webkit-border-radius: 0.125rem;; /* Safari, Chrome */
+            border-radius: 0.125rem;
+            box-shadow:         0 1.825em 1.7125em 0 rgba(0, 0, 0, 0.50);
+            -webkit-box-shadow: 0 1.825em 1.7125em 0 rgba(0, 0, 0, 0.50);
+            -moz-box-shadow:    0 1.825em 1.7125em 0 rgba(0, 0, 0, 0.50);
+            padding: 1em;
+        }
+
+    </style>
+
+</head>
+<body unresolved>
+
+<template id="DEEP" is="dom-bind">
+
+    <iron-ajax
+            auto
+            id="data_request"
+            url="http://ckan.routetopa.eu/api/action/datastore_search?resource_id=07843fc3-07e1-4c66-9be4-fed43ca4a26f"
+            verbose="true"
+            on-response="handleResponseData"
+            debounce-duration="300">
+    </iron-ajax>
+
+    <iron-ajax
+            id="datales_list_request"
+            auto
+            url={{datasetsList}}
+            handle-as="json"
+            on-response="handleResponseDatalets"
+            debounce-duration="300">
+    </iron-ajax>
+
+    <iron-ajax
+            id="selected_datalet_request"
+            url={{deepUrl}}
+            verbose="true"
+            on-response="handleSelectedDatalet"
+            debounce-duration="300">
+    </iron-ajax>
+
+    <paper-toolbar id="toolbar">
+        <paper-menu-button>
+            <paper-icon-button icon="menu" class="dropdown-trigger"></paper-icon-button>
+            <paper-menu class="dropdown-content">
+                <paper-item><a href="http://routetopa.eu/" target="_blank">ROUTE-TO PA European Project</a></paper-item>
+                <paper-item><a href="docs/docs.html" target="_blank">DEEP Documentation</a></paper-item>
+            </paper-menu>
+        </paper-menu-button>
+        <span class="title">DatalEts-Ecosystem Provider - Datalet Creator</span>
+        <a href="http://routetopa.eu/" target="_blank"><paper-icon-button id="logo" ></paper-icon-button></a>
+    </paper-toolbar>
+    <div id="main_content">
+        <div class="vertical justified layout" style="margin-top: 40px;">
+
+            <div class="horizontal layout">
+                <paper-textarea style="width: 80%;margin-top: 8px;" id="data_url" label="Dataset api data url" floatingLabel value="http://ckan.routetopa.eu/api/action/datastore_search?resource_id=07843fc3-07e1-4c66-9be4-fed43ca4a26f" on-change="_textElementChanged"></paper-textarea>
+                <paper-dropdown-menu style="width: 20%;" id="datasets-sources" label="Example datasets">
+                    <paper-menu class="dropdown-content">
+                        <template is="dom-repeat" items="[[Datasets.names]]" as="dataset" index-as="i">
+                            <paper-item id="[[i]]" on-tap="_datasourceSelected">[[dataset]]</paper-item>
+                        </template>
+                    </paper-menu>
+                </paper-dropdown-menu>
+            </div>
+
+            <div class="horizontal layout">
+
+                <div style="position:relative;width: 50%;min-height: 40vh;max-height: 40vh;" id="fields_placeholder" class="area_container flexchild" style="min-width:300px">
+                    <treeview-controllet id="fields_treeview"></treeview-controllet>
+                </div>
+
+                <div style="position:relative;width: 50%;min-height: 40vh;max-height: 40vh;" id="table_fields_container" class="area_container flex2child">
+                    <div id="table_component_place_holder"></div>
+                </div>
+
+            </div>
+
+            <div class="horizontal layout">
+
+                <div style="position:relative;width: 50%;min-height: 80vh;max-height: 80vh;" id="datalet_params_main_placeholder" class="area_container flexchild" style="min-width:300px">
+                    <div class="">
+                        <div id="visualization_slider_area" class="area_container"></div>
+                        <div id="fields_mapping_area" class="area_container horizontal layout">
+
+                            <div id="selected_fields_main_container" class="field-mapping-card" style="position:relative;width: 50%;min-height: 40vh;max-height: 40vh;">
+                                <div class="title">
+                                    <div class="medium">Selected fields</div>
+                                </div>
+                                <div id="selected_fields_container" class="area_container"></div>
+                            </div>
+
+                            <div id="idm_fields_main_container" class="field-mapping-card" style="position:relative;width: 50%;min-height: 40vh;max-height: 40vh;">
+                                <div class="title">
+                                    <div class="medium">Datalet fields</div>
+                                </div>
+                                <div id="datalet_idm_fields_container" class="area_container"></div>
+                            </div>
+                        </div>
+                        <div id="idm_layout_main_container" class="area_container" style="position:relative;min-height: 20vh;max-height: 20vh;">
+                            <div class="title">
+                                <div class="medium">Layout fields</div>
+                            </div>
+                            <div id="idm_layout_container" class="area_container"></div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div style="position:relative;width: 50%;min-height: 80vh;max-height: 80vh;" id="datalet_main_container" class="area_container flex2child">
+                </div>
+
+            </div>
+
+            <div class="horizontal layout">
+                <div id="code_area" style="position:relative;width: 100%;min-height: 20vh;max-height: 20vh;" class="area_container flex2child">
+                    <textarea id="sbiricuda" style="position:relative;width: 100%;min-height: 20vh;max-height: 20vh;" style="" rows="4" cols="50">
+                       Copy and paste this code to inject the datalet in you page.
+                    </textarea>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+</template>
+<script>
+    DEEP.Datasets = {
+        names:[
+            'Italy - Consuntivo entrate 2009',
+            'Italy - Consuntivo entrate 2010',
+            'Italy - Consuntivo entrate 2011',
+            'Italy - Consuntivo entrate 2012',
+            'Italy - Consuntivo entrate 2014',
+            'Holland - Vestigingen register gemeente Groningen',
+            'Holland - Woonruimte gemeente Groningen',
+            'Ireland - SDCC Traffic Cameras',
+            'Ireland - Derelict Site Register',
+            'Ireland - Dublin City Council Commencement Notices',
+            'Ireland - Dublin City Council Planning Applications',
+            'Ireland - Dun Laoghaire-Rathdown County Council Planning Application 2008-2014',
+            'Ireland - Fingal Council Planning Applications for last 7 years',
+            'Ireland - Planning Register',
+            'Ireland - Fingal Development Plan 2011-2017 Record of Protected Structures'
+        ],
+        urls: [
+            'http://ckan.routetopa.eu/api/action/datastore_search?resource_id=07843fc3-07e1-4c66-9be4-fed43ca4a26f',
+            'http://ckan.routetopa.eu/api/action/datastore_search?resource_id=48a4db73-d3d4-4639-bbc2-9c797d0e6cda',
+            'http://ckan.routetopa.eu/api/action/datastore_search?resource_id=a14cc2fb-0c24-48d7-9370-834045797d89',
+            'http://ckan.routetopa.eu/api/action/datastore_search?resource_id=fb32fcb6-5e44-4e52-b132-01c6540ddbee',
+            'http://ckan.routetopa.eu/api/action/datastore_search?resource_id=0cb600fc-19ad-4aaf-9794-1e6ea851840a',
+            'http://ckan.routetopa.eu/api/action/datastore_search?resource_id=ba554c1f-02a7-4d76-b449-fb9daa1f8bfd',
+            'http://ckan.routetopa.eu/api/action/datastore_search?resource_id=af7b3916-4347-469a-8354-3c2d559bd92f',
+            'http://ckan.routetopa.eu/api/action/datastore_search?resource_id=73e02092-85a1-434e-85fe-0c9a43aa9a52',
+            'http://ckan.routetopa.eu/api/action/datastore_search?resource_id=fcbee83e-3d3d-4303-a568-24dd33d02adc',
+            'http://ckan.routetopa.eu/api/action/datastore_search?resource_id=ee00de68-f2e4-482f-a003-3c0561351075',
+            'http://ckan.routetopa.eu/api/action/datastore_search?resource_id=2f4a9d44-b52f-4c8b-a5db-d8f4a676d81e',
+            'http://ckan.routetopa.eu/api/action/datastore_search?resource_id=c479f061-9638-489d-ac55-0c68765548ff',
+            'http://ckan.routetopa.eu/api/action/datastore_search?resource_id=d29a477a-4734-43ef-8002-048c8640d441',
+            'http://ckan.routetopa.eu/api/action/datastore_search?resource_id=2b23f32d-e27e-4eef-af1e-27e05103df7d',
+            'http://ckan.routetopa.eu/api/action/datastore_search?resource_id=5ea813bc-fdf9-4edb-b3b1-0142b593d5c6'
+        ]
+    };
+
+    DEEP.deepUrl = "http://192.168.214.128/DatalEts-Ecosystem-Provider/DEEP/";
+    DEEP.datasetsList = "http://192.168.214.128/DatalEts-Ecosystem-Provider/DEEP/datalets-list";
+
+    DEEP.handleResponseData = function(e){
+        DEEP.$.fields_treeview.init(e.detail.response);
+        $("#fields_placeholder").perfectScrollbar();
+        $("#table_fields_container").perfectScrollbar();
+    };
+
+    DEEP.handleResponseDatalets = function(e){
+        DEEP.datalets_list = new Array();
+        for(var i=0;i < e.detail.response.length;i++){
+            var datalet_info = { name : e.detail.response[i].name ,
+                image : e.detail.response[i].url + e.detail.response[i].name + ".png"
+            };
+
+            DEEP.datalets_list.push(datalet_info);
+        }
+
+        DEEP.$.visualization_slider_area.innerHTML = '<items-slider-controllet items=\'' + JSON.stringify(DEEP.datalets_list) + '\'' +
+                '\'></items-slider-controllet>';
+    };
+
+    DEEP.handleSelectedDatalet = function(e){
+
+        var response = e.detail.response;
+        DEEP.$.datalet_idm_fields_container.innerHTML = "";
+        DEEP.$.idm_layout_container.innerHTML = "";
+
+        if(response.idm.inputs.input.constructor == Object) {
+            var input = response.idm.inputs.input;
+            if(input.selection == "*") {
+                var input_selected_fields = Polymer.dom(DEEP.$.selected_fields_container).querySelectorAll('draggable-element-controllet');
+                for (var j = 0; j < input_selected_fields.length; j++) {
+                    DEEP.$.datalet_idm_fields_container.innerHTML += '<draggable-element-controllet is-target="true" heading="Field ' + (j + 1) + '"  description="' + input.description + '" number="' + (j + 1) + '"></draggable-element-controllet><br>';
+                }
+            }
+        }else{
+            for(var i =0; i < response.idm.inputs.input.length; i++){
+                var input = response.idm.inputs.input[i];
+                DEEP.$.datalet_idm_fields_container.innerHTML += '<draggable-element-controllet is-target="true" id="' + input.name + '" heading="' + input.name + '"  description="' + input.description + '" number="' + (i + 1) + '"></draggable-element-controllet><br>';
+            }
+        }
+
+        if(response.idm.inputs.layouts.input.constructor == Object) {
+            var input = response.idm.inputs.layouts.input;
+            DEEP.$.idm_layout_container.innerHTML += '<text-element-controllet heading="' + input.name + '" description="' + input.description + '" number="1"></text-element-controllet>';
+        }else{
+            for(var i =0; i < response.idm.inputs.layouts.input.length; i++){
+                var input = response.idm.inputs.layouts.input[i];
+                DEEP.$.idm_layout_container.innerHTML += '<text-element-controllet heading="' + input.name + '" ' +
+                        'description="' + input.description + '" ' +
+                        'number="' + (i+1) + '">' +
+                        '</text-element-controllet>';
+            }
+        }
+
+        $("#selected_fields_main_container").perfectScrollbar();
+        $("#idm_fields_main_container").perfectScrollbar();
+        $("#idm_layout_main_container").perfectScrollbar();
+        $("#datalet_params_main_placeholder").perfectScrollbar();
+    };
+
+    DEEP._urlChanged = function(event){
+        DEEP.$.data_request.url = event.target.value;
+        DEEP.$.data_request.generateRequest();
+        DEEP.$.table_component_place_holder.innerHTML = "";
+    };
+
+    DEEP._datasourceSelected = function(event){
+        DEEP.$.data_url.value = DEEP.Datasets.urls[parseInt(event.target.id)];
+        DEEP.$.data_request.url = DEEP.Datasets.urls[parseInt(event.target.id)];
+        DEEP.$.data_request.generateRequest();
+        DEEP.$.table_component_place_holder.innerHTML = "";
+    };
+
+    DEEP._fieldsSelected  = function(e){
+
+        DEEP.$.selected_fields_container.innerHTML = "";
+        for(var i=0;i<e.detail.fields.length;i++) {
+            DEEP.$.selected_fields_container.innerHTML += '<draggable-element-controllet identifier="' + e.detail.fields[i] +
+                    '" label="' + e.detail.fields[i].split(",")[e.detail.fields[i].split(",").length -1] +
+                    '"></draggable-element-controllet><br>';
+        }
+
+        ComponentService.deep_url = DEEP.deepUrl;
+
+        ComponentService.getComponent({
+            component   : "datatable-datalet",
+            params      :{
+                'data-url' : DEEP.$.data_url.value
+            },
+            fields      : e.detail.fields,
+            placeHolder :  DEEP.$.table_component_place_holder
+        });
+
+    };
+
+    DEEP._dataletSelected = function(e){
+        DEEP.selected_datalet = e.detail.datalet;
+        DEEP.$.selected_datalet_request.url = DEEP.deepUrl + e.detail.datalet;
+        DEEP.$.selected_datalet_request.generateRequest();
+    };
+
+    DEEP._fieldsMapped = function(e){
+        DEEP.generateDataletPreview();
+    };
+
+    DEEP.timer = 0;
+    DEEP._textElementChanged = function(e){
+        clearTimeout (DEEP.timer);
+        DEEP.timer = setTimeout(DEEP.generateDataletPreview, 1500);
+    };
+
+    DEEP.getXMLHttpRequest =  function()
+    {
+        if (window.XMLHttpRequest) {
+            return new XMLHttpRequest();
+        }
+        else {
+            try {
+                return new ActiveXObject("MSXML2.XMLHTTP.3.0");
+            }
+            catch(ex) {
+                return null;
+            }
+        }
+    };
+
+    DEEP.generateDataletPreview = function(){
+
+        var input_mapped_fields = Polymer.dom(DEEP.$.datalet_idm_fields_container).querySelectorAll('draggable-element-controllet[is-target=true]');
+        DEEP.selected_fields = Array();
+
+        for (var i = 0; i < input_mapped_fields.length; i++) {
+            if (input_mapped_fields[i].value != "") {
+                DEEP.selected_fields.push(input_mapped_fields[i].value);
+            }
+        }
+
+        var input_layouts_fields = Polymer.dom(DEEP.$.idm_layout_container).querySelectorAll('text-element-controllet');
+        DEEP.params_fields = {'data-url' : DEEP.$.data_url.value};
+
+        for (var i = 0; i < input_layouts_fields.length; i++) {
+            if (input_layouts_fields[i].value != "") {
+                DEEP.params_fields[input_layouts_fields[i].heading]  =  input_layouts_fields[i].value;
+            }
+        }
+
+        ComponentService.deep_url = DEEP.deepUrl;
+        ComponentService.getComponent({
+            component   : DEEP.selected_datalet,
+            params      : DEEP.params_fields,
+            fields      : DEEP.selected_fields,
+            placeHolder : DEEP.$.datalet_main_container
+        });
+
+        var request = DEEP.getXMLHttpRequest();
+
+        request.onreadystatechange = function(){
+            if(request.readyState == 4){
+                try {
+                    var resp = JSON.parse(request.response);
+                    var link = '<link rel="import" href="' + resp.bridge_link + resp.component_link +'">\n';
+
+                    //Build datalet injecting html code
+                    var datalet_code = link + '<' + DEEP.selected_datalet;
+                    var keys = Object.keys(DEEP.params_fields);
+                    for(var i = 0; i < keys.length; i++){
+                        datalet_code += ' ' + keys[i] + '=\'' + DEEP.params_fields[keys[i]] +'\'';
+                    }
+                    datalet_code += " fields='" + JSON.stringify(DEEP.selected_fields) + "'></" + DEEP.selected_datalet + ">";
+
+                    DEEP.$.code_area.innerHTML = '<textarea id="sbiricuda" style="position:relative;width: 100%;min-height: 20vh;max-height: 20vh;" style="" rows="4" cols="50" autofocus="false">' +
+                            '<!-- ADD THE POLYFILL TO YOUR PAGE - https://cdnjs.cloudflare.com/ajax/libs/webcomponentsjs/0.7.14/webcomponents.min.js -->\n' + datalet_code +
+                            '</textarea>';
+
+                    editAreaLoader.init({
+                        id : "sbiricuda"       // textarea id
+                        ,syntax: "html"          // syntax to be uses for highgliting
+                        ,start_highlight: true      // to display with highlight mode on start-up
+                        ,syntax: "html"
+                        ,replace_tab_by_spaces: 4,
+                        isEditable : false,
+                    });
+
+                } catch (e){
+                    var resp = {
+                        status: 'error',
+                        data: 'Unknown error occurred: [' + request.response + ']'
+                    };
+                }
+            }};
+
+        request.open('GET', DEEP.deepUrl + DEEP.selected_datalet);
+        request.send();
+
+    };
+
+</script>
+
+</body>
+</html>
