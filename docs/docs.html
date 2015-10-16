@@ -155,7 +155,8 @@
                 break;
             case 'controllet':
                 Doc.selectedSource = '../controllets/' + event.target.innerHTML.trim() + '/' + event.target.innerHTML.trim() + '.html';
-                Doc.$.main_content.innerHTML = '<iron-component-page src="' + Doc.selectedSource + '"></iron-component-page>';
+                //Doc.$.main_content.innerHTML = '<iron-component-page src="' + Doc.selectedSource + '"></iron-component-page>';
+                Doc.$.main_content.innerHTML = '<iframe src="../controllets/' + event.target.innerHTML.trim() + '/docs.html" style="position: absolute;top: 0;bottom: 0;left: 0;right: 0;height: 100%;width: 100%;"></iframe>';
                 break;
             case 'behaviour':
                 Doc.selectedSource = '../datalets/' + event.target.className.split(" ")[1] + '/static/js/' + event.target.innerHTML.trim() + '.js';

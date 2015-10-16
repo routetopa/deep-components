@@ -4,7 +4,7 @@
   "behaviors": [
     {
       "type": "behaviour",
-      "desc": "Defined in `AjaxJsonJsonPathBehaviour.js`. Itos a specific implemetation that uses Ajax to get the data in Json format and uses JsonPath to select and filtering the data",
+      "desc": "Defined in `AjaxJsonJsonPathBehaviour.js`. It is a specific implemetation that uses Ajax to get the data in Json format and uses JsonPath to select and filtering the data",
       "events": [],
       "properties": [
         {
