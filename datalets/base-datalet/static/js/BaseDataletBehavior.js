@@ -23,11 +23,10 @@
     THE SOFTWARE.
 */
 
-/** Created by :
-* Luigi Serra - luigser@gmail.com
-* Andrea Petta - andrpet@gmail.com
-*
-* Copyright (c) 2015 Dipartimento di Informatica - Università di Salerno - Italy
+/**
+ * Developed by :
+ * ROUTE-TO-PA Project - grant No 645860. - www.routetopa.eu
+ *
 */
 
 var BaseDataletBehavior ={
