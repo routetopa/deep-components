@@ -23,6 +23,7 @@
     <script src="../DEEPCLIENT/js/deepClient.js"></script>
     <script type="text/javascript" src="docs/js/editarea_0_8_2/edit_area/edit_area_full.js"></script>
 
+    <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" href="controllets/shared_js/perfect-scrollbar/css/perfect-scrollbar.min.css">
     <link rel="import" href="bower_components/paper-menu-button/paper-menu-button.html">
     <meta charset="UTF-8">
@@ -49,6 +50,10 @@
     </script>
 
     <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+        }
+
         .avatar
         {
             display: inline-block;
@@ -175,6 +180,15 @@
     <div id="main_content">
         <div class="vertical justified layout" style="margin-top: 40px;">
 
+            <div class="horizontal layout area_container">
+                <p>
+                    Using this page you can create a Datalet, a off-the-shelf, reusable web-component able to load,
+                    query, filter, and visualise any dataset content (e.g. through HighCharts Javascript library).
+                    Datalet are reusable since they can be placed in every web page, like institutional web-sites,
+                    blogs, forums and so on, without any knowledge on how it effectively is implemented.
+                </p>
+            </div>
+
             <div class="horizontal layout">
                 <paper-textarea style="width: 80%;margin-top: 8px;" id="data_url" label="Dataset api data url" floatingLabel value="http://ckan.routetopa.eu/api/action/datastore_search?resource_id=07843fc3-07e1-4c66-9be4-fed43ca4a26f" on-change="_textElementChanged"></paper-textarea>
                 <paper-dropdown-menu style="width: 20%;" id="datasets-sources" label="Example datasets">
@@ -248,8 +262,8 @@
 </template>
 <script>
 
-    DEEP.deepUrl = "http://192.168.214.128/DatalEts-Ecosystem-Provider/DEEP/";
-    DEEP.datasetsList = "http://192.168.214.128/DatalEts-Ecosystem-Provider/DEEP/datalets-list";
+    DEEP.deepUrl = "http://deep.routetopa.eu/DEEP/";
+    DEEP.datasetsList = "http://deep.routetopa.eu/DEEP/datalets-list";
 
     DEEP.Datasets = {
         names:[
