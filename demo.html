@@ -247,6 +247,10 @@
     </div>
 </template>
 <script>
+
+    DEEP.deepUrl = "http://deep.routetopa.eu/DEEP/";
+    DEEP.datasetsList = "http://deep.routetopa.eu/DEEP/datalets-list";
+
     DEEP.Datasets = {
         names:[
             'Italy - Consuntivo entrate 2009',
@@ -283,9 +287,6 @@
             'http://ckan.routetopa.eu/api/action/datastore_search?resource_id=5ea813bc-fdf9-4edb-b3b1-0142b593d5c6'
         ]
     };
-
-    DEEP.deepUrl = "http://192.168.214.128/DatalEts-Ecosystem-Provider/DEEP/";
-    DEEP.datasetsList = "http://192.168.214.128/DatalEts-Ecosystem-Provider/DEEP/datalets-list";
 
     DEEP.handleResponseData = function(e){
         DEEP.$.fields_treeview.init(e.detail.response);
