@@ -213,7 +213,7 @@ Example:
 
             ready: function(){
                 this.behavior =  $.extend(true, {}, BaseDataletBehavior, WorkcycleBehavior, AjaxJsonJsonPathBehavior, TreemapBehavior);
-                this.behavior.init(this);
+                this.async(function(){this.behavior.init(this)},1);
             }
 
         });

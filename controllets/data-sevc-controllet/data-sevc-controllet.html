@@ -936,7 +936,8 @@ Example:
                     dataUrl : this.dataUrl,
                     params :  this.params_fields,
                     fields :  this.selected_fields,
-                    datalet : this.selected_datalet
+                    datalet : this.selected_datalet,
+                    staticData : JSON.stringify(this.$.datalet_placeholder.children[1].behavior.data)
                 }
 
                 this.fire('data-sevc-controllet.dataletCreated', {data : data});

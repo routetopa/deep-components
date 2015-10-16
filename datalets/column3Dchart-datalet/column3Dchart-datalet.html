@@ -187,7 +187,7 @@ Example:
              */
             ready: function(){
                 this.behavior = $.extend(true, {}, HighchartsComponentBehavior, column3DchartBehavior);
-                this.behavior.init(this);
+                this.async(function(){this.behavior.init(this)},1);
             }
         });
     </script>

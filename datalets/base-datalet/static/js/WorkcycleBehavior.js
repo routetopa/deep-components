@@ -97,7 +97,14 @@ var WorkcycleBehavior = {
      */
     init: function(component){
         this._component = component;
-        this.requestData();
+
+        if(this._component.data === undefined || this._component.data == ""){
+            this.requestData();
+        }else{
+            this.data = JSON.parse(this._component.data);
+            this.transformData();
+            this.presentData();
+        }
     }
 
 };

@@ -188,7 +188,7 @@ Example:
             ready: function(){
 
                 this.behavior = $.extend(true, {}, HighchartsComponentBehavior, BarchartBehavior);
-                this.behavior.init(this);
+                this.async(function(){this.behavior.init(this)},1);
             }
         });
     </script>

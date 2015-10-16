@@ -160,7 +160,7 @@ Example:
                 L.Icon.Default.imagePath = 'http://services.routetopa.eu/DEEalerProvider/COMPONENTS/datalets/leafletjs-datalet/leafletsjs/images';
 
                 this.behavior =  $.extend(true, {}, BaseDataletBehavior, WorkcycleBehavior, AjaxJsonJsonPathBehavior, leafletjsBehavior);
-                this.behavior.init(this);
+                this.async(function(){this.behavior.init(this)},1);
             }
         });
     </script>

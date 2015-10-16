@@ -50,7 +50,7 @@ Example:
 
 <dom-module id="linechart-datalet">
     <template>
-        <highcharts-datalet id="charts" data-url="{{dataUrl}}" fields="{{fields}}"></highcharts-datalet>
+        <highcharts-datalet id="charts" data-url="{{dataUrl}}" fields="{{fields}}" data="{{data}}"></highcharts-datalet>
     </template>
     <script>
 
@@ -178,7 +178,7 @@ Example:
              */
             ready: function(){
                 this.behavior = $.extend(true, {}, HighchartsComponentBehavior, LinechartBehavior);
-                this.behavior.init(this);
+                this.async(function(){this.behavior.init(this)},1);
             }
         });
     </script>

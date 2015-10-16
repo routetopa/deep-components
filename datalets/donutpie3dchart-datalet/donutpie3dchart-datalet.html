@@ -139,7 +139,7 @@ Example:
              */
             ready: function(){
                 this.behavior = $.extend(true, {}, HighchartsComponentBehavior, DonutPiechartBehavior);
-                this.behavior.init(this);
+                this.async(function(){this.behavior.init(this)},1);
             }
         });
     </script>
