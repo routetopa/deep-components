@@ -14,7 +14,8 @@
     "tests"
   ],
   "dependencies": {
-    "polymer": "Polymer/polymer#^1.0.0",
-    "google-map": "GoogleWebComponents/google-map#^1.0.0"
+    "google-map": "GoogleWebComponents/google-map#^1.0.0",
+    "paper-fab-transitions": "~0.1.0",
+    "polymer": "Polymer/polymer#^1.0.0"
   }
 }
