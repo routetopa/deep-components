@@ -66,7 +66,7 @@ Example:
                 $(this._component.$.charts.$.container).highcharts({
                     chart: {
                         type: 'column',
-                        zoomType: 'xy'
+                        zoomType: 'xy',
                     },
                     title: {
                         text: this._component.title
@@ -186,7 +186,7 @@ Example:
              */
             ready: function(){
                 this.behavior = $.extend(true, {}, HighchartsComponentBehavior, ColumnchartBehavior);
-                this.async(function(){this.behavior.init(this)},1);
+                this.async(function(){this.behavior.init(this)},1000);
             }
         });
     </script>
