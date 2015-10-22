@@ -17,6 +17,7 @@
                 line-height: 10px;
                 --paper-fab-background: var(--accent-color);
                 font-family: 'Roboto', sans-serif;
+                padding-bottom: 30px;
             }
 
             paper-material {
@@ -69,6 +70,7 @@
             #text{
                 position:relative;
                 top: -50px;
+                min-height: 50px;
                 height: auto;
                 padding: 8px 8px 8px 8px;
                 font-size: 10px;
@@ -85,43 +87,44 @@
                     <content></content>
                 </div>
 
+                <template is="dom-if" if="{{legend}}">
+
+                    <div class="legend horizontal layout center">
+                        <span>{{legend}}</span>
+                        <!-- Adding icon based on card type -->
+
+                        <template is="dom-if" if="{{checkType(type, 'text')}}">
+
+                            <paper-fab mini icon="create"></paper-fab>
+
+                        </template>
+
+                        <template is="dom-if" if="{{checkType(type, 'image')}}">
+
+                            <paper-fab mini icon="perm-media"></paper-fab>
+
+                        </template>
+
+                        <template is="dom-if" if="{{checkType(type, 'datalet')}}">
+
+                            <paper-fab mini icon="assessment"></paper-fab>
+
+                        </template>
+
+                        <template is="dom-if" if="{{checkType(type, 'link')}}">
+
+                            <paper-fab mini icon="link"></paper-fab>
+
+                        </template>
+
+                    </div>
+
+                </template>
+
                 <div class="footer">
-
-                    <template is="dom-if" if="{{legend}}">
-
-                        <div class="legend horizontal layout center">
-                            <span>{{legend}}</span>
-                            <!-- Adding icon based on card type -->
-
-                            <template is="dom-if" if="{{checkType(type, 'text')}}">
-
-                               <paper-fab mini icon="create"></paper-fab>
-
-                             </template>
-
-                            <template is="dom-if" if="{{checkType(type, 'image')}}">
-
-                                <paper-fab mini icon="perm-media"></paper-fab>
-
-                            </template>
-
-                            <template is="dom-if" if="{{checkType(type, 'datalet')}}">
-
-                                <paper-fab mini icon="assessment"></paper-fab>
-
-                            </template>
-
-                            <template is="dom-if" if="{{checkType(type, 'link')}}">
-
-                                <paper-fab mini icon="link"></paper-fab>
-
-                            </template>
-
-                        </div>
-
+                    <template is="dom-if" if="{{text}}">
+                       <div id="text">{{text}}</div>
                     </template>
-
-                    <div id="text">{{text}}</div>
                 </div>
 
             </div>
@@ -146,6 +149,21 @@
                 type:{
                     type: String,
                     value: "text"
+                },
+                text:{
+                    type: String,
+                    value: ""
+                },
+                legend:{
+                    type: String,
+                    value: ""
+                }
+
+            },
+
+            ready: function(){
+                if(this.type == "text"){
+                    this.$.content.style.backgroundColor = "#ffc";
                 }
             },
 
@@ -156,9 +174,10 @@
             },
 
             _changeHeight: function(data){
-                this.style.height = (data + 20) + "px";
+                this.style.height = (data) + "px";
                 this.$.content.style.height = data + "px";
-               //$(this.$.content).perfectScrollbar();
+                this.style.height = (this.height + ((this.text != "") ? 50 : 0)) + "px";
+                $(this.$.content).perfectScrollbar();
             },
 
             checkType: function(type, check){
