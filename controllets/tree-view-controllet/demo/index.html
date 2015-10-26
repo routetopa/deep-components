@@ -1,0 +1,62 @@
+<html>
+
+<head>
+    <script src="../../js/jquery-1.11.2.min.js"></script>
+
+    <script src="../../bower_components/webcomponentsjs/webcomponents-lite.min.js"></script>
+
+    <link rel="import" href="../tree-view-controllet.html" />
+</head>
+
+<body>
+
+    <style>
+        #container {
+            width: 300px;
+            height: 100vh;
+            overflow: auto;
+        }
+        #fields {
+            height: 30px;
+            background-color: #2196F3;
+        }
+    </style>
+
+    <p id="fields">&nbsp;</p>
+
+    <div id="container">
+
+        <tree-view-controllet id="tree" root-name="data" opened-path="data,records"></tree-view-controllet>
+
+    </div>
+
+    <script>
+        var tree = document.getElementById('tree');
+        var fields = document.getElementById('fields');
+
+        $.ajax({
+            url: 'https://data.issy.com/api/records/1.0/search?dataset=liste-des-restaurants-a-issy-les-moulineaux&sort=type&facet=type&facet=terrasse',
+            dataType: "json",
+            success: function(data){
+                tree.setAttribute("json-data", JSON.stringify(data));
+                tree.init();//chrome
+            }
+        });
+
+        tree.addEventListener("click", function () {
+            fields.innerHTML = tree.getFlatFields();
+            console.log(tree.getFlatFields());
+            console.log(tree.getFields());//firefox console.log does not recognize associative array?
+        });
+
+    </script>
+
+</body>
+
+</html>
+
+<!--urls:-->
+<!--url: 'http://ckan.routetopa.eu/api/action/datastore_search?resource_id=73e02092-85a1-434e-85fe-0c9a43aa9a52&limit=5',-->
+<!--url: 'https://data.issy.com/api/records/1.0/search?dataset=liste-des-restaurants-a-issy-les-moulineaux&sort=type&facet=type&facet=terrasse',-->
+<!--url: 'https://data.issy.com/api/records/1.0/search?dataset=flux-rss-des-offres-demplois-a-issy-les-moulineaux&sort=published&facet=published&refine.published=2015',-->
+

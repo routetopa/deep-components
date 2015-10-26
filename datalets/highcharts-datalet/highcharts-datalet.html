@@ -113,6 +113,8 @@ Example :
              */
             transformData: function () {
 
+                if(this.data.length == 0) return;
+
                 this.properties.categories.value = this.data[0].data;
 
                 for (var i = 1; i < this.data.length; i++)

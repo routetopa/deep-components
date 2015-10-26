@@ -175,7 +175,9 @@ Example:
              */
             _valueChanged : function(oldvalue, newValue){
                 clearTimeout (this.timer);
-                this.timer = setTimeout(this.fire('text-element-controllet_content-changed', {newValue: newValue}), 2000);
+                //Firefox stuff
+                var _this = this;
+                this.timer = setTimeout(function(){_this.fire('text-element-controllet_content-changed', {newValue: newValue})}, 2000);
             },
             /**
              * It returns the value in text area

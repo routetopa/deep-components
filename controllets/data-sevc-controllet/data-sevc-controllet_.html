@@ -262,7 +262,7 @@ Example:
 
                 #idm_layout_main_container{
                     position: relative;
-                    height: 65vh;
+                    height: 25vh;
                 }
 
                 paper-menu{
@@ -400,7 +400,7 @@ Example:
                                     <div id="toolbar_title" class="big">Data mapping</div>
                                     <div id="toolbar_description" class="small">Select the visualization from the slider, drag and drop the selected fields in visualization parameter area, customize the visualization if you need</div>
                                 </div>
-                                <paper-icon-button id="NextButton" class="toolbar_button" on-click="_onNextClick" icon="chevron-right" alt="arrow-forward" title="arrow-forward"></paper-icon-button>
+                                <paper-icon-button id="finish_button" on-click="_onFinish" icon="add-circle" alt="Conforms the creation" title="finish"></paper-icon-button>
                             </div>
 
 
@@ -423,43 +423,20 @@ Example:
                                             </div>
                                             <div id="datalet_idm_fields_container" class="area_container"></div>
                                         </div>
+
+                                        <div id="idm_layout_main_container" class="area_container">
+                                            <div class="title">
+                                                <div class="medium">Layout fields</div>
+                                            </div>
+                                            <div id="idm_layout_container" class="area_container"></div>
+                                        </div>
                                     </div>
                                 </div>
 
-                                <div id="datalet_placeholder" style="min-width: 43%;margin-top:10px;"></div>
+                                <div id="datalet_placeholder" style="min-width: 43%;"></div>
 
                             </div>
 
-                        </div>
-
-                    </neon-animatable>
-
-                    <neon-animatable>
-                        <div class="vertical justified layout">
-
-                            <div class="horizontal layout">
-                                <paper-icon-button id="PrevButton" class="toolbar_button x-scope" on-click="_onPrevClick" icon="chevron-left" alt="arrow-back" title="arrow-back"></paper-icon-button>
-                                <div class="avatar">4</div>
-                                <div class="title flex">
-                                    <div id="toolbar_title" class="big">Finalize visualization</div>
-                                    <div id="toolbar_description" class="small">Assign the values for label parameters (e.g. title for you visualization).</div>
-                                </div>
-                                <paper-icon-button id="finish_button" on-click="_onFinish" icon="add-circle" alt="Conforms the creation" title="finish"></paper-icon-button>
-                            </div>
-
-                            <div class="horizontal layout">
-                                <div style="margin-top: 10px;">
-                                    <div class="title">
-                                        <div class="medium">Layout fields</div>
-                                    </div>
-                                    <div id="idm_layout_main_container" class="area_container">
-                                        <div id="idm_layout_container" class="area_container"></div>
-                                    </div>
-                                </div>
-
-                                <div id="datalet_placeholder_2" style="min-width: 43%;margin-top: 10px;"></div>
-
-                            </div>
                         </div>
 
                     </neon-animatable>
@@ -661,10 +638,8 @@ Example:
                 $(this.$.idm_layout_main_container).perfectScrollbar();
                 $(this.$.table_fields_container).perfectScrollbar();
 
-                if(this.dataletPreset != undefined) {
+                if(this.dataletPreset != undefined)
                     this.$.data_url.value = this.dataletPreset['data-url'];
-                    this.selected = 3;
-                }
             },
 
             /**
@@ -719,13 +694,12 @@ Example:
                this.$.datalet_idm_fields_container.innerHTML = "";
                this.$.idm_layout_container.innerHTML = "";
 
-               var input;
                var layouts = jQuery.extend(true, {}, response.idm.inputs.layouts);
 
                if(response.idm.inputs.input.constructor == Object) {
                    if(response.idm.inputs.input.selection == "*")
                    {
-                       input = response.idm.inputs.input;
+                       var input = response.idm.inputs.input;
                        response.idm.inputs.input = new Array();
                        for(var i=0;i<this.selectedFields.length;i++){
                            var newInput = jQuery.extend(true, {}, input);
@@ -735,6 +709,7 @@ Example:
                    }
                }
 
+               var input;
                var heading;
                var id;
 
@@ -762,22 +737,21 @@ Example:
                }
 
                if(layouts.input != undefined) {
-                   if(layouts.input.constructor == Object){
-                       layouts.input = new Array(jQuery.extend(true, {}, layouts.input));
-                   }
-
-                   html = '<text-element-controllet ';
-                   for (var i = 0; i < layouts.input.length; i++) {
-                       html += '<text-element-controllet heading="' + layouts.input[i].name + '" ' +
-                               'description="' + layouts.input[i].description + '" ' +
-                               'number="' + (i + 1) + '" ';
-                       if(this.dataletPreset != undefined){
-                          html += 'value="' + this.dataletPreset[Object.keys(this.dataletPreset)[(i + 1)]] + '"';
+                   if (layouts.input.constructor == Object) {
+                       this.$.idm_layout_container.innerHTML += '<text-element-controllet heading="' + layouts.input.name +
+                                                                                       '" description="' + layouts.input.description +
+                                                                                       '" value="' + this.dataletPreset[Object.keys(this.dataletPreset)[0]]  +
+                                                                                       '" number="1"></text-element-controllet>';
+                   } else {
+                       for (var i = 0; i < layouts.input.length; i++) {
+                           this.$.idm_layout_container.innerHTML += '<text-element-controllet heading="' + layouts.input[i].name + '" ' +
+                                   'description="' + layouts.input[i].description + '" ' +
+                                   'value="' + this.dataletPreset[Object.keys(this.dataletPreset)[(i + 1)]] + '" ' +
+                                   'number="' + (i + 1) + '">' +
+                                   '</text-element-controllet>';
                        }
 
-                       html += '></text-element-controllet>';
                    }
-                   this.$.idm_layout_container.innerHTML = html;
                }
 
                if(this.selectedFields != undefined) this.generateDataletPreview();
@@ -816,17 +790,9 @@ Example:
                     placeHolder : this.$.datalet_placeholder
                 };
 
-                var datalet_params_2 ={
-                    component   : this.selectedDatalet,
-                    params      : this.paramsFields,
-                    fields      : this.selectedFields,
-                    placeHolder : this.$.datalet_placeholder_2
-                };
-
 
                 ComponentService.deep_url = this.deepUrl;
                 ComponentService.getComponent(datalet_params);
-                ComponentService.getComponent(datalet_params_2);
 
             },
             /**
@@ -858,8 +824,6 @@ Example:
                         }else{
                             return true;
                         }
-                    case 3:
-                        return true;
                 }
 
             },
@@ -884,11 +848,11 @@ Example:
              */
             _onNextClick : function() {
 
-                if(!this.validateCurrentPass(this.selected === 3 ? 3 : (this.selected + 1))) return;
+                if(!this.validateCurrentPass(this.selected === 2 ? 2 : (this.selected + 1))) return;
 
                 this.entryAnimation = 'slide-from-right-animation';
                 this.exitAnimation  = 'slide-left-animation';
-                this.selected = this.selected === 3 ? 3 : (this.selected + 1);
+                this.selected = this.selected === 2 ? 2 : (this.selected + 1);
             },
             /**
              * Callback to manage InfoButton click to give user information about the selected dataset
@@ -945,7 +909,6 @@ Example:
              */
             _fieldsSelected : function(e){
 
-                this.selectedFields = e.detail.fields;
                  this.$.selectedFields_container.innerHTML = "";
                  for(var i=0;i<e.detail.fields.length;i++) {
                     this.$.selectedFields_container.innerHTML += '<draggable-element-controllet identifier="' + e.detail.fields[i] +

@@ -87,11 +87,6 @@ Example:
                 float: left;
                 top : 5%;
                 margin : .5em;
-
-                /*height: 8em;
-                width: 7em;
-                min-width: 80px;
-                max-width: 115px;*/
                 width: 15.5%;
                 height: 70%;
 
@@ -127,7 +122,7 @@ Example:
                 display: inline-block;*/
                 float: left;
                 margin-top: 10%;
-                width: 10px;
+                width: 30px;
                 --iron-icon-height: 28px;
                 --iron-icon-width: 28px;
             }
@@ -160,7 +155,7 @@ Example:
 
                     <template is="dom-repeat" items="{{itemsPerPage}}" as="item" index-as="i">
                        <template is="dom-if" if="{{getName(p, i) != 0}}">
-                             <div class='content-card' id="{{getName(p, i)}}" on-click="_cardClick">
+                             <div class='content-card' id="{{getName(p, i)}}" page="{{p}}" on-click="_cardClick">
 
                                 <div>
                                     <div class="title">
@@ -239,6 +234,13 @@ Example:
                 numItemsPerPage : {
                     type: Number,
                     value : 4
+                },
+                /**
+                 * Presected card. You can pass the card title to preselect it.
+                 */
+                selectedCard:{
+                    type: String,
+                    value: undefined
                 }
 
             },
@@ -300,6 +302,15 @@ Example:
 
             attached : function(){
                 this.selected = 1;
+                if(this.selectedCard != undefined){
+                    this.async(function(){
+                        var card = document.getElementById(this.selectedCard);
+                        card.className = "content-selected";
+                        this.prevSelectedCard = card;
+                        this.fire('items-slider-controllet_item-selected', {datalet: this.selectedCard + "-datalet"});
+                        this.selected = card.page;
+                    },1000);
+                }
             }
         });
 

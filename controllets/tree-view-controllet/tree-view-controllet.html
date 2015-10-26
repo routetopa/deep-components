@@ -1,0 +1,218 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html" />
+
+<link rel="import" href="../../bower_components/iron-collapse/iron-collapse.html">
+<link rel="import" href="../../bower_components/paper-menu/paper-menu.html">
+<link rel="import" href="../../bower_components/paper-menu/paper-submenu.html">
+<link rel="import" href="../../bower_components/paper-item/paper-item.html">
+
+<dom-module id="tree-view-controllet">
+
+    <style is="custom-style">
+
+        --paper-item {
+        }
+
+        paper-item {
+            cursor: pointer;
+        }
+
+        paper-item.menu-trigger {
+            font-weight: 700;
+        }
+
+        paper-item:not(.menu-trigger).iron-selected {
+            background-color: #2196F3;
+        }
+
+        .sublist {
+            padding-left: 20px;
+            padding-right: 20px;
+        }
+
+    </style>
+
+    <template>
+
+        <paper-menu id="paper-tree"></paper-menu>
+
+    </template>
+
+    <script>
+        Polymer({
+
+            is : 'tree-view-controllet',
+
+            properties : {
+
+                rootName : {
+                    type  : String,
+                    value : "Data"
+                },
+
+                jsonData : {
+                    type  : Object,
+                    value : null
+                },
+
+                selectedFields : {
+                    type  : Array,
+                    value : []
+                },
+
+                openedPath : {
+                    type : String,
+                    value : ""
+                }
+
+            },
+
+            listeners: {
+                'iron-select': '_onSelect',
+                'iron-deselect': '_onDeselect'
+            },
+
+            ready : function() {
+                if(this.jsonData)
+                    this.init();
+            },
+
+            init : function() {
+                var tree = document.getElementById('paper-tree');
+                this.injectBoundHTML(createTree(this.rootName, this.jsonData), tree);
+                this.openPath();
+            },
+
+            injectBoundHTML : function(html, element) {
+                var template = document.createElement('template');
+                template.innerHTML = html;
+                var fragment = this.instanceTemplate(template);
+                if (element) {
+                    element.textContent = '';
+                    element.appendChild(fragment);
+                }
+                return fragment;
+            },
+
+            openPath : function() {
+                var openedPath;
+
+                if (this.openedPath == "")
+                    openedPath = this.rootName;
+                else
+                    openedPath = this.openedPath;
+
+                var nodes = openedPath.split(",");
+
+                openedPath = "";
+
+                while(nodes.length != 0) {
+                    openedPath += nodes.splice(0,1);
+                    var menu = document.getElementById(openedPath);
+                    var submenu = menu.parentNode.parentNode;
+                    submenu.setAttribute("opened", "true");
+                    openedPath += ",";
+                }
+            },
+
+            _onSelect : function(e) {
+                //this.updateSelectedFields(e);
+                this.fire('treeview-controllet_fileds-selected', {fields : this.getFlatFields()});
+
+            },
+
+            _onDeselect : function(e) {
+                this.updateSelectedFields(e);
+                this.fire('treeview-controllet_fileds-selected', {fields : this.getFlatFields()});
+            },
+
+            updateSelectedFields : function(e) {
+                var menuId = e.target.id;
+                var selectedIds = [];
+
+                var selectedItems = (e.target).selectedItems;
+                for(var item in selectedItems){
+                    var id = selectedItems[item].id;
+                    if(id != "")//submenu
+                        selectedIds.push(id);
+                }
+
+                if(selectedIds.length)
+                    this.selectedFields[menuId] = selectedIds;
+                else
+                    delete this.selectedFields[menuId];
+            },
+
+            getFields : function() {
+                return this.selectedFields;
+            },
+
+            getFlatFields : function() {
+                var fields = [];
+
+                for(var A in this.selectedFields)
+                    for(var e in this.selectedFields[A])
+                        fields.push(this.selectedFields[A][e].replace(this.rootName + ",",""));
+
+                return fields;
+            }
+
+        });
+
+    </script>
+
+    <script>
+
+        function createTree(nodeName, node){
+            var html = "";
+            if(node.constructor == Object){
+                var list  = new Array();
+                for(var child in node)
+                    list.push(createTree(nodeName+","+child, node[child]));
+                html = paper_submenu(nodeName, list);
+            }
+            else if (node.constructor == Array){
+                var list  = new Array();
+                if(node[0].constructor == Object){
+                    for(var child in node[0])
+                        list.push(createTree(nodeName+","+child, node[0][child]));
+                    html = paper_submenu(nodeName, list);
+                }
+                else{
+                    html = nodeName;
+                }
+            }
+            else{
+                html = nodeName;
+            }
+            return html;
+        }
+
+        function paper_submenu(str, list){
+            var submenu = "<paper-submenu>";
+
+            submenu += "<paper-item class=\"menu-trigger\">"+getName(str)+"</paper-item>" + "<paper-menu id=\""+str+"\" class=\"menu-content sublist\" multi>";
+
+            for(var i in list){
+                if(list[i].indexOf("paper-submenu") != -1)
+                    submenu += list[i];
+                else
+                    submenu += paper_item(list[i]);
+            }
+
+            submenu += "</paper-menu>" + "</paper-submenu>";
+
+            return submenu;
+        }
+
+        function paper_item(str){
+            return "<paper-item id=\""+str+"\">"+getName(str)+"</paper-item>";
+        }
+
+        function getName(str){
+            str = str.split(",");
+            return str[str.length-1];
+        }
+
+    </script>
+
+</dom-module>

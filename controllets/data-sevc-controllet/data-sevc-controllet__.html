@@ -52,7 +52,7 @@
 
 <link rel="import" href="../items-slider-controllet/items-slider-controllet.html">
 <link rel="import" href="../draggable-element-controllet/draggable-element-controllet.html">
-<link rel="import" href="../treeview-controllet/treeview-controllet.html">
+<link rel="import" href="../tree-view-controllet/tree-view-controllet.html">
 <link rel="import" href="../text-element-controllet/text-element-controllet.html">
 
 <!--
@@ -255,14 +255,14 @@ Example:
                     height: 50vh;
                 }
 
-                #selectedFields_main_container{
+                #selected_fields_main_container{
                     position: relative;
                     height: 50vh;
                 }
 
                 #idm_layout_main_container{
                     position: relative;
-                    height: 65vh;
+                    height: 25vh;
                 }
 
                 paper-menu{
@@ -281,7 +281,6 @@ Example:
             </style>
 
             <iron-ajax
-                    auto
                     id="data_request"
                     url={{dataUrl}}
                     verbose="true"
@@ -299,7 +298,7 @@ Example:
             </iron-ajax>
 
             <iron-ajax
-                    id="selectedDatalet_request"
+                    id="selected_datalet_request"
                     url={{deepUrl}}
                     verbose="true"
                     on-response="handleSelectedDatalet"
@@ -376,7 +375,7 @@ Example:
                             <div class="horizontal layout">
 
                                 <div id="fields_placeholder" class="area_container flexchild" style="min-width:300px">
-                                    <treeview-controllet id="fields_treeview"></treeview-controllet>
+                                    <tree-view-controllet id="fields_treeview" root-name="data" opened-path="data,records"></tree-view-controllet>
                                 </div>
 
                                 <div id="table_fields_container" class="area_container flex2child">
@@ -400,7 +399,7 @@ Example:
                                     <div id="toolbar_title" class="big">Data mapping</div>
                                     <div id="toolbar_description" class="small">Select the visualization from the slider, drag and drop the selected fields in visualization parameter area, customize the visualization if you need</div>
                                 </div>
-                                <paper-icon-button id="NextButton" class="toolbar_button" on-click="_onNextClick" icon="chevron-right" alt="arrow-forward" title="arrow-forward"></paper-icon-button>
+                                <paper-icon-button id="finish_button" on-click="_onFinish" icon="add-circle" alt="Conforms the creation" title="finish"></paper-icon-button>
                             </div>
 
 
@@ -410,11 +409,11 @@ Example:
                                     <div id="visualization_slider_area" class="area_container"></div>
                                     <div id="fields_mapping_area" class="area_container">
 
-                                        <div id="selectedFields_main_container" class="field-mapping-card">
+                                        <div id="selected_fields_main_container" class="field-mapping-card">
                                             <div class="title">
                                                 <div class="medium">Selected fields</div>
                                             </div>
-                                            <div id="selectedFields_container" class="area_container"></div>
+                                            <div id="selected_fields_container" class="area_container"></div>
                                         </div>
 
                                         <div id="idm_fields_main_container" class="field-mapping-card">
@@ -423,43 +422,21 @@ Example:
                                             </div>
                                             <div id="datalet_idm_fields_container" class="area_container"></div>
                                         </div>
+
+                                        <div id="idm_layout_main_container" class="area_container">
+                                            <div class="title">
+                                                <div class="medium">Layout fields</div>
+                                            </div>
+                                            <div id="idm_layout_container" class="area_container"></div>
+                                        </div>
                                     </div>
                                 </div>
 
-                                <div id="datalet_placeholder" style="min-width: 43%;margin-top:10px;"></div>
+                                <div id="datalet_placeholder" style="min-width: 43%;"></div>
+
 
                             </div>
 
-                        </div>
-
-                    </neon-animatable>
-
-                    <neon-animatable>
-                        <div class="vertical justified layout">
-
-                            <div class="horizontal layout">
-                                <paper-icon-button id="PrevButton" class="toolbar_button x-scope" on-click="_onPrevClick" icon="chevron-left" alt="arrow-back" title="arrow-back"></paper-icon-button>
-                                <div class="avatar">4</div>
-                                <div class="title flex">
-                                    <div id="toolbar_title" class="big">Finalize visualization</div>
-                                    <div id="toolbar_description" class="small">Assign the values for label parameters (e.g. title for you visualization).</div>
-                                </div>
-                                <paper-icon-button id="finish_button" on-click="_onFinish" icon="add-circle" alt="Conforms the creation" title="finish"></paper-icon-button>
-                            </div>
-
-                            <div class="horizontal layout">
-                                <div style="margin-top: 10px;">
-                                    <div class="title">
-                                        <div class="medium">Layout fields</div>
-                                    </div>
-                                    <div id="idm_layout_main_container" class="area_container">
-                                        <div id="idm_layout_container" class="area_container"></div>
-                                    </div>
-                                </div>
-
-                                <div id="datalet_placeholder_2" style="min-width: 43%;margin-top: 10px;"></div>
-
-                            </div>
                         </div>
 
                     </neon-animatable>
@@ -567,7 +544,7 @@ Example:
                  */
                 deepUrl : {
                     type : String,
-                    value : undefined
+                    value : ""
                 },
                 /**
                  * It's used to store the list of datalets returned from DEEP
@@ -583,40 +560,33 @@ Example:
                 /**
                  * It's used to store the selected datalet. It will be set when the controllet get the event of selection by item slider (items-slider-controllet_item-selected)
                  *
-                 * @attribute selectedDatalet
+                 * @attribute selected_datalet
                  * @type String
                  * @default ''
                  */
-                selectedDatalet : {
+                selected_datalet : {
                     type : String,
-                    value : undefined
+                    value : ""
                 },
                 /**
                  * It's used to store the list of selected fields by user
                  *
-                 * @attribute selectedFields
+                 * @attribute selected_fields
                  * @type Array
                  * @default empty
                  */
-                selectedFields : {
+                selected_fields : {
                     type : Array,
-                    value : undefined
-                },
-                /**
-                 * It contains all attributes for the datalet preset. It'll be used when the controllet is called to modify an exsting datalet.
-                 */
-                dataletPreset:{
-                    type: Object,
-                    value: undefined
+                    value : []
                 },
                 /**
                  * It's used to store the params to give to datalet. This kind of params will not processed by selection step
                  *
-                 * @attribute paramsFields
+                 * @attribute params_fields
                  * @type Object
                  * @default empty
                  */
-                paramsFields:{
+                params_fields:{
                   type: Object,
                   value: {}
                 },
@@ -656,15 +626,11 @@ Example:
             ready : function(){
 
                 $(this.$.fields_placeholder).perfectScrollbar();
-                $(this.$.selectedFields_main_container).perfectScrollbar();
+                $(this.$.selected_fields_main_container).perfectScrollbar();
                 $(this.$.idm_fields_main_container).perfectScrollbar();
                 $(this.$.idm_layout_main_container).perfectScrollbar();
                 $(this.$.table_fields_container).perfectScrollbar();
 
-                if(this.dataletPreset != undefined) {
-                    this.$.data_url.value = this.dataletPreset['data-url'];
-                    this.selected = 3;
-                }
             },
 
             /**
@@ -676,8 +642,11 @@ Example:
              */
             handleResponseData : function(e){
 
-                this.$.fields_treeview.init(e.detail.response, this.selectedFields);
+                //this.$.fields_treeview.init(e.detail.response);
 
+                //this.$.fields_placeholder.innerHTML = '<tree-view-controllet id="fields_treeview" root-name="Data" opened-path="Data,records" json-data=\'' + JSON.stringify(e.detail.response)  + '\'></tree-view-controllet>';
+                this.$.fields_treeview.setAttribute("json-data", JSON.stringify(e.detail.response));
+                this.$.fields_treeview.init();//chrome
             },
 
             /**
@@ -697,13 +666,8 @@ Example:
                     this.datalets_list.push(datalet_info);
                 }
 
-                if(this.selectedDatalet == undefined)
-                  this.$.visualization_slider_area.innerHTML = '<items-slider-controllet items=\'' + JSON.stringify(this.datalets_list) + '\'' +
-                         '\'></items-slider-controllet>';
-                else
-                    this.$.visualization_slider_area.innerHTML = '<items-slider-controllet items=\'' + JSON.stringify(this.datalets_list) + '\'' +
-                                                                 'selected-card=\'' + this.selectedDatalet + '\'></items-slider-controllet>';
-
+                this.$.visualization_slider_area.innerHTML = '<items-slider-controllet items=\'' + JSON.stringify(this.datalets_list) + '\'' +
+                                                             '\'></items-slider-controllet>';
             },
             /**
              * Callback to dataset selection from list in the phase three. When a datalet is selected this function will build a bundle of box items, based on the datalet input data model,
@@ -719,68 +683,34 @@ Example:
                this.$.datalet_idm_fields_container.innerHTML = "";
                this.$.idm_layout_container.innerHTML = "";
 
-               var input;
-               var layouts = jQuery.extend(true, {}, response.idm.inputs.layouts);
-
                if(response.idm.inputs.input.constructor == Object) {
-                   if(response.idm.inputs.input.selection == "*")
-                   {
-                       input = response.idm.inputs.input;
-                       response.idm.inputs.input = new Array();
-                       for(var i=0;i<this.selectedFields.length;i++){
-                           var newInput = jQuery.extend(true, {}, input);
-                           newInput.name = input.name + ' ' + (i + 1);
-                           response.idm.inputs.input.push(newInput);
+                   var input = response.idm.inputs.input;
+                   if(input.selection == "*") {
+                       var input_selected_fields = Polymer.dom(this.$.selected_fields_container).querySelectorAll('draggable-element-controllet');
+                       for (var j = 0; j < input_selected_fields.length; j++) {
+                           this.$.datalet_idm_fields_container.innerHTML += '<draggable-element-controllet is-target="true" heading="Field ' + (j + 1) + '"  description="' + input.description + '" number="' + (j + 1) + '"></draggable-element-controllet><br>';
                        }
                    }
+               }else{
+                   for(var i =0; i < response.idm.inputs.input.length; i++){
+                       var input = response.idm.inputs.input[i];
+                       this.$.datalet_idm_fields_container.innerHTML += '<draggable-element-controllet is-target="true" id="' + input.name + '" heading="' + input.name + '"  description="' + input.description + '" number="' + (i + 1) + '"></draggable-element-controllet><br>';
+                   }
                }
 
-               var heading;
-               var id;
-
-               for(var i =0; i < response.idm.inputs.input.length; i++) {
-                   var html = '<draggable-element-controllet is-target="true" ';
-                   input = response.idm.inputs.input[i];
-
-                   heading = ' heading="' + input.name + '"';
-                   id = ' id="' + (i + 1) + '"';
-
-                   html += heading + id;
-                   html += ' description="' + input.description + '"' +
-                           ' number="' + (i + 1) + '"';
-
-                   if(this.selectedFields != undefined) {
-                      if(this.selectedFields[i] != undefined) {
-                          html += ' value="' + this.selectedFields[i] + '"' +
-                                  ' label="' + this.selectedFields[i].split(",")[this.selectedFields[i].split(",").length - 1] + '"';
-                      }
+               if(response.idm.inputs.layouts.input.constructor == Object) {
+                   var input = response.idm.inputs.layouts.input;
+                   this.$.idm_layout_container.innerHTML += '<text-element-controllet heading="' + input.name + '" description="' + input.description + '" number="1"></text-element-controllet>';
+               }else{
+                   for(var i =0; i < response.idm.inputs.layouts.input.length; i++){
+                       var input = response.idm.inputs.layouts.input[i];
+                       this.$.idm_layout_container.innerHTML += '<text-element-controllet heading="' + input.name + '" ' +
+                                                                                         'description="' + input.description + '" ' +
+                                                                                         'number="' + (i+1) + '">' +
+                                                                '</text-element-controllet>';
                    }
-
-                   html += '></draggable-element-controllet><br>';
-                   this.$.datalet_idm_fields_container.innerHTML += html;
 
                }
-
-               if(layouts.input != undefined) {
-                   if(layouts.input.constructor == Object){
-                       layouts.input = new Array(jQuery.extend(true, {}, layouts.input));
-                   }
-
-                   html = '<text-element-controllet ';
-                   for (var i = 0; i < layouts.input.length; i++) {
-                       html += '<text-element-controllet heading="' + layouts.input[i].name + '" ' +
-                               'description="' + layouts.input[i].description + '" ' +
-                               'number="' + (i + 1) + '" ';
-                       if(this.dataletPreset != undefined){
-                          html += 'value="' + this.dataletPreset[Object.keys(this.dataletPreset)[(i + 1)]] + '"';
-                       }
-
-                       html += '></text-element-controllet>';
-                   }
-                   this.$.idm_layout_container.innerHTML = html;
-               }
-
-               if(this.selectedFields != undefined) this.generateDataletPreview();
 
             },
             /**
@@ -791,42 +721,34 @@ Example:
             generateDataletPreview : function(){
 
                 var input_mapped_fields = Polymer.dom(this.$.datalet_idm_fields_container).querySelectorAll('draggable-element-controllet[is-target=true]');
-                this.selectedFields = Array();
+                this.selected_fields = Array();
 
                 for (var i = 0; i < input_mapped_fields.length; i++) {
                     if (input_mapped_fields[i].value != "") {
-                        this.selectedFields.push(input_mapped_fields[i].value);
+                        this.selected_fields.push(input_mapped_fields[i].value);
                     }
                 }
 
                 var input_layouts_fields = Polymer.dom(this.$.idm_layout_container).querySelectorAll('text-element-controllet');
-                this.paramsFields = {'data-url' : this.dataUrl};
+                this.params_fields = {'data-url' : this.dataUrl};
 
                 for (var i = 0; i < input_layouts_fields.length; i++) {
                     if (input_layouts_fields[i].value != "") {
-                        this.paramsFields[input_layouts_fields[i].heading]  =  input_layouts_fields[i].value;
+                        this.params_fields[input_layouts_fields[i].heading]  =  input_layouts_fields[i].value;
                     }
                 }
 
 
                 var datalet_params ={
-                    component   : this.selectedDatalet,
-                    params      : this.paramsFields,
-                    fields      : this.selectedFields,
+                    component   : this.selected_datalet,
+                    params      : this.params_fields,
+                    fields      : this.selected_fields,
                     placeHolder : this.$.datalet_placeholder
-                };
-
-                var datalet_params_2 ={
-                    component   : this.selectedDatalet,
-                    params      : this.paramsFields,
-                    fields      : this.selectedFields,
-                    placeHolder : this.$.datalet_placeholder_2
                 };
 
 
                 ComponentService.deep_url = this.deepUrl;
                 ComponentService.getComponent(datalet_params);
-                ComponentService.getComponent(datalet_params_2);
 
             },
             /**
@@ -842,7 +764,7 @@ Example:
                     case 0:
                         return true;
                     case 1:
-                        if(this.$.data_url.value == undefined){
+                        if(this.$.data_url.value == ""){
                             this.$.message.text = "You have to select a dataset to access to pass 2.";
                             this.$.message.show();
                             return false;
@@ -851,15 +773,13 @@ Example:
                         }
 
                     case 2:
-                        if(Polymer.dom(this.$.selectedFields_container).querySelectorAll('draggable-element-controllet') == 0){
+                        if(Polymer.dom(this.$.selected_fields_container).querySelectorAll('draggable-element-controllet') == 0){
                             this.$.message.text = "You have to select a set of fields to access to pass 3.";
                             this.$.message.show();
                             return false;
                         }else{
                             return true;
                         }
-                    case 3:
-                        return true;
                 }
 
             },
@@ -884,11 +804,11 @@ Example:
              */
             _onNextClick : function() {
 
-                if(!this.validateCurrentPass(this.selected === 3 ? 3 : (this.selected + 1))) return;
+                if(!this.validateCurrentPass(this.selected === 2 ? 2 : (this.selected + 1))) return;
 
                 this.entryAnimation = 'slide-from-right-animation';
                 this.exitAnimation  = 'slide-left-animation';
-                this.selected = this.selected === 3 ? 3 : (this.selected + 1);
+                this.selected = this.selected === 2 ? 2 : (this.selected + 1);
             },
             /**
              * Callback to manage InfoButton click to give user information about the selected dataset
@@ -931,9 +851,9 @@ Example:
              * @param {Event} e
              */
             _dataletSelected : function(e){
-                this.selectedDatalet = e.detail.datalet;
-                this.$.selectedDatalet_request.url = this.deepUrl + e.detail.datalet;
-                this.$.selectedDatalet_request.generateRequest();
+                this.selected_datalet = e.detail.datalet;
+                this.$.selected_datalet_request.url = this.deepUrl + e.detail.datalet;
+                this.$.selected_datalet_request.generateRequest();
 
             },
             /**
@@ -945,10 +865,9 @@ Example:
              */
             _fieldsSelected : function(e){
 
-                this.selectedFields = e.detail.fields;
-                 this.$.selectedFields_container.innerHTML = "";
+                 this.$.selected_fields_container.innerHTML = "";
                  for(var i=0;i<e.detail.fields.length;i++) {
-                    this.$.selectedFields_container.innerHTML += '<draggable-element-controllet identifier="' + e.detail.fields[i] +
+                    this.$.selected_fields_container.innerHTML += '<draggable-element-controllet identifier="' + e.detail.fields[i] +
                                                                                                  '" label="' + e.detail.fields[i].split(",")[e.detail.fields[i].split(",").length -1] +
                                                                   '"></draggable-element-controllet><br>';
                  }
@@ -1009,7 +928,7 @@ Example:
              */
             _onFinish : function(e){
 
-                if((this.selectedFields.length == 0) || this.selectedDatalet == ""){
+                if((this.selected_fields.length == 0) || this.selected_datalet == ""){
                     this.$.message.text = "You have to map the selected fields with datalets fields(by dragging) and select a datalet to export a new visualization.";
                     this.$.message.show();
                     return;
@@ -1017,9 +936,9 @@ Example:
 
                 var data = {
                     dataUrl : this.dataUrl,
-                    params :  this.paramsFields,
-                    fields :  this.selectedFields,
-                    datalet : this.selectedDatalet,
+                    params :  this.params_fields,
+                    fields :  this.selected_fields,
+                    datalet : this.selected_datalet,
                     staticData : JSON.stringify(this.$.datalet_placeholder.children[1].behavior.data)
                 }
 
