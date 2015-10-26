@@ -262,7 +262,12 @@ Example:
 
                 #idm_layout_main_container{
                     position: relative;
-                    height: 65vh;
+                    height: 50vh;
+                }
+
+                #comment{
+                    position: relative;
+                    width: 35vw;
                 }
 
                 paper-menu{
@@ -345,7 +350,7 @@ Example:
                                         <div><img src="static/images/or.png" style="position: relative;left: 50%;padding-top:20px"></div>
 
                                         <div class="card-content">
-                                            <paper-textarea id="data_url" label="Dataset api data url" floatingLabel value="{{dataUrl}}" on-dragover="_handleDatasourceDragOver"></paper-textarea>
+                                            <paper-textarea class="custom_textarea" id="data_url" label="Dataset api data url" floatingLabel value="{{dataUrl}}" on-dragover="_handleDatasourceDragOver"></paper-textarea>
                                         </div>
 
 
@@ -455,6 +460,11 @@ Example:
                                     <div id="idm_layout_main_container" class="area_container">
                                         <div id="idm_layout_container" class="area_container"></div>
                                     </div>
+
+                                    <div id="comment">
+                                        <paper-textarea class="custom_textarea" id="commentArea" label="Max 100 character comment" maxlength="100"></paper-textarea>
+                                    </div>
+
                                 </div>
 
                                 <div id="datalet_placeholder_2" style="min-width: 43%;margin-top: 10px;"></div>
@@ -663,8 +673,21 @@ Example:
 
                 if(this.dataletPreset != undefined) {
                     this.$.data_url.value = this.dataletPreset['data-url'];
-                    this.selected = 3;
+                    this.selected = 1;
                 }
+            },
+            /**
+             * Utility function to inject datalet in a placeholder
+             */
+            injectDatalet: function(place_holder){
+                var datalet_params_2 ={
+                    component   : this.selectedDatalet,
+                    params      : this.paramsFields,
+                    fields      : this.selectedFields,
+                    placeHolder : place_holder
+                };
+                ComponentService.deep_url = this.deepUrl;
+                ComponentService.getComponent(datalet_params_2);
             },
 
             /**
@@ -808,25 +831,7 @@ Example:
                     }
                 }
 
-
-                var datalet_params ={
-                    component   : this.selectedDatalet,
-                    params      : this.paramsFields,
-                    fields      : this.selectedFields,
-                    placeHolder : this.$.datalet_placeholder
-                };
-
-                var datalet_params_2 ={
-                    component   : this.selectedDatalet,
-                    params      : this.paramsFields,
-                    fields      : this.selectedFields,
-                    placeHolder : this.$.datalet_placeholder_2
-                };
-
-
-                ComponentService.deep_url = this.deepUrl;
-                ComponentService.getComponent(datalet_params);
-                ComponentService.getComponent(datalet_params_2);
+                this.injectDatalet(this.$.datalet_placeholder);
 
             },
             /**
@@ -859,6 +864,7 @@ Example:
                             return true;
                         }
                     case 3:
+                        this.injectDatalet(this.$.datalet_placeholder_2);
                         return true;
                 }
 
@@ -989,6 +995,7 @@ Example:
              */
             _textElementChanged : function(e){
                 this.generateDataletPreview();
+                this.injectDatalet(this.$.datalet_placeholder_2);
             },
             /**
              * Callback related to the drag operation in the dataUrl input area. It's used to delete previous value.
@@ -1020,6 +1027,7 @@ Example:
                     params :  this.paramsFields,
                     fields :  this.selectedFields,
                     datalet : this.selectedDatalet,
+                    comment : this.$.commentArea.value,
                     staticData : JSON.stringify(this.$.datalet_placeholder.children[1].behavior.data)
                 }
 
