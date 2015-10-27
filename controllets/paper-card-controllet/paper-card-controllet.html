@@ -18,6 +18,9 @@
                 --paper-fab-background: var(--accent-color);
                 font-family: 'Roboto', sans-serif;
                 padding-bottom: 30px;
+
+                /*Test*/
+
             }
 
             paper-material {
@@ -27,7 +30,7 @@
 
             .footer {
                 position: relative;
-                /*margin-bottom: 24px;*/
+                height: 21px;
             }
 
             .legend {
@@ -77,10 +80,23 @@
                 color: rgba(0,0,0,0.4);
                 font-family: 'Roboto', sans-serif;
             }
+
+            #delete{
+                position: absolute;
+                top: -12px;
+                left: -12px;
+                --iron-icon-height: 18px;
+                --iron-icon-width: 18px;
+                width: 24px;
+                height: 24px;
+                --paper-fab-background:#cccccc;
+            }
         </style>
 
 
         <paper-material animated elevation="{{elevation}}" flex>
+
+            <paper-fab id="delete" mini icon="delete" on-click="_handleDeleteClick"></paper-fab>
 
             <div class="vertical layout">
                 <div id="content">
@@ -186,7 +202,11 @@
 
             _handleDetailsClick: function(e){
                 this.fire('paper-card-controllet_details-clicked', {data : this});
-            }
+            },
+
+            _handleDeleteClick: function(e){
+            this.fire('paper-card-controllet_delete-clicked', {data : this});
+        }
         })
     </script>
 
