@@ -95,25 +95,25 @@
 
                         <template is="dom-if" if="{{checkType(type, 'text')}}">
 
-                            <paper-fab mini icon="create"></paper-fab>
+                            <paper-fab mini icon="create" on-click="_handleFabClick"></paper-fab>
 
                         </template>
 
                         <template is="dom-if" if="{{checkType(type, 'image')}}">
 
-                            <paper-fab mini icon="perm-media"></paper-fab>
+                            <paper-fab mini icon="perm-media" on-click="_handleFabClick"></paper-fab>
 
                         </template>
 
                         <template is="dom-if" if="{{checkType(type, 'datalet')}}">
 
-                            <paper-fab mini icon="assessment"></paper-fab>
+                            <paper-fab mini icon="assessment" on-click="_handleFabClick"></paper-fab>
 
                         </template>
 
                         <template is="dom-if" if="{{checkType(type, 'link')}}">
 
-                            <paper-fab mini icon="link"></paper-fab>
+                            <paper-fab mini icon="link" on-click="_handleFabClick"></paper-fab>
 
                         </template>
 
@@ -182,6 +182,10 @@
 
             checkType: function(type, check){
                 return (type == check);
+            },
+
+            _handleFabClick: function(e){
+                this.fire('paper-card-controllet_button-clicked', {data : this});
             }
         })
     </script>

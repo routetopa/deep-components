@@ -52,7 +52,7 @@
 
 <link rel="import" href="../items-slider-controllet/items-slider-controllet.html">
 <link rel="import" href="../draggable-element-controllet/draggable-element-controllet.html">
-<link rel="import" href="../treeview-controllet/treeview-controllet.html">
+<link rel="import" href="../tree-view-controllet/tree-view-controllet.html">
 <link rel="import" href="../text-element-controllet/text-element-controllet.html">
 
 <!--
@@ -80,7 +80,6 @@ Example:
 <dom-module id="data-sevc-controllet">
         <template>
             <link rel="stylesheet" href="../shared_js/perfect-scrollbar/css/perfect-scrollbar.min.css">
-            <link rel="stylesheet" href="static/css/reset.css">
 
             <style is="custom-style">
 
@@ -381,7 +380,7 @@ Example:
                             <div class="horizontal layout">
 
                                 <div id="fields_placeholder" class="area_container flexchild" style="min-width:300px">
-                                    <treeview-controllet id="fields_treeview"></treeview-controllet>
+                                    <tree-view-controllet id="fields_treeview" root-name="data" opened-path="result,records"></tree-view-controllet>
                                 </div>
 
                                 <div id="table_fields_container" class="area_container flex2child">
@@ -535,7 +534,7 @@ Example:
             listeners : {
                 'items-slider-controllet_item-selected' : '_dataletSelected',
                 'draggable-element-controllet_content-dragged' : '_fieldsMapped',
-                'treeview-controllet_fileds-selected' : '_fieldsSelected',
+                'tree-view-controllet_selected-fields' : '_fieldsSelected',
                 'text-element-controllet_content-changed' : '_textElementChanged'
             },
 
@@ -680,14 +679,14 @@ Example:
              * Utility function to inject datalet in a placeholder
              */
             injectDatalet: function(place_holder){
-                var datalet_params_2 ={
+                var datalet_params ={
                     component   : this.selectedDatalet,
                     params      : this.paramsFields,
                     fields      : this.selectedFields,
                     placeHolder : place_holder
                 };
                 ComponentService.deep_url = this.deepUrl;
-                ComponentService.getComponent(datalet_params_2);
+                ComponentService.getComponent(datalet_params);
             },
 
             /**
@@ -698,9 +697,9 @@ Example:
              * @param {Event} e
              */
             handleResponseData : function(e){
-
-                this.$.fields_treeview.init(e.detail.response, this.selectedFields);
-
+                this.$.fields_treeview.setAttribute("json-data", JSON.stringify(e.detail.response));
+                this.$.fields_treeview.setAttribute("preselected-fields", JSON.stringify(this.selectedFields));
+                this.$.fields_treeview.ready();//chrome
             },
 
             /**
@@ -951,7 +950,7 @@ Example:
              */
             _fieldsSelected : function(e){
 
-                this.selectedFields = e.detail.fields;
+                 this.selectedFields = e.detail.fields;
                  this.$.selectedFields_container.innerHTML = "";
                  for(var i=0;i<e.detail.fields.length;i++) {
                     this.$.selectedFields_container.innerHTML += '<draggable-element-controllet identifier="' + e.detail.fields[i] +

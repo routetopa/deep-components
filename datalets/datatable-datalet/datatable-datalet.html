@@ -63,7 +63,7 @@ Example:
         var DatatableBehavior = {
 
             presentData: function(){
-                if(!this.data || this.data == undefined) return;
+                if(!this.data || this.data[0] == undefined) return;
                 html = "";
                 html += '<thead>'+
                            '<tr>';

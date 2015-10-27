@@ -1,9 +1,9 @@
 <html>
 
 <head>
-    <script src="../../js/jquery-1.11.2.min.js"></script>
+    <script src="../../shared_js/jquery-1.11.2.min.js"></script>
 
-    <script src="../../bower_components/webcomponentsjs/webcomponents-lite.min.js"></script>
+    <script src="../../../bower_components/webcomponentsjs/webcomponents-lite.min.js"></script>
 
     <link rel="import" href="../tree-view-controllet.html" />
 </head>
@@ -11,22 +11,30 @@
 <body>
 
     <style>
-        #container {
-            width: 300px;
-            height: 100vh;
-            overflow: auto;
+        .container {
+            display: flex;
+            flex-direction: row;
         }
-        #fields {
-            height: 30px;
-            background-color: #2196F3;
+        #tree_container {
+            width: 300px;
+        }
+        #fields_container {
+            margin-left: 100px;
         }
     </style>
 
-    <p id="fields">&nbsp;</p>
+    <div class="container">
 
-    <div id="container">
+        <div id="tree_container">
 
-        <tree-view-controllet id="tree" root-name="data" opened-path="data,records"></tree-view-controllet>
+            <tree-view-controllet id="tree" root-name="data" opened-path="records,geometry" preselected-fields='["records,datasetid", "records,recordid", "nhits"]'></tree-view-controllet>
+
+        </div>
+
+        <div id="fields_container">
+            <h3>Selected fields:</h3>
+            <p id="fields">&nbsp;</p>
+        </div>
 
     </div>
 
@@ -39,12 +47,12 @@
             dataType: "json",
             success: function(data){
                 tree.setAttribute("json-data", JSON.stringify(data));
-                tree.init();//chrome
+                tree.ready();//chrome
             }
         });
 
-        tree.addEventListener("click", function () {
-            fields.innerHTML = tree.getFlatFields();
+        tree.addEventListener("tree-view-controllet_selected-fields", function (e) {
+            fields.innerHTML = e.detail.fields;
             console.log(tree.getFlatFields());
             console.log(tree.getFields());//firefox console.log does not recognize associative array?
         });
