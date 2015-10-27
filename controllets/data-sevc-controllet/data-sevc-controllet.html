@@ -336,7 +336,7 @@ Example:
                                 <iron-pages selected="{{DatasourceTabSelected}}">
                                     <div>
                                         <div class="card-content">
-                                            <paper-dropdown-menu id="datasets-sources" label="Available datasets">
+                                            <paper-dropdown-menu id="datasets-sources" name="datasets-sources" label="Available datasets">
                                                 <paper-menu class="dropdown-content">
                                                     <template is="dom-repeat" items="{{datasets}}" as="dataset" index-as="index">
                                                         <paper-item id="{{index}}" on-tap="_datasourceSelected">{{dataset.name}}</paper-item>
