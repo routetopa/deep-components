@@ -202,7 +202,7 @@
 
             <div class="vertical layout" style="width: 40%;">
 
-                <paper-fab mini icon="add-circle" on-click="_handleFabClick"></paper-fab>
+                <paper-fab mini icon="add-circle" on-click="_handleAddClick"></paper-fab>
 
                 <div id="card_preview"></div>
             </div>
@@ -258,8 +258,8 @@
                 return (type == check);
             },
 
-            _handleFabClick: function(e){
-                this.fire('create-card-controllet_button-clicked', {data : this});
+            _handleAddClick: function(e){
+                this.fire('create-card-controllet_add-clicked', {data : this});
             },
 
             _valueChanged: function(oldvalue, newValue) {
