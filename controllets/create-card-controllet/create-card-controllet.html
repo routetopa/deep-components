@@ -4,6 +4,7 @@
 <link rel="import" href="../../bower_components/iron-icons/iron-icons.html"/>
 <link rel="import" href="../../bower_components/paper-input/paper-textarea.html"/>
 
+<link rel="import" href="../../datalets/preview-datalet/preview-datalet.html" />
 <link rel="import" href="../../controllets/paper-card-controllet/paper-card-controllet.html"/>
 
 <dom-module id="create-card-controllet">
@@ -171,7 +172,6 @@
                                                                 label=""
                                                                 char-counter
                                                                 max-rows="6"
-                                                                rows="6"
                                                                 maxlength="1024"
                                                                 value="{{text}}">
 
@@ -204,16 +204,7 @@
 
                 <paper-fab mini icon="add-circle" on-click="_handleFabClick"></paper-fab>
 
-                <div id="card_preview">
-                    <paper-card-controllet
-                            class="grid-item"
-                            width="300"
-                            height="300"
-                            type="{{type}}"
-                            text="{{comment}}"
-                            legend="{{title}}">
-                    </paper-card-controllet>
-                </div>
+                <div id="card_preview"></div>
             </div>
 
 
@@ -234,15 +225,28 @@
 
                 title:{
                     type: String,
-                    value: "Title"
+                    value: "Title",
+                    observer : '_valueChanged'
+                },
+                text:{
+                    type: String,
+                    value: "Text content",
+                    observer : '_valueChanged'
                 },
                 content:{
                     type: String,
-                    value: undefined
+                    value: undefined,
+                    observer : '_valueChanged'
                 },
                 comment:{
                     type: String,
-                    value: "comment"
+                    value: "comment",
+                    observer : '_valueChanged'
+                },
+
+                timer :{
+                    type: Number,
+                    value : 0
                 }
             },
 
@@ -256,6 +260,32 @@
 
             _handleFabClick: function(e){
                 this.fire('create-card-controllet_button-clicked', {data : this});
+            },
+
+            _valueChanged: function(oldvalue, newValue) {
+               var card = '<paper-card-controllet'   +
+                              ' class="grid-item"'    +
+                              ' width="300"'          +
+                              ' height="300"'         +
+                              ' type="'+ this.type    + '"' +
+                              ' text="'+ this.comment + '"' +
+                              ' legend="'+ this.title + '">';
+               if(this.type == 'link'){
+                   card += '<preview-datalet data-url="'+ this.link + '" url="'+ this.link + '"></preview-datalet>';
+               }else{
+                   card += this.text;
+               }
+
+               card += '</paper-card-controllet>';
+
+                clearTimeout (this.timer);
+                //Firefox stuff
+                var _this = this;
+                this.timer = setTimeout(function(){
+                    _this.$.card_preview.innerHTML = card;
+                }, 1000);
+
+
             }
         })
     </script>
