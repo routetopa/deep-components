@@ -262,8 +262,10 @@
 </template>
 <script>
 
-    DEEP.deepUrl = "http://deep.routetopa.eu/DEEP/";
-    DEEP.datasetsList = "http://deep.routetopa.eu/DEEP/datalets-list";
+    //DEEP.deepUrl = "http://deep.routetopa.eu/DEEP/";
+    //DEEP.datasetsList = "http://deep.routetopa.eu/DEEP/datalets-list";
+    DEEP.deepUrl = "http://192.168.186.137/DEEalerProvider/DEEP/";
+    DEEP.datasetsList = "http://192.168.186.137/DEEalerProvider/DEEP/datalets-list";
 
     DEEP.Datasets = {
         names:[
@@ -281,7 +283,9 @@
             'Ireland - Dun Laoghaire-Rathdown County Council Planning Application 2008-2014',
             'Ireland - Fingal Council Planning Applications for last 7 years',
             'Ireland - Planning Register',
-            'Ireland - Fingal Development Plan 2011-2017 Record of Protected Structures'
+            'Ireland - Fingal Development Plan 2011-2017 Record of Protected Structures',
+            'Bubble example',
+            'Issy -  3d pie chart'
         ],
         urls: [
             'http://ckan.routetopa.eu/api/action/datastore_search?resource_id=07843fc3-07e1-4c66-9be4-fed43ca4a26f',
@@ -298,7 +302,9 @@
             'http://ckan.routetopa.eu/api/action/datastore_search?resource_id=c479f061-9638-489d-ac55-0c68765548ff',
             'http://ckan.routetopa.eu/api/action/datastore_search?resource_id=d29a477a-4734-43ef-8002-048c8640d441',
             'http://ckan.routetopa.eu/api/action/datastore_search?resource_id=2b23f32d-e27e-4eef-af1e-27e05103df7d',
-            'http://ckan.routetopa.eu/api/action/datastore_search?resource_id=5ea813bc-fdf9-4edb-b3b1-0142b593d5c6'
+            'http://ckan.routetopa.eu/api/action/datastore_search?resource_id=5ea813bc-fdf9-4edb-b3b1-0142b593d5c6',
+            'http://ckan.routetopa.eu/api/action/datastore_search?resource_id=0cb600fc-19ad-4aaf-9794-1e6ea851840a',
+            "https://data.issy.com/api/records/1.0/search?dataset=flux-rss-des-offres-demplois-a-issy-les-moulineaux&sort=published&facet=published&refine.published=2015%2F10"
         ]
     };
 
