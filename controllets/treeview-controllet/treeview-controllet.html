@@ -244,6 +244,13 @@ Example:
                 fieldsMap : {
                     type : Map,
                     value : null
+                },
+                /**
+                 * Array of pre-selected fields. it's used to open the treeview with pre-selected checkbox checked
+                 */
+                selectedFields:{
+                   type: Array,
+                   value: undefined
                 }
 
             },
@@ -276,6 +283,15 @@ Example:
 
             },
             /**
+             * check if fields is in preselection list
+             */
+            checkIsFieldsIsSelected : function(field){
+                if(this.selectedFields == undefined) return false;
+                for(var i = 0; i < this.selectedFields.length; i++)
+                    if(field.replace("root,","") == this.selectedFields[i]) return true;
+                return false;
+            },
+            /**
              * Create the checkbox for current leaf node field.
              *
              */
@@ -283,7 +299,7 @@ Example:
 
                return '<li class="list__item">' +
                          '<div class="check-awesome">' +
-                            '<input class="checkbox" type="checkbox" id="'+ id + '">' +
+                            '<input class="checkbox" type="checkbox" id="'+ id + '"' + ((this.checkIsFieldsIsSelected(id)) ? 'checked' : '')  + '>' +
                             '<label for="'+ id + '" style="padding-left:10px;">' +
                                 '<span></span>' +
                                 '<span class="check"></span>' +
@@ -340,7 +356,8 @@ Example:
              * to work with async object request.
              *
              */
-            init : function(data){
+            init : function(data, preselection){
+                this.selectedFields = preselection;
                 //crete root node and insert it in to shadow dom
                 var mainPanel = this.createFieldsContainer("root", "Data fields");
                 //MATERIAL CHECKBOX UL
@@ -352,6 +369,8 @@ Example:
                 this.fieldsMap["root"] = mainPanel;
                 //call recursive analyze function for current json to get all fields user can select
                 this.analyzeObject(new Array("root"), null, data);
+
+                if(this.selectedFields != undefined) this.fireSelectedFields();
 
             },
             /**

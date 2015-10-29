@@ -166,7 +166,7 @@ Example:
                     </div>
                     <div class="medium">{{description}}</div>
                 </div>
-                <div id="target_dragged_identifier" class='draggable-card dd-content-target unselectable'></div>
+                <div id="target_dragged_identifier" class='draggable-card dd-content-target unselectable'>{{label}}</div>
             </div>
         </template>
 
@@ -246,7 +246,7 @@ Example:
                  */
                 label : {
                     type : String,
-                    value : "Label"
+                    value : undefined
                 },
                 /**
                  * It's the identifier associated to the source field element

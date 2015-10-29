@@ -63,7 +63,7 @@ Example:
         var DatatableBehavior = {
 
             presentData: function(){
-                if(!this.data || this.data == undefined) return;
+                if(!this.data || this.data[0] == undefined) return;
                 html = "";
                 html += '<thead>'+
                            '<tr>';
@@ -113,7 +113,7 @@ Example:
 
             ready: function(){
                 this.behavior =  $.extend(true, {}, BaseDataletBehavior, WorkcycleBehavior, AjaxJsonJsonPathBehavior, DatatableBehavior);
-                this.async(function(){this.behavior.init(this)},1);
+                this.async(function(){this.behavior.init(this)},1000);
             }
         });
 

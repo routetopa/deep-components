@@ -1,103 +1,217 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html"/>
 <link rel="import" href="../../bower_components/paper-material/paper-material.html"/>
 <link rel="import" href="../../bower_components/paper-fab/paper-fab.html"/>
 <link rel="import" href="../../bower_components/iron-icons/iron-icons.html"/>
 
-
 <dom-module id="paper-card-controllet">
 
-    <style>
-        :host {
-            color: #333;
-            font-family: 'Roboto', 'Helvetica Neue', Helvetica, Arial, sans-serif;
-            display: inline-block;
-            margin: 0 8px 8px ;
-            font-size: 14px;
-            text-align: justify;
-            line-height: 10px;
-            --paper-fab-background: var(--accent-color);
-        }
-
-        paper-material {
-            border-radius: 2px;
-            background-color: white;
-        }
-
-        .picture {
-            position: relative;
-            margin-bottom: 0px;
-        }
-        .picture img {
-            border-top-right-radius: 2px;
-            border-top-left-radius: 2px;
-            width: 100%;
-        }
-        .legend {
-            position: absolute;
-            background: rgba(0,0,0,0.5);
-            bottom: 0;
-            color: white;
-            height: 40px;
-            padding: 0 16px;
-            left: 0; right: 0;
-        }
-        paper-fab {
-            position: absolute;
-            right: 10px;
-            bottom: -18px;
-            --paper-fab-background:#2196F3;
-        }
-
-        .content ::content {
-            padding: 0 16px 8px;
-            font-weight: 300;
-            color: var(--secondary-text-color);
-            line-height: 24px;
-        }
-        ::content.buttons {
-            margin-top: 8px;
-        }
-        ::content paper-button, ::content paper-icon-button {
-            font-weight: 500;
-            color: var(--accent-color);
-        }
-
-    </style>
-
     <template>
-        <paper-material elevation="{{elevation}}">
+        <link rel="stylesheet" href="../shared_js/perfect-scrollbar/css/perfect-scrollbar.min.css">
+        <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
+        <style>
+            :host {
+                display: inline-block;
+                margin: 0 8px 8px ;
+                font-size: 14px;
+                text-align: justify;
+                line-height: 10px;
+                --paper-fab-background: var(--accent-color);
+                font-family: 'Roboto', sans-serif;
+                padding-bottom: 30px;
+
+                /*Test*/
+
+            }
+
+            paper-material {
+                background-color: white;
+                border-width: 1em;
+            }
+
+            .footer {
+                position: relative;
+                height: 21px;
+            }
+
+            .legend {
+                position: relative;
+                top: -50px;
+                background: rgba(0,0,0,0.8);
+                bottom: 0;
+                color: white;
+                height: 50px;
+                padding: 0 16px;
+                left: 0; right: 0;
+                z-index: 1;
+            }
+            paper-fab {
+                position: absolute;
+                right: 10px;
+                bottom: -18px;
+                z-index: 10;
+                --paper-fab-background:#2196F3;
+            }
+
+            #content ::content {
+                /*padding: 0 16px 8px;*/
+                padding: 0 16px 8px;
+                font-weight: 300;
+                color: var(--secondary-text-color);
+                line-height: 24px;
+                max-height: 400px;
+                position:relative;
+                overflow: auto;
+            }
+            ::content.buttons {
+                margin-top: 8px;
+            }
+            ::content paper-button, ::content paper-icon-button {
+                font-weight: 500;
+                color: var(--accent-color);
+            }
+
+            #text{
+                position:relative;
+                top: -50px;
+                min-height: 50px;
+                height: auto;
+                padding: 8px 8px 8px 8px;
+                font-size: 10px;
+                color: rgba(0,0,0,0.4);
+                font-family: 'Roboto', sans-serif;
+            }
+
+            #delete{
+                position: absolute;
+                top: -12px;
+                left: -12px;
+                --iron-icon-height: 18px;
+                --iron-icon-width: 18px;
+                width: 24px;
+                height: 24px;
+                --paper-fab-background:#cccccc;
+            }
+        </style>
+
+
+        <paper-material animated elevation="{{elevation}}" flex>
+
+            <paper-fab id="delete" mini icon="delete" on-click="_handleDeleteClick"></paper-fab>
+
             <div class="vertical layout">
-                <div class="picture">
-                    <img src="{{src}}">
-                    <div class="horizontal layout center legend">
+                <div id="content">
+                    <content></content>
+                </div>
+
+                <template is="dom-if" if="{{legend}}">
+
+                    <div class="legend horizontal layout center">
                         <span>{{legend}}</span>
-                        <paper-fab mini icon="{{icon}}"></paper-fab>
+                        <!-- Adding icon based on card type -->
+
+                        <template is="dom-if" if="{{checkType(type, 'text')}}">
+
+                            <paper-fab mini icon="create" on-click="_handleDetailsClick"></paper-fab>
+
+                        </template>
+
+                        <template is="dom-if" if="{{checkType(type, 'image')}}">
+
+                            <paper-fab mini icon="perm-media" on-click="_handleDetailsClick"></paper-fab>
+
+                        </template>
+
+                        <template is="dom-if" if="{{checkType(type, 'datalet')}}">
+
+                            <paper-fab mini icon="assessment" on-click="_handleDetailsClick"></paper-fab>
+
+                        </template>
+
+                        <template is="dom-if" if="{{checkType(type, 'link')}}">
+
+                            <paper-fab mini icon="link" on-click="_handleDetailsClick"></paper-fab>
+
+                        </template>
+
                     </div>
-                    </div>
+
+                </template>
+
+                <div class="footer">
+                    <template is="dom-if" if="{{text}}">
+                       <div id="text">{{text}}</div>
+                    </template>
                 </div>
-                <div class="content">
-                    <p>{{text}}</p>
-                </div>
+
             </div>
         </paper-material>
+
     </template>
+
+    <script src="../shared_js/perfect-scrollbar/js/min/perfect-scrollbar.jquery.min.js"></script>
 
     <script>
         Polymer({
-            is:'paper-card-controllet',
-
+            is: "paper-card-controllet",
             properties: {
                 width: {
                     type: Number,
-                    value: 350,
                     observer: "_changeWidth",
                 },
+                height: {
+                    type: Number,
+                    observer: "_changeHeight",
+                },
+                type:{
+                    type: String,
+                    value: "text"
+                },
+                text:{
+                    type: String,
+                    value: ""
+                },
+                legend:{
+                    type: String,
+                    value: ""
+                },
+                elevation:{
+                    type: Number,
+                    value: 3
+                }
+
             },
+
+            ready: function(){
+                if(this.type == "text"){
+                    this.$.content.style.backgroundColor = "#ffc";
+                }
+            },
+
             _changeWidth: function(data){
                 this.style.width = data + "px";
-                this.querySelector(".content").width = data + "px";
+                //this.$.content.style.width = data + "px";
+                //$(this.$.content).perfectScrollbar();
             },
+
+            _changeHeight: function(data){
+                this.style.height = (data) + "px";
+                this.$.content.style.height = data + "px";
+                this.style.height = (this.height + ((this.text != "") ? 50 : 0)) + "px";
+                $(this.$.content).perfectScrollbar();
+            },
+
+            checkType: function(type, check){
+                return (type == check);
+            },
+
+            _handleDetailsClick: function(e){
+                this.fire('paper-card-controllet_details-clicked', {data : this});
+            },
+
+            _handleDeleteClick: function(e){
+            this.fire('paper-card-controllet_delete-clicked', {data : this});
+        }
         })
     </script>
-
 
 </dom-module>

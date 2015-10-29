@@ -1,0 +1,262 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html" />
+
+<link rel="import" href="../../bower_components/iron-collapse/iron-collapse.html">
+<link rel="import" href="../../bower_components/paper-menu/paper-menu.html">
+<link rel="import" href="../../bower_components/paper-menu/paper-submenu.html">
+<link rel="import" href="../../bower_components/paper-item/paper-item.html">
+
+<dom-module id="tree-view-controllet">
+
+    <style is="custom-style">
+
+        --paper-item {
+        }
+
+        paper-item {
+            cursor: pointer;
+        }
+
+        paper-item.menu-trigger {
+            font-weight: 700;
+        }
+
+        paper-item.menu-trigger.iron-selected {
+            background-color: #B6B6B6;
+        }
+
+        paper-item:not(.menu-trigger).iron-selected {
+            background-color: #2196F3;
+            color: #FFFFFF;
+        }
+
+        .sublist {
+            padding-left: 20px;
+            padding-right: 20px;
+        }
+
+        :host{
+            --paper-menu-focused-item-after: {
+                opacity: 0;
+            };
+        }
+    </style>
+
+    <template>
+
+        <paper-menu id="paper_tree"></paper-menu>
+
+    </template>
+
+    <script>
+        Polymer({
+
+            is : 'tree-view-controllet',
+
+            properties : {
+
+                rootName : {
+                    type  : String,
+                    value : "root"
+                },
+
+                jsonData : {
+                    type  : Object,
+                    value : undefined
+                },
+
+                selectedFields : {
+                    type  : Array,
+                    value : []
+                },
+
+                preselectedFields : {
+                    type : Array,
+                    value : []
+                },
+
+                openedPath : {
+                    type : String,
+                    value : undefined
+                }
+
+            },
+
+            listeners: {
+                'iron-select': '_onSelect',
+                'iron-deselect': '_onDeselect'
+            },
+
+            ready : function() {
+                if(this.jsonData)
+                    this._init();
+            },
+
+            getFields : function() {
+                return this.selectedFields;
+            },
+
+            getFlatFields : function() {
+                var fields = [];
+
+                for(var A in this.selectedFields)
+                    for(var e in this.selectedFields[A])
+                        fields.push(this.selectedFields[A][e]);
+
+                return fields;
+            },
+
+            _init : function() {
+                this._injectBoundHTML(this._initCreateTree(this.rootName, this.jsonData), this.$.paper_tree);
+                this._preselectFields();
+                this._openPath();
+            },
+
+            _injectBoundHTML : function(html, element) {
+                var template = document.createElement('template');
+                template.innerHTML = html;
+                var fragment = this.instanceTemplate(template);
+                if (element) {
+                    element.textContent = '';
+                    element.appendChild(fragment);
+                }
+                return fragment;
+            },
+
+            _initCreateTree : function(nodeName, node) {
+                var list  = new Array();
+                for(var child in node)
+                    list.push(this._createTree(child, node[child]));
+                return this._paper_submenu(nodeName, list);
+            },
+
+            _createTree : function(nodeName, node) {
+                var html = "";
+                if(node.constructor == Object){
+                    var list  = new Array();
+                    for(var child in node)
+                        list.push(this._createTree(nodeName+","+child, node[child]));
+                    html = this._paper_submenu(nodeName, list);
+                }
+                else if (node.constructor == Array){
+                    var list  = new Array();
+                    if(node[0].constructor == Object){
+                        for(var child in node[0])
+                            list.push(this._createTree(nodeName+","+child, node[0][child]));
+                        html = this._paper_submenu(nodeName, list);
+                    }
+                    else{
+                        html = nodeName;
+                    }
+                }
+                else{
+                    html = nodeName;
+                }
+                return html;
+            },
+
+            _paper_submenu : function(str, list) {
+                var submenu = "<paper-submenu>";
+
+                submenu += "<paper-item class=\"menu-trigger\">"+this._getName(str)+"</paper-item>" + "<paper-menu id=\""+str+"\" class=\"menu-content sublist\" multi>";
+
+                for(var i in list){
+                    if(list[i].indexOf("paper-submenu") != -1)
+                        submenu += list[i];
+                    else
+                        submenu += this._paper_item(list[i]);
+                }
+
+                submenu += "</paper-menu>" + "</paper-submenu>";
+
+                return submenu;
+            },
+
+            _paper_item : function(str){
+                return "<paper-item id=\""+str+"\">"+this._getName(str)+"</paper-item>";
+            },
+
+            _getName : function (str){
+                str = str.split(",");
+                return str[str.length-1];
+            },
+
+            _preselectFields : function() {
+                if (this.preselectedFields){
+                    for(var field in this.preselectedFields){
+                        var path = this.preselectedFields[field];
+
+                        if (path.lastIndexOf(",") != -1)
+                            path = path.substring(0, path.lastIndexOf(","));
+                        else
+                            path = this.rootName;
+
+                        var menu = document.getElementById(path);
+                        var item = document.getElementById(this.preselectedFields[field]);
+                        var index = menu.items.indexOf(item);
+
+                        if (menu.selectedValues == undefined){
+                            menu.selectedValues = [index];
+                        }
+                        else{
+                            var selectedValues = [];
+                            for (var i in menu.selectedValues)
+                                selectedValues.push(menu.selectedValues[i]);
+                            selectedValues.push(index);
+                            menu.selectedValues = selectedValues;
+                        }
+                    }
+                }
+            },
+
+            _openPath : function() {
+                this.$.paper_tree.firstChild.open();
+
+                if (this.openedPath) {
+                    var openedPath = this.openedPath;
+                    var nodes = openedPath.split(",");
+                    openedPath = "";
+
+                    while (nodes.length != 0) {
+                        openedPath += nodes.splice(0, 1);
+
+                        var menu = document.getElementById(openedPath);
+                        var submenu = menu.parentNode.parentNode;
+                        submenu.open();
+
+                        openedPath += ",";
+                    }
+                }
+            },
+
+            _onSelect : function(e) {
+                this._updateSelectedFields(e);
+            },
+
+            _onDeselect : function(e) {
+                this._updateSelectedFields(e);
+            },
+
+            _updateSelectedFields : function(e) {
+                var menuId = e.target.id;
+                var selectedIds = [];
+
+                var selectedItems = (e.target).selectedItems;
+                for(var item in selectedItems){
+                    var id = selectedItems[item].id;
+                    if(id != "")//submenu
+                        selectedIds.push(id);
+                }
+
+                if(selectedIds.length)
+                    this.selectedFields[menuId] = selectedIds;
+                else
+                    delete this.selectedFields[menuId];
+
+                this.fire('tree-view-controllet_selected-fields', {fields : this.getFlatFields()});
+            }
+
+        });
+
+    </script>
+
+</dom-module>
