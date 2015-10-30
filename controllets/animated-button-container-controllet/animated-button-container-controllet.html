@@ -135,8 +135,9 @@
         },
 
         ready: function(){
-            this.$.window.style.height = this.height;
-            this.$.window.style.width  = this.width;
+            this.$.window.style.height = this.height + "vh";
+            this.$.window.style.width  = this.width + "vw";
+            this.$.close.style.left    = (this.width - 1) + "vw"
         },
 
         _onOpenClick: function() {

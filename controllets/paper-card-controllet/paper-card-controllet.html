@@ -70,7 +70,7 @@
                 color: var(--accent-color);
             }
 
-            #text{
+            #comment{
                 position:relative;
                 top: -50px;
                 min-height: 50px;
@@ -103,10 +103,10 @@
                     <content></content>
                 </div>
 
-                <template is="dom-if" if="{{legend}}">
+                <template is="dom-if" if="{{cardTitle}}">
 
                     <div class="legend horizontal layout center">
-                        <span>{{legend}}</span>
+                        <span>{{cardTitle}}</span>
                         <!-- Adding icon based on card type -->
 
                         <template is="dom-if" if="{{checkType(type, 'text')}}">
@@ -138,8 +138,8 @@
                 </template>
 
                 <div class="footer">
-                    <template is="dom-if" if="{{text}}">
-                       <div id="text">{{text}}</div>
+                    <template is="dom-if" if="{{comment}}">
+                       <div id="comment">{{comment}}</div>
                     </template>
                 </div>
 
@@ -166,13 +166,13 @@
                     type: String,
                     value: "text"
                 },
-                text:{
+                comment:{
                     type: String,
-                    value: ""
+                    value: undefined
                 },
-                legend:{
+                cardTitle:{
                     type: String,
-                    value: ""
+                    value: undefined
                 },
                 elevation:{
                     type: Number,

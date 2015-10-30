@@ -460,7 +460,7 @@ Example:
                                     </paper-material>
 
                                     <div id="comment">
-                                        <paper-textarea class="custom_textarea" id="commentArea" label="Max 100 character comment" maxlength="100"></paper-textarea>
+                                        <paper-textarea class="custom_textarea" id="commentArea" label="Max 100 characters comment" maxlength="100"></paper-textarea>
                                     </div>
 
                                 </div>
@@ -722,9 +722,9 @@ Example:
                 if(this.selectedDatalet == undefined)
                  /* this.$.visualization_slider_area.innerHTML = '<items-slider-controllet items=\'' + JSON.stringify(this.datalets_list) + '\'' +
                          '\'></items-slider-controllet>';*/
-                this.$.visualization_slider_area.innerHTML = '<animated-button-container-controllet height="70vh" width="50vw">' +
-                                                               '<items-list-controllet height="70vh"' +
-                                                                                     ' width="50vw"' +
+                this.$.visualization_slider_area.innerHTML = '<animated-button-container-controllet height="70" width="50">' +
+                                                               '<items-list-controllet height="70"' +
+                                                                                     ' width="50"' +
                                                                                      ' replace-string="-datalet"' +
                                                                                      ' items=\'' + JSON.stringify(this.datalets_list) + '\'>' +
                                                                '</items-list-controllet>' +
@@ -733,9 +733,9 @@ Example:
                     /*this.$.visualization_slider_area.innerHTML = '<items-slider-controllet items=\'' + JSON.stringify(this.datalets_list) + '\'' +
                                                                  'selected-card=\'' + this.selectedDatalet + '\'></items-slider-controllet>';*/
 
-                    this.$.visualization_slider_area.innerHTML = '<animated-button-container-controllet height="50vh" width="30vw">' +
-                            '<items-list-controllet height="50vh"' +
-                            ' width="30vw"' +
+                    this.$.visualization_slider_area.innerHTML = '<animated-button-container-controllet height="50" width="30">' +
+                            '<items-list-controllet height="50"' +
+                            ' width="30"' +
                             ' replace-string="-datalet"' +
                             ' selected-card=\'' + this.selectedDatalet + '\'' +
                             ' items=\'' + JSON.stringify(this.datalets_list) + '\'>' +
@@ -1012,6 +1012,7 @@ Example:
              */
             _textElementChanged : function(e){
                 if(this.selected == 3) {
+                    this.generateDataletPreview();
                     this.injectDatalet(this.$.datalet_placeholder_2);
                 }
             },
