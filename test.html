@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <link rel="import"  href="controllets/animated-button-container-controllet/animated-button-container-controllet.html">
+    <script type="text/javascript" src="controllets/shared_js/jquery-1.11.2.min.js"></script>
+    <script type="text/javascript" src="bower_components/webcomponentsjs/webcomponents-lite.min.js"></script>
+
+    <title></title>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+           var ele = $("#sbiricuda");
+           //var cos = ele.context.getElementById("container_content");
+        });
+    </script>
+
+</head>
+<body unresolved>
+
+<template id="test" is="dom-bind">
+
+    <div id="main">
+       <animated-button-container-controllet id="sbiricuda" height="50vh" width="30vw">
+           <items-list-controllet height="50vh"
+                                  width="30vw"
+                                  replace-string="-datalet"
+                                  selected-card="linechart"
+                                  items='[{"name":"datatable-datalet","image":"http://192.168.164.128/DatalEts-Ecosystem-Provider/COMPONENTS/datalets/datatable-datalet/datatable-datalet.png"},{"name":"barchart-datalet","image":"http://192.168.164.128/DatalEts-Ecosystem-Provider/COMPONENTS/datalets/barchart-datalet/barchart-datalet.png"},{"name":"columnchart-datalet","image":"http://192.168.164.128/DatalEts-Ecosystem-Provider/COMPONENTS/datalets/columnchart-datalet/columnchart-datalet.png"},{"name":"linechart-datalet","image":"http://192.168.164.128/DatalEts-Ecosystem-Provider/COMPONENTS/datalets/linechart-datalet/linechart-datalet.png"},{"name":"column3Dchart-datalet","image":"http://192.168.164.128/DatalEts-Ecosystem-Provider/COMPONENTS/datalets/column3Dchart-datalet/column3Dchart-datalet.png"},{"name":"treemap-datalet","image":"http://192.168.164.128/DatalEts-Ecosystem-Provider/COMPONENTS/datalets/treemap-datalet/treemap-datalet.png"},{"name":"leafletjs-datalet","image":"http://192.168.164.128/DatalEts-Ecosystem-Provider/COMPONENTS/datalets/leafletjs-datalet/leafletjs-datalet.png"}]'>
+           </items-list-controllet>
+       </animated-button-container-controllet>
+        <div>
+            <p>
+                Lorem Ipsum è un testo segnaposto utilizzato nel settore della tipografia e della stampa.
+                Lorem Ipsum è considerato il testo segnaposto standard sin dal sedicesimo secolo, quando un
+                anonimo tipografo prese una cassetta di caratteri e li assemblò per preparare un testo campione.
+                È sopravvissuto non solo a più di cinque secoli, ma anche al passaggio alla videoimpaginazione,
+                pervenendoci sostanzialmente inalterato. Fu reso popolare, negli anni ’60, con la diffusione dei
+                fogli di caratteri trasferibili “Letraset”, che contenevano passaggi del Lorem Ipsum, e più recentemente
+                da software di impaginazione come Aldus PageMaker, che includeva versioni del Lorem Ipsum.
+            </p>
+
+        </div>
+    </div>
+
+</template>
+
+<script>
+
+    test.datalet = '[{"name":"datatable-datalet","image":"http://192.168.164.128/DatalEts-Ecosystem-Provider/COMPONENTS/datalets/datatable-datalet/datatable-datalet.png"},{"name":"barchart-datalet","image":"http://192.168.164.128/DatalEts-Ecosystem-Provider/COMPONENTS/datalets/barchart-datalet/barchart-datalet.png"},{"name":"columnchart-datalet","image":"http://192.168.164.128/DatalEts-Ecosystem-Provider/COMPONENTS/datalets/columnchart-datalet/columnchart-datalet.png"},{"name":"linechart-datalet","image":"http://192.168.164.128/DatalEts-Ecosystem-Provider/COMPONENTS/datalets/linechart-datalet/linechart-datalet.png"},{"name":"column3Dchart-datalet","image":"http://192.168.164.128/DatalEts-Ecosystem-Provider/COMPONENTS/datalets/column3Dchart-datalet/column3Dchart-datalet.png"},{"name":"treemap-datalet","image":"http://192.168.164.128/DatalEts-Ecosystem-Provider/COMPONENTS/datalets/treemap-datalet/treemap-datalet.png"},{"name":"leafletjs-datalet","image":"http://192.168.164.128/DatalEts-Ecosystem-Provider/COMPONENTS/datalets/leafletjs-datalet/leafletjs-datalet.png"}]';
+
+    test.click = function(e){
+
+    }
+
+</script>
+
+</body>
+</html>

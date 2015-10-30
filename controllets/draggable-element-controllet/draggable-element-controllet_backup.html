@@ -1,0 +1,346 @@
+<!--
+@license
+    The MIT License (MIT)
+
+    Copyright (c) 2015 Dipartimento di Informatica - Università di Salerno - Italy
+
+    Permission is hereby granted, free of charge, to any person obtaining a copy
+    of this software and associated documentation files (the "Software"), to deal
+    in the Software without restriction, including without limitation the rights
+    to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+    copies of the Software, and to permit persons to whom the Software is
+    furnished to do so, subject to the following conditions:
+
+    The above copyright notice and this permission notice shall be included in
+    all copies or substantial portions of the Software.
+
+    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+    IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+    FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+    AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+    LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+    THE SOFTWARE.
+-->
+<!--
+* Developed by :
+* ROUTE-TO-PA Project - grant No 645860. - www.routetopa.eu
+*
+-->
+
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/paper-styles/color.html">
+
+<!--
+`draggable-element-controllet` is a controllet that represents a draggable element. It can be a target or source. When it's a suorce is possible to drag the content in to a
+ container( a draggable-element-controllet with target feature active). When it's a target it manage the drag-and event to get the the text and id value of the source content.
+ During the dragging phase all the target border will be emphasize to facilitate the drop phase.
+
+Example:
+
+    SOURCE
+
+    <draggable-element-controllet
+       identifier="MyId"
+       label="MyLablel">
+    </draggable-element-controllet>
+
+    TARGET
+
+    <draggable-element-controllet
+       is-target="true"
+       heading="MyHeading"
+       description="MyDescription"
+       number="MyIndex">
+    </draggable-element-controllet>
+
+
+@element draggable-element-controllet
+@status beta
+@homepage
+@group controllets
+-->
+
+
+<dom-module id="draggable-element-controllet">
+    <template>
+
+        <style is="custom-style">
+
+            .drag-content-target{
+                height: 12.5em;
+                width: 13.5em;
+                font-weight: bolder;
+            }
+
+            .drag-content-source{
+                height: 1.5em;
+                width: 12.5em;
+                /* min-height: 20px;
+                 min-width: 70px;
+                 max-height: 20px;
+                 max-width: 70px;*/
+            }
+
+            .onTrackOnTarget{
+                position: relative;
+                float: left;
+                margin : 0.625em;
+                height: 1.6em;
+                width: 13.5em;
+                background: #fff;
+                padding: 1em;
+                border-style: solid;
+                border-width : 0.2625em;
+                border-color : var(--paper-blue-500);
+                border-radius: 0.425rem;
+                box-shadow: 0 0.325em 0.3125em 0 rgba(0, 0, 0, 0.25);
+                overflow: hidden;
+            }
+
+            .draggable-card{
+                position: relative;
+                float: left;
+                margin : 0.625em;
+                height: 1.5em;
+                width: 13.5em;
+                border-width : 0.0625em
+            background: #fff;
+                border-radius: 0.425rem;
+                box-shadow: 0 0.325em 0.3125em 0 rgba(0, 0, 0, 0.25);
+                padding: 1em;
+                overflow: hidden;
+            }
+
+            .avatar {
+                display: inline-block;
+                position: relative;
+                float: left;
+                height: 2em;
+                width: 2em;
+                border-radius: 50%;
+                background: var(--paper-blue-500);
+                color: white;
+                line-height: 2em;
+                font-size: 0.9375em;
+                text-align: center;
+            }
+
+            .heading{
+                width: 12.5em;
+            }
+
+            .big {
+                display: inline-block;
+                position: relative;
+                float: left;
+                font-size: 1em;
+                padding: 0.5em 0.25em 0.5em;
+                color: var(--google-grey-500);
+            }
+
+            .medium {
+                font-size: 0.8125em;
+                padding-bottom: 0px;
+                display: inline-block;
+                width: 12.5em;
+            }
+
+            .unselectable {
+                -webkit-touch-callout: none;
+                -webkit-user-select: none;
+                -khtml-user-select: none;
+                -moz-user-select: none;
+                -ms-user-select: none;
+                user-select: none;
+            }
+
+        </style>
+
+        <template is="dom-if" if="{{isTarget}}">
+            <div class="drag-content-target" draggable="false">
+                <div class="card-content">
+                    <div class="heading">
+                        <div class="avatar">{{number}}</div>
+                        <div class="big">{{heading}}</div><br>
+                    </div>
+                    <div class="medium">{{description}}</div>
+                </div>
+                <div id="target_dragged_identifier" class='draggable-card dd-content-target unselectable'>{{label}}</div>
+            </div>
+        </template>
+
+        <template is="dom-if" if="{{!isTarget}}">
+            <div id="source" class="drag-content-source" draggable="true" ondragstart="event.dataTransfer.setData('text/plain', 'This text may be dragged')" on-track="_handleTrack" on-drag="_handleOnDrag" on-dragstart="_handleStartDrag" on-dragenter="_handleEnterDrag">
+                <div id="{{identifier}}" class='draggable-card unselectable'>{{label}}</div>
+            </div>
+        </template>
+
+    </template>
+
+    <script>
+
+        Polymer({
+
+            is: 'draggable-element-controllet',
+
+            /**
+             * Fired when the user drags a suorce in to a target element.
+             *
+             * @event draggable-element-controllet_content-dragged
+             */
+
+            targets : null,
+
+            properties: {
+                /**
+                 * It's a boolean flag to give to the controllet the role of target.
+                 *
+                 * @attribute isTarget
+                 * @type Boolean
+                 * @default false
+                 */
+                isTarget : {
+                    type : Boolean,
+                    value: false
+                },
+                /**
+                 * It's a string value the represent the current number of target. It will be use in the label section.
+                 *
+                 * @attribute number
+                 * @type Strig
+                 * @default '0'
+                 */
+                number: {
+                    type: String,
+                    value : "1"
+                },
+                /**
+                 * It's the name of the target field
+                 *
+                 * @attribute heading
+                 * @type Strig
+                 * @default 'Heading'
+                 */
+                heading : {
+                    type : String,
+                    value : "Heading"
+                },
+                /**
+                 * It's the description of the target field
+                 *
+                 * @attribute description
+                 * @type Strig
+                 * @default 'Description'
+                 */
+                description: {
+                    type: String,
+                    value: "Description"
+                },
+                /**
+                 * It's the value of the source field
+                 *
+                 * @attribute label
+                 * @type Strig
+                 * @default 'Label'
+                 */
+                label : {
+                    type : String,
+                    value : undefined
+                },
+                /**
+                 * It's the identifier associated to the source field element
+                 *
+                 * @attribute identifier
+                 * @type Strig
+                 * @default ''
+                 */
+                identifier : {
+                    type : String,
+                    value : ""
+                },
+
+                value : {
+                    type : String,
+                    value : ""
+                }
+
+            },
+
+            ready : function(){
+            },
+
+            _handleStartDrag : function(e){
+                /*var target = EventUtil.getCurrentTarget(e);
+                 target.style.cursor = 'move';*/
+                return true;
+            },
+
+            _handleEnterDrag : function(e){
+                /*var target = e.target;
+                 if(target.draggable == false && (target.className.indexOf("dd-content-target") != -1)){
+
+                 target.parentNode.parentNode.value = e.srcElement.id;
+                 target.innerHTML = e.srcElement.innerText;
+
+                 this.fire('draggable-element-controllet_content-dragged', {target: target, source: e.srcElement});
+                 }
+
+                 for (var i = 0; i < this.targets.length; i++) {
+                 this.targets[i].children[0].children[1].className = "draggable-card dd-content-target unselectable style-scope draggable-element-controllet";
+                 }*/
+                return false;
+            },
+            /**
+             * Callback associated to event on-drag for the source element. When the user is dragging a source element all the target border will be emphasized.
+             *
+             * @method _handleOnDrag
+             *
+             * @param {Event} e
+             */
+            _handleOnDrag : function(e){
+                this.targets = document.querySelectorAll('draggable-element-controllet[is-target=true]');
+                for (var i = 0; i < this.targets.length; i++) {
+                    this.targets[i].children[0].children[1].className = "onTrackOnTarget dd-content-target unselectable style-scope draggable-element-controllet";
+                }
+
+            },
+            /**
+             * Callback associated to event on-trak for the source element. When the user stops dragging a source element the relative target is recognized and an event will be
+             * fired to broadcast to all listeners the information about the current dragging operation.
+             *
+             * @method _handleTrack
+             *
+             * @param {Event} e
+             */
+            _handleTrack : function(e) {
+
+                switch(e.detail.state) {
+                    case 'start':
+                        break;
+                    case 'track':
+                        break;
+                    case 'end':
+
+                        var target = e.detail.hover();
+
+                        if(target.draggable == false && (target.className.indexOf("dd-content-target") != -1)){
+
+                            target.parentNode.parentNode.value = e.target.id;
+                            target.innerHTML = e.target.innerHTML;
+
+                            this.fire('draggable-element-controllet_content-dragged', {target: target, source: e.target});
+                        }
+
+                        for (var i = 0; i < this.targets.length; i++) {
+                            this.targets[i].children[0].children[1].className = "draggable-card dd-content-target unselectable style-scope draggable-element-controllet";
+                        }
+
+                        break;
+                }
+            }
+        });
+
+    </script>
+
+</dom-module>
