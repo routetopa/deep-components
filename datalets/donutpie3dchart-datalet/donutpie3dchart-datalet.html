@@ -80,10 +80,7 @@ Example:
                         }
                     },
                     title: {
-                        text: ""
-                    },
-                    subtitle: {
-                        text: '3D Donut pie chart'
+                        text: "" + this._component.title
                     },
                     plotOptions: {
                         pie: {
@@ -128,7 +125,18 @@ Example:
                 behavior : {
                     type : Object,
                     value : {}
-                }
+                },
+                /**
+                 * It's the title of the chart
+                 *
+                 * @attribute title
+                 * @type Strig
+                 * @default ''
+                 */
+                title: {
+                    type: String,
+                    value: ""
+                },
             },
 
             /**
