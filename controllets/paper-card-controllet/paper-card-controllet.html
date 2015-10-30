@@ -33,7 +33,7 @@
                 height: 21px;
             }
 
-            .legend {
+            .title {
                 position: relative;
                 top: -50px;
                 background: rgba(0,0,0,0.8);
@@ -103,10 +103,10 @@
                     <content></content>
                 </div>
 
-                <template is="dom-if" if="{{legend}}">
+                <template is="dom-if" if="{{title}}">
 
-                    <div class="legend horizontal layout center">
-                        <span>{{legend}}</span>
+                    <div class="title horizontal layout center">
+                        <span>{{title}}</span>
                         <!-- Adding icon based on card type -->
 
                         <template is="dom-if" if="{{checkType(type, 'text')}}">
@@ -138,8 +138,8 @@
                 </template>
 
                 <div class="footer">
-                    <template is="dom-if" if="{{text}}">
-                       <div id="text">{{text}}</div>
+                    <template is="dom-if" if="{{comment}}">
+                       <div id="comment">{{comment}}</div>
                     </template>
                 </div>
 
@@ -166,11 +166,11 @@
                     type: String,
                     value: "text"
                 },
-                text:{
+                comment:{
                     type: String,
                     value: ""
                 },
-                legend:{
+                title:{
                     type: String,
                     value: ""
                 },

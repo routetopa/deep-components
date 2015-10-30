@@ -79,7 +79,7 @@ Example:
         <div class="horizontal layout">
             <neon-animated-pages selected="[[selected]]" entry-animation="[[entryAnimation]]" exit-animation="[[exitAnimation]]">
                 <neon-animatable></neon-animatable>
-                <neon-animatable><paper-input class="search-text" label="search" autosave="search_text" results="5" transition="fade-in-animation"></paper-input></neon-animatable>
+                <neon-animatable><paper-input class="search-text" label="search" autosave="search_text" results="5" transition="fade-in-animation" value="{{searchKey}}"></paper-input></neon-animatable>
             </neon-animated-pages>
             <paper-icon-button icon="search" class="dropdown-trigger" on-click="_toggleClick"></paper-icon-button>
         </div>
@@ -114,6 +114,12 @@ Example:
                 exitAnimation : {
                     type: String,
                     value: ""
+                },
+                searchKey:{
+                    type: String,
+                    value: undefined,
+                    observer: "_valueChanged"
+
                 }
             },
             _toggleClick: function(e){
@@ -136,7 +142,7 @@ Example:
              */
             _valueChanged : function(oldvalue, newValue){
                 clearTimeout (this.timer);
-                this.timer = setTimeout(this.fire('text-element-controllet_content-changed', {newValue: newValue}), 2000);
+                this.timer = setTimeout(this.fire('search-panel-controllet_content-changed', {searchKey: this.searchKey}), 500);
             },
             /**
              * It returns the value in text area
