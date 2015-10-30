@@ -112,7 +112,7 @@ Example:
                 <template is="dom-repeat" items="{{items}}" as="item">
                         <template is="dom-if" if="{{_checkCard(item.name)}}">
                             <paper-material elevation="5" class='content-card' id="{{_replaceString(item.name)}}" on-click="_cardClick">
-                                <div class="legend"><span>{{_replaceString(item.name)}}</span></div>
+                                <div id="title" class="legend"><span>{{_replaceString(item.name)}}</span></div>
                                 <div class="card-content-image">
                                     <img src="{{item.image}}">
                                 </div>
@@ -142,7 +142,7 @@ Example:
             /**
              * Fired when the user selects a card from slider by clicking on it.
              *
-             * @event items-slider-controllet_item-selected
+             * @event items-list-controllet_item-selected
              */
             properties : {
                 /**
@@ -179,15 +179,14 @@ Example:
             },
 
             ready : function(){
-                this.$.container.style.height = this.height + "vh";
-                this.$.container.style.width  = this.width + "vw";
+                this.$.container.style.height = (this.height - (22 * 0.65)) + "vh";
+                //this.$.container.style.width  = this.width + "vw";
 
                 $(this.$.container).perfectScrollbar();
 
                 if(this.selectedCard != undefined){
                     this.fire('items-list-controllet_item-selected', {datalet: this.selectedCard + this.replaceString});
                 }
-
             },
 
             _checkCard: function(name){
@@ -215,6 +214,17 @@ Example:
 
             _replaceString: function(string){
                return (this.replaceString != undefined) ? string.replace(this.replaceString,"") : string;
+            },
+
+            _handleSearch: function(e){
+                var items = document.querySelectorAll('.content-card');
+                for(var i=0; i < items.length;i++){
+                   if(items[i].id.indexOf(e.detail.searchKey) != -1 || e.detail.searchKey == ""){
+                       items[i].style.display = "inline-block";
+                   }else{
+                       items[i].style.display = "none";
+                   }
+                }
             }
         });
 
