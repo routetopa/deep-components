@@ -33,7 +33,7 @@
                 height: 21px;
             }
 
-            .title {
+            .legend {
                 position: relative;
                 top: -50px;
                 background: rgba(0,0,0,0.8);
@@ -103,10 +103,10 @@
                     <content></content>
                 </div>
 
-                <template is="dom-if" if="{{title}}">
+                <template is="dom-if" if="{{cardTitle}}">
 
-                    <div class="title horizontal layout center">
-                        <span>{{title}}</span>
+                    <div class="legend horizontal layout center">
+                        <span>{{cardTitle}}</span>
                         <!-- Adding icon based on card type -->
 
                         <template is="dom-if" if="{{checkType(type, 'text')}}">
@@ -170,7 +170,7 @@
                     type: String,
                     value: undefined
                 },
-                title:{
+                cardTitle:{
                     type: String,
                     value: undefined
                 },
