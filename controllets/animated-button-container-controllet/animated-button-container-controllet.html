@@ -131,6 +131,15 @@
             transition: 0.2s ease-out;
         }
 
+        .transparent
+        {
+            position:fixed;
+            top:0;
+            left:0;
+            width:100%;
+            height:100%;
+            background-color: rgba(0, 0, 0, 0.4);
+        }
 
     </style>
 
@@ -139,7 +148,7 @@
             <neon-animatable><div id="hidden"></div></neon-animatable>
             <neon-animatable>
                 <paper-material elevation="5" id="window" class="window">
-                    <div style="position:fixed; top:0; left:0; width:100%; height:100%; background-color: rgba(0, 0, 0, 0.4);"></div>
+                    <div class="transparent"></div>
                     <paper-toolbar id="toolbar">
                         <search-panel-controllet id="search_from_animated_button_container" left-direction="true"></search-panel-controllet>
                         <paper-fab id="close" mini icon="close" on-click="_onCloseClick"></paper-fab>
@@ -149,8 +158,7 @@
             </neon-animatable>
         </neon-animated-pages>
 
-        <div class="horizontal layout">
-            <!--<paper-fab mini icon="{{icon}}" id="open" on-click="_onOpenClick"></paper-fab>-->
+        <div id="button_container" class="horizontal layout">
            <span class="button-container" id="open" on-click="_onOpenClick">
               <iron-icon id="button" icon="{{icon}}"></iron-icon>
            </span>
@@ -229,11 +237,12 @@
 
                 $(this.$.container_content).perfectScrollbar();
 
-                this.$.open.style.height           = this.iconHeight + "px";
-                this.$.open.style.width            = this.iconWidth  + "px";
-                this.$.open.style.backgroundColor  = this.backgroundButtonColor;
-                this.$.button.style.width          = this.iconWidth  + "px";
-                this.$.button.style.height         = this.iconHeight + "px";
+                this.$.open.style.height             = this.iconHeight + "px";
+                this.$.open.style.width              = this.iconWidth  + "px";
+                this.$.open.style.backgroundColor    = this.backgroundButtonColor;
+                this.$.button.style.width            = this.iconWidth  + "px";
+                this.$.button.style.height           = this.iconHeight + "px";
+                this.$.button_container.style.height = this.iconHeight + "px";
             },
 
             _onOpenClick: function() {
