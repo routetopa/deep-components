@@ -79,9 +79,9 @@ Example:
         <div class="horizontal layout">
             <neon-animated-pages selected="[[selected]]" entry-animation="[[entryAnimation]]" exit-animation="[[exitAnimation]]">
                 <neon-animatable></neon-animatable>
-                <neon-animatable><paper-input class="search-text" label="search" autosave="search_text" results="5" transition="fade-in-animation" value="{{searchKey}}"></paper-input></neon-animatable>
+                <neon-animatable><paper-input id="search_text" class="search-text" label="search" autosave="search_text" results="5" transition="fade-in-animation" value="{{searchKey}}"></paper-input></neon-animatable>
             </neon-animated-pages>
-            <paper-icon-button icon="search" class="dropdown-trigger" on-click="_toggleClick"></paper-icon-button>
+            <paper-icon-button id="search_button" icon="search" class="dropdown-trigger" on-click="_toggleClick"></paper-icon-button>
         </div>
 
     </template>
