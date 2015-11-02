@@ -65,24 +65,33 @@ Example:
                 --paper-input-container-input-color: #ffffff;
                 --paper-input-container-focus-color: #ffffff;
                 --paper-input-container-color: #ffffff;
-                position : absolute;
-                left: 5px;
-                top: -20px;
-                width: 100%;
+                position: absolute;
+                top: -12px;
+                width: 20vw;
 
             }
 
             neon-animated-pages{
-               width: 30vw;
+               /*width: 20vw;*/
             }
 
         </style>
         <div class="horizontal layout">
+            <template is="dom-if" if="{{leftDirection}}">
+                <paper-icon-button id="search_button" icon="search" class="dropdown-trigger" on-click="_toggleClick"></paper-icon-button>
+            </template>
+
             <neon-animated-pages selected="[[selected]]" entry-animation="[[entryAnimation]]" exit-animation="[[exitAnimation]]">
                 <neon-animatable></neon-animatable>
-                <neon-animatable><paper-input id="search_text" class="search-text" autofocus label="search" autosave="search_text" results="5" transition="fade-in-animation" value="{{searchKey}}"></paper-input></neon-animatable>
+                <neon-animatable>
+                    <paper-input id="search_text" class="search-text" autofocus label="search" autosave="search_text" results="5" transition="fade-in-animation" value="{{searchKey}}">
+                    </paper-input>
+                </neon-animatable>
             </neon-animated-pages>
-            <paper-icon-button id="search_button" icon="search" class="dropdown-trigger" on-click="_toggleClick"></paper-icon-button>
+
+            <template is="dom-if" if="{{rightDirection}}">
+                <paper-icon-button id="search_button" icon="search" class="dropdown-trigger" on-click="_toggleClick"></paper-icon-button>
+            </template>
         </div>
 
     </template>
@@ -121,7 +130,25 @@ Example:
                     value: undefined,
                     observer: "_valueChanged"
 
+                },
+                leftDirection: {
+                    type: String,
+                    value: undefined
+                },
+                rightDirection: {
+                    type: String,
+                    value: undefined
                 }
+            },
+
+            ready: function(){
+
+                if(this.leftDirection != undefined){
+                    this.$.search_text.style.left =  '5px';
+                }else if(this.rightDirection != undefined){
+                    this.$.search_text.style.right =  '5px';
+                }
+
             },
             _toggleClick: function(e){
                 if(this.selected == 0) {

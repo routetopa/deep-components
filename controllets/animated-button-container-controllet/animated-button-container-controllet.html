@@ -27,9 +27,6 @@
         }
 
         .window {
-            width: 30vw;
-            height: 50vh;
-            background: #e8e8e8;
             position: absolute;
             top: 64px;
             left: 0px;
@@ -79,6 +76,8 @@
             z-index: 1000;
             position: relative;
             overflow: auto;
+            height: 100%;
+            background-color: #e8e8e8;
         }
         #toolbar{
             background: #2196F3;
@@ -138,7 +137,7 @@
             <neon-animatable>
                 <paper-material elevation="3" id="window" class="window">
                     <paper-toolbar id="toolbar">
-                        <search-panel-controllet id="search_from_animated_button_container"></search-panel-controllet>
+                        <search-panel-controllet id="search_from_animated_button_container" left-direction="true"></search-panel-controllet>
                         <paper-fab id="close" mini icon="close" on-click="_onCloseClick"></paper-fab>
                     </paper-toolbar>
                    <div id="container_content"><content></content></div>
@@ -218,7 +217,8 @@
                 this.$.window.style.width  = (this.width - 0.5) + "vw";
                 this.$.close.style.left    = (this.width - 3.5) + "vw";
 
-                this.$.container_content.style.height = (this.height - (22 * 0.65)) + "vh";
+                //this.$.container_content.style.height = (this.height - (22 * 0.65)) + "vh";
+                //this.$.container_content.style.height = this.height + "vh";
                 $(this.$.container_content).perfectScrollbar();
 
                 this.$.open.style.height           = this.iconHeight + "px";
