@@ -88,7 +88,7 @@
         search-panel-controllet{
             position: relative;
             top: -5px;
-            left: 80px;
+            roght: 80px;
         }
 
         .button-container{
@@ -137,16 +137,16 @@
             <neon-animatable><div id="hidden"></div></neon-animatable>
             <neon-animatable>
                 <paper-material elevation="3" id="window" class="window">
-                   <paper-fab id="close" mini icon="close" on-click="_onCloseClick"></paper-fab>
                     <paper-toolbar id="toolbar">
                         <search-panel-controllet id="search_from_animated_button_container"></search-panel-controllet>
                     </paper-toolbar>
+                   <paper-fab id="close" mini icon="close" on-click="_onCloseClick"></paper-fab>
                    <div id="container_content"><content></content></div>
                 </paper-material>
             </neon-animatable>
         </neon-animated-pages>
 
-        <div class="horizontal layout" style="height: 64px;">
+        <div class="horizontal layout">
             <!--<paper-fab mini icon="{{icon}}" id="open" on-click="_onOpenClick"></paper-fab>-->
            <span class="button-container" id="open" on-click="_onOpenClick">
               <iron-icon id="button" icon="{{icon}}"></iron-icon>
@@ -192,11 +192,11 @@
                 },
                 iconHeight:{
                     type: String,
-                    value: "64"
+                    value: "36"
                 },
                 iconWidth:{
                     type: String,
-                    value: "64"
+                    value: "36"
                 },
                 backgroundButtonColor:{
                     type: String,
