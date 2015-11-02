@@ -142,7 +142,7 @@ Example:
              */
             _valueChanged : function(oldvalue, newValue){
                 clearTimeout (this.timer);
-                this.timer = setTimeout(this.fire('search-panel-controllet_content-changed', {searchKey: this.searchKey}), 500);
+                this.timer = setTimeout(this.fire('search-panel-controllet_content-changed', {searchKey: this.searchKey, id : this.id}), 500);
             },
             /**
              * It returns the value in text area

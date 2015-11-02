@@ -72,11 +72,15 @@
             -moz-transform-origin: 0 0;
             -o-transform-origin: 0 0;
             -webkit-transform-origin: 0 0;
-            transform-origin: 0 0;"
+            transform-origin: 0 0;
+            max-height: 64px;
+            max-width: 64px;
         }
 
         #container_content{
             z-index: 1000;
+            position: relative;
+            overflow: auto;
         }
         #toolbar{
             background: #2196F3 ;
@@ -100,7 +104,7 @@
                 <paper-material elevation="3" id="window" class="window">
                    <paper-fab id="close" mini icon="close" on-click="_onCloseClick"></paper-fab>
                     <paper-toolbar id="toolbar">
-                        <search-panel-controllet></search-panel-controllet>
+                        <search-panel-controllet id="search_from_animated_button_container"></search-panel-controllet>
                     </paper-toolbar>
                    <div id="container_content"><content></content></div>
                 </paper-material>
@@ -108,11 +112,13 @@
         </neon-animated-pages>
 
         <div class="horizontal layout" style="height: 64px;">
-           <paper-fab mini icon="assessment" id="open" on-click="_onOpenClick"></paper-fab>
+           <paper-fab mini icon="{{icon}}" id="open" on-click="_onOpenClick"></paper-fab>
            <div id="selected_item"></div>
         </div>
 
     </template>
+
+    <script type="text/javascript" src="../shared_js/perfect-scrollbar/js/perfect-scrollbar.jquery.js"></script>
 
     <script>
 
@@ -121,7 +127,7 @@
             is: 'animated-button-container-controllet',
 
             listeners:{
-                'items-list-controllet_item-selected' : '_elementSelected',
+                'animated-button-container-controllet_element-selected' : '_elementSelected',
                 'search-panel-controllet_content-changed' : '_handleSearch'
             },
 
@@ -142,10 +148,25 @@
                     type  : String,
                     value : ""
                 },
-
+                icon:{
+                    type: String,
+                    value: "assessment"
+                },
+                iconHeight:{
+                    type: String,
+                    value: "64"
+                },
+                iconWidth:{
+                    type: String,
+                    value: "64"
+                },
                 exitAnimation  : {
                     type  : String,
                     value : ""
+                },
+                searchFunction: {
+                    type: String,
+                    notify: true
                 }
             },
 
@@ -153,6 +174,14 @@
                 this.$.window.style.height = this.height + "vh";
                 this.$.window.style.width  = (this.width - 0.5) + "vw";
                 this.$.close.style.left    = (this.width - 3.5) + "vw";
+
+                this.$.container_content.style.height = (this.height - (22 * 0.65)) + "vh";
+                $(this.$.container_content).perfectScrollbar();
+
+                this.$.open.style.height = this.iconHeight + "px";
+                this.$.open.style.width  = this.iconWidth  + "px";
+                this.$.open.style.setProperty('--iron-icon-height',this.iconHeight + "px");
+                this.$.open.style.setProperty('--iron-icon-width' ,this.iconWidth + "px");
             },
 
             _onOpenClick: function() {
@@ -172,9 +201,14 @@
                 this.$.selected_item.appendChild(e.detail.selectedElement);
             },
             _handleSearch: function(e){
-                if(this.$.container_content.children[0]._handleSearch != undefined)
-                   this.$.container_content.children[0]._handleSearch(e);
-
+                if(this.$.container_content.children[0]._handleSearch != undefined) {
+                    this.$.container_content.children[0]._handleSearch(e);
+                }else{
+                    if(this.searchFunction != undefined){
+                        this.searchFunction = new Function('e','return '+ this.searchFunction);
+                        this.searchFunction(e);
+                    }
+                }
             }
 
         });
