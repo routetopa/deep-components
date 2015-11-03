@@ -64,9 +64,18 @@ Example:
                 top: 8px;
             }
 
-            .grid{
+            .grid
+            {
+                width: 100%;
+                z-index: 0;
                 margin: auto;
                 padding: 5%;
+            }
+
+            .grid:after {
+                content: '';
+                display: block;
+                clear: both;
             }
 
             ::content .card{
@@ -81,12 +90,13 @@ Example:
                 -webkit-transform-origin: 0 0;
                 transform-origin: 0 0;*/
                 margin: 10px;
+                float: left;
             }
 
         </style>
 
         <div id="container" class="layout vertical">
-            <div>
+            <div class="grid">
                 <content></content>
             </div>
         </div>
@@ -137,7 +147,7 @@ Example:
                 this.prevSelectedCard = e.currentTarget;
 
                 this.fire('generic-cards-container-controllet_card-selected', {selectedElement: e.currentTarget});
-                //this.fire('animated-button-container-controllet_element-selected', {selectedElement: ''});
+                this.fire('animated-button-container-controllet_close', {});
 
             },
 

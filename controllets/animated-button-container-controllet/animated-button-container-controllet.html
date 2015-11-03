@@ -165,7 +165,8 @@
 
             listeners:{
                 'animated-button-container-controllet_element-selected' : '_elementSelected',
-                'search-panel-controllet_content-changed' : '_handleSearch'
+                'search-panel-controllet_content-changed' : '_handleSearch',
+                'animated-button-container-controllet_close' : '_onCloseClick'
             },
 
             properties: {
@@ -175,11 +176,11 @@
                 },
                 height:{
                     type: String,
-                    value: "30vh"
+                    value: "300px"
                 },
                 width:{
                     type: String,
-                    value: "30vh"
+                    value: "450px"
                 },
                 entryAnimation : {
                     type  : String,
@@ -213,12 +214,15 @@
             },
 
             ready: function(){
-                this.$.window.style.height = this.height + "vh";
+                /*this.$.window.style.height = this.height + "vh";
                 this.$.window.style.width  = (this.width - 0.5) + "vw";
-                this.$.close.style.left    = (this.width - 3.5) + "vw";
+                this.$.close.style.left    = (this.width - 3.5) + "vw";*/
 
-                //this.$.container_content.style.height = (this.height - (22 * 0.65)) + "vh";
-                //this.$.container_content.style.height = this.height + "vh";
+                this.$.window.style.height = this.height + "px";
+                this.$.window.style.width  = this.width + "px";
+                this.$.close.style.left    = (this.width - 30) + "px";
+
+
                 $(this.$.container_content).perfectScrollbar();
 
                 this.$.open.style.height           = this.iconHeight + "px";
