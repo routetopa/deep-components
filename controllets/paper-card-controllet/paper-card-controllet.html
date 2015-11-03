@@ -70,7 +70,7 @@
                 color: var(--accent-color);
             }
 
-            #text{
+            #comment{
                 position:relative;
                 top: -50px;
                 min-height: 50px;
@@ -103,31 +103,31 @@
                     <content></content>
                 </div>
 
-                <template is="dom-if" if="{{legend}}">
+                <template is="dom-if" if="{{cardTitle}}">
 
                     <div class="legend horizontal layout center">
-                        <span>{{legend}}</span>
+                        <span>{{cardTitle}}</span>
                         <!-- Adding icon based on card type -->
 
-                        <template is="dom-if" if="{{checkType(type, 'text')}}">
+                        <template is="dom-if" if="{{checkType(cardType, 'text')}}">
 
                             <paper-fab mini icon="create" on-click="_handleDetailsClick"></paper-fab>
 
                         </template>
 
-                        <template is="dom-if" if="{{checkType(type, 'image')}}">
+                        <template is="dom-if" if="{{checkType(cardType, 'image')}}">
 
                             <paper-fab mini icon="perm-media" on-click="_handleDetailsClick"></paper-fab>
 
                         </template>
 
-                        <template is="dom-if" if="{{checkType(type, 'datalet')}}">
+                        <template is="dom-if" if="{{checkType(cardType, 'datalet')}}">
 
                             <paper-fab mini icon="assessment" on-click="_handleDetailsClick"></paper-fab>
 
                         </template>
 
-                        <template is="dom-if" if="{{checkType(type, 'link')}}">
+                        <template is="dom-if" if="{{checkType(cardType, 'link')}}">
 
                             <paper-fab mini icon="link" on-click="_handleDetailsClick"></paper-fab>
 
@@ -138,8 +138,8 @@
                 </template>
 
                 <div class="footer">
-                    <template is="dom-if" if="{{text}}">
-                       <div id="text">{{text}}</div>
+                    <template is="dom-if" if="{{comment}}">
+                       <div id="comment">{{comment}}</div>
                     </template>
                 </div>
 
@@ -162,15 +162,15 @@
                     type: Number,
                     observer: "_changeHeight",
                 },
-                type:{
+                cardType:{
                     type: String,
                     value: "text"
                 },
-                text:{
-                    type: String,
+                comment:{
+                    cardType: String,
                     value: ""
                 },
-                legend:{
+                cardTitle:{
                     type: String,
                     value: ""
                 },
@@ -182,7 +182,7 @@
             },
 
             ready: function(){
-                if(this.type == "text"){
+                if(this.cardType == "text"){
                     this.$.content.style.backgroundColor = "#ffc";
                 }
             },

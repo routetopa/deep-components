@@ -33,7 +33,6 @@
 <script src="http://code.highcharts.com/highcharts-3d.js"></script>
 
 <!--
-
 `donutpie3dchart-datalet` is a donutpie3dchart datalet based on highcharts project <http://www.highcharts.com/>
 
 Example:
@@ -80,10 +79,7 @@ Example:
                         }
                     },
                     title: {
-                        text: ""
-                    },
-                    subtitle: {
-                        text: '3D Donut pie chart'
+                        text: "" + this._component.title
                     },
                     plotOptions: {
                         pie: {
@@ -128,6 +124,17 @@ Example:
                 behavior : {
                     type : Object,
                     value : {}
+                },
+                /**
+                 * It's the title of the chart
+                 *
+                 * @attribute title
+                 * @type Strig
+                 * @default ''
+                 */
+                title: {
+                    type: String,
+                    value: ""
                 }
             },
 

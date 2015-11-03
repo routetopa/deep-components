@@ -38,6 +38,7 @@
 
 <link rel="import" href="../../bower_components/iron-ajax/iron-ajax.html">
 <link rel="import" href="../../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../../bower_components/paper-material/paper-material.html">
 <link rel="import" href="../../bower_components/paper-input/paper-textarea.html">
 <link rel="import" href="../../bower_components/paper-button/paper-button.html">
 <link rel="import" href="../../bower_components/paper-tabs/paper-tabs.html">
@@ -50,10 +51,11 @@
 <link rel="import" href="../../bower_components/paper-dialog/paper-dialog.html">
 <link rel="import" href="../../bower_components/paper-dialog-scrollable/paper-dialog-scrollable.html">
 
-<link rel="import" href="../items-slider-controllet/items-slider-controllet.html">
+<link rel="import" href="../items-list-controllet/item-list-controllet.html">
 <link rel="import" href="../draggable-element-controllet/draggable-element-controllet.html">
 <link rel="import" href="../tree-view-controllet/tree-view-controllet.html">
 <link rel="import" href="../text-element-controllet/text-element-controllet.html">
+<link rel="import" href="../animated-button-container-controllet/animated-button-container-controllet.html">
 
 <!--
 The `data-sevc-controllet` is a controllet to generate visualization from a dataset accessible through api. A json response is required.
@@ -159,8 +161,8 @@ Example:
 
                 #visualization_slider_area
                 {
-                    min-width: 670px;
-                    min-height: 180px;
+                    padding-top: 20px;
+                    overflow: visible;
                 }
 
                 #fields_mapping_area
@@ -171,9 +173,10 @@ Example:
 
                 #datalet_placeholder
                 {
-                    height: 360px;
-                    min-height: 360px;
-
+                    height: 60vh;
+                    min-height: 60vh;
+                    min-width: 45%;
+                    margin-top:10px;
                 }
 
                 .datalet_right_container
@@ -205,9 +208,6 @@ Example:
                     overflow: hidden;
                     margin : 0.8em;
                     padding : 0.8em;
-                    border-width: 1em;
-                    border-radius: 0.125rem;
-                    box-shadow: 0.125em 0.125em 0.1125em 0.125em rgba(0, 0, 0, 0.25);
                 }
 
                 #fields_placeholder{
@@ -251,12 +251,12 @@ Example:
 
                 #idm_fields_main_container{
                     position: relative;
-                    height: 50vh;
+                    height: 60vh;
                 }
 
                 #selectedFields_main_container{
                     position: relative;
-                    height: 50vh;
+                    height: 60vh;
                 }
 
                 #idm_layout_main_container{
@@ -327,7 +327,7 @@ Example:
                                 <paper-icon-button id="NextButton" class="toolbar_button" on-click="_onNextClick" icon="chevron-right" alt="arrow-forward" title="arrow-forward"></paper-icon-button>
                             </div>
 
-                            <div class="area_container">
+                            <paper-material elevation="2" class="area_container">
                                 <paper-tabs selected="{{DatasourceTabSelected}}">
                                     <paper-tab>Select data source</paper-tab>
                                     <paper-tab>Most popular</paper-tab>
@@ -357,7 +357,7 @@ Example:
                                     <div><img src="static/images/UnderConstruction.png" style="position: relative;top: 60%;left: 25%;"></div>
                                     <div><img src="static/images/UnderConstruction.png" style="position: relative;top: 60%;left: 25%;"></div>
                                 </iron-pages>
-                            </div>
+                            </paper-material>
 
                         </div>
 
@@ -372,20 +372,20 @@ Example:
                                 <div class="avatar">2</div>
                                 <div class="title flex">
                                     <div id="toolbar_title" class="big">Dataset source</div>
-                                    <div id="toolbar_description" class="small">Copy and paste/drag and drop in the textarea the url of datasource</div>
+                                    <div id="toolbar_description" class="small">Select the fields you want to use for visualization from tree on the right side. The table on the left side will show you the values related to the selected fields.</div>
                                 </div>
                                 <paper-icon-button id="NextButton" class="toolbar_button" on-click="_onNextClick" icon="chevron-right" alt="arrow-forward" title="arrow-forward"></paper-icon-button>
                             </div>
 
                             <div class="horizontal layout">
 
-                                <div id="fields_placeholder" class="area_container flexchild" style="min-width:300px">
+                                <paper-material elevation="2" id="fields_placeholder" class="area_container flexchild" style="min-width:300px">
                                     <tree-view-controllet id="fields_treeview" root-name="data" opened-path="result,records"></tree-view-controllet>
-                                </div>
+                                </paper-material>
 
-                                <div id="table_fields_container" class="area_container flex2child">
+                                <paper-material elevation="2" id="table_fields_container" class="area_container flex2child">
                                     <div id="table_component_place_holder"></div>
-                                </div>
+                                </paper-material>
 
                             </div>
 
@@ -393,7 +393,7 @@ Example:
 
                     </neon-animatable>
 
-                    <neon-animatable style="height:100vh">
+                    <neon-animatable>
 
                         <div class="vertical justified layout">
 
@@ -402,7 +402,7 @@ Example:
                                 <div class="avatar">3</div>
                                 <div class="title flex">
                                     <div id="toolbar_title" class="big">Data mapping</div>
-                                    <div id="toolbar_description" class="small">Select the visualization from the slider, drag and drop the selected fields in visualization parameter area, customize the visualization if you need</div>
+                                    <div id="toolbar_description" class="small">Select the visualization by clicking on the button(a window will appear with all available visualization).After, drag and drop the selected fields into datalet parameters area. A preview will be shown on the right side.</div>
                                 </div>
                                 <paper-icon-button id="NextButton" class="toolbar_button" on-click="_onNextClick" icon="chevron-right" alt="arrow-forward" title="arrow-forward"></paper-icon-button>
                             </div>
@@ -411,26 +411,26 @@ Example:
                             <div class="horizontal layout">
 
                                 <div class="">
-                                    <div id="visualization_slider_area" class="area_container"></div>
-                                    <div id="fields_mapping_area" class="area_container">
+                                    <paper-material elevation="0" id="visualization_slider_area"></paper-material>
+                                    <paper-material elevation="2" id="fields_mapping_area" class="area_container">
 
                                         <div id="selectedFields_main_container" class="field-mapping-card">
                                             <div class="title">
                                                 <div class="medium">Selected fields</div>
                                             </div>
-                                            <div id="selectedFields_container" class="area_container"></div>
+                                            <paper-material elevation="2" id="selectedFields_container" class="area_container"></paper-material>
                                         </div>
 
                                         <div id="idm_fields_main_container" class="field-mapping-card">
                                             <div class="title">
                                                 <div class="medium">Datalet fields</div>
                                             </div>
-                                            <div id="datalet_idm_fields_container" class="area_container"></div>
+                                            <paper-material elevation="2" id="datalet_idm_fields_container" class="area_container"></paper-material>
                                         </div>
-                                    </div>
+                                    </paper-material>
                                 </div>
 
-                                <div id="datalet_placeholder" style="min-width: 43%;margin-top:10px;"></div>
+                                <div id="datalet_placeholder"></div>
 
                             </div>
 
@@ -446,7 +446,7 @@ Example:
                                 <div class="avatar">4</div>
                                 <div class="title flex">
                                     <div id="toolbar_title" class="big">Finalize visualization</div>
-                                    <div id="toolbar_description" class="small">Assign the values for label parameters (e.g. title for you visualization).</div>
+                                    <div id="toolbar_description" class="small">Assign the values for layout parameters (e.g. title for you visualization) and look at the final visualization. You can also add a comment if you are in the private room. </div>
                                 </div>
                                 <paper-icon-button id="finish_button" on-click="_onFinish" icon="add-circle" alt="Conforms the creation" title="finish"></paper-icon-button>
                             </div>
@@ -456,17 +456,17 @@ Example:
                                     <div class="title">
                                         <div class="medium">Layout fields</div>
                                     </div>
-                                    <div id="idm_layout_main_container" class="area_container">
-                                        <div id="idm_layout_container" class="area_container"></div>
-                                    </div>
+                                    <paper-material elevation="2" id="idm_layout_main_container" class="area_container">
+                                        <paper-material elevation="2" id="idm_layout_container" class="area_container"></paper-material>
+                                    </paper-material>
 
                                     <div id="comment">
-                                        <paper-textarea class="custom_textarea" id="commentArea" label="Max 100 character comment" maxlength="100"></paper-textarea>
+                                        <paper-textarea class="custom_textarea" id="commentArea" label="Max 100 characters comment" maxlength="100"></paper-textarea>
                                     </div>
 
                                 </div>
 
-                                <div id="datalet_placeholder_2" style="min-width: 43%;margin-top: 10px;"></div>
+                                <div id="datalet_placeholder_2" style="min-width: 45%;margin-top: 10px;"></div>
 
                             </div>
                         </div>
@@ -498,7 +498,7 @@ Example:
             /**
              * Received when the user selects a datalet from slider.
              *
-             * @event items-slider-controllet_item-selected
+             * @event items-list-controllet_item-selected
              */
 
             /**
@@ -532,7 +532,7 @@ Example:
              */
 
             listeners : {
-                'items-slider-controllet_item-selected' : '_dataletSelected',
+                'items-list-controllet_item-selected' : '_dataletSelected',
                 'draggable-element-controllet_content-dragged' : '_fieldsMapped',
                 'tree-view-controllet_selected-fields' : '_fieldsSelected',
                 'text-element-controllet_content-changed' : '_textElementChanged'
@@ -590,7 +590,7 @@ Example:
                     value : []
                 },
                 /**
-                 * It's used to store the selected datalet. It will be set when the controllet get the event of selection by item slider (items-slider-controllet_item-selected)
+                 * It's used to store the selected datalet. It will be set when the controllet get the event of selection by item slider (items-list-controllet_item-selected)
                  *
                  * @attribute selectedDatalet
                  * @type String
@@ -674,11 +674,25 @@ Example:
                     this.$.data_url.value = this.dataletPreset['data-url'];
                     this.selected = 1;
                 }
+
+                //Fiefox force :O
+                var table_params ={
+                    component   : "datatable-datalet",
+                    params      :{
+                        'data-url' : this.dataUrl
+                    },
+                    fields      : [],
+                    placeHolder : this.$.table_component_place_holder
+                };
+
+                ComponentService.deep_url = this.deepUrl;
+                ComponentService.getComponent(table_params);
             },
             /**
              * Utility function to inject datalet in a placeholder
              */
             injectDatalet: function(place_holder){
+
                 var datalet_params ={
                     component   : this.selectedDatalet,
                     params      : this.paramsFields,
@@ -720,11 +734,20 @@ Example:
                 }
 
                 if(this.selectedDatalet == undefined)
-                  this.$.visualization_slider_area.innerHTML = '<items-slider-controllet items=\'' + JSON.stringify(this.datalets_list) + '\'' +
-                         '\'></items-slider-controllet>';
+                this.$.visualization_slider_area.innerHTML = '<animated-button-container-controllet height="300" width="450" icon="assessment" icon-width="64" icon-height="64" background-button-color="#2196F3">' +
+                                                               '<items-list-controllet' +
+                                                                                     ' replace-string="-datalet"' +
+                                                                                     ' items=\'' + JSON.stringify(this.datalets_list) + '\'>' +
+                                                               '</items-list-controllet>' +
+                                                            '</animated-button-container-controllet>';
                 else
-                    this.$.visualization_slider_area.innerHTML = '<items-slider-controllet items=\'' + JSON.stringify(this.datalets_list) + '\'' +
-                                                                 'selected-card=\'' + this.selectedDatalet + '\'></items-slider-controllet>';
+                    this.$.visualization_slider_area.innerHTML = '<animated-button-container-controllet height="300" width="450" icon="assessment" icon-width="64" icon-height="64" background-button-color="#2196F3">' +
+                            '<items-list-controllet' +
+                            ' replace-string="-datalet"' +
+                            ' selected-card=\'' + this.selectedDatalet + '\'' +
+                            ' items=\'' + JSON.stringify(this.datalets_list) + '\'>' +
+                            '</items-list-controllet>' +
+                            '</animated-button-container-controllet>';
 
             },
             /**
@@ -747,9 +770,10 @@ Example:
                if(response.idm.inputs.input.constructor == Object) {
                    if(response.idm.inputs.input.selection == "*")
                    {
+                       var fields = this.$.selectedFields_container.querySelectorAll('draggable-element-controllet');
                        input = response.idm.inputs.input;
                        response.idm.inputs.input = new Array();
-                       for(var i=0;i<this.selectedFields.length;i++){
+                       for(var i=0;i<fields.length;i++){
                            var newInput = jQuery.extend(true, {}, input);
                            newInput.name = input.name + ' ' + (i + 1);
                            response.idm.inputs.input.push(newInput);
@@ -778,7 +802,7 @@ Example:
                       }
                    }
 
-                   html += '></draggable-element-controllet><br>';
+                   html += '></draggable-element-controllet>';
                    this.$.datalet_idm_fields_container.innerHTML += html;
 
                }
@@ -812,7 +836,7 @@ Example:
              */
             generateDataletPreview : function(){
 
-                var input_mapped_fields = Polymer.dom(this.$.datalet_idm_fields_container).querySelectorAll('draggable-element-controllet[is-target=true]');
+                var input_mapped_fields = this.$.datalet_idm_fields_container.querySelectorAll('draggable-element-controllet[is-target=true]');
                 this.selectedFields = Array();
 
                 for (var i = 0; i < input_mapped_fields.length; i++) {
@@ -821,7 +845,7 @@ Example:
                     }
                 }
 
-                var input_layouts_fields = Polymer.dom(this.$.idm_layout_container).querySelectorAll('text-element-controllet');
+                var input_layouts_fields = this.$.idm_layout_container.querySelectorAll('text-element-controllet');
                 this.paramsFields = {'data-url' : this.dataUrl};
 
                 for (var i = 0; i < input_layouts_fields.length; i++) {
@@ -855,7 +879,7 @@ Example:
                         }
 
                     case 2:
-                        if(Polymer.dom(this.$.selectedFields_container).querySelectorAll('draggable-element-controllet') == 0){
+                        if(this.selectedFields.length == 0){
                             this.$.message.text = "You have to select a set of fields to access to pass 3.";
                             this.$.message.show();
                             return false;
@@ -958,19 +982,18 @@ Example:
                                                                   '"></draggable-element-controllet><br>';
                  }
 
-                 var place_holder = (navigator.userAgent.toLowerCase().indexOf('chrome') > -1) ? this.$.table_component_place_holder : this.$.table_component_place_holder[Object.keys(this.$.table_component_place_holder)[0]];
-
                  var table_params ={
                      component   : "datatable-datalet",
                      params      :{
                         'data-url' : this.dataUrl
                      },
                      fields      : e.detail.fields,
-                     placeHolder :  this.$.table_component_place_holder
+                     placeHolder : this.$.table_component_place_holder
                  };
 
                  ComponentService.deep_url = this.deepUrl;
                  ComponentService.getComponent(table_params);
+
 
             },
             /**
@@ -993,8 +1016,10 @@ Example:
              * @param {Event} e
              */
             _textElementChanged : function(e){
-                this.generateDataletPreview();
-                this.injectDatalet(this.$.datalet_placeholder_2);
+                if(this.selected == 3) {
+                    this.generateDataletPreview();
+                    this.injectDatalet(this.$.datalet_placeholder_2);
+                }
             },
             /**
              * Callback related to the drag operation in the dataUrl input area. It's used to delete previous value.

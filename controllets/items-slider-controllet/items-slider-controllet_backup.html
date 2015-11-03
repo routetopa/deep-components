@@ -1,0 +1,319 @@
+<!--
+@license
+    The MIT License (MIT)
+
+    Copyright (c) 2015 Dipartimento di Informatica - Università di Salerno - Italy
+
+    Permission is hereby granted, free of charge, to any person obtaining a copy
+    of this software and associated documentation files (the "Software"), to deal
+    in the Software without restriction, including without limitation the rights
+    to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+    copies of the Software, and to permit persons to whom the Software is
+    furnished to do so, subject to the following conditions:
+
+    The above copyright notice and this permission notice shall be included in
+    all copies or substantial portions of the Software.
+
+    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+    IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+    FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+    AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+    LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+    THE SOFTWARE.
+-->
+
+<!--
+* Developed by :
+* ROUTE-TO-PA Project - grant No 645860. - www.routetopa.eu
+*
+-->
+
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/paper-styles/color.html">
+
+<link rel="import" href="../../bower_components/neon-animation/neon-animated-pages.html">
+<link rel="import" href="../../bower_components/neon-animation/neon-animatable.html">
+<link rel="import" href="../../bower_components/neon-animation/neon-animations.html">
+
+<link rel="import" href="../../bower_components/paper-card/paper-card.html">
+<link rel="import" href="../../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../../bower_components/iron-icons/iron-icons.html">
+
+<!--
+ `items-slider-controllet` is a carousel of cards with a title and an image. Pass to it an array of objects with name and image fields and
+ a responsive slider will be created. Every time the user click on a card an event will be generate in order to get the card clicked information to
+ the component that use the slider.
+
+Example:
+
+    <items-slider-controllet items='[{name : "myObject1", image : "pathToMyImage1"},...,{name : "myObjectN", image : "pathToMyImageN"}]' \>
+    </items-slider-controllet>
+
+
+@element items-slider-controllet
+@status beta
+@homepage index.html
+@group controllets
+-->
+
+<dom-module id="items-slider-controllet">
+    <template>
+
+        <style is="custom-style">
+
+            ::content .content-card{
+                position: relative;
+                float: left;
+                margin : .5em;
+               /* height: 8em;
+                width: 7em;
+                min-width: 80px;
+                max-width: 115px;*/
+                width: 15.5%;
+                height: 70%;
+                background: #fff;
+                -moz-border-radius: 0.125rem;; /* Firefox */
+                -webkit-border-radius: 0.125rem;; /* Safari, Chrome */
+                border-radius: 0.125rem;
+                box-shadow:         0 0.625em 0.5125em 0 rgba(0, 0, 0, 0.25);
+                -webkit-box-shadow: 0 0.625em 0.5125em 0 rgba(0, 0, 0, 0.25);
+                -moz-box-shadow:    0 0.625em 0.5125em 0 rgba(0, 0, 0, 0.25);
+                padding: 1em;
+            }
+
+            ::content .content-selected{
+                position: relative;
+                float: left;
+                top : 5%;
+                margin : .5em;
+                width: 15.5%;
+                height: 70%;
+
+                background: #fff;
+                border-style: solid;
+                border-width: 0.03em;
+                -moz-border-radius: 0.125rem;; /* Firefox */
+                -webkit-border-radius: 0.125rem;; /* Safari, Chrome */
+                border-radius: 0.125rem;
+                box-shadow:         0 1.825em 1.7125em 0 rgba(0, 0, 0, 0.50);
+                -webkit-box-shadow: 0 1.825em 1.7125em 0 rgba(0, 0, 0, 0.50);
+                -moz-box-shadow:    0 1.825em 1.7125em 0 rgba(0, 0, 0, 0.50);
+                padding: 1em;
+            }
+
+            .title {
+                display: inline-block;
+                position: relative;
+                padding-left: .2em;
+                padding-right: .2em;
+                color: var(--paper-indigo-500);
+            }
+
+            .title .big {
+                /*font-size: 1.1em;*/
+                widht: 100%;
+                font-size: 0.9em;
+                color: var(--google-grey-500);
+            }
+
+            .toolbar_button{
+                /*height: 100%;
+                display: inline-block;*/
+                float: left;
+                margin-top: 10%;
+                width: 30px;
+                --iron-icon-height: 28px;
+                --iron-icon-width: 28px;
+            }
+
+            #pages{
+                position: relative;
+                float:left;
+                display: inline-block;
+                height: 38vh;
+                width: 100%;
+                overflow: hidden;
+                text-align: center;
+                /*margin-left: 3em;*/
+            }
+
+            img{
+                height: 80%;
+                width: 80%;
+            }
+
+        </style>
+
+        <neon-animated-pages id="pages" class="flex" selected="[[selected]]" entry-animation="[[entryAnimation]]" exit-animation="[[exitAnimation]]">
+
+           <template is="dom-repeat" items="{{itemsPages}}" as="page" index-as="p">
+
+                <neon-animatable>
+
+                   <paper-icon-button class="toolbar_button x-scope" on-click="_onPrevClick" icon="chevron-left" alt="arrow-back" title="arrow-back"></paper-icon-button>
+
+                    <template is="dom-repeat" items="{{itemsPerPage}}" as="item" index-as="i">
+                       <template is="dom-if" if="{{getName(p, i) != 0}}">
+                             <div class='content-card' id="{{getName(p, i)}}" page="{{p}}" on-click="_cardClick">
+
+                                <div>
+                                    <div class="title">
+                                        <div class="big">{{getName(p, i)}}</div>
+                                    </div>
+                                </div>
+                                <br>
+                                <div class="card-content-image">
+                                    <img src="{{getImage(p, i)}}">
+                                </div>
+                            </div>
+                       </template>
+                    </template>
+
+                    <paper-icon-button  class="toolbar_button x-scope" on-click="_onNextClick" icon="chevron-right" alt="arrow-forward" title="arrow-forward"></paper-icon-button>
+
+                 </neon-animatable>
+            </template>
+
+        </neon-animated-pages>
+
+    </template>
+
+    <script>
+
+        Polymer({
+
+            is : 'items-slider-controllet',
+
+            /**
+             * Fired when the user selects a card from slider by clicking on it.
+             *
+             * @event items-slider-controllet_item-selected
+             */
+
+            properties : {
+
+                entryAnimation : {
+                    type  : String,
+                    value : ""
+                },
+
+                exitAnimation  : {
+                    type  : String,
+                    value : ""
+                },
+
+                selected : {
+                    type  : Number,
+                    value : 0
+                },
+
+                /**
+                 * It stores all items to put in the slider
+                 *
+                 */
+                items : {
+                    type: Array,
+                    value: []
+                },
+                itemsPages : {
+                   type : Array,
+                   value : []
+                },
+
+                itemsPerPage : {
+                    type : Array,
+                    value : []
+                },
+
+                prevSelectedCard : {
+                    type: Object,
+                    value : null
+                },
+
+                numItemsPerPage : {
+                    type: Number,
+                    value : 4
+                },
+                /**
+                 * Presected card. You can pass the card title to preselect it.
+                 */
+                selectedCard:{
+                    type: String,
+                    value: undefined
+                }
+
+            },
+
+            ready : function(){
+
+                var pages = Math.floor(this.items.length / this.numItemsPerPage);
+                var mod = this.items.length % this.numItemsPerPage;
+                if(mod > 0) pages += 1;
+
+                this.itemsPages   = new Array();
+                this.itemsPerPage = new Array();
+
+                for(var i = 0; i < pages; i++){
+                    this.itemsPages.push(i);
+                }
+
+                for(var i = 0; i < this.numItemsPerPage; i++){
+                    this.itemsPerPage.push(i);
+                }
+
+            },
+
+            getPage : function(page){
+               return this.itemsPages[page];
+            },
+
+            getName : function(page, item){
+                return ( ((page * this.itemsPerPage.length) + item) > this.items.length - 1 ) ? 0 : this.items[(page * this.itemsPerPage.length) + item].name.replace("-datalet","");
+            },
+
+            getImage : function(page, item){
+                return ( ((page * this.itemsPerPage.length) + item) > this.items.length - 1 ) ? 0 : this.items[(page * this.itemsPerPage.length) + item].image;
+            },
+
+            _onPrevClick : function() {
+                this.entryAnimation = 'slide-from-left-animation';
+                this.exitAnimation = 'slide-right-animation';
+                this.selected = this.selected === 0 ? (this.itemsPages.length - 1) : (this.selected - 1);
+            },
+
+            _onNextClick : function() {
+                this.entryAnimation = 'slide-from-right-animation';
+                this.exitAnimation = 'slide-left-animation';
+                this.selected = this.selected === (this.itemsPages.length - 1) ? 0 : (this.selected + 1);
+            },
+
+            _cardClick : function(e){
+                if(this.prevSelectedCard != null){
+                    this.prevSelectedCard.className = "content-card";
+
+                }
+                e.currentTarget.className = "content-selected";
+                this.prevSelectedCard = e.currentTarget;
+
+                this.fire('items-slider-controllet_item-selected', {datalet: e.currentTarget.id + "-datalet"});
+
+            },
+
+            attached : function(){
+                this.selected = 1;
+                if(this.selectedCard != undefined){
+                    this.async(function(){
+                        var card = document.getElementById(this.selectedCard);
+                        card.className = "content-selected";
+                        this.prevSelectedCard = card;
+                        this.fire('items-slider-controllet_item-selected', {datalet: this.selectedCard + "-datalet"});
+                        this.selected = card.page;
+                    },1000);
+                }
+            }
+        });
+
+    </script>
+
+</dom-module>

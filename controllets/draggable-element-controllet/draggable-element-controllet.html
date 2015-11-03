@@ -30,6 +30,8 @@
 
 <link rel="import" href="../../bower_components/polymer/polymer.html">
 <link rel="import" href="../../bower_components/paper-styles/color.html">
+<link rel="import" href="../../bower_components/paper-material/paper-material.html">
+<link rel="import" href="../../bower_components/paper-fab/paper-fab.html">
 
 <!--
 `draggable-element-controllet` is a controllet that represents a draggable element. It can be a target or source. When it's a suorce is possible to drag the content in to a
@@ -67,8 +69,12 @@ Example:
 
         <style is="custom-style">
 
+            :host{
+                font-size: 0.84em;
+            }
+
             .drag-content-target{
-                height: 12.5em;
+                margin-bottom: 6em;
                 width: 13.5em;
                 font-weight: bolder;
             }
@@ -76,38 +82,29 @@ Example:
             .drag-content-source{
                 height: 1.5em;
                 width: 12.5em;
-               /* min-height: 20px;
-                min-width: 70px;
-                max-height: 20px;
-                max-width: 70px;*/
             }
 
-            .onTrackOnTarget{
-                position: relative;
-                float: left;
-                margin : 0.625em;
-                height: 1.6em;
-                width: 13.5em;
-                background: #fff;
-                padding: 1em;
-                border-style: solid;
-                border-width : 0.2625em;
-                border-color : var(--paper-blue-500);
-                border-radius: 0.425rem;
-                box-shadow: 0 0.325em 0.3125em 0 rgba(0, 0, 0, 0.25);
-                overflow: hidden;
-            }
-
-            .draggable-card{
+            .draggable-card-source{
                 position: relative;
                 float: left;
                 margin : 0.625em;
                 height: 1.5em;
                 width: 13.5em;
-                border-width : 0.0625em
-                background: #fff;
-                border-radius: 0.425rem;
-                box-shadow: 0 0.325em 0.3125em 0 rgba(0, 0, 0, 0.25);
+                border-width : 0.0625em;
+                background-color: #e8e8e8;;
+                padding: 1em;
+                overflow: hidden;
+            }
+
+            .draggable-card-target{
+                position: relative;
+                float: left;
+                margin : 0.625em;
+                height: 1.5em;
+                width: 13.5em;
+                border-width : 0.0625em;
+                background-color: #2196f3;;
+                color: #ffffff;
                 padding: 1em;
                 overflow: hidden;
             }
@@ -127,7 +124,7 @@ Example:
             }
 
             .heading{
-                width: 12.5em;
+                /*width: 12.5em;*/
             }
 
             .big {
@@ -143,7 +140,7 @@ Example:
                 font-size: 0.8125em;
                 padding-bottom: 0px;
                 display: inline-block;
-                width: 12.5em;
+                /*width: 12.5em;*/
             }
 
             .unselectable {
@@ -153,6 +150,18 @@ Example:
                 -moz-user-select: none;
                 -ms-user-select: none;
                 user-select: none;
+            }
+
+            #delete{
+                position: relative;
+                top: 24px;
+                left: 200px;
+                width: 24px;
+                height: 24px;
+                z-index: 1;
+                --iron-icon-height: 18px;
+                --iron-icon-width: 18px;
+                --paper-fab-background:#cccccc;
             }
 
         </style>
@@ -166,13 +175,14 @@ Example:
                     </div>
                     <div class="medium">{{description}}</div>
                 </div>
-                <div id="target_dragged_identifier" class='draggable-card dd-content-target unselectable'>{{label}}</div>
+                <paper-fab id="delete" mini icon="clear" on-click="_handleDeleteClick"></paper-fab>
+                <paper-material elevation="2" id="target_dragged_identifier" class='draggable-card-target dd-content-target unselectable'>{{label}}</paper-material>
             </div>
         </template>
 
         <template is="dom-if" if="{{!isTarget}}">
             <div id="source" class="drag-content-source" draggable="true" ondragstart="event.dataTransfer.setData('text/plain', 'This text may be dragged')" on-track="_handleTrack" on-drag="_handleOnDrag" on-dragstart="_handleStartDrag" on-dragenter="_handleEnterDrag">
-                <div id="{{identifier}}" class='draggable-card unselectable'>{{label}}</div>
+                <paper-material elevation="2" id="{{identifier}}" class='draggable-card-source unselectable'>{{label}}</paper-material>
             </div>
         </template>
 
@@ -301,7 +311,7 @@ Example:
             _handleOnDrag : function(e){
                 this.targets = document.querySelectorAll('draggable-element-controllet[is-target=true]');
                 for (var i = 0; i < this.targets.length; i++) {
-                    this.targets[i].children[0].children[1].className = "onTrackOnTarget dd-content-target unselectable style-scope draggable-element-controllet";
+                    this.targets[i].children[0].children[2].elevation = "5";
                 }
 
             },
@@ -333,11 +343,23 @@ Example:
                         }
 
                         for (var i = 0; i < this.targets.length; i++) {
-                            this.targets[i].children[0].children[1].className = "draggable-card dd-content-target unselectable style-scope draggable-element-controllet";
+                            this.targets[i].children[0].children[2].elevation = "2";
                         }
 
                         break;
                 }
+            },
+            /**
+             * Manage the delete operation of the content.
+             *
+             * @param e
+             * @private
+             */
+            _handleDeleteClick: function(e){
+                this.value = "";
+                e.currentTarget.nextElementSibling.innerHTML = "";
+
+                this.fire('draggable-element-controllet_content-dragged', {target: e.target, source: e.target});
             }
         });
 

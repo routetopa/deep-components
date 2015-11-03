@@ -1,0 +1,219 @@
+<!--
+@license
+    The MIT License (MIT)
+
+    Copyright (c) 2015 Dipartimento di Informatica - Università di Salerno - Italy
+
+    Permission is hereby granted, free of charge, to any person obtaining a copy
+    of this software and associated documentation files (the "Software"), to deal
+    in the Software without restriction, including without limitation the rights
+    to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+    copies of the Software, and to permit persons to whom the Software is
+    furnished to do so, subject to the following conditions:
+
+    The above copyright notice and this permission notice shall be included in
+    all copies or substantial portions of the Software.
+
+    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+    IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+    FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+    AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+    LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+    THE SOFTWARE.
+-->
+
+<!--
+* Developed by :
+* ROUTE-TO-PA Project - grant No 645860. - www.routetopa.eu
+*
+-->
+
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/paper-styles/color.html">
+
+<link rel="import" href="../../bower_components/paper-material">
+<link rel="import" href="../../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../../bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout.html">
+
+<!--
+ `items-slider-controllet` is a carousel of cards with a title and an image. Pass to it an array of objects with name and image fields and
+ a responsive slider will be created. Every time the user click on a card an event will be generate in order to get the card clicked information to
+ the component that use the slider.
+
+Example:
+
+    <items-slider-controllet items='[{name : "myObject1", image : "pathToMyImage1"},...,{name : "myObjectN", image : "pathToMyImageN"}]' \>
+    </items-slider-controllet>
+
+
+@element items-slider-controllet
+@status beta
+@homepage index.html
+@group controllets
+-->
+
+<dom-module id="items-list-controllet">
+    <template>
+
+        <style is="custom-style">
+
+            .content-card{
+                position: relative;
+                float: left;
+                margin : .5em;
+                width: 80px;
+                height: 72px;
+                background: #fff;
+                padding: 1em;
+
+            }
+
+            #container{
+                /*position: relative;
+                overflow: auto;*/
+            }
+
+            img{
+                height: 100%;
+                width: 100%;
+            }
+
+            .legend {
+                position: absolute;
+                /*background: rgba(0,0,0,0.8);*/
+                background: #9e9e9e;
+                color: #ffffff;
+                height: 30px;
+                padding: 0 16px;
+                left: 0;
+                bottom: 7px;
+                z-index: 1;
+                opacity: 0.87;
+                width: 80px;
+                font-size: 11px;
+            }
+
+            .legend span{
+                position: relative;
+                top: 8px;
+            }
+
+            .grid{
+                margin: auto;
+                padding: 5%;
+            }
+
+        </style>
+
+        <div id="container" class="layout vertical">
+            <div class="grid">
+                <template is="dom-repeat" items="{{items}}" as="item">
+                        <template is="dom-if" if="{{_checkCard(item.name)}}">
+                            <paper-material elevation="5" class='content-card' id="{{_replaceString(item.name)}}" on-click="_cardClick">
+                                <div id="title" class="legend"><span>{{_replaceString(item.name)}}</span></div>
+                                <div class="card-content-image">
+                                    <img src="{{item.image}}">
+                                </div>
+                            </paper-material>
+                        </template>
+                        <template is="dom-if" if="{{!_checkCard(item.name)}}">
+                            <paper-material elevation="1" class='content-card' id="{{_replaceString(item.name)}}" on-click="_cardClick">
+                                <div class="legend"><span>{{_replaceString(item.name)}}</span></div>
+                                <div class="card-content-image">
+                                    <img src="{{item.image}}">
+                                </div>
+                            </paper-material>
+                        </template>
+                </template>
+            </div>
+        </div>
+    </template>
+
+    <script>
+
+        Polymer({
+
+            is : 'items-list-controllet',
+
+            /**
+             * Fired when the user selects a card from slider by clicking on it.
+             *
+             * @event items-list-controllet_item-selected
+             */
+            properties : {
+                /**
+                 * It stores all items to put in the slider
+                 *
+                 */
+                items : {
+                    type: Array,
+                    value: []
+                },
+                prevSelectedCard : {
+                    type: Object,
+                    value : null
+                },
+                /**
+                 * Presected card. You can pass the card title to preselect it.
+                 */
+                selectedCard:{
+                    type: String,
+                    value: undefined
+                },
+                replaceString:{
+                    type: String,
+                    vale: undefined
+                }
+            },
+
+            ready : function(){
+
+                if(this.selectedCard != undefined){
+                    this.fire('items-list-controllet_item-selected', {datalet: this.selectedCard + this.replaceString});
+                }
+            },
+
+            _checkCard: function(name){
+               return (this._replaceString(name) == this.selectedCard);
+            },
+
+            _cardClick : function(e){
+                if(this.selectedCard != undefined) {
+                    var card = document.getElementById(this.selectedCard);
+                    this.prevSelectedCard = card;
+                    this.selectedCard = undefined;
+                }
+
+                if(this.prevSelectedCard != null){
+                    this.prevSelectedCard.elevation = "1";
+
+                }
+                e.currentTarget.elevation = "5";
+                this.prevSelectedCard = e.currentTarget;
+
+                this.fire('items-list-controllet_item-selected', {datalet: e.currentTarget.id + this.replaceString});
+                this.fire('animated-button-container-controllet_element-selected', {selectedElement: e.currentTarget.cloneNode(true)});
+
+            },
+
+            _replaceString: function(string){
+               return (this.replaceString != undefined) ? string.replace(this.replaceString,"") : string;
+            },
+
+            _handleSearch: function(e){
+                var items = document.querySelectorAll('.content-card');
+                for(var i=0; i < items.length;i++){
+                   if(items[i].id.indexOf(e.detail.searchKey) != -1 || e.detail.searchKey == ""){
+                       items[i].style.display = "inline-block";
+                   }else{
+                       items[i].style.display = "none";
+                   }
+                }
+            }
+        });
+
+    </script>
+
+</dom-module>
