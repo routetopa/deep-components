@@ -627,7 +627,7 @@ Example:
                  */
                 paramsFields:{
                   type: Object,
-                  value: {}
+                  value: undefined
                 },
                 /**
                  * It's used to store the tab index in the first pass
@@ -884,7 +884,7 @@ Example:
                         }
 
                     case 2:
-                        if(this.selectedFields.length == 0){
+                        if(this.selectedFields == undefined || this.selectedFields.length == 0){
                             this.$.message.text = "You have to select a set of fields to access to pass 3.";
                             this.$.message.show();
                             return false;
@@ -892,8 +892,14 @@ Example:
                             return true;
                         }
                     case 3:
-                        this.injectDatalet(this.$.datalet_placeholder_2);
-                        return true;
+                        if(this.paramsFields == undefined){
+                            this.$.message.text = "You have to select a datalet and map the selected fields to datalets fields(by drag and drop) to access to pass 4.";
+                            this.$.message.show();
+                            return false;
+                        }else{
+                            this.injectDatalet(this.$.datalet_placeholder_2);
+                            return true;
+                        }
                 }
 
             },
