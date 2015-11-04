@@ -131,6 +131,16 @@
             transition: 0.2s ease-out;
         }
 
+        .transparent
+        {
+            position:fixed;
+            top:0;
+            left:0;
+            width:100%;
+            height:100%;
+            background-color: rgba(0, 0, 0, 0.4);
+        }
+
     </style>
 
     <template>
@@ -138,6 +148,7 @@
             <neon-animatable><div id="hidden"></div></neon-animatable>
             <neon-animatable>
                 <paper-material elevation="5" id="window" class="window">
+                    <div class="transparent"></div>
                     <paper-toolbar id="toolbar">
                         <search-panel-controllet id="search_from_animated_button_container" left-direction="true"></search-panel-controllet>
                         <paper-fab id="close" mini icon="close" on-click="_onCloseClick"></paper-fab>
@@ -236,8 +247,8 @@
             },
 
             _onOpenClick: function() {
-                this.entryAnimation = 'fade-in-animation';
-                this.exitAnimation  = 'fade-out-animation';
+                /*this.entryAnimation = 'fade-in-animation';
+                this.exitAnimation  = 'fade-out-animation';*/
                 this.selected = 1;
             },
 
