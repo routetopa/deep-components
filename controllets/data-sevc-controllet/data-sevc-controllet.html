@@ -868,6 +868,7 @@ Example:
 
                 switch(next_selected_pass){
                     case 0:
+                        this.$.data_url.value = "";
                         this.$.fields_treeview.setAttribute("json-data", null);
                         this.$.fields_treeview.setAttribute("preselected-fields", null);
                         this.$.fields_treeview.ready();//chrome
