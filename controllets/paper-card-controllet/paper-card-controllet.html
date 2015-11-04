@@ -111,25 +111,25 @@
 
                         <template is="dom-if" if="{{checkType(cardType, 'text')}}">
 
-                            <paper-fab mini icon="create" on-click="_handleDetailsClick"></paper-fab>
+                            <paper-fab id="modify" mini icon="create" on-click="_handleDetailsClick"></paper-fab>
 
                         </template>
 
                         <template is="dom-if" if="{{checkType(cardType, 'image')}}">
 
-                            <paper-fab mini icon="perm-media" on-click="_handleDetailsClick"></paper-fab>
+                            <paper-fab id="modify" mini icon="perm-media" on-click="_handleDetailsClick"></paper-fab>
 
                         </template>
 
                         <template is="dom-if" if="{{checkType(cardType, 'datalet')}}">
 
-                            <paper-fab mini icon="assessment" on-click="_handleDetailsClick"></paper-fab>
+                            <paper-fab id="modify" mini icon="assessment" on-click="_handleDetailsClick"></paper-fab>
 
                         </template>
 
                         <template is="dom-if" if="{{checkType(cardType, 'link')}}">
 
-                            <paper-fab mini icon="link" on-click="_handleDetailsClick"></paper-fab>
+                            <paper-fab id="modify" mini icon="link" on-click="_handleDetailsClick"></paper-fab>
 
                         </template>
 
