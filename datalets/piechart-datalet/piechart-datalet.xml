@@ -1,0 +1,35 @@
+<component>
+<name>piechart-datalet</name>
+<attributes>
+<attribute>
+    <name>data-url</name>
+</attribute>
+<attribute>
+    <name>fields</name>
+</attribute>
+</attributes>
+<idm>
+<inputs>
+    <input>
+        <name>Series</name>
+        <description>The chart series. Its values will be put on slice of  each series.</description>
+        <scale>nominal</scale>
+        <role>domain</role>
+        <selection>11</selection>
+    </input>
+    <input>
+        <name>Size </name>
+        <description>The size for each series to create a concentric rings</description>
+        <scale>nominal</scale>
+        <role>domain</role>
+        <selection>11</selection>
+    </input>
+    <layouts>
+        <input>
+            <name>title</name>
+            <description>The label for the title of the chart</description>
+        </input>
+    </layouts>
+</inputs>
+</idm>
+</component>
