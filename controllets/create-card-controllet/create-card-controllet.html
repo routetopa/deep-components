@@ -123,12 +123,12 @@
                 </div>
 
                 <paper-material animated elevation="2">
-                   <paper-textarea class="custom_textarea" id="title"
+                   <paper-textarea class="custom_textarea" id="cardTitle"
                                                            label=""
                                                            char-counter
                                                            maxlength="30"
                                                            rows="1"
-                                                           value="{{title}}">
+                                                           value="{{cardTitle}}">
 
                    </paper-textarea>
                 </paper-material>
@@ -223,7 +223,7 @@
                     value: "text"
                 },
 
-                title:{
+                cardTitle:{
                     type: String,
                     value: "Title",
                     observer : '_valueChanged'
@@ -269,7 +269,7 @@
                               ' height="300"'         +
                               ' card-type="'+ this.type    + '"' +
                               ' comment="'+ this.comment + '"' +
-                              ' card-title="'+ this.title + '">';
+                              ' card-title="'+ this.cardTitle + '">';
                if(this.type == 'link'){
                    card += '<preview-datalet data-url="'+ this.link + '" url="'+ this.link + '"></preview-datalet>';
                }else{
