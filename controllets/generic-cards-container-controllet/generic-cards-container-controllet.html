@@ -64,7 +64,7 @@ Example:
                 top: 8px;
             }
 
-            .grid
+            .card-grid
             {
                 width: 100%;
                 z-index: 0;
@@ -72,7 +72,7 @@ Example:
                 padding: 5%;
             }
 
-            .grid:after {
+            .card-grid:after {
                 content: '';
                 display: block;
                 clear: both;
@@ -93,14 +93,10 @@ Example:
                 float: left;
             }
 
-            ::content #delete{
-                display: none;
-            }
-
         </style>
 
         <div id="container" class="layout vertical">
-            <div class="grid">
+            <div class="card-grid">
                 <content></content>
             </div>
         </div>

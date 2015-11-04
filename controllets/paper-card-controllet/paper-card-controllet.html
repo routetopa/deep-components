@@ -81,7 +81,7 @@
                 font-family: 'Roboto', sans-serif;
             }
 
-            #delete{
+            .delete{
                 position: absolute;
                 top: -12px;
                 left: -12px;
@@ -96,7 +96,7 @@
 
         <paper-material animated elevation="{{elevation}}" flex>
 
-            <paper-fab id="delete" mini icon="delete" on-click="_handleDeleteClick"></paper-fab>
+            <paper-fab class="delete" mini icon="delete" on-click="_handleDeleteClick"></paper-fab>
 
             <div class="vertical layout">
                 <div id="content">
@@ -111,25 +111,25 @@
 
                         <template is="dom-if" if="{{checkType(cardType, 'text')}}">
 
-                            <paper-fab id="modify" mini icon="create" on-click="_handleDetailsClick"></paper-fab>
+                            <paper-fab class="modify" mini icon="create" on-click="_handleDetailsClick"></paper-fab>
 
                         </template>
 
                         <template is="dom-if" if="{{checkType(cardType, 'image')}}">
 
-                            <paper-fab id="modify" mini icon="perm-media" on-click="_handleDetailsClick"></paper-fab>
+                            <paper-fab class="modify" mini icon="perm-media" on-click="_handleDetailsClick"></paper-fab>
 
                         </template>
 
                         <template is="dom-if" if="{{checkType(cardType, 'datalet')}}">
 
-                            <paper-fab id="modify" mini icon="assessment" on-click="_handleDetailsClick"></paper-fab>
+                            <paper-fab class="modify" mini icon="assessment" on-click="_handleDetailsClick"></paper-fab>
 
                         </template>
 
                         <template is="dom-if" if="{{checkType(cardType, 'link')}}">
 
-                            <paper-fab id="modify" mini icon="link" on-click="_handleDetailsClick"></paper-fab>
+                            <paper-fab class="modify" mini icon="link" on-click="_handleDetailsClick"></paper-fab>
 
                         </template>
 
