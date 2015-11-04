@@ -8,7 +8,6 @@
 <dom-module id="tree-view-controllet">
 
     <style is="custom-style">
-
         --paper-item {
         }
 
@@ -36,7 +35,7 @@
 
         :host{
             --paper-menu-focused-item-after: {
-                opacity: 0;
+                 opacity: 0;
             };
         }
     </style>
@@ -131,7 +130,10 @@
 
             _createTree : function(nodeName, node) {
                 var html = "";
-                if(node.constructor == Object){
+                if(!node){
+                    html = nodeName;
+                }
+                else if(node.constructor == Object){
                     var list  = new Array();
                     for(var child in node)
                         list.push(this._createTree(nodeName+","+child, node[child]));
@@ -237,6 +239,7 @@
             },
 
             _updateSelectedFields : function(e) {
+
                 var menuId = e.target.id;
                 var selectedIds = [];
 
@@ -247,12 +250,22 @@
                         selectedIds.push(id);
                 }
 
-                if(selectedIds.length)
-                    this.selectedFields[menuId] = selectedIds;
+                var prevLength;
+                if(this.selectedFields[menuId])
+                    prevLength = this.selectedFields[menuId].length;
                 else
-                    delete this.selectedFields[menuId];
+                    prevLength = 0;
+                var currLength = selectedIds.length
 
-                this.fire('tree-view-controllet_selected-fields', {fields : this.getFlatFields()});
+                if(prevLength != currLength) {
+
+                    if (selectedIds.length)
+                        this.selectedFields[menuId] = selectedIds;
+                    else
+                        delete this.selectedFields[menuId];
+
+                    this.fire('tree-view-controllet_selected-fields', {fields: this.getFlatFields()});
+                }
             }
 
         });

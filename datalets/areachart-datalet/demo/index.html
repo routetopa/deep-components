@@ -13,8 +13,8 @@
 <script src="https://code.jquery.com/jquery-2.1.4.min.js" type="text/javascript"></script>
 <link rel="import" href="../areachart-datalet.html" />
 
-<areachart-datalet data-url="http://ckan.routetopa.eu/api/action/datastore_search?resource_id=73e02092-85a1-434e-85fe-0c9a43aa9a52&amp;limit=10000"
-                       fields='["result,records,Lat","result,records,Lng"]'></areachart-datalet>
+<areachart-datalet data-url="http://data.iledefrance.fr/api/records/1.0/search?dataset=logement-jeune-2014-2015&facet=departement&facet=ville"
+                       fields='["facet_groups,facets,name","facet_groups,facets,count"]'></areachart-datalet>
 
 </body>
 </html>

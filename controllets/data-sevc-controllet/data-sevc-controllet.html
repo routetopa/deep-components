@@ -175,7 +175,8 @@ Example:
                 {
                     height: 60vh;
                     min-height: 60vh;
-
+                    min-width: 45%;
+                    margin-top:10px;
                 }
 
                 .datalet_right_container
@@ -371,7 +372,7 @@ Example:
                                 <div class="avatar">2</div>
                                 <div class="title flex">
                                     <div id="toolbar_title" class="big">Dataset source</div>
-                                    <div id="toolbar_description" class="small">Copy and paste/drag and drop in the textarea the url of datasource</div>
+                                    <div id="toolbar_description" class="small">Select the fields you want to use for visualization from tree on the right side. The table on the left side will show you the values related to the selected fields.</div>
                                 </div>
                                 <paper-icon-button id="NextButton" class="toolbar_button" on-click="_onNextClick" icon="chevron-right" alt="arrow-forward" title="arrow-forward"></paper-icon-button>
                             </div>
@@ -392,7 +393,7 @@ Example:
 
                     </neon-animatable>
 
-                    <neon-animatable style="height:100vh">
+                    <neon-animatable>
 
                         <div class="vertical justified layout">
 
@@ -401,7 +402,7 @@ Example:
                                 <div class="avatar">3</div>
                                 <div class="title flex">
                                     <div id="toolbar_title" class="big">Data mapping</div>
-                                    <div id="toolbar_description" class="small">Select the visualization from the slider, drag and drop the selected fields in visualization parameter area, customize the visualization if you need</div>
+                                    <div id="toolbar_description" class="small">Select the visualization by clicking on the button(a window will appear with all available visualization).After, drag and drop the selected fields into datalet parameters area. A preview will be shown on the right side.</div>
                                 </div>
                                 <paper-icon-button id="NextButton" class="toolbar_button" on-click="_onNextClick" icon="chevron-right" alt="arrow-forward" title="arrow-forward"></paper-icon-button>
                             </div>
@@ -429,7 +430,7 @@ Example:
                                     </paper-material>
                                 </div>
 
-                                <div id="datalet_placeholder" style="min-width: 45%;margin-top:10px;"></div>
+                                <div id="datalet_placeholder"></div>
 
                             </div>
 
@@ -445,7 +446,7 @@ Example:
                                 <div class="avatar">4</div>
                                 <div class="title flex">
                                     <div id="toolbar_title" class="big">Finalize visualization</div>
-                                    <div id="toolbar_description" class="small">Assign the values for label parameters (e.g. title for you visualization).</div>
+                                    <div id="toolbar_description" class="small">Assign the values for layout parameters (e.g. title for you visualization) and look at the final visualization. You can also add a comment if you are in the private room. </div>
                                 </div>
                                 <paper-icon-button id="finish_button" on-click="_onFinish" icon="add-circle" alt="Conforms the creation" title="finish"></paper-icon-button>
                             </div>
@@ -673,6 +674,19 @@ Example:
                     this.$.data_url.value = this.dataletPreset['data-url'];
                     this.selected = 1;
                 }
+
+                //Fiefox force :O
+                var table_params ={
+                    component   : "datatable-datalet",
+                    params      :{
+                        'data-url' : this.dataUrl
+                    },
+                    fields      : [],
+                    placeHolder : this.$.table_component_place_holder
+                };
+
+                ComponentService.deep_url = this.deepUrl;
+                ComponentService.getComponent(table_params);
             },
             /**
              * Utility function to inject datalet in a placeholder
@@ -720,22 +734,15 @@ Example:
                 }
 
                 if(this.selectedDatalet == undefined)
-                 /* this.$.visualization_slider_area.innerHTML = '<items-slider-controllet items=\'' + JSON.stringify(this.datalets_list) + '\'' +
-                         '\'></items-slider-controllet>';*/
-                this.$.visualization_slider_area.innerHTML = '<animated-button-container-controllet height="70" width="50">' +
-                                                               '<items-list-controllet height="70"' +
-                                                                                     ' width="50"' +
+                this.$.visualization_slider_area.innerHTML = '<animated-button-container-controllet height="300" width="450" icon="assessment" icon-width="64" icon-height="64" background-button-color="#2196F3">' +
+                                                               '<items-list-controllet' +
                                                                                      ' replace-string="-datalet"' +
                                                                                      ' items=\'' + JSON.stringify(this.datalets_list) + '\'>' +
                                                                '</items-list-controllet>' +
                                                             '</animated-button-container-controllet>';
                 else
-                    /*this.$.visualization_slider_area.innerHTML = '<items-slider-controllet items=\'' + JSON.stringify(this.datalets_list) + '\'' +
-                                                                 'selected-card=\'' + this.selectedDatalet + '\'></items-slider-controllet>';*/
-
-                    this.$.visualization_slider_area.innerHTML = '<animated-button-container-controllet height="70" width="50">' +
-                            '<items-list-controllet height="70"' +
-                            ' width="50"' +
+                    this.$.visualization_slider_area.innerHTML = '<animated-button-container-controllet height="300" width="450" icon="assessment" icon-width="64" icon-height="64" background-button-color="#2196F3">' +
+                            '<items-list-controllet' +
                             ' replace-string="-datalet"' +
                             ' selected-card=\'' + this.selectedDatalet + '\'' +
                             ' items=\'' + JSON.stringify(this.datalets_list) + '\'>' +
@@ -975,9 +982,6 @@ Example:
                                                                   '"></draggable-element-controllet><br>';
                  }
 
-                 //firefox stuff -- ???:)) :O
-                 var place_holder = (navigator.userAgent.toLowerCase().indexOf('chrome') > -1) ? this.$.table_component_place_holder : this.$.table_component_place_holder[Object.keys(this.$.table_component_place_holder)[0]];
-
                  var table_params ={
                      component   : "datatable-datalet",
                      params      :{
@@ -989,6 +993,7 @@ Example:
 
                  ComponentService.deep_url = this.deepUrl;
                  ComponentService.getComponent(table_params);
+
 
             },
             /**

@@ -71,8 +71,8 @@ Example:
             }
 
             #container{
-                position: relative;
-                overflow: auto;
+                /*position: relative;
+                overflow: auto;*/
             }
 
             img{
@@ -131,8 +131,6 @@ Example:
         </div>
     </template>
 
-    <script type="text/javascript" src="../shared_js/perfect-scrollbar/js/perfect-scrollbar.jquery.js"></script>
-
     <script>
 
         Polymer({
@@ -164,14 +162,6 @@ Example:
                     type: String,
                     value: undefined
                 },
-                height:{
-                    type: String,
-                    value: "30vh"
-                },
-                width:{
-                    type: String,
-                    value: "30vh"
-                },
                 replaceString:{
                     type: String,
                     vale: undefined
@@ -179,10 +169,6 @@ Example:
             },
 
             ready : function(){
-                this.$.container.style.height = (this.height - (22 * 0.65)) + "vh";
-                //this.$.container.style.width  = this.width + "vw";
-
-                $(this.$.container).perfectScrollbar();
 
                 if(this.selectedCard != undefined){
                     this.fire('items-list-controllet_item-selected', {datalet: this.selectedCard + this.replaceString});
@@ -207,8 +193,8 @@ Example:
                 e.currentTarget.elevation = "5";
                 this.prevSelectedCard = e.currentTarget;
 
-                this.fire('items-list-controllet_item-selected', {datalet: e.currentTarget.id + this.replaceString,
-                                                                  selectedElement: e.currentTarget.cloneNode(true)});
+                this.fire('items-list-controllet_item-selected', {datalet: e.currentTarget.id + this.replaceString});
+                this.fire('animated-button-container-controllet_element-selected', {selectedElement: e.currentTarget.cloneNode(true)});
 
             },
 
