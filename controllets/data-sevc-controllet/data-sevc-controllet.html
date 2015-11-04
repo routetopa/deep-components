@@ -868,10 +868,14 @@ Example:
 
                 switch(next_selected_pass){
                     case 0:
+                        this.$.fields_treeview.setAttribute("json-data", null);
+                        this.$.fields_treeview.setAttribute("preselected-fields", null);
+                        this.$.fields_treeview.ready();//chrome
                         return true;
                     case 1:
-                        if(this.$.data_url.value == undefined){
-                            this.$.message.text = "You have to select a dataset to access to pass 2.";
+                        var x = this.$.fields_treeview.getAttribute("json-data");
+                        if(this.$.data_url.value == undefined || this.$.fields_treeview.getAttribute('json-data') == "null" || this.$.fields_treeview.getAttribute('json-data') == null){
+                            this.$.message.text = "You have to select a dataset to access to pass 2. It's possible that the data you selected are not available.";
                             this.$.message.show();
                             return false;
                         }else{
