@@ -52,7 +52,7 @@
             z-index: 1001;
         }
 
-        #open{
+        #open_window_button{
             --paper-fab-background:transparent;
             background: transparent;
         }
@@ -160,7 +160,7 @@
 
         <div id="button_container" class="horizontal layout">
            <span class="button-container" id="open" on-click="_onOpenClick">
-              <iron-icon id="button" icon="{{icon}}"></iron-icon>
+              <iron-icon id="open_window_button" icon="{{icon}}"></iron-icon>
            </span>
            <div id="selected_item"></div>
         </div>
@@ -178,7 +178,8 @@
             listeners:{
                 'animated-button-container-controllet_element-selected' : '_elementSelected',
                 'search-panel-controllet_content-changed' : '_handleSearch',
-                'animated-button-container-controllet_close' : '_onCloseClick'
+                'animated-button-container-controllet_close' : '_onCloseClick',
+                'animated-button-container-controllet_open-window' : '_onOpenClick'
             },
 
             properties: {
