@@ -64,7 +64,7 @@ Example:
                 top: 8px;
             }
 
-            .card-grid
+            .card_grid
             {
                 width: 100%;
                 z-index: 0;
@@ -72,39 +72,41 @@ Example:
                 padding: 5%;
             }
 
-            .card-grid:after {
+            .card_grid:after {
                 content: '';
                 display: block;
                 clear: both;
             }
 
             ::content .card{
-               /* ms-transform: scale(0.80);
-                -moz-transform: scale(0.80);
-                -o-transform: scale(0.80);
-                -webkit-transform: scale(0.80);
-                transform: scale(0.80);
-                -ms-transform-origin: 0 0;
-                -moz-transform-origin: 0 0;
-                -o-transform-origin: 0 0;
-                -webkit-transform-origin: 0 0;
-                transform-origin: 0 0;*/
                 margin: 10px;
                 float: left;
             }
 
-            ::content .card-grid .fullscreen{
+            ::content .card_grid .fullscreen{
                 display: none;
             }
 
-            ::content .card-grid .delete{
+            ::content .card_grid .delete{
                 display: none;
+            }
+
+            ::content .empty{
+                position: absolute;
+                right: 0;
+                left: 27%;
+                top: 40%;
+                margin-right: auto;
+                margin-left: auto;
+                font-family: 'Roboto', sans-serif;
+                font-weight: 500;
+                font-size: large;
             }
 
         </style>
 
         <div id="container" class="layout vertical">
-            <div class="card-grid">
+            <div class="card_grid" id="card_grid">
                 <content></content>
             </div>
         </div>
@@ -138,6 +140,12 @@ Example:
             ready : function(){
                 var _this = this;
                 var cards = document.querySelectorAll('paper-card-controllet');
+
+                if(cards.length == 0){
+
+                   this.$.card_grid.innerHTML += "<div class='empty'>There is nothing to show.</div>";
+                }
+
                 for(var i = 0; i < cards.length; i++){
                     cards[i].addEventListener('click', function(e){
                        _this._cardClick(e)
