@@ -226,29 +226,6 @@ Example:
                     overflow: auto;
                 }
 
-                paper-tabs, paper-toolbar
-                {
-                    background-color:  var(--paper-blue-500);
-                    color: #ffffff;
-                    box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.2);
-                }
-
-                paper-toolbar paper-tabs
-                {
-                    box-shadow: none;
-                    --paper-tabs-selection-bar-color : var(--google-gray-500);
-                }
-
-                paper-tabs[noink][no-bar] paper-tab.iron-selected
-                {
-                    background-color: var(--google-gray-500);
-                }
-
-                paper-tabs[align-bottom]
-                {
-                    box-shadow: 0px -2px 6px rgba(0, 0, 0, 0.15);
-                }
-
                 #idm_fields_main_container{
                     position: relative;
                     height: 60vh;
@@ -282,6 +259,28 @@ Example:
                     padding : 30px;
                 }
 
+                 paper-tabs, paper-toolbar
+                 {
+                     background-color:  var(--paper-blue-500);
+                     color: #ffffff;
+                     box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.2);
+                     --paper-tabs-selection-bar-color: var(--google-gray-500);
+                 }
+
+                 paper-toolbar paper-tabs
+                 {
+                     box-shadow: none;
+                 }
+
+                 paper-tabs[noink][no-bar] paper-tab.iron-selected
+                 {
+                     background-color: var(--google-gray-500);
+                 }
+
+                 paper-tabs[align-bottom]
+                 {
+                     box-shadow: 0px -2px 6px rgba(0, 0, 0, 0.15);
+                 }
             </style>
 
             <iron-ajax
