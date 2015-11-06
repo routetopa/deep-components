@@ -39,7 +39,7 @@
                 height: 50px;
                 padding: 0 16px;
                 left: 0; right: 0;
-                z-index: 1;
+                z-index: 1000;
                 word-wrap: break-word;
             }
             paper-fab {
@@ -113,7 +113,7 @@
                 top: 5%;
                 margin-right: auto;
                 margin-left: auto;
-                z-index: 1000;
+                z-index: 1100;
                 display: none;
                 padding: 40px;
                 line-height: 20px;
@@ -277,11 +277,18 @@
                         return;
                 }
 
+                var html = this.$.content.innerHTML;
+                this.$.content.innerHTML = "";
+                this.$.fullscreen_content.innerHTML = html;
+
                 this.$.fullscreen_container.style.display = "inline-block";
-                this.$.fullscreen_content.innerHTML = this.$.content.innerHTML;
             },
 
             _handleCloseFullscreenClick: function(e){
+
+                var html = this.$.fullscreen_content.innerHTML;
+                this.$.fullscreen_content.innerHTML = "";
+                this.$.content.innerHTML = html;
 
                 this.$.fullscreen_container.style.display = "none";
             }
