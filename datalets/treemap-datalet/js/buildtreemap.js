@@ -3,7 +3,7 @@
  */
 
 function build(root, place_holder) {
-    var plwidth = $("#" + place_holder).width(),
+    var plwidth  = $("#" + place_holder).width(),
         plheight = $("#" + place_holder).height();
 
     var margin = {top: 20, right: 0, bottom: 0, left: 0},
