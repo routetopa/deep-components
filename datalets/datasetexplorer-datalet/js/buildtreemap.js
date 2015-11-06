@@ -59,16 +59,6 @@ function build(root, place_holder) {
     layout(root);
     display(root);
 
-    function interpolate(min, max, value) {
-        var colors = ["#9e0142","#d53e4f","#f46d43","#fdae61","#fee08b","#ffffbf","#e6f598","#abdda4","#66c2a5","#3288bd","#5e4fa2"];
-        var ratio = value / (max - 1 - min) * Math.max(colors.length - 1, 1);
-        var infI = Math.floor(ratio);
-        var supI = Math.ceil(ratio);
-        var subratio = supI == infI ? 0 : (ratio - infI) / (supI - infI);
-        var color = d3.interpolateHsl( colors[infI], colors[supI] )( subratio );
-        return color;
-    }
-
     function initialize(root) {
         root.x = root.y = 0;
         root.dx = width;
@@ -82,7 +72,7 @@ function build(root, place_holder) {
     // the children being overwritten when when layout is computed.
     function accumulate(d) {
         return (d._children = d.children)
-            ? d.value = d.children.reduce(function(p, v) { return p + accumulate(v); }, 0)
+            ? d.value = d.children.reduce(function(p, v) { return p + accumulate(v); }, 5)
             : d.value;
     }
 
@@ -105,8 +95,9 @@ function build(root, place_holder) {
                 c.parent = d;
                 c.depth = d.depth + 1;
                 c.color = c.depth < 2
-                        ? interpolate(0, d._children.length, i++)
-                        : d3.rgb(d.color).brighter(.5);
+                        ? d3.scale.ordinal().domain(d3.range(d._children.length)).range(["#8dd3c7","#ffffb3","#bebada","#fb8072","#80b1d3","#fdb462","#b3de69","#fccde5","#d9d9d9","#bc80bd","#ccebc5","#ffed6f"])(i++)
+                        //? interpolate(0, d._children.length, i++)
+                        : d.color; //d3.rgb(d.color).brighter(.5);
                 layout(c);
             });
         }
@@ -141,12 +132,14 @@ function build(root, place_holder) {
             .attr("class", "parent")
             .call(rect)
             .append("title")
-            .text(function(d) { return formatNumber(d.value); });
+            .text(function(d) { return d.name;  /*formatNumber(d.value);*/ });
 
         g.append("text")
             .attr("dy", ".75em")
             .text(function(d) { return (d._children) ? d.name : ''; })
-            .call(text);
+            //.style("font-size", function(d) { return Math.min(16, (d.dx - 8) / this.getComputedTextLength() * 16) + "px"; })
+            .call(text)
+            ;
 
         function transition(d) {
             if (transitioning || !d) return;
@@ -192,8 +185,6 @@ function build(root, place_holder) {
         if (!d._children[0]._children) {
             var dataurl = d._children[0].name;
             var pageurl = dataurl.replace(/\/download\/.*/, '');
-console.log(dataurl);
-console.log(pageurl);
             dataletContainer = svg
                 .append("foreignObject")
                 .attr("width", 480)
@@ -206,11 +197,10 @@ console.log(pageurl);
         return g;
     }
 
-
-
     function text(text) {
         text.attr("x", function(d) { return x(d.x) + 6; })
-            .attr("y", function(d) { return y(d.y) + 6; });
+            .attr("y", function(d) { return y(d.y) + 6; })
+            ;
     }
 
     function rect(rect) {
