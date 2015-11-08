@@ -2,7 +2,7 @@
 @license
     The MIT License (MIT)
 
-    Copyright (c) 2015 Dipartimento di Informatica - Università di Salerno - Italy
+    Copyright (c) 2015 Dipartimento di Informatica - Universitï¿½ di Salerno - Italy
 
     Permission is hereby granted, free of charge, to any person obtaining a copy
     of this software and associated documentation files (the "Software"), to deal
@@ -55,21 +55,35 @@ Example :
 <dom-module id="base-datalet">
     <template>
         <style>
-            #footer {
-                position: relative;
-                bottom: 0;
-                width: 100%;
+            #base_datalet_container {
+                font-family: 'Roboto', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+                padding: 16px;
+            }
+            #base_datalet_rtp {
+                display: flex;
+                padding-top: 8px;
+            }
+            #rtp{
+                padding-top: 8px;
+                padding-right: 8px;
                 font-size: small;
             }
-
             #rtpalogo{
-                height:30px;
-                width: 30px;
+                height:32px;
+                width: 32px;
             }
         </style>
 
-        <b>Source : </b><span id="domain"></span><br><br>
-        <div id="footer">Powered by Route-to-PA&nbsp&nbsp<a href="http://routetopa.eu/"><img src="static/images/rtpalogo.png" id="rtpalogo"></a></div><br>
+        <div id="base_datalet_container">
+            <b>Source: </b><span id="domain"></span>
+            <div id="base_datalet_rtp">
+                <div id="rtp">Powered by Route-to-PA</div>
+                <div><a href="http://routetopa.eu/"><img id="rtpalogo" src="static/images/rtpalogo.png"></a></div>
+            </div>
+        </div>
+
+        <!--<b>Source : </b><span id="domain"></span><br><br>-->
+        <!--<div id="footer">Powered by Route-to-PA&nbsp&nbsp<a href="http://routetopa.eu/"><img src="static/images/rtpalogo.png" id="rtpalogo"></a></div><br>-->
     </template>
 
     <script src="static/js/BaseDataletBehavior.js"></script>
@@ -80,7 +94,7 @@ Example :
             is: 'base-datalet',
 
             /**
-             * It is called after the element’s template has been stamped and all elements inside the element’s local
+             * It is called after the elementï¿½s template has been stamped and all elements inside the elementï¿½s local
              * DOM have been configured (with values bound from parents, deserialized attributes, or else default values)
              * and had their ready method called.
              *
