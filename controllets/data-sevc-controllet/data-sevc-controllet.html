@@ -888,6 +888,8 @@ Example:
                             this.$.message.show();
                             return false;
                         }else{
+                            this.$.datalet_placeholder_2.innerHTML = "";
+                            if(this.selectedDatalet != undefined) this.injectDatalet(this.$.datalet_placeholder);
                             return true;
                         }
                     case 3:
@@ -896,6 +898,7 @@ Example:
                             this.$.message.show();
                             return false;
                         }else{
+                            this.$.datalet_placeholder.innerHTML = "";
                             this.injectDatalet(this.$.datalet_placeholder_2);
                             return true;
                         }
@@ -1028,6 +1031,7 @@ Example:
             _textElementChanged : function(e){
                 if(this.selected == 3) {
                     this.generateDataletPreview();
+                    this.$.datalet_placeholder.innerHTML = "";
                     this.injectDatalet(this.$.datalet_placeholder_2);
                 }
             },
@@ -1062,7 +1066,7 @@ Example:
                     fields :  this.selectedFields,
                     datalet : this.selectedDatalet,
                     comment : this.$.commentArea.value,
-                    staticData : JSON.stringify(this.$.datalet_placeholder.children[1].behavior.data)
+                    staticData : JSON.stringify(this.$.datalet_placeholder_2.children[1].behavior.data)
                 }
 
                 this.fire('data-sevc-controllet.dataletCreated', {data : data});

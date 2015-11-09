@@ -3,12 +3,10 @@
  */
 
 function build(root, place_holder) {
-    var plwidth = $("#" + place_holder).width(),
-        plheight = $("#" + place_holder).height();
+        var plwidth  = $(place_holder).width();
+        var plheight = $(place_holder).height();
 
     var margin = {top: 20, right: 0, bottom: 0, left: 0},
-        //width = 960,
-        //height = 500 - margin.top - margin.bottom,
         width  = plwidth,
         height =  plheight - margin.top - margin.bottom,
         formatNumber = d3.format(",d"),
@@ -28,7 +26,7 @@ function build(root, place_holder) {
         .ratio(height / width * 0.5 * (1 + Math.sqrt(5)))
         .round(false);
 
-    var svg = d3.select("#" + place_holder).append("svg")
+    var svg = d3.select(place_holder).append("svg")
         .attr("width", width + margin.left + margin.right)
         .attr("height", height + margin.bottom + margin.top)
         .style("margin-left", -margin.left + "px")
