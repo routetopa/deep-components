@@ -12,6 +12,7 @@
         }
 
         paper-item {
+            font-family: 'Roboto', 'Helvetica Neue', Helvetica, Arial, sans-serif;
             cursor: pointer;
         }
 
@@ -185,27 +186,17 @@
             _preselectFields : function() {
                 if (this.preselectedFields){
                     for(var field in this.preselectedFields){
-                        var path = this.preselectedFields[field];
+                        var fieldId = this.preselectedFields[field];
 
-                        if (path.lastIndexOf(",") != -1)
-                            path = path.substring(0, path.lastIndexOf(","));
-                        else
-                            path = this.rootName;
+                        var menuId = this.rootName;
+                        if (fieldId.lastIndexOf(",") != -1)
+                            menuId = fieldId.substring(0, fieldId.lastIndexOf(","));
 
-                        var menu = document.getElementById(path);
-                        var item = document.getElementById(this.preselectedFields[field]);
-                        var index = menu.items.indexOf(item);
+                        var menu = document.getElementById(menuId);
+                        var field = document.getElementById(fieldId);
+                        var index = menu.items.indexOf(field);
 
-                        if (menu.selectedValues == undefined){
-                            menu.selectedValues = [index];
-                        }
-                        else{
-                            var selectedValues = [];
-                            for (var i in menu.selectedValues)
-                                selectedValues.push(menu.selectedValues[i]);
-                            selectedValues.push(index);
-                            menu.selectedValues = selectedValues;
-                        }
+                        menu.select(index);
                     }
                 }
             },

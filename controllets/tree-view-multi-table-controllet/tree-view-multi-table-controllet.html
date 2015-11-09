@@ -1,0 +1,113 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html" />
+
+<link rel="import" href="../../bower_components/paper-material/paper-material.html" />
+
+<link rel="import" href="../tree-view-controllet/tree-view-controllet.html" />
+<link rel="import" href="../multi-table-controllet/multi-table-controllet.html" />
+
+<script src="../shared_js/perfect-scrollbar/js/min/perfect-scrollbar.jquery.min.js"></script>
+<link rel="stylesheet" href="../shared_js/perfect-scrollbar/css/perfect-scrollbar.min.css">
+
+
+<dom-module id="tree-view-multi-table-controllet">
+
+    <style is="custom-style">
+        .div_container {
+            display: flex;
+            flex-direction: row;
+        }
+        #material_tree_view {
+            position: relative;
+            width: 25%;
+            min-width: 200px;
+            height: 100vh;
+        }
+        #material_multi_table {
+            position: relative;
+            width: 75%;
+
+            margin-left: 64px;
+            margin-top: 8px;
+        }
+    </style>
+
+    <template>
+
+        <div class="div_container">
+            <paper-material id="material_tree_view" elevation="5">
+                <tree-view-controllet id="tree_view" root-name={{rootName}} opened-path={{openedPath}} preselected-fields={{preselectedFields}}></tree-view-controllet>
+            </paper-material>
+            <paper-material id="material_multi_table" elevation="5">
+                <multi-table-controllet id="multi_table" data-url={{dataUrl}}></multi-table-controllet>
+            </paper-material>
+        </div>
+
+    </template>
+
+    <script>
+        Polymer({
+
+            is : 'tree-view-multi-table-controllet',
+
+            properties : {
+
+                rootName : {
+                    type  : String,
+                    value : "root"
+                },
+
+                preselectedFields : {
+                    type : Array,
+                    value : []
+                },
+
+                openedPath : {
+                    type : String,
+                    value : undefined
+                },
+
+                dataUrl : {
+                    type  : String,
+                    value : undefined
+                }
+
+            },
+
+            listeners: {
+                'tree-view-controllet_selected-fields': '_updateSelectedFields'
+            },
+
+            ready : function() {
+                var tree = document.getElementById('tree_view');
+
+                $.ajax({
+                    url: this.dataUrl,
+                    dataType: "json",
+                    success: function(data){
+                        tree.setAttribute("json-data", JSON.stringify(data));
+                        tree.ready();
+                    }
+                });
+
+                $(this.$.material_tree_view).perfectScrollbar();
+                $(this.$.material_multi_table).perfectScrollbar();
+            },
+
+            getFields : function() {
+                return this.$.tree_view.getFields();
+            },
+
+            getFlatFields : function() {
+                return this.$.tree_view.getFlatFields();
+            },
+
+            _updateSelectedFields : function() {
+                var fields = this.$.tree_view.getFields();
+                this.$.multi_table.setSelectedFields(fields);
+            },
+
+        });
+
+    </script>
+
+</dom-module>
