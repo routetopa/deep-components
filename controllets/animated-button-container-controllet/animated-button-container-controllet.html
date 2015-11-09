@@ -27,10 +27,11 @@
         }
 
         .window {
+            display: none;
             position: fixed;
             right: 0;
             left: 0;
-            top: 25%;
+            top: 20%;
             margin-right: auto;
             margin-left: auto;
             z-index: 1000;
@@ -144,9 +145,9 @@
     </style>
 
     <template>
-        <neon-animated-pages id="pages" selected="[[selected]]" entry-animation="[[entryAnimation]]" exit-animation="[[exitAnimation]]">
+        <!--<neon-animated-pages id="pages" selected="[[selected]]" entry-animation="[[entryAnimation]]" exit-animation="[[exitAnimation]]">
             <neon-animatable><div id="hidden"></div></neon-animatable>
-            <neon-animatable>
+            <neon-animatable>-->
                 <paper-material elevation="5" id="window" class="window">
                     <div class="transparent"></div>
                     <paper-toolbar id="toolbar">
@@ -155,12 +156,12 @@
                     </paper-toolbar>
                    <div id="container_content"><content></content></div>
                 </paper-material>
-            </neon-animatable>
-        </neon-animated-pages>
+            <!--</neon-animatable>
+        </neon-animated-pages>-->
 
         <div id="button_container" class="horizontal layout">
            <span class="button-container" id="open" on-click="_onOpenClick">
-              <iron-icon id="button" icon="{{icon}}"></iron-icon>
+              <iron-icon id="open_window_button" icon="{{icon}}"></iron-icon>
            </span>
            <div id="selected_item"></div>
         </div>
@@ -178,7 +179,8 @@
             listeners:{
                 'animated-button-container-controllet_element-selected' : '_elementSelected',
                 'search-panel-controllet_content-changed' : '_handleSearch',
-                'animated-button-container-controllet_close' : '_onCloseClick'
+                'animated-button-container-controllet_close' : '_onCloseClick',
+                'animated-button-container-controllet_open-window' : '_onOpenClick'
             },
 
             properties: {
@@ -239,22 +241,24 @@
 
                 this.$.open.style.height             = this.iconHeight + "px";
                 this.$.open.style.width              = this.iconWidth  + "px";
-                this.$.open.style.backgroundColor    = this.backgroundButtonColor;
-                this.$.button.style.width            = this.iconWidth  + "px";
-                this.$.button.style.height           = this.iconHeight + "px";
+                this.$.open_window_button.style.backgroundColor    = this.backgroundButtonColor;
+                this.$.open_window_button.style.width            = this.iconWidth  + "px";
+                this.$.open_window_button.style.height           = this.iconHeight + "px";
                 this.$.button_container.style.height = this.iconHeight + "px";
             },
 
             _onOpenClick: function() {
-                this.entryAnimation = 'fade-in-animation';
-                this.exitAnimation  = 'fade-out-animation';
-                this.selected = 1;
+                /*this.entryAnimation = 'fade-in-animation';
+                this.exitAnimation  = 'fade-out-animation';*/
+                //this.selected = 1;
+                $(this.$.window).show();
             },
 
             _onCloseClick: function(){
                 /*this.entryAnimation = 'fade-out-animation';
                 this.exitAnimation  = 'fade-in-animation';*/
-                this.selected = 0;
+                //this.selected = 0;
+                $(this.$.window).hide();
             },
 
             _elementSelected: function(e){

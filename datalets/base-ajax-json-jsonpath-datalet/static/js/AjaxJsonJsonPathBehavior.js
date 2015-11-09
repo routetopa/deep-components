@@ -82,11 +82,13 @@ var AjaxJsonJsonPathBehavior = {
      */
     isFieldArray : function(field){
        if(field.length == 0) return false;
+
        var obj = this.properties.json_results.value[field[0]];
        for(var i=1; i < field.length; i++){
           obj = (obj.constructor == Array) ? obj[0][field[i]] : obj[field[i]];
        }
 
+       if(obj == null) return false;
        return (obj.constructor === Array && obj[0].constructor == Object) ? true : false;
     },
 

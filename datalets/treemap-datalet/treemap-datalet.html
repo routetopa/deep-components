@@ -142,7 +142,7 @@ Example:
                 this.map.children = [];
 
                 for(var i = 0; i < treemapData.length; i++){
-                    this.checkAggragationField(treemapData[i], this._component.fields.length , this._component.fields.length - 1);
+                    this.checkAggragationField(treemapData[i], this.data.length , this.data.length - 1);
                 }
 
                 var json = JSON.stringify(this.map);
@@ -178,7 +178,8 @@ Example:
             },
 
             presentData: function(){
-                build(this.map, "treemap_placeholder");
+                //build(this.map, "treemap_placeholder");
+                build(this.map, this._component.$.treemap_placeholder);
             }
         };
 
