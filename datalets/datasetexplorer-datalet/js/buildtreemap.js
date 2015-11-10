@@ -96,8 +96,7 @@ function build(root, place_holder) {
                 c.depth = d.depth + 1;
                 c.color = c.depth < 2
                         ? d3.scale.ordinal().domain(d3.range(d._children.length)).range(["#8dd3c7","#ffffb3","#bebada","#fb8072","#80b1d3","#fdb462","#b3de69","#fccde5","#d9d9d9","#bc80bd","#ccebc5","#ffed6f"])(i++)
-                        //? interpolate(0, d._children.length, i++)
-                        : d.color; //d3.rgb(d.color).brighter(.5);
+                        : d.color;
                 layout(c);
             });
         }
@@ -137,7 +136,6 @@ function build(root, place_holder) {
         g.append("text")
             .attr("dy", ".75em")
             .text(function(d) { return (d._children) ? d.name : ''; })
-            //.style("font-size", function(d) { return Math.min(16, (d.dx - 8) / this.getComputedTextLength() * 16) + "px"; })
             .call(text)
             ;
 
@@ -146,8 +144,6 @@ function build(root, place_holder) {
             transitioning = true;
 
             if (dataletContainer) {
-                //svg.select("foreignObject")
-                //svg.remove(dataletContainer);
                 dataletContainer.remove();
                 dataletContainer = null;
             }
@@ -187,8 +183,8 @@ function build(root, place_holder) {
             var pageurl = dataurl.replace(/\/download\/.*/, '');
             dataletContainer = svg
                 .append("foreignObject")
-                .attr("width", 480)
-                .attr("height", 500)
+                .attr("width", root.dx)
+                .attr("height", root.dy - root.y)
                     .append("xhtml:body")
                     .html('<iframe src="'+pageurl+'" width="'+root.dx+'" height="'+root.dy+'"></iframe>');
 

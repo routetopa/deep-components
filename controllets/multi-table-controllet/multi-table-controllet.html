@@ -1,0 +1,168 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html" />
+
+<link rel="import" href="../../bower_components/paper-tabs/paper-tabs.html">
+<link rel="import" href="../../bower_components/paper-tabs/paper-tab.html">
+
+<link rel="import" href="../../bower_components/neon-animation/neon-animation.html">
+<link rel="import" href="../../bower_components/neon-animation/neon-animatable.html">
+<link rel="import" href="../../bower_components/neon-animation/neon-animations.html">
+
+<link rel="import" href="../../datalets/dynamic-datatable-datalet/datatable-datalet.html" />
+
+<dom-module id="multi-table-controllet">
+
+    <template>
+
+        <style is="custom-style">
+            paper-tabs{
+                font-family: 'Roboto', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+                font-size: 16px;
+                font-weight: bold;
+                --paper-tabs-selection-bar-color: #2196F3;
+            }
+
+            paper-tab{
+                transition: all 1.0s;
+            }
+
+            paper-tab.iron-selected{
+                background-color: #B6B6B6;
+            }
+
+            paper-tab:hover{
+                color: #2196F3;
+            }
+        </style>
+
+        <paper-tabs selected="{{selected}}">
+            <template id="dom-tabs" is="dom-repeat" items="{{_toArrayTabs(selectedFields)}}">
+                <paper-tab noink>{{item.name}}</paper-tab>
+            </template>
+        </paper-tabs>
+
+        <neon-animated-pages selected="{{selected}}" entry-animation="fade-in-animation" exit-animation="fade-out-animation">
+            <template id="dom-pages" is="dom-repeat" items="{{_toArrayPages(selectedFields)}}">
+                <neon-animatable>
+                        <dynamic-datatable-datalet id="{{item.name}}" data-url={{dataUrl}} fields$='{{_getFields(item.value)}}'></dynamic-datatable-datalet>
+                </neon-animatable>
+            </template>
+
+        </neon-animated-pages>
+
+    </template>
+
+    <script>
+
+        Polymer({
+
+            is : 'multi-table-controllet',
+
+            properties : {
+
+                selected : {
+                    type  : Number,
+                    value : undefined
+                },
+
+                selectedFields : {
+                    type  : Array,
+                    value : undefined
+                },
+
+                dataUrl : {
+                    type  : String,
+                    value : undefined
+                },
+
+                toSelect : {
+                    type  : Number,
+                    value : undefined
+                }
+
+            },
+
+            listeners: {
+                'dom-change': '_onDomChange'
+            },
+
+            setSelectedFields : function(selectedFields) {
+                this.toSelect = this._calculateSelected(this.selectedFields, selectedFields);
+                this.selectedFields = this._copy(selectedFields);
+            },
+
+            _calculateSelected : function(preselectedFields, selectedFields) {
+                if(!preselectedFields)
+                    return 0;//new multi-table
+                if(Object.keys(selectedFields).length == 0)
+                    return 0;//no fields
+
+                for(var key in selectedFields){
+                    if(!preselectedFields[key])
+                        return Object.keys(selectedFields).indexOf(key);//new field
+
+                    if(JSON.stringify(selectedFields[key]) != JSON.stringify(preselectedFields[key]))
+                        return Object.keys(selectedFields).indexOf(key);//modified field
+                }
+
+                //removed field
+                if(this.selected == 0){
+                    this.selected = 1;
+                    return 0;
+                }
+
+                /******** optional ********/
+
+                var removedIndex;
+                for(var key in preselectedFields){
+                    if(!selectedFields[key]){
+//                        if(Object.keys(preselectedFields).indexOf(key) != 0)
+                            removedIndex = Object.keys(preselectedFields).indexOf(key);//
+                    }
+                }
+
+                //'select the selected' (index changed after remove)
+                if(removedIndex <= this.selected){
+                    return this.selected - 1;
+                }
+                else{
+                    this.selected = this.selected + 1;
+                    return this.selected -1;
+                }
+            },
+
+            _copy : function(o) {//non necessario
+                var out, v, key;
+                out = Array.isArray(o) ? [] : {};
+                for (key in o) {
+                    v = o[key];
+                    out[key] = (typeof v === "object") ? this._copy(v) : v;
+                }
+                return out;
+            },
+
+            _onDomChange : function(e) {
+                if (e.target.id == "dom-pages")
+                    this.async(function () {this.selected = this.toSelect;}, 0);
+            },
+
+            _toArrayTabs: function(obj) {
+                return Object.keys(obj).map(function(key) {
+                    return {name: key.replace(/,/g, " / "), value: obj[key]};
+                });
+            },
+
+            _toArrayPages: function(obj) {
+                return Object.keys(obj).map(function(key) {
+                    return {name: key, value: obj[key]};
+                });
+            },
+
+            _getFields: function(value) {
+                return value;
+            }
+
+        });
+
+    </script>
+
+</dom-module>
