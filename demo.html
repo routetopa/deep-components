@@ -12,7 +12,8 @@
     <link rel="import" href="bower_components/iron-flex-layout/iron-flex-layout.html">
     <link rel="import" href="bower_components/iron-ajax/iron-ajax.html">
 
-    <link rel="import" href="controllets/items-slider-controllet/items-slider-controllet.html">
+    <link rel="import" href="controllets/animated-button-container-controllet/animated-button-container-controllet.html">
+    <link rel="import" href="controllets/items-list-controllet/item-list-controllet.html">
     <link rel="import" href="controllets/draggable-element-controllet/draggable-element-controllet.html">
     <link rel="import" href="controllets/treeview-controllet/treeview-controllet.html">
     <link rel="import" href="controllets/text-element-controllet/text-element-controllet.html">
@@ -34,7 +35,7 @@
 
         $(document).ready(function () {
             window.addEventListener("treeview-controllet_fileds-selected", DEEP._fieldsSelected, false);
-            window.addEventListener("items-slider-controllet_item-selected", DEEP._dataletSelected, false);
+            window.addEventListener("items-list-controllet_item-selected", DEEP._dataletSelected, false);
             window.addEventListener("draggable-element-controllet_content-dragged", DEEP._fieldsMapped, false);
             window.addEventListener("text-element-controllet_content-changed", DEEP._textElementChanged, false);
 
@@ -93,8 +94,7 @@
         #visualization_slider_area
         {
             min-width: 566px;
-            min-height: 200px;
-            height: 175px;
+            height: 100px;
         }
         .content-card {
             position: relative;
@@ -264,8 +264,8 @@
 
     //DEEP.deepUrl = "http://deep.routetopa.eu/DEEP/";
     //DEEP.datasetsList = "http://deep.routetopa.eu/DEEP/datalets-list";
-    DEEP.deepUrl = "http://192.168.186.137/DEEalerProvider/DEEP/";
-    DEEP.datasetsList = "http://192.168.186.137/DEEalerProvider/DEEP/datalets-list";
+    DEEP.deepUrl = "http://192.168.164.128/DatalEts-Ecosystem-Provider/DEEP/";
+    DEEP.datasetsList = "http://192.168.164.128/DatalEts-Ecosystem-Provider/DEEP/datalets-list";
 
     DEEP.Datasets = {
         names:[
@@ -308,6 +308,8 @@
         ]
     };
 
+    DEEP.selected_fields = undefined;
+
     DEEP.handleResponseData = function(e){
         DEEP.$.fields_treeview.init(e.detail.response);
         $("#fields_placeholder").perfectScrollbar();
@@ -324,8 +326,12 @@
             DEEP.datalets_list.push(datalet_info);
         }
 
-        DEEP.$.visualization_slider_area.innerHTML = '<items-slider-controllet items=\'' + JSON.stringify(DEEP.datalets_list) + '\'' +
-                '\'></items-slider-controllet>';
+        DEEP.$.visualization_slider_area.innerHTML = '<animated-button-container-controllet height="300" width="450" icon="assessment" icon-width="64" icon-height="64" background-button-color="#2196F3">' +
+                                                         '<items-list-controllet' +
+                                                         ' replace-string="-datalet"' +
+                                                         ' items=\'' + JSON.stringify(DEEP.datalets_list) + '\'>' +
+                                                         '</items-list-controllet>' +
+                                                     '</animated-button-container-controllet>';
     };
 
     DEEP.handleSelectedDatalet = function(e){
@@ -334,33 +340,66 @@
         DEEP.$.datalet_idm_fields_container.innerHTML = "";
         DEEP.$.idm_layout_container.innerHTML = "";
 
+        var input;
+        var layouts = jQuery.extend(true, {}, response.idm.inputs.layouts);
+
         if(response.idm.inputs.input.constructor == Object) {
-            var input = response.idm.inputs.input;
-            if(input.selection == "*") {
-                var input_selected_fields = Polymer.dom(DEEP.$.selected_fields_container).querySelectorAll('draggable-element-controllet');
-                for (var j = 0; j < input_selected_fields.length; j++) {
-                    DEEP.$.datalet_idm_fields_container.innerHTML += '<draggable-element-controllet is-target="true" heading="Field ' + (j + 1) + '"  description="' + input.description + '" number="' + (j + 1) + '"></draggable-element-controllet><br>';
+            if(response.idm.inputs.input.selection == "*")
+            {
+                var fields = this.$.selectedFields_container.querySelectorAll('draggable-element-controllet');
+                input = response.idm.inputs.input;
+                response.idm.inputs.input = new Array();
+                for(var i=0;i<fields.length;i++){
+                    var newInput = jQuery.extend(true, {}, input);
+                    newInput.name = input.name + ' ' + (i + 1);
+                    response.idm.inputs.input.push(newInput);
                 }
-            }
-        }else{
-            for(var i =0; i < response.idm.inputs.input.length; i++){
-                var input = response.idm.inputs.input[i];
-                DEEP.$.datalet_idm_fields_container.innerHTML += '<draggable-element-controllet is-target="true" id="' + input.name + '" heading="' + input.name + '"  description="' + input.description + '" number="' + (i + 1) + '"></draggable-element-controllet><br>';
             }
         }
 
-        if(response.idm.inputs.layouts.input.constructor == Object) {
-            var input = response.idm.inputs.layouts.input;
-            DEEP.$.idm_layout_container.innerHTML += '<text-element-controllet heading="' + input.name + '" description="' + input.description + '" number="1"></text-element-controllet>';
-        }else{
-            for(var i =0; i < response.idm.inputs.layouts.input.length; i++){
-                var input = response.idm.inputs.layouts.input[i];
-                DEEP.$.idm_layout_container.innerHTML += '<text-element-controllet heading="' + input.name + '" ' +
-                        'description="' + input.description + '" ' +
-                        'number="' + (i+1) + '">' +
-                        '</text-element-controllet>';
+        var heading;
+        var id;
+
+        for(var i =0; i < response.idm.inputs.input.length; i++) {
+            var html = '<draggable-element-controllet is-target="true" ';
+            input = response.idm.inputs.input[i];
+
+            heading = ' heading="' + input.name + '"';
+            id = ' id="' + (i + 1) + '"';
+
+            html += heading + id;
+            html += ' description="' + input.description + '"' +
+                    ' number="' + (i + 1) + '"';
+
+            if(DEEP.selected_fields != undefined) {
+                if(this.selected_fields[i] != undefined) {
+                    html += ' value="' + this.selected_fields[i] + '"' +
+                            ' label="' + this.selected_fields[i].split(",")[this.selected_fields[i].split(",").length - 1] + '"';
+                }
             }
+
+            html += '></draggable-element-controllet>';
+            this.$.datalet_idm_fields_container.innerHTML += html;
+
         }
+
+        if(layouts.input != undefined) {
+            if(layouts.input.constructor == Object){
+                layouts.input = new Array(jQuery.extend(true, {}, layouts.input));
+            }
+
+            html = '<text-element-controllet ';
+            for (var i = 0; i < layouts.input.length; i++) {
+                html += '<text-element-controllet heading="' + layouts.input[i].name + '" ' +
+                        'description="' + layouts.input[i].description + '" ' +
+                        'number="' + (i + 1) + '" ';
+
+                html += '></text-element-controllet>';
+            }
+            DEEP.$.idm_layout_container.innerHTML = html;
+        }
+
+        if(DEEP.selected_fields != undefined) DEEP.generateDataletPreview();
 
         $("#selected_fields_main_container").perfectScrollbar();
         $("#idm_fields_main_container").perfectScrollbar();
