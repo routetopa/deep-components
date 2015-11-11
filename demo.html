@@ -517,8 +517,13 @@
                     }
                     datalet_code += " fields='" + JSON.stringify(DEEP.selected_fields) + "'></" + DEEP.selected_datalet + ">";
 
+                    //'<!-- ADD THE POLYFILL TO YOUR PAGE - https://cdnjs.cloudflare.com/ajax/libs/webcomponentsjs/0.7.14/webcomponents.min.js -->\n'
+
                     DEEP.$.code_area.innerHTML = '<textarea id="sbiricuda" style="position:relative;width: 100%;min-height: 20vh;max-height: 20vh;" style="" rows="4" cols="50" autofocus="false">' +
-                            '<!-- ADD THE POLYFILL TO YOUR PAGE - https://cdnjs.cloudflare.com/ajax/libs/webcomponentsjs/0.7.14/webcomponents.min.js -->\n' + datalet_code +
+                            '\<script type="text/javascript" src="https://cdn.jsdelivr.net/webcomponentsjs/0.7.16/webcomponents-lite.min.js"\>\<\/script\>\n' +
+                            '\<script type="text/javascript" src="https://code.jquery.com/jquery-2.1.4.min.js"\>\<\/script\>\n' +
+                            '<!-- REMOVE THE PREVIOUS SCRIPT TAGS IF YOUR PAGE ALREADY USES JQUERY AND POLYFILL LIBRARIES  -->\n'
+                            + datalet_code +
                             '</textarea>';
 
                     editAreaLoader.init({
