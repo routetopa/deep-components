@@ -65,7 +65,7 @@ Example:
             <div id="toolbar">
                 <paper-slider min="900" max="1500" value="{{width}}"></paper-slider>
             </div>
-            <div style="align-content: center;">
+            <div style="align-content: center;" id="graph-content">
                 <svg id="sbiricuda"></svg>
             </div>
        </div>
@@ -78,6 +78,8 @@ Example:
     <script src="static/js/buildGraph.js"></script>
 
     <script>
+
+        var _this;
 
         Polymer({
             is : 'graph-datalet',
@@ -97,7 +99,7 @@ Example:
 
                 width: {
                     type: Number,
-                    value: 900,
+                    value: undefined,
                     observer : '_widthChanged'
                 },
 
@@ -109,10 +111,20 @@ Example:
                 svg: {
                     type: Object,
                     value: undefined
-                }
+                },
+
+                gnodes:{
+                    type: Array,
+                    value: undefined
+                },
+
+                glinks:{
+                    type: Array,
+                    value: undefined
+                },
             },
 
-            /*buildGraph: function (t){
+           /* buildGraph: function (t){
                 var graph = {};
 
                 graph.nodes = t.nodes;
@@ -123,9 +135,9 @@ Example:
                     return t.value ? t.value : 80
                 }).on("tick", this.tick).start();
 
-                links = this.svg.selectAll(".link").data(graph.links).enter().append("line").attr("class", "link");
+                this.glinks = this.svg.selectAll(".link").data(graph.links).enter().append("line").attr("class", "link");
 
-                nodes = this.svg.selectAll(".node").data(graph.nodes).enter().append("g").attr("class", function (t) {
+                this.gnodes = this.svg.selectAll(".node").data(graph.nodes).enter().append("g").attr("class", function (t) {
                     return t.fixed ? "node fixed" : "node"
                 }).attr("name", function (t) {
                     return t.name ? t.name.split(" ").join("_").toLowerCase() : ""
@@ -166,11 +178,15 @@ Example:
                     return t.y
                 });
 
-                nodes.attr("cx", function (t) {
+
+
+                _this.gnodes.attr("cx", function (t) {
                     return t.x = Math.max(25, Math.min(this.width - 50, t.x))
                 }).attr("cy", function (t) {
                     return t.y = Math.max(8, Math.min(600, t.y))
-                }), links.attr("x1", function (t) {
+                });
+
+                _this.glinks.attr("x1", function (t) {
                     return t.source.x
                 }).attr("y1", function (t) {
                     return t.source.y
@@ -221,12 +237,25 @@ Example:
                 svg = d3.select("svg#sbiricuda").attr("class", "svg").attr({
                     width: "100%",
                     height: "100%"
-                }).attr("viewBox", "0 0 " + this.width + " " + this.height).attr("pointer-events", "all").style("position", "absolute").attr("style", "transform:translate(0px)");
+                })//.attr("viewBox", "0 0 " + this.width + " " + this.height).attr("pointer-events", "all").style("position", "absolute").attr("style", "transform:translate(0px)");
 
                 var g = JSON.parse(this.data);
                 g.nodes[0].x = this.width / 2;
                 g.nodes[0].y = this.height / 2;
                 buildGraph(g);
+
+               /* _this = this;
+
+                this.height = 9 * this.width / 16;
+                this.svg = d3.select("svg#sbiricuda").attr("class", "svg").attr({
+                    width: "100%",
+                    height: "100%"
+                }).attr("viewBox", "0 0 " + this.width + " " + this.height).attr("pointer-events", "all").style("position", "absolute").attr("style", "transform:translate(0px)");
+
+                var g = JSON.parse(this.data);
+                g.nodes[0].x = this.width / 2;
+                g.nodes[0].y = this.height / 2;
+                this.buildGraph(g);*/
             },
 
             _widthChanged: function(oldValue, newValue){
@@ -239,6 +268,10 @@ Example:
                     width: "100%",
                     height: "100%"
                 }).attr("viewBox", "0 0 " + this.width + " " + height).attr("pointer-events", "all").style("position", "absolute").attr("style", "transform:translate(0px)");
+
+                var g = JSON.parse(this.data);
+                g.nodes[0].x = this.width / 2;
+                g.nodes[0].y = this.height / 2;
             }
         });
     </script>
