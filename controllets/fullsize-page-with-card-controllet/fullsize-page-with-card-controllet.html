@@ -50,7 +50,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         <div id="fixed" class$="[[_computeFixedBackgroundClass(color)]]"></div>
         <div id="card" class$="[[_computeCardClass(color)]]">
             <template is="dom-if" if="{{_checkUndefined(publicRoom)}}">
-                <iframe src="/public-room/{{publicRoom}}" width="100%" height="100%"></iframe>
+                <iframe id="public_room_iframe" src="/public-room/{{publicRoom}}" width="100%" height="100%"></iframe>
             </template>
         </div>
 
@@ -121,8 +121,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
         _checkUndefined: function(variable)
         {
-          if(typeof variable === 'undefined')
+          if(typeof variable === 'undefined') {
+              public_room_iframe.src = "";
               return false;
+          }
           return true;
         },
 
