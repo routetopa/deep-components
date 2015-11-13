@@ -29,7 +29,7 @@
 *
 -->
 
-<link rel="import" href="http://deep.routetopa.eu/COMPONENTS/datalets/base-ajax-json-jsonpath-datalet/base-ajax-json-jsonpath-datalet.html">
+<link rel="import" href="../base-ajax-json-jsonpath-datalet/base-ajax-json-jsonpath-datalet.html">
 
 <!--
 
@@ -124,7 +124,8 @@ Example:
         <base-ajax-json-jsonpath-datalet data-url="{{dataUrl}}" fields="{{fields}}" data="{{data}}"></base-ajax-json-jsonpath-datalet>
     </template>
 
-    <script src="http://deep.routetopa.eu/COMPONENTS/datalets/shared_js/d3.js"></script>
+    <!--<script src="../shared_js/d3.js"></script>-->
+    <script src="../shared_js/d3.js"></script>
     <script src="js/buildtreemap.js"></script>
     <script>
 
@@ -237,7 +238,7 @@ Example:
 
             ready: function(){
                 this.behavior =  $.extend(true, {}, BaseDataletBehavior, WorkcycleBehavior, AjaxJsonJsonPathBehavior, DatasetexplorerBehavior);
-                this.async(function(){this.behavior.init(this)},1000);
+                this.async(function(){this.behavior.init(this)},0);
             }
 
         });

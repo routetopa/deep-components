@@ -1,0 +1,1080 @@
+<!--
+@license
+    The MIT License (MIT)
+
+    Copyright (c) 2015 Dipartimento di Informatica - Universit� di Salerno - Italy
+
+    Permission is hereby granted, free of charge, to any person obtaining a copy
+    of this software and associated documentation files (the "Software"), to deal
+    in the Software without restriction, including without limitation the rights
+    to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+    copies of the Software, and to permit persons to whom the Software is
+    furnished to do so, subject to the following conditions:
+
+    The above copyright notice and this permission notice shall be included in
+    all copies or substantial portions of the Software.
+
+    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+    IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+    FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+    AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+    LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+    THE SOFTWARE.
+-->
+
+<!--
+* Developed by :
+* ROUTE-TO-PA Project - grant No 645860. - www.routetopa.eu
+*
+-->
+
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/paper-styles/color.html">
+
+<link rel="import" href="../../bower_components/neon-animation/neon-animated-pages.html">
+<link rel="import" href="../../bower_components/neon-animation/neon-animatable.html">
+<link rel="import" href="../../bower_components/neon-animation/neon-animations.html">
+
+<link rel="import" href="../../bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="../../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../../bower_components/paper-material/paper-material.html">
+<link rel="import" href="../../bower_components/paper-input/paper-textarea.html">
+<link rel="import" href="../../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../../bower_components/paper-tabs/paper-tabs.html">
+<link rel="import" href="../../bower_components/paper-tabs/paper-tab.html">
+<link rel="import" href="../../bower_components/iron-pages/iron-pages.html">
+<link rel="import" href="../../bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
+<link rel="import" href="../../bower_components/paper-menu/paper-menu.html">
+<link rel="import" href="../../bower_components/paper-item/paper-item.html">
+<link rel="import" href="../../bower_components/paper-toast/paper-toast.html">
+<link rel="import" href="../../bower_components/paper-dialog/paper-dialog.html">
+<link rel="import" href="../../bower_components/paper-dialog-scrollable/paper-dialog-scrollable.html">
+
+<link rel="import" href="../items-list-controllet/item-list-controllet.html">
+<link rel="import" href="../draggable-element-controllet/draggable-element-controllet.html">
+<link rel="import" href="../tree-view-controllet/tree-view-controllet.html">
+<link rel="import" href="../text-element-controllet/text-element-controllet.html">
+<link rel="import" href="../animated-button-container-controllet/animated-button-container-controllet.html">
+
+<!--
+The `data-sevc-controllet` is a controllet to generate visualization from a dataset accessible through api. A json response is required.
+It's composed by three steps. First, user have to select a datasource to access to a dataset. He can copy and paste/drag and drop an url(an api url with json response) or select
+from select contextual menu an available one. Second, the user selects the fields he want to visualize from a treeview by checking on it. A table preview of selected fields will show
+the currently selected values. Third, the users selects a visualization(datalet) from a slider and drags the previous selected fields in to the input data model fields area. A preview
+is available every time a fields is dragged in the input data model fields area.
+
+Example:
+
+    <data-sevc-controllet deep-url="http://192.168.36.128/DatalEts-Ecosystem-Provider/DEEP/"
+                          datalets-list-url="http://192.168.36.128/DatalEts-Ecosystem-Provider/DEEP/datalets-list"
+                          datasets='{[{name : 'dataset1', url : dataset1Urls}, ... , {name : 'datasetN', url : datasetNUrls}]'>
+    </data-sevc-controllet>
+
+
+@element data-sevc-controllet
+@status beta
+@homepage
+@group controllets
+-->
+
+
+<dom-module id="data-sevc-controllet">
+    <template>
+        <link rel="stylesheet" href="../shared_js/perfect-scrollbar/css/perfect-scrollbar.min.css">
+
+        <style is="custom-style">
+
+            ::content body {
+                font-family: 'Roboto', sans-serif;
+            }
+
+            .flexchild
+            {
+            @apply(--layout-flex);
+            }
+
+            .flex2child
+            {
+            @apply(--layout-flex-2);
+            }
+
+            .avatar
+            {
+                display: inline-block;
+                height: 2em;
+                width: 2em;
+                border-radius: 50%;
+                background: var(--paper-blue-500);
+                color: white;
+                line-height: 2em;
+                font-size: 1.87em;
+                text-align: center;
+            }
+
+            .title
+            {
+                position: relative;
+                top: 0.60vh;
+                margin-left: 20px;
+            }
+
+            .big
+            {
+                font-size: 1.37em;
+                color: var(--google-grey-500);
+            }
+
+            .medium
+            {
+                font-size: 1em;
+                padding-bottom: 0.5em;
+                color : #000000;
+                font-weight: bold;
+            }
+
+            .small
+            {
+                font-size: 0.8em;
+                padding-top: 10px;
+                color: var(--paper-blue-500);
+                font-weight: bold;
+            }
+
+            paper-input
+            {
+                width: 80%;
+            }
+
+            paper-dropdown-menu
+            {
+                text-align: left;
+                margin: auto;
+                width: 100%;
+            }
+
+            ::content paper-menu-button
+            {
+                display: block;
+                width: 100%;
+            }
+
+            #visualization_slider_area
+            {
+                padding-top: 20px;
+                overflow: visible;
+            }
+
+            #fields_mapping_area
+            {
+                min-width: 670px;
+                min-height: 180px;
+            }
+
+            #datalet_placeholder
+            {
+                height: 60vh;
+                min-height: 60vh;
+                min-width: 45%;
+                margin-top:10px;
+            }
+
+            .datalet_right_container
+            {
+                width: 100vh;
+            }
+
+            .field-mapping-card
+            {
+                width: 50%;
+                float: left;
+            }
+
+            .toolbar_button
+            {
+                --iron-icon-height: 32px;
+                --iron-icon-width: 32px;
+            }
+
+            #finish_button
+            {
+                --iron-icon-height: 32px;
+                --iron-icon-width: 32px;
+                color: var(--paper-blue-500);
+            }
+
+            .area_container
+            {
+                overflow: hidden;
+                margin : 0.8em;
+                padding : 0.8em;
+            }
+
+            #fields_placeholder{
+                width: 40%;
+                height: 75vh;
+                position: relative;
+                float: left;
+                overflow: auto;
+            }
+
+            #table_fields_container{
+                height: 75vh;
+                width: 55%;
+                position: relative;
+                float: left;
+                overflow: auto;
+            }
+
+            #idm_fields_main_container{
+                position: relative;
+                height: 60vh;
+            }
+
+            #selectedFields_main_container{
+                position: relative;
+                height: 60vh;
+            }
+
+            #idm_layout_main_container{
+                position: relative;
+                height: 50vh;
+            }
+
+            #comment{
+                position: relative;
+                width: 35vw;
+            }
+
+            paper-menu{
+                width: 100%;
+            }
+
+            paper-dialog {
+                position: fixed;
+                top: 16px;
+                width: auto;
+                height: auto;
+                overflow: auto;
+                padding : 30px;
+            }
+
+            paper-tabs, paper-toolbar
+            {
+                background-color:  var(--paper-blue-500);
+                color: #ffffff;
+                box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.2);
+                --paper-tabs-selection-bar-color: var(--google-gray-500);
+            }
+
+            paper-toolbar paper-tabs
+            {
+                box-shadow: none;
+            }
+
+            paper-tabs[noink][no-bar] paper-tab.iron-selected
+            {
+                background-color: var(--google-gray-500);
+            }
+
+            paper-tabs[align-bottom]
+            {
+                box-shadow: 0px -2px 6px rgba(0, 0, 0, 0.15);
+            }
+        </style>
+
+        <iron-ajax
+                auto
+                id="data_request"
+                url={{dataUrl}}
+                verbose="true"
+                on-response="handleResponseData"
+                debounce-duration="300">
+        </iron-ajax>
+
+        <iron-ajax
+                id="datales_list_request"
+                auto
+                url={{dataletsListUrl}}
+                handle-as="json"
+                on-response="handleResponseDatalets"
+                debounce-duration="300">
+        </iron-ajax>
+
+        <iron-ajax
+                id="selectedDatalet_request"
+                url={{deepUrl}}
+                verbose="true"
+                on-response="handleSelectedDatalet"
+                debounce-duration="300">
+        </iron-ajax>
+
+        <content>
+
+            <neon-animated-pages id="pages" selected="[[selected]]" entry-animation="[[entryAnimation]]" exit-animation="[[exitAnimation]]">
+
+                <neon-animatable>
+
+                    <div class="vertical justified layout">
+
+                        <div class="horizontal layout">
+                            <div class="avatar" style="margin-left:15px">1</div>
+                            <div class="title flex">
+                                <div id="toolbar_title" class="big">Dataset source</div>
+                                <div id="toolbar_description" class="small">Copy and paste/drag and drop in the textarea the url of datasource</div>
+                            </div>
+                            <paper-icon-button id="NextButton" class="toolbar_button" on-click="_onNextClick" icon="chevron-right" alt="arrow-forward" title="arrow-forward"></paper-icon-button>
+                        </div>
+
+                        <paper-material elevation="2" class="area_container">
+                            <paper-tabs selected="{{DatasourceTabSelected}}">
+                                <paper-tab>Select data source</paper-tab>
+                                <paper-tab>Most popular</paper-tab>
+                                <paper-tab>Search</paper-tab>
+                            </paper-tabs>
+                            <iron-pages selected="{{DatasourceTabSelected}}">
+                                <div>
+                                    <div class="card-content">
+                                        <paper-dropdown-menu id="datasets-sources" name="datasets-sources" label="Available datasets">
+                                            <paper-menu class="dropdown-content">
+                                                <template is="dom-repeat" items="{{datasets}}" as="dataset" index-as="index">
+                                                    <paper-item id="{{index}}" on-tap="_datasourceSelected">{{dataset.name}}</paper-item>
+                                                </template>
+                                            </paper-menu>
+                                        </paper-dropdown-menu>
+                                        <paper-icon-button id="infoButton" on-click="_onInfoClick" icon="info-outline" alt="Information about selected dataset" title="info-button" style="color:#9e9e9e;"></paper-icon-button>
+                                    </div>
+
+                                    <div><img src="static/images/or.png" style="position: relative;left: 50%;padding-top:20px"></div>
+
+                                    <div class="card-content">
+                                        <paper-textarea class="custom_textarea" id="data_url" label="Dataset api data url" floatingLabel value="{{dataUrl}}" on-dragover="_handleDatasourceDragOver"></paper-textarea>
+                                    </div>
+
+
+                                </div>
+                                <div><img src="static/images/UnderConstruction.png" style="position: relative;top: 60%;left: 25%;"></div>
+                                <div><img src="static/images/UnderConstruction.png" style="position: relative;top: 60%;left: 25%;"></div>
+                            </iron-pages>
+                        </paper-material>
+
+                    </div>
+
+                </neon-animatable>
+
+                <neon-animatable>
+
+                    <div class="vertical justified layout">
+
+                        <div class="horizontal layout">
+                            <paper-icon-button id="PrevButton" class="toolbar_button x-scope" on-click="_onPrevClick" icon="chevron-left" alt="arrow-back" title="arrow-back"></paper-icon-button>
+                            <div class="avatar">2</div>
+                            <div class="title flex">
+                                <div id="toolbar_title" class="big">Dataset source</div>
+                                <div id="toolbar_description" class="small">Select the fields you want to use for visualization from tree on the right side. The table on the left side will show you the values related to the selected fields.</div>
+                            </div>
+                            <paper-icon-button id="NextButton" class="toolbar_button" on-click="_onNextClick" icon="chevron-right" alt="arrow-forward" title="arrow-forward"></paper-icon-button>
+                        </div>
+
+                        <div class="horizontal layout">
+
+                            <paper-material elevation="2" id="fields_placeholder" class="area_container flexchild" style="min-width:300px">
+                                <tree-view-controllet id="fields_treeview" root-name="data" opened-path="result,records"></tree-view-controllet>
+                            </paper-material>
+
+                            <paper-material elevation="2" id="table_fields_container" class="area_container flex2child">
+                                <div id="table_component_place_holder"></div>
+                            </paper-material>
+
+                        </div>
+
+                    </div>
+
+                </neon-animatable>
+
+                <neon-animatable>
+
+                    <div class="vertical justified layout">
+
+                        <div class="horizontal layout">
+                            <paper-icon-button id="PrevButton" class="toolbar_button x-scope" on-click="_onPrevClick" icon="chevron-left" alt="arrow-back" title="arrow-back"></paper-icon-button>
+                            <div class="avatar">3</div>
+                            <div class="title flex">
+                                <div id="toolbar_title" class="big">Data mapping</div>
+                                <div id="toolbar_description" class="small">Select the visualization by clicking on the button(a window will appear with all available visualization).After, drag and drop the selected fields into datalet parameters area. A preview will be shown on the right side.</div>
+                            </div>
+                            <paper-icon-button id="NextButton" class="toolbar_button" on-click="_onNextClick" icon="chevron-right" alt="arrow-forward" title="arrow-forward"></paper-icon-button>
+                        </div>
+
+
+                        <div class="horizontal layout">
+
+                            <div class="">
+                                <paper-material elevation="0" id="visualization_slider_area"></paper-material>
+                                <paper-material elevation="2" id="fields_mapping_area" class="area_container">
+
+                                    <div id="selectedFields_main_container" class="field-mapping-card">
+                                        <div class="title">
+                                            <div class="medium">Selected fields</div>
+                                        </div>
+                                        <paper-material elevation="2" id="selectedFields_container" class="area_container"></paper-material>
+                                    </div>
+
+                                    <div id="idm_fields_main_container" class="field-mapping-card">
+                                        <div class="title">
+                                            <div class="medium">Datalet fields</div>
+                                        </div>
+                                        <paper-material elevation="2" id="datalet_idm_fields_container" class="area_container"></paper-material>
+                                    </div>
+                                </paper-material>
+                            </div>
+
+                            <div id="datalet_placeholder"></div>
+
+                        </div>
+
+                    </div>
+
+                </neon-animatable>
+
+                <neon-animatable>
+                    <div class="vertical justified layout">
+
+                        <div class="horizontal layout">
+                            <paper-icon-button id="PrevButton" class="toolbar_button x-scope" on-click="_onPrevClick" icon="chevron-left" alt="arrow-back" title="arrow-back"></paper-icon-button>
+                            <div class="avatar">4</div>
+                            <div class="title flex">
+                                <div id="toolbar_title" class="big">Finalize visualization</div>
+                                <div id="toolbar_description" class="small">Assign the values for layout parameters (e.g. title for you visualization) and look at the final visualization. You can also add a comment if you are in the private room. </div>
+                            </div>
+                            <paper-icon-button id="finish_button" on-click="_onFinish" icon="add-circle" alt="Conforms the creation" title="finish"></paper-icon-button>
+                        </div>
+
+                        <div class="horizontal layout">
+                            <div style="margin-top: 10px;">
+                                <div class="title">
+                                    <div class="medium">Layout fields</div>
+                                </div>
+                                <paper-material elevation="2" id="idm_layout_main_container" class="area_container">
+                                    <paper-material elevation="2" id="idm_layout_container" class="area_container"></paper-material>
+                                </paper-material>
+
+                                <div id="comment">
+                                    <paper-textarea class="custom_textarea" id="commentArea" label="Max 100 characters comment" maxlength="100"></paper-textarea>
+                                </div>
+
+                            </div>
+
+                            <div id="datalet_placeholder_2" style="min-width: 45%;margin-top: 10px;"></div>
+
+                        </div>
+                    </div>
+
+                </neon-animatable>
+
+            </neon-animated-pages>
+
+            <paper-toast id="message" text=""></paper-toast>
+
+            <paper-dialog id="infoDialog">
+                <h2 id="infoDialogTitle"></h2>
+                <paper-dialog-scrollable id="infoDialogContent">
+                </paper-dialog-scrollable>
+            </paper-dialog>
+
+        </content>
+    </template>
+
+    <script src="../shared_js/perfect-scrollbar/js/min/perfect-scrollbar.jquery.min.js"></script>
+    <script src="../../../DEEPCLIENT/js/deepClient.js"></script>
+
+    <script>
+
+        Polymer({
+
+            is : 'data-sevc-controllet',
+
+            /**
+             * Received when the user selects a datalet from slider.
+             *
+             * @event items-list-controllet_item-selected
+             */
+
+            /**
+             * Received when the user drags a selected fields in to one of the source input data model field
+             *
+             * @event draggable-element-controllet_content-dragged
+             */
+
+            /**
+             * Received when the user selects one field from treeview controllet
+             *
+             * @event treeview-controllet-fileds-selected
+             */
+
+            /**
+             * Received when the user drags a selected fields in to one of the source input data model field
+             *
+             * @event draggable-element-controllet_content-dragged
+             */
+
+            /**
+             * Received when the user change text value of the selected datalet layout inputs
+             *
+             * @event text-element-controllet_content-changed
+             */
+
+            /**
+             * Fired when the user press to finish button. At this event are attached all information about the visualization currently created
+             *
+             * @event data-sevc-controllet.dataletCreated
+             */
+
+            listeners : {
+                'items-list-controllet_item-selected' : '_dataletSelected',
+                'draggable-element-controllet_content-dragged' : '_fieldsMapped',
+                'tree-view-controllet_selected-fields' : '_fieldsSelected',
+                'text-element-controllet_content-changed' : '_textElementChanged'
+            },
+
+            properties : {
+
+                entryAnimation : {
+                    type  : String,
+                    value : ""
+                },
+
+                exitAnimation  : {
+                    type  : String,
+                    value : ""
+                },
+
+                selected       : {
+                    type  : Number,
+                    value : 0
+                },
+
+                /**
+                 * It represents the data url from CKAN api
+                 *
+                 * @attribute dataUrl
+                 * @type string
+                 * @default 'null'
+                 */
+                dataUrl : {
+                    type : String,
+                    value : undefined,
+                    observer : '_dataUrlChanged'
+                },
+                /**
+                 * It represents the DEEP url to get information about the datalets
+                 *
+                 * @attribute deepUrl
+                 * @type string
+                 * @default 'null'
+                 */
+                deepUrl : {
+                    type : String,
+                    value : undefined
+                },
+                /**
+                 * It's used to store the list of datalets returned from DEEP
+                 *
+                 * @attribute datalets_list
+                 * @type Array
+                 * @default empty
+                 */
+                datalets_list : {
+                    type : Array ,
+                    value : []
+                },
+                /**
+                 * It's used to store the selected datalet. It will be set when the controllet get the event of selection by item slider (items-list-controllet_item-selected)
+                 *
+                 * @attribute selectedDatalet
+                 * @type String
+                 * @default ''
+                 */
+                selectedDatalet : {
+                    type : String,
+                    value : undefined
+                },
+                /**
+                 * It's used to store the list of selected fields by user
+                 *
+                 * @attribute selectedFields
+                 * @type Array
+                 * @default empty
+                 */
+                selectedFields : {
+                    type : Array,
+                    value : undefined
+                },
+                /**
+                 * It contains all attributes for the datalet preset. It'll be used when the controllet is called to modify an exsting datalet.
+                 */
+                dataletPreset:{
+                    type: Object,
+                    value: undefined
+                },
+                /**
+                 * It's used to store the params to give to datalet. This kind of params will not processed by selection step
+                 *
+                 * @attribute paramsFields
+                 * @type Object
+                 * @default empty
+                 */
+                paramsFields:{
+                    type: Object,
+                    value: undefined
+                },
+                /**
+                 * It's used to store the tab index in the first pass
+                 *
+                 * @attribute DatasourceTabSelected
+                 * @type Number
+                 * @default 0
+                 */
+                DatasourceTabSelected : {
+                    type : Number,
+                    value : 0
+                },
+                /**
+                 * It's used to store the datasets to show in the contexual menu
+                 *
+                 * @attribute datasets
+                 * @type Array
+                 * @default empty
+                 */
+                datasets :
+                {
+                    type : Array,
+                    value : []
+                }
+            },
+            /**
+             * It is called after the element�s template has been stamped and all elements inside the element�s local DOM have been configured (with values bound from parents, deserialized attributes, or else default values) and had their ready method called.
+             * In this phase the scrollbar will be initialized
+             *
+             * @method handleResponseData
+             *
+             * @param {Event} e
+             */
+
+            ready : function(){
+
+                $(this.$.fields_placeholder).perfectScrollbar();
+                $(this.$.selectedFields_main_container).perfectScrollbar();
+                $(this.$.idm_fields_main_container).perfectScrollbar();
+                $(this.$.idm_layout_main_container).perfectScrollbar();
+                $(this.$.table_fields_container).perfectScrollbar();
+
+                if(this.dataletPreset != undefined) {
+                    this.$.data_url.value = this.dataletPreset['data-url'];
+                    this.selected = 1;
+                }
+
+                //Fiefox force :O
+                var table_params ={
+                    component   : "datatable-datalet",
+                    params      :{
+                        'data-url' : this.dataUrl
+                    },
+                    fields      : [],
+                    placeHolder : this.$.table_component_place_holder
+                };
+
+                ComponentService.deep_url = this.deepUrl;
+                ComponentService.getComponent(table_params);
+            },
+            /**
+             * Utility function to inject datalet in a placeholder
+             */
+            injectDatalet: function(place_holder){
+
+                var datalet_params ={
+                    component   : this.selectedDatalet,
+                    params      : this.paramsFields,
+                    fields      : this.selectedFields,
+                    placeHolder : place_holder
+                };
+                ComponentService.deep_url = this.deepUrl;
+                ComponentService.getComponent(datalet_params);
+            },
+
+            /**
+             * Callback to parse the data requested when dataUrl change its value
+             *
+             * @method handleResponseData
+             *
+             * @param {Event} e
+             */
+            handleResponseData : function(e){
+                this.$.fields_treeview.setAttribute("json-data", JSON.stringify(e.detail.response));
+                this.$.fields_treeview.setAttribute("preselected-fields", JSON.stringify(this.selectedFields));
+                this.$.fields_treeview.ready();//chrome
+            },
+
+            /**
+             * Callback to parse the components response object
+             *
+             * @method handleResponseDatalets
+             *
+             * @param {Event} e
+             */
+            handleResponseDatalets : function(e){
+                this.datalets_list = new Array();
+                for(var i=0;i < e.detail.response.length;i++){
+                    var datalet_info = { name : e.detail.response[i].name ,
+                        image : e.detail.response[i].url + e.detail.response[i].name + ".png"
+                    };
+
+                    this.datalets_list.push(datalet_info);
+                }
+
+                if(this.selectedDatalet == undefined)
+                    this.$.visualization_slider_area.innerHTML = '<animated-button-container-controllet height="300" width="450" icon="assessment" icon-width="64" icon-height="64" background-button-color="#2196F3">' +
+                            '<items-list-controllet' +
+                            ' replace-string="-datalet"' +
+                            ' items=\'' + JSON.stringify(this.datalets_list) + '\'>' +
+                            '</items-list-controllet>' +
+                            '</animated-button-container-controllet>';
+                else
+                    this.$.visualization_slider_area.innerHTML = '<animated-button-container-controllet height="300" width="450" icon="assessment" icon-width="64" icon-height="64" background-button-color="#2196F3">' +
+                            '<items-list-controllet' +
+                            ' replace-string="-datalet"' +
+                            ' selected-card=\'' + this.selectedDatalet + '\'' +
+                            ' items=\'' + JSON.stringify(this.datalets_list) + '\'>' +
+                            '</items-list-controllet>' +
+                            '</animated-button-container-controllet>';
+
+            },
+            /**
+             * Callback to dataset selection from list in the phase three. When a datalet is selected this function will build a bundle of box items, based on the datalet input data model,
+             * to allow user to drag the fields, from the selected fields box, and create a new visualization.
+             *
+             * @method handleSelectedDatalet
+             *
+             * @param {Event} e
+             */
+            handleSelectedDatalet : function(e){
+
+                var response = e.detail.response;
+                this.$.datalet_idm_fields_container.innerHTML = "";
+                this.$.idm_layout_container.innerHTML = "";
+
+                var input;
+                var layouts = jQuery.extend(true, {}, response.idm.inputs.layouts);
+
+                if(response.idm.inputs.input.constructor == Object) {
+                    if(response.idm.inputs.input.selection == "*")
+                    {
+                        var fields = this.$.selectedFields_container.querySelectorAll('draggable-element-controllet');
+                        input = response.idm.inputs.input;
+                        response.idm.inputs.input = new Array();
+                        for(var i=0;i<fields.length;i++){
+                            var newInput = jQuery.extend(true, {}, input);
+                            newInput.name = input.name + ' ' + (i + 1);
+                            response.idm.inputs.input.push(newInput);
+                        }
+                    }
+                }
+
+                var heading;
+                var id;
+
+                for(var i =0; i < response.idm.inputs.input.length; i++) {
+                    var html = '<draggable-element-controllet is-target="true" ';
+                    input = response.idm.inputs.input[i];
+
+                    heading = ' heading="' + input.name + '"';
+                    id = ' id="' + (i + 1) + '"';
+
+                    html += heading + id;
+                    html += ' description="' + input.description + '"' +
+                            ' number="' + (i + 1) + '"';
+
+                    if(this.selectedFields != undefined) {
+                        if(this.selectedFields[i] != undefined) {
+                            html += ' value="' + this.selectedFields[i] + '"' +
+                                    ' label="' + this.selectedFields[i].split(",")[this.selectedFields[i].split(",").length - 1] + '"';
+                        }
+                    }
+
+                    html += '></draggable-element-controllet>';
+                    this.$.datalet_idm_fields_container.innerHTML += html;
+
+                }
+
+                if(layouts.input != undefined) {
+                    if(layouts.input.constructor == Object){
+                        layouts.input = new Array(jQuery.extend(true, {}, layouts.input));
+                    }
+
+                    html = '<text-element-controllet ';
+                    for (var i = 0; i < layouts.input.length; i++) {
+                        html += '<text-element-controllet heading="' + layouts.input[i].name + '" ' +
+                                'description="' + layouts.input[i].description + '" ' +
+                                'number="' + (i + 1) + '" ';
+                        if(this.dataletPreset != undefined){
+                            html += 'value="' + this.dataletPreset[Object.keys(this.dataletPreset)[(i + 1)]] + '"';
+                        }
+
+                        html += '></text-element-controllet>';
+                    }
+                    this.$.idm_layout_container.innerHTML = html;
+                }
+
+                if(this.selectedFields != undefined) this.generateDataletPreview();
+
+            },
+            /**
+             * Generate the datalet preview when user mapped fields. it even retrieves the value of layout inputs values.
+             *
+             * @method generateDataletPreview
+             */
+            generateDataletPreview : function(){
+
+                var input_mapped_fields = this.$.datalet_idm_fields_container.querySelectorAll('draggable-element-controllet[is-target=true]');
+                this.selectedFields = Array();
+
+                for (var i = 0; i < input_mapped_fields.length; i++) {
+                    if (input_mapped_fields[i].value != "") {
+                        this.selectedFields.push(input_mapped_fields[i].value);
+                    }
+                }
+
+                var input_layouts_fields = this.$.idm_layout_container.querySelectorAll('text-element-controllet');
+                this.paramsFields = {'data-url' : this.dataUrl};
+
+                for (var i = 0; i < input_layouts_fields.length; i++) {
+                    if (input_layouts_fields[i].value != "") {
+                        this.paramsFields[input_layouts_fields[i].heading]  =  input_layouts_fields[i].value;
+                    }
+                }
+
+                this.injectDatalet(this.$.datalet_placeholder);
+
+            },
+            /**
+             * Validate the current pass in order to access to next one.
+             *
+             * @method validateCurrentPass
+             *
+             * @param {Number} next_selected_pass
+             */
+            validateCurrentPass : function(next_selected_pass){
+
+                switch(next_selected_pass){
+                    case 0:
+                        this.$.data_url.value = "";
+                        this.$.fields_treeview.setAttribute("json-data", null);
+                        this.$.fields_treeview.setAttribute("preselected-fields", null);
+                        this.$.fields_treeview.ready();//chrome
+                        return true;
+                    case 1:
+                        var x = this.$.fields_treeview.getAttribute("json-data");
+                        if(this.$.data_url.value == undefined || this.$.fields_treeview.getAttribute('json-data') == "null" || this.$.fields_treeview.getAttribute('json-data') == null){
+                            this.$.message.text = "You have to select a dataset to access to pass 2. It's possible that the data you selected are not available.";
+                            this.$.message.show();
+                            return false;
+                        }else{
+                            return true;
+                        }
+
+                    case 2:
+                        if(this.selectedFields == undefined || this.selectedFields.length == 0){
+                            this.$.message.text = "You have to select a set of fields to access to pass 3.";
+                            this.$.message.show();
+                            return false;
+                        }else{
+                            this.$.datalet_placeholder_2.innerHTML = "";
+                            if(this.selectedDatalet != undefined) this.injectDatalet(this.$.datalet_placeholder);
+                            return true;
+                        }
+                    case 3:
+                        if(this.paramsFields == undefined){
+                            this.$.message.text = "You have to select a datalet and map the selected fields to datalets fields(by drag and drop) to access to pass 4.";
+                            this.$.message.show();
+                            return false;
+                        }else{
+                            this.$.datalet_placeholder.innerHTML = "";
+                            this.injectDatalet(this.$.datalet_placeholder_2);
+                            return true;
+                        }
+                }
+
+            },
+            /**
+             * Callback for manage the previous pass button
+             *
+             * @method _onPrevClick
+             *
+             */
+            _onPrevClick : function() {
+                if(!this.validateCurrentPass(this.selected === 0 ? 0 : (this.selected - 1))) return;
+
+                this.entryAnimation = 'slide-from-left-animation';
+                this.exitAnimation  = 'slide-right-animation';
+                this.selected = this.selected === 0 ? 0 : (this.selected - 1);
+            },
+            /**
+             * Callback to manage the next pass button
+             *
+             * @method _onNextClick
+             *
+             */
+            _onNextClick : function() {
+
+                if(!this.validateCurrentPass(this.selected === 3 ? 3 : (this.selected + 1))) return;
+
+                this.entryAnimation = 'slide-from-right-animation';
+                this.exitAnimation  = 'slide-left-animation';
+                this.selected = this.selected === 3 ? 3 : (this.selected + 1);
+            },
+            /**
+             * Callback to manage InfoButton click to give user information about the selected dataset
+             *
+             */
+            _onInfoClick : function(){
+
+                this.$.infoDialog.open();
+
+            },
+            /**
+             * Callback related to datasource selection from select menu
+             *
+             * @method _datasourceSelected
+             *
+             * @param {Event} e
+             */
+            _datasourceSelected : function(e){
+
+                this.$.data_url.value = this.datasets[parseInt(e.target.id)].url;
+                this.$.infoDialogTitle.innerHTML = this.datasets[parseInt(e.target.id)].name;
+                this.$.infoDialogContent.innerHTML = this.datasets[parseInt(e.target.id)].description;
+
+            },
+            /**
+             * Callback related to data url change
+             *
+             * @method _dataUrlChanged
+             *
+             * @param {Event} e
+             */
+            _dataUrlChanged : function(newValue, oldValue){
+                this.$.data_request.generateRequest();
+            },
+            /**
+             * Callback related to event 'items-slider-controllet_item-selected' fired by items-slider-controllet when the user selects a datalet
+             *
+             * @method _dataletSelected
+             *
+             * @param {Event} e
+             */
+            _dataletSelected : function(e){
+                this.selectedDatalet = e.detail.datalet;
+                this.$.selectedDatalet_request.url = this.deepUrl + e.detail.datalet;
+                this.$.selectedDatalet_request.generateRequest();
+
+            },
+            /**
+             * Callback related to event 'treeview-controllet-fileds-selected' fired by treeview-controllet when the user selects a field
+             *
+             * @method _fieldsSelected
+             *
+             * @param {Event} e
+             */
+            _fieldsSelected : function(e){
+
+                this.selectedFields = e.detail.fields;
+                this.$.selectedFields_container.innerHTML = "";
+                for(var i=0;i<e.detail.fields.length;i++) {
+                    this.$.selectedFields_container.innerHTML += '<draggable-element-controllet identifier="' + e.detail.fields[i] +
+                            '" label="' + e.detail.fields[i].split(",")[e.detail.fields[i].split(",").length -1] +
+                            '"></draggable-element-controllet><br>';
+                }
+
+                var table_params ={
+                    component   : "datatable-datalet",
+                    params      :{
+                        'data-url' : this.dataUrl
+                    },
+                    fields      : e.detail.fields,
+                    placeHolder : this.$.table_component_place_holder
+                };
+
+                ComponentService.deep_url = this.deepUrl;
+                ComponentService.getComponent(table_params);
+
+
+            },
+            /**
+             * Callback related to event 'draggable-element-controllet_content-dragged' fired by draggable-element-controllet when the user drags a selected field in to input data model field
+             *
+             * @method _fieldsMapped
+             *
+             * @param {Event} e
+             */
+            _fieldsMapped : function(e){
+
+                this.generateDataletPreview();
+
+            },
+            /**
+             * Callback related to event 'text-element-controllet_content-changed' fired by text-element-controllet when the user change the value of text
+             *
+             * @method _textElementChanged
+             *
+             * @param {Event} e
+             */
+            _textElementChanged : function(e){
+                if(this.selected == 3) {
+                    this.generateDataletPreview();
+                    this.$.datalet_placeholder.innerHTML = "";
+                    this.injectDatalet(this.$.datalet_placeholder_2);
+                }
+            },
+            /**
+             * Callback related to the drag operation in the dataUrl input area. It's used to delete previous value.
+             *
+             * @method _handleDatasourceDragOver
+             *
+             * @param {Event} e
+             */
+            _handleDatasourceDragOver : function(e){
+                this.$.data_url.value = "";
+            },
+            /**
+             * Callback related to the finish button.
+             *
+             * @method _onFinish
+             *
+             * @param {Event} e
+             */
+            _onFinish : function(e){
+
+                if((this.selectedFields.length == 0) || this.selectedDatalet == ""){
+                    this.$.message.text = "You have to map the selected fields with datalets fields(by dragging) and select a datalet to export a new visualization.";
+                    this.$.message.show();
+                    return;
+                }
+
+                var data = {
+                    dataUrl : this.dataUrl,
+                    params :  this.paramsFields,
+                    fields :  this.selectedFields,
+                    datalet : this.selectedDatalet,
+                    comment : this.$.commentArea.value,
+                    staticData : JSON.stringify(this.$.datalet_placeholder_2.children[1].behavior.data)
+                }
+
+                this.fire('data-sevc-controllet.dataletCreated', {data : data});
+
+            }
+
+        });
+
+    </script>
+
+</dom-module>
