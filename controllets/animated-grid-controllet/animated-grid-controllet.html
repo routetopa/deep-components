@@ -28,8 +28,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         }
 
         /* ---- grid-item ---- */
-
-
         ::content .grid-item {float: left;box-sizing: border-box;-moz-box-sizing: border-box;-webkit-box-sizing: border-box;border: 3px solid white;}
         ::content .grid-sizer {width: 200px;}
         ::content .grid-item-w20  {width:  200px;}
@@ -37,31 +35,52 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         ::content .grid-item-w60  {width:  600px;}
         ::content .grid-item-w80  {width:  80%;}
         ::content .grid-item-w100 {width:  100%;}
-
         ::content .grid-item-h200 {height: 200px;}
         ::content .grid-item-h400 {height: 400px;}
         ::content .grid-item-h600 {height: 600px;}
         ::content .grid-item-h800 {height: 800px;}
+        ::content .grid-item-c4 {background-color: #2C29FF;}
+        /* ---- grid-item ---- */
 
-        ::content .grid-item-c0 {background-color: #0D47A1;}
-        ::content .grid-item-c1 {background-color: #1976D2;}
-        ::content .grid-item-c2 {background-color: #2196F3;}
-        ::content .grid-item-c3 {background-color: #64B5F6;}
-        ::content .grid-item-c4 {background-color: #BBDEFB;}
-
-        ::content .room-body    {background-color: #BBDEFB;}
-
+        ::content .room-body    {color:#FFFFFF;}
         ::content .room-subject
         {
             position: absolute;
             width: 100%;
             height: 30px;
-            bottom: 20px;
+            bottom: 30px;
             background-color: rgba(0,0,0,0.6);
-            vertical-align: middle;
             color: #FFFFFF;
         }
-
+        ::content .room-subject span
+        {
+            top: 5px;
+            left: 5px;
+            position: relative;
+            text-overflow: ellipsis;
+            overflow: hidden;
+            white-space:nowrap;
+            text-overflow:ellipsis;
+            display:inline-block;
+        }
+        ::content .room-body span
+        {
+            top: 5px;
+            left: 5px;
+            position: relative;
+            text-overflow: ellipsis;
+            overflow: hidden;
+            text-overflow:ellipsis;
+            display:inline-block;
+        }
+        ::content .room-timestamp
+        {
+            position: absolute;
+            right:3px;
+            bottom: 3px;
+            font-size: 8px;
+            color: #CCCCCC;
+        }
     </style>
 
     <template>
@@ -146,8 +165,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
             var target = event.target;
 
-            if(target.classList[0] != "grid-item")
-                return;
+            while(target.classList[0] != "grid-item")
+                target = target.parentElement;
 
             // configure the page animation
             this.sharedElements = {
@@ -161,8 +180,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
             this.fire('tile-click', {
                 tile: target,
-                //data: {color: target._templateInstance.item.c}
-                data: {color: target.classList[3], id:target.id}
+                data: {color: target.style.backgroundColor, id:target.id}
             });
 
         }

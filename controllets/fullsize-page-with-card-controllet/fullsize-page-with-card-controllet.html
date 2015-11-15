@@ -31,24 +31,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             height: 90%;
         }
 
-        .grid-item-c0 {background-color: #0D47A1;}
-        .grid-item-c1 {background-color: #1976D2;}
-        .grid-item-c2 {background-color: #2196F3;}
-        .grid-item-c3 {background-color: #64B5F6;}
-        .grid-item-c4 {background-color: #BBDEFB;}
-
-        .grid-item-c0-l {background-color: #1565C0;}
-        .grid-item-c1-l {background-color: #1E88E5;}
-        .grid-item-c2-l {background-color: #42A5F5;}
-        .grid-item-c3-l {background-color: #90CAF9;}
-        .grid-item-c4-l {background-color: #E3F2FD;}
-
     </style>
 
     <template>
 
-        <div id="fixed" class$="[[_computeFixedBackgroundClass(color)]]"></div>
-        <div id="card" class$="[[_computeCardClass(color)]]">
+        <div id="fixed" class="fixed" style$="background-color:{{color}}"></div>
+        <div id="card" class="card" style$="background-color:{{color}}">
             <template is="dom-if" if="{{_checkUndefined(publicRoom)}}">
                 <iframe id="public_room_iframe" src="/public-room/{{publicRoom}}" width="100%" height="100%"></iframe>
             </template>
@@ -129,13 +117,15 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         },
 
         _computeCardClass: function(color) {
-            var cls = 'card';
-            return cls + ' ' + color;
+            //var cls = 'card';
+            //return cls + ' ' + color;
+            this.$.card = color;
         },
 
         _computeFixedBackgroundClass: function(color) {
-            var cls = 'fixed';
-            return cls + ' ' + color + '-l';
+            //var cls = 'fixed';
+            //return cls + ' ' + color + '-l';
+            this.$.fixed = color;
         }
 
     });
