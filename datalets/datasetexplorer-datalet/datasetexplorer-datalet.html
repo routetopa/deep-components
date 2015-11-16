@@ -64,7 +64,8 @@ Example:
                 width: 100%;
                 height: 70%;
                 min-height: 500px;
-                background: #ddd;
+                background: #ffffff;
+                position: relative;
             }
 
             :host ::content text {
@@ -107,8 +108,19 @@ Example:
             :host ::content .children:hover rect.child {
                 fill: #bbb;
             }
+
+            :host ::content .spinner  {
+                position: absolute;
+                left: 50%;
+                top: 50%;
+                width: 160px;
+                height: 160px;
+                margin-left: -80px;
+                margin-top: -80px;
+
+            }
         </style>
-        <div id="treemap_placeholder"></div>
+        <div id="treemap_placeholder"><img class="spinner" src="spin.svg" /></div>
         <base-ajax-json-jsonpath-datalet data-url="{{dataUrl}}" fields="{{fields}}" data="{{data}}"></base-ajax-json-jsonpath-datalet>
     </template>
 
@@ -182,7 +194,15 @@ Example:
             },
 
             presentData: function(){
-                build(this.map, "treemap_placeholder");
+                var me = this;
+                var xyz = function(url) {
+                    me.selectResource(url);
+                }
+                build(this.map, "treemap_placeholder", xyz);
+            },
+
+            selectResource: function(url) {
+                this._component.fire("datasetexplorer-datalet_data-url", { url: url });
             }
         };
 
