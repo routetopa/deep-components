@@ -31,6 +31,7 @@
 
 <link rel="import" href="../base-datalet/base-datalet.html">
 <link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout.html">
+<link rel="import" href="../../bower_components/paper-dialog/paper-dialog.html">
 
 <!--
 `preview-datalet` is a datalet that allow user to preview the content of a web page. It creates a thumbnail of the site using the data-url attribute passed as input.
@@ -54,11 +55,22 @@ Example:
 
         <style is="custom-style">
 
+            #dialog{
+                position: absolute;
+                padding: 20px;
+            }
+
         </style>
 
         <div style="align-content: center;" id="graph_content">
             <svg id="sbiricuda"></svg>
         </div>
+
+        <paper-dialog id="dialog">
+            <h2 id="dialog_title"></h2>
+            <paper-dialog-scrollable id="dialog_content">
+            </paper-dialog-scrollable>
+        </paper-dialog>
 
     </template>
 
@@ -73,6 +85,7 @@ Example:
         height = undefined;
         svg    = undefined;
         _this  = null;
+        prev_selected_node = null;
 
         Polymer({
             is : 'graph-datalet',
@@ -137,6 +150,9 @@ Example:
                                                                                               .on("mouseout", this.mouseout)
                                                                                               .on("click", this.active)
                                                                                             .append("circle")
+                                                                                                .attr("id", function(t){
+                                                                                                   return t.id;
+                                                                                                })
                                                                                                 .attr("class", function (t) {
                                                                                                     return t.fixed ? "" : "drag"
                                                                                                 }).attr("r", function (t) {
@@ -200,9 +216,10 @@ Example:
             },
             mouseover : function (t) {
                 d3.select(this).selectAll("circle").transition().duration(600).ease("elastic").attr("r", function (t) {
+                    //return 1 == t.fixed ? 1.4 * t.r : 15
                     return 1 == t.fixed ? 1.4 * t.r : 15
                 });
-                //$("#sbiricuda").html($("." + t.name.split(" ").join("_").toLowerCase()).html())
+
             },
 
             mouseout : function () {
@@ -212,8 +229,23 @@ Example:
             },
 
             active : function (t) {
-               /*t.fixed && openModal(t.name)*/
                _this.fire('graph-datalet_node-clicked', {node : t});
+
+                if(prev_selected_node != null){
+                    prev_selected_node.style.stroke = prev_selected_node.style.fill;
+                    prev_selected_node.style.fill = "";
+                }
+
+                prev_selected_node = document.getElementById("" + t.id);
+                prev_selected_node.style.fill   = prev_selected_node.style.stroke;
+                prev_selected_node.style.stroke = "#000000";
+
+               /* _this.$.dialog_title.innerHTML   = "Comment";
+                _this.$.dialog_content.innerHTML = t.name;
+                _this.$.dialog.style.top         = t.y + "px";
+                _this.$.dialog.style.left        = t.x + "px";
+
+               _this.$.dialog.open();*/
             },
 
             openModal : function(t) {
