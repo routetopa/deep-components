@@ -1,4 +1,9 @@
+circle{
+    stroke-width: 2.5px;
+}
+
 .text {
+    font-family: 'Roboto', sans-serif;
     visibility: hidden
 }
 
@@ -7,6 +12,7 @@
     fill: #fff;
     stroke: #959595;
     stroke-width: 4.5px
+    z-index: 100;
 }
 
 .node.fixed {

@@ -31,7 +31,6 @@
 
 <link rel="import" href="../base-datalet/base-datalet.html">
 <link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout.html">
-<link rel="import" href="../../bower_components/paper-slider/paper-slider.html">
 
 <!--
 `preview-datalet` is a datalet that allow user to preview the content of a web page. It creates a thumbnail of the site using the data-url attribute passed as input.
@@ -54,32 +53,26 @@ Example:
         <link rel="stylesheet" href="static/css/graphStyle.css">
 
         <style is="custom-style">
-            .content {
-                /*width: 50%;*/
-                margin: 0px auto;
-            }
 
         </style>
 
-       <div class="layout vertical">
-            <div id="toolbar">
-                <paper-slider min="900" max="1500" value="{{width}}"></paper-slider>
-            </div>
-            <div style="align-content: center;" id="graph-content">
-                <svg id="sbiricuda"></svg>
-            </div>
-       </div>
-
-        <base-datalet id="base" data-url="{{dataUrl}}"></base-datalet>
+        <div style="align-content: center;" id="graph_content">
+            <svg id="sbiricuda"></svg>
+        </div>
 
     </template>
 
     <script src="static/js/d3.v3.js"></script>
-    <script src="static/js/buildGraph.js"></script>
 
     <script>
 
-        var _this;
+        gnodes = [];
+        glinks = [];
+
+        width  = undefined;
+        height = undefined;
+        svg    = undefined;
+        _this  = null;
 
         Polymer({
             is : 'graph-datalet',
@@ -99,8 +92,7 @@ Example:
 
                 width: {
                     type: Number,
-                    value: undefined,
-                    observer : '_widthChanged'
+                    value: 1250
                 },
 
                 height : {
@@ -111,20 +103,20 @@ Example:
                 svg: {
                     type: Object,
                     value: undefined
-                },
-
-                gnodes:{
-                    type: Array,
-                    value: undefined
-                },
-
-                glinks:{
-                    type: Array,
-                    value: undefined
-                },
+                }
             },
 
-           /* buildGraph: function (t){
+            buildGraph: function (t){
+
+                this.svg = this.svg.append("g")
+                                   .call(d3.behavior.zoom().scaleExtent([.25, 20]).on("zoom", this.zoom))
+                                   .append("g");
+
+                this.svg.append("rect")
+                        .attr("fill", "white")
+                        .attr("width", width)
+                        .attr("height", height);
+
                 var graph = {};
 
                 graph.nodes = t.nodes;
@@ -135,24 +127,35 @@ Example:
                     return t.value ? t.value : 80
                 }).on("tick", this.tick).start();
 
-                this.glinks = this.svg.selectAll(".link").data(graph.links).enter().append("line").attr("class", "link");
+                glinks = this.svg.selectAll(".link").data(graph.links).enter().append("line").attr("class", "link");
 
-                this.gnodes = this.svg.selectAll(".node").data(graph.nodes).enter().append("g").attr("class", function (t) {
-                    return t.fixed ? "node fixed" : "node"
-                }).attr("name", function (t) {
-                    return t.name ? t.name.split(" ").join("_").toLowerCase() : ""
-                }).on("mouseover", this.mouseover).on("mouseout", this.mouseout).on("click", this.active).append("circle").attr("class", function (t) {
-                    return t.fixed ? "" : "drag"
-                }).attr("r", function (t) {
-                    return t.r ? t.r : 15
-                }).attr("style", function (t) {
-                    return t.color ? "stroke:" + t.color : !1
-                });
+                gnodes = this.svg.selectAll(".node").data(graph.nodes).enter().append("g").attr("class", function (t) {
+                                                                                                return t.fixed ? "node fixed" : "node"
+                                                                                            }).attr("name", function (t) {
+                                                                                                return t.name ? t.name.split(" ").join("_").toLowerCase() : ""
+                                                                                            }).on("mouseover", this.mouseover)
+                                                                                              .on("mouseout", this.mouseout)
+                                                                                              .on("click", this.active)
+                                                                                            .append("circle")
+                                                                                                .attr("class", function (t) {
+                                                                                                    return t.fixed ? "" : "drag"
+                                                                                                }).attr("r", function (t) {
+                                                                                                    return t.r ? t.r : 15
+                                                                                                }).attr("style", function (t) {
+                                                                                                    return t.color ? "stroke:" + t.color : !1
+                                                                                                });
 
                 //d3.selectAll(".drag").call(force.drag), svg.selectAll("g.fixed").call(text);
                 d3.selectAll(".drag").call(force.drag), this.svg.selectAll("g.node").call(this.text);
 
+                svg = this.svg;
+
             },
+
+            zoom: function() {
+                svg.attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")");
+            },
+
             text: function (t)
             {
                 var e = t.append("svg:foreignObject").attr("width", 120).attr("height", 30);
@@ -179,14 +182,13 @@ Example:
                 });
 
 
-
-                _this.gnodes.attr("cx", function (t) {
-                    return t.x = Math.max(25, Math.min(this.width - 50, t.x))
+                gnodes.attr("cx", function (t) {
+                    return t.x = Math.max(25, Math.min(width - 50, t.x))
                 }).attr("cy", function (t) {
                     return t.y = Math.max(8, Math.min(600, t.y))
                 });
 
-                _this.glinks.attr("x1", function (t) {
+                glinks.attr("x1", function (t) {
                     return t.source.x
                 }).attr("y1", function (t) {
                     return t.source.y
@@ -210,7 +212,8 @@ Example:
             },
 
             active : function (t) {
-               t.fixed && openModal(t.name)
+               /*t.fixed && openModal(t.name)*/
+               _this.fire('graph-datalet_node-clicked', {node : t});
             },
 
             openModal : function(t) {
@@ -218,7 +221,7 @@ Example:
                 $(".modal-content").hide();
                 $("." + e).fadeIn();
                 $("#modal").modal()
-            },*/
+            },
 
             /**
              * It is called after the element’s template has been stamped and all elements inside the element’s local
@@ -231,22 +234,16 @@ Example:
              *
              */
             ready: function(){
-                width = this.width;
+
+                _this = this;
+
                 this.height = 9 * this.width / 16;
+
+                width  = this.width;
                 height = this.height;
-                svg = d3.select("svg#sbiricuda").attr("class", "svg").attr({
-                    width: "100%",
-                    height: "100%"
-                })//.attr("viewBox", "0 0 " + this.width + " " + this.height).attr("pointer-events", "all").style("position", "absolute").attr("style", "transform:translate(0px)");
 
-                var g = JSON.parse(this.data);
-                g.nodes[0].x = this.width / 2;
-                g.nodes[0].y = this.height / 2;
-                buildGraph(g);
+                this.$.graph_content.style.height = height + "px";
 
-               /* _this = this;
-
-                this.height = 9 * this.width / 16;
                 this.svg = d3.select("svg#sbiricuda").attr("class", "svg").attr({
                     width: "100%",
                     height: "100%"
@@ -255,23 +252,7 @@ Example:
                 var g = JSON.parse(this.data);
                 g.nodes[0].x = this.width / 2;
                 g.nodes[0].y = this.height / 2;
-                this.buildGraph(g);*/
-            },
-
-            _widthChanged: function(oldValue, newValue){
-
-                width = this.width;
-                this.height = 9 * this.width / 16;
-                height = this.height;
-
-                svg = d3.select("svg#sbiricuda").attr("class", "svg").attr({
-                    width: "100%",
-                    height: "100%"
-                }).attr("viewBox", "0 0 " + this.width + " " + height).attr("pointer-events", "all").style("position", "absolute").attr("style", "transform:translate(0px)");
-
-                var g = JSON.parse(this.data);
-                g.nodes[0].x = this.width / 2;
-                g.nodes[0].y = this.height / 2;
+                this.buildGraph(g);
             }
         });
     </script>
