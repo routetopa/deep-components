@@ -1,0 +1,259 @@
+<!--
+@license
+    The MIT License (MIT)
+
+    Copyright (c) 2015 Dipartimento di Informatica - Università di Salerno - Italy
+
+    Permission is hereby granted, free of charge, to any person obtaining a copy
+    of this software and associated documentation files (the "Software"), to deal
+    in the Software without restriction, including without limitation the rights
+    to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+    copies of the Software, and to permit persons to whom the Software is
+    furnished to do so, subject to the following conditions:
+
+    The above copyright notice and this permission notice shall be included in
+    all copies or substantial portions of the Software.
+
+    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+    IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+    FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+    AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+    LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+    THE SOFTWARE.
+-->
+
+<!--
+* Developed by :
+* ROUTE-TO-PA Project - grant No 645860. - www.routetopa.eu
+*
+-->
+
+<link rel="import" href="../base-datalet/base-datalet.html">
+<link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout.html">
+
+<!--
+`preview-datalet` is a datalet that allow user to preview the content of a web page. It creates a thumbnail of the site using the data-url attribute passed as input.
+
+Example:
+
+    <preview-datalet data-url="http://spod.routetopa.eu"
+    </preview-datalet>
+
+
+@element preview-datalet
+@status beta
+@homepage
+@group datalets
+-->
+
+<dom-module id="graph-datalet">
+    <template>
+
+        <link rel="stylesheet" href="static/css/graphStyle.css">
+
+        <style is="custom-style">
+
+        </style>
+
+        <div style="align-content: center;" id="graph_content">
+            <svg id="sbiricuda"></svg>
+        </div>
+
+    </template>
+
+    <script src="static/js/d3.v3.js"></script>
+
+    <script>
+
+        gnodes = [];
+        glinks = [];
+
+        width  = undefined;
+        height = undefined;
+        svg    = undefined;
+        _this  = null;
+
+        Polymer({
+            is : 'graph-datalet',
+
+            properties: {
+                /**
+                 * It's the url for the preview
+                 *
+                 * @attribute url
+                 * @type Strig
+                 * @default ''
+                 */
+                data : {
+                    type : Object,
+                    value : undefined
+                },
+
+                width: {
+                    type: Number,
+                    value: 1250
+                },
+
+                height : {
+                    type : Number,
+                    type: undefined
+                },
+
+                svg: {
+                    type: Object,
+                    value: undefined
+                }
+            },
+
+            buildGraph: function (t){
+
+                this.svg = this.svg.append("g")
+                                   .call(d3.behavior.zoom().scaleExtent([.25, 20]).on("zoom", this.zoom))
+                                   .append("g");
+
+                this.svg.append("rect")
+                        .attr("fill", "white")
+                        .attr("width", width)
+                        .attr("height", height);
+
+                var graph = {};
+
+                graph.nodes = t.nodes;
+                graph.links = t.links;
+
+                force = d3.layout.force().nodes(graph.nodes).links(graph.links).size([this.width, this.height]).charge(-1e3).friction(.7).linkDistance(function (t)
+                {
+                    return t.value ? t.value : 80
+                }).on("tick", this.tick).start();
+
+                glinks = this.svg.selectAll(".link").data(graph.links).enter().append("line").attr("class", "link");
+
+                gnodes = this.svg.selectAll(".node").data(graph.nodes).enter().append("g").attr("class", function (t) {
+                                                                                                return t.fixed ? "node fixed" : "node"
+                                                                                            }).attr("name", function (t) {
+                                                                                                return t.name ? t.name.split(" ").join("_").toLowerCase() : ""
+                                                                                            }).on("mouseover", this.mouseover)
+                                                                                              .on("mouseout", this.mouseout)
+                                                                                              .on("click", this.active)
+                                                                                            .append("circle")
+                                                                                                .attr("class", function (t) {
+                                                                                                    return t.fixed ? "" : "drag"
+                                                                                                }).attr("r", function (t) {
+                                                                                                    return t.r ? t.r : 15
+                                                                                                }).attr("style", function (t) {
+                                                                                                    return t.color ? "stroke:" + t.color : !1
+                                                                                                });
+
+                //d3.selectAll(".drag").call(force.drag), svg.selectAll("g.fixed").call(text);
+                d3.selectAll(".drag").call(force.drag), this.svg.selectAll("g.node").call(this.text);
+
+                svg = this.svg;
+
+            },
+
+            zoom: function() {
+                svg.attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")");
+            },
+
+            text: function (t)
+            {
+                var e = t.append("svg:foreignObject").attr("width", 120).attr("height", 30);
+                e.attr("style", function (t) {
+                    return "color:" + (t.color ? t.color : "#000")
+                }).append("xhtml:div").html(function (t) {
+                    //return t.fixed ? t.name : null
+                    return t.name;
+                })
+            },
+
+            tick : function () {
+                // d3.select("svg").attr("style", "transform:translate(8%)");
+                d3.selectAll("g foreignObject").attr("x", function (t) {
+                    return t.x + (t.r ? 1.1 * t.r : 15)
+                }).attr("y", function (t) {
+                    return t.y - 35
+                });
+
+                d3.selectAll("#logo text").attr("x", function (t) {
+                    return t.x + .7 * (t.r ? t.r : 15)
+                }).attr("y", function (t) {
+                    return t.y
+                });
+
+
+                gnodes.attr("cx", function (t) {
+                    return t.x = Math.max(25, Math.min(width - 50, t.x))
+                }).attr("cy", function (t) {
+                    return t.y = Math.max(8, Math.min(600, t.y))
+                });
+
+                glinks.attr("x1", function (t) {
+                    return t.source.x
+                }).attr("y1", function (t) {
+                    return t.source.y
+                }).attr("x2", function (t) {
+                    return t.target.x
+                }).attr("y2", function (t) {
+                    return t.target.y
+                })
+            },
+            mouseover : function (t) {
+                d3.select(this).selectAll("circle").transition().duration(600).ease("elastic").attr("r", function (t) {
+                    return 1 == t.fixed ? 1.4 * t.r : 15
+                });
+                //$("#sbiricuda").html($("." + t.name.split(" ").join("_").toLowerCase()).html())
+            },
+
+            mouseout : function () {
+                d3.select(this).selectAll("text").style("visibility", "hidden"), d3.select(this).selectAll("circle").transition().duration(400).attr("r", function (t) {
+                    return t.r ? t.r : 15
+                })
+            },
+
+            active : function (t) {
+               /*t.fixed && openModal(t.name)*/
+               _this.fire('graph-datalet_node-clicked', {node : t});
+            },
+
+            openModal : function(t) {
+                var e = t.split(" ").join("_").toLowerCase();
+                $(".modal-content").hide();
+                $("." + e).fadeIn();
+                $("#modal").modal()
+            },
+
+            /**
+             * It is called after the element’s template has been stamped and all elements inside the element’s local
+             * DOM have been configured (with values bound from parents, deserialized attributes, or else default values)
+             * and had their ready method called.
+             *
+             * Extract the dataset domain from the entire URL and set the text content of the datalet footer.
+             *
+             * @method ready
+             *
+             */
+            ready: function(){
+
+                _this = this;
+
+                this.height = 9 * this.width / 16;
+
+                width  = this.width;
+                height = this.height;
+
+                this.$.graph_content.style.height = height + "px";
+
+                this.svg = d3.select("svg#sbiricuda").attr("class", "svg").attr({
+                    width: "100%",
+                    height: "100%"
+                }).attr("viewBox", "0 0 " + this.width + " " + this.height).attr("pointer-events", "all").style("position", "absolute").attr("style", "transform:translate(0px)");
+
+                var g = JSON.parse(this.data);
+                g.nodes[0].x = this.width / 2;
+                g.nodes[0].y = this.height / 2;
+                this.buildGraph(g);
+            }
+        });
+    </script>
+</dom-module>
