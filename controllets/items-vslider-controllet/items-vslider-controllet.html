@@ -1,0 +1,291 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html" />
+
+<link rel="import" href="../../bower_components/iron-ajax/iron-ajax.html">
+
+<link rel="import" href="../../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../../bower_components/iron-icons/hardware-icons.html">
+<link rel="import" href="../../bower_components/iron-icons/iron-icons.html">
+
+<link rel="import" href="../../bower_components/paper-material/paper-material.html" />
+
+<link rel="import" href="../../bower_components/paper-input/paper-input.html">
+
+<dom-module id="items-vslider-controllet">
+
+    <template>
+
+        <style is="custom-style">
+            paper-icon-button{
+                color: #FFFFFF;
+                height: 48px;
+                width: 48px;
+                padding: 0px;
+                margin: 0px;
+                --paper-icon-button-ink-color: white;
+            }
+
+            #items_vslider_container{
+                display: flex;
+                flex-direction: column;
+                height: 100vh;
+                width: 172px;
+                background-color: #E0E0E0;
+            }
+
+            #div_datalets_container {
+                position: relative;
+                margin-bottom: 16px;
+            }
+
+            .arrow-up{
+                background-color: #2196F3;
+                padding-left: 63px;
+            }
+
+            .arrow-down{
+                background-color: #2196F3;
+                padding-left: 63px;
+            }
+
+            .content-card{
+                position: relative;
+                float: left;/*firefox*/
+                /*margin : 16px;*/
+                margin : 16px 16px 0px 16px;
+                padding: 8px;
+                height: 124px;
+                width: 124px;
+                cursor: pointer;
+                background-color: #FFFFFF;
+            }
+
+            img{
+                /*height: 100%;*/
+                width: 100%;
+            }
+
+            .legend {
+                position: absolute;
+                left: 0;
+                bottom: 16px;
+                padding: 8px;
+                width: 124px;
+                background-color: #9E9E9E;
+                color: #FFFFFF;
+                opacity: 0.87;
+                z-index: 1;
+                font-family: 'Roboto', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+                font-size: 16px;
+            }
+
+            .legend.selected {
+                font-weight: 700;
+                background-color: #2196F3;
+                opacity: 1;
+            }
+
+            #items_vslider_search{
+                height: 48px;
+                padding: 0px 8px;
+                background-color: #B6B6B6;
+                --paper-input-container-focus-color: #2196F3;
+            }
+
+            .search{
+                color: #FFFFFF
+            }
+
+            .clear {
+                margin-bottom: 3px;
+                width: 16px;
+                height: 16px;
+                color: #2196F3;
+                --paper-icon-button-ink-color: #2196F3;
+            }
+        </style>
+
+        <iron-ajax auto handle-as="json" url={{dataletsListUrl}} on-response="_getDatalets"></iron-ajax>
+
+        <paper-material id="items_vslider_container" elevation="5">
+
+            <paper-input id="items_vslider_search" value={{filter}} no-label-float label="search datalet">
+                <iron-icon class="search" icon="search" prefix></iron-icon>
+                <paper-icon-button class="clear" suffix on-click="_clearInput" icon="clear"></paper-icon-button>
+            </paper-input>
+
+            <div class="arrow-up">
+                <paper-icon-button on-click="_onPrevClick" icon="hardware:keyboard-arrow-up"></paper-icon-button>
+            </div>
+
+            <div id="div_datalets_container" class="flex">
+                <template is="dom-repeat" items="{{filteredDatalets}}">
+                    <paper-material id={{item.imageName}} elevation="1" class='content-card' on-click="_selectDatalet">
+                        <div class="legend">{{item.imageName}}</div>
+                        <div><img src={{item.imageUrl}}></div>
+                    </paper-material>
+                </template>
+            </div>
+
+            <div class="arrow-down">
+                <paper-icon-button on-click="_onNextClick" icon="hardware:keyboard-arrow-down"></paper-icon-button>
+            </div>
+
+        </paper-material>
+
+    </template>
+
+    <script>
+
+        Polymer({
+
+            is : 'items-vslider-controllet',
+
+            properties : {
+
+                dataletsListUrl : {
+                    type : String,
+                    value : undefined
+                },
+
+                selectedDatalet : {
+                    type  : String,
+                    value : undefined
+                },
+
+                datalets : {
+                    type  : Array,
+                    value : []
+                },
+
+                filteredDatalets : {
+                    type  : Array,
+                    value : []
+                },
+
+                filter : {
+                    type  : String,
+                    value : "",
+                    observer : '_filterDatalets'
+                }
+            },
+
+            listeners: {
+                'dom-change': '_onDomChange'
+            },
+
+            ready : function() {
+//                this._resize();
+                $(this.$.div_datalets_container).perfectScrollbar();
+            },
+
+            attached : function() {
+//                this._resize();
+//                var that = this;
+//                window.addEventListener("resize", function() { that._resize(); });
+            },
+
+            _clearInput : function() {
+                this.$.items_vslider_search.value = "";
+            },
+
+            _getDatalets : function(e){
+                var datalets = new Array();
+                for(var i=0; i < e.detail.response.length; i++){
+                    var datalet = { imageName : e.detail.response[i].name.replace("-datalet", ""), imageUrl : e.detail.response[i].url + e.detail.response[i].name + ".png" };
+                    datalets.push(datalet);
+                }
+
+                this.datalets = datalets;
+                this.filteredDatalets = datalets;
+            },
+
+            _filterDatalets : function(){
+                var datalets = new Array();
+                for(var i=0; i < this.datalets.length; i++){
+                    var datalet = this.datalets[i];
+                    if(datalet.imageName.indexOf(this.filter) != -1)
+                        datalets.push(datalet);
+                }
+
+                this.filteredDatalets = datalets;
+
+                $("#div_datalets_container").animate({ scrollTop: 0}, 0);
+            },
+
+            _onDomChange : function() {
+                if(this.selectedDatalet != undefined ){
+
+                    for(var i=0; i < this.filteredDatalets.length; i++){
+                        var datalet = this.filteredDatalets[i];
+                        var dataletCard = document.getElementById(datalet.imageName);
+                        dataletCard.elevation = "1";
+                        dataletCard.getElementsByClassName("legend")[0].className = dataletCard.getElementsByClassName("legend")[0].className.replace("selected", "");
+                    }
+
+                    if(document.getElementById(this.selectedDatalet) != null){
+                        var dataletCard = document.getElementById(this.selectedDatalet);
+                        dataletCard.elevation = "5";
+                        dataletCard.getElementsByClassName("legend")[0].className = dataletCard.getElementsByClassName("legend")[0].className + " selected";
+                    }
+
+                }
+            },
+
+            _selectDatalet : function(e){
+                if(this.selectedDatalet != undefined && (document.getElementById(this.selectedDatalet) != null)){
+                    var dataletCard = document.getElementById(this.selectedDatalet);
+                    dataletCard.elevation = "1";
+                    dataletCard.getElementsByClassName("legend")[0].className = dataletCard.getElementsByClassName("legend")[0].className.replace(" selected", "");
+                }
+
+                if(e.currentTarget.id != this.selectedDatalet){
+                    e.currentTarget.elevation = "5";
+                    e.currentTarget.getElementsByClassName("legend")[0].className = e.currentTarget.getElementsByClassName("legend")[0].className + " selected";
+                    this.selectedDatalet = e.currentTarget.id;
+                }
+                else
+                    this.selectedDatalet = undefined;
+
+                this.fire('items-vslider-controllet_selected-datalet', {datalet: this.selectedDatalet});
+            },
+
+
+            _getImageUrl : function(index){
+                return this.datalets[index].imageUrl;
+            },
+
+            _onPrevClick : function() {
+
+                var container = $("#div_datalets_container");
+                var h = container.height();
+                var dataletPerPage = parseInt(h/156);
+                var scroll = $("#div_datalets_container").scrollTop()-156*dataletPerPage;
+                var diff = scroll % 156;
+//                scroll += 156-diff;
+                scroll -= diff;
+                $("#div_datalets_container").animate({ scrollTop: scroll}, 300);
+
+            },
+
+            _onNextClick : function() {
+                var container = $("#div_datalets_container");
+                var h = container.height();
+                var dataletPerPage = parseInt(h/156);
+                var scroll = $("#div_datalets_container").scrollTop()+156*dataletPerPage;
+                var diff = scroll % 156;
+                scroll -= diff;
+                $("#div_datalets_container").animate({ scrollTop: scroll}, 300);
+
+            },
+
+//            _resize : function(){
+//                var h = Math.max(document.documentElement.clientHeight, window.innerHeight || 0) - 16;
+//                h = h - 64 - 8; //height with page scroller
+//                $("#items_vslider_container").height(h);
+//            }
+
+        });
+
+    </script>
+
+</dom-module>

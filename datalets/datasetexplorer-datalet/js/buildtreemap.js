@@ -190,9 +190,8 @@ function build(root, place_holder, select_listener) {
                 .append("foreignObject")
                 .attr("width", root.dx)
                 .attr("height", root.dy - root.y)
-                    .append("xhtml:body")
-                    .html('<iframe src="'+pageurl+'" width="'+root.dx+'" height="'+root.dy+'"></iframe>');
-
+                .append("xhtml:body")
+                .html('<iframe src="'+pageurl+'" width="'+root.dx+'" height="'+root.dy+'"></iframe>');
         }
 
         return g;
