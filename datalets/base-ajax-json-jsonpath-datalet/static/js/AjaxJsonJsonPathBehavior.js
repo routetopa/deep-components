@@ -2,7 +2,7 @@
 @license
     The MIT License (MIT)
 
-    Copyright (c) 2015 Dipartimento di Informatica - Università di Salerno - Italy
+    Copyright (c) 2015 Dipartimento di Informatica - Universitï¿½ di Salerno - Italy
 
     Permission is hereby granted, free of charge, to any person obtaining a copy
     of this software and associated documentation files (the "Software"), to deal
@@ -98,7 +98,7 @@ var AjaxJsonJsonPathBehavior = {
      *
      * @method selectData
      */
-    selectData : function(){
+    selectData : function() {
 
         this.data = [];
 
@@ -107,17 +107,27 @@ var AjaxJsonJsonPathBehavior = {
 
         this._component.fields = JSON.parse(this._component.fields);
 
-        for(var i=0;i < this._component.fields.length; i++){
+        for (var i = 0; i < this._component.fields.length; i++) {
             var query = "$";
             var query_elements = this._component.fields[i].split(',');
-            for(var j=0; j < query_elements.length;j++){
+            for (var j = 0; j < query_elements.length; j++) {
                 query += "['" + query_elements[j] + "']";
-                if(this.isFieldArray(query_elements.slice(0,j+1))){
+                if (this.isFieldArray(query_elements.slice(0, j + 1))) {
                     query += "[*]";
                 }
             }
-            this.data.push({name : query_elements[query_elements.length - 1], data : jsonPath(this.properties.json_results.value, query)});
+            this.data.push({
+                name: query_elements[query_elements.length - 1],
+                data: jsonPath(this.properties.json_results.value, query)
+            });
         }
-    }
+        this.deleteWaitImage();
+    },
 
+    /**
+     * Delete a image after loading a datalet
+     */
+    deleteWaitImage : function() {
+        $("img[src$='spin.svg']").remove();
+    }
 };
