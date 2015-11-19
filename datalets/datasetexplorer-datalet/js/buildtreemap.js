@@ -28,8 +28,6 @@ function build(root, place_holder, select_listener) {
         .ratio(height / width * 0.5 * (1 + Math.sqrt(5)))
         .round(false);
 
-    d3.select("#" + place_holder).selectAll('*').remove();
-
     var svg = d3.select("#" + place_holder)
         .append("svg")
         .attr("width", width + margin.left + margin.right)
