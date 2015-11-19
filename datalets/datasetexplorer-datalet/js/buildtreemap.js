@@ -209,7 +209,8 @@ function build(root, place_holder, select_listener) {
         d.each(function(){
             var text = d3.select(this),
                 d = text[0][0].__data__,
-                words = d.name.trim().split(/\s+|\./).reverse(),
+                name = d.name.trim(),
+                words = name.search(/\s+/) >= 0 ? name.split(/\s+/).reverse() : [name],
                 word = words.pop(),
                 line = [word],
                 lineNumber = 0,
@@ -232,7 +233,8 @@ function build(root, place_holder, select_listener) {
                     .append("tspan")
                     .attr("x", fx(d.x) + 6)
                     .attr("y", fy(d.y) + 6)
-                    .attr("dy", lineNumber++ * lineHeight + dy + "em");
+                    .attr("dy", lineNumber++ * lineHeight + dy + "em")
+                    .text(word);
             var width = fx(d.x + d.dx) - fx(d.x) - 12;
             var height = fy(d.y + d.dy) - fy(d.y) - 6;
 
