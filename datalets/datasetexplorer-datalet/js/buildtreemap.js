@@ -177,9 +177,29 @@ function build(root, place_holder, select_listener) {
         }
 
         if (!d._children[0]._children) {
-            //grandparent.dispatchEvent(new CustomEvent('select', { detail: d._children[0].name }));
             if (select_listener) {
-                select_listener(d._children[0].name);
+                var url = d._children[0].name;
+
+                // Check if CKAN
+                var strDatasetPos = url.indexOf('/dataset/');
+                var strResourcePos = (strDatasetPos >= 0) ? url.indexOf('/resource/') : -1;
+                if (strDatasetPos >= 0 && strResourcePos > strDatasetPos) {
+                    var urlSegment1 = url.substring(0, strDatasetPos);
+                    var urlResourceEnd = url.indexOf('/', strResourcePos + 10);
+                    var resourceId = url.substring(strResourcePos + 10, urlResourceEnd);
+                    url = urlSegment1 + "/api/action/datastore_search?resourceid=" + resourceId;
+                }
+
+                // Check if OPENDATASOFT
+                var strExploreDatasetPos = url.indexOf('/explore/dataset/');
+                if (strExploreDatasetPos >= 0) {
+                    var urlSegment1 = url.substring(0, strExploreDatasetPos);
+                    var datasetEnd = url.indexOf(strExploreDatasetPos + 17, '/');
+                    var datasetId = url.substring(strExploreDatasetPos + 17, datasetEnd >= 0 ? datasetEnd : url.length);
+                    url = urlSegment1 + '/api/records/1.0/search?dataset=' + datasetId;
+                }
+
+                select_listener(url);
             }
 
             var dataurl = d._children[0].name;
