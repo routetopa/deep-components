@@ -30,6 +30,7 @@
 -->
 
 <link rel="import" href="../base-ajax-json-jsonpath-datalet/base-ajax-json-jsonpath-datalet.html">
+<link rel="import" href="../base-ajax-json-jsonpath-datalet/base-ajax-json-jsonpath-datalet.html">
 
 <!--
 
@@ -120,11 +121,10 @@ Example:
 
             }
         </style>
-        <div id="treemap_placeholder"><img class="spinner" src="spin.svg" /></div>
+        <div id="treemap_placeholder"></div>
         <base-ajax-json-jsonpath-datalet data-url="{{dataUrl}}" fields="{{fields}}" data="{{data}}"></base-ajax-json-jsonpath-datalet>
     </template>
 
-    <!--<script src="../shared_js/d3.js"></script>-->
     <script src="../shared_js/d3.js"></script>
     <script src="js/buildtreemap.js"></script>
     <script>

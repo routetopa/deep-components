@@ -80,16 +80,17 @@ Example :
                 width: 100%;
              }
 
+
         </style>
 
         <div id="base_datalet_imgWaitDatalet">
                 <img id="image_spin" src="static/images/spin.svg">
 
         </div>
-
         <div id="base_datalet_container">
-            <b>Source: </b><span id="domain"></span>
-            <b>  </b><span id="domainPage"></span>
+            <b> Source:</b><span id="domain"></span>
+            <b>  </b><span id="domainPage">
+        </span>
             <div id="base_datalet_rtp">
                 <div id="rtp">Powered by ROUTE-TO-PA</div>
                 <div><a href="http://www.routetopa.eu/"><img id="rtpalogo" src="static/images/rtpalogo.png" ></a></div>
@@ -134,8 +135,6 @@ Example :
                 var urlDatalet;
                 if(this.dataUrl != undefined){
 
-                    urlSource =  this.dataUrl.split("/")[0] + "//" + this.dataUrl.split("/")[2];
-
                     var apiIdResource = "resource_show?id=";
 
                     //Resourceid of a datalet
@@ -148,10 +147,10 @@ Example :
                     queryFinal = this.dataUrl.substring(this.dataUrl.indexOf("api"),  this.dataUrl.indexOf("datastore_search"));
 
                     urlDatalet = queryInitial +  queryFinal + apiIdResource + resultIdDatalet;
+                    urlSource = this.dataUrl.split("/")[0] + "//" + this.dataUrl.split("/")[2];
 
+                    this.$.domainPage.innerHTML = '<a href=' + urlSource +  ' target=' + "_blank>" + urlSource + '</a>'+ "." ;
                     this.requestDataletData(urlDatalet);
-                    //String  source to define for Issy
-                    this.$.domain.textContent = this.dataUrl.split("/")[0] + "//" + this.dataUrl.split("/")[2];
                 }
             },
             /**
@@ -214,10 +213,9 @@ Example :
                     urlDatalet = urlDatasetDownload.replace(/\/download\/.*/, '');
                     urlSource =  this.dataUrl.split("/")[0] + "//" + this.dataUrl.split("/")[2];
 
-                    //this.$.domain.textContent = this.dataUrl.split("/")[0] + "//" + this.dataUrl.split("/")[2];
 
-                    //this.$.domainPage.innerHTML = '<a href=' + urlSource +  ' target=' + "_blank>" + " urlSource" + '</a>';
-                    this.$.domainPage.innerHTML = '<a href=' + urlDatalet +  ' target=' + "_blank>" + " Dataset's page" + '</a>';
+                    this.$.domainPage.innerHTML += " (" + ' <a href=' + urlDatalet +  ' target=' + "_blank>" + "Dataset's page" + '</a>' + " )";
+
                 }
             }
         });

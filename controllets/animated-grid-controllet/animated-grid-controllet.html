@@ -146,6 +146,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
             var target = event.target;
 
+            if(target.classList[0] != "grid-item")
+                return;
+
             // configure the page animation
             this.sharedElements = {
                 'hero': target,

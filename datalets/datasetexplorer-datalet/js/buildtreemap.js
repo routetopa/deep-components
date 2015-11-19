@@ -28,8 +28,6 @@ function build(root, place_holder, select_listener) {
         .ratio(height / width * 0.5 * (1 + Math.sqrt(5)))
         .round(false);
 
-    d3.select("#" + place_holder).selectAll('*').remove();
-
     var svg = d3.select("#" + place_holder)
         .append("svg")
         .attr("width", width + margin.left + margin.right)
@@ -179,9 +177,29 @@ function build(root, place_holder, select_listener) {
         }
 
         if (!d._children[0]._children) {
-            //grandparent.dispatchEvent(new CustomEvent('select', { detail: d._children[0].name }));
             if (select_listener) {
-                select_listener(d._children[0].name);
+                var url = d._children[0].name;
+
+                // Check if CKAN
+                var strDatasetPos = url.indexOf('/dataset/');
+                var strResourcePos = (strDatasetPos >= 0) ? url.indexOf('/resource/') : -1;
+                if (strDatasetPos >= 0 && strResourcePos > strDatasetPos) {
+                    var urlSegment1 = url.substring(0, strDatasetPos);
+                    var urlResourceEnd = url.indexOf('/', strResourcePos + 10);
+                    var resourceId = url.substring(strResourcePos + 10, urlResourceEnd);
+                    url = urlSegment1 + "/api/action/datastore_search?resourceid=" + resourceId;
+                }
+
+                // Check if OPENDATASOFT
+                var strExploreDatasetPos = url.indexOf('/explore/dataset/');
+                if (strExploreDatasetPos >= 0) {
+                    var urlSegment1 = url.substring(0, strExploreDatasetPos);
+                    var datasetEnd = url.indexOf(strExploreDatasetPos + 17, '/');
+                    var datasetId = url.substring(strExploreDatasetPos + 17, datasetEnd >= 0 ? datasetEnd : url.length);
+                    url = urlSegment1 + '/api/records/1.0/search?dataset=' + datasetId;
+                }
+
+                select_listener(url);
             }
 
             var dataurl = d._children[0].name;
@@ -211,7 +229,8 @@ function build(root, place_holder, select_listener) {
         d.each(function(){
             var text = d3.select(this),
                 d = text[0][0].__data__,
-                words = d.name.trim().split(/\s+|\./).reverse(),
+                name = d.name.trim(),
+                words = name.search(/\s+/) >= 0 ? name.split(/\s+/).reverse() : [name],
                 word = words.pop(),
                 line = [word],
                 lineNumber = 0,
@@ -234,7 +253,8 @@ function build(root, place_holder, select_listener) {
                     .append("tspan")
                     .attr("x", fx(d.x) + 6)
                     .attr("y", fy(d.y) + 6)
-                    .attr("dy", lineNumber++ * lineHeight + dy + "em");
+                    .attr("dy", lineNumber++ * lineHeight + dy + "em")
+                    .text(word);
             var width = fx(d.x + d.dx) - fx(d.x) - 12;
             var height = fy(d.y + d.dy) - fy(d.y) - 6;
 
