@@ -1,0 +1,299 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html" />
+
+<!--<link rel="import" href="../../bower_components/neon-animation/neon-animation.html">-->
+<link rel="import" href="../../bower_components/neon-animation/neon-animated-pages.html">
+<link rel="import" href="../../bower_components/neon-animation/neon-animatable.html">
+<link rel="import" href="../../bower_components/neon-animation/neon-animations.html">
+
+<link rel="import" href="../../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../../bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="../../bower_components/iron-icon/iron-icon.html">
+
+<link rel="import" href="../../bower_components/paper-material">
+
+<dom-module id="items-vslider-controllet">
+
+    <template>
+
+        <style is="custom-style">
+            paper-icon-button{
+                color: #00BCD4;
+                height: 48px;
+                width: 48px;
+                --paper-icon-button-ink-color: #00BCD4;
+            }
+
+            paper-icon-button:hover{
+            }
+
+            .header{
+                width: 100%;
+                /*padding-bottom: 8px;*/
+                /*border-bottom: 2px solid #B6B6B6;*/
+            }
+
+            .chevron-left{
+                float: left;
+                margin-top: 8px;
+            }
+
+            .chevron-right{
+                float: right;
+                margin-top: 8px;
+            }
+
+            .box{
+                overflow: auto;
+            }
+
+            .avatar {
+                display: inline-block;
+                height: 64px;
+                width: 64px;
+                border-radius: 50%;
+                background: #2196F3;
+                color: #FFFFFF;
+                line-height: 64px;
+                font-size: 32px;
+                vertical-align: middle;
+                text-align: center;
+            }
+
+            .text {
+                display: inline-block;
+                height: 64px;
+                vertical-align: middle;
+                padding-left: 20px;
+            }
+
+            .title {
+                font-size: 32px;
+                color: #2196F3;
+            }
+
+            .subtitle {
+                font-size: 16px;
+                color: #727272;
+            }
+        </style>
+
+        <iron-ajax
+                auto
+                handle-as="json"
+                url={{dataletsListUrl}}
+                on-response="getDatalets">
+        </iron-ajax>
+
+        <div class="header">
+            <paper-icon-button class="chevron-left" on-click="_onPrevClick" icon="chevron-left"></paper-icon-button>
+            <paper-icon-button class="chevron-right" on-click="_onNextClick" icon="chevron-right"></paper-icon-button>
+
+            <div class="box">
+                <div class="avatar">[[avatar]]</div>
+                <div class="text">
+                    <div class="title">[[title]]</div>
+                    <div class="subtitle">[[subtitle]]</div>
+                </div>
+            </div>
+        </div>
+
+        <paper-material id="material_tree_view" elevation="5">
+
+            <neon-animated-pages on-neon-animation-finish="_onNeonAnimationFinish" selected="[[selected]]" entry-animation="[[entryAnimation]]" exit-animation="[[exitAnimation]]">
+            <!--<neon-animated-pages on-neon-animation-finish="_onNeonAnimationFinish" selected="[[selected]]" entry-animation="slide-from-bottom-animation" exit-animation="slide-down-animation">-->
+
+                <template is="dom-repeat" items="{{pages}}" as="page">
+
+                    <neon-animatable>
+
+                        <template is="dom-repeat" items="{{dataletsPerPage}}" as="index">
+
+                        <!--<span> {{item.name}}</span>-->
+                        <!--<img src={{getdatalets.image}}>-->
+                            <img src={{_getImage(page,index)}}>
+
+                        </template>
+                    </neon-animatable>
+
+                    <!--<neon-animated-pages id="neon_animated_pages" class="flex" selected="[[selected]]" entry-animation="[[entryAnimation]]" exit-animation="[[exitAnimation]]">-->
+                    <!--<template is="dom-repeat" items="{{pages}}" as="page">-->
+                    <!--<neon-animatable>-->
+                    <!--<template is="dom-repeat" items="{{dataletsPerPage}}" as="index">-->
+                    <!--<paper-material elevation="1" class='content-card'>-->
+                    <!--<div class="legend"><span>sbiricuda siempre!</span></div>-->
+                    <!--<div class="card-content-image">-->
+                    <!--<img src="{{_getImageUrl(page,index)}}">-->
+                    <!--</div>-->
+                    <!--</paper-material>-->
+                    <!--</template>-->
+                    <!--</neon-animatable>-->
+                    <!--</template>-->
+                    <!--</neon-animated-pages>-->
+
+                </template>
+
+            </neon-animated-pages>
+
+        </paper-material>
+
+    </template>
+
+    <script>
+
+        Polymer({
+
+            is : 'items-vslider-controllet',
+
+            properties : {
+
+                entryAnimation : {
+                    type  : String,
+                    value : ""
+                },
+
+                exitAnimation  : {
+                    type  : String,
+                    value : ""
+                },
+
+                selected : {
+                    type  : Number,
+                    value : 0
+                },
+
+                title : {
+                    type  : String,
+                    value : ""
+                },
+
+                subtitle : {
+                    type  : String,
+                    value : ""
+                },
+
+                avatar : {
+                    type  : String,
+                    value : "1"
+                },
+
+                datalets : {
+                    type  : Array,
+                    value : []
+                },
+
+                pages : {
+                    type  : Array,
+                    value : []
+                },
+
+                dataletsPerPage : {
+                    type  : Array,
+                    value : []
+                }
+
+
+                //dataletsListUrl or datalets as input
+            },
+
+            getDatalets : function(e){//imageUrllllllllllllllllllllllllllllllllllllllll
+                datalets = new Array();
+                for(var i=0; i < e.detail.response.length; i++){
+                    var datalet = { name : e.detail.response[i].name, image : e.detail.response[i].url + e.detail.response[i].name + ".png" };
+                    datalets.push(datalet);
+                }
+                this.datalets = datalets;
+
+                console.log(this.datalets);
+                this.pages = [0,1,2];
+                this.dataletsPerPage = [0,1,2];
+
+            },
+
+//            getName : function(name){
+//                return name;
+//            },
+//
+            _getImage : function(page, index){
+                console.log(this.datalets[3*page+index].image);
+                return this.datalets[3*page+index].image;
+            },
+
+            _resize : function(){//da cambiare rispetto al div container!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                var h = Math.max(document.documentElement.clientHeight, window.innerHeight || 0) - 16;
+                h = h - 64; //height with page scroller
+                $("#material_tree_view").height(h);
+            },
+
+            attached : function() {
+//                this.fire('items-vslider-controllet_selected', {selected : this.selected});
+                this._resize();
+            },
+
+            setTitle : function(title, subtitle) {
+                this.title = title;
+                this.subtitle = subtitle;
+            },
+
+            setAvatar : function(innerText) {
+                this.avatar = innerText;
+            },
+
+            chevronLeft : function(flag) {
+                var buttons = document.getElementsByTagName("paper-icon-button");
+                if(flag)
+                    buttons[0].removeAttribute("disabled");
+                else
+                    buttons[0].setAttribute("disabled", "true");
+            },
+
+            chevronRight : function(flag) {
+                var buttons = document.getElementsByTagName("paper-icon-button");
+                if(flag)
+                    buttons[1].removeAttribute("disabled");
+                else
+                    buttons[1].setAttribute("disabled", "true");
+            },
+
+            _onPrevClick : function() {
+                var buttons = document.getElementsByTagName("paper-icon-button");
+                buttons[0].setAttribute("disabled", "true");
+                buttons[1].setAttribute("disabled", "true");
+
+//                this.entryAnimation = 'slide-from-left-animation';
+//                this.exitAnimation  = 'slide-right-animation';
+
+                this.entryAnimation = '';
+                this.exitAnimation = 'slide-up-animation';
+
+                this.selected = this.selected === 0 ? (this.pages.length-1) : (this.selected - 1);
+            },
+
+            _onNextClick : function() {
+                var buttons = document.getElementsByTagName("paper-icon-button");
+                buttons[0].setAttribute("disabled", "true");
+                buttons[1].setAttribute("disabled", "true");
+
+//                this.entryAnimation = 'slide-from-right-animation';
+//                this.exitAnimation  = 'slide-left-animation';
+
+                this.entryAnimation = 'slide-down-animation';
+                this.exitAnimation = '';
+
+                this.selected = this.selected === (this.pages.length-1) ? 0 : (this.selected + 1);
+            },
+
+            _onNeonAnimationFinish: function() {
+                var buttons = document.getElementsByTagName("paper-icon-button");
+                buttons[0].removeAttribute("disabled");
+                buttons[1].removeAttribute("disabled");
+
+                this.avatar = this.selected+1;
+
+                this.fire('page-slider-controllet_selected', {selected : this.selected});
+            }
+
+        });
+
+    </script>
+
+</dom-module>

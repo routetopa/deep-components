@@ -1,0 +1,98 @@
+circle{
+    stroke-width: 2.5px;
+}
+
+.text {
+    font-family: 'Roboto', sans-serif;
+    visibility: hidden
+}
+
+.node {
+    cursor: move;
+    fill: #fff;
+    stroke: #959595;
+    stroke-width: 4.5px
+    z-index: 100;
+}
+
+.node.fixed {
+    cursor: pointer;
+    cursor: hand;
+    stroke-width: 6px
+}
+
+.link {
+    stroke: #d0d0d0;
+    stroke-width: 2.5px
+}
+
+g foreignObject {
+    z-index: 100;
+    position: relative;
+    -webkit-transition: opacity .5s ease-in-out;
+    -moz-transition: opacity .5s ease-in-out;
+    -ms-transition: opacity .5s ease-in-out;
+    -o-transition: opacity .5s ease-in-out;
+    transition: opacity .5s ease-in-out
+}
+
+g foreignObject div {
+    font-family: 'Roboto', sans-serif;
+    display: inline-block;
+    font-size: 12px;
+    text-decoration: none;
+    padding: 0px
+}
+
+g foreignObject a:hover {
+    background-color: #f4f4f4;
+    text-decoration: none
+}
+
+.r {
+    color: #c82528
+}
+
+.p {
+    color: #662d91
+}
+
+.y {
+    color: #f69a43
+}
+
+.g {
+    color: #519c76
+}
+
+.header {
+    text-align: center
+}
+
+.n1 {
+    font-size: 8em;
+    height: 120px;
+    color: #595a5a;
+    letter-spacing: -4px;
+    line-height: 1
+}
+
+.n1 span {
+    color: #c82528;
+    font-weight: 700
+}
+
+.n2 {
+    font-size: 1.5em;
+    line-height: 1
+}
+
+.n2 span {
+    display: block
+}
+
+span.n4 {
+    font-size: .8em;
+    padding-top: 10px;
+    line-height: 1.3
+}

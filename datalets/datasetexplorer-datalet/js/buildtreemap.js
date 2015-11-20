@@ -2,20 +2,19 @@
  * Created by Utente on 17/07/2015.
  */
 
-function build(root, place_holder) {
+function build(root, place_holder, select_listener) {
 
     var plwidth = $("#" + place_holder).width(),
         plheight = $("#" + place_holder).height();
 
     var margin = {top: 20, right: 0, bottom: 0, left: 0},
-        //width = 960,
-        //height = 500 - margin.top - margin.bottom,
         width  = plwidth,
         height =  plheight - margin.top - margin.bottom,
         formatNumber = d3.format(",d"),
         transitioning;
 
     var x = d3.scale.linear()
+        .domain([0, width])
         .domain([0, width])
         .range([0, width]);
 
@@ -29,7 +28,8 @@ function build(root, place_holder) {
         .ratio(height / width * 0.5 * (1 + Math.sqrt(5)))
         .round(false);
 
-    var svg = d3.select("#" + place_holder).append("svg")
+    var svg = d3.select("#" + place_holder)
+        .append("svg")
         .attr("width", width + margin.left + margin.right)
         .attr("height", height + margin.bottom + margin.top)
         .style("margin-left", -margin.left + "px")
@@ -102,7 +102,7 @@ function build(root, place_holder) {
         }
     }
 
-    function display(d) {0
+    function display(d) {
         grandparent
             .datum(d.parent)
             .on("click", transition)
@@ -135,9 +135,7 @@ function build(root, place_holder) {
 
         g.append("text")
             .attr("dy", ".75em")
-            .text(function(d) { return (d._children) ? d.name : ''; })
-            .call(text)
-            ;
+            .call(text);
 
         function transition(d) {
             if (transitioning || !d) return;
@@ -160,7 +158,7 @@ function build(root, place_holder) {
             svg.style("shape-rendering", null);
 
             // Draw child nodes on top of parent nodes.
-            svg.selectAll(".depth").sort(function(a, b) { return a.depth - b.depth; });
+            svg.selectAll(".depth").sort(function(a, b) { return b.depth - a.depth; });
 
             // Fade-in entering text.
             g2.selectAll("text").style("fill-opacity", 0);
@@ -179,24 +177,110 @@ function build(root, place_holder) {
         }
 
         if (!d._children[0]._children) {
+            if (select_listener) {
+                var url = d._children[0].name;
+
+                // Check if CKAN
+                var strDatasetPos = url.indexOf('/dataset/');
+                var strResourcePos = (strDatasetPos >= 0) ? url.indexOf('/resource/') : -1;
+                if (strDatasetPos >= 0 && strResourcePos > strDatasetPos) {
+                    var urlSegment1 = url.substring(0, strDatasetPos);
+                    var urlResourceEnd = url.indexOf('/', strResourcePos + 10);
+                    var resourceId = url.substring(strResourcePos + 10, urlResourceEnd);
+                    url = urlSegment1 + "/api/action/datastore_search?resourceid=" + resourceId;
+                }
+
+                // Check if OPENDATASOFT
+                var strExploreDatasetPos = url.indexOf('/explore/dataset/');
+                if (strExploreDatasetPos >= 0) {
+                    var urlSegment1 = url.substring(0, strExploreDatasetPos);
+                    var datasetEnd = url.indexOf(strExploreDatasetPos + 17, '/');
+                    var datasetId = url.substring(strExploreDatasetPos + 17, datasetEnd >= 0 ? datasetEnd : url.length);
+                    url = urlSegment1 + '/api/records/1.0/search?dataset=' + datasetId;
+                }
+
+                select_listener(url);
+            }
+
             var dataurl = d._children[0].name;
             var pageurl = dataurl.replace(/\/download\/.*/, '');
             dataletContainer = svg
                 .append("foreignObject")
                 .attr("width", root.dx)
                 .attr("height", root.dy - root.y)
-                    .append("xhtml:body")
-                    .html('<iframe src="'+pageurl+'" width="'+root.dx+'" height="'+root.dy+'"></iframe>');
-
+                .append("xhtml:body")
+                .html('<iframe src="'+pageurl+'" width="'+root.dx+'" height="'+root.dy+'"></iframe>');
         }
 
         return g;
     }
 
     function text(text) {
-        text.attr("x", function(d) { return x(d.x) + 6; })
-            .attr("y", function(d) { return y(d.y) + 6; })
-            ;
+        text
+            .attr("x", function(d) { return x(d.x) + 6; })
+            .attr("y", function(d) { return y(d.y) + 6; });
+        text.call(wrap);
+    }
+
+    function wrap(d) {
+        var wwidth = width;
+        var hheight = height;
+
+        d.each(function(){
+            var text = d3.select(this),
+                d = text[0][0].__data__,
+                name = d.name.trim(),
+                words = name.search(/\s+/) >= 0 ? name.split(/\s+/).reverse() : [name],
+                word = words.pop(),
+                line = [word],
+                lineNumber = 0,
+                lineHeight = 1.1, // ems
+                x = parseFloat(text.attr("x")),
+                y = parseFloat(text.attr("y")),
+                dy = parseFloat(text.attr("dy"));
+                text.selectAll("tspan").remove();
+
+            var fx = d3.scale.linear()
+                .domain([d.parent.x, d.parent.x + d.parent.dx])
+                .range([0, wwidth]);
+
+            var fy = d3.scale.linear()
+                .domain([d.parent.y, d.parent.y + d.parent.dy])
+                .range([0, hheight]);
+
+            var tspan = text
+                    .text(null)
+                    .append("tspan")
+                    .attr("x", fx(d.x) + 6)
+                    .attr("y", fy(d.y) + 6)
+                    .attr("dy", lineNumber++ * lineHeight + dy + "em")
+                    .text(word);
+            var width = fx(d.x + d.dx) - fx(d.x) - 12;
+            var height = fy(d.y + d.dy) - fy(d.y) - 6;
+
+            while (word = words.pop()) {
+                line.push(word);
+                tspan.text(line.join(" "));
+                if (tspan.node().getComputedTextLength() > width) {
+                    line.pop();
+                    tspan.text(line.join(" "));
+
+                    line = [word];
+
+                    tspan = text
+                        .append("tspan")
+                        .attr("x", fx(d.x) + 6)
+                        .attr("y", fy(d.y) + 6)
+                        .attr("dy", lineNumber++ * lineHeight + dy + "em")
+                        .text(word);
+
+                    if (text.node().offsetHeight > height) {
+                        tspan.remove();
+                        break;
+                    }
+                }
+            }
+        });
     }
 
     function rect(rect) {

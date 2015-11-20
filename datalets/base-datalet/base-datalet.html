@@ -72,13 +72,28 @@ Example :
                 height:32px;
                 width: 32px;
             }
+            #image_spin {
+                height:32px;
+                width: 32px;
+                position: relative;
+                center: center;
+                width: 100%;
+             }
+
+
         </style>
 
+        <div id="base_datalet_imgWaitDatalet">
+                <img id="image_spin" src="static/images/spin.svg">
+
+        </div>
         <div id="base_datalet_container">
-            <b>Source: </b><span id="domain"></span>
+            <b> Source:</b><span id="domain"></span>
+            <b>  </b><span id="domainPage">
+        </span>
             <div id="base_datalet_rtp">
-                <div id="rtp">Powered by Route-to-PA</div>
-                <div><a href="http://routetopa.eu/"><img id="rtpalogo" src="static/images/rtpalogo.png"></a></div>
+                <div id="rtp">Powered by ROUTE-TO-PA</div>
+                <div><a href="http://www.routetopa.eu/"><img id="rtpalogo" src="static/images/rtpalogo.png" ></a></div>
             </div>
         </div>
 
@@ -92,20 +107,50 @@ Example :
     <script>
         BaseDatalet = Polymer({
             is: 'base-datalet',
-
+            objectDatalet: {
+                /**
+                 * It contains the json data from async xhr call returned from core-ajax core component
+                 *
+                 * @attribute json_resultDatalet
+                 * @type object
+                 * @default 'null'.
+                 */
+                json_resultDatalet: {
+                    type: Object,
+                    value: {}
+                }
+            },
             /**
              * It is called after the element�s template has been stamped and all elements inside the element�s local
              * DOM have been configured (with values bound from parents, deserialized attributes, or else default values)
              * and had their ready method called.
              *
-             * Extract the dataset domain from the entire URL and set the text content of the datalet footer.
-             *
+             * Extract
+             *   1) the dataset domain
+             *   2) the page of a datalet
+             *   from the entire URL and set the text content of the datalet footer.
              * @method ready
-             *
              */
             ready: function(){
+                var urlDatalet;
                 if(this.dataUrl != undefined){
-                    this.$.domain.textContent = this.dataUrl.split("/")[0] + "//" + this.dataUrl.split("/")[2];
+
+                    var apiIdResource = "resource_show?id=";
+
+                    //Resourceid of a datalet
+                    var query = this.dataUrl.substring(this.dataUrl.indexOf("?"), this.dataUrl.length);
+                    var params  = this.decomponeQueryString(query);
+                    resultIdDatalet = params["resource_id"];
+
+                    //cKan organized with or not catalog
+                    queryInitial = this.dataUrl.substring(0,  this.dataUrl.indexOf("api"));
+                    queryFinal = this.dataUrl.substring(this.dataUrl.indexOf("api"),  this.dataUrl.indexOf("datastore_search"));
+
+                    urlDatalet = queryInitial +  queryFinal + apiIdResource + resultIdDatalet;
+                    urlSource = this.dataUrl.split("/")[0] + "//" + this.dataUrl.split("/")[2];
+
+                    this.$.domainPage.innerHTML = '<a href=' + urlSource +  ' target=' + "_blank>" + urlSource + '</a>'+ "." ;
+                    this.requestDataletData(urlDatalet);
                 }
             },
             /**
@@ -113,7 +158,65 @@ Example :
              */
             setDomain: function(url){
                 this.$.domain.textContent = url;
+            },
+            /**
+             * Get the (key, value)  query string parameters
+             **/
+            decomponeQueryString: function (querystring) {
+            // remove any preceding url and split
+            querystring = querystring.substring(querystring.indexOf('?')+1).split('&');
+            var params = {}, pair, d = decodeURIComponent;
+            // march and parse
+            for (var i = querystring.length - 1; i >= 0; i--) {
+                pair = querystring[i].split('=');
+                params[d(pair[0])] = d(pair[1]);
+            }
+            return params;
+            },
+            /**
+             * Make an AJAX call to the dataset URL to retrieve package_id
+             *
+             * @method urlDatalet
+             */
+            requestDataletData: function(urlDatalet){
+                var comp = this;
+                $.ajax({
+                    url: urlDatalet, //url con package
+                    dataType: "json",
+                    success: function(e){
+                        comp.handleDataletResponse(e);
+                    }
+                });
+            },
+            /**
+             * Called when core-ajax component receive the json data from called url.
+             *
+             * @method handleResponse
+             */
+            handleDataletResponse: function(e) {
+                this.objectDatalet.json_resultDatalet.value = e;
 
+                //packageId of a give datalet
+                packageIdDatalet = this.objectDatalet.json_resultDatalet.value.result.package_id;
+                resourceId = this.objectDatalet.json_resultDatalet.value.result.id;
+
+                //url complete of download
+                urlDatasetDownload = this.objectDatalet.json_resultDatalet.value.result.url;
+
+                if(this.dataUrl != undefined){
+                    //static url
+                    lastStringResourceId =  this.dataUrl.split("/")[5];
+                    resourceId  = lastStringResourceId.split('=')[1];
+                    var urlDatalet = this.dataUrl.split("/")[0]+ "//" + this.dataUrl.split("/")[2]  + "/dataset/" + packageIdDatalet +"/resource/" +resourceId;
+
+
+                    urlDatalet = urlDatasetDownload.replace(/\/download\/.*/, '');
+                    urlSource =  this.dataUrl.split("/")[0] + "//" + this.dataUrl.split("/")[2];
+
+
+                    this.$.domainPage.innerHTML += " (" + ' <a href=' + urlDatalet +  ' target=' + "_blank>" + "Dataset's page" + '</a>' + " )";
+
+                }
             }
         });
     </script>

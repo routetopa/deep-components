@@ -1,0 +1,458 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html" />
+
+<link rel="import" href="../../bower_components/neon-animation/neon-animated-pages.html">
+<link rel="import" href="../../bower_components/neon-animation/neon-animatable.html">
+<link rel="import" href="../../bower_components/neon-animation/neon-animations.html">
+
+<link rel="import" href="../../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../../bower_components/iron-icons/hardware-icons.html">
+<link rel="import" href="../../bower_components/iron-icons/iron-icons.html">
+
+<link rel="import" href="../../bower_components/paper-material">
+
+<link rel="import" href="../../bower_components/paper-input/paper-input.html">
+
+<!--<link rel="import" href="../paper-input.html">-->
+<!--<link rel="import" href="../paper-input-container.html">-->
+<!--<link rel="import" href="../paper-input-error.html">-->
+<!--<link rel="import" href="../paper-input-char-counter.html">-->
+<!--<link rel="import" href="../paper-textarea.html">-->
+<!--<link rel="import" href="../../iron-input/iron-input.html">-->
+<!--<link rel="import" href="../../iron-icon/iron-icon.html">-->
+<!--<link rel="import" href="../../iron-icons/iron-icons.html">-->
+<!--<link rel="import" href="../../paper-icon-button/paper-icon-button.html">-->
+
+
+<dom-module id="items-vslider-controllet">
+
+    <template>
+
+        <style is="custom-style">
+            #material_items_vslider{
+                display: flex;
+                flex-direction: column;
+                width: 172px;
+                background-color: #E0E0E0;
+            }
+
+            paper-icon-button{
+                color: #FFFFFF;
+                /*color: #2196F3;*/
+                height: 48px;
+                width: 48px;
+                padding: 0px;
+                margin: 0px;
+                --paper-icon-button-ink-color: white;
+                /*--paper-icon-button-ink-color: #2196F3;*/
+
+                /*margin-left: 63px;*/
+            }
+
+            paper-icon-button:hover{
+            }
+
+            .arrow-up{
+                background-color: #2196F3;
+                /*float: left;*/
+                /*margin-top: 8px;*/
+                padding-left: 63px;
+            }
+
+            .arrow-down{
+                background-color: #2196F3;
+                /*float: right;*/
+                /*margin-top: 8px;*/
+                padding-left: 63px;
+            }
+
+            neon-animatable {
+                position: relative;
+                color: white;
+                /*width: 248px;*/
+                /*height: 100%;*/
+                height: auto;/*???*/
+                /*background-color: red;*/
+                overflow: hidden;
+            }
+
+            #div_datalets_container {
+                position: relative;
+                /*color: white;*/
+                /*width: 248px;*/
+                /*height: 100%;*/
+                /*height: auto;/!*???*!/*/
+                /*background-color: red;*/
+                /*overflow: hidden;*/
+            }
+
+            .content-card{
+                position: relative;
+                /*float: left;*/
+                margin : 16px;
+                /*width: 80px;*/
+                /*height: 72px;*/
+                background: #fff;
+                padding: 8px;
+
+                height: 124px;
+                width: 124px;
+
+                cursor: pointer;
+            }
+
+            img{
+                height: 100%;
+                width: 100%;
+            }
+
+            .legend {
+                position: absolute;
+                /*background: rgba(0,0,0,0.8);*/
+                background: #9E9E9E;/*#9e9e9e;*/
+                color: #FFFFFF;
+                /*height: 32px;*/
+                /*padding-left: 8px;*/
+                /*padding: 0px 8px 0px 8px;*/
+                padding: 8px;
+                left: 0;
+                bottom: 16px;
+                z-index: 1;
+                opacity: 0.87;
+                width: 124px;
+                font-family: 'Roboto', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+                font-size: 16px;
+            }
+
+            .legend.selected {
+                font-weight: 700;
+                background-color: #2196F3;
+                opacity: 1;
+            }
+
+            .legend span{
+                /*position: relative;*/
+                /*top: 8px;*/
+            }
+
+            .div_search{
+                /*height: 64px;*/
+                height: 48px;
+                padding: 0px 8px;
+                background-color: #B6B6B6;
+                --paper-input-container-focus-color: #2196F3;
+            }
+
+            .search{
+                color: #FFFFFF
+                /*height: 32px;*/
+            }
+
+            .clear {
+                color: #2196F3;
+                --paper-icon-button-ink-color: #2196F3;
+                width: 16px; /* 15px + 2*4px for padding */
+                height: 16px;
+                /*padding: 0px 4px;*/
+                margin-bottom: 3px;
+            }
+
+
+
+        </style>
+
+        <iron-ajax auto handle-as="json" url={{dataletsListUrl}} on-response="_getDatalets"></iron-ajax>
+
+        <paper-material id="material_items_vslider" elevation="5">
+
+            <!--<div class="div_search">-->
+                <!--<paper-icon-button class="search"  icon="icons:search"></paper-icon-button>-->
+
+                <paper-input id="div_search" value={{filter}} class="div_search" no-label-float label="search datalet" id="input_search">
+                    <iron-icon class="search" icon="search" prefix></iron-icon>
+                    <paper-icon-button class="clear" suffix on-click="_clearInput" icon="clear" ></paper-icon-button><!--tabindex="0"-->
+                </paper-input>
+
+            <!--</div>-->
+
+
+
+            <div class="arrow-up"><paper-icon-button on-click="_onPrevClick" icon="hardware:keyboard-arrow-up"></paper-icon-button></div>
+
+            <div id="div_datalets_container" class="flex">
+                        <template is="dom-repeat" items="{{filteredDatalets}}">
+                            <paper-material id={{item.imageName}} elevation="1" class='content-card' on-click="_selectDatalet">
+                                <div class="legend">{{item.imageName}}</div>
+                                <div class="card-content-image">
+                                    <img src={{item.imageUrl}}>
+                                </div>
+                            </paper-material>
+                        </template>
+            </div>
+
+            <div class="arrow-down"><paper-icon-button on-click="_onNextClick" icon="hardware:keyboard-arrow-down"></paper-icon-button></div>
+
+        </paper-material>
+
+    </template>
+
+    <script>
+
+        Polymer({
+
+            is : 'items-vslider-controllet',
+
+            properties : {
+
+//                entryAnimation : {
+//                    type  : String,
+//                    value : ""
+//                },
+//
+//                exitAnimation  : {
+//                    type  : String,
+//                    value : ""
+//                },
+
+                selectedDatalet : {
+                    type  : String,
+                    value : undefined
+                },
+
+//                prevSelectedCard : {
+//                    type  : Object,
+//                    value : undefined
+//                },
+
+                datalets : {
+                    type  : Array,
+                    value : []
+                },
+
+                filteredDatalets : {
+                    type  : Array,
+                    value : []
+                },
+
+                pages : {
+                    type  : Array,
+                    value : []
+                },
+
+                dataletsPerPage : {
+                    type  : Array,
+                    value : []
+                },
+
+                filter : {
+                    type  : String,
+                    value : "",
+                    observer : '_filterDatalets'
+                }
+            },
+
+            listeners: {
+                'dom-change': '_onDomChange'
+            },
+
+            ready : function() {
+                $(this.$.div_datalets_container).perfectScrollbar();
+
+                this._resize();
+                var that = this;
+                window.addEventListener("resize", function() { that._resize(); });
+            },
+
+            _clearInput : function() {
+                this.$.div_search.value = "";
+                ///////usa sempre this.$!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                ///////usa sempre this.$!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                ///////usa sempre this.$!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                ///////usa sempre this.$!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+            },
+//            attached : function() {
+//                this._resize();
+//                var that = this;
+//                window.addEventListener("resize", function() { that._resize(); });
+//            },
+
+            _getDatalets : function(e){
+                var datalets = new Array();
+                for(var i=0; i < e.detail.response.length; i++){
+                    var datalet = { imageName : e.detail.response[i].name.replace("-datalet", ""), imageUrl : e.detail.response[i].url + e.detail.response[i].name + ".png" };
+                    datalets.push(datalet);
+//                    datalets.push(datalet);
+                }
+
+                {{}}
+                this.pages = [0,1,2];
+                this.dataletsPerPage = [0,1,2];
+
+                this.datalets = datalets;
+                this.filteredDatalets = datalets;
+
+//                console.log(this.datalets);
+            },
+
+            _filterDatalets : function(){//console.log(this.filter);
+                var datalets = new Array();
+                for(var i=0; i < this.datalets.length; i++){
+                    var datalet = this.datalets[i];
+//                    console.log(datalet.imageName.indexOf(this.filter));
+//                    console.log(datalet.imageName);
+                    if(datalet.imageName.indexOf(this.filter) != -1){
+                        datalets.push(datalet);
+//                        console.log("we");
+                    }
+
+                }
+
+//                console.log(datalets);
+                this.filteredDatalets = datalets;
+
+
+
+                ///////////////
+//
+//                console.log(this.selectedDatalet);
+//                if(this.selectedDatalet != undefined && (document.getElementById(this.selectedDatalet)) != null ){
+//
+//                    var datalet = document.getElementById(this.selectedDatalet);
+//                    console.log(datalet);
+//                    datalet.elevation = "5";
+//                    datalet.childNodes[2].className = datalet.childNodes[2].className + " selected";
+//                }
+
+                //////////////
+
+
+                $("#div_datalets_container").animate({ scrollTop: 0}, 0);
+
+            },
+
+            _onDomChange : function() {
+                console.log("dom changed");
+                console.log(this.filteredDatalets);
+
+                if(this.selectedDatalet != undefined ){
+//                    console.log(this.selectedDatalet);
+//                    var datalets = document.getElementsByClassName("content-card");
+//                    var datalets = document.getElementsByTagName("paper-material");
+
+                    for(var i=0; i < this.filteredDatalets.length; i++){
+                        var datalet = this.filteredDatalets[i];
+//                        console.log(datalet.imageName);
+                        datalet = document.getElementById(datalet.imageName);//dataletCarDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD
+                        console.log(datalet);
+                        datalet.elevation = "1";
+                        datalet.childNodes[2].className = datalet.childNodes[2].className.replace("selected", "");
+                    }
+//
+                    if(document.getElementById(this.selectedDatalet) != null ){
+
+                        var datalet = document.getElementById(this.selectedDatalet);
+                        console.log(datalet);
+                        datalet.elevation = "5";
+                        datalet.childNodes[2].className = datalet.childNodes[2].className + " selected";
+                    }
+
+                }
+            },
+
+            _selectDatalet : function(e){
+//                var dataletId = e.currentTarget.id;
+//                console.log(dataletId)
+
+                if(this.selectedDatalet != undefined){
+                    var datalet = document.getElementById(this.selectedDatalet);
+                    datalet.elevation = "1";
+                    datalet.childNodes[2].className = datalet.childNodes[2].className.replace("selected", "");
+                }
+
+                e.currentTarget.elevation = "5";
+                e.currentTarget.childNodes[2].className = e.currentTarget.childNodes[2].className + " selected";
+
+                console.log("weeeeeeeeeeeeeeeeee");
+                this.selectedDatalet = e.currentTarget.id;
+            },
+
+//            _onCardClick : function(e){//prevSelectedCard-->selectedCard, no selected!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+//
+////                console.log(e.currentTarget);
+//
+//
+//                //controlla sul search......................................................................
+//
+////                dai ID alle card e modifica funzione!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+////                disabilita pulsante top o bottom e multiclick
+//                if(this.prevSelectedCard != undefined){
+//                    this.prevSelectedCard.elevation = "1";
+//                    this.prevSelectedCard.childNodes[2].className = this.prevSelectedCard.childNodes[2].className.replace("selected", "");
+//                }
+//
+//
+//                e.currentTarget.elevation = "5";
+//                e.currentTarget.childNodes[2].className = e.currentTarget.childNodes[2].className + " selected";
+//
+//                var b = document.getElementById("barchart");
+//
+////                b.elevation = "5";
+////                b.childNodes[2].className = e.currentTarget.childNodes[2].className + " selected";
+//
+//                this.prevSelectedCard = e.currentTarget;
+//
+////                this.fire('items-slider-controllet_item-selected', {datalet: e.currentTarget.id + "-datalet"});
+//
+//            },
+
+//            _getImageUrl : function(page, index){
+//                return this.datalets[3*page+index].imageUrl;
+//            },
+
+            _getImageUrl : function(index){
+                return this.datalets[index].imageUrl;
+            },
+
+            _onPrevClick : function() {
+
+                var container = $("#div_datalets_container");
+                var h = container.height();
+                var dataletPerPage = parseInt(h/156);
+                var scroll = $("#div_datalets_container").scrollTop()-156*dataletPerPage;
+                var diff = scroll % 156;
+//                scroll += 156-diff;
+                scroll -= diff;
+                $("#div_datalets_container").animate({ scrollTop: scroll}, 300);
+
+
+//                var scroll = $("#div_datalets_container").scrollTop()-156*3;
+//                console.log(scroll);
+
+//                    console.log(scroll);
+            },
+
+            _onNextClick : function() {
+                var container = $("#div_datalets_container");
+                var h = container.height();
+                var dataletPerPage = parseInt(h/156);
+                var scroll = $("#div_datalets_container").scrollTop()+156*dataletPerPage;
+                var diff = scroll % 156;
+                scroll -= diff;
+                $("#div_datalets_container").animate({ scrollTop: scroll}, 300);
+
+//                var scroll = $("#div_datalets_container").scrollTop()+156*3;
+////                console.log(scroll);
+//                    $("#div_datalets_container").animate({ scrollTop: scroll}, 300);
+////                    console.log(scroll);
+            },
+
+            _resize : function(){console.log("we");
+                var h = Math.max(document.documentElement.clientHeight, window.innerHeight || 0) - 16;
+                h = h - 64 - 8; //height with page scroller
+                $("#material_items_vslider").height(h);
+            }
+
+        });
+
+    </script>
+
+</dom-module>

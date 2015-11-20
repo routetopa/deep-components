@@ -5,10 +5,6 @@
 <link rel="import" href="../tree-view-controllet/tree-view-controllet.html" />
 <link rel="import" href="../multi-table-controllet/multi-table-controllet.html" />
 
-<script src="../shared_js/perfect-scrollbar/js/min/perfect-scrollbar.jquery.min.js"></script>
-<link rel="stylesheet" href="../shared_js/perfect-scrollbar/css/perfect-scrollbar.min.css">
-
-
 <dom-module id="tree-view-multi-table-controllet">
 
     <style is="custom-style">
@@ -68,7 +64,8 @@
 
                 dataUrl : {
                     type  : String,
-                    value : undefined
+                    value : undefined,
+                    observer : '_init'
                 }
 
             },
@@ -78,19 +75,17 @@
             },
 
             ready : function() {
-                var tree = document.getElementById('tree_view');
-
-                $.ajax({
-                    url: this.dataUrl,
-                    dataType: "json",
-                    success: function(data){
-                        tree.setAttribute("json-data", JSON.stringify(data));
-                        tree.ready();
-                    }
-                });
+//                if(this.dataUrl)
+//                    this._init();
 
                 $(this.$.material_tree_view).perfectScrollbar();
                 $(this.$.material_multi_table).perfectScrollbar();
+            },
+
+            attached : function(){
+                this._resize();
+                var that = this;
+                window.addEventListener("resize", function() { that._resize(); });
             },
 
             getFields : function() {
@@ -101,10 +96,32 @@
                 return this.$.tree_view.getFlatFields();
             },
 
+            _init : function() {
+                var tree = document.getElementById('tree_view');
+                var t = this;
+
+                $.ajax({
+                    url: this.dataUrl,
+                    dataType: "json",
+                    success: function(data){
+                        tree.setAttribute("json-data", JSON.stringify(data));
+                        tree.selectedFields = [];
+                        t._updateSelectedFields();
+                        tree.ready();
+                    }
+                });
+            },
+
             _updateSelectedFields : function() {
                 var fields = this.$.tree_view.getFields();
                 this.$.multi_table.setSelectedFields(fields);
             },
+
+            _resize : function(){
+                var h = Math.max(document.documentElement.clientHeight, window.innerHeight || 0) - 16;
+                h = h - 64; //height with page scroller
+                $("#material_tree_view").height(h);
+            }
 
         });
 

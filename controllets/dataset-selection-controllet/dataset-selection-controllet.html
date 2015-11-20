@@ -1,0 +1,253 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+
+<link rel="import" href="../../bower_components/paper-tabs/paper-tabs.html">
+<link rel="import" href="../../bower_components/paper-tabs/paper-tab.html">
+
+<link rel="import" href="../../bower_components/neon-animation/neon-animation.html">
+<link rel="import" href="../../bower_components/neon-animation/neon-animatable.html">
+<link rel="import" href="../../bower_components/neon-animation/neon-animations.html">
+
+<link rel="import" href="../../bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
+<link rel="import" href="../../bower_components/paper-menu/paper-menu.html">
+<link rel="import" href="../../bower_components/paper-item/paper-item.html">
+
+<link rel="import" href="../../bower_components/paper-input/paper-textarea.html">
+
+<link rel="import" href="../../bower_components/paper-material/paper-material.html" />
+
+<link rel="import" href="../../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../../bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="../../bower_components/iron-icon/iron-icon.html">
+
+<link rel="import" href="../../bower_components/paper-dialog/paper-dialog.html">
+<link rel="import" href="../../bower_components/paper-dialog-scrollable/paper-dialog-scrollable.html">
+
+<link rel="import" href="../../datalets/datasetexplorer-datalet/datasetexplorer-datalet.html">
+
+<!--<script src="../../datalets/shared_js/d3.js"></script>-->
+
+<dom-module id="dataset-selection-controllet">
+
+    <template>
+
+        <style is="custom-style">
+            paper-tabs {
+                font-family: 'Roboto', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+                font-size: 16px;
+                font-weight: bold;
+                --paper-tabs-selection-bar-color: #2196F3;
+            }
+
+            paper-tab {
+                transition: all 1.0s;
+            }
+
+            paper-tab.iron-selected {
+                background-color: #B6B6B6;
+            }
+
+            paper-tab:hover {
+                color: #2196F3;
+            }
+
+            paper-tab[disabled] {
+                color: #B6B6B6;
+            }
+
+            paper-dropdown-menu {
+                width: 45%;
+                margin-bottom: 32px;
+                --paper-input-container-focus-color: #2196F3;
+            }
+
+            paper-item.iron-selected {
+                background-color: #2196F3;
+                color: #FFFFFF;
+            }
+
+            /*paper-item[focused] {*/
+                /*background: #FFFFFF;*/
+            /*}*/
+
+            paper-textarea {
+                width: 90%;
+                margin-bottom: 32px;
+                --paper-input-container-focus-color: #2196F3;
+            }
+
+            paper-icon-button {
+                color: #2196F3;
+                --paper-icon-button-ink-color: #2196F3;
+            }
+
+            paper-icon-button[disabled] {
+                color: #B6B6B6;
+            }
+
+            #material_container {
+                margin-top: 8px;
+                /*height: 55vh;*/
+            }
+
+            #div_selection {
+                padding-left: 10%;
+                padding-top: 64px;
+                /*padding-bottom: 64px;*/
+            }
+
+            #dialog_info {
+                border: 2px solid #2196F3;
+                background-color: #E0E0E0;
+                position: fixed;
+                top: 232px;
+                width: 60%;
+                height: auto;
+                /*overflow: auto;*/
+            }
+
+            #div_datasetexplorer {
+                padding-top: 48px;
+            }
+        </style>
+
+        <paper-material id="material_container" elevation="5">
+
+            <paper-tabs selected="{{selected}}" on-tap="_loadTreeMap">
+                <paper-tab noink>SELECT DATA SOURCE</paper-tab>
+                <paper-tab noink>TREE MAP SEARCH</paper-tab>
+                <paper-tab noink disabled>MOST POPULAR</paper-tab>
+            </paper-tabs>
+
+            <neon-animated-pages selected="{{selected}}" entry-animation="fade-in-animation" exit-animation="fade-out-animation">
+
+                <neon-animatable>
+
+                    <div id="div_selection">
+                        <paper-dropdown-menu label="Available datasets">
+                            <paper-menu class="dropdown-content">
+                                <template is="dom-repeat" items={{datasets}} as="dataset">
+                                    <paper-item id={{index}} on-tap="_selectDataUrl">{{dataset.name}}</paper-item>
+                                </template>
+                            </paper-menu>
+                        </paper-dropdown-menu>
+
+                        <paper-icon-button id="info_button" disabled on-click="_showInfo" icon="info-outline" title="dataset info"></paper-icon-button>
+
+                        <paper-textarea id="selected_url" label="Selected url" value={{dataUrl}}></paper-textarea>
+
+                        <paper-dialog id="dialog_info">
+                            <h2 id="dialog_name"></h2>
+                            <p id="dialog_description"></p>
+                        </paper-dialog>
+                    </div>
+
+                </neon-animatable>
+
+                <neon-animatable>
+                    <div id="div_datasetexplorer">
+                        <datasetexplorer-datalet class="datasetexplorer" data-url="/oxwall_x.y.z/openwall/api/datasetTree" fields='["result,provider_name","result,organization_name","result,package_name","result,resource_name","result,url","result,w"]'></datasetexplorer-datalet>
+                    </div>
+                </neon-animatable>
+
+                <neon-animatable>
+                </neon-animatable>
+
+            </neon-animated-pages>
+
+        </paper-material>
+
+    </template>
+
+    <script>
+
+        Polymer({
+
+            is : 'dataset-selection-controllet',
+
+            properties : {
+
+                selected : {
+                    type  : Number,
+                    value : 0
+                },
+
+                datasets : {
+                    type : Array,
+                    value : undefined
+                },
+
+                dataUrl : {
+                    type  : String,
+                    value : undefined,
+                    observer : '_fireDataUrl'
+                }
+
+            },
+
+            listeners: {
+                'datasetexplorer-datalet_data-url': '_selectDataUrl_treeMap'
+            },
+
+            ready : function(){
+                $(this.$.dialog_info).perfectScrollbar();
+            },
+
+            attached : function(){
+                this._resize();
+                var that = this;
+                window.addEventListener("resize", function() { that._resize(); });
+            },
+
+            _loadTreeMap : function(){
+                if(this.selected == 0 && this.$.div_datasetexplorer.innerHTML == "")
+                    this.$.div_datasetexplorer.innerHTML = "<datasetexplorer-datalet class=\"datasetexplorer\" data-url=\"/oxwall_x.y.z/openwall/api/datasetTree\" fields='[\"result,provider_name\",\"result,organization_name\",\"result,package_name\",\"result,resource_name\",\"result,url\",\"result,w\"]'></datasetexplorer-datalet>";
+            },
+
+            _selectDataUrl_treeMap : function(e){
+                var url = e.detail.url;
+                url = url.split('/');
+                var index = url.indexOf('resource')
+                if (index != -1) { // ckan
+                    var resourceId = url[index + 1];
+                    url = "http://ckan.routetopa.eu/api/action/datastore_search?resource_id=" + resourceId;
+
+                } else
+                    url = "sorry, data provider not supported yet";
+
+                this.dataUrl = url;
+                this.selected=0;
+            },
+
+            _selectDataUrl : function(e){
+                var dataset = this.datasets[parseInt(e.target.id)]
+
+                this.dataUrl = dataset.url;
+
+                if(dataset.description != ""){
+                    this.$.info_button.removeAttribute("disabled");
+                    this.$.dialog_name.innerHTML = dataset.name;
+                    this.$.dialog_description.innerHTML = dataset.description;
+                }
+                else
+                    this.$.info_button.setAttribute("disabled", "true");
+            },
+
+            _showInfo : function(){
+                this.$.dialog_info.open();
+            },
+
+            _fireDataUrl : function(){
+                this.fire('dataset-selection-controllet_data-url', {url: this.dataUrl});
+            },
+
+            _resize : function(){
+                var h = Math.max(document.documentElement.clientHeight, window.innerHeight || 0) - 16;
+                h = h - 64 - 8; //height with page scroller
+                $("#material_container").height(h);
+            }
+
+        });
+
+    </script>
+
+</dom-module>

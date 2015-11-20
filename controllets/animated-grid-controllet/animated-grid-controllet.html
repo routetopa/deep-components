@@ -1,0 +1,172 @@
+<!--
+Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/paper-styles/paper-styles.html">
+<link rel="import" href="../../bower_components/neon-animation/neon-shared-element-animatable-behavior.html">
+
+<dom-module id="animated-grid-controllet">
+
+    <style>
+
+        :host {
+            display: block;
+            /*background: #000;*/
+        }
+
+        /* clearfix */
+        .grid:after
+        {
+            content: '';
+            display: block;
+            clear: both;
+        }
+
+        /* ---- grid-item ---- */
+
+
+        ::content .grid-item {float: left;box-sizing: border-box;-moz-box-sizing: border-box;-webkit-box-sizing: border-box;border: 3px solid white;}
+        ::content .grid-sizer {width: 200px;}
+        ::content .grid-item-w20  {width:  200px;}
+        ::content .grid-item-w40  {width:  400px;}
+        ::content .grid-item-w60  {width:  600px;}
+        ::content .grid-item-w80  {width:  80%;}
+        ::content .grid-item-w100 {width:  100%;}
+
+        ::content .grid-item-h200 {height: 200px;}
+        ::content .grid-item-h400 {height: 400px;}
+        ::content .grid-item-h600 {height: 600px;}
+        ::content .grid-item-h800 {height: 800px;}
+
+        ::content .grid-item-c0 {background-color: #0D47A1;}
+        ::content .grid-item-c1 {background-color: #1976D2;}
+        ::content .grid-item-c2 {background-color: #2196F3;}
+        ::content .grid-item-c3 {background-color: #64B5F6;}
+        ::content .grid-item-c4 {background-color: #BBDEFB;}
+
+        ::content .room-body    {background-color: #BBDEFB;}
+
+        ::content .room-subject
+        {
+            position: absolute;
+            width: 100%;
+            height: 30px;
+            bottom: 20px;
+            background-color: rgba(0,0,0,0.6);
+            vertical-align: middle;
+            color: #FFFFFF;
+        }
+
+    </style>
+
+    <template>
+
+        <div id="grid-container" class="grid">
+            <!--<template is="dom-repeat" items="{{data}}">
+                <div class$="{{item.b}} {{item.w}} {{item.h}} {{item.c}}">{{index}}</div>
+            </template>-->
+            <content></content>
+        </div>
+
+        <div class="grid-sizer"></div>
+
+    </template>
+
+</dom-module>
+
+<script>
+
+    Polymer({
+
+        is: 'animated-grid-controllet',
+
+        behaviors: [
+            Polymer.NeonSharedElementAnimatableBehavior
+        ],
+
+        properties: {
+            animationConfig: {
+                type: Object,
+                value: function() {
+                    return {
+                        'exit': [{
+                            name: 'ripple-animation',
+                            id: 'ripple',
+                            fromPage: this
+                        }, {
+                            name: 'hero-animation',
+                            id: 'hero',
+                            fromPage: this
+                        }]
+                    }
+                }
+            }
+        },
+
+        ready : function()
+        {
+            /*var randW = 0;
+            var randH = 0;
+            var randC = 0;
+            this.data = [];
+
+            for(var i=0; i<100; i++)
+            {
+                randW = Math.floor(Math.random() * 2);
+                randH = Math.floor(Math.random() * 2);//randW;//0;//1;
+                randC = Math.floor(Math.random() * 5);
+                //html += '<div class="grid-item grid-item-w'+((randW*20)+20)+' grid-item-h'+((randH*200)+200)+' grid-item-c'+randC+'">Topic - '+i+'</div>';
+
+                this.push('data',    {b: 'grid-item',
+                                      w: 'grid-item-w'+((randW*20)+20),
+                                      h: 'grid-item-h'+((randH*200)+200),
+                                      c: 'grid-item-c'+randC});
+
+            }*/
+        },
+
+        attached : function()
+        {
+            $('.grid').masonry({
+                itemSelector: '.grid-item',
+                columnWidth: 200
+            });
+        },
+
+        listeners: {
+            click: '_onClick'
+        },
+
+        _onClick: function(event) {
+
+            var target = event.target;
+
+            if(target.classList[0] != "grid-item")
+                return;
+
+            // configure the page animation
+            this.sharedElements = {
+                'hero': target,
+                'ripple': target
+            };
+            this.animationConfig['exit'][0].gesture = {
+                x: event.x || event.pageX,
+                y: event.y || event.pageY
+            };
+
+            this.fire('tile-click', {
+                tile: target,
+                //data: {color: target._templateInstance.item.c}
+                data: {color: target.classList[3], id:target.id}
+            });
+
+        }
+
+    });
+
+</script>
