@@ -179,6 +179,7 @@ function build(root, place_holder, select_listener) {
         if (!d._children[0]._children) {
             if (select_listener) {
                 var url = d._children[0].name;
+                var ret = "Data provider not supported yet."
 
                 // Check if CKAN
                 var strDatasetPos = url.indexOf('/dataset/');
@@ -187,7 +188,7 @@ function build(root, place_holder, select_listener) {
                     var urlSegment1 = url.substring(0, strDatasetPos);
                     var urlResourceEnd = url.indexOf('/', strResourcePos + 10);
                     var resourceId = url.substring(strResourcePos + 10, urlResourceEnd);
-                    url = urlSegment1 + "/api/action/datastore_search?resourceid=" + resourceId;
+                    ret = urlSegment1 + "/api/action/datastore_search?resource_id=" + resourceId;
                 }
 
                 // Check if OPENDATASOFT
@@ -196,10 +197,10 @@ function build(root, place_holder, select_listener) {
                     var urlSegment1 = url.substring(0, strExploreDatasetPos);
                     var datasetEnd = url.indexOf(strExploreDatasetPos + 17, '/');
                     var datasetId = url.substring(strExploreDatasetPos + 17, datasetEnd >= 0 ? datasetEnd : url.length);
-                    url = urlSegment1 + '/api/records/1.0/search?dataset=' + datasetId;
+                    ret = urlSegment1 + '/api/records/1.0/search?dataset=' + datasetId;
                 }
 
-                select_listener(url);
+                select_listener(ret);
             }
 
             var dataurl = d._children[0].name;
