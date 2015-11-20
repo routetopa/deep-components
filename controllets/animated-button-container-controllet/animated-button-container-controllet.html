@@ -242,8 +242,9 @@
                 this.$.open.style.height             = this.iconHeight + "px";
                 this.$.open.style.width              = this.iconWidth  + "px";
                 this.$.open_window_button.style.backgroundColor    = this.backgroundButtonColor;
-                this.$.open_window_button.style.width            = this.iconWidth  + "px";
-                this.$.open_window_button.style.height           = this.iconHeight + "px";
+                this.$.open_window_button.style.width            = 24 /*this.iconWidth*/  + "px";
+                this.$.open_window_button.style.height           = 24 /*this.iconHeight*/ + "px";
+		this.$.open_window_button.style.padding = "6px";
                 this.$.button_container.style.height = this.iconHeight + "px";
             },
 

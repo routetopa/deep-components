@@ -339,7 +339,7 @@ Example:
                         <paper-material elevation="2" class="area_container">
                             <paper-tabs selected="{{DatasourceTabSelected}}">
                                 <paper-tab>Select data source</paper-tab>
-                                <paper-tab>Tree Map Search</paper-tab>
+                                <paper-tab>Tree Map view</paper-tab>
                                 <paper-tab>Most popular</paper-tab>
                             </paper-tabs>
                             <iron-pages selected="{{DatasourceTabSelected}}">
@@ -1096,14 +1096,14 @@ Example:
             //tree map
             _selectDataUrl_treeMap : function(e){
                 var url = e.detail.url;
-                url = url.split('/');
-                var index = url.indexOf('resource')
-                if (index != -1) { // ckan
-                    var resourceId = url[index + 1];
-                    url = "http://ckan.routetopa.eu/api/action/datastore_search?resource_id=" + resourceId;
-
-                } else
-                    url = "sorry, data provider not supported yet";
+//                url = url.split('/');
+//                var index = url.indexOf('resource')
+//                if (index != -1) { // ckan
+//                    var resourceId = url[index + 1];
+//                    url = "http://ckan.routetopa.eu/api/action/datastore_search?resource_id=" + resourceId;
+//
+//                } else
+//                    url = "sorry, data provider not supported yet";
 
                 this.dataUrl = url;
                 this.DatasourceTabSelected=0;
