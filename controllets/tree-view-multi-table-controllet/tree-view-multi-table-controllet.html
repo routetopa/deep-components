@@ -98,18 +98,33 @@
 
             _init : function() {
                 var tree = document.getElementById('tree_view');
-                var t = this;
+                var that = this;
 
                 $.ajax({
                     url: this.dataUrl,
                     dataType: "json",
                     success: function(data){
+                        data = that._filterJson(data);
                         tree.setAttribute("json-data", JSON.stringify(data));
                         tree.selectedFields = [];
-                        t._updateSelectedFields();
+                        that._updateSelectedFields();
                         tree.ready();
                     }
                 });
+
+
+            },
+
+            _filterJson : function(data){
+                console.log(data);
+                console.log(this.dataUrl);
+//                if(this.dataUrl.indexOf("ckan") != -1)
+                if(data.result != undefined && data.result.resource_id != undefined) {
+                    this.rootName = "ckan"
+                    this.openedPath = "result,records";
+                    return {result: {records: data.result.records}};
+                }
+                return data;
             },
 
             _updateSelectedFields : function() {
