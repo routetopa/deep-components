@@ -26,6 +26,8 @@
 
 <!--<script src="../../datalets/shared_js/d3.js"></script>-->
 
+<link rel="import" href="paper-input-search.html">
+
 <dom-module id="dataset-selection-controllet">
 
     <template>
@@ -63,6 +65,10 @@
             paper-item.iron-selected {
                 background-color: #2196F3;
                 color: #FFFFFF;
+            }
+
+            paper-menu{
+                /*visibility: visible ! important;*/
             }
 
             /*paper-item[focused] {*/
@@ -123,13 +129,13 @@
                 <neon-animatable>
 
                     <div id="div_selection">
-                        <paper-dropdown-menu label="Available datasets">
+                        <paper-input-search label="Available datasets">
                             <paper-menu class="dropdown-content">
                                 <template is="dom-repeat" items={{datasets}} as="dataset">
                                     <paper-item id={{index}} on-tap="_selectDataUrl">{{dataset.name}}</paper-item>
                                 </template>
                             </paper-menu>
-                        </paper-dropdown-menu>
+                        </paper-input-search>
 
                         <paper-icon-button id="info_button" disabled on-click="_showInfo" icon="info-outline" title="dataset info"></paper-icon-button>
 
