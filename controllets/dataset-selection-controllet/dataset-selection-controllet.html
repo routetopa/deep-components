@@ -56,20 +56,10 @@
                 color: #B6B6B6;
             }
 
-            /*paper-dropdown-menu {*/
-                /*width: 45%;*/
-                /*margin-bottom: 32px;*/
-                /*--paper-input-container-focus-color: #2196F3;*/
-            /*}*/
-
-            paper-input-search {
+            paper-dropdown-menu {
                 width: 45%;
                 margin-bottom: 32px;
                 --paper-input-container-focus-color: #2196F3;
-            }
-
-            paper-input-search paper-item {
-                white-space: nowrap;
             }
 
             paper-item.iron-selected {
@@ -130,7 +120,7 @@
 
             <paper-tabs selected="{{selected}}" on-tap="_loadTreeMap">
                 <paper-tab noink>SELECT DATA SOURCE</paper-tab>
-                <paper-tab noink>TREE MAP VIEW</paper-tab>
+                <paper-tab noink>TREE MAP SEARCH</paper-tab>
                 <paper-tab noink disabled>MOST POPULAR</paper-tab>
             </paper-tabs>
 
@@ -139,18 +129,16 @@
                 <neon-animatable>
 
                     <div id="div_selection">
-
                         <paper-input-search label="Available datasets">
                             <paper-menu class="dropdown-content">
-                                <template is="dom-repeat" items={{filteredDatasets}} as="dataset">
+                                <template is="dom-repeat" items={{datasets}} as="dataset">
                                     <paper-item id={{index}} on-tap="_selectDataUrl">{{dataset.name}}</paper-item>
-                                    <!--<paper-item id={{index}} on-tap="_selectDataUrl">{{_addHTMLSpace(dataset.name)}}</paper-item>-->
                                 </template>
                             </paper-menu>
                         </paper-input-search>
 
                         <paper-icon-button id="info_button" disabled on-click="_showInfo" icon="info-outline" title="dataset info"></paper-icon-button>
-                            <!--aggiustami anche dialog...-->
+
                         <paper-textarea id="selected_url" label="Selected url" value={{dataUrl}}></paper-textarea>
 
                         <paper-dialog id="dialog_info">
@@ -163,7 +151,7 @@
 
                 <neon-animatable>
                     <div id="div_datasetexplorer">
-                        <datasetexplorer-datalet class="datasetexplorer" data-url="/oxwall_x.y.z/openwall/api/datasetTree" fields='["result,provider_name","result,organization_name","result,package_name","result,resource_name","result,url","result,w"]'></datasetexplorer-datalet>
+                        <datasetexplorer-datalet class="datasetexplorer" data-url="/openwall/api/datasetTree" fields='["result,provider_name","result,organization_name","result,package_name","result,resource_name","result,url","result,w"]'></datasetexplorer-datalet>
                     </div>
                 </neon-animatable>
 
@@ -194,11 +182,6 @@
                     value : undefined
                 },
 
-                filteredDatasets : {
-                    type : Array,
-                    value : []
-                },
-
                 dataUrl : {
                     type  : String,
                     value : undefined,
@@ -208,8 +191,7 @@
             },
 
             listeners: {
-                'datasetexplorer-datalet_data-url': '_selectDataUrl_treeMap',
-                'paper-input-search_input-value' : '_filterDatasets'
+                'datasetexplorer-datalet_data-url': '_selectDataUrl_treeMap'
             },
 
             ready : function(){
@@ -220,24 +202,11 @@
                 this._resize();
                 var that = this;
                 window.addEventListener("resize", function() { that._resize(); });
-
-                this.filteredDatasets = this.datasets;
-            },
-
-            _filterDatasets : function(e){
-                var filter = e.detail.inputValue;
-                var filteredDatasets = [];
-                for (var i in this.datasets){
-                    if(this.datasets[i].name.toLowerCase().indexOf(filter.toLowerCase()) != -1)
-                        filteredDatasets.push(this.datasets[i]);
-                }
-
-                this.filteredDatasets = filteredDatasets;
             },
 
             _loadTreeMap : function(){
                 if(this.selected == 0 && this.$.div_datasetexplorer.innerHTML == "")
-                    this.$.div_datasetexplorer.innerHTML = "<datasetexplorer-datalet class=\"datasetexplorer\" data-url=\"/oxwall_x.y.z/openwall/api/datasetTree\" fields='[\"result,provider_name\",\"result,organization_name\",\"result,package_name\",\"result,resource_name\",\"result,url\",\"result,w\"]'></datasetexplorer-datalet>";
+                    this.$.div_datasetexplorer.innerHTML = "<datasetexplorer-datalet class=\"datasetexplorer\" data-url=\"/openwall/api/datasetTree\" fields='[\"result,provider_name\",\"result,organization_name\",\"result,package_name\",\"result,resource_name\",\"result,url\",\"result,w\"]'></datasetexplorer-datalet>";
             },
 
             _selectDataUrl_treeMap : function(e){
@@ -256,7 +225,7 @@
             },
 
             _selectDataUrl : function(e){
-                var dataset = this.filteredDatasets[parseInt(e.target.id)]
+                var dataset = this.datasets[parseInt(e.target.id)]
 
                 this.dataUrl = dataset.url;
 
@@ -276,10 +245,6 @@
             _fireDataUrl : function(){
                 this.fire('dataset-selection-controllet_data-url', {url: this.dataUrl});
             },
-
-//            _addHTMLSpace : function(name){
-//                return name.replace(/ /g, '&nbsp;');
-//            },
 
             _resize : function(){
                 var h = Math.max(document.documentElement.clientHeight, window.innerHeight || 0) - 16;
