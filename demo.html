@@ -264,8 +264,8 @@
 
     //DEEP.deepUrl = "http://deep.routetopa.eu/DEEP/";
     //DEEP.datasetsList = "http://deep.routetopa.eu/DEEP/datalets-list";
-    DEEP.deepUrl = "http://deep.routetopa.eu/DEEP/";
-    DEEP.datasetsList = "http://deep.routetopa.eu/DEEP/datalets-list";
+    DEEP.deepUrl = "http://192.168.164.128/DatalEts-Ecosystem-Provider/DEEP/";
+    DEEP.datasetsList = "http://192.168.164.128/DatalEts-Ecosystem-Provider/DEEP/datalets-list";
 
     DEEP.Datasets = {
         names:[
@@ -346,7 +346,7 @@
         if(response.idm.inputs.input.constructor == Object) {
             if(response.idm.inputs.input.selection == "*")
             {
-                var fields = this.$.selectedFields_container.querySelectorAll('draggable-element-controllet');
+                var fields = this.$.selected_fields_container.querySelectorAll('draggable-element-controllet');
                 input = response.idm.inputs.input;
                 response.idm.inputs.input = new Array();
                 for(var i=0;i<fields.length;i++){
