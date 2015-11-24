@@ -48,7 +48,8 @@
 
             listeners : {
                 'page-slider-controllet_selected' : '_updateSlider',
-                'dataset-selection-controllet_data-url' : '_updateDataUrl'
+                'dataset-selection-controllet_data-url' : '_allowSecondStep',
+                'tree-view-controllet_selected-fields' : '_allowThirdStep'
             },
 
             properties : {
@@ -87,25 +88,29 @@
                 switch (e.detail.selected) {
                     case 0:
                         slider.setTitle("SELECT DATASET", "Search or copy and paste the url of dataset.");
-                        slider.chevronLeft(false);
+                        slider.chevronLeft("invisible");
                         slider.chevronRight(false);
                         this.$.dataset_selection._fireDataUrl();
 //                        http://designpieces.com/palette/google-new-logo-2015-color-palette-hex-and-rgb/
                                 break;
                     case 1:
                         slider.setTitle("SELECT FIELDS", "Select the fields from tree-view. The multi-table will show the values related to the selected fields.");
-//                        slider.chevronRight(false);
+                        slider.chevronLeft(true);
+                        slider.chevronRight(false);
                         this.$.tree_view_multi_table.ready();
+                        this._allowThirdStep({detail: {fields: tree_view_multi_table.getFlatFields()}})
                         break;
                     case 2:
                         slider.setTitle("SELECT DATALET", "Select a visualization, fill out inputs and labels (optional).");
-                        slider.chevronRight(false);
+                        slider.chevronLeft(true);
+                        slider.chevronRight("invisible");
+                            //reset when?
                         this.$.datalet_selection.setFields(tree_view_multi_table.getFlatFields());//???
                         this.$.datalet_selection.ready();//???
                 }
             },
 
-            _updateDataUrl : function(e){
+            _allowSecondStep : function(e){
                 this.dataUrl = e.detail.url;
 
                 $.ajax({
@@ -121,6 +126,13 @@
                         slider.chevronRight(false);
                     }
                 });
+            },
+
+            _allowThirdStep : function(e){
+                if(e.detail.fields.length > 0)
+                    slider.chevronRight(true);
+                else
+                    slider.chevronRight(false);
             }
 
         });

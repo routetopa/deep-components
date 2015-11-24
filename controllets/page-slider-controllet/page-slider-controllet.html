@@ -160,6 +160,14 @@
 
             chevronLeft : function(flag) {
                 var buttons = document.getElementsByTagName("paper-icon-button");
+
+                if(flag == "invisible") {
+                    buttons[0].style.visibility = "hidden";
+                    return;
+                }
+                else
+                    buttons[0].style.visibility = "visible";
+
                 if(flag)
                     buttons[0].removeAttribute("disabled");
                 else
@@ -168,6 +176,14 @@
 
             chevronRight : function(flag) {
                 var buttons = document.getElementsByTagName("paper-icon-button");
+
+                if(flag == "invisible") {
+                    buttons[1].style.visibility = "hidden";
+                    return;
+                }
+                else
+                    buttons[1].style.visibility = "visible";
+
                 if(flag)
                     buttons[1].removeAttribute("disabled");
                 else

@@ -80,8 +80,6 @@
 
                 $(this.$.material_tree_view).perfectScrollbar();
                 $(this.$.material_multi_table).perfectScrollbar();
-
-                this.$.multi_table.ready();
             },
 
             attached : function(){
@@ -115,7 +113,7 @@
                     }
                 });
 
-
+                this.$.multi_table.ready();
             },
 
             _filterJson : function(data){

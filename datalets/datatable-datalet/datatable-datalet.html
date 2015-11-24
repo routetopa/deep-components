@@ -2,7 +2,7 @@
 @license
     The MIT License (MIT)
 
-    Copyright (c) 2015 Dipartimento di Informatica - Università di Salerno - Italy
+    Copyright (c) 2015 Dipartimento di Informatica - Universitï¿½ di Salerno - Italy
 
     Permission is hereby granted, free of charge, to any person obtaining a copy
     of this software and associated documentation files (the "Software"), to deal
@@ -50,44 +50,65 @@ Example:
 
 <dom-module id="datatable-datalet">
     <template>
-        <link rel="stylesheet" href="js/DataTables-master/media/css/jquery.dataTables.min.css">
+        <link rel="stylesheet" type="text/css" href="js/DataTables/datatables.css"/>
 
-        <table id="datatable" class="table table-striped table-bordered" cellspacing="0" style="height: auto; width: auto;">
+        <table id="datatable" class="stripe row-border" cellspacing="0" style="height: auto; width: auto;">
         </table>
         <base-ajax-json-jsonpath-datalet data-url="{{dataUrl}}" fields="{{fields}}" data="{{data}}"></base-ajax-json-jsonpath-datalet>
     </template>
 
-    <script src="js/DataTables-master/media/js/jquery.dataTables.js"></script>
+    <script type="text/javascript" src="js/DataTables/datatables.js"></script>
 
     <script>
         var DatatableBehavior = {
 
             presentData: function(){
+                var html = "";
+
                 if(!this.data || this.data[0] == undefined) return;
-                html = "";
                 html += '<thead>'+
-                           '<tr>';
-                for(var x = 0; x<this.data.length; x++){
-                   html += '<th>' + this.data[x].name + '</th>';
-                }
-                html +=  '</tr>' +
-                         '</thead>' +
-                         '<tfoot>' +
-                         '<tr>';
+                        '<tr>';
                 for(var x = 0; x<this.data.length; x++){
                     html += '<th>' + this.data[x].name + '</th>';
                 }
-                html += '</tr>' +
-                        '</tfoot>' +
+                html +=  '</tr>' +
+                        '</thead>' +
                         '<tbody>';
                 for(var i = 0; i<this.data[0].data.length; i++){
                     html += '<tr>';
                     for(var x = 0; x<this.data.length; x++){
-                      html += '<td>' + this.data[x].data[i] + '</td>';
+                        html += '<td>' + this.data[x].data[i] + '</td>';
                     }
                     html += '</tr>';
                 }
                 html += '</tbody>';
+
+
+//                if(!this.data || this.data[0] == undefined) return;
+//                html = "";
+//                html += '<thead>'+
+//                           '<tr>';
+//                for(var x = 0; x<this.data.length; x++){
+//                   html += '<th>' + this.data[x].name + '</th>';
+//                }
+//                html +=  '</tr>' +
+//                         '</thead>' +
+//                         '<tfoot>' +
+//                         '<tr>';
+//                for(var x = 0; x<this.data.length; x++){
+//                    html += '<th>' + this.data[x].name + '</th>';
+//                }
+//                html += '</tr>' +
+//                        '</tfoot>' +
+//                        '<tbody>';
+//                for(var i = 0; i<this.data[0].data.length; i++){
+//                    html += '<tr>';
+//                    for(var x = 0; x<this.data.length; x++){
+//                      html += '<td>' + this.data[x].data[i] + '</td>';
+//                    }
+//                    html += '</tr>';
+//                }
+//                html += '</tbody>';
 
                 $(this._component.$.datatable).html(html);
                 $(this._component.$.datatable).DataTable();
