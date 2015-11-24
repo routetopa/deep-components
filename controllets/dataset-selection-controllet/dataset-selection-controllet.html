@@ -225,7 +225,7 @@
             },
 
             _filterDatasets : function(e){
-                var filter = e.detail.inputValue;console.log(filter);
+                var filter = e.detail.inputValue;
                 var filteredDatasets = [];
                 for (var i in this.datasets){
                     if(this.datasets[i].name.toLowerCase().indexOf(filter.toLowerCase()) != -1)
@@ -256,7 +256,7 @@
             },
 
             _selectDataUrl : function(e){
-                var dataset = this.datasets[parseInt(e.target.id)]
+                var dataset = this.filteredDatasets[parseInt(e.target.id)]
 
                 this.dataUrl = dataset.url;
 
