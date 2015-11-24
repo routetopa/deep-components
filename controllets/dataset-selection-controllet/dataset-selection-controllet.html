@@ -56,10 +56,20 @@
                 color: #B6B6B6;
             }
 
-            paper-dropdown-menu {
+            /*paper-dropdown-menu {*/
+                /*width: 45%;*/
+                /*margin-bottom: 32px;*/
+                /*--paper-input-container-focus-color: #2196F3;*/
+            /*}*/
+
+            paper-input-search {
                 width: 45%;
                 margin-bottom: 32px;
                 --paper-input-container-focus-color: #2196F3;
+            }
+
+            paper-input-search paper-item {
+                white-space: nowrap;
             }
 
             paper-item.iron-selected {
@@ -120,7 +130,7 @@
 
             <paper-tabs selected="{{selected}}" on-tap="_loadTreeMap">
                 <paper-tab noink>SELECT DATA SOURCE</paper-tab>
-                <paper-tab noink>TREE MAP SEARCH</paper-tab>
+                <paper-tab noink>TREE MAP VIEW</paper-tab>
                 <paper-tab noink disabled>MOST POPULAR</paper-tab>
             </paper-tabs>
 
@@ -129,16 +139,18 @@
                 <neon-animatable>
 
                     <div id="div_selection">
+
                         <paper-input-search label="Available datasets">
                             <paper-menu class="dropdown-content">
-                                <template is="dom-repeat" items={{datasets}} as="dataset">
+                                <template is="dom-repeat" items={{filteredDatasets}} as="dataset">
                                     <paper-item id={{index}} on-tap="_selectDataUrl">{{dataset.name}}</paper-item>
+                                    <!--<paper-item id={{index}} on-tap="_selectDataUrl">{{_addHTMLSpace(dataset.name)}}</paper-item>-->
                                 </template>
                             </paper-menu>
                         </paper-input-search>
 
                         <paper-icon-button id="info_button" disabled on-click="_showInfo" icon="info-outline" title="dataset info"></paper-icon-button>
-
+                            <!--aggiustami anche dialog...-->
                         <paper-textarea id="selected_url" label="Selected url" value={{dataUrl}}></paper-textarea>
 
                         <paper-dialog id="dialog_info">
@@ -182,6 +194,11 @@
                     value : undefined
                 },
 
+                filteredDatasets : {
+                    type : Array,
+                    value : []
+                },
+
                 dataUrl : {
                     type  : String,
                     value : undefined,
@@ -191,7 +208,8 @@
             },
 
             listeners: {
-                'datasetexplorer-datalet_data-url': '_selectDataUrl_treeMap'
+                'datasetexplorer-datalet_data-url': '_selectDataUrl_treeMap',
+                'paper-input-search_input-value' : '_filterDatasets'
             },
 
             ready : function(){
@@ -202,6 +220,19 @@
                 this._resize();
                 var that = this;
                 window.addEventListener("resize", function() { that._resize(); });
+
+                this.filteredDatasets = this.datasets;
+            },
+
+            _filterDatasets : function(e){
+                var filter = e.detail.inputValue;console.log(filter);
+                var filteredDatasets = [];
+                for (var i in this.datasets){
+                    if(this.datasets[i].name.toLowerCase().indexOf(filter.toLowerCase()) != -1)
+                        filteredDatasets.push(this.datasets[i]);
+                }
+
+                this.filteredDatasets = filteredDatasets;
             },
 
             _loadTreeMap : function(){
@@ -245,6 +276,10 @@
             _fireDataUrl : function(){
                 this.fire('dataset-selection-controllet_data-url', {url: this.dataUrl});
             },
+
+//            _addHTMLSpace : function(name){
+//                return name.replace(/ /g, '&nbsp;');
+//            },
 
             _resize : function(){
                 var h = Math.max(document.documentElement.clientHeight, window.innerHeight || 0) - 16;

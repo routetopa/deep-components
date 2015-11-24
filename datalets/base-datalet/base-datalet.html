@@ -55,6 +55,14 @@ Example :
 <dom-module id="base-datalet">
     <template>
         <style>
+            a {
+                color: #00BCD4;
+                text-decoration: none;
+            }
+            a:hover {
+                color: #2db395;
+                text-decoration: underline;
+            }
             #base_datalet_container {
                 font-family: 'Roboto', 'Helvetica Neue', Helvetica, Arial, sans-serif;
                 padding: 16px;
@@ -63,34 +71,34 @@ Example :
                 display: flex;
                 padding-top: 8px;
             }
-            #rtp{
+            #rtp {
                 padding-top: 8px;
                 padding-right: 8px;
                 font-size: small;
             }
-            #rtpalogo{
+            #rtpalogo {
                 height:32px;
                 width: 32px;
             }
-            #image_spin {
-                height:32px;
-                width: 32px;
+            #base_datalet_spin {
+                height:256px;
+                width: 256px;
                 position: relative;
                 center: center;
                 width: 100%;
              }
-
-
         </style>
 
         <div id="base_datalet_imgWaitDatalet">
-                <img id="image_spin" src="static/images/spin.svg">
-
+                <img id="base_datalet_spin" src="static/images/spin.svg">
         </div>
+
         <div id="base_datalet_container">
-            <b> Source:</b><span id="domain"></span>
-            <b>  </b><span id="domainPage">
-        </span>
+            <!--<b>Source:</b><span id="domain"></span>-->
+            <!--<b></b><span id="domainPage"></span>-->
+
+            <b>Source:</b> <a id="base_datalet_source"></a> ( <a id="base_datalet_link">dataset</a> )
+
             <div id="base_datalet_rtp">
                 <div id="rtp">Powered by ROUTE-TO-PA</div>
                 <div><a href="http://www.routetopa.eu/"><img id="rtpalogo" src="static/images/rtpalogo.png" ></a></div>
@@ -132,6 +140,9 @@ Example :
              * @method ready
              */
             ready: function(){
+
+
+
                 var urlDatalet;
                 if(this.dataUrl != undefined){
 
@@ -149,7 +160,11 @@ Example :
                     urlDatalet = queryInitial +  queryFinal + apiIdResource + resultIdDatalet;
                     urlSource = this.dataUrl.split("/")[0] + "//" + this.dataUrl.split("/")[2];
 
-                    this.$.domainPage.innerHTML = '<a href=' + urlSource +  ' target=' + "_blank>" + urlSource + '</a>'+ "." ;
+//                    this.$.domainPage.innerHTML = '<a href=' + urlSource +  ' target=' + "_blank>" + urlSource + '</a>'+ "." ;
+
+                    this.$.base_datalet_source.innerHTML = urlSource;
+                    this.$.base_datalet_source.setAttribute("href", urlSource);
+
                     this.requestDataletData(urlDatalet);
                 }
             },
@@ -209,12 +224,11 @@ Example :
                     resourceId  = lastStringResourceId.split('=')[1];
                     var urlDatalet = this.dataUrl.split("/")[0]+ "//" + this.dataUrl.split("/")[2]  + "/dataset/" + packageIdDatalet +"/resource/" +resourceId;
 
-
                     urlDatalet = urlDatasetDownload.replace(/\/download\/.*/, '');
                     urlSource =  this.dataUrl.split("/")[0] + "//" + this.dataUrl.split("/")[2];
 
-
-                    this.$.domainPage.innerHTML += " (" + ' <a href=' + urlDatalet +  ' target=' + "_blank>" + "Dataset's page" + '</a>' + " )";
+                    this.$.base_datalet_link.setAttribute("href", urlDatalet);
+//                    this.$.domainPage.innerHTML += " (" + ' <a href=' + urlDatalet +  ' target=' + "_blank>" + "Dataset's page" + '</a>' + " )";
 
                 }
             }

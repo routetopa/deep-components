@@ -16,7 +16,7 @@
 
 <link rel="import" href="../items-vslider-controllet/items-vslider-controllet.html" />
 
-<link rel="import" href="../../datalets/datatable-datalet/datatable-datalet.html" />
+<script src="../../../DEEPCLIENT/js/deepClient.js"></script>
 
 <dom-module id="datalet-selection-controllet">
 
@@ -28,6 +28,7 @@
                 display: flex;
                 font-family: 'Roboto', 'Helvetica Neue', Helvetica, Arial, sans-serif;
                 font-size: 16px;
+                margin-top: 8px;
             }
 
             #datalet_selection_inputs {
@@ -145,9 +146,13 @@
             paper-button:hover {
                 background-color: #00AABF;
             }
+
+            paper-button[disabled] {
+                background-color: #B6B6B6;
+            }
         </style>
 
-        <iron-ajax id="selectedDatalet_request" on-response="handleSelectedDatalet"></iron-ajax>
+        <iron-ajax id="selectedDatalet_request" on-response="_handleSelectedDatalet"></iron-ajax>
 
         <div id="datalet_selection_container">
             <items-vslider-controllet datalets-list-url={{dataletsListUrl}}></items-vslider-controllet>
@@ -165,7 +170,7 @@
                         </div>
                         <paper-dropdown-menu no-label-float label={{item.name}}>
                             <paper-menu class="dropdown-content">
-                                <template is="dom-repeat" items={{fields}}>
+                                <template is="dom-repeat" items={{selectableFields}}>
                                     <paper-item id={{index}} on-tap="_loadDatalet">{{item}}</paper-item>
                                 </template>
                             </paper-menu>
@@ -193,7 +198,7 @@
             <div id="datalet_selection_column">
                 <paper-material id="datalet_selection_comment" elevation="5">
                     <div class="input_header">COMMENT</div>
-                    <paper-textarea no-label-float label="comment (max 100 characters)"></paper-textarea>
+                    <paper-textarea id="comment" no-label-float maxlength="100" label="comment (max 100 characters)"></paper-textarea>
                 </paper-material>
 
                 <paper-material id="datalet_selection_datalet" elevation="5">
@@ -202,7 +207,7 @@
 
                 </paper-material>
 
-                <paper-button raised>ADD DATALET</paper-button>
+                <paper-button id="add_button" disabled raised on-click="_addDatalet">ADD DATALET</paper-button>
 
             </div>
 
@@ -245,18 +250,29 @@
 
                 fields : {
                     type : Array,
-                    value : ["result,records,Lat","result,records,Lng"]
+                    value : []
+                },
+
+                selectedFields : {
+                    type : Array,
+                    value : []
+                },
+
+                selectableFields : {
+                    type : Array,
+                    value : []
                 },
 
                 dataUrl : {
                     type  : String,
-                    value : " http://ckan.routetopa.eu/api/action/datastore_search?resource_id=73e02092-85a1-434e-85fe-0c9a43aa9a52&amp;limit=10000"
+                    value : undefined
                 }
 
             },
 
             listeners: {
                 'items-vslider-controllet_selected-datalet': '_dataletSelected'
+//                'tree-view-controllet_selected-fields': '_updateSelectedFields'
             },
 
             ready : function() {
@@ -264,6 +280,8 @@
                 $(this.$.datalet_selection_inputs).perfectScrollbar();
                 $(this.$.datalet_selection_labels).perfectScrollbar();
                 $(this.$.datalet_selection_datalet).perfectScrollbar();
+
+                this.selectableFields = this._copy(this.fields);
             },
 
             attached : function() {
@@ -272,26 +290,68 @@
                 window.addEventListener("resize", function() { that._resize(); });
             },
 
+            setFields : function(fields) {
+                this.fields = fields;
+            },
+
+            _loadPreview : function() {
+//                if(!this.selectedDatalet)
+//                    return false;//delete load
+//
+//                for(var i in this.inputs){
+//                    console.log(this.inputs[i]);
+//                }
+//
+//
+//                var inputs = document.getElementsByClassName("prova");
+//                console.log(inputs);
+//
+//                return true;
+            },
+
+//            _updateSelectedFields : function(e) {//////male male
+//                console.log(e.detail);
+//                console.log("ciao");
+//            },
+
             _dataletSelected : function(e){
+                this.$.add_button.setAttribute("disabled", "true");
+
                 this.selectedDatalet = e.detail.datalet;
+                this.inputs = [];
+                this.labels = [];
+
                 if(this.selectedDatalet){
                     this.$.selectedDatalet_request.url = this.deepUrl + e.detail.datalet + "-datalet";
                     this.$.selectedDatalet_request.generateRequest();
                 }
-                else
-                    this.inputs = []
+//                else {
+//                    this.inputs = [];
+//                    this.labels = [];
+//                }
+
+                this.$.datalet_selection_datalet_placeholder.innerHTML = "";
+                this.selectedFields = [];
+
+//                this.async(function(){this._loadPreview();}, 1000);
+                this._loadPreview();
             },
 
-            handleSelectedDatalet : function(e){
+            _handleSelectedDatalet : function(e){
+
+
+//                console.log(e.detail.response.idm.inputs);
 //                console.log(e.detail.response.idm.inputs.layouts.input);
                 var inputs = e.detail.response.idm.inputs.input;
                 var labels = e.detail.response.idm.inputs.layouts.input;
 
                 if(inputs.constructor == Object) {//not Array && inputs.input.selection == "*"
                     var name = inputs.name;
+                    var description = inputs.description;
+                    var selection = inputs.selection;
                     inputs = [];
                     for(var i in this.fields)
-                        inputs.push({name: name + " " + i});
+                        inputs.push({name: name + " " + i, description: description, selection: selection});
 
                 }
 
@@ -299,15 +359,83 @@
                 this.labels = labels;
             },
 
-            _loadDatalet : function(){
-//                this.$.datalet_selection_datalet_placeholder.innerHTML = "<datatable-datalet data-url=\""+this.dataUrl+"\" fields='[\"result,records,Lat\",\"result,records,Lng\"]'></datatable-datalet>";
-                this.$.datalet_selection_datalet_placeholder.innerHTML = "<datatable-datalet data-url=\"http://ckan.routetopa.eu/api/action/datastore_search?resource_id=73e02092-85a1-434e-85fe-0c9a43aa9a52&amp;limit=10000\" fields='[\"result,records,Lat\",\"result,records,Lng\"]'>we";
+            _copy : function(o) {
+                var out, v, key;
+                out = Array.isArray(o) ? [] : {};
+                for (key in o) {
+                    v = o[key];
+                    out[key] = (typeof v === "object") ? this._copy(v) : v;
+                }
+                return out;
+            },
+
+            _loadDatalet : function(e){
+                var selectedFields = this._copy(this.selectedFields);
+//                var selectableFields = this._copy(this.selectableFields);
+
+                if($(e.target).parents("paper-dropdown-menu")[0].selectedItem) {
+                    var prevSelected = $(e.target).parents("paper-dropdown-menu")[0].selectedItem.innerText;
+                    var index = this.selectedFields.indexOf(prevSelected);
+                    selectedFields.splice(index, 1);
+//                    selectableFields.push(prevSelected);
+                }
+
+                var selected = e.target.innerText;
+//                var index = this.selectableFields.indexOf(selected);
+//                selectableFields.splice(index, 1);
+                selectedFields.push(selected);
+
+                this.selectedFields = selectedFields;
+//                this.selectableFields = selectableFields;
+
+//                console.log(this.selectedFields);
+//                console.log(this.selectableFields);
+
+                var load = false;
+                if(this.selectedFields.length > 0 && this.inputs[0].selection == "*")
+                    load = true;
+                else if(this.selectedFields.length == this.inputs.length)
+                    load = true;
+
+                if(load){
+                    var params = {'data-url' : this.dataUrl};
+
+                    var dataletParams ={
+                        component   : this.selectedDatalet+"-datalet",
+                        params      : params,
+                        fields      : this.selectedFields,
+                        placeHolder : datalet_selection_datalet_placeholder
+                    };
+
+                    ComponentService.deep_url = this.deepUrl;
+                    ComponentService.getComponent(dataletParams);
+
+                    this.async(function(){this.$.add_button.removeAttribute("disabled");}, 1111);
+                }
+
+//                this.$.datalet_selection_datalet_placeholder.innerHTML = "<datatable-datalet data-url=\"http://ckan.routetopa.eu/api/action/datastore_search?resource_id=73e02092-85a1-434e-85fe-0c9a43aa9a52&amp;limit=10000\" fields='[\"result,records,Lat\",\"result,records,Lng\"]'>we";
+//                this.$.datalet_selection_datalet_placeholder.innerHTML = "<"+this.selectedDatalet+"-datalet data-url=\""+this.dataUrl+"\" fields='"+JSON.stringify(this.fields)+"'></"+this.selectedDatalet+">";
 
 //                $("#base_datalet_container").html("");
                 $("#base_datalet_container").css('visibility','hidden');
                 $("#base_datalet_container").css('padding','0px');
                 $("#base_datalet_container").css('height','0px');
 //                console.log($("#base_datalet_container"));
+            },
+
+            _addDatalet : function(){console.log("we");
+
+                var data = {
+                    dataUrl : this.dataUrl,
+//                    params :  this.paramsFields,
+                    params :  {'data-url' : this.dataUrl},
+                    fields :  this.selectedFields,
+                    datalet : this.selectedDatalet+"-datalet",
+                    comment : this.$.comment.value,
+                    staticData : JSON.stringify(this.$.datalet_selection_datalet_placeholder.children[1].behavior.data)
+                }
+
+                this.fire('data-sevc-controllet.dataletCreated', {data : data});
 
             },
 
