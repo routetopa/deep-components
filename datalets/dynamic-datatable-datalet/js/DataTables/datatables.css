@@ -1491,7 +1491,7 @@ table.dataTable td {
   clear: both;
   *zoom: 1;
   zoom: 1;
-  border-bottom: 2px solid #B6B6B6;
+  /*border-bottom: 2px solid #B6B6B6;*/
   /*margin-bottom: 8px;*/
 }
 .dataTables_wrapper .dataTables_length {

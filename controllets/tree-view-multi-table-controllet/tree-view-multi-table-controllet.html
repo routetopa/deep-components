@@ -80,6 +80,8 @@
 
                 $(this.$.material_tree_view).perfectScrollbar();
                 $(this.$.material_multi_table).perfectScrollbar();
+
+                this.$.multi_table.ready();
             },
 
             attached : function(){
@@ -104,6 +106,7 @@
                     url: this.dataUrl,
                     dataType: "json",
                     success: function(data){
+                        that.rootName = "data"
                         data = that._filterJson(data);
                         tree.setAttribute("json-data", JSON.stringify(data));
                         tree.selectedFields = [];
@@ -118,11 +121,9 @@
             _filterJson : function(data){
                 console.log(data);
                 console.log(this.dataUrl);
-//                if(this.dataUrl.indexOf("ckan") != -1)
                 if(data.result != undefined && data.result.resource_id != undefined) {
-                    this.rootName = "ckan"
-                    this.openedPath = "result,records";
-                    return {result: {records: data.result.records}};
+                    this.rootName = "result,records"
+                    return data.result.records;
                 }
                 return data;
             },

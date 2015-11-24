@@ -294,26 +294,6 @@
                 this.fields = fields;
             },
 
-            _loadPreview : function() {
-//                if(!this.selectedDatalet)
-//                    return false;//delete load
-//
-//                for(var i in this.inputs){
-//                    console.log(this.inputs[i]);
-//                }
-//
-//
-//                var inputs = document.getElementsByClassName("prova");
-//                console.log(inputs);
-//
-//                return true;
-            },
-
-//            _updateSelectedFields : function(e) {//////male male
-//                console.log(e.detail);
-//                console.log("ciao");
-//            },
-
             _dataletSelected : function(e){
                 this.$.add_button.setAttribute("disabled", "true");
 
@@ -332,6 +312,7 @@
 
                 this.$.datalet_selection_datalet_placeholder.innerHTML = "";
                 this.selectedFields = [];
+                this.selectableFields =  this._copy(this.fields);
 
 //                this.async(function(){this._loadPreview();}, 1000);
                 this._loadPreview();
@@ -371,7 +352,7 @@
 
             _loadDatalet : function(e){
                 var selectedFields = this._copy(this.selectedFields);
-//                var selectableFields = this._copy(this.selectableFields);
+                var selectableFields = this._copy(this.selectableFields);
 
                 if($(e.target).parents("paper-dropdown-menu")[0].selectedItem) {
                     var prevSelected = $(e.target).parents("paper-dropdown-menu")[0].selectedItem.innerText;
@@ -386,10 +367,10 @@
                 selectedFields.push(selected);
 
                 this.selectedFields = selectedFields;
-//                this.selectableFields = selectableFields;
+                this.selectableFields = selectableFields;
 
-//                console.log(this.selectedFields);
-//                console.log(this.selectableFields);
+                console.log(this.selectedFields);
+                console.log(this.selectableFields);
 
                 var load = false;
                 if(this.selectedFields.length > 0 && this.inputs[0].selection == "*")
