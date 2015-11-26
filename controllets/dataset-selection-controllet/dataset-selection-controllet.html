@@ -150,7 +150,7 @@
 
         <paper-material id="material_container" elevation="5">
 
-            <paper-tabs selected="{{selected}}" on-tap="_loadTreeMap">
+            <paper-tabs selected="{{selected}}">
                 <paper-tab noink>LIST VIEW</paper-tab>
                 <paper-tab noink>TREE MAP VIEW</paper-tab>
                 <paper-tab noink disabled>MOST POPULAR</paper-tab>
@@ -208,7 +208,7 @@
                 <neon-animatable>
                     <div id="div_datasetexplorer"></div>
                         <!--<datasetexplorer-datalet class="datasetexplorer" data-url="/openwall/api/datasetTree" fields='["result,provider_name","result,organization_name","result,package_name","result,resource_name","result,url","result,w"]'></datasetexplorer-datalet>-->
-                        <!--<datasetexplorer-datalet class="datasetexplorer" data-url="/oxwall_x.y.z/openwall/api/datasetTree" fields='["result,provider_name","result,organization_name","result,package_name","result,resource_name","result,url","result,w"]'></datasetexplorer-datalet>-->
+                        <!--<datasetexplorer-datalet id="datasetexplorer" data-url="/oxwall_x.y.z/openwall/api/datasetTree" fields='["result,provider_name","result,organization_name","result,package_name","result,resource_name","result,url","result,w"]'></datasetexplorer-datalet>-->
                     <!--</div>-->
                 </neon-animatable>
 
@@ -282,6 +282,8 @@
 
                 if(this.suggestedDatasets)
                     this.isSuggested = true;
+
+                this._loadTreeMap();
             },
 
 //            _isSuggested : function(){
@@ -302,8 +304,11 @@
             },
 
             _loadTreeMap : function(){
-                if(this.selected != 1 && this.$.div_datasetexplorer.innerHTML == "")
-                    this.$.div_datasetexplorer.innerHTML = "<datasetexplorer-datalet class=\"datasetexplorer\" data-url=\"/openwall/api/datasetTree\" fields='[\"result,provider_name\",\"result,organization_name\",\"result,package_name\",\"result,resource_name\",\"result,url\",\"result,w\"]'></datasetexplorer-datalet>";
+                var h = $("#material_container").height() - 48;
+                var w = $("#material_container").width();
+
+//                if(this.selected != 1 && this.$.div_datasetexplorer.innerHTML == "")
+                this.$.div_datasetexplorer.innerHTML = "<datasetexplorer-datalet width=\""+w+"\" height=\""+h+"\" data-url=\"/oxwall_x.y.z/openwall/api/datasetTree\" fields='[\"result,provider_name\",\"result,organization_name\",\"result,package_name\",\"result,resource_name\",\"result,url\",\"result,w\"]'></datasetexplorer-datalet>";
             },
 
             _selectDataUrl_treeMap : function(e){
