@@ -321,13 +321,13 @@ respectively.
                 }
             },
 
-            _fireInputValue: function() {console.log(this.inputValue);
+            _fireInputValue: function() {//console.log(this.inputValue);
                 if(this.fireInputValue) {//change NO DDL
                     this.fire('paper-input-search_input-value', {inputValue: this.inputValue});
                     if(this.contentElement.selectedItem){
 //                        this._setSelectedItem(null);
                         this.contentElement.select(-1);
-                        console.log("deselected");
+//                        console.log("deselected");
                     }
                 }
 

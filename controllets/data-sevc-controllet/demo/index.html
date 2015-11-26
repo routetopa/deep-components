@@ -39,9 +39,12 @@
     var dataset2 = {description: "", name: "Klassen", url: "http://ckan.routetopa.eu/api/action/datastore_search?resource_id=dfd27de5-0790-466c-af59-6a82509e7fbb"};
     var dataset3 = {description: "descrizione bellissima purissima levissima sbiricuda antani", name: "Derelict Sites", url: "http://ckan.routetopa.eu/api/action/datastore_search?resource_id=fcbee83e-3d3d-4303-a568-24dd33d02adc"};
     var datasets = [dataset1, dataset2, dataset3];
+    var s_datasets = [dataset1, dataset3];
 
     var dsc = document.getElementById('dsc');
     dsc.setAttribute("datasets", JSON.stringify(datasets));
+
+    dsc.setAttribute("suggested-datasets", JSON.stringify(s_datasets));
 </script>
 
 </body>

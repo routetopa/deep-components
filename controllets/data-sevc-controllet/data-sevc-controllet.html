@@ -19,20 +19,20 @@
         <page-slider-controllet id="slider">
 
             <neon-animatable>
+                <template is="dom-if" if={{!modify}}>
+                    <dataset-selection-controllet id="dataset_selection" datasets={{datasets}} suggested-datasets={{suggestedDatasets}}></dataset-selection-controllet>
+                </template>
+            </neon-animatable>
 
-                <dataset-selection-controllet id="dataset_selection" datasets={{datasets}}></dataset-selection-controllet>
+            <neon-animatable>
+
+                <tree-view-multi-table-controllet id="tree_view_multi_table" data-url={{dataUrl}} preselected-fields={{selectedFields}}></tree-view-multi-table-controllet>
 
             </neon-animatable>
 
             <neon-animatable>
 
-                <tree-view-multi-table-controllet id="tree_view_multi_table" data-url={{dataUrl}}></tree-view-multi-table-controllet>
-
-            </neon-animatable>
-
-            <neon-animatable>
-
-                <datalet-selection-controllet id="datalet_selection" deep-url={{deepUrl}} datalets-list-url={{dataletsListUrl}} data-url={{dataUrl}} fields={{fields}}></datalet-selection-controllet>
+                <datalet-selection-controllet id="datalet_selection" deep-url={{deepUrl}} datalets-list-url={{dataletsListUrl}} data-url={{dataUrl}} preselected-datalet={{selectedDatalet}}></datalet-selection-controllet>
 
             </neon-animatable>
 
@@ -69,6 +69,11 @@
                     value : undefined
                 },
 
+                suggestedDatasets : {
+                    type : Array,
+                    value : undefined
+                },
+
                 dataUrl : {
                     type  : String,
                     value : undefined
@@ -77,11 +82,38 @@
                 jsonData : {
                     type  : Object,
                     value : undefined
+                },
+
+                modify : {
+                    type  : Boolean,
+                    value : false
+                },
+
+                selectedDatalet : {
+                    type  : String,
+                    value : undefined
+                },
+
+                selectedFields : {
+                    type  : Array,
+                    value : []
+                },
+
+                dataletPreset : {
+                    type  : Object,
+                    value : []
                 }
 
             },
 
             ready : function(){
+                if(this.selectedDatalet){
+                    this.modify = true;
+                    this.$.slider.selected = 1;
+//                    console.log(this.selectedDatalet);
+                    this.dataUrl = this.dataletPreset["data-url"];
+
+                }
             },
 
             _updateSlider : function(e){
@@ -90,18 +122,27 @@
                         slider.setTitle("SELECT DATASET", "Search or copy and paste the url of dataset.");
                         slider.chevronLeft("invisible");
                         slider.chevronRight(false);
-                        this.$.dataset_selection._fireDataUrl();
-//                        http://designpieces.com/palette/google-new-logo-2015-color-palette-hex-and-rgb/
-                                break;
+                        if(slider.getPrevSelected() == 1)
+                            slider.chevronRight(true);
+
+//                        this.$.dataset_selection._fireDataUrl();
+//                        console.log(this.$.dataset_selection);
+                        break;
                     case 1:
-                        slider.setTitle("SELECT FIELDS", "Select the fields from tree-view. The multi-table will show the values related to the selected fields.");
-                        slider.chevronLeft(true);
+                        slider.setTitle("SELECT DATA", "Select the fields from tree-view. The multi-table will show the values related to the selected fields.");
+                        if(this.modify){
+                            slider.chevronLeft("invisible");
+                            slider.setAvatar("2");
+                        }
+                        else{
+                            slider.chevronLeft(true);
+                        }
                         slider.chevronRight(false);
                         this.$.tree_view_multi_table.ready();
-                        this._allowThirdStep({detail: {fields: tree_view_multi_table.getFlatFields()}})
+                        this._allowThirdStep({detail: {fields: tree_view_multi_table.getFlatFields()}});
                         break;
                     case 2:
-                        slider.setTitle("SELECT DATALET", "Select a visualization, fill out inputs and labels (optional).");
+                        slider.setTitle("SELECT VISUALIZATION", "Select a visualization, fill out inputs and labels (optional).");
                         slider.chevronLeft(true);
                         slider.chevronRight("invisible");
                             //reset when?
@@ -126,6 +167,8 @@
                         slider.chevronRight(false);
                     }
                 });
+
+                this.$.datalet_selection.reset();
             },
 
             _allowThirdStep : function(e){

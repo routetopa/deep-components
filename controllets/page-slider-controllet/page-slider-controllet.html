@@ -123,6 +123,11 @@
                     value : 0
                 },
 
+                prevSelected : {
+                    type  : Number,
+                    value : 0
+                },
+
                 pages : {
                     type  : Number,
                     value : document.querySelectorAll('neon-animatable').length
@@ -190,6 +195,10 @@
                     buttons[1].setAttribute("disabled", "true");
             },
 
+            getPrevSelected : function() {
+                return this.prevSelected;
+            },
+
             _onPrevClick : function() {
                 var buttons = document.getElementsByTagName("paper-icon-button");
                 buttons[0].setAttribute("disabled", "true");
@@ -198,6 +207,7 @@
                 this.entryAnimation = 'slide-from-left-animation';
                 this.exitAnimation  = 'slide-right-animation';
 
+                this.prevSelected = this.selected;
                 this.selected = this.selected === 0 ? (this.pages-1) : (this.selected - 1);
             },
 
@@ -209,6 +219,7 @@
                 this.entryAnimation = 'slide-from-right-animation';
                 this.exitAnimation  = 'slide-left-animation';
 
+                this.prevSelected = this.selected;
                 this.selected = this.selected === (this.pages-1) ? 0 : (this.selected + 1);
             },
 

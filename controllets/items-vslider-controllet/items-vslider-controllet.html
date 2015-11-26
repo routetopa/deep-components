@@ -108,7 +108,7 @@
 
         <paper-material id="items_vslider_container" elevation="5">
 
-            <paper-input id="items_vslider_search" value={{filter}} no-label-float label="search datalet">
+            <paper-input id="items_vslider_search" value={{filter}} no-label-float label="search">
                 <iron-icon class="search" icon="search" prefix></iron-icon>
                 <paper-icon-button class="clear" suffix on-click="_clearInput" icon="clear"></paper-icon-button>
             </paper-input>
@@ -152,6 +152,11 @@
                     value : undefined
                 },
 
+                preselectedDatalet : {
+                    type  : String,
+                    value : undefined
+                },
+
                 datalets : {
                     type  : Array,
                     value : []
@@ -182,6 +187,11 @@
 //                this._resize();
 //                var that = this;
 //                window.addEventListener("resize", function() { that._resize(); });
+
+                if(this.preselectedDatalet){
+                    this._preselectDatalet();
+                    this.preselectedDatalet = undefined;
+                }
             },
 
             _clearInput : function() {
@@ -238,7 +248,7 @@
                     dataletCard.getElementsByClassName("legend")[0].className = dataletCard.getElementsByClassName("legend")[0].className.replace(" selected", "");
                 }
 
-                if(e.currentTarget.id != this.selectedDatalet){
+                if (e.currentTarget.id != this.selectedDatalet) {
                     e.currentTarget.elevation = "5";
                     e.currentTarget.getElementsByClassName("legend")[0].className = e.currentTarget.getElementsByClassName("legend")[0].className + " selected";
                     this.selectedDatalet = e.currentTarget.id;
@@ -249,6 +259,14 @@
                 this.fire('items-vslider-controllet_selected-datalet', {datalet: this.selectedDatalet});
             },
 
+            _preselectDatalet : function(){
+                var dataletCard = document.getElementById(this.preselectedDatalet);
+                dataletCard.elevation = "5";
+                dataletCard.getElementsByClassName("legend")[0].className = dataletCard.getElementsByClassName("legend")[0].className + " selected";
+                this.selectedDatalet = this.preselectedDatalet;
+
+                this.fire('items-vslider-controllet_selected-datalet', {datalet: this.selectedDatalet});
+            },
 
             _getImageUrl : function(index){
                 return this.datalets[index].imageUrl;
