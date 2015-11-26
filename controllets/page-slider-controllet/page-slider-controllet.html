@@ -77,7 +77,7 @@
 
             .subtitle {
                 font-size: 16px;
-                color: #727272;
+                color: #727272;/*#00BCD4*/
             }
         </style>
 
@@ -123,6 +123,11 @@
                     value : 0
                 },
 
+                prevSelected : {
+                    type  : Number,
+                    value : 0
+                },
+
                 pages : {
                     type  : Number,
                     value : document.querySelectorAll('neon-animatable').length
@@ -160,6 +165,14 @@
 
             chevronLeft : function(flag) {
                 var buttons = document.getElementsByTagName("paper-icon-button");
+
+                if(flag == "invisible") {
+                    buttons[0].style.visibility = "hidden";
+                    return;
+                }
+                else
+                    buttons[0].style.visibility = "visible";
+
                 if(flag)
                     buttons[0].removeAttribute("disabled");
                 else
@@ -168,10 +181,22 @@
 
             chevronRight : function(flag) {
                 var buttons = document.getElementsByTagName("paper-icon-button");
+
+                if(flag == "invisible") {
+                    buttons[1].style.visibility = "hidden";
+                    return;
+                }
+                else
+                    buttons[1].style.visibility = "visible";
+
                 if(flag)
                     buttons[1].removeAttribute("disabled");
                 else
                     buttons[1].setAttribute("disabled", "true");
+            },
+
+            getPrevSelected : function() {
+                return this.prevSelected;
             },
 
             _onPrevClick : function() {
@@ -182,6 +207,7 @@
                 this.entryAnimation = 'slide-from-left-animation';
                 this.exitAnimation  = 'slide-right-animation';
 
+                this.prevSelected = this.selected;
                 this.selected = this.selected === 0 ? (this.pages-1) : (this.selected - 1);
             },
 
@@ -193,6 +219,7 @@
                 this.entryAnimation = 'slide-from-right-animation';
                 this.exitAnimation  = 'slide-left-animation';
 
+                this.prevSelected = this.selected;
                 this.selected = this.selected === (this.pages-1) ? 0 : (this.selected + 1);
             },
 

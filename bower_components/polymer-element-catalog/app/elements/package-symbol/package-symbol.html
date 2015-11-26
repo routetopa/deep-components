@@ -1,0 +1,42 @@
+<dom-module id="package-symbol">
+  <style>
+    :host {
+      display: block;
+      line-height: 34px;
+      width: 34px;
+      height: 34px;
+      background: #ccc;
+      text-align: center;
+      font-weight: 500;
+      font-size: 18px;
+      color: #606060;
+      outline: none;
+    }
+
+    :host(.large) {
+      line-height: 64px;
+      width: 64px;
+      height: 64px;
+      font-size: 30px;
+    }
+  </style>
+  <template>
+    <div style$="[[_getComputedStyle(color)]]">
+      <span>[[symbol]]</span>
+    </div>
+  </template>
+</dom-module>
+
+<script>
+  Polymer({
+    is: 'package-symbol',
+    properties: {
+      symbol: String,
+      color: String
+    },
+
+    _getComputedStyle: function(color) {
+      return 'background-color: ' + color + ';';
+    } 
+  });
+</script>

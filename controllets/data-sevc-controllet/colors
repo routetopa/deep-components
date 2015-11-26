@@ -33,3 +33,14 @@ E0E0E0
 
 
 'Roboto', 'Helvetica Neue', Helvetica, Arial, sans-serif
+
+
+
+a {
+	color: #00BCD4 ; /** OW_Control type:color, key:accentColor, section:2. Colors, label:5. Accent **/
+	text-decoration: none;
+}
+a:hover {
+	color: #2db395;
+	text-decoration: underline;
+}

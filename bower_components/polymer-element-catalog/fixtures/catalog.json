@@ -1,0 +1,118 @@
+{
+  "packages": [
+    {
+      "name":"iron-elements",
+      "title":"Iron Elements",
+      "version":"1.0.0",
+      "symbol":"Fe",
+      "color":"#81c784",
+      "tagline":"Polymer core elements",
+      "description":"Iron elements are a set of visual and non-visual utility elements. They include elements for working with layout, user input, selection, and scaffolding apps."
+    },
+    {
+      "name":"gold-elements",
+      "title":"Gold Elements",
+      "symbol":"Au",
+      "color":"#ffb74d",
+      "version":"1.0.0",
+      "tagline":"Business elements",
+      "description":"Business elements provide UI and common utility components for eCommerce. They include elements such as checkout forms, product listings, and shopping carts."
+    },
+    {
+      "name":"paper-elements",
+      "title":"Paper Elements",
+      "symbol":"Md",
+      "color":"#ffffff",
+      "version":"1.0.0",
+      "tagline":"Material design elements",
+      "description":"--TBD--"
+    },
+    {
+      "name":"oxygen-elements",
+      "title":"Oxygen Elements",
+      "symbol":"O",
+      "color":"#4DD0E1",
+      "version":"1.0.0",
+      "tagline":"Data-pipes and specialized services",
+      "description":"--TBD--"
+    },
+    {
+      "name":"neon-elements",
+      "title":"Neon Elements",
+      "symbol":"Ne",
+      "color":"#a7ffeb",
+      "version":"1.0.0",
+      "tagline":"Elements that implement special effects",
+      "description":"--TBD--"
+    },
+    {
+      "name":"carbon-elements",
+      "title":"Carbon Elements",
+      "symbol":"C",
+      "color":"#b0bec5",
+      "version":"1.0.0",
+      "tagline":"Magical unknown element group",
+      "description":"--TBD--"
+    },
+    {
+      "name":"molecules",
+      "title":"Molecules",
+      "symbol":"Mo",
+      "color":"#ffab91",
+      "version":"1.0.0",
+      "tagline":"Third-party library wrappers",
+      "description":"--TBD--"
+    },
+    {
+      "name":"service-worker-elements",
+      "title":"Service Worker Elements",
+      "symbol":"Sw",
+      "color":"#ffeb3b",
+      "version":"1.0.0",
+      "tagline":"Offline and networking",
+      "description":"--TBD--"
+    }
+  ],
+  "elements": [
+    {
+      "name":"iron-ajax",
+      "package":"iron-elements",
+      "description":"Make requests using AJAX",
+      "tags":["utility","data","app"]
+    },
+    {
+      "name":"iron-toolbar",
+      "package":"iron-elements",
+      "description":"A horizontal bar useful for layout and navigation",
+      "tags":["ui","layout"]
+    },
+    {
+      "name":"gold-checkout",
+      "package":"gold-elements",
+      "description":"A checkout form for collecting payment info.",
+      "tags":["ui","payments"]
+    },
+    {
+      "name":"paper-item",
+      "package":"paper-elements",
+      "description":"A list item",
+      "tags":["ui","lists"]
+    }
+  ],
+  "guides": [
+    {
+      "name":"example",
+      "title":"Example Guide",
+      "summary":"An example guide to live in place of all guides since we don't have any yet.",
+      "packages":["iron-elements","oxygen-elements"],
+      "elements":["iron-ajax","oxygen-foobar"]
+    }
+  ],
+  "tags": {
+    "app":["iron-ajax"],
+    "layout":["iron-toolbar"],
+    "data":["iron-ajax"],
+    "utility":["iron-ajax"],
+    "ui":["iron-toolbar"]
+  }
+}

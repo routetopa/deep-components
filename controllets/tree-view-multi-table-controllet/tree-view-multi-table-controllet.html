@@ -104,6 +104,7 @@
                     url: this.dataUrl,
                     dataType: "json",
                     success: function(data){
+                        that.rootName = "data"
                         data = that._filterJson(data);
                         tree.setAttribute("json-data", JSON.stringify(data));
                         tree.selectedFields = [];
@@ -112,17 +113,15 @@
                     }
                 });
 
-
+                this.$.multi_table.ready();
             },
 
             _filterJson : function(data){
-                console.log(data);
-                console.log(this.dataUrl);
-//                if(this.dataUrl.indexOf("ckan") != -1)
+//                console.log(data);
+//                console.log(this.dataUrl);
                 if(data.result != undefined && data.result.resource_id != undefined) {
-                    this.rootName = "ckan"
-                    this.openedPath = "result,records";
-                    return {result: {records: data.result.records}};
+                    this.rootName = "result,records"
+                    return data.result.records;
                 }
                 return data;
             },

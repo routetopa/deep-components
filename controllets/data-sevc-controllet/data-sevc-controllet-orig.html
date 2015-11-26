@@ -54,8 +54,10 @@
 <link rel="import" href="../items-list-controllet/item-list-controllet.html">
 <link rel="import" href="../draggable-element-controllet/draggable-element-controllet.html">
 <link rel="import" href="../tree-view-controllet/tree-view-controllet.html">
+<link rel="import" href="../tree-view-multi-table-controllet/tree-view-multi-table-controllet.html">
 <link rel="import" href="../text-element-controllet/text-element-controllet.html">
 <link rel="import" href="../animated-button-container-controllet/animated-button-container-controllet.html">
+<link rel="import" href="../../datalets/datasetexplorer-datalet/datasetexplorer-datalet.html">
 
 <!--
 The `data-sevc-controllet` is a controllet to generate visualization from a dataset accessible through api. A json response is required.
@@ -210,12 +212,20 @@ Example:
                 padding : 0.8em;
             }
 
+            /*#fields_placeholder{*/
+            /*width: 40%;*/
+            /*height: 75vh;*/
+            /*position: relative;*/
+            /*float: left;*/
+            /*overflow: auto;*/
+            /*}*/
+
             #fields_placeholder{
-                width: 40%;
-                height: 75vh;
-                position: relative;
-                float: left;
-                overflow: auto;
+                width: 100%;
+                /*height: 75vh;*/
+                /*position: relative;*/
+                /*float: right;*/
+                /*overflow: auto;*/
             }
 
             #table_fields_container{
@@ -329,8 +339,8 @@ Example:
                         <paper-material elevation="2" class="area_container">
                             <paper-tabs selected="{{DatasourceTabSelected}}">
                                 <paper-tab>Select data source</paper-tab>
+                                <paper-tab>Tree Map view</paper-tab>
                                 <paper-tab>Most popular</paper-tab>
-                                <paper-tab>Search</paper-tab>
                             </paper-tabs>
                             <iron-pages selected="{{DatasourceTabSelected}}">
                                 <div>
@@ -353,7 +363,10 @@ Example:
 
 
                                 </div>
-                                <div><img src="static/images/UnderConstruction.png" style="position: relative;top: 60%;left: 25%;"></div>
+                                <!--<div><img src="static/images/UnderConstruction.png" style="position: relative;top: 60%;left: 25%;"></div>-->
+                                <div>
+                                    <datasetexplorer-datalet class="datasetexplorer" data-url="/openwall/api/datasetTree" fields='["result,provider_name","result,organization_name","result,package_name","result,resource_name","result,url","result,w"]'></datasetexplorer-datalet>
+                                </div>
                                 <div><img src="static/images/UnderConstruction.png" style="position: relative;top: 60%;left: 25%;"></div>
                             </iron-pages>
                         </paper-material>
@@ -378,13 +391,19 @@ Example:
 
                         <div class="horizontal layout">
 
-                            <paper-material elevation="2" id="fields_placeholder" class="area_container flexchild" style="min-width:300px">
-                                <tree-view-controllet id="fields_treeview" root-name="data" opened-path="result,records"></tree-view-controllet>
-                            </paper-material>
+                            <!--<paper-material elevation="2" id="fields_placeholder" class="area_container flexchild" style="min-width:300px">-->
+                            <!--<tree-view-controllet id="fields_treeview" root-name="data" opened-path="result,records"></tree-view-controllet>-->
+                            <!--</paper-material>-->
 
-                            <paper-material elevation="2" id="table_fields_container" class="area_container flex2child">
-                                <div id="table_component_place_holder"></div>
-                            </paper-material>
+                            <!--<paper-material elevation="2" id="table_fields_container" class="area_container flex2child">-->
+                            <!--<div id="table_component_place_holder"></div>-->
+                            <!--</paper-material>-->
+
+                            <!--<paper-material elevation="2" id="fields_placeholder" class="area_container flexchild" style="min-width:300px">-->
+                            <div id="fields_placeholder">
+                                <tree-view-multi-table-controllet id="fields_treeview" root-name="data" opened-path="result,records" data-url={{dataUrl}}></tree-view-multi-table-controllet>
+                            </div>
+                            <!--</paper-material>-->
 
                         </div>
 
@@ -534,7 +553,8 @@ Example:
                 'items-list-controllet_item-selected' : '_dataletSelected',
                 'draggable-element-controllet_content-dragged' : '_fieldsMapped',
                 'tree-view-controllet_selected-fields' : '_fieldsSelected',
-                'text-element-controllet_content-changed' : '_textElementChanged'
+                'text-element-controllet_content-changed' : '_textElementChanged',
+                'datasetexplorer-datalet_data-url': '_selectDataUrl_treeMap'
             },
 
             properties : {
@@ -663,7 +683,7 @@ Example:
 
             ready : function(){
 
-                $(this.$.fields_placeholder).perfectScrollbar();
+//                $(this.$.fields_placeholder).perfectScrollbar();
                 $(this.$.selectedFields_main_container).perfectScrollbar();
                 $(this.$.idm_fields_main_container).perfectScrollbar();
                 $(this.$.idm_layout_main_container).perfectScrollbar();
@@ -1071,7 +1091,23 @@ Example:
 
                 this.fire('data-sevc-controllet.dataletCreated', {data : data});
 
-            }
+            },
+
+            //tree map
+            _selectDataUrl_treeMap : function(e){
+                var url = e.detail.url;
+//                url = url.split('/');
+//                var index = url.indexOf('resource')
+//                if (index != -1) { // ckan
+//                    var resourceId = url[index + 1];
+//                    url = "http://ckan.routetopa.eu/api/action/datastore_search?resource_id=" + resourceId;
+//
+//                } else
+//                    url = "sorry, data provider not supported yet";
+
+                this.dataUrl = url;
+                this.DatasourceTabSelected=0;
+            },
 
         });
 

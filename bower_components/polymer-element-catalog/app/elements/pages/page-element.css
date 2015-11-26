@@ -1,0 +1,241 @@
+responsive-element[size=xs].layout {
+  flex-direction: column;
+}
+
+[size=xs] app-sidebar {
+  min-width: 100%;
+  height: auto;
+}
+
+app-sidebar paper-toolbar {
+  --paper-toolbar-background: white;
+  --paper-toolbar: {
+    box-sizing: border-box;
+  }
+}
+
+[size=xs] app-sidebar paper-toolbar /deep/ #topBar {
+  padding: 0 16px;
+}
+
+#package-heading {
+  height: 48px;
+  line-height: 48px;
+  background: var(--paper-blue-grey-50);
+  border: solid;
+  border-color: var(--paper-blue-grey-100);
+  border-width: 1px 0;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+#package-heading iron-icon {
+  margin: 0 0 0 4px;
+}
+
+#package-heading package-symbol {
+  margin: 0 8px 0 2px;
+}
+
+#element-header {
+  position: relative;
+  padding: 8px 16px;
+}
+
+#element-header .version {
+  position: absolute;
+  top: 24px;
+  right: 16px;
+  font-size: 14px;
+  color: var(--paper-grey-500);
+}
+
+#element-header h2 {
+  margin: 0;
+}
+
+#element-desc p {
+  margin-bottom: 0;
+}
+
+#element-tags tag-link:last-of-type + span {
+  display: none;
+}
+
+[size=xs] .section {
+  display: none;
+}
+
+paper-item, a.item {
+  display: block;
+  font-size: 14px;
+  padding: 4px 16px;
+  min-height: inherit;
+  cursor: pointer;
+  font-weight: 400;
+}
+
+.nav {
+  display: block;
+  margin-top: 8px;
+}
+
+.nav iron-icon {
+  width: 18px;
+  height: 18px;
+  margin-right: 8px;
+}
+
+.nav [active] {
+  background: var(--paper-blue-grey-50);
+}
+
+.nav [active] iron-icon {
+  color: var(--paper-blue-a700);
+}
+
+.nav .item {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+app-sidebar h4 {
+  font-size: 14px;
+  font-weight: 500;
+  margin: 12px 16px;
+}
+
+app-sidebar section {
+  border-top: 1px solid #e5e5e5;
+}
+
+section[main] {
+  background: #fafafa;
+}
+
+iron-component-page {
+  --iron-component-page-container: {
+    padding: 10px;
+  };
+  --iron-component-page-max-width: 920px;
+}
+
+:host([package-name=iron-elements]) iron-component-page {
+  --iron-doc-viewer-header: {
+    background-color: #81c784;
+  };
+}
+
+:host([package-name=gold-elements]) iron-component-page {
+  --iron-doc-viewer-header: {
+    background-color: #ffb74d;
+  };
+}
+
+:host([package-name=google-web-components]) iron-component-page {
+  --iron-doc-viewer-header: {
+    background-color: #64B5F6;
+  };
+}
+
+:host([package-name=neon-elements]) iron-component-page {
+  --iron-doc-viewer-header: {
+    background-color: #a7ffeb;
+  };
+}
+
+:host([package-name=platinum-elements]) iron-component-page {
+  --iron-doc-viewer-header: {
+    background-color: #cfd8dc;
+  };
+}
+
+:host([package-name=molecules]) iron-component-page {
+  --iron-doc-viewer-header: {
+    background-color: #ffab91;
+  };
+}
+
+
+[narrow] iron-component-page {
+  top: 64px;
+}
+
+[paper-drawer-toggle] {
+  position: absolute;
+  top: 12px;
+  left: 10px;
+}
+
+cart-icon {
+  position: absolute;
+  top: 12px;
+  right: 10px;
+}
+
+cart-item-icon {
+  --cart-item-icon-size: 18px;
+  --cart-item-icon-label: {
+    margin-left: 8px;
+  };
+}
+
+#other-elements {
+  overflow: hidden;
+  -webkit-flex-shrink: 5;
+  flex-shrink: 5;
+}
+
+#other-elements .list {
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+#element-header, #package-heading, #nav, #cart-add {
+  -webkit-flex-shrink: 0;
+  flex-shrink: 0;
+}
+
+.shrinkable {
+  overflow: hidden;
+  @apply(--layout);
+  @apply(--layout-vertical);
+}
+
+.shrinkable .nav, .shrinkable .list {
+  overflow-x: hidden;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.bower-command-label {
+  margin: 10px 0 2px 17px;
+  font-size: 10px;
+  line-height: 16px;
+  font-weight: 500;
+}
+
+.bower-command {
+  display: block;
+  height: 32px;
+  -webkit-flex-shrink: 0;
+  flex-shrink: 0;
+  padding: 10px 4px;
+  margin: 0 13px 12px;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  border: 1px solid var(--paper-blue-grey-100);
+  border-radius: 2px;
+  font-size: 12px;
+  color: var(--paper-blue-grey-500);
+}
+
+cart-icon {
+  transition: opacity 0.2;
+  -webkit-transition: opacity 0.2s;
+}
+
+cart-icon[fade-out] {
+  opacity: 0;
+}

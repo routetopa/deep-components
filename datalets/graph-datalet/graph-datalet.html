@@ -130,6 +130,32 @@ Example:
                         .attr("width", width)
                         .attr("height", height);
 
+                //pezzotto
+                this.svg.append("filter")
+                            .attr("id","filter1")
+                            .attr("x","0%")
+                            .attr("y","0%")
+                            .attr("width","100%")
+                            .attr("height","100%")
+                        .append("feImage")
+                            .attr("xlink:href","http://icons.iconarchive.com/icons/hopstarter/soft-scraps/256/User-Executive-Green-icon.png");
+
+                /*this.svg.append("defs")
+                        .append("pattern")
+                            .attr("id","urlimage")
+                            //.attr("patternUnits","userSpaceOnUse")
+                            .attr("width","100%")
+                            .attr("height","100%")
+                        .append("image")
+                            .attr("xlink:href","http://lorempixel.com/400/200")
+                            //.attr("patternUnits","userSpaceOnUse")
+                            .attr("x","0%")
+                            .attr("y","0%")
+                            .attr("width","100%")
+                            .attr("height","100%");*/
+                //end pezzotto
+
+
                 var graph = {};
 
                 graph.nodes = t.nodes;
@@ -157,9 +183,12 @@ Example:
                                                                                                     return t.fixed ? "" : "drag"
                                                                                                 }).attr("r", function (t) {
                                                                                                     return t.r ? t.r : 15
-                                                                                                }).attr("style", function (t) {
+                                                                                                })
+                                                                                                .attr("style", function (t) {
                                                                                                     return t.color ? "stroke:" + t.color : !1
                                                                                                 });
+
+                d3.selectAll('circle').attr("filter", function(t){return  t.image ? 'url(#filter1)' : ""});
 
                 //d3.selectAll(".drag").call(force.drag), svg.selectAll("g.fixed").call(text);
                 d3.selectAll(".drag").call(force.drag), this.svg.selectAll("g.node").call(this.text);
@@ -217,7 +246,7 @@ Example:
             mouseover : function (t) {
                 d3.select(this).selectAll("circle").transition().duration(600).ease("elastic").attr("r", function (t) {
                     //return 1 == t.fixed ? 1.4 * t.r : 15
-                    return 1 == t.fixed ? 1.4 * t.r : 15
+                    return 1 == t.fixed ? 1.4 * t.r : t.r + 10;
                 });
 
             },

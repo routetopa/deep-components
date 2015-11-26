@@ -79,7 +79,7 @@ respectively.
             display: inline-block;
             position: relative;
             text-align: left;
-            /*cursor: pointer;*/
+            cursor: pointer;
 
             /* NOTE(cdata): Both values are needed, since some phones require the
              * value to be `transparent`.
@@ -131,7 +131,8 @@ respectively.
         }
 
         iron-icon {
-            color: var(--disabled-text-color);
+            /*color: var(--disabled-text-color);*/
+            color: #2196F3;
 
         @apply(--paper-dropdown-menu-icon);
         }
@@ -141,7 +142,7 @@ respectively.
         <paper-menu-button
                 id="menuButton"
                 vertical-align="top"
-                horizontal-align="right"
+                horizontal-align="left"
                 vertical-offset="[[_computeMenuVerticalOffset(noLabelFloat)]]"
                 disabled="[[disabled]]"
                 no-animations="[[noAnimations]]"
@@ -149,14 +150,16 @@ respectively.
                 on-iron-deselect="_onIronDeselect"
                 opened="{{opened}}">
             <div class="dropdown-trigger">
-                <paper-ripple></paper-ripple>
+                <!--<paper-ripple></paper-ripple>-->
                 <paper-input
+                        id="inputField"
                         invalid="[[invalid]]"
-                        value="[[selectedItemLabel]]"
+                        value="{{inputValue}}"
                         placeholder="[[placeholder]]"
                         always-float-label="[[alwaysFloatLabel]]"
                         no-label-float="[[noLabelFloat]]"
                         label="[[label]]">
+                    <iron-icon icon="search" prefix></iron-icon>
                     <iron-icon icon="arrow-drop-down" suffix></iron-icon>
                 </paper-input>
             </div>
@@ -199,7 +202,7 @@ respectively.
                 selectedItemLabel: {
                     type: String,
                     notify: true,
-                    readOnly: true,
+                    readOnly: true
                 },
 
                 /**
@@ -275,6 +278,17 @@ respectively.
                 noAnimations: {
                     type: Boolean,
                     value: false
+                },
+
+                inputValue: {
+                    type: String,
+                    value: undefined,
+                    observer: '_fireInputValue'
+                },
+
+                fireInputValue: {
+                    type: Boolean,
+                    value: true,
                 }
             },
 
@@ -293,7 +307,7 @@ respectively.
             },
 
             observers: [
-                '_selectedItemChanged(selectedItem)'
+//                '_selectedItemChanged(selectedItem)'
             ],
 
             attached: function() {
@@ -305,6 +319,19 @@ respectively.
                 if (contentElement && contentElement.selectedItem) {
                     this._setSelectedItem(contentElement.selectedItem);
                 }
+            },
+
+            _fireInputValue: function() {//console.log(this.inputValue);
+                if(this.fireInputValue) {//change NO DDL
+                    this.fire('paper-input-search_input-value', {inputValue: this.inputValue});
+                    if(this.contentElement.selectedItem){
+//                        this._setSelectedItem(null);
+                        this.contentElement.select(-1);
+//                        console.log("deselected");
+                    }
+                }
+
+                this.fireInputValue = true;
             },
 
             /**
@@ -334,7 +361,10 @@ respectively.
              * @param {CustomEvent} event An `iron-select` event.
              */
             _onIronSelect: function(event) {
+//                console.log("select");
+                this.fireInputValue = false;
                 this._setSelectedItem(event.detail.item);
+                this.inputValue = event.detail.item.label || event.detail.item.textContent.trim();
             },
 
             /**
@@ -343,6 +373,8 @@ respectively.
              * @param {CustomEvent} event An `iron-deselect` event.
              */
             _onIronDeselect: function(event) {
+//                console.log("deselect");
+                this.fireInputValue = false;
                 this._setSelectedItem(null);
             },
 
@@ -355,6 +387,11 @@ respectively.
                 if (Polymer.Gestures.findOriginalTarget(event) === this) {
                     this.open();
                 }
+                this.async(function(){this.$.inputField.$.input.focus();},200);//to improve
+//                console.log(this.selectedItemLabel);
+//                console.log(this.value);
+//                console.log(this.$.inputField.value);
+//                console.log(this.inputValue);
             },
 
             /**
@@ -363,17 +400,18 @@ respectively.
              * @param {Element} selectedItem A selected Element item, with an
              * optional `label` property.
              */
-            _selectedItemChanged: function(selectedItem) {
-                var value = '';
-                if (!selectedItem) {
-                    value = '';
-                } else {
-                    value = selectedItem.label || selectedItem.textContent.trim();
-                }
-
-                this._setValue(value);
-                this._setSelectedItemLabel(value);
-            },
+//            _selectedItemChanged: function(selectedItem) {
+//                var value = '';
+//                if (!selectedItem) {
+//                    value = '';
+//                } else {
+//                    value = selectedItem.label || selectedItem.textContent.trim();
+//                }
+//
+//                this._setValue(value);
+//                this._setSelectedItemLabel(value);
+//                this.inputValue = selectedItem.label || selectedItem.textContent.trim();
+//            },
 
             /**
              * Compute the vertical offset of the menu based on the value of
@@ -388,7 +426,8 @@ respectively.
                 // template. The metrics will change depending on whether or not the
                 // input has a floating label.
 //                return noLabelFloat ? -4 : 8;
-                return 64;
+                return noLabelFloat ? 46-4 : 46+8;
+//                return 64;
             },
 
             /**

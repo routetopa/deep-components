@@ -123,9 +123,20 @@
             },
 
             _initCreateTree : function(nodeName, node) {
+//                var list  = new Array();
+//                for(var child in node)
+//                    list.push(this._createTree(child, node[child]));
+//                return this._paper_submenu(nodeName, list);
+
                 var list  = new Array();
-                for(var child in node)
-                    list.push(this._createTree(child, node[child]));
+
+                if(node.constructor == Array)
+                    for(var child in node[0])
+                        list.push(this._createTree(nodeName+","+child, node[0][child]));
+                else
+                    for(var child in node)
+                        list.push(this._createTree(child, node[child]));
+
                 return this._paper_submenu(nodeName, list);
             },
 
