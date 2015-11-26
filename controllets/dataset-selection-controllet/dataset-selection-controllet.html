@@ -144,7 +144,7 @@
             }
 
             #div_datasetexplorer {
-                padding-top: 48px;
+                /*padding-top: 48px;*/
             }
         </style>
 
@@ -206,10 +206,10 @@
                 </neon-animatable>
 
                 <neon-animatable>
-                    <div id="div_datasetexplorer">
-                        <datasetexplorer-datalet class="datasetexplorer" data-url="/openwall/api/datasetTree" fields='["result,provider_name","result,organization_name","result,package_name","result,resource_name","result,url","result,w"]'></datasetexplorer-datalet>
+                    <div id="div_datasetexplorer"></div>
+                        <!--<datasetexplorer-datalet class="datasetexplorer" data-url="/openwall/api/datasetTree" fields='["result,provider_name","result,organization_name","result,package_name","result,resource_name","result,url","result,w"]'></datasetexplorer-datalet>-->
                         <!--<datasetexplorer-datalet class="datasetexplorer" data-url="/oxwall_x.y.z/openwall/api/datasetTree" fields='["result,provider_name","result,organization_name","result,package_name","result,resource_name","result,url","result,w"]'></datasetexplorer-datalet>-->
-                    </div>
+                    <!--</div>-->
                 </neon-animatable>
 
                 <neon-animatable>
@@ -269,6 +269,7 @@
             },
 
             ready : function(){
+                $(this.$.material_container).perfectScrollbar();
                 $(this.$.dialog_info).perfectScrollbar();
             },
 
@@ -301,8 +302,8 @@
             },
 
             _loadTreeMap : function(){
-//                if(this.selected == 0 && this.$.div_datasetexplorer.innerHTML == "")
-//                    this.$.div_datasetexplorer.innerHTML = "<datasetexplorer-datalet class=\"datasetexplorer\" data-url=\"/oxwall_x.y.z/openwall/api/datasetTree\" fields='[\"result,provider_name\",\"result,organization_name\",\"result,package_name\",\"result,resource_name\",\"result,url\",\"result,w\"]'></datasetexplorer-datalet>";
+                if(this.selected != 1 && this.$.div_datasetexplorer.innerHTML == "")
+                    this.$.div_datasetexplorer.innerHTML = "<datasetexplorer-datalet class=\"datasetexplorer\" data-url=\"/openwall/api/datasetTree\" fields='[\"result,provider_name\",\"result,organization_name\",\"result,package_name\",\"result,resource_name\",\"result,url\",\"result,w\"]'></datasetexplorer-datalet>";
             },
 
             _selectDataUrl_treeMap : function(e){

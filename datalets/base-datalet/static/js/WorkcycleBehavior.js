@@ -2,7 +2,7 @@
  @license
  The MIT License (MIT)
 
- Copyright (c) 2015 Dipartimento di Informatica - Università di Salerno - Italy
+ Copyright (c) 2015 Dipartimento di Informatica - Universitï¿½ di Salerno - Italy
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -101,6 +101,7 @@ var WorkcycleBehavior = {
         if(this._component.data === undefined || this._component.data == ""){
             this.requestData();
         }else{
+            this.deleteWaitImage();
             this.data = JSON.parse(this._component.data);
             this.transformData();
             this.presentData();
