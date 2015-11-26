@@ -1,0 +1,19 @@
+language: node_js
+sudo: false
+node_js:
+- 0.12
+before_install:
+- openssl aes-256-cbc -K $encrypted_430815991462_key -iv $encrypted_430815991462_iv
+  -in .firebaserc.enc -out $HOME/.firebaserc -d
+install:
+- npm install
+- "./node_modules/.bin/bower update"
+script: npm run build
+cache:
+  directories:
+  - node_modules
+  - bower_components
+after_success:
+- "./scripts/travis_deploy"
+notifications:
+  slack: polymer:j3IJDjBbXxqzuGRCIDYJ7tIA
