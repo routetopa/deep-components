@@ -2,10 +2,10 @@
  * Created by Utente on 17/07/2015.
  */
 
-function build(root, place_holder, select_listener) {
+function build(root, place_holder, select_listener, width, height) {
 
-    var plwidth = $("#" + place_holder).width(),
-        plheight = $("#" + place_holder).height();
+    var plwidth = width >= 0 ? width : $("#" + place_holder).width(),
+        plheight = height >= 0 ? height : $("#" + place_holder).height();
 
     var margin = {top: 20, right: 0, bottom: 0, left: 0},
         width  = plwidth,
