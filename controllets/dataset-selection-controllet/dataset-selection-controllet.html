@@ -176,7 +176,7 @@
                             </div>
                         </div>
 
-                        <template is="dom-if" if={{_isSuggested()}}>
+                        <template is="dom-if" if={{isSuggested}}>
                             <div class="ddl_container">
                                 <paper-dropdown-menu label="Suggested datasets">
                                     <paper-menu class="dropdown-content">
@@ -250,6 +250,11 @@
                     value : undefined
                 },
 
+                isSuggested : {
+                    type : Boolean,
+                    value : false
+                },
+
                 dataUrl : {
                     type  : String,
                     value : undefined,
@@ -273,13 +278,16 @@
                 window.addEventListener("resize", function() { that._resize(); });
 
                 this.filteredDatasets = this.datasets;
+
+                if(this.suggestedDatasets)
+                    this.isSuggested = true;
             },
 
-            _isSuggested : function(){
-                if(this.suggestedDatasets)
-                    return true;
-                return false;
-            },
+//            _isSuggested : function(){
+//                if(this.suggestedDatasets)
+//                    return true;
+//                return false;
+//            },
 
             _filterDatasets : function(e){
                 var filter = e.detail.inputValue;
