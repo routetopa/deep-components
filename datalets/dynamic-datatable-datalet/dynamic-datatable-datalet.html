@@ -60,7 +60,7 @@ Example:
     <script type="text/javascript" src="js/DataTables/datatables.js"></script>
 
     <script>
-        var DatatableBehavior = {
+        var DynamicDatatableBehavior = {
 
             presentData: function(){
                 var html = "<table id=\"dynamic-datatable\" class=\"stripe row-border\" cellspacing=\"0\"  style=\"height: auto; width: auto;\">";
@@ -121,7 +121,7 @@ Example:
             },
 
             ready: function(){
-                this.behavior =  $.extend(true, {}, BaseDataletBehavior, WorkcycleBehavior, AjaxJsonJsonPathBehavior, DatatableBehavior);
+                this.behavior =  $.extend(true, {}, BaseDataletBehavior, WorkcycleBehavior, AjaxJsonJsonPathBehavior, DynamicDatatableBehavior);
                 this.async(function(){this.behavior.init(this)}, 0);
             },
 
