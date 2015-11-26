@@ -109,17 +109,6 @@ Example:
             :host ::content .children:hover rect.child {
                 fill: #bbb;
             }
-
-            :host ::content .spinner  {
-                position: absolute;
-                left: 50%;
-                top: 50%;
-                width: 160px;
-                height: 160px;
-                margin-left: -80px;
-                margin-top: -80px;
-
-            }
         </style>
         <div id="treemap_placeholder"></div>
         <base-ajax-json-jsonpath-datalet data-url="{{dataUrl}}" fields="{{fields}}" data="{{data}}"></base-ajax-json-jsonpath-datalet>
@@ -199,7 +188,7 @@ Example:
                 var xyz = function(url) {
                     me.selectResource(url);
                 }
-                build(this.map, "treemap_placeholder", xyz);
+                build(this.map, "treemap_placeholder", xyz, this._component.width, this._component.height);
             },
 
             selectResource: function(url) {
@@ -233,6 +222,16 @@ Example:
                 behavior : {
                     type : Object,
                     value : {}
+                },
+
+                width : {
+                    type : Number,
+                    value: -1
+                },
+
+                height : {
+                    type : Number,
+                    value: -1
                 }
             },
 
