@@ -410,10 +410,15 @@
             },
 
             _addInput : function(e){
+                console.log(e.target.innerHTML.trim());
+                console.log(e.target.innerText);
+                console.log(e.currentTarget.innerHTML.trim());
+                console.log(e.currentTarget.innerText);
+
                 var selectedFields = this._copy(this.selectedFields);
 
                 var index = $(e.target).parents("paper-dropdown-menu")[0].id;
-                selectedFields[index] = e.target.innerText;
+                selectedFields[index] = e.target.innerHTML.trim();
 
                 this.selectedFields = this._copy(selectedFields);
 
@@ -463,11 +468,16 @@
 
             _addDatalet : function(){
 
+                var selectedFields = [];
+                for (var i = 0; i < this.selectedFields.length; i++)
+                    if(this.selectedFields[i])
+                        selectedFields.push(this.selectedFields[i]);
+
                 var data = {
                     dataUrl : this.dataUrl,
 //                    params :  this.paramsFields,
                     params :  {'data-url' : this.dataUrl},
-                    fields :  this.selectedFields,
+                    fields :  selectedFields,
                     datalet : this.selectedDatalet+"-datalet",
                     comment : this.$.comment.value,
                     staticData : JSON.stringify(this.$.datalet_selection_datalet_placeholder.children[1].behavior.data)
