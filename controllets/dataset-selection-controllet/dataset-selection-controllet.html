@@ -181,7 +181,7 @@
                                 <paper-dropdown-menu label="Suggested datasets">
                                     <paper-menu class="dropdown-content">
                                         <template is="dom-repeat" items={{suggestedDatasets}} as="dataset">
-                                            <paper-item id={{index}} on-tap="_selectDataUrl">{{dataset.name}}</paper-item>
+                                            <paper-item id={{index}} on-tap="_selectSuggestedDataUrl">{{dataset.name}}</paper-item>
                                             <!--<paper-item id={{index}} on-tap="_selectDataUrl">{{_addHTMLSpace(dataset.name)}}</paper-item>-->
                                         </template>
                                     </paper-menu>
@@ -327,9 +327,24 @@
             },
 
             _selectDataUrl : function(e){
+                console.log(e.target);
                 var dataset = this.filteredDatasets[parseInt(e.target.id)]
 
-//                this.$.input_search.value = "";
+                this.dataUrl = dataset.url;
+
+//                if(dataset.description != ""){
+//                    this.$.info_button.removeAttribute("disabled");
+//                    this.$.dialog_name.innerHTML = dataset.name;
+//                    this.$.dialog_description.innerHTML = dataset.description;
+//                }
+//                else
+//                    this.$.info_button.setAttribute("disabled", "true");
+            },
+
+            _selectSuggestedDataUrl : function(e){
+                console.log(e.target);
+                var dataset = this.suggestedDatasets[parseInt(e.target.id)]
+
                 this.dataUrl = dataset.url;
 
 //                if(dataset.description != ""){

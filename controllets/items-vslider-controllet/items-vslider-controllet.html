@@ -96,11 +96,11 @@
             }
 
             .clear {
-                margin-bottom: 3px;
-                width: 16px;
-                height: 16px;
-                color: #2196F3;
-                --paper-icon-button-ink-color: #2196F3;
+                width: 24px;
+                height: 24px;
+                padding: 0px 4px;
+                color: #FFFFFF;
+                --paper-icon-button-ink-color: #FFFFFF;
             }
         </style>
 
@@ -110,7 +110,7 @@
 
             <paper-input id="items_vslider_search" value={{filter}} no-label-float label="search">
                 <iron-icon class="search" icon="search" prefix></iron-icon>
-                <paper-icon-button class="clear" suffix on-click="_clearInput" icon="clear"></paper-icon-button>
+                <paper-icon-button class="clear" suffix on-click="_clearInput" icon="clear" tabindex="0"></paper-icon-button>
             </paper-input>
 
             <div class="arrow-up">
