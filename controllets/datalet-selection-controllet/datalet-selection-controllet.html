@@ -14,6 +14,8 @@
 
 <link rel="import" href="../../bower_components/paper-button/paper-button.html">
 
+<link rel="import" href="../../bower_components/paper-dialog/paper-dialog.html">
+
 <link rel="import" href="../items-vslider-controllet/items-vslider-controllet.html" />
 
 <script src="../../../DEEPCLIENT/js/deepClient.js"></script>
@@ -169,6 +171,11 @@
             paper-button[disabled] {
                 background-color: #B6B6B6;
             }
+
+            #dialog_info {
+                border: 2px solid #2196F3;
+                background-color: #E0E0E0;
+            }
         </style>
 
         <iron-ajax id="selectedDatalet_request" on-response="_handleSelectedDatalet"></iron-ajax>
@@ -239,6 +246,11 @@
 
             </div>
 
+            <paper-dialog id="dialog_info">
+                <h2 id="dialog_name"></h2>
+                <p id="dialog_description"></p>
+            </paper-dialog>
+
         </div>
 
     </template>
@@ -301,6 +313,11 @@
                     value : undefined
                 },
 
+                params:{
+                    type: Object,
+                    value: undefined
+                },
+
                 modify : {
                     type  : Boolean,
                     value : false
@@ -325,6 +342,8 @@
                     this._preselectDatalet();
                     this.preselectedDatalet = undefined;
                 }
+
+                this.params = {'data-url' : this.dataUrl};
             },
 
             attached : function() {
@@ -440,6 +459,14 @@
                 }
 
                 if(load){
+                    var labels = this.$.datalet_selection_labels.querySelectorAll("paper-textarea");
+                    console.log(labels);
+                    for (var i = 0; i < labels.length; i++) {
+                        if (labels[i].innerHTML.trim() != "") {
+                            this.params[labels[i].label] = labels[i].value;
+                        }
+                    }
+
                     this._loadDatalet(selectedFields);
                 }
 
@@ -451,11 +478,11 @@
             },
 
             _loadDatalet : function(selectedFields){
-                var params = {'data-url' : this.dataUrl};
+//                var params = {'data-url' : this.dataUrl};
 
                 var dataletParams ={
                     component   : this.selectedDatalet+"-datalet",
-                    params      : params,
+                    params      : this.params,
                     fields      : selectedFields,
                     placeHolder : this.$.datalet_selection_datalet_placeholder
                 };
@@ -475,8 +502,8 @@
 
                 var data = {
                     dataUrl : this.dataUrl,
-//                    params :  this.paramsFields,
-                    params :  {'data-url' : this.dataUrl},
+                    params :  this.params,
+//                    params :  {'data-url' : this.dataUrl},
                     fields :  selectedFields,
                     datalet : this.selectedDatalet+"-datalet",
                     comment : this.$.comment.value,
@@ -485,6 +512,26 @@
 
                 this.fire('data-sevc-controllet.dataletCreated', {data : data});
 
+            },
+
+            _showInfo : function(e){
+                var t = e.target;
+                if(t.tagName.indexOf("IRON-ICON") != -1)
+                    t = $(e.target).parents("paper-icon-button")[0];
+
+                var name = t.getAttribute("title").replace(" info", "");
+
+                var dataset = $.grep(this.inputs, function(e){ return e.name == name; })[0];
+                if(!dataset)
+                    dataset = $.grep(this.labels, function(e){ return e.name == name; })[0];
+
+                this.$.dialog_name.innerHTML = dataset.name;
+                this.$.dialog_description.innerHTML = dataset.description;
+                this.$.dialog_info.open();
+
+                var pos = t.getBoundingClientRect();
+                $("#dialog_info").css("top", pos.top - 4);
+                $("#dialog_info").css("left", pos.left - 4);
             },
 
             _copy : function(o) {

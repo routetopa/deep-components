@@ -20,11 +20,8 @@
 <link rel="import" href="../../bower_components/iron-icon/iron-icon.html">
 
 <link rel="import" href="../../bower_components/paper-dialog/paper-dialog.html">
-<link rel="import" href="../../bower_components/paper-dialog-scrollable/paper-dialog-scrollable.html">
 
 <link rel="import" href="../../datalets/datasetexplorer-datalet/datasetexplorer-datalet.html">
-
-<!--<script src="../../datalets/shared_js/d3.js"></script>-->
 
 <link rel="import" href="paper-input-search.html">
 
@@ -63,7 +60,6 @@
             }
 
             paper-dropdown-menu {
-                /*display: block;*/
                 width: 45%;
                 margin-bottom: 32px;
                 --paper-input-container-focus-color: #2196F3;
@@ -93,19 +89,10 @@
             }
 
             .info_button {
-                /*background-color: red;*/
                 position: absolute;
                 top: 18px;
                 left: 45%;
             }
-
-            /*paper-menu{*/
-            /*/!*visibility: visible ! important;*!/*/
-            /*}*/
-
-            /*paper-item[focused] {*/
-            /*background: #FFFFFF;*/
-            /*}*/
 
             paper-textarea {
                 width: 90%;
@@ -124,27 +111,16 @@
 
             #material_container {
                 margin-top: 8px;
-                /*height: 55vh;*/
             }
 
             #div_selection {
                 padding-left: 10%;
                 padding-top: 64px;
-                /*padding-bottom: 64px;*/
             }
 
             #dialog_info {
                 border: 2px solid #2196F3;
                 background-color: #E0E0E0;
-                position: fixed;
-                top: 232px;
-                width: 60%;
-                height: auto;
-                /*overflow: auto;*/
-            }
-
-            #div_datasetexplorer {
-                /*padding-top: 48px;*/
             }
         </style>
 
@@ -162,11 +138,10 @@
 
                     <div id="div_selection">
                         <div class="ddl_container">
-                            <paper-input-search id="input_search" label="Available datasets">
+                            <paper-input-search id="_datasets" label="Available datasets">
                                 <paper-menu class="dropdown-content">
                                     <template is="dom-repeat" items={{filteredDatasets}} as="dataset">
                                         <paper-item id={{index}} on-tap="_selectDataUrl">{{dataset.name}}</paper-item>
-                                        <!--<paper-item id={{index}} on-tap="_selectDataUrl">{{_addHTMLSpace(dataset.name)}}</paper-item>-->
                                     </template>
                                 </paper-menu>
                             </paper-input-search>
@@ -177,12 +152,12 @@
                         </div>
 
                         <template is="dom-if" if={{isSuggested}}>
+
                             <div class="ddl_container">
-                                <paper-dropdown-menu label="Suggested datasets">
+                                <paper-dropdown-menu id="s_datasets" label="Suggested datasets">
                                     <paper-menu class="dropdown-content">
                                         <template is="dom-repeat" items={{suggestedDatasets}} as="dataset">
                                             <paper-item id={{index}} on-tap="_selectSuggestedDataUrl">{{dataset.name}}</paper-item>
-                                            <!--<paper-item id={{index}} on-tap="_selectDataUrl">{{_addHTMLSpace(dataset.name)}}</paper-item>-->
                                         </template>
                                     </paper-menu>
                                 </paper-dropdown-menu>
@@ -196,7 +171,6 @@
 
                         <paper-textarea id="selected_url" label="Selected url" value={{dataUrl}}></paper-textarea>
 
-                        <!--aggiustami anche dialog...-->
                         <paper-dialog id="dialog_info">
                             <h2 id="dialog_name"></h2>
                             <p id="dialog_description"></p>
@@ -207,9 +181,6 @@
 
                 <neon-animatable>
                     <div id="div_datasetexplorer"></div>
-                        <!--<datasetexplorer-datalet class="datasetexplorer" data-url="/openwall/api/datasetTree" fields='["result,provider_name","result,organization_name","result,package_name","result,resource_name","result,url","result,w"]'></datasetexplorer-datalet>-->
-                        <!--<datasetexplorer-datalet id="datasetexplorer" data-url="/oxwall_x.y.z/openwall/api/datasetTree" fields='["result,provider_name","result,organization_name","result,package_name","result,resource_name","result,url","result,w"]'></datasetexplorer-datalet>-->
-                    <!--</div>-->
                 </neon-animatable>
 
                 <neon-animatable>
@@ -286,12 +257,6 @@
                 this._loadTreeMap();
             },
 
-//            _isSuggested : function(){
-//                if(this.suggestedDatasets)
-//                    return true;
-//                return false;
-//            },
-
             _filterDatasets : function(e){
                 var filter = e.detail.inputValue;
                 var filteredDatasets = [];
@@ -306,67 +271,78 @@
             _loadTreeMap : function(){
                 var h = $("#material_container").height() - 48;
                 var w = $("#material_container").width();
-
-//                if(this.selected != 1 && this.$.div_datasetexplorer.innerHTML == "")
+                //                                                                                                          /oxwall_x.y.z
                 this.$.div_datasetexplorer.innerHTML = "<datasetexplorer-datalet width=\""+w+"\" height=\""+h+"\" data-url=\"/openwall/api/datasetTree\" fields='[\"result,provider_name\",\"result,organization_name\",\"result,package_name\",\"result,resource_name\",\"result,url\",\"result,w\"]'></datasetexplorer-datalet>";
             },
 
-            _selectDataUrl_treeMap : function(e){
-                var url = e.detail.url;
-                url = url.split('/');
-                var index = url.indexOf('resource')
-                if (index != -1) { // ckan
-                    var resourceId = url[index + 1];
-                    url = "http://ckan.routetopa.eu/api/action/datastore_search?resource_id=" + resourceId;
+            _selectDataUrl_treeMap : function(e) {
+                $("#_datasets")[0]._setSelectedItem(null);
+                $("#_datasets")[0].inputValue = "";
+                $("#info_dataset")[0].setAttribute("disabled", "true");
 
-                } else
-                    url = "sorry, data provider not supported yet";
+                if (this.isSuggested) {
+                    $("#s_datasets")[0]._setSelectedItem(null);
+                    $("#s_datasets")[0].contentElement.select(-1);
+                    $("#info_s_dataset")[0].setAttribute("disabled", "true");
+                }
 
-                this.dataUrl = url;
+                this.dataUrl = e.detail.url;
                 this.selected=0;
             },
 
             _selectDataUrl : function(e){
-                console.log(e.target);
+                if (this.isSuggested) {
+                    $("#s_datasets")[0]._setSelectedItem(null);
+                    $("#s_datasets")[0].contentElement.select(-1);
+                    $("#info_s_dataset")[0].setAttribute("disabled", "true");
+                }
+
                 var dataset = this.filteredDatasets[parseInt(e.target.id)]
 
                 this.dataUrl = dataset.url;
 
-//                if(dataset.description != ""){
-//                    this.$.info_button.removeAttribute("disabled");
-//                    this.$.dialog_name.innerHTML = dataset.name;
-//                    this.$.dialog_description.innerHTML = dataset.description;
-//                }
-//                else
-//                    this.$.info_button.setAttribute("disabled", "true");
+                if(dataset.description != ""){
+                    $("#info_dataset")[0].removeAttribute("disabled");
+                    this.$.dialog_name.innerHTML = dataset.name;
+                    this.$.dialog_description.innerHTML = dataset.description;
+                }
+                else
+                    $("#info_dataset")[0].setAttribute("disabled", "true");
             },
 
             _selectSuggestedDataUrl : function(e){
-                console.log(e.target);
+                $("#_datasets")[0]._setSelectedItem(null);
+                $("#_datasets")[0].inputValue = "";
+                $("#info_dataset")[0].setAttribute("disabled", "true");
+
                 var dataset = this.suggestedDatasets[parseInt(e.target.id)]
 
                 this.dataUrl = dataset.url;
 
-//                if(dataset.description != ""){
-//                    this.$.info_button.removeAttribute("disabled");
-//                    this.$.dialog_name.innerHTML = dataset.name;
-//                    this.$.dialog_description.innerHTML = dataset.description;
-//                }
-//                else
-//                    this.$.info_button.setAttribute("disabled", "true");
+                if(dataset.description != ""){
+                    $("#info_s_dataset")[0].removeAttribute("disabled");
+                    this.$.dialog_name.innerHTML = dataset.name;
+                    this.$.dialog_description.innerHTML = dataset.description;
+                }
+                else
+                    $("#info_s_dataset")[0].setAttribute("disabled", "true");
             },
 
-            _showInfo : function(){
+            _showInfo : function(e){
+                var t = e.target;
+                if(t.tagName.indexOf("IRON-ICON") != -1)
+                    t = $(e.target).parents("paper-icon-button")[0];
+
                 this.$.dialog_info.open();
+
+                var pos = t.getBoundingClientRect();
+                $("#dialog_info").css("top", pos.top - 4);
+                $("#dialog_info").css("left", pos.left - 4);
             },
 
             _fireDataUrl : function(){
                 this.fire('dataset-selection-controllet_data-url', {url: this.dataUrl});
             },
-
-//            _addHTMLSpace : function(name){
-//                return name.replace(/ /g, '&nbsp;');
-//            },
 
             _resize : function(){
                 var h = Math.max(document.documentElement.clientHeight, window.innerHeight || 0) - 16;
