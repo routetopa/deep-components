@@ -172,7 +172,7 @@
                 background-color: #B6B6B6;
             }
 
-            #dialog_info {
+            #dialog_info_input {
                 border: 2px solid #2196F3;
                 background-color: #E0E0E0;
             }
@@ -246,7 +246,7 @@
 
             </div>
 
-            <paper-dialog id="dialog_info">
+            <paper-dialog id="dialog_info_input">
                 <h2 id="dialog_name"></h2>
                 <p id="dialog_description"></p>
             </paper-dialog>
@@ -527,11 +527,11 @@
 
                 this.$.dialog_name.innerHTML = dataset.name;
                 this.$.dialog_description.innerHTML = dataset.description;
-                this.$.dialog_info.open();
+                this.$.dialog_info_input.open();
 
                 var pos = t.getBoundingClientRect();
-                $("#dialog_info").css("top", pos.top - 4);
-                $("#dialog_info").css("left", pos.left - 4);
+                $("#dialog_info_input").css("top", pos.top - 4);
+                $("#dialog_info_input").css("left", pos.left - 4);
             },
 
             _copy : function(o) {
