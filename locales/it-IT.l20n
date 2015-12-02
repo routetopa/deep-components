@@ -1,0 +1,13 @@
+<slide1Title "SELEZIONA IL DATASET">
+<slide1Subtitle "Cerca o copia e incolla l'url del dataset.">
+<slide2Title "SELEZIONA I DATI">
+<slide2Subtitle "Seleziona i campi dalla tree-view. La multi-table mostrerà i valori relativi ai campi selezionati.">
+<slide3Title "SELEZIONA LA VISUALIZZAZIONE">
+<slide3Subtitle "Seleziona una visualizzazione, inserisci gli input e le etichette (opzionali).">
+
+<listView "LISTA">
+<treeMapView "TREE MAP">
+<mostPopular "POPOLARI">
+<availableDatasets "Dataset disponibili">
+<suggestedDatasets "Dataset suggeriti">
+<selectedUrl "Url selezionato">

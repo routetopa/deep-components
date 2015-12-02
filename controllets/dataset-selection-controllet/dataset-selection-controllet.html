@@ -127,9 +127,9 @@
         <paper-material id="material_container" elevation="5">
 
             <paper-tabs selected="{{selected}}">
-                <paper-tab noink>LIST VIEW</paper-tab>
-                <paper-tab noink>TREE MAP VIEW</paper-tab>
-                <paper-tab noink disabled>MOST POPULAR</paper-tab>
+                <paper-tab noink><span data-l10n-id="listView"></span></paper-tab>
+                <paper-tab noink><span data-l10n-id="treeMapView"></span></paper-tab>
+                <paper-tab noink disabled><span data-l10n-id="mostPopular"></span></paper-tab>
             </paper-tabs>
 
             <neon-animated-pages selected="{{selected}}" entry-animation="fade-in-animation" exit-animation="fade-out-animation">
@@ -255,6 +255,14 @@
                     this.isSuggested = true;
 
                 this._loadTreeMap();
+
+                this._translate();
+            },
+
+            _translate : function(){
+                document.l10n.formatValue('availableDatasets').then(s => $("#_datasets")[0].setAttribute("label", s));
+                document.l10n.formatValue('suggestedDatasets').then(s => $("#s_datasets")[0].setAttribute("label", s));
+                document.l10n.formatValue('selectedUrl').then(s => this.$.selected_url.setAttribute("label", s));
             },
 
             _filterDatasets : function(e){
@@ -290,7 +298,7 @@
                 this.selected=0;
             },
 
-            _selectDataUrl : function(e){
+            _selectDataUrl : function(e){this._translate();
                 if (this.isSuggested) {
                     $("#s_datasets")[0]._setSelectedItem(null);
                     $("#s_datasets")[0].contentElement.select(-1);
