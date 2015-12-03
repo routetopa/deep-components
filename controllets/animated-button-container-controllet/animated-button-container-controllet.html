@@ -1,4 +1,3 @@
-
 <link rel="import" href="../../bower_components/polymer/polymer.html">
 <link rel="import" href="../../bower_components/paper-styles/paper-styles.html">
 <link rel="import" href="../../bower_components/iron-icons/iron-icons.html">
@@ -145,19 +144,14 @@
     </style>
 
     <template>
-        <!--<neon-animated-pages id="pages" selected="[[selected]]" entry-animation="[[entryAnimation]]" exit-animation="[[exitAnimation]]">
-            <neon-animatable><div id="hidden"></div></neon-animatable>
-            <neon-animatable>-->
-                <paper-material elevation="5" id="window" class="window">
-                    <div class="transparent"></div>
-                    <paper-toolbar id="toolbar">
-                        <search-panel-controllet id="search_from_animated_button_container" left-direction="true"></search-panel-controllet>
-                        <paper-fab id="close" mini icon="close" on-click="_onCloseClick"></paper-fab>
-                    </paper-toolbar>
-                   <div id="container_content"><content></content></div>
-                </paper-material>
-            <!--</neon-animatable>
-        </neon-animated-pages>-->
+        <paper-material elevation="5" id="window" class="window">
+            <div class="transparent"></div>
+            <paper-toolbar id="toolbar">
+                <search-panel-controllet id="search_from_animated_button_container" left-direction="true"></search-panel-controllet>
+                <paper-fab id="close" mini icon="close" on-click="_onCloseClick"></paper-fab>
+            </paper-toolbar>
+           <div id="container_content"><content></content></div>
+        </paper-material>
 
         <div id="button_container" class="horizontal layout">
            <span class="button-container" id="open" on-click="_onOpenClick">

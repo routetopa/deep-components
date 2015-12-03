@@ -68,10 +68,10 @@ Example:
                 position: absolute;
                 top: -12px;
                 width: 20vw;
-
             }
 
-            neon-animated-pages{
+            neon-animated-pages
+            {
                /*width: 20vw;*/
             }
 
@@ -143,7 +143,7 @@ Example:
 
             ready: function(){
 
-                if(this.leftDirection != undefined){
+               if(this.leftDirection != undefined){
                     this.$.search_text.style.left =  '5px';
                 }else if(this.rightDirection != undefined){
                     this.$.search_text.style.right =  '5px';
@@ -169,8 +169,12 @@ Example:
              * @param {Event} e
              */
             _valueChanged : function(oldvalue, newValue){
-                clearTimeout (this.timer);
-                this.timer = setTimeout(this.fire('search-panel-controllet_content-changed', {searchKey: this.searchKey, id : this.id}), 500);
+                if(newValue != undefined)
+                {
+                    clearTimeout(this.timer);
+                    this.timer = setTimeout(this.fire('search-panel-controllet_content-changed', {searchKey: this.searchKey, id : this.id}), 500);
+                    //this.fire('search-panel-controllet_content-changed', {searchKey: this.searchKey, id: this.id});
+                }
             },
             /**
              * It returns the value in text area
