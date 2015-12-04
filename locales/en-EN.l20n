@@ -11,3 +11,13 @@
 <availableDatasets "Available datasets">
 <suggestedDatasets "Suggested datasets">
 <selectedUrl "Selected url">
+
+<inputs "INPUTS">
+<labels "LABELS / OPTIONS">
+<comment "COMMENT">
+<commentLabel "comment (max 100 characters)">
+<dataletPreview "DATALET PREVIEW">
+<addDatalet "ADD">
+<modifyDatalet "MODIFY">
+
+<googlePiechartDescription "The labels of slices.">

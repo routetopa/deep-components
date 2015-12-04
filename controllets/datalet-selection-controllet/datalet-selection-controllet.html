@@ -175,6 +175,7 @@
             #dialog_info_input {
                 border: 2px solid #2196F3;
                 background-color: #E0E0E0;
+                min-width: 256px;
             }
         </style>
 
@@ -185,15 +186,9 @@
 
 
             <paper-material id="datalet_selection_inputs" elevation="5">
-                <div class="input_header">INPUTS</div>
+                <div class="input_header"><span data-l10n-id="inputs"></span></div>
                 <template is="dom-repeat" items="{{inputs}}" index-as="ddl_index">
                     <div class="inputs">
-                        <!--<div class="input_name">-->
-                            <!--{{item.name}}-->
-                            <!--<div class="info_button">-->
-                                <!--<paper-icon-button id="info_button" on-click="_showInfo" icon="info-outline" title="{{item.name}} info"></paper-icon-button>-->
-                            <!--</div>-->
-                        <!--</div>-->
                         <paper-dropdown-menu id={{ddl_index}} label={{item.name}}>
                             <paper-menu class="dropdown-content">
                                 <template is="dom-repeat" items={{fields}}>
@@ -209,15 +204,9 @@
             </paper-material>
 
             <paper-material id="datalet_selection_labels" elevation="5">
-                <div class="input_header">LABELS</div>
+                <div class="input_header"><span data-l10n-id="labels"></span></div>
                 <template is="dom-repeat" items="{{labels}}" index-as="index">
                     <div class="inputs">
-                        <!--<div class="input_name">-->
-                            <!--{{item.name}}-->
-                            <!--<div class="info_button">-->
-                                <!--<paper-icon-button id="info_button" on-click="_showInfo" icon="info-outline" title="{{item.name}} info"></paper-icon-button>-->
-                            <!--</div>-->
-                        <!--</div>-->
                         <paper-textarea label={{item.name}}></paper-textarea>
                         <div class="info_button">
                             <paper-icon-button id="info_button" on-click="_showInfo" icon="info-outline" title="{{item.name}} info"></paper-icon-button>
@@ -231,18 +220,18 @@
 
                 <!--<template is="dom-if" if={{modify}}>-->
                     <paper-material id="datalet_selection_comment" elevation="5">
-                        <div class="input_header">COMMENT</div>
+                        <div class="input_header"><span data-l10n-id="comment"></span></div>
                         <paper-textarea id="comment" no-label-float maxlength="100" label="comment (max 100 characters)"></paper-textarea>
                     </paper-material>
                 <!--</template>-->
 
                 <paper-material id="datalet_selection_datalet" elevation="5">
-                    <div class="input_header">DATALET PREVIEW</div>
+                    <div class="input_header"><span data-l10n-id="dataletPreview"></span></div>
                     <div id="datalet_selection_datalet_placeholder"></div>
 
                 </paper-material>
 
-                <paper-button id="add_button" disabled raised on-click="_addDatalet">ADD DATALET</paper-button>
+                <paper-button id="add_button" disabled raised on-click="_addDatalet"><span data-l10n-id="addDatalet"></span></paper-button>
 
             </div>
 
@@ -357,6 +346,13 @@
 //                    console.log(i);
 //                for(var i=0; i < inputs.length; i++)
 //                    console.log($(inputs[i]).children("paper-menu"));
+
+                this._translate();
+
+            },
+
+            _translate : function(){
+                document.l10n.formatValue('commentLabel').then(s => $("#comment")[0].setAttribute("label", s));
             },
 
             setFields : function(fields) {
@@ -391,7 +387,8 @@
             },
 
             _preselectDatalet : function() {
-                this.$.add_button.innerText = "MODIFY DATALET";
+//                this.$.add_button.innerText = "MODIFY DATALET";
+                document.l10n.formatValue('modifyDatalet').then(s => this.$.add_button.innerText = s);
 
 
                 this.selectedDatalet = this.preselectedDatalet;
@@ -429,10 +426,10 @@
             },
 
             _addInput : function(e){
-                console.log(e.target.innerHTML.trim());
-                console.log(e.target.innerText);
-                console.log(e.currentTarget.innerHTML.trim());
-                console.log(e.currentTarget.innerText);
+//                console.log(e.target.innerHTML.trim());
+//                console.log(e.target.innerText);
+//                console.log(e.currentTarget.innerHTML.trim());
+//                console.log(e.currentTarget.innerText);
 
                 var selectedFields = this._copy(this.selectedFields);
 
@@ -460,21 +457,16 @@
 
                 if(load){
                     var labels = this.$.datalet_selection_labels.querySelectorAll("paper-textarea");
-                    console.log(labels);
+//                    console.log(labels);
                     for (var i = 0; i < labels.length; i++) {
                         if (labels[i].innerHTML.trim() != "") {
                             this.params[labels[i].label] = labels[i].value;
                         }
                     }
-
+                    
                     this._loadDatalet(selectedFields);
                 }
 
-//                $("#base_datalet_container").html("");
-//                $("#base_datalet_container").css('visibility','hidden');
-//                $("#base_datalet_container").css('padding','0px');
-//                $("#base_datalet_container").css('height','0px');
-//                console.log($("#base_datalet_container"));
             },
 
             _loadDatalet : function(selectedFields){
@@ -526,7 +518,8 @@
                     dataset = $.grep(this.labels, function(e){ return e.name == name; })[0];
 
                 this.$.dialog_name.innerHTML = dataset.name;
-                this.$.dialog_description.innerHTML = dataset.description;
+//                this.$.dialog_description.innerHTML = dataset.description;
+                document.l10n.formatValue(dataset.description).then(s => this.$.dialog_description.innerHTML = s);
                 this.$.dialog_info_input.open();
 
                 var pos = t.getBoundingClientRect();

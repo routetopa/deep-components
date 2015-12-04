@@ -11,3 +11,13 @@
 <availableDatasets "Dataset disponibili">
 <suggestedDatasets "Dataset suggeriti">
 <selectedUrl "Url selezionato">
+
+<inputs "INPUT">
+<labels "ETICHETTE / OPZIONI">
+<comment "COMMENTO">
+<commentLabel "commento (massimo 100 caratteri)">
+<dataletPreview "ANTEPRIMA DATALET">
+<addDatalet "AGGIUNGI">
+<modifyDatalet "MODIFICA">
+
+<googlePiechartDescription "Le etichette delle fette.">

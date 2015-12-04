@@ -62,8 +62,10 @@
         var GooglePiechartBehavior = {
 
             presentData : function(){
-                var cols = [{"label": this.data[0].name, "type": "string"}, {"label": this.data[1].name, "type": "number"}];
+                if(!this._dataIsValid())
+                    return;
 
+                var cols = [{"label": this.data[0].name, "type": typeof this.data[0].data[0]}, {"label": this.data[1].name, "type": typeof this.data[1].data[0]}];
                 var rows = [];
                 for(var i=0; i<this.data[0].data.length; i++)
                 {
@@ -71,17 +73,30 @@
                     rows.push(row);
                 }
 
-                var options = {"title": this._component._title, "pieHole": this._component.pieHole, "is3D": this._component.is3D, "sliceVisibilityThreshold": this._component.sliceVisibilityThreshold};
+                this._updateOptions();
 
                 this._component.cols = cols;
                 this._component.rows = rows;
-                this._component.options = options;
             },
 
             _updateOptions : function(){
-                var options = {"title": this._component._title, "pieHole": this._component.pieHole, "is3D": this._component.is3D, "sliceVisibilityThreshold": this._component.sliceVisibilityThreshold};
+                if(!this._dataIsValid())
+                    return;
+
+                var options = this._component.options;
+
+                options["title"] = this._component._title;
+                options["pieHole"] = this._component.pieHole;
+                options["is3D"] = this._component.is3D;
+
                 this._component.options = options;
                 this._component.$.google_piechart.drawChart();
+            },
+
+            _dataIsValid : function(){
+                if(!this.data[0] || !this.data[1] || typeof this.data[1].data[0] != "number")
+                    return false;
+                return true;
             }
 
         };
@@ -113,7 +128,7 @@
 
                 options: {
                     type: Object,
-                    value: undefined
+                    value: {"sliceVisibilityThreshold": .03}
                 },
 
                 _title: {//_?
@@ -129,12 +144,8 @@
                 pieHole: {
                     type: Number,
                     value: 0
-                },
-
-                sliceVisibilityThreshold: {
-                    type: Number,
-                    value: 1/20
                 }
+
             },
 
             observers: [
