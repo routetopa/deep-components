@@ -169,12 +169,9 @@ Example:
              * @param {Event} e
              */
             _valueChanged : function(oldvalue, newValue){
-                if(newValue != undefined)
-                {
-                    clearTimeout(this.timer);
-                    this.timer = setTimeout(this.fire('search-panel-controllet_content-changed', {searchKey: this.searchKey, id : this.id}), 500);
-                    //this.fire('search-panel-controllet_content-changed', {searchKey: this.searchKey, id: this.id});
-                }
+                var t = this;
+                clearTimeout(this.timer);
+                this.timer = setTimeout(function(){t.fire('search-panel-controllet_content-changed', {searchKey: t.searchKey, id : t.id})}, 500);
             },
             /**
              * It returns the value in text area
