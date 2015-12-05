@@ -513,7 +513,7 @@
                 for (var i = 0; i < labels.length; i++)
                     this.params[labels[i].label] = labels[i].value;
 
-                var dataletParams ={
+                /*var dataletParams ={
                     component   : this.selectedDatalet+"-datalet",
                     params      : this.params,
                     fields      : this.selectedFields,
@@ -521,9 +521,11 @@
                 };
 
                 ComponentService.deep_url = this.deepUrl;
-                ComponentService.getComponent(dataletParams);
+                ComponentService.getComponent(dataletParams);*/
 
 //                this.async(function(){this.$.add_button.removeAttribute("disabled");}, 1111);
+
+                this.$.datalet_selection_datalet_placeholder.children[1].behavior.setParameters(this.params);
             },
 
             _loadDatalet : function(selectedFields){
