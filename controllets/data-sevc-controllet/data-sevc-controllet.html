@@ -3,6 +3,8 @@
 <!--<script src="../../bower_components/webcomponentsjs/webcomponents-lite.min.js"></script>-->
 <script src="../shared_js/perfect-scrollbar/js/min/perfect-scrollbar.jquery.min.js"></script>
 <link rel="stylesheet" href="../shared_js/perfect-scrollbar/css/perfect-scrollbar.min.css">
+
+<script defer src="../../bower_components/l20n/dist/compat/web/l20n.min.js"></script>
 /********************************************************************************************************************************
 
 <link rel="import" href="../../bower_components/polymer/polymer.html">
@@ -114,8 +116,12 @@
                     this.$.slider.selected = 1;
 //                    console.log(this.selectedDatalet);
                     this.dataUrl = this.dataletPreset["data-url"];
-
                 }
+
+//                var languageLink = document.createElement("link");
+//                languageLink.rel = "localization";
+//                languageLink.href = "../../../locales/it.l20n";
+//                document.getElementsByTagName("head")[0].appendChild(languageLink);
             },
 
             _updateSlider : function(e){
