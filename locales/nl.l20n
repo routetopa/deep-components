@@ -1,0 +1,23 @@
+<slide1Title "SELECT DATASET">
+<slide1Subtitle "Search or copy and paste the url of dataset.">
+<slide2Title "SELECT DATA">
+<slide2Subtitle "Select the fields from tree-view. The multi-table will show the values related to the selected fields.">
+<slide3Title "SELECT VISUALIZATION">
+<slide3Subtitle "Select a visualization, fill out inputs and labels (optional).">
+
+<listView "LIST VIEW">
+<treeMapView "TREE MAP VIEW">
+<mostPopular "MOST POPULAR">
+<availableDatasets "Available datasets">
+<suggestedDatasets "Suggested datasets">
+<selectedUrl "Selected url">
+
+<inputs "INPUTS">
+<labels "LABELS / OPTIONS">
+<comment "COMMENT">
+<commentLabel "comment (max 100 characters)">
+<dataletPreview "DATALET PREVIEW">
+<addDatalet "ADD">
+<modifyDatalet "MODIFY">
+
+<googlePiechartDescription "The labels of slices.">
