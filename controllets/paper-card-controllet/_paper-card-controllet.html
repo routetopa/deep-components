@@ -1,0 +1,173 @@
+<link rel="import" href="../../bower_components/paper-material/paper-material.html"/>
+<link rel="import" href="../../bower_components/paper-fab/paper-fab.html"/>
+<link rel="import" href="../../bower_components/iron-icons/iron-icons.html"/>
+
+
+<dom-module id="paper-card-controllet">
+
+    <template>
+        <style>
+            :host {
+                color: #333;
+                font-family: 'Roboto', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+                display: inline-block;
+                margin: 0 8px 8px ;
+                font-size: 14px;
+                text-align: justify;
+                line-height: 10px;
+                --paper-fab-background: var(--accent-color);
+            }
+
+            paper-material {
+                border-radius: 2px;
+                background-color: white;
+            }
+
+            .preview {
+                position: relative;
+                margin-bottom: 0px;
+                /*max-width: 200px;
+                max-height: 200px;
+                min-width: 200px;
+                min-height: 200px;*/
+            }
+
+            .legend {
+                position: absolute;
+                background: rgba(0,0,0,0.5);
+                bottom: 0;
+                color: white;
+                height: 40px;
+                padding: 0 16px;
+                left: 0; right: 0;
+            }
+
+            paper-fab {
+                position: absolute;
+                right: 10px;
+                bottom: -18px;
+                --paper-fab-background:#2196F3;
+            }
+
+            .content ::content {
+                padding: 0 16px 8px;
+                font-weight: 300;
+                color: var(--secondary-text-color);
+                line-height: 24px;
+            }
+            ::content.buttons {
+                margin-top: 8px;
+            }
+            ::content paper-button, ::content paper-icon-button {
+                font-weight: 500;
+                color: var(--accent-color);
+            }
+
+            paper-material{
+                max-height: 260px;
+                max-width: 200px;
+                min-height: 260px;
+                min-width: 200px;
+            }
+
+            #card_content{
+                overflow: hidden;
+                max-width: 200px;
+                max-height: 240px;
+                min-width: 200px;
+                min-height: 240px;
+            }
+
+            #datalet_preview{
+
+                -ms-transform: scale(0.95);
+                -moz-transform: scale(0.95);
+                -o-transform: scale(0.95);
+                -webkit-transform: scale(0.95);
+                transform: scale(0.95);
+
+            }
+
+            #text_preview{
+               font-size: smaller;
+            }
+
+        </style>
+
+        <paper-material elevation="{{elevation}}">
+            <div class="vertical layout">
+                <div class="preview">
+                    <div id="card_content">
+                        <template is="dom-if" if="{{checkType(type,'image')}}">
+                            <img src="{{imageSrc}}">
+                        </template>
+                        <template is="dom-if" if="{{checkType(type,'datalet')}}">
+                            <div id="datalet_preview"><content></content></div>
+                        </template>
+                        <template is="dom-if" if="{{checkType(type,'text')}}">
+                           <div id="text_preview"><content></content></div>
+                        </template>
+                    </div>
+                    <div class="horizontal layout center legend">
+                        <span>{{legend}}</span>
+                        <paper-fab mini icon="{{icon}}"></paper-fab>
+                    </div>
+                </div>
+                <div class="content">
+                    <p>{{text}}</p >
+                </div>
+            </div>
+        </paper-material>
+    </template>
+
+    <script>
+        Polymer({
+            is:'paper-card-controllet',
+
+            properties: {
+                width: {
+                    type: Number,
+                    value: 350,
+                    /*observer: "_changeWidth",*/
+                },
+                height: {
+                    type: Number,
+                    value: 200
+                },
+
+                legend:{
+                    type: String,
+                    value: "Legend"
+                },
+
+                type:{
+                    type: String,
+                    value: "text"
+                },
+
+                icon:{
+                    type: String,
+                    value: "home"
+                },
+
+                imageSrc: {
+                    type: String,
+                    value:""
+                }
+            },
+            _changeWidth: function(data){
+                this.style.width = data + "px";
+                this.querySelector(".content").width = data + "px";
+            },
+
+            checkType: function(type, check){
+                return (type == check);
+            },
+
+            ready: function(){
+            }
+        })
+    </script>
+
+
+</dom-module>
