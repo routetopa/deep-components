@@ -97,7 +97,7 @@ Example :
             <!--<b>Source:</b><span id="domain"></span>-->
             <!--<b></b><span id="domainPage"></span>-->
 
-            <b>Source:</b> <a id="base_datalet_source" target="_blank"></a> ( <a id="base_datalet_link" target="_blank">dataset</a> )
+            <b>Source:</b> <a id="base_datalet_source" target="_blank"></a> (<a id="base_datalet_link" target="_blank">dataset</a>)
 
             <div id="base_datalet_rtp">
                 <div id="rtp">Powered by ROUTE-TO-PA</div>
@@ -140,32 +140,45 @@ Example :
              * @method ready
              */
             ready: function(){
+                //cKan organized with or not catalog
+                queryInitial = this.dataUrl.substring(0,  this.dataUrl.indexOf("api")); //SOURCE
+
+                urlSource = this.dataUrl.split("/")[0] + "//" + this.dataUrl.split("/")[2];
+                this.$.base_datalet_source.innerHTML = urlSource;
+                this.$.base_datalet_source.setAttribute("href", urlSource);
 
 
+                //OpenDataSoft check
+                if(this.dataUrl.indexOf("/records/") > -1 )
+                {
+                    //Resourceid of a datalet
+                    var query = this.dataUrl.substring(this.dataUrl.indexOf("?"), this.dataUrl.length);
+                    var params  = this.decomponeQueryString(query);
+                    resultIssyIdDatalet = params["dataset"];
+                    resultIssyAPI = "explore/dataset/";
+                    urlPageDatasetIssy = queryInitial + resultIssyAPI + resultIssyIdDatalet + "/";
 
+                    this.$.base_datalet_link.setAttribute("href", urlPageDatasetIssy);
+                }
+                else
+                {
+                //CKAN portal
                 var urlDatalet;
-                if(this.dataUrl != undefined){
-
+                if(this.dataUrl != undefined) {
                     var apiIdResource = "resource_show?id=";
 
                     //Resourceid of a datalet
                     var query = this.dataUrl.substring(this.dataUrl.indexOf("?"), this.dataUrl.length);
-                    var params  = this.decomponeQueryString(query);
+                    var params = this.decomponeQueryString(query);
+                    //CKAN
                     resultIdDatalet = params["resource_id"];
 
                     //cKan organized with or not catalog
-                    queryInitial = this.dataUrl.substring(0,  this.dataUrl.indexOf("api"));
-                    queryFinal = this.dataUrl.substring(this.dataUrl.indexOf("api"),  this.dataUrl.indexOf("datastore_search"));
+                    queryFinal = this.dataUrl.substring(this.dataUrl.indexOf("api"), this.dataUrl.indexOf("datastore_search"));
 
-                    urlDatalet = queryInitial +  queryFinal + apiIdResource + resultIdDatalet;
-                    urlSource = this.dataUrl.split("/")[0] + "//" + this.dataUrl.split("/")[2];
-
-//                    this.$.domainPage.innerHTML = '<a href=' + urlSource +  ' target=' + "_blank>" + urlSource + '</a>'+ "." ;
-
-                    this.$.base_datalet_source.innerHTML = urlSource;
-                    this.$.base_datalet_source.setAttribute("href", urlSource);
-
+                    urlDatalet = queryInitial + queryFinal + apiIdResource + resultIdDatalet;
                     this.requestDataletData(urlDatalet);
+                }
                 }
             },
             /**
@@ -210,7 +223,6 @@ Example :
              */
             handleDataletResponse: function(e) {
                 this.objectDatalet.json_resultDatalet.value = e;
-
                 //packageId of a give datalet
                 packageIdDatalet = this.objectDatalet.json_resultDatalet.value.result.package_id;
                 resourceId = this.objectDatalet.json_resultDatalet.value.result.id;
@@ -228,8 +240,6 @@ Example :
                     urlSource =  this.dataUrl.split("/")[0] + "//" + this.dataUrl.split("/")[2];
 
                     this.$.base_datalet_link.setAttribute("href", urlDatalet);
-//                    this.$.domainPage.innerHTML += " (" + ' <a href=' + urlDatalet +  ' target=' + "_blank>" + "Dataset's page" + '</a>' + " )";
-
                 }
             }
         });
