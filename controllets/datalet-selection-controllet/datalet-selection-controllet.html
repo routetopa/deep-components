@@ -224,18 +224,18 @@
                 <div class="input_header"><span data-l10n-id="baseInfo"></span></div>
 
                 <div class="inputs">
-                    <paper-input maxlength="32" label="title" class="base_input"></paper-input>
+                    <paper-input maxlength="32" label="title" class="base_input" on-blur="_loadDataletBlur"></paper-input>
                 </div>
 
                 <div class="inputs">
-                    <paper-textarea maxlength="100" label="description" class="base_input"></paper-textarea>
+                    <paper-textarea maxlength="100" label="description" class="base_input" on-blur="_loadDataletBlur"></paper-textarea>
                 </div>
 
                 <div class="input_header"><span data-l10n-id="layouts"></span></div>
 
                 <template is="dom-repeat" items="{{labels}}" index-as="index">
                     <div class="inputs">
-                        <paper-input label={{item.name}}></paper-input>
+                        <paper-input label={{item.name}} on-blur="_loadDataletBlur"></paper-input>
                         <div class="info_button">
                             <paper-icon-button id="info_button" on-click="_showInfo" icon="info-outline" title="{{item.name}} info"></paper-icon-button>
                         </div>
@@ -320,6 +320,11 @@
                     value : []
                 },
 
+                dataletPreset : {
+                    type  : Object,
+                    value : []
+                },
+
 //                selectableFields : {
 //                    type : Array,
 //                    value : []
@@ -347,7 +352,7 @@
 //                'tree-view-controllet_selected-fields': '_updateSelectedFields'
             },
 
-            ready : function() {
+            ready : function() {//console.log(this.dataletPreset);
                 this._resize();
                 $(this.$.datalet_selection_inputs).perfectScrollbar();
                 $(this.$.datalet_selection_labels).perfectScrollbar();
@@ -424,6 +429,14 @@
                     $(inputs[i]).find("paper-menu")[0].select(i);
 
                //set info labels options
+                var labels = this.$.datalet_selection_labels.querySelectorAll("paper-textarea");
+                for (var i = 0; i < labels.length; i++)
+                    labels[i].value = this.dataletPreset[labels[i].label];
+
+                var labels = this.$.datalet_selection_labels.querySelectorAll("paper-input");
+                for (var i = 0; i < labels.length; i++)
+                    labels[i].value = this.dataletPreset[labels[i].label];
+
 
                 this._loadDatalet(this.selectedFields);
             },
@@ -490,22 +503,46 @@
 
             },
 
-            _loadDatalet : function(selectedFields){
-//                var params = {'data-url' : this.dataUrl};
+            _loadDataletBlur : function(){//da eliminare
+
+                var labels = this.$.datalet_selection_labels.querySelectorAll("paper-textarea");
+                for (var i = 0; i < labels.length; i++)
+                    this.params[labels[i].label] = labels[i].value;
 
                 var labels = this.$.datalet_selection_labels.querySelectorAll("paper-input");
-                for (var i = 0; i < labels.length; i++) {
-                    if (labels[i].innerHTML.trim() != "") {
-                        this.params[labels[i].label] = labels[i].value;
-                    }
-                }
+                for (var i = 0; i < labels.length; i++)
+                    this.params[labels[i].label] = labels[i].value;
+
+                var dataletParams ={
+                    component   : this.selectedDatalet+"-datalet",
+                    params      : this.params,
+                    fields      : this.selectedFields,
+                    placeHolder : this.$.datalet_selection_datalet_placeholder
+                };
+
+                ComponentService.deep_url = this.deepUrl;
+                ComponentService.getComponent(dataletParams);
+
+//                this.async(function(){this.$.add_button.removeAttribute("disabled");}, 1111);
+            },
+
+            _loadDatalet : function(selectedFields){
 
                 var labels = this.$.datalet_selection_labels.querySelectorAll("paper-textarea");
                 for (var i = 0; i < labels.length; i++) {
-                    if (labels[i].innerHTML.trim() != "") {
-                        this.params[labels[i].label] = labels[i].value;
-                    }
+//                    if (labels[i].innerHTML.trim() != "") {
+                    this.params[labels[i].label] = labels[i].value;
+//                    }
                 }
+
+                var labels = this.$.datalet_selection_labels.querySelectorAll("paper-input");
+                for (var i = 0; i < labels.length; i++) {
+//                    if (labels[i].innerHTML.trim() != "") {
+                        this.params[labels[i].label] = labels[i].value;
+//                    }
+                }
+
+//                console.log(this.params);
 
                 var dataletParams ={
                     component   : this.selectedDatalet+"-datalet",
@@ -527,7 +564,7 @@
                     if(this.selectedFields[i])
                         selectedFields.push(this.selectedFields[i]);
 
-//                console.log(this.params);
+                console.log(this.params);
 
                 var data = {
                     dataUrl : this.dataUrl,
