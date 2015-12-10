@@ -130,20 +130,6 @@ Example :
         BaseDatalet = Polymer({
             is: 'base-datalet',
 
-            objectDatalet: {
-                /**
-                 * It contains the json data from async xhr call returned from core-ajax core component
-                 *
-                 * @attribute json_resultDatalet
-                 * @type object
-                 * @default 'null'.
-                 */
-                json_resultDatalet: {
-                    type: Object,
-                    value: {}
-                }
-            },
-
             hideFooter: function() {
                 this.$.base_datalet_container.innerHTML = "";
                 this.$.base_datalet_container.style.border = 0;
@@ -167,11 +153,7 @@ Example :
             },
 
             ready: function(){
-
                 if(this.dataUrl != undefined) {
-
-                    //cKan organized with or not catalog
-                    var queryInitial = this.dataUrl.substring(0,  this.dataUrl.indexOf("api")); //SOURCE
 
                     var urlSource = this.dataUrl.split("/")[0] + "//" + this.dataUrl.split("/")[2];
                     this.$.base_datalet_source.innerHTML = urlSource;
@@ -181,101 +163,29 @@ Example :
                     //OpenDataSoft check
                     if(this.dataUrl.indexOf("/records/") > -1 )
                     {
-                        //Resourceid of a datalet
-                        var query = this.dataUrl.substring(this.dataUrl.indexOf("?"), this.dataUrl.length);
-                        var params  = this.decomponeQueryString(query);
-                        var resultIssyIdDatalet = params["dataset"];
-                        var resultIssyAPI = "explore/dataset/";
-                        var urlPageDatasetIssy = queryInitial + resultIssyAPI + resultIssyIdDatalet + "/";
-
-                        this.$.base_datalet_link.setAttribute("href", urlPageDatasetIssy);
+                        this.$.base_datalet_link.setAttribute("href", urlSource + "/explore/dataset/" + this.dataUrl.substring(this.dataUrl.indexOf("=")+1,this.dataUrl.indexOf("&")));
                     }
-                    else
+                    // CKAN
+                    else if(this.dataUrl.indexOf("datastore_search?resource_id") > -1 )
                     {
-                        //CKAN portal
-                        var urlDatalet;
-
-                        var apiIdResource = "resource_show?id=";
-
-                        //Resourceid of a datalet
-                        var query = this.dataUrl.substring(this.dataUrl.indexOf("?"), this.dataUrl.length);
-                        var params = this.decomponeQueryString(query);
-                        //CKAN
-                        var resultIdDatalet = params["resource_id"];
-
-                        //cKan organized with or not catalog
-                        var queryFinal = this.dataUrl.substring(this.dataUrl.indexOf("api"), this.dataUrl.indexOf("datastore_search"));
-
-                        urlDatalet = queryInitial + queryFinal + apiIdResource + resultIdDatalet;
-                        this.requestDataletData(urlDatalet);
+                        var comp = this;
+                        $.ajax({
+                            url: this.dataUrl.replace("datastore_search?resource_id", "resource_show?id"),
+                            dataType: "json",
+                            success: function(e){
+                                comp.$.base_datalet_link.setAttribute("href", urlSource + "/dataset/" + e.result.package_id + "/resource/" + e.result.id);
+                            }
+                        });
                     }
                 }
-
             },
+            
             /**
              * Set the domain url to show in the footer
              */
             setDomain: function(url){
                 this.$.domain.textContent = url;
             },
-            /**
-             * Get the (key, value)  query string parameters
-             **/
-            decomponeQueryString: function (querystring) {
-            // remove any preceding url and split
-            querystring = querystring.substring(querystring.indexOf('?')+1).split('&');
-            var params = {}, pair, d = decodeURIComponent;
-            // march and parse
-            for (var i = querystring.length - 1; i >= 0; i--) {
-                pair = querystring[i].split('=');
-                params[d(pair[0])] = d(pair[1]);
-            }
-            return params;
-            },
-            /**
-             * Make an AJAX call to the dataset URL to retrieve package_id
-             *
-             * @method urlDatalet
-             */
-            requestDataletData: function(urlDatalet){
-                var comp = this;
-                $.ajax({
-                    url: urlDatalet, //url con package
-                    dataType: "json",
-                    success: function(e){
-                        comp.handleDataletResponse(e);
-                    }
-                });
-            },
-            /**
-             * Called when core-ajax component receive the json data from called url.
-             *
-             * @method handleResponse
-             */
-            handleDataletResponse: function(e) {
-                this.objectDatalet.json_resultDatalet.value = e;
-                //packageId of a give datalet
-                packageIdDatalet = this.objectDatalet.json_resultDatalet.value.result.package_id;
-                resourceId = this.objectDatalet.json_resultDatalet.value.result.id;
-
-                //url complete of download
-                urlDatasetDownload = this.objectDatalet.json_resultDatalet.value.result.url;
-
-                if(this.dataUrl != undefined){
-                    //static url
-                    lastStringResourceId =  this.dataUrl.split("/")[5];
-                    resourceId  = lastStringResourceId.split('=')[1];
-                    var urlDatalet = this.dataUrl.split("/")[0]+ "//" + this.dataUrl.split("/")[2]  + "/dataset/" + packageIdDatalet +"/resource/" +resourceId;
-
-                    urlDatalet = urlDatasetDownload.replace(/\/download\/.*/, '');
-                    urlSource =  this.dataUrl.split("/")[0] + "//" + this.dataUrl.split("/")[2];
-
-                    this.$.base_datalet_link.setAttribute("href", urlDatalet);
-                }
-            },
-
-
-
-        });
+         });
     </script>
 </dom-module>
