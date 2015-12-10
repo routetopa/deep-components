@@ -13,7 +13,8 @@
 <selectedUrl "Selected url">
 
 <inputs "INPUTS">
-<labels "LABELS / OPTIONS">
+<layouts "LABELS / OPTIONS">
+<baseInfo "BASE INFO">
 <comment "COMMENT">
 <commentLabel "comment (max 100 characters)">
 <dataletPreview "DATALET PREVIEW">

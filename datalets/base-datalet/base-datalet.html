@@ -115,6 +115,21 @@ Example :
     <script>
         BaseDatalet = Polymer({
             is: 'base-datalet',
+
+            properties: {
+
+                title : {
+                    type : String,
+                    value : undefined
+                },
+
+                description : {
+                    type : String,
+                    value : undefined
+                }
+
+            },
+
             objectDatalet: {
                 /**
                  * It contains the json data from async xhr call returned from core-ajax core component
