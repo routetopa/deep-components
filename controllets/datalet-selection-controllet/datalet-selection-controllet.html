@@ -325,14 +325,14 @@
                 $(this.$.datalet_selection_labels).perfectScrollbar();
                 $(this.$.datalet_selection_datalet).perfectScrollbar();
 
-                this.modify = true;//da eliminare in futuro
+                this.params = {'data-url' : this.dataUrl};
+
+                //this.modify = true;//da eliminare in futuro
                 if(this.preselectedDatalet){
                     this.modify = true;
                     this._preselectDatalet();
                     this.preselectedDatalet = undefined;
                 }
-
-                this.params = {'data-url' : this.dataUrl};
             },
 
             attached : function() {
@@ -348,11 +348,12 @@
 //                    console.log($(inputs[i]).children("paper-menu"));
 
                 this._translate();
-
             },
 
             _translate : function(){
                 document.l10n.formatValue('commentLabel').then(s => $("#comment")[0].setAttribute("label", s));
+                if(this.modify)
+                    document.l10n.formatValue('modifyDatalet').then(s => this.$.add_button.innerText = s);
             },
 
             setFields : function(fields) {
@@ -387,10 +388,6 @@
             },
 
             _preselectDatalet : function() {
-//                this.$.add_button.innerText = "MODIFY DATALET";
-                document.l10n.formatValue('modifyDatalet').then(s => this.$.add_button.innerText = s);
-
-
                 this.selectedDatalet = this.preselectedDatalet;
                 this.selectedFields = this._copy(this.fields);
 
@@ -426,11 +423,6 @@
             },
 
             _addInput : function(e){
-//                console.log(e.target.innerHTML.trim());
-//                console.log(e.target.innerText);
-//                console.log(e.currentTarget.innerHTML.trim());
-//                console.log(e.currentTarget.innerText);
-
                 var selectedFields = this._copy(this.selectedFields);
 
                 var index = $(e.target).parents("paper-dropdown-menu")[0].id;
@@ -456,13 +448,12 @@
                 }
 
                 if(load){
-                    var labels = this.$.datalet_selection_labels.querySelectorAll("paper-textarea");
-//                    console.log(labels);
-                    for (var i = 0; i < labels.length; i++) {
-                        if (labels[i].innerHTML.trim() != "") {
-                            this.params[labels[i].label] = labels[i].value;
-                        }
-                    }
+//                    var labels = this.$.datalet_selection_labels.querySelectorAll("paper-textarea");
+//                    for (var i = 0; i < labels.length; i++) {
+//                        if (labels[i].innerHTML.trim() != "") {
+//                            this.params[labels[i].label] = labels[i].value;
+//                        }
+//                    }
                     
                     this._loadDatalet(selectedFields);
                 }
@@ -471,6 +462,18 @@
 
             _loadDatalet : function(selectedFields){
 //                var params = {'data-url' : this.dataUrl};
+
+                var labels = this.$.datalet_selection_labels.querySelectorAll("paper-textarea");
+                for (var i = 0; i < labels.length; i++) {
+                    if (labels[i].innerHTML.trim() != "") {
+                        this.params[labels[i].label] = labels[i].value;
+                    }
+                }
+
+                console.log(this.selectedDatalet);
+                console.log(this.params);
+                console.log(selectedFields);
+                console.log(this.dataUrl);
 
                 var dataletParams ={
                     component   : this.selectedDatalet+"-datalet",
@@ -545,10 +548,10 @@
 
                 $("#datalet_selection_inputs").height(h);
                 $("#datalet_selection_labels").height(h);
-                if(this.modify)
+//                if(this.modify)
                     $("#datalet_selection_datalet").height(h-128);
-                else
-                    $("#datalet_selection_datalet").height(h);
+//                else
+//                    $("#datalet_selection_datalet").height(h);
             }
 
         });

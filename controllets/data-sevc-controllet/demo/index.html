@@ -9,11 +9,11 @@
     <script src="../../shared_js/perfect-scrollbar/js/min/perfect-scrollbar.jquery.min.js"></script>
     <link rel="stylesheet" href="../../shared_js/perfect-scrollbar/css/perfect-scrollbar.min.css">
 
-    <!--<meta name="defaultLanguage" content="en-EN">-->
-    <meta name="availableLanguages" content="en-EN, it-IT">
-    <!--<link rel="localization" href="../../../locales/{locale}.l20n">-->
-    <link rel="localization" href="../../../locales/it-IT.l20n">
-    <script defer src="../../../bower_components/l20n/dist/compat/web/l20n.min.js"></script>
+    <!--&lt;!&ndash;<meta name="defaultLanguage" content="en">&ndash;&gt;-->
+    <!--<meta name="availableLanguages" content="en, it">-->
+    <!--&lt;!&ndash;<link rel="localization" href="../../../locales/{locale}.l20n">&ndash;&gt;-->
+    <link rel="localization" href="../../../locales/it.l20n">
+    <!--<script defer src="../../../bower_components/l20n/dist/compat/web/l20n.min.js"></script>-->
 
     <link rel="import" href="../data-sevc-controllet.html" />
 </head>
@@ -24,6 +24,12 @@
     <data-sevc-controllet id="dsc" deep-url="http://172.16.15.89/DEEalerProvider/DEEP/" datalets-list-url="http://172.16.15.89/DEEalerProvider/DEEP/datalets-list"></data-sevc-controllet>
 
     <script>
+
+//        var languageLink = document.createElement("link");
+//        languageLink.rel = "localization";
+//        languageLink.href = "../../../locales/it.l20n";
+//        document.getElementsByTagName("head")[0].appendChild(languageLink);
+
         var description = "aaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaa aaaaaaaaaaaa aaaaaaaaa aaaaaaaaaaaaaaaaaaaaaaaaaa "+
         " aaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaa aaaaaaaaaaaa aaaaaaaaa aaaaaaaaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaa "+
         " aaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaa aaaaaaaaaaaa aaaaaaaaa aaaaaaaaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaa "+
