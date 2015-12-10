@@ -32,6 +32,7 @@
 <link rel="import" href="../base-datalet/base-datalet.html">
 <link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout.html">
 <link rel="import" href="../../bower_components/paper-dialog/paper-dialog.html">
+<link rel="import" href="../../bower_components/paper-fab/paper-fab.html">
 
 <!--
 `preview-datalet` is a datalet that allow user to preview the content of a web page. It creates a thumbnail of the site using the data-url attribute passed as input.
@@ -56,8 +57,21 @@ Example:
         <style is="custom-style">
 
             #dialog{
-                position: absolute;
+                position: relative;
                 padding: 20px;
+                right:5%;
+            }
+
+            #close{
+                position: absolute;
+                top: -20px;
+                right: 3px;
+                --iron-icon-height: 20px;
+                --iron-icon-width: 20px;
+                width: 24px;
+                height: 24px;
+                --paper-fab-background:#9e9e9e;
+                z-index: 1001;
             }
 
         </style>
@@ -67,9 +81,9 @@ Example:
         </div>
 
         <paper-dialog id="dialog">
+            <paper-fab id="close" mini icon="close" on-click="_onCloseClick"></paper-fab>
             <h2 id="dialog_title"></h2>
-            <paper-dialog-scrollable id="dialog_content">
-            </paper-dialog-scrollable>
+            <paper-dialog-scrollable id="dialog_content">cos</paper-dialog-scrollable>
         </paper-dialog>
 
     </template>
@@ -116,6 +130,10 @@ Example:
                 svg: {
                     type: Object,
                     value: undefined
+                },
+                feelings:{
+                    type: Array,
+                    values: ["Agree", "Neutral", "Not agree"]
                 }
             },
 
@@ -248,13 +266,12 @@ Example:
                     //return 1 == t.fixed ? 1.4 * t.r : 15
                     return 1 == t.fixed ? 1.4 * t.r : t.r + 10;
                 });
-
             },
 
             mouseout : function () {
                 d3.select(this).selectAll("text").style("visibility", "hidden"), d3.select(this).selectAll("circle").transition().duration(400).attr("r", function (t) {
                     return t.r ? t.r : 15
-                })
+                });
             },
 
             active : function (t) {
@@ -269,12 +286,17 @@ Example:
                 prev_selected_node.style.fill   = prev_selected_node.style.stroke;
                 prev_selected_node.style.stroke = "#000000";
 
-               /* _this.$.dialog_title.innerHTML   = "Comment";
-                _this.$.dialog_content.innerHTML = t.name;
-                _this.$.dialog.style.top         = t.y + "px";
-                _this.$.dialog.style.left        = t.x + "px";
+                _this.$.dialog.close();
+                _this.$.dialog_title.innerHTML   = t.name;
+                _this.$.dialog_content.innerHTML = t.content;
+                /*_this.$.dialog.style.top         = t.y + "px";
+                _this.$.dialog.style.left        = t.x + "px";*/
 
-               _this.$.dialog.open();*/
+               _this.$.dialog.open();
+            },
+
+            _onCloseClick : function(){
+                _this.$.dialog.close();
             },
 
             /**
