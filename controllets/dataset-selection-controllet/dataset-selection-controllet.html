@@ -261,7 +261,8 @@
 
             _translate : function(){
                 document.l10n.formatValue('availableDatasets').then(s => $("#_datasets")[0].setAttribute("label", s));
-                document.l10n.formatValue('suggestedDatasets').then(s => $("#s_datasets")[0].setAttribute("label", s));
+                if(this.isSuggested)
+                    document.l10n.formatValue('suggestedDatasets').then(s => $("#s_datasets")[0].setAttribute("label", s));
                 document.l10n.formatValue('selectedUrl').then(s => this.$.selected_url.setAttribute("label", s));
             },
 
