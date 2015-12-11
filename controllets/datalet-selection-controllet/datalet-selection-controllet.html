@@ -224,18 +224,18 @@
                 <div class="input_header"><span data-l10n-id="baseInfo"></span></div>
 
                 <div class="inputs">
-                    <paper-input maxlength="32" label="title" class="base_input" on-blur="_loadDataletBlur"></paper-input>
+                    <paper-input maxlength="32" label="title" class="base_input"></paper-input>
                 </div>
 
                 <div class="inputs">
-                    <paper-textarea maxlength="100" label="description" class="base_input" on-blur="_loadDataletBlur"></paper-textarea>
+                    <paper-textarea maxlength="100" label="description" class="base_input"></paper-textarea>
                 </div>
 
                 <div class="input_header"><span data-l10n-id="layouts"></span></div>
 
                 <template is="dom-repeat" items="{{labels}}" index-as="index">
                     <div class="inputs">
-                        <paper-input label={{item.name}} on-blur="_loadDataletBlur"></paper-input>
+                        <paper-input label={{item.name}}></paper-input>
                         <div class="info_button">
                             <paper-icon-button id="info_button" on-click="_showInfo" icon="info-outline" title="{{item.name}} info"></paper-icon-button>
                         </div>
@@ -348,9 +348,16 @@
             },
 
             listeners: {
-                'items-vslider-controllet_selected-datalet': '_selectDatalet'
+                'items-vslider-controllet_selected-datalet': '_selectDatalet',
 //                'tree-view-controllet_selected-fields': '_updateSelectedFields'
+                'change': '_loadDataletBlur'
             },
+
+//            aaaaaaaaaa : function() {
+//                console.log("AAAAAAAAAAAAAAAAAAAAAAAA");
+//            },
+
+//            change in highchart e chart a gruppi
 
             ready : function() {//console.log(this.dataletPreset);
                 this._resize();
@@ -503,7 +510,7 @@
 
             },
 
-            _loadDataletBlur : function(){//da eliminare
+            _loadDataletBlur : function(e){//da eliminare
 
                 var labels = this.$.datalet_selection_labels.querySelectorAll("paper-textarea");
                 for (var i = 0; i < labels.length; i++)
@@ -513,7 +520,9 @@
                 for (var i = 0; i < labels.length; i++)
                     this.params[labels[i].label] = labels[i].value;
 
-                var dataletParams ={
+//                console.log(e.target);
+
+                /*var dataletParams ={
                     component   : this.selectedDatalet+"-datalet",
                     params      : this.params,
                     fields      : this.selectedFields,
@@ -521,9 +530,11 @@
                 };
 
                 ComponentService.deep_url = this.deepUrl;
-                ComponentService.getComponent(dataletParams);
+                ComponentService.getComponent(dataletParams);*/
 
 //                this.async(function(){this.$.add_button.removeAttribute("disabled");}, 1111);
+                if(this.$.datalet_selection_datalet_placeholder.children[1])
+                    this.$.datalet_selection_datalet_placeholder.children[1].behavior.setParameters(this.params);
             },
 
             _loadDatalet : function(selectedFields){
