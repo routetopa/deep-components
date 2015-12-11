@@ -56,23 +56,6 @@ Example:
 
         var BarchartBehavior = {
 
-
-            setParameters: function(params)
-            {
-                //"description\":\"d\",\"title\":\"coseeee\",\"x-axis-label\":\"x\",\"y-axis-label\":\"y\",\"suffix\":\"e\"}'
-                this._component.chart.setTitle({text: params.title});
-                this._component.chart.xAxis[0].setTitle({text: params['x-axis-label']});
-                this._component.chart.yAxis[0].setTitle({text: params['y-axis-label']});
-
-
-                /*this._component.chart.tooltip.options.formatter = function() {
-                    $.each(this.points,function(){
-                        console.log(this.points);
-                    });
-                    return 'a';
-                }*/
-            },
-
             /**
              * Bluid Highchart object
              *
@@ -131,7 +114,6 @@ Example:
                     series: this.properties.series.value
                 });
 
-                this._component.chart = $(this._component.$.charts.$.container).highcharts();
             }
         };
 
@@ -163,17 +145,6 @@ Example:
                     value: ""
                 },
                 /**
-                 * It's the title of the chart
-                 *
-                 * @attribute title
-                 * @type Strig
-                 * @default ''
-                 */
-                title: {
-                    type: String,
-                    value: "Heading"
-                },
-                /**
                  * It's the values suffix
                  *
                  * @attribute suffix
@@ -194,18 +165,8 @@ Example:
                 behavior : {
                     type : Object,
                     value : {}
-                },
-                /**
-                 * It's the component chart
-                 *
-                 * @attribute chart
-                 * @type Object
-                 * @default {}
-                 */
-                chart : {
-                    type : Object,
-                    value : {}
                 }
+
             },
 
             /**
@@ -217,7 +178,7 @@ Example:
             ready: function(){
 
                 this.behavior = $.extend(true, {}, HighchartsComponentBehavior, BarchartBehavior);
-                this.async(function(){this.behavior.init(this)},1000);
+                this.async(function(){this.behavior.init(this)},0);
             }
         });
     </script>

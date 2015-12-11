@@ -128,7 +128,7 @@ Example:
             transformData: function(e)
             {
                 var treemapData = [];
-                DatasetexplorerBehavior.map.name = this._component.name;
+                DatasetexplorerBehavior.map.name = this._component.title;
 
                 if(this.data.length > 1) {
                     for (i = 0; i < this.data.length; i++) {
@@ -201,17 +201,6 @@ Example:
             is : 'datasetexplorer-datalet' ,
 
             properties: {
-                /**
-                 * It's the name for treemap
-                 *
-                 * @attribute name
-                 * @type String
-                 * @default ''
-                 */
-                name: {
-                    type: String,
-                    value: ""
-                },
                 /**
                  * It's the component behavior
                  *

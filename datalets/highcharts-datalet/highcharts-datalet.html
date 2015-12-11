@@ -2,7 +2,7 @@
 @license
     The MIT License (MIT)
 
-    Copyright (c) 2015 Dipartimento di Informatica - Universit‡ di Salerno - Italy
+    Copyright (c) 2015 Dipartimento di Informatica - UniversitÔøΩ di Salerno - Italy
 
     Permission is hereby granted, free of charge, to any person obtaining a copy
     of this software and associated documentation files (the "Software"), to deal
@@ -133,7 +133,21 @@ Example :
 
                     this.properties.series.value.push(this.data[i]);
                 }
-            }
+            },
+
+            setParameters: function(params)
+            {
+                var chart = $(this._component.$.charts.$.container).highcharts();
+
+                chart.setTitle({text: params['title']});
+                chart.xAxis[0].setTitle({text: params['x-axis-label']});
+                chart.yAxis[0].setTitle({text: params['y-axis-label']});
+
+                chart.tooltip.options.formatter = function() {
+                    return this.x + '<br/><br/><span style="fill:#7cb5ec" x="8" dy="15">‚óè</span> ' + this.series.name + ': <b>' + this.y + ' ' + params['suffix'] + '</b>';
+                }
+
+            },
         };
 
         var HighchartsComponentBehavior = $.extend(true, {}, BaseDataletBehavior, WorkcycleBehavior, AjaxJsonJsonPathBehavior, HighchartsBehavior);

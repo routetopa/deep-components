@@ -189,17 +189,6 @@ Example:
 
             properties: {
                 /**
-                 * It's the name for treemap
-                 *
-                 * @attribute name
-                 * @type String
-                 * @default ''
-                 */
-                title: {
-                    type: String,
-                    value: ""
-                },
-                /**
                  * It's the component behavior
                  *
                  * @attribute behavior
@@ -214,7 +203,7 @@ Example:
 
             ready: function(){
                 this.behavior =  $.extend(true, {}, BaseDataletBehavior, WorkcycleBehavior, AjaxJsonJsonPathBehavior, TreemapBehavior);
-                this.async(function(){this.behavior.init(this)},1000);
+                this.async(function(){this.behavior.init(this)},0);
             }
 
         });

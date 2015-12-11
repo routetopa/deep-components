@@ -360,8 +360,7 @@
             listeners: {
                 'items-vslider-controllet_selected-datalet': '_selectDatalet',
 //                'tree-view-controllet_selected-fields': '_updateSelectedFields'
-                'change': '_loadDataletBlur'
-                 //change name
+                'change': '_paramsChanged'
             },
 
             ready : function() {//console.log(this.dataletPreset);
@@ -504,27 +503,28 @@
                 }
 
                 if(load){
-//                    var labels = this.$.datalet_selection_labels.querySelectorAll("paper-textarea");
-//                    for (var i = 0; i < labels.length; i++) {
-//                        if (labels[i].innerHTML.trim() != "") {
-//                            this.params[labels[i].label] = labels[i].value;
-//                        }
-//                    }
                     this.loadPreview = true
                     this._loadDatalet(selectedFields);
                 }
 
             },
 
-            _loadDataletBlur : function(e){//da eliminare
+            _updateParams : function(){
 
                 var labels = this.$.datalet_selection_labels.querySelectorAll("paper-textarea");
-                for (var i = 0; i < labels.length; i++)
-                    this.params[labels[i].label] = labels[i].value;
+                this.params[labels[0].label] = labels[0].value;
+
+                if(!labels[0].value)
+                    this.params[labels[0].label] = "";
 
                 var labels = this.$.datalet_selection_labels.querySelectorAll("paper-input");
                 for (var i = 0; i < labels.length; i++)
                     this.params[labels[i].label] = labels[i].value;
+            },
+
+            _paramsChanged : function(){
+
+                this._updateParams();
 
                 if(this.$.datalet_selection_datalet_placeholder.children[1])
                     this.$.datalet_selection_datalet_placeholder.children[1].behavior.setParameters(this.params);
@@ -532,20 +532,7 @@
 
             _loadDatalet : function(selectedFields){
 
-                var labels = this.$.datalet_selection_labels.querySelectorAll("paper-textarea");
-                for (var i = 0; i < labels.length; i++) {
-//                    if (labels[i].innerHTML.trim() != "") {
-                    this.params[labels[i].label] = labels[i].value;
-//                    }
-                }
-
-                var labels = this.$.datalet_selection_labels.querySelectorAll("paper-input");
-                for (var i = 0; i < labels.length; i++) {
-//                    if (labels[i].innerHTML.trim() != "") {
-                        this.params[labels[i].label] = labels[i].value;
-//                    }
-                }
-
+                this._updateParams();
 
                 var dataletParams ={
                     component   : this.selectedDatalet+"-datalet",
@@ -567,6 +554,7 @@
                     if(this.selectedFields[i])
                         selectedFields.push(this.selectedFields[i]);
 
+                console.log(this.params);
 
                 var data = {
                     dataUrl : this.dataUrl,

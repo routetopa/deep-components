@@ -226,17 +226,6 @@ Examples:
                     value: ""
                 },
                 /**
-                 * It's the title of the chart
-                 *
-                 * @attribute title
-                 * @type Strig
-                 * @default ''
-                 */
-                title: {
-                    type: String,
-                    value: ""
-                },
-                /**
                  * It's the component behavior
                  *
                  * @attribute behavior
@@ -256,7 +245,7 @@ Examples:
              */
             ready: function(){
                 this.behavior = $.extend(true, {}, HighchartsComponentBehavior, Bubble3dBehavior);
-                this.async(function(){this.behavior.init(this)},1);
+                this.async(function(){this.behavior.init(this)},0);
             }
         });
     </script>

@@ -141,17 +141,6 @@ Example:
                     value: ""
                 },
                 /**
-                 * It's the title of the chart
-                 *
-                 * @attribute title
-                 * @type Strig
-                 * @default ''
-                 */
-                title: {
-                    type: String,
-                    value: "Heading"
-                },
-                /**
                  * It's the values suffix
                  *
                  * @attribute suffix
@@ -171,7 +160,7 @@ Example:
              */
             ready: function(){
                 this.behavior = $.extend(true, {}, HighchartsComponentBehavior, AreachartBehavior);
-                this.async(function(){this.behavior.init(this)},1000);
+                this.async(function(){this.behavior.init(this)},0);
             }
         });
     </script>
