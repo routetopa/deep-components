@@ -57,8 +57,9 @@ Example:
         <style is="custom-style">
 
             #dialog{
-                position: relative;
+                position: absolute;
                 padding: 20px;
+                top: 20px;
                 right:5%;
             }
 
@@ -144,7 +145,7 @@ Example:
                                    .append("g");
 
                 //set initial zoom
-                scale = (0.8);
+                scale = (0.87);
                 //translate = [(width-scale*width)/2, ((height-scale*height)/4)];
                 translate = [0, 0];
                 console.log("w: " + width + " h:" + height);
@@ -286,12 +287,19 @@ Example:
                     //return 1 == t.fixed ? 1.4 * t.r : 15
                     return 1 == t.fixed ? 1.4 * t.r : t.r + 10;
                 });
+
+                _this.$.dialog.close();
+                _this.$.dialog_title.innerHTML   = t.name;
+                _this.$.dialog_content.innerHTML = t.content;
+
+                _this.$.dialog.open();
             },
 
             mouseout : function () {
                 d3.select(this).selectAll("text").style("visibility", "hidden"), d3.select(this).selectAll("circle").transition().duration(400).attr("r", function (t) {
                     return t.r ? t.r : 15
                 });
+                _this.$.dialog.close();
             },
 
             active : function (t) {
@@ -306,15 +314,15 @@ Example:
                 prev_selected_node.style.fill   = "#FFFFFF"
                 prev_selected_node.style.stroke = t.color;
 
-                _this.$.dialog.close();
+               /* _this.$.dialog.close();
                 _this.$.dialog_title.innerHTML   = t.name;
                 _this.$.dialog_content.innerHTML = t.content;
 
-               _this.$.dialog.open();
+               _this.$.dialog.open();*/
             },
 
             _onCloseClick : function(){
-                _this.$.dialog.close();
+                //_this.$.dialog.close();
             },
 
             /**

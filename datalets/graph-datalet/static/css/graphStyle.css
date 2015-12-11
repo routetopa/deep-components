@@ -8,7 +8,7 @@ circle{
 }
 
 .node {
-    cursor: move;
+    cursor: pointer;
     fill: #fff;
     stroke: #FFFFFF;
     stroke-width: 4.5px
@@ -17,7 +17,6 @@ circle{
 
 .node.fixed {
     cursor: pointer;
-    cursor: hand;
     stroke-width: 6px
 }
 
