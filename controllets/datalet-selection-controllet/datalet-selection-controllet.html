@@ -300,6 +300,16 @@
                     value : undefined
                 },
 
+                loadPreview : {
+                    type :  Boolean,
+                    value : false
+                },
+
+                type : {
+                    type : String,
+                    value : undefined
+                },
+
                 inputs : {
                     type : Array,
                     value : []
@@ -351,13 +361,8 @@
                 'items-vslider-controllet_selected-datalet': '_selectDatalet',
 //                'tree-view-controllet_selected-fields': '_updateSelectedFields'
                 'change': '_loadDataletBlur'
+                 //change name
             },
-
-//            aaaaaaaaaa : function() {
-//                console.log("AAAAAAAAAAAAAAAAAAAAAAAA");
-//            },
-
-//            change in highchart e chart a gruppi
 
             ready : function() {//console.log(this.dataletPreset);
                 this._resize();
@@ -379,13 +384,6 @@
                 this._resize();
                 var that = this;
                 window.addEventListener("resize", function() { that._resize(); });
-
-//                var inputs = document.getElementsByTagName("paper-dropdown-menu");
-//                console.log(inputs);
-//                for(var i in inputs)
-//                    console.log(i);
-//                for(var i=0; i < inputs.length; i++)
-//                    console.log($(inputs[i]).children("paper-menu"));
 
                 this._translate();
             },
@@ -411,20 +409,19 @@
                 this.$.add_button.setAttribute("disabled", "true");
 
                 this.selectedDatalet = e.detail.datalet;
-                this.inputs = [];
-                this.labels = [];
 
-                if(this.selectedDatalet){
+                this.$.datalet_selection_datalet_placeholder.innerHTML = "";
+
+                if(!this.selectedDatalet){
+                    this.type = undefined;
+                    this.inputs = [];
+                    this.labels = [];
+                    this.loadPreview = false;
+                }
+                else{
                     this.$.selectedDatalet_request.url = this.deepUrl + e.detail.datalet + "-datalet";
                     this.$.selectedDatalet_request.generateRequest();
                 }
-//                else {
-//                    this.inputs = [];
-//                    this.labels = [];
-//                }
-
-//                this.$.datalet_selection_datalet_placeholder.innerHTML = "";
-//                this.selectedFields = [];
             },
 
             _preselectDatalet : function() {
@@ -449,27 +446,36 @@
             },
 
             _handleSelectedDatalet : function(e){
-                this.$.datalet_selection_datalet_placeholder.innerHTML = "";
 
-                var inputs = e.detail.response.idm.inputs.input;
-                var labels = e.detail.response.idm.inputs.layouts.input;
+                if(this.type != e.detail.response.type) {
 
-                if(inputs.constructor == Object) {//not Array && inputs.input.selection == "*"
-                    var name = inputs.name;
-                    var description = inputs.description;
-                    var selection = inputs.selection;
-                    inputs = [];
-                    for(var i in this.fields)
-                        inputs.push({name: name + " " + i, description: description, selection: selection});
+                    this.inputs = [];
+                    this.labels = [];
+
+                    var inputs = e.detail.response.idm.inputs.input;
+
+                    if (inputs.constructor == Object) {//not Array && inputs.input.selection == "*"
+                        var name = inputs.name;
+                        var description = inputs.description;
+                        var selection = inputs.selection;
+                        inputs = [];
+                        for (var i in this.fields)
+                            inputs.push({name: name + " " + i, description: description, selection: selection});
+                    }
+
+                    this.async(function(){
+                        this.type = e.detail.response.type;
+                        this.inputs = inputs;
+                        this.labels = e.detail.response.idm.inputs.layouts.input;
+
+                        this.selectedFields = new Array(inputs.length);
+                    },0);
+
+                    this.loadPreview = false;
                 }
 
-                this.inputs = inputs;
-                this.labels = labels;
-
-//                if(this.inputs[0].selection == "*")
-//                    this.selectedFields = [];
-//                else
-                    this.selectedFields = new Array(inputs.length);
+                else if (this.loadPreview)
+                    this._loadDatalet(this.selectedFields);
             },
 
             _addInput : function(e){
@@ -504,7 +510,7 @@
 //                            this.params[labels[i].label] = labels[i].value;
 //                        }
 //                    }
-                    
+                    this.loadPreview = true
                     this._loadDatalet(selectedFields);
                 }
 
@@ -520,19 +526,6 @@
                 for (var i = 0; i < labels.length; i++)
                     this.params[labels[i].label] = labels[i].value;
 
-//                console.log(e.target);
-
-                /*var dataletParams ={
-                    component   : this.selectedDatalet+"-datalet",
-                    params      : this.params,
-                    fields      : this.selectedFields,
-                    placeHolder : this.$.datalet_selection_datalet_placeholder
-                };
-
-                ComponentService.deep_url = this.deepUrl;
-                ComponentService.getComponent(dataletParams);*/
-
-//                this.async(function(){this.$.add_button.removeAttribute("disabled");}, 1111);
                 if(this.$.datalet_selection_datalet_placeholder.children[1])
                     this.$.datalet_selection_datalet_placeholder.children[1].behavior.setParameters(this.params);
             },
@@ -553,7 +546,6 @@
 //                    }
                 }
 
-//                console.log(this.params);
 
                 var dataletParams ={
                     component   : this.selectedDatalet+"-datalet",
@@ -575,7 +567,6 @@
                     if(this.selectedFields[i])
                         selectedFields.push(this.selectedFields[i]);
 
-//                console.log(this.$.datalet_selection_datalet_placeholder.children[1].behavior.data);
 
                 var data = {
                     dataUrl : this.dataUrl,
@@ -586,7 +577,6 @@
                     staticData : JSON.stringify(this.$.datalet_selection_datalet_placeholder.children[1].behavior.data)
                 }
 
-//                console.log(data);
                 this.fire('data-sevc-controllet.dataletCreated', {data : data});
 
             },
