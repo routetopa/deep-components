@@ -21,4 +21,24 @@
 <addDatalet "AGGIUNGI">
 <modifyDatalet "MODIFICA">
 
-<googlePiechartDescription "Le etichette delle fette.">
+<cellDescription "The cell of table.">
+<levelDescription "It is the level field that the datalet will use to group the values at corrisponding field number level.">
+
+<categoriesDescription "The chart categories. Its values will be put in the horizontal axis. You need one value for each series.">
+<seriesDescription "The chart series. Its values will be put in the vertical axis.">
+
+<XAxisLabelDescription "The label for the X axis.">
+<YAxisLabelDescription "The label for the Y axis.">
+<suffixDescription "The values suffix (eg units, dollars, euro, ...).">
+
+<pieSeriesDescription "The chart series. Its values will be put on slice of each series.">
+<pieSizeDescription "The size for each series to create a concentric rings.">
+
+<bubbleCategoriesDescription "he chart categories. Its values will be put in the horizontal axis. You need one value for each series.">
+<bubbleYValuesDescription "The chart plots y values. Its values will be put in the vertical axis.">
+<bubbleZValuesDescription "The chart plots z value. Its values represent the size of the bubble.">
+<bubbleSeriesDescription "The chart series. Its values visualize multi- series bubbles chart.">
+
+<LatitudeDescription "It is latitude of the points you want to show in the map.">
+<LongitudeDescription "It is longitude of the points you want to show in the map.">
+<BalloonContentDescription "It is the text associated to the marker or the link to the image related to the camera associated to each points.">

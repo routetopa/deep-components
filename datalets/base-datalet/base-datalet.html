@@ -64,14 +64,20 @@ Example :
                 text-decoration: underline;
             }
             #base_datalet_container {
+                /*display: flex;*/
                 font-family: 'Roboto', 'Helvetica Neue', Helvetica, Arial, sans-serif;
-                padding: 16px;
+                /*color: #212121;*/
+                padding-top: 2px;
+                /*padding: 16px;*/
+                border-top: 2px solid #B6B6B6;
             }
             #base_datalet_rtp {
+                /*background-color: red;*/
                 display: flex;
-                padding-top: 8px;
+                padding-top: 4px;
             }
             #rtp {
+                /*width: 152px;*/
                 padding-top: 8px;
                 padding-right: 8px;
                 font-size: small;
@@ -83,9 +89,16 @@ Example :
             #base_datalet_spin {
                 height:64px;
                 width: 100%;
-                /*position: relative;*/
-                /*center: center;*/
-             }
+            }
+            /*#base_datalet_info{*/
+                /*padding-top: 8px;*/
+                /*/!*background-color: green;*!/*/
+                /*width: 100%;*/
+                /*/!*font-size: small;*!/*/
+            /*}*/
+            #base_datalet_source_link{
+                padding-top: 12px;
+            }
         </style>
 
         <div id="base_datalet_imgWaitDatalet">
@@ -94,7 +107,13 @@ Example :
 
         <div id="base_datalet_container">
 
-            <b>Source:</b> <a id="base_datalet_source" target="_blank"></a> (<a id="base_datalet_link" target="_blank">dataset</a>)
+            <div id="base_datalet_title_description">
+                <span id="span_title" style="font-size: small"><b>{{title}}</b><span id="span_description" style="color: #727272"> - {{description}}</span></span>
+            </div>
+
+            <div id="base_datalet_source_link">
+                <b>Source:</b> <a id="base_datalet_source" target="_blank"></a> (<a id="base_datalet_link" target="_blank">dataset</a>)
+            </div>
 
             <div id="base_datalet_rtp">
                 <div id="rtp">Powered by ROUTE-TO-PA</div>
@@ -122,6 +141,11 @@ Example :
                 description : {
                     type : String,
                     value : ""
+                },
+
+                hideFooter : {
+                    type : Boolean,
+                    value : false
                 }
 
             },
@@ -139,6 +163,20 @@ Example :
                     value: {}
                 }
             },
+
+            _setFooter: function() {
+                if (this.title == "" && this.description == "")
+                    this.$.base_datalet_title_description.innerHTML = "";
+                else if (this.description == "")
+                    this.$.span_description.innerHTML = "";
+
+                if (this.hideFooter) {
+                    this.$.base_datalet_source_link.innerHTML = "";
+                    this.$.base_datalet_rtp.innerHTML = "";
+                }
+
+            },
+
             /**
              * It is called after the element�s template has been stamped and all elements inside the element�s local
              * DOM have been configured (with values bound from parents, deserialized attributes, or else default values)
@@ -151,46 +189,51 @@ Example :
              * @method ready
              */
             ready: function(){
-                //cKan organized with or not catalog
-                queryInitial = this.dataUrl.substring(0,  this.dataUrl.indexOf("api")); //SOURCE
+                this._setFooter();
 
-                urlSource = this.dataUrl.split("/")[0] + "//" + this.dataUrl.split("/")[2];
-                this.$.base_datalet_source.innerHTML = urlSource;
-                this.$.base_datalet_source.setAttribute("href", urlSource);
-
-
-                //OpenDataSoft check
-                if(this.dataUrl.indexOf("/records/") > -1 )
-                {
-                    //Resourceid of a datalet
-                    var query = this.dataUrl.substring(this.dataUrl.indexOf("?"), this.dataUrl.length);
-                    var params  = this.decomponeQueryString(query);
-                    resultIssyIdDatalet = params["dataset"];
-                    resultIssyAPI = "explore/dataset/";
-                    urlPageDatasetIssy = queryInitial + resultIssyAPI + resultIssyIdDatalet + "/";
-
-                    this.$.base_datalet_link.setAttribute("href", urlPageDatasetIssy);
-                }
-                else
-                {
-                //CKAN portal
-                var urlDatalet;
                 if(this.dataUrl != undefined) {
-                    var apiIdResource = "resource_show?id=";
-
-                    //Resourceid of a datalet
-                    var query = this.dataUrl.substring(this.dataUrl.indexOf("?"), this.dataUrl.length);
-                    var params = this.decomponeQueryString(query);
-                    //CKAN
-                    resultIdDatalet = params["resource_id"];
 
                     //cKan organized with or not catalog
-                    queryFinal = this.dataUrl.substring(this.dataUrl.indexOf("api"), this.dataUrl.indexOf("datastore_search"));
+                    var queryInitial = this.dataUrl.substring(0,  this.dataUrl.indexOf("api")); //SOURCE
 
-                    urlDatalet = queryInitial + queryFinal + apiIdResource + resultIdDatalet;
-                    this.requestDataletData(urlDatalet);
+                    var urlSource = this.dataUrl.split("/")[0] + "//" + this.dataUrl.split("/")[2];
+                    this.$.base_datalet_source.innerHTML = urlSource;
+                    this.$.base_datalet_source.setAttribute("href", urlSource);
+
+
+                    //OpenDataSoft check
+                    if(this.dataUrl.indexOf("/records/") > -1 )
+                    {
+                        //Resourceid of a datalet
+                        var query = this.dataUrl.substring(this.dataUrl.indexOf("?"), this.dataUrl.length);
+                        var params  = this.decomponeQueryString(query);
+                        var resultIssyIdDatalet = params["dataset"];
+                        var resultIssyAPI = "explore/dataset/";
+                        var urlPageDatasetIssy = queryInitial + resultIssyAPI + resultIssyIdDatalet + "/";
+
+                        this.$.base_datalet_link.setAttribute("href", urlPageDatasetIssy);
+                    }
+                    else
+                    {
+                        //CKAN portal
+                        var urlDatalet;
+
+                        var apiIdResource = "resource_show?id=";
+
+                        //Resourceid of a datalet
+                        var query = this.dataUrl.substring(this.dataUrl.indexOf("?"), this.dataUrl.length);
+                        var params = this.decomponeQueryString(query);
+                        //CKAN
+                        var resultIdDatalet = params["resource_id"];
+
+                        //cKan organized with or not catalog
+                        var queryFinal = this.dataUrl.substring(this.dataUrl.indexOf("api"), this.dataUrl.indexOf("datastore_search"));
+
+                        urlDatalet = queryInitial + queryFinal + apiIdResource + resultIdDatalet;
+                        this.requestDataletData(urlDatalet);
+                    }
                 }
-                }
+
             },
             /**
              * Set the domain url to show in the footer
@@ -252,7 +295,10 @@ Example :
 
                     this.$.base_datalet_link.setAttribute("href", urlDatalet);
                 }
-            }
+            },
+
+
+
         });
     </script>
 </dom-module>

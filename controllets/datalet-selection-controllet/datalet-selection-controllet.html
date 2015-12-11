@@ -210,6 +210,7 @@
                             <paper-menu class="dropdown-content">
                                 <template is="dom-repeat" items={{fields}}>
                                     <paper-item id={{index}} on-tap="_addInput">{{item}}</paper-item>
+                                    <!--{{_fieldName(item)}}-->
                                 </template>
                             </paper-menu>
                         </paper-dropdown-menu>
@@ -441,6 +442,7 @@
                     labels[i].value = this.dataletPreset[labels[i].label];
 
 
+                this.loadPreview = true;
                 this._loadDatalet(this.selectedFields);
             },
 
@@ -544,7 +546,8 @@
                 ComponentService.deep_url = this.deepUrl;
                 ComponentService.getComponent(dataletParams);
 
-                this.async(function(){this.$.add_button.removeAttribute("disabled");}, 1111);
+//                this.async(function(){this.$.add_button.removeAttribute("disabled");}, 1000);
+                this.$.add_button.removeAttribute("disabled");
             },
 
             _addDatalet : function(){
@@ -588,6 +591,10 @@
                 var pos = t.getBoundingClientRect();
                 $("#dialog_info_input").css("top", pos.top - 4);
                 $("#dialog_info_input").css("left", pos.left - 4);
+            },
+
+            _fieldName : function(field) {
+                return field.substring(field.lastIndexOf(",")+1, field.length);;
             },
 
             _copy : function(o) {
