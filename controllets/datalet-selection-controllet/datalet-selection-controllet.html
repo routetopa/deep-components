@@ -560,11 +560,17 @@
                 ComponentService.deep_url = this.deepUrl;
                 ComponentService.getComponent(dataletParams);
 
-                //300???
-                if(this.$.datalet_selection_datalet_placeholder.children[1])
-                    this.async(function(){this.$.datalet_selection_datalet_placeholder.children[1].behavior.setParameters(this.params)}, 300);
-                this.async(function(){this.$.add_button.removeAttribute("disabled");}, 300);
+                console.log(this.params);
 
+                //300???
+
+                this.async(function(){
+                    if(this.$.datalet_selection_datalet_placeholder.children[1])
+                        this.$.datalet_selection_datalet_placeholder.children[1].behavior.setParameters(this.params);
+                    this.$.add_button.removeAttribute("disabled");
+                }, 300);
+
+//                this.async(function(){this.$.add_button.removeAttribute("disabled");}, 300);
 //                this.$.add_button.removeAttribute("disabled");
             },
 
