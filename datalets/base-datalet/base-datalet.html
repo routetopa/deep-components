@@ -83,21 +83,25 @@ Example :
                 font-size: small;
             }
             #rtpalogo {
-                height:32px;
+                height: 32px;
                 width: 32px;
             }
             #base_datalet_spin {
-                height:64px;
+                height: 64px;
                 width: 100%;
+                margin-top: 64px;
             }
-            /*#base_datalet_info{*/
-                /*padding-top: 8px;*/
-                /*/!*background-color: green;*!/*/
-                /*width: 100%;*/
-                /*/!*font-size: small;*!/*/
-            /*}*/
+
             #base_datalet_source_link{
                 padding-top: 12px;
+            }
+
+            #span_title{
+                font-size: small;
+            }
+
+            #span_description{
+                color: #727272;
             }
         </style>
 
@@ -108,7 +112,7 @@ Example :
         <div id="base_datalet_container">
 
             <div id="base_datalet_title_description">
-                <span id="span_title" style="font-size: small"><b>{{title}}</b><span id="span_description" style="color: #727272"> - {{description}}</span></span>
+                <span id="span_title"><b>{{title}}</b> <span id="span_description">{{description}}</span></span>
             </div>
 
             <div id="base_datalet_source_link">
@@ -141,11 +145,6 @@ Example :
                 description : {
                     type : String,
                     value : ""
-                },
-
-                hideFooter : {
-                    type : Boolean,
-                    value : false
                 }
 
             },
@@ -164,17 +163,25 @@ Example :
                 }
             },
 
-            _setFooter: function() {
+            hideFooter: function() {
+                this.$.base_datalet_container.innerHTML = "";
+                this.$.base_datalet_container.style.border = 0;
+
+//                this.$.base_datalet_source_link.innerHTML = "";
+//                this.$.base_datalet_rtp.innerHTML = "";
+            },
+
+            setFooter: function(title, description) {
+                this.title = title;
+                if(title != "" && description != "")
+                    this.description = "- " + description;
+                else
+                    this.description = description;
+
                 if (this.title == "" && this.description == "")
-                    this.$.base_datalet_title_description.innerHTML = "";
-                else if (this.description == "")
-                    this.$.span_description.innerHTML = "";
-
-                if (this.hideFooter) {
-                    this.$.base_datalet_source_link.innerHTML = "";
-                    this.$.base_datalet_rtp.innerHTML = "";
-                }
-
+                    this.$.base_datalet_title_description.style.display = "none";
+                else
+                    this.$.base_datalet_title_description.style.display = "block";
             },
 
             /**
@@ -189,8 +196,6 @@ Example :
              * @method ready
              */
             ready: function(){
-                this._setFooter();
-
                 if(this.dataUrl != undefined) {
 
                     //cKan organized with or not catalog

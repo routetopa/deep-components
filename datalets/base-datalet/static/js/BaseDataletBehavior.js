@@ -2,7 +2,7 @@
 @license
     The MIT License (MIT)
 
-    Copyright (c) 2015 Dipartimento di Informatica - Università di Salerno - Italy
+    Copyright (c) 2015 Dipartimento di Informatica - Universitï¿½ di Salerno - Italy
 
     Permission is hereby granted, free of charge, to any person obtaining a copy
     of this software and associated documentation files (the "Software"), to deal
@@ -74,6 +74,11 @@ var BaseDataletBehavior ={
     factoryImpl: function(data_url, fields) {
         this.data_url = data_url;
         this.fields   = fields;
-    }
+    },
+
+    setParameters: function(params)
+    {
+        $(this._component).find("base-datalet")[0].setFooter(params['title'], params['description']);
+    },
 
 };

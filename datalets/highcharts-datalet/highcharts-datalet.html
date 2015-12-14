@@ -137,6 +137,8 @@ Example :
 
             setParameters: function(params)
             {
+                $(this._component).find("base-datalet")[0].setFooter(params['title'], params['description']);
+
                 var chart = $(this._component.$.charts.$.container).highcharts();
 
                 chart.setTitle({text: params['title']});

@@ -121,6 +121,8 @@ Example:
             },
 
             ready: function(){
+                $(this).find("base-datalet")[0].hideFooter();
+
                 this.behavior =  $.extend(true, {}, BaseDataletBehavior, WorkcycleBehavior, AjaxJsonJsonPathBehavior, DynamicDatatableBehavior);
                 this.async(function(){this.behavior.init(this)}, 0);
             },
