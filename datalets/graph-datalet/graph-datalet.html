@@ -148,7 +148,6 @@ Example:
                 scale = (1.0);
                 //translate = [(width-scale*width)/2, ((height-scale*height)/4)];
                 translate = [0, 0];
-                console.log("w: " + width + " h:" + height);
                 this.svg.transition()
                         .duration(750)
                         .attr("transform", "translate(" + translate + ")scale(" + scale +    ")")
@@ -237,7 +236,6 @@ Example:
 
             zoom: function() {
                 svg.attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")");
-                console.log(d3.event.scale);
             },
 
             text: function (t)
@@ -361,7 +359,6 @@ Example:
                 g.nodes[0].x = this.width / 2;
                 g.nodes[0].y = this.height / 8;
                 this.buildGraph(g);
-                console.log(g.nodes.length);
             }
         });
     </script>
