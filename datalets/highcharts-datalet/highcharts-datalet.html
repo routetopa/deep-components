@@ -57,7 +57,7 @@ Example :
 
     <template>
         <div id="container" style="width:auto; height:auto;"></div>
-        <base-ajax-json-jsonpath-datalet data-url="{{dataUrl}}" fields="{{fields}}" data="{{data}}"></base-ajax-json-jsonpath-datalet>
+        <base-ajax-json-jsonpath-datalet data-url="{{dataUrl}}" fields="{{fields}}" data="{{data}}" title="{{title}}" description="{{description}}"></base-ajax-json-jsonpath-datalet>
     </template>
 
     <script src="static/js/highcharts.js"></script>
@@ -82,6 +82,7 @@ Example :
                     type: String,
                     value: "line"//spline,time
                 }
+
             },
             /**
              * Normalizes a number in agreement with javascript's conventions. Delete all NaN characters. Exception: number representing lat & long remain unchanged.
@@ -137,7 +138,8 @@ Example :
 
             setParameters: function(params)
             {
-                $(this._component).find("base-datalet")[0].setFooter(params['title'], params['description']);
+                this._component.title = params['title'];
+                this._component.description = params['description'];
 
                 var chart = $(this._component.$.charts.$.container).highcharts();
 
@@ -149,7 +151,8 @@ Example :
                     return this.x + '<br/><br/><span style="fill:#7cb5ec" x="8" dy="15">●</span> ' + this.series.name + ': <b>' + this.y + ' ' + params['suffix'] + '</b>';
                 }
 
-            },
+            }
+
         };
 
         var HighchartsComponentBehavior = $.extend(true, {}, BaseDataletBehavior, WorkcycleBehavior, AjaxJsonJsonPathBehavior, HighchartsBehavior);

@@ -78,7 +78,8 @@ var BaseDataletBehavior ={
 
     setParameters: function(params)
     {
-        $(this._component).find("base-datalet")[0].setFooter(params['title'], params['description']);
-    },
+        this.title = params['title'];
+        this.description = params['description'];
+    }
 
 };

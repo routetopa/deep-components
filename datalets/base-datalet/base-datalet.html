@@ -64,20 +64,15 @@ Example :
                 text-decoration: underline;
             }
             #base_datalet_container {
-                /*display: flex;*/
                 font-family: 'Roboto', 'Helvetica Neue', Helvetica, Arial, sans-serif;
-                /*color: #212121;*/
                 padding-top: 2px;
-                /*padding: 16px;*/
                 border-top: 2px solid #B6B6B6;
             }
             #base_datalet_rtp {
-                /*background-color: red;*/
                 display: flex;
                 padding-top: 4px;
             }
             #rtp {
-                /*width: 152px;*/
                 padding-top: 8px;
                 padding-right: 8px;
                 font-size: small;
@@ -135,20 +130,6 @@ Example :
         BaseDatalet = Polymer({
             is: 'base-datalet',
 
-            properties: {
-
-                title : {
-                    type : String,
-                    value : ""
-                },
-
-                description : {
-                    type : String,
-                    value : ""
-                }
-
-            },
-
             objectDatalet: {
                 /**
                  * It contains the json data from async xhr call returned from core-ajax core component
@@ -166,22 +147,6 @@ Example :
             hideFooter: function() {
                 this.$.base_datalet_container.innerHTML = "";
                 this.$.base_datalet_container.style.border = 0;
-
-//                this.$.base_datalet_source_link.innerHTML = "";
-//                this.$.base_datalet_rtp.innerHTML = "";
-            },
-
-            setFooter: function(title, description) {
-                this.title = title;
-                if(title != "" && description != "")
-                    this.description = "- " + description;
-                else
-                    this.description = description;
-
-                if (this.title == "" && this.description == "")
-                    this.$.base_datalet_title_description.style.display = "none";
-                else
-                    this.$.base_datalet_title_description.style.display = "block";
             },
 
             /**
@@ -195,7 +160,14 @@ Example :
              *   from the entire URL and set the text content of the datalet footer.
              * @method ready
              */
+
+            attached: function(){
+                if(this.title != "" && this.description != "")
+                    this.description = "- " + this.description;
+            },
+
             ready: function(){
+
                 if(this.dataUrl != undefined) {
 
                     //cKan organized with or not catalog
