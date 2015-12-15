@@ -130,11 +130,6 @@ Example :
         BaseDatalet = Polymer({
             is: 'base-datalet',
 
-            hideFooter: function() {
-                this.$.base_datalet_container.innerHTML = "";
-                this.$.base_datalet_container.style.border = 0;
-            },
-
             /**
              * It is called after the element�s template has been stamped and all elements inside the element�s local
              * DOM have been configured (with values bound from parents, deserialized attributes, or else default values)
@@ -146,12 +141,6 @@ Example :
              *   from the entire URL and set the text content of the datalet footer.
              * @method ready
              */
-
-            attached: function(){
-                if(this.title != "" && this.description != "")
-                    this.description = "- " + this.description;
-            },
-
             ready: function(){
                 if(this.dataUrl != undefined) {
 
@@ -179,6 +168,11 @@ Example :
                     }
                 }
             },
+
+            attached: function(){
+                if(this.title != "" && this.description != "")
+                    this.description = "- " + this.description;
+            },
             
             /**
              * Set the domain url to show in the footer
@@ -186,6 +180,12 @@ Example :
             setDomain: function(url){
                 this.$.domain.textContent = url;
             },
+
+            hideFooter: function() {
+                this.$.base_datalet_container.innerHTML = "";
+                this.$.base_datalet_container.style.border = 0;
+            }
+            
          });
     </script>
 </dom-module>
