@@ -209,7 +209,7 @@
                         <paper-dropdown-menu id={{ddl_index}} label={{item.name}}>
                             <paper-menu class="dropdown-content">
                                 <template is="dom-repeat" items={{fields}}>
-                                    <paper-item id={{index}} on-tap="_addInput">{{item}}</paper-item>
+                                    <paper-item id={{index}} on-tap="_addInput">{{_fieldName(item)}}</paper-item>
                                     <!--{{_fieldName(item)}}-->
                                 </template>
                             </paper-menu>
@@ -374,8 +374,10 @@
 
                 //this.modify = true;//da eliminare in futuro
                 if(this.preselectedDatalet){
+                    if(this.modify)
+                        this._preselectDatalet();
+
                     this.modify = true;
-                    this._preselectDatalet();
                     this.preselectedDatalet = undefined;
                 }
             },
@@ -425,22 +427,29 @@
             },
 
             _preselectDatalet : function() {
+                this.type = "undefined";
+                this.$.selectedDatalet_request.url = this.deepUrl + this.preselectedDatalet + "-datalet";
+                this.$.selectedDatalet_request.generateRequest();
+
                 this.selectedDatalet = this.preselectedDatalet;
                 this.selectedFields = this._copy(this.fields);
 
-                var inputs = document.getElementsByTagName("paper-dropdown-menu");
-                for(var i=0; i < inputs.length; i++)
-                    $(inputs[i]).find("paper-menu")[0].select(i);
+                this.async(function() {
+                    this.selectedFields = this._copy(this.fields);
 
-               //set info labels options
-                var labels = this.$.datalet_selection_labels.querySelectorAll("paper-textarea");
-                for (var i = 0; i < labels.length; i++)
-                    labels[i].value = this.dataletPreset[labels[i].label];
+                    var inputs = document.getElementsByTagName("paper-dropdown-menu");
+                    for (var i = 0; i < inputs.length; i++)
+                        $(inputs[i]).find("paper-menu")[0].select(i);
 
-                var labels = this.$.datalet_selection_labels.querySelectorAll("paper-input");
-                for (var i = 0; i < labels.length; i++)
-                    labels[i].value = this.dataletPreset[labels[i].label];
+                    //set info labels options
+                    var labels = this.$.datalet_selection_labels.querySelectorAll("paper-textarea");
+                    for (var i = 0; i < labels.length; i++)
+                        labels[i].value = this.dataletPreset[labels[i].label];
 
+                    var labels = this.$.datalet_selection_labels.querySelectorAll("paper-input");
+                    for (var i = 0; i < labels.length; i++)
+                        labels[i].value = this.dataletPreset[labels[i].label];
+                }, 300);
 
                 this.loadPreview = true;
                 this._loadDatalet(this.selectedFields);
@@ -461,6 +470,7 @@
                         var selection = inputs.selection;
                         inputs = [];
                         for (var i in this.fields)
+//                        for (var i = 0; i < Math.max(this.fields.length, 8); i++)//error
                             inputs.push({name: name + " " + i, description: description, selection: selection});
                     }
 
@@ -482,8 +492,12 @@
             _addInput : function(e){
                 var selectedFields = this._copy(this.selectedFields);
 
-                var index = $(e.target).parents("paper-dropdown-menu")[0].id;
-                selectedFields[index] = e.target.innerHTML.trim();
+//                var index = $(e.target).parents("paper-dropdown-menu")[0].id;
+//                selectedFields[index] = e.target.innerHTML.trim();
+
+                var ddl_index = $(e.target).parents("paper-dropdown-menu")[0].id;
+                var index = e.target.id;
+                selectedFields[ddl_index] = this.fields[index];
 
                 this.selectedFields = this._copy(selectedFields);
 
@@ -546,7 +560,16 @@
                 ComponentService.deep_url = this.deepUrl;
                 ComponentService.getComponent(dataletParams);
 
-//                this.async(function(){this.$.add_button.removeAttribute("disabled");}, 1000);
+//                console.log(this.params);
+
+
+//                this.async(function(){
+//                    if(this.$.datalet_selection_datalet_placeholder.children[1])
+//                        this.$.datalet_selection_datalet_placeholder.children[1].behavior.setParameters(this.params);
+//                    this.$.add_button.removeAttribute("disabled");
+//                }, 300);
+
+//                this.async(function(){this.$.add_button.removeAttribute("disabled");}, 300);
                 this.$.add_button.removeAttribute("disabled");
             },
 
@@ -557,7 +580,7 @@
                     if(this.selectedFields[i])
                         selectedFields.push(this.selectedFields[i]);
 
-                console.log(this.params);
+//                console.log(this.params);
 
                 var data = {
                     dataUrl : this.dataUrl,

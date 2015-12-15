@@ -50,7 +50,7 @@ Example:
 
 <dom-module name="barchart-datalet">
     <template>
-        <highcharts-datalet id="charts" data-url="{{dataUrl}}" fields="{{fields}}" data="{{data}}"></highcharts-datalet>
+        <highcharts-datalet id="charts" data-url="{{dataUrl}}" fields="{{fields}}" data="{{data}}" title="{{title}}" description="{{description}}"></highcharts-datalet>
     </template>
     <script>
 
@@ -117,7 +117,6 @@ Example:
             }
         };
 
-
         BarchartDatalet = Polymer({
             is: 'barchart-datalet',
 
@@ -176,7 +175,6 @@ Example:
              * @method ready
              */
             ready: function(){
-
                 this.behavior = $.extend(true, {}, HighchartsComponentBehavior, BarchartBehavior);
                 this.async(function(){this.behavior.init(this)},0);
             }
