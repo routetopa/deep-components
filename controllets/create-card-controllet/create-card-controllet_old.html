@@ -1,0 +1,307 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html"/>
+<link rel="import" href="../../bower_components/paper-material/paper-material.html"/>
+<link rel="import" href="../../bower_components/paper-fab/paper-fab.html"/>
+<link rel="import" href="../../bower_components/iron-icons/iron-icons.html"/>
+<link rel="import" href="../../bower_components/paper-input/paper-textarea.html"/>
+
+<link rel="import" href="../../datalets/preview-datalet/preview-datalet.html" />
+<link rel="import" href="../../controllets/paper-card-controllet/paper-card-controllet.html"/>
+
+<dom-module id="create-card-controllet">
+
+    <template>
+        <link rel="stylesheet" href="../shared_js/perfect-scrollbar/css/perfect-scrollbar.min.css">
+        <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
+        <style>
+            :host {
+                display: inline-block;
+                margin: 0 8px 8px ;
+                font-size: 14px;
+                text-align: justify;
+                line-height: 10px;
+                --paper-fab-background: var(--accent-color);
+                font-family: 'Roboto', sans-serif;
+                padding-bottom: 30px;
+                width: 100%;
+            }
+
+            paper-material {
+                background-color: white;
+                border-width: 1em;
+                padding: 5px;
+                margin-bottom: 20px;
+            }
+
+            paper-fab {
+                position: relative;
+                left: 90%;
+                --paper-fab-background:#2196F3;
+            }
+
+            #content ::content {
+                /*padding: 0 16px 8px;*/
+                padding: 0 16px 8px;
+                font-weight: 300;
+                color: var(--secondary-text-color);
+                line-height: 24px;
+                max-height: 400px;
+                position:relative;
+                overflow: auto;
+            }
+            ::content.buttons {
+                margin-top: 8px;
+            }
+            ::content paper-button, ::content paper-icon-button {
+                font-weight: 500;
+                color: var(--accent-color);
+            }
+
+            .avatar
+            {
+                display: inline-block;
+                height: 0.7em;
+                width: 0.7em;
+                border-radius: 50%;
+                background: var(--paper-blue-500);
+                color: white;
+                line-height: 2em;
+                font-size: 1.87em;
+                text-align: center;
+            }
+
+            .title
+            {
+                position: relative;
+                left: 0px;
+                /*top: 0.60vh;
+                margin-left: 20px;*/
+            }
+
+            .big
+            {
+                font-size: 1.37em;
+                color: var(--google-grey-500);
+            }
+
+            .medium
+            {
+                font-size: 1em;
+                padding-bottom: 0.5em;
+                color : #000000;
+                font-weight: bold;
+            }
+
+            .small
+            {
+                font-size: 0.8em;
+                padding-top: 10px;
+                color: var(--paper-blue-500);
+                font-weight: bold;
+            }
+
+            paper-textarea.custom_textarea{
+               /*max-width:40vw;*/
+            }
+
+            div.vertical{
+                margin: 20px;
+            }
+
+            ::content #card_preview .modify{
+                display: none;
+            }
+
+            ::content #card_preview .delete{
+                display: none;
+            }
+
+            ::content #card_preview .fullscreen{
+                display: none;
+            }
+
+
+        </style>
+
+        <div class="horizontal layout">
+
+            <div class="vertical layout" style="width: 60%;">
+
+                <div class="horizontal layout">
+                    <div class="avatar"></div>
+                    <div class="title">
+                        <div class="big">Title</div>
+                        <div class="small">This is the title for your new card. It'll be visualized in the bottom black section.</div>
+                    </div>
+                </div>
+
+                <paper-material animated elevation="2">
+                   <paper-textarea class="custom_textarea" id="cardTitle"
+                                                           label=""
+                                                           char-counter
+                                                           maxlength="25"
+                                                           rows="1"
+                                                           value="{{cardTitle}}">
+
+                   </paper-textarea>
+                </paper-material>
+
+                <template is="dom-if" if="{{checkType(type, 'link')}}">
+
+                    <div class="horizontal layout">
+                        <div class="avatar"></div>
+                        <div class="title">
+                            <div class="big">Link</div>
+                            <div class="small">This is the link you want to share.</div>
+                        </div>
+                    </div>
+
+                    <paper-material animated elevation="2">
+                        <paper-textarea class="custom_textarea" id="link"
+                                                                label=""
+                                                                auto-validate
+                                                                pattern="^(http[s]?:\\/\\/(www\\.)?|ftp:\\/\\/(www\\.)?|www\\.){1}([0-9A-Za-z-\\.@:%_\+~#=]+)+((\\.[a-zA-Z]{2,3})+)(/(.)*)?(\\?(.)*)?"
+                                                                error-message="Urls only!"
+                                                                value="{{link}}">
+
+                        </paper-textarea>
+                    </paper-material>
+
+                </template>
+
+
+                <template is="dom-if" if="{{checkType(type, 'text')}}">
+
+                    <div class="horizontal layout">
+                        <div class="avatar"></div>
+                        <div class="title">
+                            <div class="big">Text content</div>
+                            <div class="small">It's the text content of your card. It'll be visualize in the body(yellow top section).</div>
+                        </div>
+                    </div>
+
+                    <paper-material animated elevation="2">
+                        <paper-textarea class="custom_textarea" id="text"
+                                                                label=""
+                                                                char-counter
+                                                                max-rows="50"
+                                                                maxlength="1024"
+                                                                value="{{text}}">
+
+                        </paper-textarea>
+                    </paper-material>
+
+                </template>
+
+                <div class="horizontal layout">
+                    <div class="avatar"></div>
+                    <div class="title">
+                        <div class="big">Comment</div>
+                        <div class="small">This is a comment you'll see on the bottom of the card.</div>
+                    </div>
+                </div>
+
+                <paper-material animated elevation="2">
+                    <paper-textarea class="custom_textarea" id="comment"
+                                    label=""
+                                    char-counter
+                                    maxlength="100"
+                                    value="{{comment}}">
+
+                    </paper-textarea>
+                </paper-material>
+
+            </div>
+
+            <div class="vertical layout" style="width: 40%;">
+
+                <paper-fab mini icon="add-circle" on-click="_handleAddClick"></paper-fab>
+
+                <div id="card_preview"></div>
+            </div>
+
+
+        </div>
+
+    </template>
+
+    <script src="../shared_js/perfect-scrollbar/js/min/perfect-scrollbar.jquery.min.js"></script>
+
+    <script>
+        Polymer({
+            is: "create-card-controllet",
+            properties: {
+                type:{
+                    type: String,
+                    value: "text"
+                },
+
+                cardTitle:{
+                    type: String,
+                    value: "Title",
+                    observer : '_valueChanged'
+                },
+                text:{
+                    type: String,
+                    value: "Text content",
+                    observer : '_valueChanged'
+                },
+                content:{
+                    type: String,
+                    value: undefined,
+                    observer : '_valueChanged'
+                },
+                comment:{
+                    type: String,
+                    value: "comment",
+                    observer : '_valueChanged'
+                },
+
+                timer :{
+                    type: Number,
+                    value : 0
+                }
+            },
+
+            ready: function(){
+
+                this._valueChanged('','');
+            },
+
+
+            checkType: function(type, check){
+                return (type == check);
+            },
+
+            _handleAddClick: function(e){
+                this.fire('create-card-controllet_add-clicked', {data : this});
+            },
+
+            _valueChanged: function(oldvalue, newValue) {
+               var card = '<paper-card-controllet'   +
+                              ' class="grid-item"'    +
+                              ' width="300"'          +
+                              ' height="300"'         +
+                              ' card-type="'+ this.type    + '"' +
+                              ' comment="'+ this.comment + '"' +
+                              ' card-title="'+ this.cardTitle + '">';
+               if(this.type == 'link'){
+                   card += '<preview-datalet data-url="'+ this.link + '" url="'+ this.link + '"></preview-datalet>';
+               }else{
+                   card += this.text;
+               }
+
+               card += '</paper-card-controllet>';
+
+                clearTimeout (this.timer);
+                //Firefox stuff
+                var _this = this;
+                this.timer = setTimeout(function(){
+                    _this.$.card_preview.innerHTML = card;
+                }, 1000);
+
+
+            }
+        })
+    </script>
+
+</dom-module>
