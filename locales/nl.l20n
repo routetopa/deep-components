@@ -34,10 +34,16 @@
 <pieSeriesDescription "The chart series. Its values will be put on slice of each series.">
 <pieSizeDescription "The size for each series to create a concentric rings.">
 
-<bubbleCategoriesDescription "he chart categories. Its values will be put in the horizontal axis. You need one value for each series.">
+<bubbleCategoriesDescription "The chart categories. Its values will be put in the horizontal axis. You need one value for each series.">
 <bubbleYValuesDescription "The chart plots y values. Its values will be put in the vertical axis.">
 <bubbleZValuesDescription "The chart plots z value. Its values represent the size of the bubble.">
 <bubbleSeriesDescription "The chart series. Its values visualize multi- series bubbles chart.">
+
+<scatterCategoriesDescription "The chart categories. You need one value for each series.">
+<scatterXValuesDescription "The chart plots x values. Its values will be put in the horizontal axis.">
+<scatterYValuesDescription "The chart plots y value. Its values will be put in the vertical axis.">
+
+<heatmapCategoriesDescription "The chart categories. Its values will be put in the horizontal axis.">
 
 <LatitudeDescription "It is latitude of the points you want to show in the map.">
 <LongitudeDescription "It is longitude of the points you want to show in the map.">
