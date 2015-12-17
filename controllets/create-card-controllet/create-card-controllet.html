@@ -107,7 +107,7 @@
             <paper-material id="create_card_info" elevation="5">
                 <div class="input_header">BASE INFO</div>
 
-                <paper-input value="{{title}}" maxlength="32" label="title"></paper-input>
+                <paper-input value="{{cardTitle}}" maxlength="32" label="title"></paper-input>
 
                 <paper-input value="{{description}}" maxlength="100" label="description"></paper-input>
 
@@ -148,7 +148,7 @@
 
                 <template is="dom-if" if="{{_checkType(type, 'text')}}">
 
-                    <p id ="create_card_title">{{title}}</p>
+                    <p id ="create_card_title">{{cardTitle}}</p>
                     <p id ="create_card_description">{{description}}</p>
                     <p id ="create_card_text">{{text}}</p>
 
@@ -169,7 +169,7 @@
                     value: undefined//text or link
                 },
 
-                title:{//cardTitle
+                cardTitle:{
                     type: String,
                     value: ""
                 },
@@ -226,7 +226,7 @@
             },
 
             _addCard: function(){
-                this.fire('create-card-controllet_add-clicked', {data : this});//create-card-controllet_data
+                this.fire('create-card-controllet_data', {data : this});
             },
 
             _resize : function(){
