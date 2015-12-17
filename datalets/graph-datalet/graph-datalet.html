@@ -180,9 +180,19 @@ Example:
                             .attr("y","0%")
                             .attr("width","100%")
                             .attr("height","100%")
-                            .attr("style","-webkit-border-radius: 20px;")
                             .append("feImage")
-                               .attr("xlink:href", graph.nodes[i].image);
+                               .attr("xlink:href", graph.nodes[i].image)
+                               /*test*/
+                               .attr("result", "img")
+                            .append("feComposite")
+                                .attr("operator","in")
+                                .attr("in","img")
+                                .attr("in2","SourceGraphic")
+                                .attr("result","clip")
+                            .append("feBlend")
+                                .attr("mode","multiply")
+                                .attr("in","SourceGraphic")
+                                .attr("in2","clip");
                 }
                 //end pezzotto
 
@@ -203,7 +213,8 @@ Example:
 
                 gnodes = this.svg.selectAll(".node").data(graph.nodes).enter().append("g").attr("class", function (t) {
                                                                                                 return t.fixed ? "node fixed" : "node"
-                                                                                            }).attr("name", function (t) {
+                                                                                            })
+                                                                                            .attr("name", function (t) {
                                                                                                 return t.name ? t.name.split(" ").join("_").toLowerCase() : ""
                                                                                             }).on("mouseover", this.mouseover)
                                                                                               .on("mouseout", this.mouseout)
@@ -214,7 +225,8 @@ Example:
                                                                                                 })
                                                                                                 .attr("class", function (t) {
                                                                                                     return t.fixed ? "" : "drag"
-                                                                                                }).attr("r", function (t) {
+                                                                                                })
+                                                                                                .attr("r", function (t) {
                                                                                                     return t.r ? t.r : 15
                                                                                                 })
                                                                                                 .attr("style", function (t) {
@@ -231,7 +243,6 @@ Example:
                                                                                                         default:
                                                                                                             t.color = "#333";
                                                                                                     }
-                                                                                                    //return t.color ? "fill:" + t.color : !1 + "; stroke:white"
                                                                                                     return "fill:" + t.color + "; stroke:white"
                                                                                                 });
 
