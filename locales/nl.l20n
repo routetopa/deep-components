@@ -17,7 +17,7 @@
 <baseInfo "BASE INFO">
 <comment "COMMENT">
 <commentLabel "comment (max 100 characters)">
-<dataletPreview "DATALET PREVIEW">
+<dataletPreview "PREVIEW">
 <addDatalet "ADD">
 <modifyDatalet "MODIFY">
 

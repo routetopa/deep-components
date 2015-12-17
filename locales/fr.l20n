@@ -17,7 +17,7 @@
 <baseInfo "INFORMATION DE BASE">
 <comment "COMMENTAIRES">
 <commentLabel "Commentaires (maximum 100 caractères) ">
-<dataletPreview "PREVISUALISATION  ">
+<dataletPreview "PREVISUALISATION">
 <addDatalet "AJOUTER">
 <modifyDatalet "MODIFIER">
 
@@ -34,8 +34,8 @@
 <pieSeriesDescription "Série de graphiques. Ses valeurs seront intégrées au sein des segments de chaque série.">
 <pieSizeDescription "Taille de chaque série afin de créer un anneau concentrique.">
 
-<bubbleCategoriesDescription "Catégories de graphique. Ses valeurs seront insérées dans l’axe horizontal. Vous devez insérer une valeur pour chaque série">
-<bubbleYValuesDescription "Le graphique présente les valeurs Y. Ses valeurs seront insérées dans l’axe vertical..">
+<bubbleCategoriesDescription "Catégories de graphique. Ses valeurs seront insérées dans l’axe horizontal. Vous devez insérer une valeur pour chaque série.">
+<bubbleYValuesDescription "Le graphique présente les valeurs Y. Ses valeurs seront insérées dans l’axe vertical.">
 <bubbleZValuesDescription "Le graphique présente les valeurs Z. Ses valeurs représentent la taille des bulles.">
 <bubbleSeriesDescription "The chart series. Its values visualize multi- series bubbles chart.">
 
