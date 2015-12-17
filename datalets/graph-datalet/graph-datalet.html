@@ -74,6 +74,9 @@ Example:
                 --paper-fab-background:#9e9e9e;
                 z-index: 1001;
             }
+            #dialog_content{
+                padding : 10px;
+            }
 
         </style>
 
@@ -84,7 +87,7 @@ Example:
         <paper-dialog id="dialog">
             <paper-fab id="close" mini icon="close" on-click="_onCloseClick"></paper-fab>
             <h2 id="dialog_title"></h2>
-            <paper-dialog-scrollable id="dialog_content">cos</paper-dialog-scrollable>
+            <div id="dialog_content">cos</div>
         </paper-dialog>
 
     </template>
@@ -203,6 +206,8 @@ Example:
 
                 this.svg.selectAll(".link").attr("style", function(t){
                     return "stroke:" + t.color
+                }).attr("style", function(t){
+                    return "stroke-width:" + (t.size ? t.size : 1.0) + "px";
                 });
 
                 gnodes = this.svg.selectAll(".node").data(graph.nodes).enter().append("g").attr("class", function (t) {
@@ -225,7 +230,10 @@ Example:
                                                                                                     return t.color ? "fill:" + t.color : !1 + "; stroke:white"
                                                                                                 });
 
-                d3.selectAll('circle').attr("filter", function(t){return  t.image ? 'url(#filter1)' : ""});
+                d3.selectAll('circle').attr("filter", function(t){return  t.image ? 'url(#filter1)' : ""})
+                                         .selectAll('feImage')
+                                            .attr("xlink:href", function(t){
+                            return t.image ? t.image : "http://icons.iconarchive.com/icons/hopstarter/soft-scraps/256/User-Executive-Green-icon.png"});
 
                 //d3.selectAll(".drag").call(force.drag), svg.selectAll("g.fixed").call(text);
                 d3.selectAll(".drag").call(force.drag), this.svg.selectAll("g.node").call(this.text);
@@ -355,6 +363,7 @@ Example:
                 g.nodes[0].y = this.height / 2;
                 this.buildGraph(g);*/
 
+                var json = JSON.stringify(this.data);
                 var g = this.data;
                 g.nodes[0].x = this.width / 2;
                 g.nodes[0].y = this.height / 8;

@@ -1,5 +1,5 @@
 circle{
-    stroke-width: 2.5px;
+    stroke-width: 1.5px;
 }
 
 .text {
@@ -11,8 +11,8 @@ circle{
     cursor: pointer;
     fill: #fff;
     stroke: #FFFFFF;
-    stroke-width: 4.5px
-    z-index: 100;
+    stroke-width: 2.5px
+    z-index: 10;
 }
 
 .node.fixed {
