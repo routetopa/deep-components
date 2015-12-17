@@ -432,42 +432,44 @@ Example:
             },
 
             tick : function () {
+                if(_this.hull != undefined) {
+                    if (!_this.hull.empty()) {
+                        _this.hull.data(_this.convexHulls)
+                                .style("fill", function (d) {
+                                    return _this.fill(d.sentiment);
+                                })
+                                .attr("d", _this.drawCluster);
+                    }
 
-                if (!_this.hull.empty()) {
-                    _this.hull.data(_this.convexHulls)
-                              .style("fill", function(d) {
-                                       return _this.fill(d.sentiment);
-                                    })
-                              .attr("d", _this.drawCluster);
+
+                    d3.selectAll("g foreignObject").attr("x", function (t) {
+                        return t.x + (t.r ? 0.8 * t.r : 15)
+                    }).attr("y", function (t) {
+                        return t.y - 20
+                    });
+
+                    d3.selectAll("#logo text").attr("x", function (t) {
+                        return t.x + .7 * (t.r ? t.r : 15)
+                    }).attr("y", function (t) {
+                        return t.y
+                    });
+
+                    _this.svgNodes.attr("cx", function (t) {
+                        return t.x = Math.max(25, Math.min(_this.width - 50, t.x))
+                    }).attr("cy", function (t) {
+                        return t.y = Math.max(8, Math.min(600, t.y))
+                    });
+
+                    _this.svgLinks.attr("x1", function (t) {
+                        return t.source.x
+                    }).attr("y1", function (t) {
+                        return t.source.y
+                    }).attr("x2", function (t) {
+                        return t.target.x
+                    }).attr("y2", function (t) {
+                        return t.target.y
+                    });
                 }
-
-                d3.selectAll("g foreignObject").attr("x", function (t) {
-                    return t.x + (t.r ? 0.8 * t.r : 15)
-                }).attr("y", function (t) {
-                    return t.y - 20
-                });
-
-                d3.selectAll("#logo text").attr("x", function (t) {
-                    return t.x + .7 * (t.r ? t.r : 15)
-                }).attr("y", function (t) {
-                    return t.y
-                });
-
-                _this.svgNodes.attr("cx", function (t) {
-                    return t.x = Math.max(25, Math.min(_this.width - 50, t.x))
-                }).attr("cy", function (t) {
-                    return t.y = Math.max(8, Math.min(600, t.y))
-                });
-
-                _this.svgLinks.attr("x1", function (t) {
-                    return t.source.x
-                }).attr("y1", function (t) {
-                    return t.source.y
-                }).attr("x2", function (t) {
-                    return t.target.x
-                }).attr("y2", function (t) {
-                    return t.target.y
-                });
 
             },
 

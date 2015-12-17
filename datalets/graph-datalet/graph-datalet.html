@@ -166,36 +166,24 @@ Example:
                         .attr("width", width)
                         .attr("height", height);
 
-                //pezzotto
-                this.svg.append("filter")
-                            .attr("id","filter1")
-                            .attr("x","0%")
-                            .attr("y","0%")
-                            .attr("width","100%")
-                            .attr("height","100%")
-                        .append("feImage")
-                            .attr("xlink:href","http://icons.iconarchive.com/icons/hopstarter/soft-scraps/256/User-Executive-Green-icon.png");
-
-                /*this.svg.append("defs")
-                        .append("pattern")
-                            .attr("id","urlimage")
-                            //.attr("patternUnits","userSpaceOnUse")
-                            .attr("width","100%")
-                            .attr("height","100%")
-                        .append("image")
-                            .attr("xlink:href","http://lorempixel.com/400/200")
-                            //.attr("patternUnits","userSpaceOnUse")
-                            .attr("x","0%")
-                            .attr("y","0%")
-                            .attr("width","100%")
-                            .attr("height","100%");*/
-                //end pezzotto
-
 
                 var graph = {};
 
                 graph.nodes = t.nodes;
                 graph.links = t.links;
+
+                //pezzotto
+                for(var i =0; i < graph.nodes.length; i++){
+                    this.svg.append("filter" )
+                            .attr("id","filter_" + graph.nodes[i].id)
+                            .attr("x","0%")
+                            .attr("y","0%")
+                            .attr("width","100%")
+                            .attr("height","100%")
+                            .append("feImage")
+                               .attr("xlink:href", graph.nodes[i].image);
+                }
+                //end pezzotto
 
                 force = d3.layout.force().nodes(graph.nodes).links(graph.links).size([this.width, this.height]).charge(-1e3).friction(.7).linkDistance(function (t)
                 {
@@ -204,11 +192,13 @@ Example:
 
                 glinks = this.svg.selectAll(".link").data(graph.links).enter().append("line").attr("class", "link");
 
-                this.svg.selectAll(".link").attr("style", function(t){
-                    return "stroke:" + t.color
-                }).attr("style", function(t){
-                    return "stroke-width:" + (t.size ? t.size : 1.0) + "px";
-                });
+                this.svg.selectAll(".link")
+                        .attr("style", function(t){
+                            return "stroke:" + t.color
+                        })
+                        .attr("style", function(t){
+                            return "stroke-width:" + (t.size ? t.size : 1.0) + "px";
+                        });
 
                 gnodes = this.svg.selectAll(".node").data(graph.nodes).enter().append("g").attr("class", function (t) {
                                                                                                 return t.fixed ? "node fixed" : "node"
@@ -227,13 +217,24 @@ Example:
                                                                                                     return t.r ? t.r : 15
                                                                                                 })
                                                                                                 .attr("style", function (t) {
-                                                                                                    return t.color ? "fill:" + t.color : !1 + "; stroke:white"
+                                                                                                    switch(parseInt(t.sentiment)){
+                                                                                                        case 1 :
+                                                                                                            t.color = "#1F77B4";
+                                                                                                            break;
+                                                                                                        case 2 :
+                                                                                                            t.color = "#2CA02C";
+                                                                                                            break;
+                                                                                                        case 3:
+                                                                                                            t.color = "#D62728";
+                                                                                                            break;
+                                                                                                        default:
+                                                                                                            t.color = "#333";
+                                                                                                    }
+                                                                                                    //return t.color ? "fill:" + t.color : !1 + "; stroke:white"
+                                                                                                    return "fill:" + t.color + "; stroke:white"
                                                                                                 });
 
-                d3.selectAll('circle').attr("filter", function(t){return  t.image ? 'url(#filter1)' : ""})
-                                         .selectAll('feImage')
-                                            .attr("xlink:href", function(t){
-                            return t.image ? t.image : "http://icons.iconarchive.com/icons/hopstarter/soft-scraps/256/User-Executive-Green-icon.png"});
+                d3.selectAll('circle').attr("filter", function(t){return  t.image ? 'url(#filter_' + t.id +')' : ""});
 
                 //d3.selectAll(".drag").call(force.drag), svg.selectAll("g.fixed").call(text);
                 d3.selectAll(".drag").call(force.drag), this.svg.selectAll("g.node").call(this.text);
