@@ -150,7 +150,7 @@ Example:
                 //set initial zoom
                 scale = (1.0);
                 //translate = [(width-scale*width)/2, ((height-scale*height)/4)];
-                translate = [0, 0];
+                translate = [100, 100];
                 this.svg.transition()
                         .duration(750)
                         .attr("transform", "translate(" + translate + ")scale(" + scale +    ")")
@@ -174,25 +174,27 @@ Example:
 
                 //pezzotto
                 for(var i =0; i < graph.nodes.length; i++){
-                    this.svg.append("filter" )
+                    /*this.svg.append("filter")
                             .attr("id","filter_" + graph.nodes[i].id)
                             .attr("x","0%")
                             .attr("y","0%")
                             .attr("width","100%")
                             .attr("height","100%")
                             .append("feImage")
-                               .attr("xlink:href", graph.nodes[i].image)
-                               /*test*/
-                               .attr("result", "img")
-                            .append("feComposite")
-                                .attr("operator","in")
-                                .attr("in","img")
-                                .attr("in2","SourceGraphic")
-                                .attr("result","clip")
-                            .append("feBlend")
-                                .attr("mode","multiply")
-                                .attr("in","SourceGraphic")
-                                .attr("in2","clip");
+                               .attr("xlink:href", graph.nodes[i].image);*/
+
+                    this.svg.append("defs")
+                               .append("pattern")
+                                  .attr("id","image_" + graph.nodes[i].id)
+                                  .attr("patternUnits","objectBoundingBox")
+                                  .attr("height","40")
+                                  .attr("width","40")
+                                  .append("image")
+                                     .attr("x","0")
+                                     .attr("y","0")
+                                     .attr("height","30")
+                                     .attr("width","30")
+                                     .attr("xlink:href", graph.nodes[i].image);
                 }
                 //end pezzotto
 
@@ -246,7 +248,9 @@ Example:
                                                                                                     return "fill:" + t.color + "; stroke:white"
                                                                                                 });
 
-                d3.selectAll('circle').attr("filter", function(t){return  t.image ? 'url(#filter_' + t.id +')' : ""});
+                //d3.selectAll('circle').attr("filter", function(t){return  t.image ? 'url(#filter_' + t.id +')' : ""});
+                d3.selectAll('circle').attr("style", function(t){
+                    return  "fill :" + (t.image ? 'url(#image_' + t.id +')' : t.color)});
 
                 //d3.selectAll(".drag").call(force.drag), svg.selectAll("g.fixed").call(text);
                 d3.selectAll(".drag").call(force.drag), this.svg.selectAll("g.node").call(this.text);
@@ -302,10 +306,10 @@ Example:
                 })
             },
             mouseover : function (t) {
-                d3.select(this).selectAll("circle").transition().duration(600).ease("elastic").attr("r", function (t) {
-                    //return 1 == t.fixed ? 1.4 * t.r : 15
-                    return 1 == t.fixed ? 1.4 * t.r : t.r + 10;
-                });
+                d3.select(this).selectAll("circle").transition().duration(600).ease("elastic")
+                   .attr("r", function (t) {
+                      return (!t.image) ? 1 == t.fixed ? 1.4 * t.r : t.r + 10 : t.r;
+                   });
 
                 _this.$.dialog.close();
                 _this.$.dialog_title.innerHTML   = t.name;
@@ -315,9 +319,11 @@ Example:
             },
 
             mouseout : function () {
-                d3.select(this).selectAll("text").style("visibility", "hidden"), d3.select(this).selectAll("circle").transition().duration(400).attr("r", function (t) {
-                    return t.r ? t.r : 15
-                });
+                d3.select(this).selectAll("text").style("visibility", "hidden"), d3.select(this).selectAll("circle").transition().duration(400)
+                   .attr("r", function (t) {
+                        return t.r ? t.r : 15
+                    });
+
                 _this.$.dialog.close();
             },
 
