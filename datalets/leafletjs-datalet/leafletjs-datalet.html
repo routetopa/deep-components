@@ -52,7 +52,7 @@ Example:
     <template>
         <link rel="stylesheet" href="leafletsjs/leaflet.css" />
         <style>
-            #leafletjs { height: 600px; }
+            #leafletjs {height: 600px;}
         </style>
 
         <div id="leafletjs"></div>
@@ -73,32 +73,45 @@ Example:
              * @method transformData
              */
             presentData: function(){
-            	            	             
-				var coordinates = [];
-                var isArray = (this.data[0].data[0].constructor === Array) ? true : false;
 
-                for(var i=0; i<this.data[0].data.length; i++)
-                {
-                    if(isArray)
-                        coordinates.push([parseFloat(this.data[0].data[i][0]), parseFloat(this.data[0].data[i][1])]);
-                    else
-                        coordinates.push([parseFloat(this.data[0].data[i]), parseFloat(this.data[1].data[i])]);
+                var t = this;
+                this._component.map = L.map(this._component.$.leafletjs).setView([0, 0], 13, {reset:true});
 
-                    var marker = L.marker([coordinates[i][0], coordinates[i][1]]).addTo(this._component.map);
+                L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                    maxZoom: 18,
+                    attribution: 'Map data © <a href="http://openstreetmap.org">OpenStreetMap</a> contributors'
+                }).addTo(this._component.map);
 
-                    if(this.data.length > 2)
+                setTimeout(function() {
+
+                    L.Icon.Default.imagePath = 'http://services.routetopa.eu/DEEalerProvider/COMPONENTS/datalets/leafletjs-datalet/leafletsjs/images';
+
+                    var coordinates = [];
+                    var isArray = t.data[0].data[0].constructor === Array;
+
+                    for(var i=0; i<t.data[0].data.length; i++)
                     {
-                        if(this.data[this.data.length - 1].data[i].match(new RegExp("^(http[s]?:\\/\\/(www\\.)?|ftp:\\/\\/(www\\.)?|www\\.){1}([0-9A-Za-z-\\.@:%_\+~#=]+)+((\\.[a-zA-Z]{2,3})+)(/(.)*)?(\\?(.)*)?")))
-                           var popup = L.popup().setContent('<image height="100" width="100" src="' + this.data[this.data.length - 1].data[i] + '" />');
+                        if(isArray)
+                            coordinates.push([parseFloat(t.data[0].data[i][0]), parseFloat(t.data[0].data[i][1])]);
                         else
-                            var popup = L.popup().setContent('<span>' + this.data[this.data.length - 1].data[i] + '</span>');
-                        marker.bindPopup(popup);
-                    }
-                }
+                            coordinates.push([parseFloat(t.data[0].data[i]), parseFloat(t.data[1].data[i])]);
 
-                this._component.map.invalidateSize();
-                this._component.map.fitBounds(coordinates);            	
-            	
+                        var marker = L.marker([coordinates[i][0], coordinates[i][1]]).addTo(t._component.map);
+
+                        if(t.data.length > 2)
+                        {
+                            if(t.data[t.data.length - 1].data[i].match(new RegExp("^(http[s]?:\\/\\/(www\\.)?|ftp:\\/\\/(www\\.)?|www\\.){1}([0-9A-Za-z-\\.@:%_\+~#=]+)+((\\.[a-zA-Z]{2,3})+)(/(.)*)?(\\?(.)*)?")))
+                               var popup = L.popup().setContent('<image height="100" width="100" src="' + t.data[t.data.length - 1].data[i] + '" />');
+                            else
+                                var popup = L.popup().setContent('<span>' + t.data[t.data.length - 1].data[i] + '</span>');
+                            marker.bindPopup(popup);
+                        }
+                    }
+
+                    t._component.map._onResize();
+                    t._component.map.invalidateSize(false);
+                    t._component.map.fitBounds(coordinates);
+                }, 1000)
             }
         };
 
@@ -148,19 +161,9 @@ Example:
              *
              * @method ready
              */
-            ready: function(){
-
-				this.map = L.map(this.$.leafletjs).setView([0, 0], 13);
-
-                L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                    maxZoom: 18,
-                    attribution: 'Map data © <a href="http://openstreetmap.org">OpenStreetMap</a> contributors'
-                }).addTo(this.map);
-
-                L.Icon.Default.imagePath = 'http://services.routetopa.eu/DEEalerProvider/COMPONENTS/datalets/leafletjs-datalet/leafletsjs/images';
-
+            attached: function(){
                 this.behavior =  $.extend(true, {}, BaseDataletBehavior, WorkcycleBehavior, AjaxJsonJsonPathBehavior, leafletjsBehavior);
-                this.async(function(){this.behavior.init(this)},0);
+                this.behavior.init(this);
             }
         });
     </script>
