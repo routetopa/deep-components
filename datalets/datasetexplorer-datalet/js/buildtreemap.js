@@ -2,7 +2,7 @@
  * Created by Utente on 17/07/2015.
  */
 
-function build(root, place_holder, select_listener, width, height) {
+function build(root, meta, place_holder, select_listener, width, height) {
 
     var plwidth = width >= 0 ? width : $("#" + place_holder).width(),
         plheight = height >= 0 ? height : $("#" + place_holder).height();
@@ -223,6 +223,17 @@ function build(root, place_holder, select_listener, width, height) {
         text.call(wrap);
     }
 
+    function checkProviderName(name) {
+        console.log(name);
+        if (name.substr(0, 2) == 'p:') {
+            console.log("in");
+            var pid = name.substr(2);
+            name = meta[pid].title;
+        }
+        console.log(name);
+        return name;
+    }
+
     function wrap(d) {
         var wwidth = width;
         var hheight = height;
@@ -230,7 +241,7 @@ function build(root, place_holder, select_listener, width, height) {
         d.each(function(){
             var text = d3.select(this),
                 d = text[0][0].__data__,
-                name = d.name.trim(),
+                name = checkProviderName(d.name.trim());
                 words = name.search(/\s+/) >= 0 ? name.split(/\s+/).reverse() : [name],
                 word = words.pop(),
                 line = [word],
