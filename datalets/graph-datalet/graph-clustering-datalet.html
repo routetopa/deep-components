@@ -1,0 +1,585 @@
+<!--
+@license
+    The MIT License (MIT)
+
+    Copyright (c) 2015 Dipartimento di Informatica - Università di Salerno - Italy
+
+    Permission is hereby granted, free of charge, to any person obtaining a copy
+    of this software and associated documentation files (the "Software"), to deal
+    in the Software without restriction, including without limitation the rights
+    to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+    copies of the Software, and to permit persons to whom the Software is
+    furnished to do so, subject to the following conditions:
+
+    The above copyright notice and this permission notice shall be included in
+    all copies or substantial portions of the Software.
+
+    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+    IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+    FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+    AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+    LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+    THE SOFTWARE.
+-->
+
+<!--
+* Developed by :
+* ROUTE-TO-PA Project - grant No 645860. - www.routetopa.eu
+*
+-->
+
+<link rel="import" href="../base-datalet/base-datalet.html">
+<link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout.html">
+<link rel="import" href="../../bower_components/paper-dialog/paper-dialog.html">
+<link rel="import" href="../../bower_components/paper-fab/paper-fab.html">
+
+<!--
+`preview-datalet` is a datalet that allow user to preview the content of a web page. It creates a thumbnail of the site using the data-url attribute passed as input.
+
+Example:
+
+    <preview-datalet data-url="http://spod.routetopa.eu"
+    </preview-datalet>
+
+
+@element preview-datalet
+@status beta
+@homepage
+@group datalets
+-->
+
+<dom-module id="graph-clustering-datalet">
+    <template>
+
+        <link rel="stylesheet" href="static/css/graphClusteringStyle.css">
+
+        <style is="custom-style">
+
+            #dialog{
+                position: absolute;
+                padding: 20px;
+                top: 20px;
+                right:5%;
+            }
+
+            #close{
+                position: absolute;
+                top: -20px;
+                right: 3px;
+                --iron-icon-height: 20px;
+                --iron-icon-width: 20px;
+                width: 24px;
+                height: 24px;
+                --paper-fab-background:#9e9e9e;
+                z-index: 1001;
+            }
+
+        </style>
+
+        <div style="align-content: center;overflow: visible" id="graph_content">
+            <svg id="sbiricuda"></svg>
+        </div>
+
+        <paper-dialog id="dialog">
+            <paper-fab id="close" mini icon="close" on-click="_onCloseClick"></paper-fab>
+            <h2 id="dialog_title"></h2>
+            <paper-dialog-scrollable id="dialog_content">cos</paper-dialog-scrollable>
+        </paper-dialog>
+
+    </template>
+
+    <script src="static/js/d3.v3.js"></script>
+
+    <script>
+        _this  = null;
+
+        var dr = 4,      // default point radius
+            off = 15,    // cluster hull offset
+            expand = {}, // expanded clusters
+            data, net, force, hullg, hull, linkg, link, nodeg, node;
+
+
+        var fill = d3.scale.category20();
+        var curve = d3.svg.line()
+                .interpolate("cardinal-closed")
+                .tension(.85);
+
+        Polymer({
+            is : 'graph-clustering-datalet',
+
+            properties: {
+                /**
+                 * It's the url for the preview
+                 *
+                 * @attribute url
+                 * @type Strig
+                 * @default ''
+                 */
+                width: {
+                    type: Number,
+                    value: undefined
+                },
+
+                height: {
+                    type: Number,
+                    type: undefined
+                },
+
+                svg: {
+                    type: Object,
+                    value: undefined
+                },
+
+                feelings: {
+                    type: Array,
+                    values: ["Agree", "Neutral", "Not agree"]
+                },
+
+                gnodes : {
+                    type : Array,
+                    value : []
+                },
+
+                glinks : {
+                    type :Array,
+                    value : []
+                },
+
+                graph : {
+                   type : Object,
+                   value : {}
+                },
+
+                prev_selected_node : {
+                    type : Object,
+                    value : null
+                }
+            },
+
+           /* fill : function(group){
+                d3.scale.category20();
+            },*/
+
+            noop : function() { return false; },
+
+            nodeid : function(n) {
+                return n.size ? "_g_"+n.group : n.name;
+            },
+
+            linkid: function(l) {
+                var u = _this.nodeid(l.source),
+                    v = _this.nodeid(l.target);
+                return u<v ? u+"|"+v : v+"|"+u;
+            },
+
+            getGroup: function(n) {
+                return n.group;
+            },
+
+            // constructs the network to visualize
+            network : function(prev, index, expand) {
+                expand = expand || {};
+                var gm = {},    // group map
+                        nm = {},    // node map
+                        lm = {},    // link map
+                        gn = {},    // previous group nodes
+                        gc = {},    // previous group centroids
+                        nodes = [], // output nodes
+                        links = []; // output links
+
+                // process previous nodes for reuse or centroid calculation
+                if (prev) {
+                    prev.nodes.forEach(function(n) {
+                        var i = index(n), o;
+                        if (n.size > 0) {
+                            gn[i] = n;
+                            n.size = 0;
+                        } else {
+                            o = gc[i] || (gc[i] = {x:0,y:0,count:0});
+                            o.x += n.x;
+                            o.y += n.y;
+                            o.count += 1;
+                        }
+                    });
+                }
+
+                // determine nodes
+                for (var k=0; k < this.graph.nodes.length; ++k) {
+                    var n = this.graph.nodes[k],
+                            i = index(n),
+                            l = gm[i] || (gm[i]=gn[i]) || (gm[i]={group:i, size:0, nodes:[]});
+
+                    if (expand[i]) {
+                        // the node should be directly visible
+                        nm[n.name] = nodes.length;
+                        nodes.push(n);
+                        if (gn[i]) {
+                            // place new nodes at cluster location (plus jitter)
+                            n.x = gn[i].x + Math.random();
+                            n.y = gn[i].y + Math.random();
+                        }
+                    } else {
+                        // the node is part of a collapsed cluster
+                        if (l.size == 0) {
+                            // if new cluster, add to set and position at centroid of leaf nodes
+                            nm[i] = nodes.length;
+                            nodes.push(l);
+                            if (gc[i]) {
+                                l.x = gc[i].x / gc[i].count;
+                                l.y = gc[i].y / gc[i].count;
+                            }
+                        }
+                        l.nodes.push(n);
+                    }
+                    // always count group size as we also use it to tweak the force graph strengths/distances
+                    l.size += 1;
+                    n.group_data = l;
+                }
+
+                for (i in gm) { gm[i].link_count = 0; }
+
+                // determine links
+                for (k=0; k<this.graph.links.length; ++k) {
+                    var e = this.graph.links[k],
+                            u = index(e.source),
+                            v = index(e.target);
+                    if (u != v) {
+                        gm[u].link_count++;
+                        gm[v].link_count++;
+                    }
+                    u = expand[u] ? nm[e.source.name] : nm[u];
+                    v = expand[v] ? nm[e.target.name] : nm[v];
+                    var i = (u<v ? u+"|"+v : v+"|"+u),
+                            l = lm[i] || (lm[i] = {source:u, target:v, size:0});
+                    l.size += 1;
+                }
+                for (i in lm) { links.push(lm[i]); }
+
+                return {nodes: nodes, links: links};
+            },
+
+            // constructs the network to visualize
+
+            convexHulls : function(nodes, index, offset) {
+                var hulls = {};
+
+                // create point sets
+                for (var k=0; k<nodes.length; ++k) {
+                    var n = nodes[k];
+                    if (n.size) continue;
+                    var i = index(n),
+                            l = hulls[i] || (hulls[i] = []);
+                    l.push([n.x-offset, n.y-offset]);
+                    l.push([n.x-offset, n.y+offset]);
+                    l.push([n.x+offset, n.y-offset]);
+                    l.push([n.x+offset, n.y+offset]);
+                }
+
+                // create convex hulls
+                var hullset = [];
+                for (i in hulls) {
+                    hullset.push({group: i, path: d3.geom.hull(hulls[i])});
+                }
+                return hullset;
+            },
+
+            drawCluster : function(d) {
+                return curve(d.path); // 0.8
+            },
+
+            init : function() {
+                if (force) force.stop();
+
+                net = this.network(net, this.getGroup, expand);
+
+                force = d3.layout.force()
+                        .nodes(net.nodes)
+                        .links(net.links)
+                        .size([this.width, this.height])
+                        .linkDistance(function(l, i) {
+                            var n1 = l.source, n2 = l.target;
+                            // larger distance for bigger groups:
+                            // both between single nodes and _other_ groups (where size of own node group still counts),
+                            // and between two group nodes.
+                            //
+                            // reduce distance for groups with very few outer links,
+                            // again both in expanded and grouped form, i.e. between individual nodes of a group and
+                            // nodes of another group or other group node or between two group nodes.
+                            //
+                            // The latter was done to keep the single-link groups ('blue', rose, ...) close.
+                            return 30 +
+                                    Math.min(20 * Math.min((n1.size || (n1.group != n2.group ? n1.group_data.size : 0)),
+                                                    (n2.size || (n1.group != n2.group ? n2.group_data.size : 0))),
+                                            -30 +
+                                            30 * Math.min((n1.link_count || (n1.group != n2.group ? n1.group_data.link_count : 0)),
+                                                    (n2.link_count || (n1.group != n2.group ? n2.group_data.link_count : 0))),
+                                            100);
+                            //return 150;
+                        })
+                        .linkStrength(function(l, i) {
+                            return 1;
+                        })
+                        .gravity(0.05)   // gravity+charge tweaked to ensure good 'grouped' view (e.g. green group not smack between blue&orange, ...
+                        .charge(-600)    // ... charge is important to turn single-linked groups to the outside
+                        .friction(0.5)   // friction adjusted to get dampened display: less bouncy bouncy ball [Swedish Chef, anyone?]
+                        .start();
+
+                hullg.selectAll("path.hull").remove();
+                hull = hullg.selectAll("path.hull")
+                        .data(this.convexHulls(net.nodes, this.getGroup, off))
+                        .enter().append("path")
+                        .attr("class", "hull")
+                        .attr("d", this.drawCluster)
+                        .style("fill", function(d) { return fill(d.group); })
+                        .on("click", function(d) {
+                            console.log("hull click", d, arguments, this, expand[d.group]);
+                            expand[d.group] = false; _this.init();
+                        });
+
+                link = linkg.selectAll("line.link").data(net.links, this.linkid);
+                link.exit().remove();
+                link.enter().append("line")
+                        .attr("class", "link")
+                        .attr("x1", function(d) { return d.source.x; })
+                        .attr("y1", function(d) { return d.source.y; })
+                        .attr("x2", function(d) { return d.target.x; })
+                        .attr("y2", function(d) { return d.target.y; })
+                        .attr("style", function(t){ return "stroke:" + t.color })
+                        .style("stroke-width", function(d) { return d.size || 1; });
+
+
+                node = nodeg.selectAll("circle.node").data(net.nodes, this.nodeid);
+                node.exit().remove();
+                node.enter().append("circle")
+                    // if (d.size) -- d.size > 0 when d is a group node.
+                        .attr("class", function(d) { return "node" + (d.size?"":" leaf"); })
+                        .attr("r", function(d) { return d.size ? d.size + dr : dr+1; })
+                        //.attr("r", function (t) { return t.r;})
+                        .attr("cx", function(d) { return d.x; })
+                        .attr("cy", function(d) { return d.y; })
+                        .attr("id", function(d){ return d.id; })
+                        //.attr("style", function (t) { return t.color ? "fill:" + t.color : !1 + "; stroke:white" })
+                        .style("fill", function(d) { return fill(d.group); })
+                        .on("mouseover", this.mouseover)
+                        .on("mouseout", this.mouseout)
+                        .on("click", this.active)
+                        .on("click", function(d) {
+                            //console.log("node click", d, arguments, this, expand[d.group]);
+                            expand[d.group] = !expand[d.group];
+                            _this.init();
+                        });
+
+                node.call(force.drag);
+
+                force.on("tick", function() {
+                    if (!hull.empty()) {
+                        hull.data(_this.convexHulls(net.nodes, _this.getGroup, off))
+                                .attr("d", _this.drawCluster);
+                    }
+
+                    link.attr("x1", function(d) { return d.source.x; })
+                            .attr("y1", function(d) { return d.source.y; })
+                            .attr("x2", function(d) { return d.target.x; })
+                            .attr("y2", function(d) { return d.target.y; });
+
+                    node.attr("cx", function(d) { return d.x; })
+                            .attr("cy", function(d) { return d.y; });
+                });
+            },
+
+            buildGraph: function (){
+
+                    this.svg = this.svg.append("g")
+                            .call(d3.behavior.zoom().scaleExtent([.25, 20]).on("zoom", this.zoom))
+                            .append("g");
+
+                    //set initial zoom
+                    scale = (1.0);
+                    //translate = [(width-scale*width)/2, ((height-scale*height)/4)];
+                    translate = [0, 0];
+                    this.svg.transition()
+                            .duration(750)
+                            .attr("transform", "translate(" + translate + ")scale(" + scale +    ")")
+                            .each("end", function () {
+                                d3.behavior.zoom()
+                                        .scale(scale)
+                                        .translate(translate);
+                            });
+                    //end set initial zoom
+
+                    this.svg.append("rect")
+                            .attr("fill", "white")
+                            .attr("width", this.width)
+                            .attr("height", this.height);
+
+                    //pezzotto
+                    this.svg.append("filter")
+                            .attr("id","filter1")
+                            .attr("x","0%")
+                            .attr("y","0%")
+                            .attr("width","100%")
+                            .attr("height","100%")
+                            .append("feImage")
+                            .attr("xlink:href","http://icons.iconarchive.com/icons/hopstarter/soft-scraps/256/User-Executive-Green-icon.png");
+
+                    for (var i = 0; i < this.graph.links.length; ++i) {
+                        o = this.graph.links[i];
+                        o.source = this.graph.nodes[o.source];
+                        o.target = this.graph.nodes[o.target];
+                    }
+
+                    hullg = this.svg.append("g");
+                    linkg = this.svg.append("g");
+                    nodeg = this.svg.append("g");
+
+                    this.init();
+
+                    this.svg.attr("opacity", 1e-6)
+                            .transition()
+                            .duration(1000)
+                            .attr("opacity", 1);
+            },
+
+            zoom: function() {
+                _this.svg.attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")");
+            },
+
+            text: function (t){
+                var e = t.append("svg:foreignObject").attr("width", 120).attr("height", 30);
+                e.attr("style", function (t) {
+                    return "color:" + (t.color ? t.color : "#000")
+                }).append("xhtml:div").html(function (t) {
+                    //return t.fixed ? t.name : null
+                    return t.name;
+                })
+            },
+
+            tick : function () {
+                // d3.select("svg").attr("style", "transform:translate(8%)");
+                d3.selectAll("g foreignObject").attr("x", function (t) {
+                    return t.x + (t.r ? 0.8 * t.r : 15)
+                }).attr("y", function (t) {
+                    return t.y - 20
+                });
+
+                d3.selectAll("#logo text").attr("x", function (t) {
+                    return t.x + .7 * (t.r ? t.r : 15)
+                }).attr("y", function (t) {
+                    return t.y
+                });
+
+
+                _this.gnodes.attr("cx", function (t) {
+                    return t.x = Math.max(25, Math.min(_this.width - 50, t.x))
+                }).attr("cy", function (t) {
+                    return t.y = Math.max(8, Math.min(600, t.y))
+                });
+
+                _this.glinks.attr("x1", function (t) {
+                    return t.source.x
+                }).attr("y1", function (t) {
+                    return t.source.y
+                }).attr("x2", function (t) {
+                    return t.target.x
+                }).attr("y2", function (t) {
+                    return t.target.y
+                })
+            },
+
+            mouseover : function (t) {
+                d3.select(this).selectAll("circle").transition().duration(600).ease("elastic").attr("r", function (t) {
+                    //return 1 == t.fixed ? 1.4 * t.r : 15
+                    return 1 == t.fixed ? 1.4 * t.r : t.r + 10;
+                });
+
+                _this.$.dialog.close();
+                _this.$.dialog_title.innerHTML   = t.name;
+                _this.$.dialog_content.innerHTML = t.content;
+
+                _this.$.dialog.open();
+            },
+
+            mouseout : function () {
+                d3.select(this).selectAll("text").style("visibility", "hidden"), d3.select(this).selectAll("circle").transition().duration(400).attr("r", function (t) {
+                    return t.r ? t.r : 15
+                });
+                _this.$.dialog.close();
+            },
+
+            active : function (t) {
+                _this.fire('graph-datalet_node-clicked', {node : t});
+
+                if(_this.prev_selected_node != null){
+                    _this.prev_selected_node.style.fill = _this.prev_selected_node.style.stroke;
+                    _this.prev_selected_node.style.stroke = "#FFFFFF";
+                }
+
+                _this.prev_selected_node = document.getElementById("" + t.id);
+                _this.prev_selected_node.style.fill   = "#FFFFFF"
+                _this.prev_selected_node.style.stroke = t.color;
+
+                /* _this.$.dialog.close();
+                 _this.$.dialog_title.innerHTML   = t.name;
+                 _this.$.dialog_content.innerHTML = t.content;
+
+                 _this.$.dialog.open();*/
+            },
+
+            _onCloseClick : function(){
+                //_this.$.dialog.close();
+            },
+
+            /**
+             * It is called after the element’s template has been stamped and all elements inside the element’s local
+             * DOM have been configured (with values bound from parents, deserialized attributes, or else default values)
+             * and had their ready method called.
+             *
+             * Extract the dataset domain from the entire URL and set the text content of the datalet footer.
+             *
+             * @method ready
+             *
+             */
+            ready: function(){
+
+                _this = this;
+
+                this.svg = d3.select("svg#sbiricuda").attr("class", "svg").attr({
+                    width: "100%",
+                    height: "100%"
+                }).attr("viewBox", "0 0 " + this.width + " " + this.height)
+                  .attr("pointer-events", "all")
+                  .attr("style", "transform:translate(0px)")
+                  .style("position", "absolute");
+
+                var groups = [];
+                for(var i= 0,j=0; i < this.graph.nodes.length;i++,j+=3){
+                    groups.push([{key : "" + j, values : []}, {key : "" + (j + 1), values : []}, {key : "" + (j + 2), values : []}]);
+                    if(this.graph.nodes[i].father != null){
+                        switch (parseInt(this.graph.nodes[i].sentiment)){
+                            case 1:
+                                groups[this.graph.nodes[i].father.id][0].values.push(this.graph.nodes[i]);
+                                break;
+                            case 2:
+                                groups[this.graph.nodes[i].father.id][1].values.push(this.graph.nodes[i]);
+                                break;
+                            case 3:
+                                groups[this.graph.nodes[i].father.id][2].values.push(this.graph.nodes[i]);
+                                break;
+                        }
+                    }
+                }
+
+                var index = 0;
+                for(var i=0; i < groups.length; i++){
+                    for(var j=0; j < groups[i].length;j++){
+                        for(var k=0; k < groups[i][j].values.length;k++)
+                            this.graph.nodes[groups[i][j].values[k].id].group = i;
+                    }
+                }
+
+                this.buildGraph();
+            }
+        });
+    </script>
+</dom-module>

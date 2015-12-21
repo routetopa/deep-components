@@ -1,0 +1,234 @@
+<!--
+@license
+    The MIT License (MIT)
+
+    Copyright (c) 2015 Dipartimento di Informatica - Università di Salerno - Italy
+
+    Permission is hereby granted, free of charge, to any person obtaining a copy
+    of this software and associated documentation files (the "Software"), to deal
+    in the Software without restriction, including without limitation the rights
+    to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+    copies of the Software, and to permit persons to whom the Software is
+    furnished to do so, subject to the following conditions:
+
+    The above copyright notice and this permission notice shall be included in
+    all copies or substantial portions of the Software.
+
+    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+    IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+    FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+    AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+    LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+    THE SOFTWARE.
+-->
+
+<!--
+* Developed by :
+* ROUTE-TO-PA Project - grant No 645860. - www.routetopa.eu
+*
+-->
+
+<link rel="import" href="../highcharts-datalet/highcharts-datalet.html">
+
+<!--
+
+`scatterchart-datalet` is a scatter plot chart datalet based on highcharts project <http://www.highcharts.com/>
+
+Example:
+
+    <scatterchart-datalet
+        data-url="http://ckan.routetopa.eu/api/action/datastore_search?resource_id=#"
+        fields='["field1","field2"]'>
+    </scatterchart-datalet>
+
+@element scatterchart-datalet
+@status v0.1
+@demo demo/index.html
+@group datalets
+-->
+
+<dom-module id="scatterchart-datalet">
+    <template>
+        <highcharts-datalet id="charts" data-url="{{dataUrl}}" fields="{{fields}}" data="{{data}}" title="{{title}}" description="{{description}}"></highcharts-datalet>
+    </template>
+    <script>
+
+        var scatterchartBehavior = {
+
+            /**
+             * Bluid Highchart object
+             *
+             * @method presentData
+             */
+            presentData: function(){
+                var categoryName = [];
+                var color = {};
+                var scatterSeriesData = {};
+                var scattserie = [];
+
+                ScatterArr = [];
+                var dataTmp = [];
+                //Example 1: No Series name is specified in the query
+                if(this.data.length == 2){
+                    for (var i = 0; i < this.data[0].data.length; i++) {
+                            ScatterArr = [parseFloat(this.data[0].data[i]), parseFloat(this.data[1].data[i])];
+                            dataTmp.push(ScatterArr)
+                        }
+                    //add data to the series
+                    scatterSeriesData = {
+                        name: "Series",
+                        data: dataTmp,
+                        marker: color
+                    }
+                    scattserie.push(scatterSeriesData);
+                }
+                //Example 2: multi-series charts
+                else{
+                    var categoryNameDuplicateValue = [];
+                    for (i = 0; i < this.data[0].data.length; i++) {
+                            categoryNameDuplicateValue.push(this.data[0].data[i]);
+                    }
+                    categoryName = categoryNameDuplicateValue.filter(function (itm, i, categoryNameDuplicateValue) {
+                        return i == categoryNameDuplicateValue.indexOf(itm);
+                    });
+                    for (var index = 0; index < categoryName.length; index++) {
+                        for (var i = 0; i < this.data[0].data.length; i++) {
+                            if (this.data[0].data[i] == categoryName[index]) {
+                                ScatterArr = [this.data[1].data[i], this.data[2].data[i]];
+                                dataTmp.push(ScatterArr);
+                            }
+                        }
+                        //add data to the series
+                        scatterSeriesData = {
+                            name: "Series: " + categoryName[index],
+                            data: dataTmp,
+                            marker: color
+                        }
+
+                        scattserie.push(scatterSeriesData);
+                        dataTmp = [];
+                    }
+                }
+                
+                $(this._component.$.charts.$.container).highcharts({
+                    chart: {
+                        type: 'scatter',
+                        zoomType: 'xy'
+                    },
+                    title: {
+                        text: "" + this._component.title
+                    },
+                    subtitle: {
+                        text: "" +  this._component.subTitle
+                    },
+                    xAxis: {
+                        categories: this.properties.categories.value,
+                        title: {
+                            enabled: true,
+                            text: this._component.xAxisLabel,
+                            startOnTick: true,
+                            endOnTick: true,
+                            showLastLabel: true
+                        }
+                    },
+                    yAxis: {
+                        categories: this.properties.categories.value,
+                        title: {
+                            text: this._component.yAxisLabel
+                        }
+                    },
+                    /*legend: {
+                        layout: 'vertical',
+                        align: 'bottom',
+                        verticalAlign: 'top',
+                        x: -40,
+                        y: 100,
+                        floating: true,
+                        backgroundColor: (Highcharts.theme && Highcharts.theme.legendBackgroundColor) || '#FFFFFF',
+                        borderWidth: 1,
+                        shadow: true
+                    },*/
+                    plotOptions: {
+                        scatter: {
+                            marker: {
+                                radius: 5,
+                                states: {
+                                    hover: {
+                                        enabled: true,
+                                        lineColor: 'rgb(100,100,100)'
+                                    }
+                                }
+                            },
+                            /*tooltip: {
+                                headerFormat: '<b>{series.name}</b><br>',
+                                pointFormat: '{point.x} ab, {point.y} kmq',
+                                valueSuffix: ' ' + this._component.suffix
+                            }*/
+                            tooltip: {
+                             headerFormat: '<b>{series.name}</b><br>',
+                             pointFormat: '{point.x}' + this._component.xAxisLabel + ', {point.y}' + this._component.yAxisLabel,
+                             valueSuffix: ' ' + this._component.suffix
+                             }
+                        }
+                    },
+                    credits: {
+                        enabled: false
+                    },
+                    series: scattserie
+                });
+            }
+        };
+
+
+        scatterchartDatalet = Polymer({
+            is: 'scatterchart-datalet',
+            properties: {
+                /**
+                 * It's the label for X axis
+                 *
+                 * @attribute xAxisLabel
+                 * @type String
+                 * @default ''
+                 */
+                xAxisLabel: {
+                    type: String,
+                    value: ""
+                },
+                /**
+                 * It's the label for Y axis
+                 *
+                 * @attribute yAxisLabel
+                 * @type String
+                 * @default ''
+                 */
+                yAxisLabel: {
+                    type: String,
+                    value: ""
+                },
+                /**
+                 * It's the component behavior
+                 *
+                 * @attribute behavior
+                 * @type Object
+                 * @default {}
+                 */
+                behavior : {
+                    type : Object,
+                    value : {}
+                }
+            },
+
+            /**
+             * 'ready' callback extend the scatterchartComponentBehavior with HighchartsComponentBehavior and scatterchartBehavior
+             * and run the Datalet workcycle.
+             *
+             * @method ready
+             */
+            ready: function(){
+                this.behavior = $.extend(true, {}, HighchartsComponentBehavior, scatterchartBehavior);
+                this.async(function(){this.behavior.init(this)},1000);
+            }
+        });
+    </script>
+</dom-module>

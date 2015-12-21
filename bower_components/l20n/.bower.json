@@ -1,0 +1,36 @@
+{
+  "name": "l20n",
+  "description": "A natural-language localization framework",
+  "version": "3.4.1",
+  "homepage": "http://l20n.org",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/l20n/l20n.js.git"
+  },
+  "authors": [
+    "Mozilla <l10n-drivers@mozilla.org>",
+    "Zbigniew Braniecki",
+    "Staś Małolepszy"
+  ],
+  "license": "Apache 2.0",
+  "keywords": [
+    "localization",
+    "l10n",
+    "l20n"
+  ],
+  "main": [],
+  "ignore": [
+    "**/*",
+    "!dist/**/*"
+  ],
+  "_release": "3.4.1",
+  "_resolution": {
+    "type": "version",
+    "tag": "v3.4.1",
+    "commit": "4b5428be54003e8dc7243665a5f844a546ddd226"
+  },
+  "_source": "git://github.com/l20n/l20n.js.git",
+  "_target": "v3.x",
+  "_originalSource": "l20n",
+  "_direct": true
+}

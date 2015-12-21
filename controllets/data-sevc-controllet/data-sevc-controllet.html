@@ -3,6 +3,8 @@
 <!--<script src="../../bower_components/webcomponentsjs/webcomponents-lite.min.js"></script>-->
 <script src="../shared_js/perfect-scrollbar/js/min/perfect-scrollbar.jquery.min.js"></script>
 <link rel="stylesheet" href="../shared_js/perfect-scrollbar/css/perfect-scrollbar.min.css">
+
+<script defer src="../../bower_components/l20n/dist/compat/web/l20n.min.js"></script>
 /********************************************************************************************************************************
 
 <link rel="import" href="../../bower_components/polymer/polymer.html">
@@ -19,9 +21,11 @@
         <page-slider-controllet id="slider">
 
             <neon-animatable>
+
                 <template is="dom-if" if={{!modify}}>
                     <dataset-selection-controllet id="dataset_selection" datasets={{datasets}} suggested-datasets={{suggestedDatasets}}></dataset-selection-controllet>
                 </template>
+
             </neon-animatable>
 
             <neon-animatable>
@@ -32,7 +36,7 @@
 
             <neon-animatable>
 
-                <datalet-selection-controllet id="datalet_selection" deep-url={{deepUrl}} datalets-list-url={{dataletsListUrl}} data-url={{dataUrl}} preselected-datalet={{selectedDatalet}}></datalet-selection-controllet>
+                <datalet-selection-controllet id="datalet_selection" deep-url={{deepUrl}} datalets-list-url={{dataletsListUrl}} data-url={{dataUrl}} preselected-datalet={{selectedDatalet}} datalet-preset={{dataletPreset}}></datalet-selection-controllet>
 
             </neon-animatable>
 
@@ -112,27 +116,26 @@
                     this.$.slider.selected = 1;
 //                    console.log(this.selectedDatalet);
                     this.dataUrl = this.dataletPreset["data-url"];
-
                 }
+
             },
 
             _updateSlider : function(e){
                 switch (e.detail.selected) {
                     case 0:
-                        slider.setTitle("SELECT DATASET", "Search or copy and paste the url of dataset.");
+                        document.l10n.formatValues('slide1Title', 'slide1Subtitle').then(A => slider.setTitle(A[0], A[1]));
+//                        slider.setTitle("SELECT DATASET", "Search or copy and paste the url of dataset.");
                         slider.chevronLeft("invisible");
                         slider.chevronRight(false);
                         if(slider.getPrevSelected() == 1)
                             slider.chevronRight(true);
-
-//                        this.$.dataset_selection._fireDataUrl();
-//                        console.log(this.$.dataset_selection);
                         break;
                     case 1:
-                        slider.setTitle("SELECT DATA", "Select the fields from tree-view. The multi-table will show the values related to the selected fields.");
+                        document.l10n.formatValues('slide2Title', 'slide2Subtitle').then(A => slider.setTitle(A[0], A[1]));
+//                        slider.setTitle("SELECT DATA", "Select the fields from tree-view. The multi-table will show the values related to the selected fields.");
                         if(this.modify){
                             slider.chevronLeft("invisible");
-                            slider.setAvatar("2");
+//                            slider.setAvatar("2");
                         }
                         else{
                             slider.chevronLeft(true);
@@ -142,12 +145,12 @@
                         this._allowThirdStep({detail: {fields: tree_view_multi_table.getFlatFields()}});
                         break;
                     case 2:
-                        slider.setTitle("SELECT VISUALIZATION", "Select a visualization, fill out inputs and labels (optional).");
+                        document.l10n.formatValues('slide3Title', 'slide3Subtitle').then(A => slider.setTitle(A[0], A[1]));
+//                        slider.setTitle("SELECT VISUALIZATION", "Select a visualization, fill out inputs and labels (optional).");
                         slider.chevronLeft(true);
                         slider.chevronRight("invisible");
-                            //reset when?
-                        this.$.datalet_selection.setFields(tree_view_multi_table.getFlatFields());//???
-                        this.$.datalet_selection.ready();//???
+                        this.$.datalet_selection.setFields(tree_view_multi_table.getFlatFields());
+                        this.$.datalet_selection.ready();
                 }
             },
 

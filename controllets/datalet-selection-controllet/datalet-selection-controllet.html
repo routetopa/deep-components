@@ -11,8 +11,11 @@
 <link rel="import" href="../../bower_components/iron-icon/iron-icon.html">
 
 <link rel="import" href="../../bower_components/paper-input/paper-textarea.html">
+<link rel="import" href="../../bower_components/paper-input/paper-input.html">
 
 <link rel="import" href="../../bower_components/paper-button/paper-button.html">
+
+<link rel="import" href="../../bower_components/paper-dialog/paper-dialog.html">
 
 <link rel="import" href="../items-vslider-controllet/items-vslider-controllet.html" />
 
@@ -109,7 +112,7 @@
                 right: 0px;
             }
 
-            paper-textarea {
+            paper-input {
                 display: inline-block;
                 height: 48px;
                 /*padding: 0px 8px;*/
@@ -119,7 +122,20 @@
                 --paper-input-container-focus-color: #2196F3;
             }
 
-            #datalet_selection_comment paper-textarea {
+            paper-input.base_input {
+                width: 242px;
+            }
+
+            paper-textarea {
+                /*height: 48px;*/
+                /*padding: 0px 8px;*/
+                width: 242px;
+                padding-left: 8px;
+                padding-bottom: 4px;
+                --paper-input-container-focus-color: #2196F3;
+            }
+
+            #datalet_selection_comment paper-input {
                 padding-bottom: 0px;
                 width: calc(100% - 16px);
             }
@@ -164,10 +180,20 @@
 
             paper-button:hover {
                 background-color: #00AABF;
+
+                box-shadow: 0px 8px 12px #888;
+                -webkit-box-shadow: 0px 8px 12px #888;
+                -moz-box-shadow: 0px 8px 12px #888;
             }
 
             paper-button[disabled] {
                 background-color: #B6B6B6;
+            }
+
+            #dialog_info_input {
+                border: 2px solid #2196F3;
+                background-color: #E0E0E0;
+                min-width: 248px;
             }
         </style>
 
@@ -176,21 +202,15 @@
         <div id="datalet_selection_container">
             <items-vslider-controllet id="vslider" datalets-list-url={{dataletsListUrl}} preselected-datalet={{preselectedDatalet}}></items-vslider-controllet>
 
-
             <paper-material id="datalet_selection_inputs" elevation="5">
-                <div class="input_header">INPUTS</div>
+                <div class="input_header"><span data-l10n-id="inputs"></span></div>
                 <template is="dom-repeat" items="{{inputs}}" index-as="ddl_index">
                     <div class="inputs">
-                        <!--<div class="input_name">-->
-                            <!--{{item.name}}-->
-                            <!--<div class="info_button">-->
-                                <!--<paper-icon-button id="info_button" on-click="_showInfo" icon="info-outline" title="{{item.name}} info"></paper-icon-button>-->
-                            <!--</div>-->
-                        <!--</div>-->
                         <paper-dropdown-menu id={{ddl_index}} label={{item.name}}>
                             <paper-menu class="dropdown-content">
                                 <template is="dom-repeat" items={{fields}}>
-                                    <paper-item id={{index}} on-tap="_addInput">{{item}}</paper-item>
+                                    <paper-item id={{index}} on-tap="_addInput">{{_fieldName(item)}}</paper-item>
+                                    <!--{{_fieldName(item)}}-->
                                 </template>
                             </paper-menu>
                         </paper-dropdown-menu>
@@ -202,16 +222,21 @@
             </paper-material>
 
             <paper-material id="datalet_selection_labels" elevation="5">
-                <div class="input_header">LABELS</div>
+                <div class="input_header"><span data-l10n-id="baseInfo"></span></div>
+
+                <div class="inputs">
+                    <paper-input maxlength="32" label="title" class="base_input"></paper-input>
+                </div>
+
+                <div class="inputs">
+                    <paper-textarea maxlength="100" label="description" class="base_input"></paper-textarea>
+                </div>
+
+                <div class="input_header"><span data-l10n-id="layouts"></span></div>
+
                 <template is="dom-repeat" items="{{labels}}" index-as="index">
                     <div class="inputs">
-                        <!--<div class="input_name">-->
-                            <!--{{item.name}}-->
-                            <!--<div class="info_button">-->
-                                <!--<paper-icon-button id="info_button" on-click="_showInfo" icon="info-outline" title="{{item.name}} info"></paper-icon-button>-->
-                            <!--</div>-->
-                        <!--</div>-->
-                        <paper-textarea label={{item.name}}></paper-textarea>
+                        <paper-input label={{item.name}}></paper-input>
                         <div class="info_button">
                             <paper-icon-button id="info_button" on-click="_showInfo" icon="info-outline" title="{{item.name}} info"></paper-icon-button>
                         </div>
@@ -223,21 +248,26 @@
             <div id="datalet_selection_column">
 
                 <!--<template is="dom-if" if={{modify}}>-->
-                    <paper-material id="datalet_selection_comment" elevation="5">
-                        <div class="input_header">COMMENT</div>
-                        <paper-textarea id="comment" no-label-float maxlength="100" label="comment (max 100 characters)"></paper-textarea>
-                    </paper-material>
+                    <!--<paper-material id="datalet_selection_comment" elevation="5">-->
+                        <!--<div class="input_header"><span data-l10n-id="comment"></span></div>-->
+                        <!--<paper-textarea id="comment" no-label-float maxlength="100" label="comment (max 100 characters)"></paper-textarea>-->
+                    <!--</paper-material>-->
                 <!--</template>-->
 
                 <paper-material id="datalet_selection_datalet" elevation="5">
-                    <div class="input_header">DATALET PREVIEW</div>
+                    <div class="input_header"><span data-l10n-id="dataletPreview"></span></div>
                     <div id="datalet_selection_datalet_placeholder"></div>
 
                 </paper-material>
 
-                <paper-button id="add_button" disabled raised on-click="_addDatalet">ADD DATALET</paper-button>
+                <paper-button id="add_button" disabled raised on-click="_addDatalet"><span data-l10n-id="addDatalet"></span></paper-button>
 
             </div>
+
+            <paper-dialog id="dialog_info_input">
+                <h2 id="dialog_name"></h2>
+                <p id="dialog_description"></p>
+            </paper-dialog>
 
         </div>
 
@@ -271,6 +301,16 @@
                     value : undefined
                 },
 
+                loadPreview : {
+                    type :  Boolean,
+                    value : false
+                },
+
+                type : {
+                    type : String,
+                    value : undefined
+                },
+
                 inputs : {
                     type : Array,
                     value : []
@@ -291,6 +331,11 @@
                     value : []
                 },
 
+                dataletPreset : {
+                    type  : Object,
+                    value : []
+                },
+
 //                selectableFields : {
 //                    type : Array,
 //                    value : []
@@ -301,6 +346,11 @@
                     value : undefined
                 },
 
+                params:{
+                    type: Object,
+                    value: undefined
+                },
+
                 modify : {
                     type  : Boolean,
                     value : false
@@ -309,20 +359,25 @@
             },
 
             listeners: {
-                'items-vslider-controllet_selected-datalet': '_selectDatalet'
+                'items-vslider-controllet_selected-datalet': '_selectDatalet',
 //                'tree-view-controllet_selected-fields': '_updateSelectedFields'
+                'change': '_paramsChanged'
             },
 
-            ready : function() {
+            ready : function() {//console.log(this.dataletPreset);
                 this._resize();
                 $(this.$.datalet_selection_inputs).perfectScrollbar();
                 $(this.$.datalet_selection_labels).perfectScrollbar();
                 $(this.$.datalet_selection_datalet).perfectScrollbar();
 
-                this.modify = true;//da eliminare in futuro
+                this.params = {'data-url' : this.dataUrl};
+
+                //this.modify = true;//da eliminare in futuro
                 if(this.preselectedDatalet){
+                    if(this.modify)
+                        this._preselectDatalet();
+
                     this.modify = true;
-                    this._preselectDatalet();
                     this.preselectedDatalet = undefined;
                 }
             },
@@ -332,12 +387,7 @@
                 var that = this;
                 window.addEventListener("resize", function() { that._resize(); });
 
-//                var inputs = document.getElementsByTagName("paper-dropdown-menu");
-//                console.log(inputs);
-//                for(var i in inputs)
-//                    console.log(i);
-//                for(var i=0; i < inputs.length; i++)
-//                    console.log($(inputs[i]).children("paper-menu"));
+                this._translate();
             },
 
             setFields : function(fields) {
@@ -351,69 +401,103 @@
                 this.$.datalet_selection_datalet_placeholder.innerHTML = "";
             },
 
+            _translate : function(){
+//                document.l10n.formatValue('commentLabel').then(s => $("#comment")[0].setAttribute("label", s));
+                if(this.modify)
+                    document.l10n.formatValue('modifyDatalet').then(s => this.$.add_button.innerText = s);
+            },
+
             _selectDatalet : function(e){
                 this.$.add_button.setAttribute("disabled", "true");
 
                 this.selectedDatalet = e.detail.datalet;
-                this.inputs = [];
-                this.labels = [];
 
-                if(this.selectedDatalet){
+                this.$.datalet_selection_datalet_placeholder.innerHTML = "";
+
+                if(!this.selectedDatalet){
+                    this.type = undefined;
+                    this.inputs = [];
+                    this.labels = [];
+                    this.loadPreview = false;
+                }
+                else{
                     this.$.selectedDatalet_request.url = this.deepUrl + e.detail.datalet + "-datalet";
                     this.$.selectedDatalet_request.generateRequest();
                 }
-//                else {
-//                    this.inputs = [];
-//                    this.labels = [];
-//                }
-
-//                this.$.datalet_selection_datalet_placeholder.innerHTML = "";
-//                this.selectedFields = [];
             },
 
             _preselectDatalet : function() {
-                this.$.add_button.innerText = "MODIFY DATALET";
-
+                this.type = "undefined";
+                this.$.selectedDatalet_request.url = this.deepUrl + this.preselectedDatalet + "-datalet";
+                this.$.selectedDatalet_request.generateRequest();
 
                 this.selectedDatalet = this.preselectedDatalet;
                 this.selectedFields = this._copy(this.fields);
 
-                var inputs = document.getElementsByTagName("paper-dropdown-menu");
-                for(var i=0; i < inputs.length; i++)
-                    $(inputs[i]).find("paper-menu")[0].select(i);
+                this.async(function() {
+                    this.selectedFields = this._copy(this.fields);
 
+                    var inputs = document.getElementsByTagName("paper-dropdown-menu");
+                    for (var i = 0; i < inputs.length; i++)
+                        $(inputs[i]).find("paper-menu")[0].select(i);
+
+                    //set info labels options
+                    var labels = this.$.datalet_selection_labels.querySelectorAll("paper-textarea");
+                    for (var i = 0; i < labels.length; i++)
+                        labels[i].value = this.dataletPreset[labels[i].label];
+
+                    var labels = this.$.datalet_selection_labels.querySelectorAll("paper-input");
+                    for (var i = 0; i < labels.length; i++)
+                        labels[i].value = this.dataletPreset[labels[i].label];
+                }, 300);
+
+                this.loadPreview = true;
                 this._loadDatalet(this.selectedFields);
             },
 
             _handleSelectedDatalet : function(e){
-                this.$.datalet_selection_datalet_placeholder.innerHTML = "";
 
-                var inputs = e.detail.response.idm.inputs.input;
-                var labels = e.detail.response.idm.inputs.layouts.input;
+                if(this.type != e.detail.response.type) {
 
-                if(inputs.constructor == Object) {//not Array && inputs.input.selection == "*"
-                    var name = inputs.name;
-                    var description = inputs.description;
-                    var selection = inputs.selection;
-                    inputs = [];
-                    for(var i in this.fields)
-                        inputs.push({name: name + " " + i, description: description, selection: selection});
+                    this.inputs = [];
+                    this.labels = [];
+
+                    var inputs = e.detail.response.idm.inputs.input;
+
+                    if (inputs.constructor == Object) {//not Array && inputs.input.selection == "*"
+                        var name = inputs.name;
+                        var description = inputs.description;
+                        var selection = inputs.selection;
+                        inputs = [];
+                        for (var i in this.fields)
+//                        for (var i = 0; i < Math.max(this.fields.length, 8); i++)//error
+                            inputs.push({name: name + " " + i, description: description, selection: selection});
+                    }
+
+                    this.async(function(){
+                        this.type = e.detail.response.type;
+                        this.inputs = inputs;
+                        this.labels = e.detail.response.idm.inputs.layouts.input;
+
+                        this.selectedFields = new Array(inputs.length);
+                    },0);
+
+                    this.loadPreview = false;
                 }
 
-                this.inputs = inputs;
-                this.labels = labels;
-
-//                if(this.inputs[0].selection == "*")
-//                    this.selectedFields = [];
-//                else
-                    this.selectedFields = new Array(inputs.length);
+                else if (this.loadPreview)
+                    this._loadDatalet(this.selectedFields);
             },
 
             _addInput : function(e){
                 var selectedFields = this._copy(this.selectedFields);
 
-                var index = $(e.target).parents("paper-dropdown-menu")[0].id;
-                selectedFields[index] = e.target.innerText;
+//                var index = $(e.target).parents("paper-dropdown-menu")[0].id;
+//                selectedFields[index] = e.target.innerHTML.trim();
+
+                var ddl_index = $(e.target).parents("paper-dropdown-menu")[0].id;
+                var index = e.target.id;
+                selectedFields[ddl_index] = this.fields[index];
 
                 this.selectedFields = this._copy(selectedFields);
 
@@ -435,22 +519,40 @@
                 }
 
                 if(load){
+                    this.loadPreview = true
                     this._loadDatalet(selectedFields);
                 }
 
-//                $("#base_datalet_container").html("");
-//                $("#base_datalet_container").css('visibility','hidden');
-//                $("#base_datalet_container").css('padding','0px');
-//                $("#base_datalet_container").css('height','0px');
-//                console.log($("#base_datalet_container"));
+            },
+
+            _updateParams : function(){
+
+                var labels = this.$.datalet_selection_labels.querySelectorAll("paper-textarea");
+                this.params[labels[0].label] = labels[0].value;
+
+                if(!labels[0].value)
+                    this.params[labels[0].label] = "";
+
+                var labels = this.$.datalet_selection_labels.querySelectorAll("paper-input");
+                for (var i = 0; i < labels.length; i++)
+                    this.params[labels[i].label] = labels[i].value;
+            },
+
+            _paramsChanged : function(){
+
+                this._updateParams();
+
+                if(this.$.datalet_selection_datalet_placeholder.children[1])
+                    this.$.datalet_selection_datalet_placeholder.children[1].behavior.setParameters(this.params);
             },
 
             _loadDatalet : function(selectedFields){
-                var params = {'data-url' : this.dataUrl};
+
+                this._updateParams();
 
                 var dataletParams ={
                     component   : this.selectedDatalet+"-datalet",
-                    params      : params,
+                    params      : this.params,
                     fields      : selectedFields,
                     placeHolder : this.$.datalet_selection_datalet_placeholder
                 };
@@ -458,23 +560,64 @@
                 ComponentService.deep_url = this.deepUrl;
                 ComponentService.getComponent(dataletParams);
 
-                this.async(function(){this.$.add_button.removeAttribute("disabled");}, 1111);
+//                console.log(this.params);
+
+
+//                this.async(function(){
+//                    if(this.$.datalet_selection_datalet_placeholder.children[1])
+//                        this.$.datalet_selection_datalet_placeholder.children[1].behavior.setParameters(this.params);
+//                    this.$.add_button.removeAttribute("disabled");
+//                }, 300);
+
+//                this.async(function(){this.$.add_button.removeAttribute("disabled");}, 300);
+                this.$.add_button.removeAttribute("disabled");
             },
 
             _addDatalet : function(){
 
+                var selectedFields = [];
+                for (var i = 0; i < this.selectedFields.length; i++)
+                    if(this.selectedFields[i])
+                        selectedFields.push(this.selectedFields[i]);
+
+//                console.log(this.params);
+
                 var data = {
                     dataUrl : this.dataUrl,
-//                    params :  this.paramsFields,
-                    params :  {'data-url' : this.dataUrl},
-                    fields :  this.selectedFields,
+                    params :  this.params,
+                    fields :  selectedFields,
                     datalet : this.selectedDatalet+"-datalet",
-                    comment : this.$.comment.value,
+//                    comment : "",//DEPRECATED!!!
                     staticData : JSON.stringify(this.$.datalet_selection_datalet_placeholder.children[1].behavior.data)
                 }
 
                 this.fire('data-sevc-controllet.dataletCreated', {data : data});
 
+            },
+
+            _showInfo : function(e){
+                var t = e.target;
+                if(t.tagName.indexOf("IRON-ICON") != -1)
+                    t = $(e.target).parents("paper-icon-button")[0];
+
+                var name = t.getAttribute("title").replace(" info", "");
+
+                var dataset = $.grep(this.inputs, function(e){ return e.name == name; })[0];
+                if(!dataset)
+                    dataset = $.grep(this.labels, function(e){ return e.name == name; })[0];
+
+                this.$.dialog_name.innerHTML = dataset.name;
+//                this.$.dialog_description.innerHTML = dataset.description;
+                document.l10n.formatValue(dataset.description).then(s => this.$.dialog_description.innerHTML = s);
+                this.$.dialog_info_input.open();
+
+                var pos = t.getBoundingClientRect();
+                $("#dialog_info_input").css("top", pos.top - 4);
+                $("#dialog_info_input").css("left", pos.left - 4);
+            },
+
+            _fieldName : function(field) {
+                return field.substring(field.lastIndexOf(",")+1, field.length);;
             },
 
             _copy : function(o) {
@@ -495,9 +638,9 @@
 
                 $("#datalet_selection_inputs").height(h);
                 $("#datalet_selection_labels").height(h);
-                if(this.modify)
-                    $("#datalet_selection_datalet").height(h-128);
-                else
+//                if(this.modify)
+//                    $("#datalet_selection_datalet").height(h-128);
+//                else
                     $("#datalet_selection_datalet").height(h);
             }
 

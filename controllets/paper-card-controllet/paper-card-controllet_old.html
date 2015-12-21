@@ -1,0 +1,294 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html"/>
+<link rel="import" href="../../bower_components/paper-material/paper-material.html"/>
+<link rel="import" href="../../bower_components/paper-fab/paper-fab.html"/>
+<link rel="import" href="../../bower_components/iron-icons/iron-icons.html"/>
+
+<dom-module id="paper-card-controllet">
+
+    <template>
+        <link rel="stylesheet" href="../shared_js/perfect-scrollbar/css/perfect-scrollbar.min.css">
+        <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
+        <style>
+            :host {
+                display: inline-block;
+                margin: 0 8px 8px ;
+                font-size: 14px;
+                text-align: justify;
+                line-height: 10px;
+                --paper-fab-background: var(--accent-color);
+                font-family: 'Roboto', sans-serif;
+                padding-bottom: 30px;
+            }
+
+            paper-material {
+                background-color: white;
+                border-width: 1em;
+            }
+
+            .footer {
+                position: relative;
+                height: 21px;
+            }
+
+            .legend {
+                position: relative;
+                top: -50px;
+                background: rgba(0,0,0,0.8);
+                bottom: 0;
+                color: white;
+                height: 50px;
+                padding: 0 16px;
+                left: 0; right: 0;
+                z-index: 1000;
+                word-wrap: break-word;
+            }
+            paper-fab {
+                position: absolute;
+                right: 10px;
+                bottom: -18px;
+                z-index: 10;
+                --paper-fab-background:#2196F3;
+            }
+
+            #content ::content {
+                /*padding: 0 16px 8px;*/
+                padding: 0 16px 8px;
+                font-weight: 300;
+                color: var(--secondary-text-color);
+                line-height: 24px;
+                max-height: 400px;
+                position:relative;
+                overflow: auto;
+            }
+
+            ::content.buttons {
+                margin-top: 8px;
+            }
+
+            ::content paper-button, ::content paper-icon-button {
+                font-weight: 500;
+                color: var(--accent-color);
+            }
+
+            #comment{
+                position:relative;
+                top: -50px;
+                min-height: 50px;
+                height: auto;
+                padding: 8px 8px 8px 8px;
+                font-size: 10px;
+                color: rgba(0,0,0,0.4);
+                font-family: 'Roboto', sans-serif;
+                word-wrap: break-word;
+            }
+
+            .delete{
+                position: absolute;
+                top: -12px;
+                left: -12px;
+                --iron-icon-height: 18px;
+                --iron-icon-width: 18px;
+                width: 24px;
+                height: 24px;
+                --paper-fab-background:#cccccc;
+            }
+
+            .fullscreen{
+                position: absolute;
+                top: 36px;
+                right: 54px;
+                --iron-icon-height: 18px;
+                --iron-icon-width: 18px;
+                width: 24px;
+                height: 24px;
+                --paper-fab-background:#cccccc;
+            }
+
+            #fullscreen_container{
+                position: fixed;
+                width: 80%;
+                /*height: 60%;*/
+                right: 0;
+                left: 0;
+                top: 5%;
+                margin-right: auto;
+                margin-left: auto;
+                z-index: 1100;
+                display: none;
+                padding: 40px;
+                line-height: 20px;
+            }
+
+            .close_fullscreen{
+                position: absolute;
+                top: 5px;
+                right: 1vw;
+                --iron-icon-height: 18px;
+                --iron-icon-width: 18px;
+                width: 24px;
+                height: 24px;
+                --paper-fab-background:#cccccc;
+            }
+
+            #fullscreen_content{
+                position: relative;
+                height: 100%;
+                width: 100%;
+                z-index: 1000;
+            }
+
+        </style>
+
+
+        <paper-material animated elevation="{{elevation}}" flex>
+
+            <paper-fab class="delete" mini icon="delete" on-click="_handleDeleteClick"></paper-fab>
+
+            <div class="vertical layout">
+                <div id="content">
+                    <content></content>
+                </div>
+                
+                <div class="legend horizontal layout center">
+                    <span>{{cardTitle}}</span>
+
+                    <paper-fab class="fullscreen" mini icon="fullscreen" on-click="_handleFullscreenClick"></paper-fab>
+
+                    <!-- Adding icon based on card type -->
+
+                    <template is="dom-if" if="{{checkType(cardType, 'text')}}">
+
+                        <paper-fab class="modify" mini icon="create" on-click="_handleDetailsClick"></paper-fab>
+
+                    </template>
+
+                    <template is="dom-if" if="{{checkType(cardType, 'image')}}">
+
+                        <paper-fab class="modify" mini icon="perm-media" on-click="_handleDetailsClick"></paper-fab>
+
+                    </template>
+
+                    <template is="dom-if" if="{{checkType(cardType, 'datalet')}}">
+
+                        <paper-fab class="modify" mini icon="assessment" on-click="_handleDetailsClick"></paper-fab>
+
+                    </template>
+
+                    <template is="dom-if" if="{{checkType(cardType, 'link')}}">
+
+                        <paper-fab class="modify" mini icon="link" on-click="_handleDetailsClick"></paper-fab>
+
+                    </template>
+
+                </div>
+
+                <div class="footer">
+                    <template is="dom-if" if="{{comment}}">
+                       <div id="comment">{{comment}}</div>
+                    </template>
+                </div>
+
+                <paper-material elevation="3" id="fullscreen_container">
+                    <paper-fab class="close_fullscreen" mini icon="close" on-click="_handleCloseFullscreenClick"></paper-fab>
+                    <div id="fullscreen_content"></div>
+                </paper-material>
+
+            </div>
+        </paper-material>
+
+    </template>
+
+    <script src="../shared_js/perfect-scrollbar/js/min/perfect-scrollbar.jquery.min.js"></script>
+
+    <script>
+        Polymer({
+            is: "paper-card-controllet",
+            properties: {
+                width: {
+                    type: Number,
+                    observer: "_changeWidth"
+                },
+                height: {
+                    type: Number,
+                    observer: "_changeHeight"
+                },
+                cardType:{
+                    type: String,
+                    value: "text"
+                },
+                comment:{
+                    cardType: String,
+                    value: ""
+                },
+                cardTitle:{
+                    type: String,
+                    value: ""
+                },
+                elevation:{
+                    type: Number,
+                    value: 3
+                }
+
+            },
+
+            attached: function(){
+                if(this.cardType == "text"){
+                    this.$.content.style.backgroundColor = "#ffc";
+                }
+            },
+
+            _changeWidth: function(data){
+                this.style.width = data + "px";
+                //this.$.content.style.width = data + "px";
+                //$(this.$.content).perfectScrollbar();
+            },
+
+            _changeHeight: function(data){
+                this.style.height = (data) + "px";
+                this.$.content.style.height = data + "px";
+                this.style.height = (this.height + ((this.text != "") ? 50 : 0)) + "px";
+                $(this.$.content).perfectScrollbar();
+            },
+
+            checkType: function(type, check){
+                return (type == check);
+            },
+
+            _handleDetailsClick: function(e){
+                this.fire('paper-card-controllet_details-clicked', {data : this});
+            },
+
+            _handleDeleteClick: function(e){
+                this.fire('paper-card-controllet_delete-clicked', {data : this});
+            },
+
+            _handleFullscreenClick: function(e){
+
+                switch(this.cardType){
+                    case 'text':
+                        this.$.fullscreen_content.style.backgroundColor = "#ffc";
+                        break;
+                    case 'link':
+                        window.open(this.getAttribute('card-link'),'_blank');
+                        return;
+                }
+
+                var html = this.$.content.innerHTML;
+                this.$.content.innerHTML = "";
+                this.$.fullscreen_content.innerHTML = html;
+
+                this.$.fullscreen_container.style.display = "inline-block";
+            },
+
+            _handleCloseFullscreenClick: function(e){
+
+                var html = this.$.fullscreen_content.innerHTML;
+                this.$.fullscreen_content.innerHTML = "";
+                this.$.content.innerHTML = html;
+
+                this.$.fullscreen_container.style.display = "none";
+            }
+        })
+    </script>
+
+</dom-module>

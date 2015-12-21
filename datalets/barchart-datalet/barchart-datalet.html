@@ -2,7 +2,7 @@
 @license
     The MIT License (MIT)
 
-    Copyright (c) 2015 Dipartimento di Informatica - Università di Salerno - Italy
+    Copyright (c) 2015 Dipartimento di Informatica - Universitï¿½ di Salerno - Italy
 
     Permission is hereby granted, free of charge, to any person obtaining a copy
     of this software and associated documentation files (the "Software"), to deal
@@ -50,12 +50,11 @@ Example:
 
 <dom-module name="barchart-datalet">
     <template>
-        <highcharts-datalet id="charts" data-url="{{dataUrl}}" fields="{{fields}}" data="{{data}}"></highcharts-datalet>
+        <highcharts-datalet id="charts" data-url="{{dataUrl}}" fields="{{fields}}" data="{{data}}" title="{{title}}" description="{{description}}"></highcharts-datalet>
     </template>
     <script>
 
         var BarchartBehavior = {
-
 
             /**
              * Bluid Highchart object
@@ -114,9 +113,9 @@ Example:
                     },
                     series: this.properties.series.value
                 });
+
             }
         };
-
 
         BarchartDatalet = Polymer({
             is: 'barchart-datalet',
@@ -145,17 +144,6 @@ Example:
                     value: ""
                 },
                 /**
-                 * It's the title of the chart
-                 *
-                 * @attribute title
-                 * @type Strig
-                 * @default ''
-                 */
-                title: {
-                    type: String,
-                    value: "Heading"
-                },
-                /**
                  * It's the values suffix
                  *
                  * @attribute suffix
@@ -177,6 +165,7 @@ Example:
                     type : Object,
                     value : {}
                 }
+
             },
 
             /**
@@ -186,9 +175,8 @@ Example:
              * @method ready
              */
             ready: function(){
-
                 this.behavior = $.extend(true, {}, HighchartsComponentBehavior, BarchartBehavior);
-                this.async(function(){this.behavior.init(this)},1000);
+                this.async(function(){this.behavior.init(this)},0);
             }
         });
     </script>

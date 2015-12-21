@@ -32,6 +32,7 @@
 <link rel="import" href="../base-datalet/base-datalet.html">
 <link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout.html">
 <link rel="import" href="../../bower_components/paper-dialog/paper-dialog.html">
+<link rel="import" href="../../bower_components/paper-fab/paper-fab.html">
 
 <!--
 `preview-datalet` is a datalet that allow user to preview the content of a web page. It creates a thumbnail of the site using the data-url attribute passed as input.
@@ -58,18 +59,35 @@ Example:
             #dialog{
                 position: absolute;
                 padding: 20px;
+                top: 20px;
+                right:5%;
+            }
+
+            #close{
+                position: absolute;
+                top: -20px;
+                right: 3px;
+                --iron-icon-height: 20px;
+                --iron-icon-width: 20px;
+                width: 24px;
+                height: 24px;
+                --paper-fab-background:#9e9e9e;
+                z-index: 1001;
+            }
+            #dialog_content{
+                padding : 10px;
             }
 
         </style>
 
-        <div style="align-content: center;" id="graph_content">
+        <div style="align-content: center;overflow: visible" id="graph_content">
             <svg id="sbiricuda"></svg>
         </div>
 
         <paper-dialog id="dialog">
+            <paper-fab id="close" mini icon="close" on-click="_onCloseClick"></paper-fab>
             <h2 id="dialog_title"></h2>
-            <paper-dialog-scrollable id="dialog_content">
-            </paper-dialog-scrollable>
+            <div id="dialog_content">cos</div>
         </paper-dialog>
 
     </template>
@@ -105,7 +123,7 @@ Example:
 
                 width: {
                     type: Number,
-                    value: 1250
+                    value: undefined
                 },
 
                 height : {
@@ -116,6 +134,10 @@ Example:
                 svg: {
                     type: Object,
                     value: undefined
+                },
+                feelings:{
+                    type: Array,
+                    values: ["Agree", "Neutral", "Not agree"]
                 }
             },
 
@@ -125,41 +147,56 @@ Example:
                                    .call(d3.behavior.zoom().scaleExtent([.25, 20]).on("zoom", this.zoom))
                                    .append("g");
 
+                //set initial zoom
+                scale = (1.0);
+                //translate = [(width-scale*width)/2, ((height-scale*height)/4)];
+                translate = [100, 100];
+                this.svg.transition()
+                        .duration(750)
+                        .attr("transform", "translate(" + translate + ")scale(" + scale +    ")")
+                        .each("end", function () {
+                            d3.behavior.zoom()
+                                    .scale(scale)
+                                    .translate(translate);
+                        });
+                //end set initial zoom
+
                 this.svg.append("rect")
                         .attr("fill", "white")
                         .attr("width", width)
                         .attr("height", height);
-
-                //pezzotto
-                this.svg.append("filter")
-                            .attr("id","filter1")
-                            .attr("x","0%")
-                            .attr("y","0%")
-                            .attr("width","100%")
-                            .attr("height","100%")
-                        .append("feImage")
-                            .attr("xlink:href","http://icons.iconarchive.com/icons/hopstarter/soft-scraps/256/User-Executive-Green-icon.png");
-
-                /*this.svg.append("defs")
-                        .append("pattern")
-                            .attr("id","urlimage")
-                            //.attr("patternUnits","userSpaceOnUse")
-                            .attr("width","100%")
-                            .attr("height","100%")
-                        .append("image")
-                            .attr("xlink:href","http://lorempixel.com/400/200")
-                            //.attr("patternUnits","userSpaceOnUse")
-                            .attr("x","0%")
-                            .attr("y","0%")
-                            .attr("width","100%")
-                            .attr("height","100%");*/
-                //end pezzotto
 
 
                 var graph = {};
 
                 graph.nodes = t.nodes;
                 graph.links = t.links;
+
+                //pezzotto
+                for(var i =0; i < graph.nodes.length; i++){
+                    /*this.svg.append("filter")
+                            .attr("id","filter_" + graph.nodes[i].id)
+                            .attr("x","0%")
+                            .attr("y","0%")
+                            .attr("width","100%")
+                            .attr("height","100%")
+                            .append("feImage")
+                               .attr("xlink:href", graph.nodes[i].image);*/
+
+                    this.svg.append("defs")
+                               .append("pattern")
+                                  .attr("id","image_" + graph.nodes[i].id)
+                                  .attr("patternUnits","objectBoundingBox")
+                                  .attr("height","40")
+                                  .attr("width","40")
+                                  .append("image")
+                                     .attr("x","0")
+                                     .attr("y","0")
+                                     .attr("height","30")
+                                     .attr("width","30")
+                                     .attr("xlink:href", graph.nodes[i].image);
+                }
+                //end pezzotto
 
                 force = d3.layout.force().nodes(graph.nodes).links(graph.links).size([this.width, this.height]).charge(-1e3).friction(.7).linkDistance(function (t)
                 {
@@ -168,9 +205,18 @@ Example:
 
                 glinks = this.svg.selectAll(".link").data(graph.links).enter().append("line").attr("class", "link");
 
+                this.svg.selectAll(".link")
+                        .attr("style", function(t){
+                            return "stroke:" + t.color
+                        })
+                        .attr("style", function(t){
+                            return "stroke-width:" + (t.size ? t.size : 1.0) + "px";
+                        });
+
                 gnodes = this.svg.selectAll(".node").data(graph.nodes).enter().append("g").attr("class", function (t) {
                                                                                                 return t.fixed ? "node fixed" : "node"
-                                                                                            }).attr("name", function (t) {
+                                                                                            })
+                                                                                            .attr("name", function (t) {
                                                                                                 return t.name ? t.name.split(" ").join("_").toLowerCase() : ""
                                                                                             }).on("mouseover", this.mouseover)
                                                                                               .on("mouseout", this.mouseout)
@@ -181,14 +227,30 @@ Example:
                                                                                                 })
                                                                                                 .attr("class", function (t) {
                                                                                                     return t.fixed ? "" : "drag"
-                                                                                                }).attr("r", function (t) {
+                                                                                                })
+                                                                                                .attr("r", function (t) {
                                                                                                     return t.r ? t.r : 15
                                                                                                 })
                                                                                                 .attr("style", function (t) {
-                                                                                                    return t.color ? "stroke:" + t.color : !1
+                                                                                                    switch(parseInt(t.sentiment)){
+                                                                                                        case 1 :
+                                                                                                            t.color = "#1F77B4";
+                                                                                                            break;
+                                                                                                        case 2 :
+                                                                                                            t.color = "#2CA02C";
+                                                                                                            break;
+                                                                                                        case 3:
+                                                                                                            t.color = "#D62728";
+                                                                                                            break;
+                                                                                                        default:
+                                                                                                            t.color = "#333";
+                                                                                                    }
+                                                                                                    return "fill:" + t.color + "; stroke:white"
                                                                                                 });
 
-                d3.selectAll('circle').attr("filter", function(t){return  t.image ? 'url(#filter1)' : ""});
+                //d3.selectAll('circle').attr("filter", function(t){return  t.image ? 'url(#filter_' + t.id +')' : ""});
+                d3.selectAll('circle').attr("style", function(t){
+                    return  "fill :" + (t.image ? 'url(#image_' + t.id +')' : t.color)});
 
                 //d3.selectAll(".drag").call(force.drag), svg.selectAll("g.fixed").call(text);
                 d3.selectAll(".drag").call(force.drag), this.svg.selectAll("g.node").call(this.text);
@@ -215,9 +277,9 @@ Example:
             tick : function () {
                 // d3.select("svg").attr("style", "transform:translate(8%)");
                 d3.selectAll("g foreignObject").attr("x", function (t) {
-                    return t.x + (t.r ? 1.1 * t.r : 15)
+                    return t.x + (t.r ? 0.8 * t.r : 15)
                 }).attr("y", function (t) {
-                    return t.y - 35
+                    return t.y - 20
                 });
 
                 d3.selectAll("#logo text").attr("x", function (t) {
@@ -244,37 +306,48 @@ Example:
                 })
             },
             mouseover : function (t) {
-                d3.select(this).selectAll("circle").transition().duration(600).ease("elastic").attr("r", function (t) {
-                    //return 1 == t.fixed ? 1.4 * t.r : 15
-                    return 1 == t.fixed ? 1.4 * t.r : t.r + 10;
-                });
+                d3.select(this).selectAll("circle").transition().duration(600).ease("elastic")
+                   .attr("r", function (t) {
+                      return (!t.image) ? 1 == t.fixed ? 1.4 * t.r : t.r + 10 : t.r;
+                   });
 
+                _this.$.dialog.close();
+                _this.$.dialog_title.innerHTML   = t.name;
+                _this.$.dialog_content.innerHTML = t.content;
+
+                _this.$.dialog.open();
             },
 
             mouseout : function () {
-                d3.select(this).selectAll("text").style("visibility", "hidden"), d3.select(this).selectAll("circle").transition().duration(400).attr("r", function (t) {
-                    return t.r ? t.r : 15
-                })
+                d3.select(this).selectAll("text").style("visibility", "hidden"), d3.select(this).selectAll("circle").transition().duration(400)
+                   .attr("r", function (t) {
+                        return t.r ? t.r : 15
+                    });
+
+                _this.$.dialog.close();
             },
 
             active : function (t) {
                _this.fire('graph-datalet_node-clicked', {node : t});
 
                 if(prev_selected_node != null){
-                    prev_selected_node.style.stroke = prev_selected_node.style.fill;
-                    prev_selected_node.style.fill = "";
+                    prev_selected_node.style.fill = prev_selected_node.style.stroke;
+                    prev_selected_node.style.stroke = "#FFFFFF";
                 }
 
                 prev_selected_node = document.getElementById("" + t.id);
-                prev_selected_node.style.fill   = prev_selected_node.style.stroke;
-                prev_selected_node.style.stroke = "#000000";
+                prev_selected_node.style.fill   = "#FFFFFF"
+                prev_selected_node.style.stroke = t.color;
 
-               /* _this.$.dialog_title.innerHTML   = "Comment";
-                _this.$.dialog_content.innerHTML = t.name;
-                _this.$.dialog.style.top         = t.y + "px";
-                _this.$.dialog.style.left        = t.x + "px";
+               /* _this.$.dialog.close();
+                _this.$.dialog_title.innerHTML   = t.name;
+                _this.$.dialog_content.innerHTML = t.content;
 
                _this.$.dialog.open();*/
+            },
+
+            _onCloseClick : function(){
+                //_this.$.dialog.close();
             },
 
             /**
@@ -291,12 +364,13 @@ Example:
 
                 _this = this;
 
-                this.height = 9 * this.width / 16;
+                //this.height = 9 * this.width / 16;
+                //this.height = this.width;
 
                 width  = this.width;
                 height = this.height;
 
-                this.$.graph_content.style.height = height + "px";
+                //this.$.graph_content.style.height = height + "px";
 
                 this.svg = d3.select("svg#sbiricuda").attr("class", "svg").attr({
                     width: "100%",
@@ -308,9 +382,10 @@ Example:
                 g.nodes[0].y = this.height / 2;
                 this.buildGraph(g);*/
 
+                var json = JSON.stringify(this.data);
                 var g = this.data;
                 g.nodes[0].x = this.width / 2;
-                g.nodes[0].y = this.height / 2;
+                g.nodes[0].y = this.height / 8;
                 this.buildGraph(g);
             }
         });

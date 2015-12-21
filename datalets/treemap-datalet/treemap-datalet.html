@@ -2,7 +2,7 @@
 @license
     The MIT License (MIT)
 
-    Copyright (c) 2015 Dipartimento di Informatica - Università di Salerno - Italy
+    Copyright (c) 2015 Dipartimento di Informatica - Universitï¿½ di Salerno - Italy
 
     Permission is hereby granted, free of charge, to any person obtaining a copy
     of this software and associated documentation files (the "Software"), to deal
@@ -105,7 +105,7 @@ Example:
             }
         </style>
         <div id="treemap_placeholder"></div>
-        <base-ajax-json-jsonpath-datalet data-url="{{dataUrl}}" fields="{{fields}}" data="{{data}}"></base-ajax-json-jsonpath-datalet>
+        <base-ajax-json-jsonpath-datalet data-url="{{dataUrl}}" fields="{{fields}}" data="{{data}}" title="{{title}}" description="{{description}}"></base-ajax-json-jsonpath-datalet>
     </template>
 
     <script src="../shared_js/d3.js"></script>
@@ -122,7 +122,7 @@ Example:
             transformData: function(e)
             {
                 var treemapData = [];
-                TreemapBehavior.map.name = this._component.name;
+                TreemapBehavior.map.name = this._component.title;
 
                 if(this.data.length > 1) {
                     for (i = 0; i < this.data.length; i++) {
@@ -177,7 +177,7 @@ Example:
                 curchild.value = value;
             },
 
-            presentData: function(){
+            presentData: function(){console.log(TreemapBehavior.map.name);
                 //build(this.map, "treemap_placeholder");
                 build(this.map, this._component.$.treemap_placeholder);
             }
@@ -188,17 +188,6 @@ Example:
             is : 'treemap-datalet' ,
 
             properties: {
-                /**
-                 * It's the name for treemap
-                 *
-                 * @attribute name
-                 * @type String
-                 * @default ''
-                 */
-                name: {
-                    type: String,
-                    value: ""
-                },
                 /**
                  * It's the component behavior
                  *
@@ -214,7 +203,7 @@ Example:
 
             ready: function(){
                 this.behavior =  $.extend(true, {}, BaseDataletBehavior, WorkcycleBehavior, AjaxJsonJsonPathBehavior, TreemapBehavior);
-                this.async(function(){this.behavior.init(this)},1000);
+                this.async(function(){this.behavior.init(this)},0);
             }
 
         });

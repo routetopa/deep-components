@@ -64,7 +64,7 @@ Example:
             :host ::content #treemap_placeholder {
                 width: 100%;
                 height: 70%;
-                min-height: 500px;
+                /*min-height: 500px;*/
                 background: #ffffff;
                 position: relative;
             }
@@ -125,10 +125,9 @@ Example:
                 children : []
             },
 
-            transformData: function(e)
-            {
+            transformData: function(e){
                 var treemapData = [];
-                DatasetexplorerBehavior.map.name = this._component.name;
+                DatasetexplorerBehavior.map.name = this._component.title;
 
                 if(this.data.length > 1) {
                     for (i = 0; i < this.data.length; i++) {
@@ -228,17 +227,6 @@ Example:
 
             properties: {
                 /**
-                 * It's the name for treemap
-                 *
-                 * @attribute name
-                 * @type String
-                 * @default ''
-                 */
-                name: {
-                    type: String,
-                    value: ""
-                },
-                /**
                  * It's the component behavior
                  *
                  * @attribute behavior
@@ -262,6 +250,8 @@ Example:
             },
 
             ready: function(){
+                $(this).find("base-datalet")[0].hideFooter();
+
                 this.behavior =  $.extend(true, {}, BaseDataletBehavior, WorkcycleBehavior, AjaxJsonJsonPathBehavior, DatasetexplorerBehavior);
                 this.async(function(){this.behavior.init(this)},0);
             }

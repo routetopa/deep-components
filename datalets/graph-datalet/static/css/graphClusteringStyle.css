@@ -1,0 +1,22 @@
+#sbiricuda {
+    border: 1px solid #ccc;
+}
+
+.node {
+    fill: lightsteelblue;
+    stroke: #FFFFFF;
+    stroke-width: 3px;
+}
+.leaf {
+    stroke: #fff;
+    stroke-width: 1.5px;
+}
+.hull {
+    fill: lightsteelblue;
+    fill-opacity: 0.3;
+}
+.link {
+    stroke: #333;
+    stroke-opacity: 0.5;
+    pointer-events: none;
+}

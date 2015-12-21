@@ -1,5 +1,5 @@
 circle{
-    stroke-width: 2.5px;
+    stroke-width: 1.5px;
 }
 
 .text {
@@ -8,22 +8,21 @@ circle{
 }
 
 .node {
-    cursor: move;
+    cursor: pointer;
     fill: #fff;
-    stroke: #959595;
-    stroke-width: 4.5px
-    z-index: 100;
+    stroke: #FFFFFF;
+    stroke-width: 2.5px
+    z-index: 10;
 }
 
 .node.fixed {
     cursor: pointer;
-    cursor: hand;
     stroke-width: 6px
 }
 
 .link {
     stroke: #d0d0d0;
-    stroke-width: 2.5px
+    stroke-width: 1.0px
 }
 
 g foreignObject {
@@ -39,7 +38,7 @@ g foreignObject {
 g foreignObject div {
     font-family: 'Roboto', sans-serif;
     display: inline-block;
-    font-size: 12px;
+    font-size: 8px;
     text-decoration: none;
     padding: 0px
 }

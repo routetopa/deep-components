@@ -1,0 +1,50 @@
+<slide1Title "SELECTIONNER UN JEU DE DONNEES">
+<slide1Subtitle "Rechercher ou copier/coller l’url du jeu de données.">
+<slide2Title "SELECTIONNER DONNEES">
+<slide2Subtitle "Sélectionner les champs à partir de l’arborescence. Une fenêtre vous indiquera les valeurs relatives aux champs sélectionnés.">
+<slide3Title "SELECTIONNER UN MODE DE VISUALISATION">
+<slide3Subtitle "Sélectionner un mode de visualisation, remplir les entrées et les vignettes (optionnel).">
+
+<listView "VUE EN LISTE">
+<treeMapView "VUE EN ARBORESCENCE">
+<mostPopular "LES PLUS POPULAIRES">
+<availableDatasets "Jeux de données disponibles">
+<suggestedDatasets "Jeux de données suggérés">
+<selectedUrl "Sélectionner URL">
+
+<inputs "SORTIES">
+<layouts "VIGNETTES/OPTIONSs">
+<baseInfo "INFORMATION DE BASE">
+<comment "COMMENTAIRES">
+<commentLabel "Commentaires (maximum 100 caractères) ">
+<dataletPreview "PREVISUALISATION">
+<addDatalet "AJOUTER">
+<modifyDatalet "MODIFIER">
+
+<cellDescription "Cellules du tableau.">
+<levelDescription "C’est le niveau local que le graphique utilisera pour grouper les valeurs correspondantes au nombre de niveaux de champs">
+
+<categoriesDescription "Catégories de graphiques. Ses valeurs seront insérées dans l’axe horizontal. Vous devez insérer une valeur pour chaque série.">
+<seriesDescription "Catégories de graphique. Ses valeurs seront insérées dans l’axe vertical.">
+
+<XAxisLabelDescription "Vignette pour l’axe X.">
+<YAxisLabelDescription "Vignette pour l’axe Y.">
+<suffixDescription "Unités de mesures (ex:  dollars, euros.">
+
+<pieSeriesDescription "Série de graphiques. Ses valeurs seront intégrées au sein des segments de chaque série.">
+<pieSizeDescription "Taille de chaque série afin de créer un anneau concentrique.">
+
+<bubbleCategoriesDescription "Catégories de graphique. Ses valeurs seront insérées dans l’axe horizontal. Vous devez insérer une valeur pour chaque série.">
+<bubbleYValuesDescription "Le graphique présente les valeurs Y. Ses valeurs seront insérées dans l’axe vertical.">
+<bubbleZValuesDescription "Le graphique présente les valeurs Z. Ses valeurs représentent la taille des bulles.">
+<bubbleSeriesDescription "The chart series. Its values visualize multi- series bubbles chart.">
+
+<scatterCategoriesDescription "The chart categories. You need one value for each series.">
+<scatterXValuesDescription "The chart plots x values. Its values will be put in the horizontal axis.">
+<scatterYValuesDescription "The chart plots y value. Its values will be put in the vertical axis.">
+
+<heatmapCategoriesDescription "The chart categories. Its values will be put in the horizontal axis.">
+
+<LatitudeDescription "Latitude des points que vous souhaitez montrer sur la carte.">
+<LongitudeDescription "Longitude des points que vous souhaitez montrer sur la carte.">
+<BalloonContentDescription "It is the text associated to the marker or the link to the image related to the camera associated to each points.">

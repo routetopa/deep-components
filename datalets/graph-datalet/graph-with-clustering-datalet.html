@@ -1,0 +1,546 @@
+<!--
+@license
+    The MIT License (MIT)
+
+    Copyright (c) 2015 Dipartimento di Informatica - Università di Salerno - Italy
+
+    Permission is hereby granted, free of charge, to any person obtaining a copy
+    of this software and associated documentation files (the "Software"), to deal
+    in the Software without restriction, including without limitation the rights
+    to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+    copies of the Software, and to permit persons to whom the Software is
+    furnished to do so, subject to the following conditions:
+
+    The above copyright notice and this permission notice shall be included in
+    all copies or substantial portions of the Software.
+
+    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+    IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+    FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+    AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+    LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+    THE SOFTWARE.
+-->
+
+<!--
+* Developed by :
+* ROUTE-TO-PA Project - grant No 645860. - www.routetopa.eu
+*
+-->
+
+<link rel="import" href="../base-datalet/base-datalet.html">
+<link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout.html">
+<link rel="import" href="../../bower_components/paper-dialog/paper-dialog.html">
+<link rel="import" href="../../bower_components/paper-fab/paper-fab.html">
+
+<!--
+`preview-datalet` is a datalet that allow user to preview the content of a web page. It creates a thumbnail of the site using the data-url attribute passed as input.
+
+Example:
+
+    <preview-datalet data-url="http://spod.routetopa.eu"
+    </preview-datalet>
+
+
+@element preview-datalet
+@status beta
+@homepage
+@group datalets
+-->
+
+<dom-module id="graph-with-clustering-datalet">
+    <template>
+
+        <link rel="stylesheet" href="static/css/graphStyle.css">
+
+        <style is="custom-style">
+
+            #dialog{
+                position: absolute;
+                padding: 20px;
+                top: 20px;
+                right:5%;
+            }
+
+            #close{
+                position: absolute;
+                top: -20px;
+                right: 3px;
+                --iron-icon-height: 20px;
+                --iron-icon-width: 20px;
+                width: 24px;
+                height: 24px;
+                --paper-fab-background:#9e9e9e;
+                z-index: 1001;
+            }
+
+        </style>
+
+        <div style="align-content: center;overflow: visible" id="graph_content">
+            <svg id="sbiricuda"></svg>
+        </div>
+
+        <paper-dialog id="dialog">
+            <paper-fab id="close" mini icon="close" on-click="_onCloseClick"></paper-fab>
+            <h2 id="dialog_title"></h2>
+            <paper-dialog-scrollable id="dialog_content">cos</paper-dialog-scrollable>
+        </paper-dialog>
+
+    </template>
+
+    <script src="static/js/d3.v3.js"></script>
+
+    <script>
+        _this  = null;
+
+        Polymer({
+            is : 'graph-with-clustering-datalet',
+
+            properties: {
+                /**
+                 * It's the url for the preview
+                 *
+                 * @attribute url
+                 * @type Strig
+                 * @default ''
+                 */
+                graph : {
+                    type : Object,
+                    value : undefined
+                },
+
+                svgNodes : {
+                   type : Array,
+                   value : []
+                },
+
+                svgLinks : {
+                    type : Array,
+                    value : []
+                },
+
+                width: {
+                    type: Number,
+                    value: undefined
+                },
+
+                height : {
+                    type : Number,
+                    value: undefined
+                },
+
+                svg: {
+                    type: Object,
+                    value: undefined
+                },
+                feelings:{
+                    type: Array,
+                    values: ["Agree", "Neutral", "Not agree"]
+                },
+                prev_selected_node : {
+                    type : Object,
+                    value : null
+                },
+
+                force : {
+                    type : Object,
+                    value : null
+                },
+
+                edgesMap : {
+                    type : Array,
+                    value : []
+                },
+
+                groups: {
+                    type: Array,
+                    value: []
+                },
+
+                hull : {
+                    type : Array,
+                    value : []
+                },
+                /*test*/
+                hullg : {
+                    type : Array,
+                    value : []
+                },
+
+                offset :{
+                    type : Number,
+                    value : 15
+                }
+
+                /*end test*/
+            },
+
+            convexHulls : function() {
+                var hullset = [];
+                for(var i in _this.groups){
+                    for(var j=0; j < _this.groups[i].length;j++){
+                        var vertices = [];
+                        for(var v=0;v < _this.groups[i][j].values.length; v++){
+                            vertices.push([_this.groups[i][j].values[v].x - _this.offset, _this.groups[i][j].values[v].y - _this.offset]);
+                            vertices.push([_this.groups[i][j].values[v].x - _this.offset, _this.groups[i][j].values[v].y + _this.offset]);
+                            vertices.push([_this.groups[i][j].values[v].x + _this.offset, _this.groups[i][j].values[v].y - _this.offset]);
+                            vertices.push([_this.groups[i][j].values[v].x + _this.offset, _this.groups[i][j].values[v].y + _this.offset]);
+                        }
+
+                        hullset.push({id :  parseInt(i) + 3, sentiment: j , path: d3.geom.hull(vertices), extend : _this.groups[i][j].extend});
+                    }
+                }
+
+                return hullset;
+            },
+
+            fill : function(d){
+                /*var fill = d3.scale.category20();
+                return fill(d);*/
+                switch((d % 3)){
+                    case 0 :
+                        return "#1F77B4";
+                    case 1 :
+                        return "#2CA02C";
+                    case 2:
+                        return "#FF1E1E";
+                }
+            },
+
+            drawCluster : function(d) {
+                var curve = d3.svg.line()
+                        .interpolate("cardinal-closed")
+                        .tension(.85);
+
+                return curve(d.path); // 0.8
+            },
+
+            getNetwork : function(){
+
+                var nodes = [], links = [];
+                this.groups = [];
+
+                for(var i= 0,j=0; i < this.graph.nodes.length;i++,j+=3){
+
+                    var f = this.graph.nodes[i].father;
+                    if(f != null) {
+                        while (f.sentiment == this.graph.nodes[i].sentiment) f = f.father;
+                    }
+
+                    if(f != null){
+                        if(this.groups[f.id] == undefined){
+                            this.groups[f.id] = ([
+                                {key: "" + j, values: [], extend: true},
+                                {key: "" + (j + 1), values: [],extend: true},
+                                {key: "" + (j + 2), values: [], extend: true}
+                            ]);
+                        }
+
+                        this.graph.nodes[i].group = f.id;
+
+                        switch (parseInt(this.graph.nodes[i].sentiment)){
+                            case 1:
+                                if(this.groups[f.id][0].extend) {
+                                    this.groups[f.id][0].values.push(this.graph.nodes[i]);
+                                }
+                               break;
+                            case 2:
+                                if(this.groups[f.id][1].extend)
+                                   this.groups[f.id][1].values.push(this.graph.nodes[i]);
+                                break;
+                            case 3:
+                                if(this.groups[f.id][2].extend)
+                                   this.groups[f.id][2].values.push(this.graph.nodes[i]);
+                                break;
+                        }
+                    }else{
+                        this.graph.nodes[i].group = 0;
+                    }
+                }
+
+                var nodesMap = [];
+
+                for(var g in this.groups){
+                    for(var s in this.groups[g]) {
+                        if(this.groups[g][s].values.length > 0) {
+                            var node =  ({
+                                group: g,
+                                sentiment: parseInt(s) + 1,
+                                nodes: this.groups[g][s].values,
+                                r: this.groups[g][s].values.length * 6,
+                                extend: false
+                            });
+
+                            node.id = nodes.length;
+                            nodes.push(node);
+
+                            for(var n=0; n < this.groups[g][s].values.length;n++)
+                               nodesMap[this.groups[g][s].values[n].id] = node;
+
+                        }
+                    }
+                }
+
+                for(var e = 0; e < this.graph.links.length; e++){
+                    if(this.graph.nodes[this.graph.links[e].source.id].group !=  this.graph.nodes[this.graph.links[e].target.id].group) {
+                        links.push({
+                            //id: nodesMap[this.graph.nodes[this.graph.links[e].source.id].group].id + "-" + nodesMap[this.graph.nodes[this.graph.links[e].target.id].group].id,
+                            source: nodesMap[this.graph.links[e].source.id],
+                            target: nodesMap[this.graph.links[e].target.id],
+                            value: 100
+                        });
+                    }
+
+                }
+
+                //return {nodes : nodes, links : links};
+                return {nodes : this.graph.nodes, links : this.graph.links};
+
+            },
+
+            init : function(){
+
+                var net = this.getNetwork();
+
+                if(this.force != null) this.force.stop();
+                force = d3.layout.force()
+                                     .nodes(net.nodes)
+                                     .links(net.links)
+                                        .size([this.width, this.height])
+                                        .charge(-1e3)
+                                        .friction(.7)
+                                        .linkDistance(function (t){ return t.value ? t.value : 80})
+                                        .on("tick", this.tick).start();
+
+                this.hullg.selectAll("path.hull").remove();
+                this.hull = this.hullg.selectAll("path.hull")
+                        .data(this.convexHulls)
+                        .enter().append("path")
+                        .attr("class", "hull")
+                        .attr("d", this.drawCluster)
+                        .style("fill", "#60df20")
+                        .style("opacity", .2)
+                        .on("click", function(d) {
+                            alert(d.id);
+                        });
+
+
+                this.svg.selectAll(".link").data(net.links).remove();
+                this.svgLinks = this.svg.selectAll(".link").data(net.links).enter()
+                        .append("line")
+                        .attr("class", "link")
+                        .attr("style", function(t){ return "stroke:#333"; /*+ t.color*/ })
+                        .style("stroke-width", function(d) { return d.size || 0.3; });
+
+                this.svg.selectAll(".node").data(net.nodes).remove();
+                this.svgNodes = this.svg.selectAll(".node").data(net.nodes).enter()
+                        .append("g")
+                        .on("mouseover", this.mouseover)
+                        .on("mouseout", this.mouseout)
+                        .attr("class", function (t) { return t.fixed ? "node fixed" : "node"})
+                        .attr("name", function (t) { return t.name ? t.name.split(" ").join("_").toLowerCase() : ""})
+                        .append("circle")
+                            .on("click", this.active)
+                            .attr("id", function(t){ return t.id })
+                            .attr("class", function (t) { return t.fixed ? "" : "drag"})
+                            .attr("r", function (t){ return t.r ? t.r : 15 })
+                            .attr("style", function (t) {
+                                switch(parseInt(t.sentiment)){
+                                    case 1 :
+                                        t.color = "#1F77B4";
+                                        break;
+                                    case 2 :
+                                        t.color = "#2CA02C";
+                                        break;
+                                    case 3:
+                                        t.color = "#D62728";
+                                        break;
+                                    default:
+                                        t.color = "#333";
+                                }
+                                //return t.color ? "fill:" + t.color : !1 + "; stroke:white"
+                                return "fill:" + t.color + "; stroke:white"
+                             })
+                            .attr("filter", function(t){return  t.image ? 'url(#filter1)' : ""});
+
+                this.svg.style("opacity", 1e-6)
+                        .transition()
+                        .duration(1000)
+                        .style("opacity", 1);
+
+                d3.selectAll(".drag").call(force.drag), this.svg.selectAll("g.node").call(this.text);
+            },
+
+            buildGraph: function (){
+
+                this.svg = this.svg.append("g")
+                        .call(d3.behavior.zoom().scaleExtent([.25, 20]).on("zoom", this.zoom))
+                        .append("g");
+
+                //set initial zoom
+                scale = (1.0);
+                translate = [0, 0];
+                this.svg.transition()
+                        .duration(750)
+                        .attr("transform", "translate(" + translate + ")scale(" + scale +    ")")
+                        .each("end", function () {
+                            d3.behavior.zoom()
+                                    .scale(scale)
+                                    .translate(translate);
+                        });
+                //end set initial zoom
+
+                this.svg.append("rect")
+                        .attr("fill", "white")
+                        .attr("width", this.width)
+                        .attr("height", this.height);
+
+                //pezzotto
+                this.svg.append("filter")
+                        .attr("id","filter1")
+                        .attr("x","0%")
+                        .attr("y","0%")
+                        .attr("width","100%")
+                        .attr("height","100%")
+                        .append("feImage")
+                        .attr("xlink:href","http://icons.iconarchive.com/icons/hopstarter/soft-scraps/256/User-Executive-Green-icon.png");
+
+                for (var i = 0; i < this.graph.links.length; ++i) {
+                    o = this.graph.links[i];
+                    o.source = this.graph.nodes[o.source];
+                    o.target = this.graph.nodes[o.target];
+                }
+
+                this.hullg = this.svg.append("g");
+
+                this.init();
+            },
+
+            zoom: function() {
+                _this.svg.attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")");
+            },
+
+            text: function (t){
+                var e = t.append("svg:foreignObject").attr("width", 120).attr("height", 30);
+                e.attr("style", function (t) {
+                    return "color:" + (t.color ? t.color : "#000")
+                }).append("xhtml:div").html(function (t) {
+                    //return t.fixed ? t.name : null
+                    return t.name;
+                })
+            },
+
+            tick : function () {
+                if(_this.hull != undefined) {
+                    if (!_this.hull.empty()) {
+                        _this.hull.data(_this.convexHulls)
+                                .style("fill", function (d) {
+                                    return _this.fill(d.sentiment);
+                                })
+                                .attr("d", _this.drawCluster);
+                    }
+
+
+                    d3.selectAll("g foreignObject").attr("x", function (t) {
+                        return t.x + (t.r ? 0.8 * t.r : 15)
+                    }).attr("y", function (t) {
+                        return t.y - 20
+                    });
+
+                    d3.selectAll("#logo text").attr("x", function (t) {
+                        return t.x + .7 * (t.r ? t.r : 15)
+                    }).attr("y", function (t) {
+                        return t.y
+                    });
+
+                    _this.svgNodes.attr("cx", function (t) {
+                        return t.x = Math.max(25, Math.min(_this.width - 50, t.x))
+                    }).attr("cy", function (t) {
+                        return t.y = Math.max(8, Math.min(600, t.y))
+                    });
+
+                    _this.svgLinks.attr("x1", function (t) {
+                        return t.source.x
+                    }).attr("y1", function (t) {
+                        return t.source.y
+                    }).attr("x2", function (t) {
+                        return t.target.x
+                    }).attr("y2", function (t) {
+                        return t.target.y
+                    });
+                }
+
+            },
+
+            mouseover : function (t) {
+                d3.select(this).selectAll("circle").transition().duration(600).ease("elastic").attr("r", function (t) {
+                    return 1 == t.fixed ? 1.4 * t.r : t.r + 10;
+                });
+
+                _this.$.dialog.close();
+                _this.$.dialog_title.innerHTML   = t.name;
+                _this.$.dialog_content.innerHTML = t.content;
+
+                _this.$.dialog.open();
+            },
+
+            mouseout : function () {
+                d3.select(this).selectAll("text").style("visibility", "hidden"), d3.select(this).selectAll("circle").transition().duration(400).attr("r", function (t) {
+                    return t.r ? t.r : 15
+                });
+                _this.$.dialog.close();
+            },
+
+            active : function (t) {
+
+                _this.init();
+                _this.fire('graph-datalet_node-clicked', {node : t});
+
+                if(_this.prev_selected_node != null){
+                    _this.prev_selected_node.style.fill = _this.prev_selected_node.style.stroke;
+                    _this.prev_selected_node.style.stroke = "#FFFFFF";
+                }
+
+                _this.prev_selected_node = document.getElementById("" + t.id);
+                _this.prev_selected_node.style.fill   = "#FFFFFF"
+                _this.prev_selected_node.style.stroke = t.color;
+
+                /* _this.$.dialog.close();
+                 _this.$.dialog_title.innerHTML   = t.name;
+                 _this.$.dialog_content.innerHTML = t.content;
+
+                 _this.$.dialog.open();*/
+            },
+
+            _onCloseClick : function(){
+                //_this.$.dialog.close();
+            },
+
+            /**
+             * It is called after the element’s template has been stamped and all elements inside the element’s local
+             * DOM have been configured (with values bound from parents, deserialized attributes, or else default values)
+             * and had their ready method called.
+             *
+             * Extract the dataset domain from the entire URL and set the text content of the datalet footer.
+             *
+             * @method ready
+             *
+             */
+            ready: function(){
+
+                _this = this;
+
+                this.svg = d3.select("svg#sbiricuda").attr("class", "svg").attr({
+                    width: "100%",
+                    height: "100%"
+                }).attr("viewBox", "0 0 " + this.width + " " + this.height)
+                  .attr("pointer-events", "all")
+                        .attr("style", "transform:translate(0px)")
+                  .style("position", "absolute");
+
+                this.buildGraph();
+            }
+        });
+    </script>
+</dom-module>

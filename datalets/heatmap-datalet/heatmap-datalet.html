@@ -1,0 +1,224 @@
+<!--
+@license
+    The MIT License (MIT)
+
+    Copyright (c) 2015 Dipartimento di Informatica - Università di Salerno - Italy
+
+    Permission is hereby granted, free of charge, to any person obtaining a copy
+    of this software and associated documentation files (the "Software"), to deal
+    in the Software without restriction, including without limitation the rights
+    to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+    copies of the Software, and to permit persons to whom the Software is
+    furnished to do so, subject to the following conditions:
+
+    The above copyright notice and this permission notice shall be included in
+    all copies or substantial portions of the Software.
+
+    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+    IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+    FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+    AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+    LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+    THE SOFTWARE.
+-->
+
+<!--
+* Developed by :
+* ROUTE-TO-PA Project - grant No 645860. - www.routetopa.eu
+*
+-->
+
+<link rel="import" href="../highcharts-datalet/highcharts-datalet.html">
+<script src="https://code.highcharts.com/highcharts-more.js"></script>
+<script type='text/javascript' src='https://code.highcharts.com/maps/1.1.6/modules/map.js'></script>
+
+<!--script src="https://code.highcharts.com/modules/heatmap.js"></script>
+
+<!--
+
+`heatmap-datalet` is a heat map datalet based on highcharts project <http://www.highcharts.com/>
+
+Example:
+
+    <heatmap-datalet
+        data-url="http://ckan.routetopa.eu/api/action/datastore_search?resource_id=#"
+        fields='["field1","field2"]'>
+    </heatmap-datalet>
+
+@element heatmap-datalet
+@status v0.1
+@demo demo/index.html
+@group datalets
+-->
+
+<dom-module id="heatmap-datalet">
+    <template>
+        <highcharts-datalet id="charts" data-url="{{dataUrl}}" fields="{{fields}}" data="{{data}}" title="{{title}}" description="{{description}}"></highcharts-datalet>
+    </template>
+    <script>
+
+        var HeatMapBehavior = {
+
+            /**
+             * Build Highchart object
+             *
+             * @method presentData
+             */
+            presentData: function(){
+                campi = [];
+                serie = [];
+
+            for (i = 0; i < this.properties.series.value.length; i++) {
+                campi.push(this.properties.series.value[i].name);
+                for (j = 0; j < this.properties.series.value[i].data.length; j++) {
+                    serie.push([j,i,this.properties.series.value[i].data[j]])
+                }
+            }
+
+                $(this._component.$.charts.$.container).highcharts({
+                    chart: {
+                        type: 'heatmap',
+                        marginTop: 40,
+                        marginBottom: 80,
+                        plotBorderWidth: 1
+                    },
+
+                    title: {
+                        text: this._component.Title
+                    },
+
+                    xAxis: {
+                        categories: this.properties.categories.value,
+                        title: {
+                            text: this._component.xAxisLabel
+                        }
+                    },
+
+                    yAxis: {
+                        categories: campi,
+                        //categories: this.properties.categories.value,
+                        title: {
+                            text: this._component.yAxisLabel
+                        }
+                    },
+
+                    colorAxis: {
+                        min: 0,
+                        minColor: '#FFFFFF',
+                        maxColor: Highcharts.getOptions().colors[0]
+                    },
+
+                    legend: {
+                        align: 'right',
+                        layout: 'vertical',
+                        margin: 0,
+                        verticalAlign: 'top',
+                        y: 25,
+                        symbolHeight: 280
+                    },
+                    /*tooltip: {
+                        formatter: function () {
+                            return '<b>' + this.series.xAxis.categories[this.point.x] + '</b><br>Abitanti:   <b>' +  this._component.prototype.xAxis
+                                this.point.value + '</b><br>Anno <b>' + this.series.yAxis.categories[this.point.y] + '</b>';
+                        }*/
+
+                    //},
+                   /* tooltip: {
+                     formatter: function () {
+                     return '<b>' + this.series.xAxis.categories[this.point.x] +  this._component.prototype.xAxis
+                     this.point.value  + this.series.yAxis.categories[this.point.y];
+                     }
+*/
+                     //},
+                    credits: {
+                        enabled: false
+                    },
+                    series: [{
+                        //name: 'Popolazione',
+                        borderWidth: 1,
+                        data: serie,
+                        dataLabels: {
+                            enabled: true,
+                            color: '#000000'
+                        }
+                    }]
+                });
+            }
+        };
+
+
+        heatmapDatalet = Polymer({
+            is: 'heatmap-datalet',
+
+            properties: {
+                /**
+                 * It's the label for X axis
+                 *
+                 * @attribute xAxisLabel
+                 * @type String
+                 * @default ''
+                 */
+                xAxisLabel: {
+                    type: String,
+                    value: ""
+                },
+                /**
+                 * It's the label for Y axis
+                 *
+                 * @attribute yAxisLabel
+                 * @type String
+                 * @default ''
+                 */
+                yAxisLabel: {
+                    type: String,
+                    value: ""
+                },
+                /**
+                 * It's the title of the chart
+                 *
+                 * @attribute title
+                 * @type String
+                 * @default ''
+                 */
+                Title: {
+                    type: String,
+                    value: ""
+                },
+                /**
+                 * It's the values suffix
+                 *
+                 * @attribute suffix
+                 * @type String
+                 * @default 'units'
+                 */
+                suffix : {
+                    type : String,
+                    value : ""
+                },
+                /**
+                 * It's the component behavior
+                 *
+                 * @attribute behavior
+                 * @type Object
+                 * @default {}
+                 */
+                behavior : {
+                    type : Object,
+                    value : {}
+                }
+            },
+
+            /**
+             * 'ready' callback extend the heatmapComponentBehavior with HighchartsComponentBehavior and heatmapBehavior
+             * and run the Datalet workcycle.
+             *
+             * @method ready
+             */
+            ready: function(){
+                this.behavior = $.extend(true, {}, HighchartsComponentBehavior, HeatMapBehavior);
+                this.async(function(){this.behavior.init(this)},1000);
+            }
+        });
+    </script>
+</dom-module>

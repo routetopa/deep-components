@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+
+    <script>
+    </script>
+
+</head>
+<body>
+
+<script src="https://code.jquery.com/jquery-2.1.4.min.js" type="text/javascript"></script>
+<link rel="import" href="../scatterchart-datalet.html" />
+
+<!--More serie-->
+<scatterchart-datalet data-url="http://ckan.ancitel.it/api/action/datastore_search?resource_id=29d9700a-fb2c-45fe-9cea-da856d5afd6c&limit=500"
+                  fields='["result,records,area_geo","result,records,pop_residente","result,records,superficie_kmq"]'></scatterchart-datalet>
+
+<!-- One serie-->
+<!--scatterchart-datalet data-url="http://ckan.ancitel.it/api/action/datastore_search?resource_id=29d9700a-fb2c-45fe-9cea-da856d5afd6c&limit=500"
+                  fields='["result,records,pop_residente","result,records,superficie_kmq"]'></scatterchart-datalet-->
+
+</body>
+</html>

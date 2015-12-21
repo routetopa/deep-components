@@ -47,55 +47,49 @@ Example:
 -->
 
 <dom-module id="preview-datalet">
+
     <template>
+
         <style is="custom-style">
-            .content {
-                /*width: 50%;*/
-                margin: 0px auto;
+            #preview_datalet_container {
+                height: 432px
             }
 
-            .embed-container {
-                height: 0;
-                /*width: 100vw;*/
-                padding-bottom: 56.25%;
-                overflow: hidden;
-                position: relative;
-
-
+            #preview_datalet_link {
+                padding: 8px 0px 8px 0px;
             }
 
-            .embed-container iframe {
-                width: 100%;
-                height: 100%;
-                position: absolute;
-                top: 0;
-                left: 0;
+            #preview_datalet_iframe {
+                width: 200%;
+                height: calc((100% - 32px) * 2);
+
+                /*zoom:0.75;*/
+                /*width:1280px;*/
+                /*height:800px;*/
+                /*border:none;*/
+                -ms-transform: scale(0.50);
+                -moz-transform: scale(0.50);
+                -o-transform: scale(0.50);
+                -webkit-transform: scale(0.50);
+                transform: scale(0.50);
+                -ms-transform-origin: 0 0;
+                -moz-transform-origin: 0 0;
+                -o-transform-origin: 0 0;
+                -webkit-transform-origin: 0 0;
+                transform-origin: 0 0;
             }
+
         </style>
-        <div class="content">
-            <a href="{{url}}" target="_blank">{{url}}</a>
-            <div class="embed-container" style="height:300px;padding:0px;overflow:hidden;">
-                <iframe style="zoom:0.75;
-                                width:1280px;
-                                height:786px;
-                                border:none;
-                                -ms-transform: scale(0.50);
-                                -moz-transform: scale(0.50);
-                                -o-transform: scale(0.50);
-                                -webkit-transform: scale(0.50);
-                                transform: scale(0.50);
-                                -ms-transform-origin: 0 0;
-                                -moz-transform-origin: 0 0;
-                                -o-transform-origin: 0 0;
-                                -webkit-transform-origin: 0 0;
-                                transform-origin: 0 0;"
-                                 src="{{url}}"
-                                 scrolling="yes">
-                </iframe>
-            </div>
+
+        <div id="preview_datalet_container">
+
+            <div id="preview_datalet_link"><b>link:</b> <a href="{{url}}" target="_blank">{{url}}</a></div>
+
+            <iframe id="preview_datalet_iframe" src="{{url}}"></iframe>
+
         </div>
 
-        <base-datalet id="base" data-url="{{dataUrl}}"></base-datalet>
+        <base-datalet></base-datalet>
 
     </template>
 
@@ -103,35 +97,8 @@ Example:
 
         Polymer({
             is : 'preview-datalet',
-
-            properties: {
-                /**
-                 * It's the url for the preview
-                 *
-                 * @attribute url
-                 * @type Strig
-                 * @default ''
-                 */
-                url : {
-                    type : String,
-                    value : ""
-                }
-            },
-
-            /**
-             * It is called after the element’s template has been stamped and all elements inside the element’s local
-             * DOM have been configured (with values bound from parents, deserialized attributes, or else default values)
-             * and had their ready method called.
-             *
-             * Extract the dataset domain from the entire URL and set the text content of the datalet footer.
-             *
-             * @method ready
-             *
-             */
-            ready: function(){
-                this.$.base.setDomain(this.url.split("/")[0] + "//" + this.url.split("/")[2]);
-            }
         });
+
     </script>
 </dom-module>
 
