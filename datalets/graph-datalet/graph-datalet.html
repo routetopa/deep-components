@@ -328,7 +328,9 @@ Example:
             },
 
             active : function (t) {
-               _this.fire('graph-datalet_node-clicked', {node : t});
+                if(t.image) return;
+
+                _this.fire('graph-datalet_node-clicked', {node : t});
 
                 if(prev_selected_node != null){
                     prev_selected_node.style.fill = prev_selected_node.style.stroke;
