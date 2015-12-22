@@ -50,7 +50,14 @@
             }
 
             p {
-                margin: 16px 8px 0px 8px;
+                padding: 16px 0px 0px 8px;
+                margin: 0px;
+            }
+
+            #create_card_text {
+                width: 100%;
+                height: 100%;
+                background-color: #FFFFCC;
             }
 
             #create_card_title {
@@ -62,11 +69,6 @@
             #create_card_description {
                 font-style: italic;
                 color: #727272;
-                text-align: center;
-            }
-
-            #create_card_text {
-
             }
 
             paper-input, paper-textarea {
@@ -138,6 +140,7 @@
             </paper-material>
 
             <paper-material id="create_card_content" elevation="5">
+
                 <div class="input_header">PREVIEW</div>
 
                 <template is="dom-if" if="{{_checkType(type, 'link')}}">
@@ -148,9 +151,11 @@
 
                 <template is="dom-if" if="{{_checkType(type, 'text')}}">
 
-                    <p id ="create_card_title">{{cardTitle}}</p>
-                    <p id ="create_card_description">{{description}}</p>
-                    <p id ="create_card_text">{{text}}</p>
+                    <div id="create_card_text">
+                        <p id ="create_card_title">{{cardTitle}}</p>
+                        <p id ="create_card_description">{{description}}</p>
+                        <p>{{text}}</p>
+                    </div>
 
                 </template>
 
@@ -216,6 +221,7 @@
 
                     if(!link.invalid && value.length > 16) {
                         iframe.setAttribute("src", value);
+                        this.link = value;
                         this._resize();
                     }
                 }

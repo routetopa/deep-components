@@ -187,12 +187,38 @@ Example:
                 var xyz = function(url) {
                     me.selectResource(url);
                 }
-                build(this.map, "treemap_placeholder", xyz, this._component.width, this._component.height);
+                build(this.map, this.meta, "treemap_placeholder", xyz, this._component.width, this._component.height);
             },
 
             selectResource: function(url) {
                 this._component.fire("datasetexplorer-datalet_data-url", { url: url });
-            }
+            },
+
+            selectData : function() {
+                this.data = [];
+                this.meta = this.properties.json_results.value.result.providers;
+
+                //Deal the fields with "'" char
+                //this._component.fields = this._component.fields.replace(/#/g,"'");
+
+                this._component.fields = JSON.parse(this._component.fields);
+
+                for (var i = 0; i < this._component.fields.length; i++) {
+                    var query = "$";
+                    var query_elements = this._component.fields[i].split(',');
+                    for (var j = 0; j < query_elements.length; j++) {
+                        query += "['" + query_elements[j] + "']";
+                        if (this.isFieldArray(query_elements.slice(0, j + 1))) {
+                            query += "[*]";
+                        }
+                    }
+                    this.data.push({
+                        name: query_elements[query_elements.length - 1],
+                        data: jsonPath(this.properties.json_results.value, query)
+                    });
+                }
+                this.deleteWaitImage();
+            },
         };
 
 
@@ -214,12 +240,12 @@ Example:
 
                 width : {
                     type : Number,
-                    value: -1
+                    value: 968
                 },
 
                 height : {
                     type : Number,
-                    value: -1
+                    value: 700
                 }
             },
 
