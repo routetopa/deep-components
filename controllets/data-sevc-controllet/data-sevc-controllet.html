@@ -5,6 +5,7 @@
 <link rel="stylesheet" href="../shared_js/perfect-scrollbar/css/perfect-scrollbar.min.css">
 
 <script defer src="../../bower_components/l20n/dist/compat/web/l20n.min.js"></script>
+<script defer src="../../locales/lnHashMap.js"></script>
 /********************************************************************************************************************************
 
 <link rel="import" href="../../bower_components/polymer/polymer.html">
@@ -124,12 +125,14 @@
                 switch (e.detail.selected) {
                     case 0:
                        /* document.l10n.formatValues('slide1Title', 'slide1Subtitle').then(A => slider.setTitle(A[0], A[1]));*/
-                        document.l10n.formatValues('slide1Title', 'slide1Subtitle').then(function(A){
+                        /*document.l10n.formatValues('slide1Title', 'slide1Subtitle').then(function(A){
                             slider.setTitle(A[0], A[1])
                         }, function(reason){
                             var a = reason;
                             console.log(a);
-                        });
+                        });*/
+                        slider.setTitle(ln["slide1Title_it"], ln["slide1Subtitle_it"]);
+
 //                        slider.setTitle("SELECT DATASET", "Search or copy and paste the url of dataset.");
                         slider.chevronLeft("invisible");
                         slider.chevronRight(false);
