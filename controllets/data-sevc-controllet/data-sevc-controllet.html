@@ -124,7 +124,9 @@
                 switch (e.detail.selected) {
                     case 0:
                        /* document.l10n.formatValues('slide1Title', 'slide1Subtitle').then(A => slider.setTitle(A[0], A[1]));*/
-                        document.l10n.formatValues('slide1Title', 'slide1Subtitle').then(function(A){slider.setTitle(A[0], A[1])});
+                        document.l10n.formatValues('slide1Title', 'slide1Subtitle').then(function(A){
+                            slider.setTitle(A[0], A[1])
+                        });
 //                        slider.setTitle("SELECT DATASET", "Search or copy and paste the url of dataset.");
                         slider.chevronLeft("invisible");
                         slider.chevronRight(false);
