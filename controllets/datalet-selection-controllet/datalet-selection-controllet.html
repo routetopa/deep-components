@@ -403,8 +403,10 @@
 
             _translate : function(){
 //                document.l10n.formatValue('commentLabel').then(s => $("#comment")[0].setAttribute("label", s));
-                if(this.modify)
-                    document.l10n.formatValue('modifyDatalet').then(s => this.$.add_button.innerText = s);
+                if(this.modify){
+                    var that = this;
+                    document.l10n.formatValue('modifyDatalet').then(function(s){that.$.add_button.innerText = s});
+                }
             },
 
             _selectDatalet : function(e){
@@ -596,6 +598,7 @@
             },
 
             _showInfo : function(e){
+                var that = this;
                 var t = e.target;
                 if(t.tagName.indexOf("IRON-ICON") != -1)
                     t = $(e.target).parents("paper-icon-button")[0];
@@ -608,7 +611,7 @@
 
                 this.$.dialog_name.innerHTML = dataset.name;
 //                this.$.dialog_description.innerHTML = dataset.description;
-                document.l10n.formatValue(dataset.description).then(s => this.$.dialog_description.innerHTML = s);
+                document.l10n.formatValue(dataset.description).then(function(s){that.$.dialog_description.innerHTML = s});
                 this.$.dialog_info_input.open();
 
                 var pos = t.getBoundingClientRect();

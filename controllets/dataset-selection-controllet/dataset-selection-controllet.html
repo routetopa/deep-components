@@ -260,10 +260,11 @@
             },
 
             _translate : function(){
-                document.l10n.formatValue('availableDatasets').then(s => $("#_datasets")[0].setAttribute("label", s));
+                var that = this;
+                document.l10n.formatValue('availableDatasets').then(function(s){$("#_datasets")[0].setAttribute("label", s)});
                 if(this.isSuggested)
-                    document.l10n.formatValue('suggestedDatasets').then(s => $("#s_datasets")[0].setAttribute("label", s));
-                document.l10n.formatValue('selectedUrl').then(s => this.$.selected_url.setAttribute("label", s));
+                    document.l10n.formatValue('suggestedDatasets').then(function(s){$("#s_datasets")[0].setAttribute("label", s)});
+                document.l10n.formatValue('selectedUrl').then(function(s){that.$.selected_url.setAttribute("label", s)});
             },
 
             _filterDatasets : function(e){

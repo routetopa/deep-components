@@ -123,7 +123,8 @@
             _updateSlider : function(e){
                 switch (e.detail.selected) {
                     case 0:
-                        document.l10n.formatValues('slide1Title', 'slide1Subtitle').then(A => slider.setTitle(A[0], A[1]));
+                       /* document.l10n.formatValues('slide1Title', 'slide1Subtitle').then(A => slider.setTitle(A[0], A[1]));*/
+                        document.l10n.formatValues('slide1Title', 'slide1Subtitle').then(function(A){slider.setTitle(A[0], A[1])});
 //                        slider.setTitle("SELECT DATASET", "Search or copy and paste the url of dataset.");
                         slider.chevronLeft("invisible");
                         slider.chevronRight(false);
@@ -131,7 +132,7 @@
                             slider.chevronRight(true);
                         break;
                     case 1:
-                        document.l10n.formatValues('slide2Title', 'slide2Subtitle').then(A => slider.setTitle(A[0], A[1]));
+                        document.l10n.formatValues('slide2Title', 'slide2Subtitle').then(function(A){slider.setTitle(A[0], A[1])});
 //                        slider.setTitle("SELECT DATA", "Select the fields from tree-view. The multi-table will show the values related to the selected fields.");
                         if(this.modify){
                             slider.chevronLeft("invisible");
@@ -145,7 +146,7 @@
                         this._allowThirdStep({detail: {fields: tree_view_multi_table.getFlatFields()}});
                         break;
                     case 2:
-                        document.l10n.formatValues('slide3Title', 'slide3Subtitle').then(A => slider.setTitle(A[0], A[1]));
+                        document.l10n.formatValues('slide3Title', 'slide3Subtitle').then(function(A){slider.setTitle(A[0], A[1])});
 //                        slider.setTitle("SELECT VISUALIZATION", "Select a visualization, fill out inputs and labels (optional).");
                         slider.chevronLeft(true);
                         slider.chevronRight("invisible");
