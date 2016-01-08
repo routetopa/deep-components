@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Demo Graph with node clustering</title>
-    <link rel="import" href="../graph-with-clustering-datalet.html">
+    <link rel="import" href="../graph-with-clustering-extend-datalet.html">
     <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.4.js"></script>
 </head>
 <script>
@@ -11,8 +11,8 @@
         var xhttp = new XMLHttpRequest();
         xhttp.onreadystatechange = function() {
             if (xhttp.readyState == 4 && xhttp.status == 200) {
-                document.getElementById("graph-placeholder").innerHTML = '<graph-with-clustering-datalet width="1000" height="700" graph=\'' + JSON.parse(xhttp.responseText).graph +
-                                                                         '\'></graph-with-clustering-datalet>';
+                document.getElementById("graph-placeholder").innerHTML = '<graph-with-clustering-extend-datalet width="1000" height="700" graph=\'' + JSON.parse(xhttp.responseText).graph +
+                                                                         '\'></graph-with-clustering-extend-datalet>';
             }
         };
         xhttp.open("GET", "http://192.168.164.128/public_room/ajax/get-graph?id=1&type=comments", true);
