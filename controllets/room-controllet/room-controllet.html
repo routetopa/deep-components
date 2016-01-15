@@ -1,23 +1,41 @@
 <link rel="import" href="../../bower_components/polymer/polymer.html" />
 
+<link rel="import" href="../../bower_components/paper-dialog/paper-dialog.html">
+
 <dom-module id="room-controllet">
 
     <template>
 
         <style is="custom-style">
 
-            .cos {
-                height: 400px;
-                width:  400px;
-                background-color: red;
+            .room {
+                cursor: pointer;
             }
+
+            .room-body {
+
+            }
+
+            .room-subject {
+
+            }
+
+            .room-timestamp {
+
+            }
+
         </style>
 
-        <div class=" cos grid-item">
+        <div id={{roomId}} class="grid-item room" on-mouseover="_showTooltip">
             <div class="room-body"><span>{{body}}</span></div>
             <div class="room-subject"><span>{{subject}}</span></div>
             <div class="room-timestamp">{{timestamp}}</div>
         </div>
+
+        <paper-dialog id="dialog_info_input">
+            <h2 id="dialog_name"></h2>
+            <p id="dialog_description"></p>
+        </paper-dialog>
 
     </template>
 
@@ -28,6 +46,26 @@
             is : 'room-controllet',
 
             properties : {
+
+                roomId : {
+                    type  : Number,
+                    value : undefined
+                },
+
+                roomColor : {
+                    type  : String,
+                    value : ""
+                },
+
+                roomHeight : {
+                    type  : Number,
+                    value : undefined
+                },
+
+                roomWidth : {
+                    type  : Number,
+                    value : undefined
+                },
 
                 body : {
                     type  : String,
@@ -44,34 +82,31 @@
                     value : ""
                 },
 
-                color : {
-                    type  : String,
-                    value : ""
-                },
-
                 openData : {
                     type  : Number,
-                    value : 0
+                    value : undefined
                 },
 
                 comments : {
                     type  : Number,
-                    value : 0
-                },
-
-                roomHeight : {
-                    type  : Number,
-                    value : 0
-                },
-
-                roomWidth : {
-                    type  : Number,
-                    value : 0
+                    value : undefined
                 }
 
             },
 
             attached : function() {
+                var room = document.getElementById(this.roomId);
+                console.log(room);
+                $(room).height(this.roomHeight);
+                $(room).width(this.roomWidth);
+                $(room).css('background', this.roomColor)
+//                $(this.$.room).height(this.roomHeight);
+//                $(this.$.room).width(this.roomWidth);
+//                $(this.$.room).css('background', this.color)
+            },
+
+            _showTooltip: function() {
+                console.log("weeeeeeeeeeee");
             }
 
         });

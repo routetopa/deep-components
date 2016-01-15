@@ -15,9 +15,10 @@
         <style is="custom-style">
             paper-icon-button{
                 color: #00BCD4;
-                height: 48px;
-                width: 48px;
+                height: 64px;
+                width: 64px;
                 padding: 0px;
+                margin: 0px;
                 --paper-icon-button-ink-color: #00BCD4;
             }
 
@@ -38,12 +39,12 @@
 
             .chevron-left{
                 float: left;
-                margin-top: 8px;
+                /*margin-top: 8px;*/
             }
 
             .chevron-right{
                 float: right;
-                margin-top: 8px;
+                /*margin-top: 8px;*/
             }
 
             .box{
@@ -82,8 +83,8 @@
         </style>
 
         <div class="header">
-            <paper-icon-button class="chevron-left" on-click="_onPrevClick" icon="chevron-left"></paper-icon-button>
-            <paper-icon-button class="chevron-right" on-click="_onNextClick" icon="chevron-right"></paper-icon-button>
+            <paper-icon-button class="chevron-left" on-click="_onPrevClick" icon="arrow-back" title="back"></paper-icon-button>
+            <paper-icon-button class="chevron-right" on-click="_onNextClick" icon="arrow-forward" title="forward"></paper-icon-button>
 
             <div class="box">
                 <div class="avatar">[[avatar]]</div>
@@ -168,10 +169,12 @@
 
                 if(flag == "invisible") {
                     buttons[0].style.visibility = "hidden";
+//                    buttons[0].style.width = "0px";
                     return;
                 }
                 else
                     buttons[0].style.visibility = "visible";
+//                    buttons[0].style.width = "64px";
 
                 if(flag)
                     buttons[0].removeAttribute("disabled");
