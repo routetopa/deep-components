@@ -24,18 +24,26 @@
 
             }
 
+            .room-tooltip {
+                position: absolute;
+                border: 2px solid #2196F3;
+                background-color: #E0E0E0;
+                min-width: 248px;
+                top: 0px;
+                left: 0px;
+            }
+
         </style>
 
-        <div id={{roomId}} class="grid-item room" on-mouseover="_showTooltip">
+        <div id={{roomId}} class$="grid-item room {{roomHeight}} {{roomWidth}}" on-mouseover="_showTooltip" on-mouseout="_hideTooltip">
             <div class="room-body"><span>{{body}}</span></div>
             <div class="room-subject"><span>{{subject}}</span></div>
             <div class="room-timestamp">{{timestamp}}</div>
-        </div>
 
-        <paper-dialog id="dialog_info_input">
-            <h2 id="dialog_name"></h2>
-            <p id="dialog_description"></p>
-        </paper-dialog>
+            <paper-dialog id="pippo" class="room-tooltip">
+                {{roomId}}
+            </paper-dialog>
+        </div>
 
     </template>
 
@@ -58,13 +66,13 @@
                 },
 
                 roomHeight : {
-                    type  : Number,
-                    value : undefined
+                    type  : String,
+                    value : ""
                 },
 
                 roomWidth : {
-                    type  : Number,
-                    value : undefined
+                    type  : String,
+                    value : ""
                 },
 
                 body : {
@@ -96,17 +104,25 @@
 
             attached : function() {
                 var room = document.getElementById(this.roomId);
-                console.log(room);
-                $(room).height(this.roomHeight);
-                $(room).width(this.roomWidth);
-                $(room).css('background', this.roomColor)
-//                $(this.$.room).height(this.roomHeight);
-//                $(this.$.room).width(this.roomWidth);
-//                $(this.$.room).css('background', this.color)
+                $(room).css('background', this.roomColor);
             },
 
             _showTooltip: function() {
-                console.log("weeeeeeeeeeee");
+
+                var room = document.getElementById(this.roomId);
+                var pos = room.getBoundingClientRect();
+                console.log(pos.top);
+                console.log(pos.left);
+//                $(this.$.pippo).css("top", 1000);
+//                $(this.$.pippo).css("left", 100);
+//                $("#pippo").css("top", pos.top - 4);
+//                $("#pippo").css("left", pos.left - 4);
+                this.$.pippo.open();
+            },
+
+            _hideTooltip: function() {
+                this.$.pippo.close();
+                console.log("eeeeeeeeeeeeeeeeee")
             }
 
         });
