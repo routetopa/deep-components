@@ -1,0 +1,81 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html" />
+
+<dom-module id="room-controllet">
+
+    <template>
+
+        <style is="custom-style">
+
+            .cos {
+                height: 400px;
+                width:  400px;
+                background-color: red;
+            }
+        </style>
+
+        <div class=" cos grid-item">
+            <div class="room-body"><span>{{body}}</span></div>
+            <div class="room-subject"><span>{{subject}}</span></div>
+            <div class="room-timestamp">{{timestamp}}</div>
+        </div>
+
+    </template>
+
+    <script>
+
+        Polymer({
+
+            is : 'room-controllet',
+
+            properties : {
+
+                body : {
+                    type  : String,
+                    value : ""
+                },
+
+                subject  : {
+                    type  : String,
+                    value : ""
+                },
+
+                timestamp : {
+                    type  : String,
+                    value : ""
+                },
+
+                color : {
+                    type  : String,
+                    value : ""
+                },
+
+                openData : {
+                    type  : Number,
+                    value : 0
+                },
+
+                comments : {
+                    type  : Number,
+                    value : 0
+                },
+
+                roomHeight : {
+                    type  : Number,
+                    value : 0
+                },
+
+                roomWidth : {
+                    type  : Number,
+                    value : 0
+                }
+
+            },
+
+            attached : function() {
+            }
+
+        });
+
+    </script>
+
+</dom-module>
