@@ -1,12 +1,11 @@
-/********************************************************************************************************************************
 <!--<script src="../shared_js/jquery-1.11.2.min.js"></script>-->
 <!--<script src="../../bower_components/webcomponentsjs/webcomponents-lite.min.js"></script>-->
 <script src="../shared_js/perfect-scrollbar/js/min/perfect-scrollbar.jquery.min.js"></script>
 <link rel="stylesheet" href="../shared_js/perfect-scrollbar/css/perfect-scrollbar.min.css">
 
-<script defer src="../../bower_components/l20n/dist/compat/web/l20n.min.js"></script>
-<script defer src="../../locales/lnHashMap.js"></script>
-/********************************************************************************************************************************
+<!--<script defer src="../../bower_components/l20n/dist/compat/web/l20n.min.js"></script>-->
+<script src="../../locales/lnHashMap.js"></script>
+
 
 <link rel="import" href="../../bower_components/polymer/polymer.html">
 
@@ -107,6 +106,11 @@
                 dataletPreset : {
                     type  : Object,
                     value : []
+                },
+
+                localization : {
+                    type : String,
+                    value : "en"
                 }
 
             },
@@ -118,33 +122,22 @@
 //                    console.log(this.selectedDatalet);
                     this.dataUrl = this.dataletPreset["data-url"];
                 }
-
+                ln["localization"] = this.localization;
             },
 
             _updateSlider : function(e){
                 switch (e.detail.selected) {
                     case 0:
-                       /* document.l10n.formatValues('slide1Title', 'slide1Subtitle').then(A => slider.setTitle(A[0], A[1]));*/
-                        /*document.l10n.formatValues('slide1Title', 'slide1Subtitle').then(function(A){
-                            slider.setTitle(A[0], A[1])
-                        }, function(reason){
-                            var a = reason;
-                            console.log(a);
-                        });*/
-                        slider.setTitle(ln["slide1Title_it"], ln["slide1Subtitle_it"]);
-
-//                        slider.setTitle("SELECT DATASET", "Search or copy and paste the url of dataset.");
+                        slider.setTitle(ln["slide1Title_" + this.localization], ln["slide1Subtitle_" + this.localization]);
                         slider.chevronLeft("invisible");
                         slider.chevronRight(false);
                         if(slider.getPrevSelected() == 1)
                             slider.chevronRight(true);
                         break;
                     case 1:
-                        document.l10n.formatValues('slide2Title', 'slide2Subtitle').then(function(A){slider.setTitle(A[0], A[1])});
-//                        slider.setTitle("SELECT DATA", "Select the fields from tree-view. The multi-table will show the values related to the selected fields.");
+                        slider.setTitle(ln["slide2Title_" + this.localization], ln["slide2Subtitle_" + this.localization]);
                         if(this.modify){
                             slider.chevronLeft("invisible");
-//                            slider.setAvatar("2");
                         }
                         else{
                             slider.chevronLeft(true);
@@ -154,8 +147,7 @@
                         this._allowThirdStep({detail: {fields: tree_view_multi_table.getFlatFields()}});
                         break;
                     case 2:
-                        document.l10n.formatValues('slide3Title', 'slide3Subtitle').then(function(A){slider.setTitle(A[0], A[1])});
-//                        slider.setTitle("SELECT VISUALIZATION", "Select a visualization, fill out inputs and labels (optional).");
+                        slider.setTitle(ln["slide3Title_" + this.localization], ln["slide3Subtitle_" + this.localization]);
                         slider.chevronLeft(true);
                         slider.chevronRight("invisible");
                         this.$.datalet_selection.setFields(tree_view_multi_table.getFlatFields());

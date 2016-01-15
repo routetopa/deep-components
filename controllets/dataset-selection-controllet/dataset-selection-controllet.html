@@ -127,9 +127,9 @@
         <paper-material id="material_container" elevation="5">
 
             <paper-tabs selected="{{selected}}">
-                <paper-tab noink><span data-l10n-id="listView"></span></paper-tab>
-                <paper-tab noink><span data-l10n-id="treeMapView"></span></paper-tab>
-                <paper-tab noink disabled><span data-l10n-id="mostPopular"></span></paper-tab>
+                <paper-tab noink><span id="listView"></span></paper-tab>
+                <paper-tab noink><span id="treeMapView"></span></paper-tab>
+                <!--<paper-tab noink disabled><span data-l10n-id="mostPopular"></span></paper-tab>-->
             </paper-tabs>
 
             <neon-animated-pages selected="{{selected}}" entry-animation="fade-in-animation" exit-animation="fade-out-animation">
@@ -256,15 +256,17 @@
 
                 this._loadTreeMap();
 
-                this._translate();
+                this.async(function(){this._translate();},100);
             },
 
             _translate : function(){
-                var that = this;
-                document.l10n.formatValue('availableDatasets').then(function(s){$("#_datasets")[0].setAttribute("label", s)});
+                this.$._datasets.setAttribute("label", ln["availableDatasets_" + ln["localization"]]);
+                this.$.listView.innerHTML    = ln["listView_" + ln["localization"]];
+                this.$.treeMapView.innerHTML = ln["treeMapView_" + ln["localization"]];
+
                 if(this.isSuggested)
-                    document.l10n.formatValue('suggestedDatasets').then(function(s){$("#s_datasets")[0].setAttribute("label", s)});
-                document.l10n.formatValue('selectedUrl').then(function(s){that.$.selected_url.setAttribute("label", s)});
+                    this.$$("#s_datasets").setAttribute("label", ln["suggestedDatasets_" + ln["localization"]]);
+                this.$.selected_url.setAttribute("label", ln["selectedUrl_" + ln["localization"]]);
             },
 
             _filterDatasets : function(e){
