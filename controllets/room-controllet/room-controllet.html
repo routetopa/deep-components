@@ -2,46 +2,79 @@
 
 <link rel="import" href="../../bower_components/paper-dialog/paper-dialog.html">
 
+<link rel="import" href="../../bower_components/iron-icons/editor-icons.html">
+<link rel="import" href="../../bower_components/iron-icons/communication-icons.html">
+<link rel="import" href="../../bower_components/iron-icon/iron-icon.html">
+
 <dom-module id="room-controllet">
 
     <template>
 
         <style is="custom-style">
 
-            .room {
-                cursor: pointer;
+            iron-icon {
+                padding: 0px;
+                margin: 0px;
             }
 
-            .room-body {
+            iron-icon.this {
+                position: absolute;
+                top: -3px;
+                left: -3px;
+
+                -moz-transform: scaleX(-1);
+                -o-transform: scaleX(-1);
+                -webkit-transform: scaleX(-1);
+                transform: scaleX(-1);
+                filter: FlipH;
+                -ms-filter: "FlipH";
 
             }
 
-            .room-subject {
-
-            }
-
-            .room-timestamp {
-
+            paper-dialog {
+                margin: 0px;
             }
 
             .room-tooltip {
+                font-family: 'Roboto', 'Helvetica Neue', Helvetica, Arial, sans-serif;
                 position: absolute;
-                border: 2px solid #2196F3;
-                background-color: #E0E0E0;
-                min-width: 248px;
-                top: 0px;
-                left: 0px;
+                min-width: 250px;
+                top: 49px;
+                left: 98px;
+                padding: 16px;
+            }
+
+            .div_icon{
+                display: inline-block;
+                height: 20px;
+                width: 20px;
+                margin:4px 6px 4px 2px;
+            }
+
+            p {
+                padding-top: 8px;
+                margin: 0px;
+                white-space: nowrap;
+            }
+
+            .ptop{
+                padding-top: 0px;
             }
 
         </style>
 
-        <div id={{roomId}} class$="grid-item room {{roomHeight}} {{roomWidth}}" on-mouseover="_showTooltip" on-mouseout="_hideTooltip">
-            <div class="room-body"><span>{{body}}</span></div>
+        <div id={{roomId}} class$="grid-item {{roomHeight}} {{roomWidth}}" on-mouseover="_showTooltip" on-mouseout="_hideTooltip" style$="background-color: {{roomColor}};">
+            <div class="room-body">{{body}}</div>
             <div class="room-subject"><span>{{subject}}</span></div>
             <div class="room-timestamp">{{timestamp}}</div>
 
-            <paper-dialog id="pippo" class="room-tooltip">
-                {{roomId}}
+            <paper-dialog id="room_info" class="room-tooltip">
+                <iron-icon icon="communication:call-made" class="this" style="color: #2196F3;"></iron-icon>
+                <p class="ptop">This room <b style="color: #2196F3;">{{subject}}</b>,</p>
+                <p>created by <b style="color: #2196F3;">{{roomOwner}}</b> has:</p>
+                <p><iron-icon class="div_icon" style$="background-color: {{roomColor}};"></iron-icon><b style$="color: {{roomColor}};">{{_howMany(roomShape, 0)}} views</b> (<b style$="color: {{roomColor}};">{{roomViews}}</b>),</p>
+                <p><iron-icon icon="editor:border-left"></iron-icon> <b>{{_howMany(roomShape, 1)}} comments</b> (<b>{{comments}}</b>) and</p>
+                <p><iron-icon icon="editor:border-bottom"></iron-icon> <b>{{_howMany(roomShape, 2)}} datasets</b> (<b>{{datasets}}</b>).</p>
             </paper-dialog>
         </div>
 
@@ -75,6 +108,16 @@
                     value : ""
                 },
 
+                roomOwner : {
+                    type  : String,
+                    value : ""
+                },
+
+                roomShape : {
+                    type  : Array,
+                    value : undefined
+                },
+
                 body : {
                     type  : String,
                     value : ""
@@ -90,7 +133,7 @@
                     value : ""
                 },
 
-                openData : {
+                roomViews : {
                     type  : Number,
                     value : undefined
                 },
@@ -98,31 +141,31 @@
                 comments : {
                     type  : Number,
                     value : undefined
+                },
+
+                datasets : {
+                    type  : Number,
+                    value : undefined
                 }
 
             },
 
             attached : function() {
-                var room = document.getElementById(this.roomId);
-                $(room).css('background', this.roomColor);
+                console.log(this.views);
             },
 
             _showTooltip: function() {
-
-                var room = document.getElementById(this.roomId);
-                var pos = room.getBoundingClientRect();
-                console.log(pos.top);
-                console.log(pos.left);
-//                $(this.$.pippo).css("top", 1000);
-//                $(this.$.pippo).css("left", 100);
-//                $("#pippo").css("top", pos.top - 4);
-//                $("#pippo").css("left", pos.left - 4);
-                this.$.pippo.open();
+                this.$.room_info.open();
             },
 
             _hideTooltip: function() {
-                this.$.pippo.close();
-                console.log("eeeeeeeeeeeeeeeeee")
+                this.$.room_info.close();
+            },
+
+            _howMany: function(A, i) {
+//                return this.roomShape[i];
+//                console.log(i);
+                return A[i];
             }
 
         });
