@@ -97,6 +97,11 @@ Example:
         Polymer({
             is : 'graph-with-clustering-datalet',
 
+            listeners: {
+                'graph-datalet_on-node-select' : '_onNodeSelect',
+                'graph-datalet_on-node-out' : '_onNodeOut'
+            },
+
             properties: {
                 /**
                  * It's the url for the preview
@@ -138,6 +143,7 @@ Example:
                     type: Array,
                     values: ["Agree", "Neutral", "Not agree"]
                 },
+
                 prev_selected_node : {
                     type : Object,
                     value : null
@@ -200,11 +206,11 @@ Example:
                 return fill(d);*/
                 switch((d % 3)){
                     case 0 :
-                        return "#1F77B4";
+                        return "transparent";//"#1F77B4";//neutral
                     case 1 :
-                        return "#2CA02C";
+                        return "#2CA02C";//agree
                     case 2:
-                        return "#FF1E1E";
+                        return "transparent";//"#FF1E1E";//disagree
                 }
             },
 
@@ -277,7 +283,6 @@ Example:
 
                             for(var n=0; n < this.groups[g][s].values.length;n++)
                                nodesMap[this.groups[g][s].values[n].id] = node;
-
                         }
                     }
                 }
@@ -322,7 +327,6 @@ Example:
                         .style("fill", "#60df20")
                         .style("opacity", .2)
                         .on("click", function(d) {
-                            alert(d.id);
                         });
 
 
@@ -340,9 +344,11 @@ Example:
                         .on("mouseout", this.mouseout)
                         .attr("class", function (t) { return t.fixed ? "node fixed" : "node"})
                         .attr("name", function (t) { return t.name ? t.name.split(" ").join("_").toLowerCase() : ""})
+                        .attr("id", function (t) { return "g" + t.id;})
                         .append("circle")
                             .on("click", this.active)
                             .attr("id", function(t){ return t.id })
+                            .attr("originalId", function (t) { return t.originalId;})
                             .attr("class", function (t) { return t.fixed ? "" : "drag"})
                             .attr("r", function (t){ return t.r ? t.r : 15 })
                             .attr("style", function (t) {
@@ -515,6 +521,29 @@ Example:
 
             _onCloseClick : function(){
                 //_this.$.dialog.close();
+            },
+
+            _onNodeSelect : function(e){
+                try {
+                    var nodeId = $("[originalId=" + e.detail.id + "]")[0].id;
+                    var gNode = $("#g" + nodeId)[0];
+                    var node = this.graph.nodes[nodeId];
+
+                    d3.select(gNode).selectAll("circle").transition().duration(600).ease("elastic")
+                            .attr("r", function (t) {
+                                return (!t.image) ? 1 == t.fixed ? 1.4 * t.r : t.r + 10 : t.r;
+                            });
+
+                    _this.$.dialog.close();
+                    _this.$.dialog_title.innerHTML = node.name;
+                    _this.$.dialog_content.innerHTML = node.content;
+
+                    _this.$.dialog.open();
+                }catch(e){}
+            },
+
+            _onNodeOut : function(e){
+                this.mouseout();
             },
 
             /**

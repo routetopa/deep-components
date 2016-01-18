@@ -171,6 +171,11 @@ Example:
                 offset :{
                     type : Number,
                     value : 15
+                },
+
+                prevNetwork : {
+                    type : Object,
+                    value : undefined
                 }
 
                 /*end test*/
@@ -178,19 +183,6 @@ Example:
 
             convexHulls : function() {
                 var hullset = [];
-                /*for(var i in _this.groups){
-                    for(var j=0; j < _this.groups[i].length && _this.groups[i].extend;j++){
-                        var vertices = [];
-                        for(var v=0;v < _this.groups[i][j].values.length; v++){
-                            vertices.push([_this.groups[i][j].values[v].x - _this.offset, _this.groups[i][j].values[v].y - _this.offset]);
-                            vertices.push([_this.groups[i][j].values[v].x - _this.offset, _this.groups[i][j].values[v].y + _this.offset]);
-                            vertices.push([_this.groups[i][j].values[v].x + _this.offset, _this.groups[i][j].values[v].y - _this.offset]);
-                            vertices.push([_this.groups[i][j].values[v].x + _this.offset, _this.groups[i][j].values[v].y + _this.offset]);
-                        }
-
-                        hullset.push({id :  parseInt(i) + 3, sentiment: j , path: d3.geom.hull(vertices), extend : _this.groups[i][j].extend});
-                    }
-                }*/
                 for(var n in _this.hulls){
                    var vertices = [];
                    for(var v in _this.hulls[n]){
@@ -199,7 +191,7 @@ Example:
                        vertices.push([_this.hulls[n][v].x + _this.offset, _this.hulls[n][v].y - _this.offset]);
                        vertices.push([_this.hulls[n][v].x + _this.offset, _this.hulls[n][v].y + _this.offset]);
                    }
-                    hullset.push({/*id :  parseInt(i) + 3,*/ sentiment: _this.hulls[n][v].sentiment , path: d3.geom.hull(vertices), extend : true});
+                    hullset.push({id :  n, sentiment: _this.hulls[n][v].sentiment , path: d3.geom.hull(vertices)});
                 }
                 return hullset;
             },
@@ -243,7 +235,7 @@ Example:
                         this.groups[f.id][parseInt(this.graph.nodes[i].sentiment) - 1].values.push(this.graph.nodes[i]);
 
                     }else{
-                        this.graph.nodes[i].group = -1;
+                        this.graph.nodes[i].group = 0;
                     }
                 }
             },
@@ -255,37 +247,44 @@ Example:
                 //Associate the root to first node
                 var root = ({
                     id: 0,
-                    group: -1,
-                    r: 30,
+                    group: 0,
+                    name : this.graph.nodes[0].name,
+                    content : this.graph.nodes[0].content,
+                    r: this.graph.nodes[0].r,
                 });
                 nodes.push(root);
-                nodesMap[-1] = root;
                 nodesMap[0] = root;
 
                 this.hulls = [];
                 for(var g in this.groups){
                     for(var s in this.groups[g]) {
                         if(this.groups[g][s].values.length > 0) {
-                            if(this.groups[g][s].extend){
+                            if(this.groups[g][s].extend || this.groups[g][s].values.length == 1 ){
                                 this.hulls[g + "-" + s] = [];
                                 for(var n=0; n < this.groups[g][s].values.length;n++) {
                                     var node = ({
                                         id: g + "-" + s + "-" + n,
                                         group: g + "-" + s,
                                         sentiment: parseInt(s) + 1,
-                                        r: 3,
+                                        r: this.groups[g][s].values[n].r,
+                                        name : this.groups[g][s].values[n].name,
+                                        content : this.groups[g][s].values[n].content
                                     });
                                     nodes.push(node);
                                     nodesMap[this.groups[g][s].values[n].id] = node;
                                     this.hulls[g + "-" + s].push(node);
                                 }
                             }else{
+                                var r = 0;
+                                for(var n=0; n < this.groups[g][s].values.length;n++) r+= Math.sqrt(this.groups[g][s].values[n].r);
+
                                 var node =  ({
                                     id : g + "-"+ s,
                                     group: g,
                                     sentiment: parseInt(s) + 1,
                                     nodes: this.groups[g][s].values,
-                                    r: this.groups[g][s].values.length * 3,
+                                    r: (r < 4) ? 4 : r,
+                                    content : "This node contains " + this.groups[g][s].values.length + " nodes",
                                     extend: false
                                 });
 
@@ -294,8 +293,6 @@ Example:
                                 for(var n=0; n < this.groups[g][s].values.length;n++)
                                     nodesMap[this.groups[g][s].values[n].id] = node;
                             }
-
-                            //root.r +=(this.groups[g][s].values.length * 3);
                         }
                     }
                 }
@@ -311,15 +308,12 @@ Example:
                                 id: id,
                                 source: nodesMap[this.graph.links[e].source.id],
                                 target: nodesMap[this.graph.links[e].target.id],
-                                value: 120,
                                 size : 1
                             });
                     }else{
                         links.push({
-                            id: id,
-                            source: nodesMap[this.graph.links[e].source.father.id],
+                            source: nodesMap[this.graph.links[e].source.id],
                             target: nodesMap[this.graph.links[e].target.id],
-                            value: 120,
                             size : 1
                         });
                     }
@@ -335,8 +329,6 @@ Example:
                     if(links[i].id == id) return links[i];
                 }
                 return null;
-
-
             },
 
             init : function(){
@@ -362,18 +354,21 @@ Example:
                         .style("fill", "#60df20")
                         .style("opacity", .2)
                         .on("click", function(d) {
-                            alert(d.id);
+                            var gids = d.id.split("-");
+                            _this.groups[parseInt(gids[0])][parseInt(gids[1])].extend = false;
+                            _this.init();
                         });
 
 
-                this.svg.selectAll(".link").data(net.links).remove();
-                this.svgLinks = this.svg.selectAll(".link").data(net.links).enter()
+                this.svg.selectAll(".link").data((this.prevNetwork != undefined) ? this.prevNetwork.links : net.links).remove();
+                this.svgLinks = this.svg.selectAll(".link").data(net.links);
+                this.svgLinks.enter()
                         .append("line")
                         .attr("class", "link")
-                        .attr("style", function(t){ return "stroke:#333"; /*+ t.color*/ })
+                        .attr("style", function(t){ return "stroke:#999999"; /*+ t.color*/ })
                         .style("stroke-width", function(d) { return d.size || 0.3; });
 
-                this.svg.selectAll(".node").data(net.nodes).remove();
+                this.svg.selectAll(".node").data((this.prevNetwork != undefined) ? this.prevNetwork.nodes : net.nodes).remove();
                 this.svgNodes = this.svg.selectAll(".node").data(net.nodes).enter()
                         .append("g")
                         .on("mouseover", this.mouseover)
@@ -410,6 +405,8 @@ Example:
                         .style("opacity", 1);
 
                 d3.selectAll(".drag").call(force.drag), this.svg.selectAll("g.node").call(this.text);
+
+                this.prevNetwork = net;
             },
 
             buildGraph: function (){
@@ -447,7 +444,7 @@ Example:
                         .attr("xlink:href","http://icons.iconarchive.com/icons/hopstarter/soft-scraps/256/User-Executive-Green-icon.png");
 
                 for (var i = 0; i < this.graph.links.length; ++i) {
-                    o = this.graph.links[i];
+                    var o = this.graph.links[i];
                     o.source = this.graph.nodes[o.source];
                     o.target = this.graph.nodes[o.target];
                 }
@@ -515,21 +512,30 @@ Example:
             },
 
             mouseover : function (t) {
-                d3.select(this).selectAll("circle").transition().duration(600).ease("elastic").attr("r", function (t) {
-                    return 1 == t.fixed ? 1.4 * t.r : t.r + 10;
-                });
+                d3.select(this).selectAll("circle").transition().duration(600).ease("elastic")
+                        .attr("r", function (t) {
+                            return (t.extend == undefined) ? t.r + 1 : t.r + 10;
+                        })
+                        /*.attr("style", function(t){
+                            return (t.extend == undefined) ? "fill:#FFFFFF; stroke:" + t.color : "fill:" + t.color + "; stroke:#FFFFFF";
+                        })*/;
+
 
                 _this.$.dialog.close();
-                _this.$.dialog_title.innerHTML   = t.name;
-                _this.$.dialog_content.innerHTML = t.nodes ? t.nodes.length : 1;
+                _this.$.dialog_title.innerHTML   = (t.name) ? t.name : "Cluster";
+                _this.$.dialog_content.innerHTML = t.content;
 
                 _this.$.dialog.open();
             },
 
             mouseout : function () {
-                d3.select(this).selectAll("text").style("visibility", "hidden"), d3.select(this).selectAll("circle").transition().duration(400).attr("r", function (t) {
-                    return t.r ? t.r : 15
-                });
+                d3.select(this).selectAll("text").style("visibility", "hidden"), d3.select(this).selectAll("circle").transition().duration(400)
+                       .attr("r", function (t) {
+                          return t.r ? t.r : 15
+                        })
+                       /*.attr("style", function(t){
+                            return (t.extend == undefined) ? "stroke:#FFFFFF; fill:" + t.color  : "stroke:#FFFFFF; fill:" + t.color;
+                       })*/;
                 _this.$.dialog.close();
             },
 
@@ -541,15 +547,15 @@ Example:
                     _this.fire('graph-datalet_node-clicked', {node : t});
 
                     if(_this.prev_selected_node != null){
-                        _this.prev_selected_node.style.fill = _this.prev_selected_node.style.stroke;
+                        _this.prev_selected_node.style.fill = _this.prev_selected_node.color;
                         _this.prev_selected_node.style.stroke = "#FFFFFF";
                     }
 
                     _this.prev_selected_node = document.getElementById("" + t.id);
-                    _this.prev_selected_node.style.fill   = "#FFFFFF"
+                    _this.prev_selected_node.style.fill   = "#FFFFFF";
                     _this.prev_selected_node.style.stroke = t.color;
                 }else{
-                   var gids = t.id.split("-");
+                    var gids = t.id.split("-");
                     _this.groups[gids[0]][gids[1]].extend = true;
                     _this.init();
                 }
