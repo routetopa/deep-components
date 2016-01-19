@@ -96,17 +96,15 @@ Example:
 
     <script>
 
-        gnodes = [];
-        glinks = [];
-
-        width  = undefined;
-        height = undefined;
-        svg    = undefined;
         _this  = null;
-        prev_selected_node = null;
 
         Polymer({
             is : 'graph-datalet',
+
+            listeners: {
+                'graph-datalet_on-node-hover' : '_onNodeHover',
+                'graph-datalet_on-node-out' : '_onNodeOut'
+            },
 
             properties: {
                 /**
@@ -116,9 +114,19 @@ Example:
                  * @type Strig
                  * @default ''
                  */
-                data : {
+                graph : {
                     type : Object,
                     value : undefined
+                },
+
+                gnodes : {
+                    type : Array,
+                    value : []
+                },
+
+                glinks : {
+                    type : Array,
+                    value : []
                 },
 
                 width: {
@@ -128,7 +136,7 @@ Example:
 
                 height : {
                     type : Number,
-                    type: undefined
+                    value: undefined
                 },
 
                 svg: {
@@ -138,6 +146,11 @@ Example:
                 feelings:{
                     type: Array,
                     values: ["Agree", "Neutral", "Not agree"]
+                },
+
+                prev_selected_node : {
+                    type : Object,
+                    value : null
                 }
             },
 
@@ -148,9 +161,9 @@ Example:
                                    .append("g");
 
                 //set initial zoom
-                scale = (1.0);
+                var scale = (1.0);
                 //translate = [(width-scale*width)/2, ((height-scale*height)/4)];
-                translate = [100, 100];
+                var translate = [100, 100];
                 this.svg.transition()
                         .duration(750)
                         .attr("transform", "translate(" + translate + ")scale(" + scale +    ")")
@@ -163,8 +176,8 @@ Example:
 
                 this.svg.append("rect")
                         .attr("fill", "white")
-                        .attr("width", width)
-                        .attr("height", height);
+                        .attr("width", this.width)
+                        .attr("height", this.height);
 
 
                 var graph = {};
@@ -174,15 +187,6 @@ Example:
 
                 //pezzotto
                 for(var i =0; i < graph.nodes.length; i++){
-                    /*this.svg.append("filter")
-                            .attr("id","filter_" + graph.nodes[i].id)
-                            .attr("x","0%")
-                            .attr("y","0%")
-                            .attr("width","100%")
-                            .attr("height","100%")
-                            .append("feImage")
-                               .attr("xlink:href", graph.nodes[i].image);*/
-
                     this.svg.append("defs")
                                .append("pattern")
                                   .attr("id","image_" + graph.nodes[i].id)
@@ -203,7 +207,7 @@ Example:
                     return t.value ? t.value : 80
                 }).on("tick", this.tick).start();
 
-                glinks = this.svg.selectAll(".link").data(graph.links).enter().append("line").attr("class", "link");
+                this.glinks = this.svg.selectAll(".link").data(graph.links).enter().append("line").attr("class", "link");
 
                 this.svg.selectAll(".link")
                         .attr("style", function(t){
@@ -213,24 +217,18 @@ Example:
                             return "stroke-width:" + (t.size ? t.size : 1.0) + "px";
                         });
 
-                gnodes = this.svg.selectAll(".node").data(graph.nodes).enter().append("g").attr("class", function (t) {
-                                                                                                return t.fixed ? "node fixed" : "node"
-                                                                                            })
-                                                                                            .attr("name", function (t) {
-                                                                                                return t.name ? t.name.split(" ").join("_").toLowerCase() : ""
-                                                                                            }).on("mouseover", this.mouseover)
-                                                                                              .on("mouseout", this.mouseout)
-                                                                                              .on("click", this.active)
+                this.gnodes = this.svg.selectAll(".node").data(graph.nodes).enter().append("g")
+                                                                                            .attr("class", function (t) { return t.fixed ? "node fixed" : "node"})
+                                                                                            .attr("id", function (t) { return "g" + t.id;})
+                                                                                            .attr("name", function (t) { return t.name ? t.name.split(" ").join("_").toLowerCase() : ""})
+                                                                                            .on("mouseover", this.mouseover)
+                                                                                            .on("mouseout", this.mouseout)
+                                                                                            .on("click", this.active)
                                                                                             .append("circle")
-                                                                                                .attr("id", function(t){
-                                                                                                   return t.id;
-                                                                                                })
-                                                                                                .attr("class", function (t) {
-                                                                                                    return t.fixed ? "" : "drag"
-                                                                                                })
-                                                                                                .attr("r", function (t) {
-                                                                                                    return t.r ? t.r : 15
-                                                                                                })
+                                                                                                .attr("id", function(t){ return t.id;})
+                                                                                                .attr("originalId", function (t) { return t.originalId;})
+                                                                                                .attr("class", function (t) { return t.fixed ? "" : "drag"})
+                                                                                                .attr("r", function (t) {return t.r ? t.r : 15})
                                                                                                 .attr("style", function (t) {
                                                                                                     switch(parseInt(t.sentiment)){
                                                                                                         case 1 :
@@ -248,19 +246,16 @@ Example:
                                                                                                     return "fill:" + t.color + "; stroke:white"
                                                                                                 });
 
-                //d3.selectAll('circle').attr("filter", function(t){return  t.image ? 'url(#filter_' + t.id +')' : ""});
                 d3.selectAll('circle').attr("style", function(t){
-                    return  "fill :" + (t.image ? 'url(#image_' + t.id +')' : t.color)});
+                    return  "fill :" + (t.image ? 'url(#image_' + t.id +')' : t.color)
+                });
 
-                //d3.selectAll(".drag").call(force.drag), svg.selectAll("g.fixed").call(text);
                 d3.selectAll(".drag").call(force.drag), this.svg.selectAll("g.node").call(this.text);
-
-                svg = this.svg;
 
             },
 
             zoom: function() {
-                svg.attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")");
+                _this.svg.attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")");
             },
 
             text: function (t)
@@ -275,35 +270,37 @@ Example:
             },
 
             tick : function () {
-                // d3.select("svg").attr("style", "transform:translate(8%)");
-                d3.selectAll("g foreignObject").attr("x", function (t) {
-                    return t.x + (t.r ? 0.8 * t.r : 15)
-                }).attr("y", function (t) {
-                    return t.y - 20
-                });
+                if(_this.gnodes != undefined)
+                {
+                    d3.selectAll("g foreignObject").attr("x", function (t) {
+                        return t.x + (t.r ? 0.8 * t.r : 15)
+                    }).attr("y", function (t) {
+                        return t.y - 20
+                    });
 
-                d3.selectAll("#logo text").attr("x", function (t) {
-                    return t.x + .7 * (t.r ? t.r : 15)
-                }).attr("y", function (t) {
-                    return t.y
-                });
+                    d3.selectAll("#logo text").attr("x", function (t) {
+                        return t.x + .7 * (t.r ? t.r : 15)
+                    }).attr("y", function (t) {
+                        return t.y
+                    });
 
 
-                gnodes.attr("cx", function (t) {
-                    return t.x = Math.max(25, Math.min(width - 50, t.x))
-                }).attr("cy", function (t) {
-                    return t.y = Math.max(8, Math.min(600, t.y))
-                });
+                    _this.gnodes.attr("cx", function (t) {
+                        return t.x = Math.max(25, Math.min(_this.width - 50, t.x))
+                    }).attr("cy", function (t) {
+                        return t.y = Math.max(8, Math.min(600, t.y))
+                    });
 
-                glinks.attr("x1", function (t) {
-                    return t.source.x
-                }).attr("y1", function (t) {
-                    return t.source.y
-                }).attr("x2", function (t) {
-                    return t.target.x
-                }).attr("y2", function (t) {
-                    return t.target.y
-                })
+                    _this.glinks.attr("x1", function (t) {
+                        return t.source.x
+                    }).attr("y1", function (t) {
+                        return t.source.y
+                    }).attr("x2", function (t) {
+                        return t.target.x
+                    }).attr("y2", function (t) {
+                        return t.target.y
+                    });
+                }
             },
             mouseover : function (t) {
                 d3.select(this).selectAll("circle").transition().duration(600).ease("elastic")
@@ -328,16 +325,18 @@ Example:
             },
 
             active : function (t) {
-               _this.fire('graph-datalet_node-clicked', {node : t});
+                if(t.image) return;
 
-                if(prev_selected_node != null){
-                    prev_selected_node.style.fill = prev_selected_node.style.stroke;
-                    prev_selected_node.style.stroke = "#FFFFFF";
+                _this.fire('graph-datalet_node-clicked', {node : t});
+
+                if(_this.prev_selected_node != null){
+                    _this.prev_selected_node.style.fill = _this.prev_selected_node.style.stroke;
+                    _this.prev_selected_node.style.stroke = "#FFFFFF";
                 }
 
-                prev_selected_node = document.getElementById("" + t.id);
-                prev_selected_node.style.fill   = "#FFFFFF"
-                prev_selected_node.style.stroke = t.color;
+                _this.prev_selected_node = document.getElementById("" + t.id);
+                _this. prev_selected_node.style.fill   = "#FFFFFF"
+                _this.prev_selected_node.style.stroke = t.color;
 
                /* _this.$.dialog.close();
                 _this.$.dialog_title.innerHTML   = t.name;
@@ -348,6 +347,30 @@ Example:
 
             _onCloseClick : function(){
                 //_this.$.dialog.close();
+            },
+
+            _onNodeHover : function(e){
+                try {
+                    var nodeId = $("[originalId=" + e.detail.id + "]")[0].id;
+                    var gNode = $("#g" + nodeId)[0];
+                    var node = this.graph.nodes[nodeId];
+
+                    d3.select(gNode).selectAll("circle").transition().duration(600).ease("elastic")
+                            .attr("r", function (t) {
+                                return (!t.image) ? 1 == t.fixed ? 1.4 * t.r : t.r + 10 : t.r;
+                            });
+
+                    _this.$.dialog.close();
+                    _this.$.dialog_title.innerHTML = node.name;
+                    _this.$.dialog_content.innerHTML = node.content;
+
+                    _this.$.dialog.open();
+                }catch(e){}
+
+            },
+
+            _onNodeOut : function(e){
+                    this.mouseout();
             },
 
             /**
@@ -364,26 +387,16 @@ Example:
 
                 _this = this;
 
-                //this.height = 9 * this.width / 16;
-                //this.height = this.width;
-
-                width  = this.width;
-                height = this.height;
-
-                //this.$.graph_content.style.height = height + "px";
 
                 this.svg = d3.select("svg#sbiricuda").attr("class", "svg").attr({
                     width: "100%",
                     height: "100%"
-                }).attr("viewBox", "0 0 " + this.width + " " + this.height).attr("pointer-events", "all").style("position", "absolute").attr("style", "transform:translate(0px)");
+                }).attr("viewBox", "0 0 " + this.width + " " + this.height)
+                        .attr("pointer-events", "all")
+                        .attr("style", "transform:translate(0px)")
+                        .style("position", "absolute");
 
-                /*var g = JSON.parse(this.data);
-                g.nodes[0].x = this.width / 2;
-                g.nodes[0].y = this.height / 2;
-                this.buildGraph(g);*/
-
-                var json = JSON.stringify(this.data);
-                var g = this.data;
+                var g = this.graph;
                 g.nodes[0].x = this.width / 2;
                 g.nodes[0].y = this.height / 8;
                 this.buildGraph(g);

@@ -49,7 +49,7 @@ Example:
 @group datalets
 -->
 
-<dom-module id="graph-with-clustering-datalet">
+<dom-module id="graph-with-clustering-extend-datalet">
     <template>
 
         <link rel="stylesheet" href="static/css/graphStyle.css">
@@ -95,12 +95,7 @@ Example:
         _this  = null;
 
         Polymer({
-            is : 'graph-with-clustering-datalet',
-
-            listeners: {
-                'graph-datalet_on-node-select' : '_onNodeSelect',
-                'graph-datalet_on-node-out' : '_onNodeOut'
-            },
+            is : 'graph-with-clustering-extend-datalet',
 
             properties: {
                 /**
@@ -116,8 +111,8 @@ Example:
                 },
 
                 svgNodes : {
-                   type : Array,
-                   value : []
+                    type : Array,
+                    value : []
                 },
 
                 svgLinks : {
@@ -143,7 +138,6 @@ Example:
                     type: Array,
                     values: ["Agree", "Neutral", "Not agree"]
                 },
-
                 prev_selected_node : {
                     type : Object,
                     value : null
@@ -177,6 +171,11 @@ Example:
                 offset :{
                     type : Number,
                     value : 15
+                },
+
+                prevNetwork : {
+                    type : Object,
+                    value : undefined
                 }
 
                 /*end test*/
@@ -184,33 +183,27 @@ Example:
 
             convexHulls : function() {
                 var hullset = [];
-                for(var i in _this.groups){
-                    for(var j=0; j < _this.groups[i].length;j++){
-                        var vertices = [];
-                        for(var v=0;v < _this.groups[i][j].values.length; v++){
-                            vertices.push([_this.groups[i][j].values[v].x - _this.offset, _this.groups[i][j].values[v].y - _this.offset]);
-                            vertices.push([_this.groups[i][j].values[v].x - _this.offset, _this.groups[i][j].values[v].y + _this.offset]);
-                            vertices.push([_this.groups[i][j].values[v].x + _this.offset, _this.groups[i][j].values[v].y - _this.offset]);
-                            vertices.push([_this.groups[i][j].values[v].x + _this.offset, _this.groups[i][j].values[v].y + _this.offset]);
-                        }
-
-                        hullset.push({id :  parseInt(i) + 3, sentiment: j , path: d3.geom.hull(vertices), extend : _this.groups[i][j].extend});
-                    }
+                for(var n in _this.hulls){
+                   var vertices = [];
+                   for(var v in _this.hulls[n]){
+                       vertices.push([_this.hulls[n][v].x - _this.offset, _this.hulls[n][v].y - _this.offset]);
+                       vertices.push([_this.hulls[n][v].x - _this.offset, _this.hulls[n][v].y + _this.offset]);
+                       vertices.push([_this.hulls[n][v].x + _this.offset, _this.hulls[n][v].y - _this.offset]);
+                       vertices.push([_this.hulls[n][v].x + _this.offset, _this.hulls[n][v].y + _this.offset]);
+                   }
+                    hullset.push({id :  n, sentiment: _this.hulls[n][v].sentiment , path: d3.geom.hull(vertices)});
                 }
-
                 return hullset;
             },
 
             fill : function(d){
-                /*var fill = d3.scale.category20();
-                return fill(d);*/
-                switch((d % 3)){
+                switch(((d - 1) % 3)){
                     case 0 :
-                        return "transparent";//"#1F77B4";//neutral
+                        return "#1F77B4";
                     case 1 :
-                        return "#2CA02C";//agree
+                        return "#2CA02C";
                     case 2:
-                        return "transparent";//"#FF1E1E";//disagree
+                        return "#FF1E1E";
                 }
             },
 
@@ -222,11 +215,7 @@ Example:
                 return curve(d.path); // 0.8
             },
 
-            getNetwork : function(){
-
-                var nodes = [], links = [];
-                this.groups = [];
-
+            getGroups : function(){
                 for(var i= 0,j=0; i < this.graph.nodes.length;i++,j+=3){
 
                     var f = this.graph.nodes[i].father;
@@ -237,71 +226,109 @@ Example:
                     if(f != null){
                         if(this.groups[f.id] == undefined){
                             this.groups[f.id] = ([
-                                {key: "" + j, values: [], extend: true},
-                                {key: "" + (j + 1), values: [],extend: true},
-                                {key: "" + (j + 2), values: [], extend: true}
+                                {key: "" + j, values: [], extend: false},
+                                {key: "" + (j + 1), values: [],extend: false},
+                                {key: "" + (j + 2), values: [], extend: false}
                             ]);
                         }
-
                         this.graph.nodes[i].group = f.id;
+                        this.groups[f.id][parseInt(this.graph.nodes[i].sentiment) - 1].values.push(this.graph.nodes[i]);
 
-                        switch (parseInt(this.graph.nodes[i].sentiment)){
-                            case 1:
-                                if(this.groups[f.id][0].extend) {
-                                    this.groups[f.id][0].values.push(this.graph.nodes[i]);
-                                }
-                               break;
-                            case 2:
-                                if(this.groups[f.id][1].extend)
-                                   this.groups[f.id][1].values.push(this.graph.nodes[i]);
-                                break;
-                            case 3:
-                                if(this.groups[f.id][2].extend)
-                                   this.groups[f.id][2].values.push(this.graph.nodes[i]);
-                                break;
-                        }
                     }else{
                         this.graph.nodes[i].group = 0;
                     }
                 }
+            },
 
+            getNetwork : function(){
+                var nodes = [], links = [];
                 var nodesMap = [];
 
+                //Associate the root to first node
+                var root = ({
+                    id: 0,
+                    group: 0,
+                    name : this.graph.nodes[0].name,
+                    content : this.graph.nodes[0].content,
+                    r: this.graph.nodes[0].r,
+                });
+                nodes.push(root);
+                nodesMap[0] = root;
+
+                this.hulls = [];
                 for(var g in this.groups){
                     for(var s in this.groups[g]) {
                         if(this.groups[g][s].values.length > 0) {
-                            var node =  ({
-                                group: g,
-                                sentiment: parseInt(s) + 1,
-                                nodes: this.groups[g][s].values,
-                                r: this.groups[g][s].values.length * 6,
-                                extend: false
-                            });
+                            if(this.groups[g][s].extend || this.groups[g][s].values.length == 1 ){
+                                this.hulls[g + "-" + s] = [];
+                                for(var n=0; n < this.groups[g][s].values.length;n++) {
+                                    var node = ({
+                                        id: g + "-" + s + "-" + n,
+                                        group: g + "-" + s,
+                                        sentiment: parseInt(s) + 1,
+                                        r: this.groups[g][s].values[n].r,
+                                        name : this.groups[g][s].values[n].name,
+                                        content : this.groups[g][s].values[n].content
+                                    });
+                                    nodes.push(node);
+                                    nodesMap[this.groups[g][s].values[n].id] = node;
+                                    this.hulls[g + "-" + s].push(node);
+                                }
+                            }else{
+                                var r = 0;
+                                for(var n=0; n < this.groups[g][s].values.length;n++) r+= Math.sqrt(this.groups[g][s].values[n].r);
 
-                            node.id = nodes.length;
-                            nodes.push(node);
+                                var node =  ({
+                                    id : g + "-"+ s,
+                                    group: g,
+                                    sentiment: parseInt(s) + 1,
+                                    nodes: this.groups[g][s].values,
+                                    r: (r < 4) ? 4 : r,
+                                    content : "This node contains " + this.groups[g][s].values.length + " nodes",
+                                    extend: false
+                                });
 
-                            for(var n=0; n < this.groups[g][s].values.length;n++)
-                               nodesMap[this.groups[g][s].values[n].id] = node;
+                                nodes.push(node);
+
+                                for(var n=0; n < this.groups[g][s].values.length;n++)
+                                    nodesMap[this.groups[g][s].values[n].id] = node;
+                            }
                         }
                     }
                 }
 
                 for(var e = 0; e < this.graph.links.length; e++){
                     if(this.graph.nodes[this.graph.links[e].source.id].group !=  this.graph.nodes[this.graph.links[e].target.id].group) {
+                        var id = nodesMap[this.graph.links[e].source.id].id + "-" + nodesMap[this.graph.links[e].target.id].id;
+                        var link = this.findLink(links, id);
+                        if(link != null)
+                            link.size += 3;
+                        else
+                            links.push({
+                                id: id,
+                                source: nodesMap[this.graph.links[e].source.id],
+                                target: nodesMap[this.graph.links[e].target.id],
+                                size : 1
+                            });
+                    }else{
                         links.push({
-                            //id: nodesMap[this.graph.nodes[this.graph.links[e].source.id].group].id + "-" + nodesMap[this.graph.nodes[this.graph.links[e].target.id].group].id,
                             source: nodesMap[this.graph.links[e].source.id],
                             target: nodesMap[this.graph.links[e].target.id],
-                            value: 100
+                            size : 1
                         });
                     }
-
                 }
 
-                //return {nodes : nodes, links : links};
-                return {nodes : this.graph.nodes, links : this.graph.links};
+                return {nodes : nodes, links : links};
+                //return {nodes : this.graph.nodes, links : this.graph.links};
 
+            },
+
+            findLink : function(links, id){
+                for(var i=0; i<links.length;i++){
+                    if(links[i].id == id) return links[i];
+                }
+                return null;
             },
 
             init : function(){
@@ -310,13 +337,13 @@ Example:
 
                 if(this.force != null) this.force.stop();
                 force = d3.layout.force()
-                                     .nodes(net.nodes)
-                                     .links(net.links)
-                                        .size([this.width, this.height])
-                                        .charge(-1e3)
-                                        .friction(.7)
-                                        .linkDistance(function (t){ return t.value ? t.value : 80})
-                                        .on("tick", this.tick).start();
+                        .nodes(net.nodes)
+                        .links(net.links)
+                        .size([this.width, this.height])
+                        .charge(-1e3)
+                        .friction(.7)
+                        .linkDistance(function (t){ return t.value ? t.value : 80})
+                        .on("tick", this.tick).start();
 
                 this.hullg.selectAll("path.hull").remove();
                 this.hull = this.hullg.selectAll("path.hull")
@@ -327,48 +354,50 @@ Example:
                         .style("fill", "#60df20")
                         .style("opacity", .2)
                         .on("click", function(d) {
+                            var gids = d.id.split("-");
+                            _this.groups[parseInt(gids[0])][parseInt(gids[1])].extend = false;
+                            _this.init();
                         });
 
 
-                this.svg.selectAll(".link").data(net.links).remove();
-                this.svgLinks = this.svg.selectAll(".link").data(net.links).enter()
+                this.svg.selectAll(".link").data((this.prevNetwork != undefined) ? this.prevNetwork.links : net.links).remove();
+                this.svgLinks = this.svg.selectAll(".link").data(net.links);
+                this.svgLinks.enter()
                         .append("line")
                         .attr("class", "link")
-                        .attr("style", function(t){ return "stroke:#333"; /*+ t.color*/ })
+                        .attr("style", function(t){ return "stroke:#999999"; /*+ t.color*/ })
                         .style("stroke-width", function(d) { return d.size || 0.3; });
 
-                this.svg.selectAll(".node").data(net.nodes).remove();
+                this.svg.selectAll(".node").data((this.prevNetwork != undefined) ? this.prevNetwork.nodes : net.nodes).remove();
                 this.svgNodes = this.svg.selectAll(".node").data(net.nodes).enter()
                         .append("g")
                         .on("mouseover", this.mouseover)
                         .on("mouseout", this.mouseout)
                         .attr("class", function (t) { return t.fixed ? "node fixed" : "node"})
                         .attr("name", function (t) { return t.name ? t.name.split(" ").join("_").toLowerCase() : ""})
-                        .attr("id", function (t) { return "g" + t.id;})
                         .append("circle")
-                            .on("click", this.active)
-                            .attr("id", function(t){ return t.id })
-                            .attr("originalId", function (t) { return t.originalId;})
-                            .attr("class", function (t) { return t.fixed ? "" : "drag"})
-                            .attr("r", function (t){ return t.r ? t.r : 15 })
-                            .attr("style", function (t) {
-                                switch(parseInt(t.sentiment)){
-                                    case 1 :
-                                        t.color = "#1F77B4";
-                                        break;
-                                    case 2 :
-                                        t.color = "#2CA02C";
-                                        break;
-                                    case 3:
-                                        t.color = "#D62728";
-                                        break;
-                                    default:
-                                        t.color = "#333";
-                                }
-                                //return t.color ? "fill:" + t.color : !1 + "; stroke:white"
-                                return "fill:" + t.color + "; stroke:white"
-                             })
-                            .attr("filter", function(t){return  t.image ? 'url(#filter1)' : ""});
+                        .on("click", this.active)
+                        .attr("id", function(t){ return t.id })
+                        .attr("class", function (t) { return t.fixed ? "" : "drag"})
+                        .attr("r", function (t){ return t.r ? t.r : 15 })
+                        .attr("style", function (t) {
+                            switch(parseInt(t.sentiment)){
+                                case 1 :
+                                    t.color = "#1F77B4";
+                                    break;
+                                case 2 :
+                                    t.color = "#2CA02C";
+                                    break;
+                                case 3:
+                                    t.color = "#D62728";
+                                    break;
+                                default:
+                                    t.color = "#333";
+                            }
+                            //return t.color ? "fill:" + t.color : !1 + "; stroke:white"
+                            return "fill:" + t.color + "; stroke:white"
+                        })
+                        .attr("filter", function(t){return  t.image ? 'url(#filter1)' : ""});
 
                 this.svg.style("opacity", 1e-6)
                         .transition()
@@ -376,6 +405,8 @@ Example:
                         .style("opacity", 1);
 
                 d3.selectAll(".drag").call(force.drag), this.svg.selectAll("g.node").call(this.text);
+
+                this.prevNetwork = net;
             },
 
             buildGraph: function (){
@@ -413,13 +444,14 @@ Example:
                         .attr("xlink:href","http://icons.iconarchive.com/icons/hopstarter/soft-scraps/256/User-Executive-Green-icon.png");
 
                 for (var i = 0; i < this.graph.links.length; ++i) {
-                    o = this.graph.links[i];
+                    var o = this.graph.links[i];
                     o.source = this.graph.nodes[o.source];
                     o.target = this.graph.nodes[o.target];
                 }
 
                 this.hullg = this.svg.append("g");
 
+                this.getGroups();
                 this.init();
             },
 
@@ -480,70 +512,57 @@ Example:
             },
 
             mouseover : function (t) {
-                d3.select(this).selectAll("circle").transition().duration(600).ease("elastic").attr("r", function (t) {
-                    return 1 == t.fixed ? 1.4 * t.r : t.r + 10;
-                });
+                d3.select(this).selectAll("circle").transition().duration(600).ease("elastic")
+                        .attr("r", function (t) {
+                            return (t.extend == undefined) ? t.r + 1 : t.r + 10;
+                        })
+                        /*.attr("style", function(t){
+                            return (t.extend == undefined) ? "fill:#FFFFFF; stroke:" + t.color : "fill:" + t.color + "; stroke:#FFFFFF";
+                        })*/;
+
 
                 _this.$.dialog.close();
-                _this.$.dialog_title.innerHTML   = t.name;
+                _this.$.dialog_title.innerHTML   = (t.name) ? t.name : "Cluster";
                 _this.$.dialog_content.innerHTML = t.content;
 
                 _this.$.dialog.open();
             },
 
             mouseout : function () {
-                d3.select(this).selectAll("text").style("visibility", "hidden"), d3.select(this).selectAll("circle").transition().duration(400).attr("r", function (t) {
-                    return t.r ? t.r : 15
-                });
+                d3.select(this).selectAll("text").style("visibility", "hidden"), d3.select(this).selectAll("circle").transition().duration(400)
+                       .attr("r", function (t) {
+                          return t.r ? t.r : 15
+                        })
+                       /*.attr("style", function(t){
+                            return (t.extend == undefined) ? "stroke:#FFFFFF; fill:" + t.color  : "stroke:#FFFFFF; fill:" + t.color;
+                       })*/;
                 _this.$.dialog.close();
             },
 
             active : function (t) {
 
-                _this.init();
-                _this.fire('graph-datalet_node-clicked', {node : t});
+                if(t.extend == undefined)
+                {
+                    _this.init();
+                    _this.fire('graph-datalet_node-clicked', {node : t});
 
-                if(_this.prev_selected_node != null){
-                    _this.prev_selected_node.style.fill = _this.prev_selected_node.style.stroke;
-                    _this.prev_selected_node.style.stroke = "#FFFFFF";
+                    if(_this.prev_selected_node != null){
+                        _this.prev_selected_node.style.fill = _this.prev_selected_node.color;
+                        _this.prev_selected_node.style.stroke = "#FFFFFF";
+                    }
+
+                    _this.prev_selected_node = document.getElementById("" + t.id);
+                    _this.prev_selected_node.style.fill   = "#FFFFFF";
+                    _this.prev_selected_node.style.stroke = t.color;
+                }else{
+                    var gids = t.id.split("-");
+                    _this.groups[gids[0]][gids[1]].extend = true;
+                    _this.init();
                 }
-
-                _this.prev_selected_node = document.getElementById("" + t.id);
-                _this.prev_selected_node.style.fill   = "#FFFFFF"
-                _this.prev_selected_node.style.stroke = t.color;
-
-                /* _this.$.dialog.close();
-                 _this.$.dialog_title.innerHTML   = t.name;
-                 _this.$.dialog_content.innerHTML = t.content;
-
-                 _this.$.dialog.open();*/
             },
 
             _onCloseClick : function(){
                 //_this.$.dialog.close();
-            },
-
-            _onNodeSelect : function(e){
-                try {
-                    var nodeId = $("[originalId=" + e.detail.id + "]")[0].id;
-                    var gNode = $("#g" + nodeId)[0];
-                    var node = this.graph.nodes[nodeId];
-
-                    d3.select(gNode).selectAll("circle").transition().duration(600).ease("elastic")
-                            .attr("r", function (t) {
-                                return (!t.image) ? 1 == t.fixed ? 1.4 * t.r : t.r + 10 : t.r;
-                            });
-
-                    _this.$.dialog.close();
-                    _this.$.dialog_title.innerHTML = node.name;
-                    _this.$.dialog_content.innerHTML = node.content;
-
-                    _this.$.dialog.open();
-                }catch(e){}
-            },
-
-            _onNodeOut : function(e){
-                this.mouseout();
             },
 
             /**
@@ -564,9 +583,9 @@ Example:
                     width: "100%",
                     height: "100%"
                 }).attr("viewBox", "0 0 " + this.width + " " + this.height)
-                  .attr("pointer-events", "all")
+                        .attr("pointer-events", "all")
                         .attr("style", "transform:translate(0px)")
-                  .style("position", "absolute");
+                        .style("position", "absolute");
 
                 this.buildGraph();
             }

@@ -203,7 +203,7 @@
             <items-vslider-controllet id="vslider" datalets-list-url={{dataletsListUrl}} preselected-datalet={{preselectedDatalet}}></items-vslider-controllet>
 
             <paper-material id="datalet_selection_inputs" elevation="5">
-                <div class="input_header"><span data-l10n-id="inputs"></span></div>
+                <div class="input_header"><span id="inputs"></span></div>
                 <template is="dom-repeat" items="{{inputs}}" index-as="ddl_index">
                     <div class="inputs">
                         <paper-dropdown-menu id={{ddl_index}} label={{item.name}}>
@@ -222,7 +222,7 @@
             </paper-material>
 
             <paper-material id="datalet_selection_labels" elevation="5">
-                <div class="input_header"><span data-l10n-id="baseInfo"></span></div>
+                <div class="input_header"><span id="baseInfo"></span></div>
 
                 <div class="inputs">
                     <paper-input maxlength="32" label="title" class="base_input"></paper-input>
@@ -232,7 +232,7 @@
                     <paper-textarea maxlength="100" label="description" class="base_input"></paper-textarea>
                 </div>
 
-                <div class="input_header"><span data-l10n-id="layouts"></span></div>
+                <div class="input_header"><span id="layouts"></span></div>
 
                 <template is="dom-repeat" items="{{labels}}" index-as="index">
                     <div class="inputs">
@@ -255,12 +255,12 @@
                 <!--</template>-->
 
                 <paper-material id="datalet_selection_datalet" elevation="5">
-                    <div class="input_header"><span data-l10n-id="dataletPreview"></span></div>
+                    <div class="input_header"><span id="dataletPreview"></span></div>
                     <div id="datalet_selection_datalet_placeholder"></div>
 
                 </paper-material>
 
-                <paper-button id="add_button" disabled raised on-click="_addDatalet"><span data-l10n-id="addDatalet"></span></paper-button>
+                <paper-button id="add_button" disabled raised on-click="_addDatalet"></paper-button>
 
             </div>
 
@@ -402,9 +402,15 @@
             },
 
             _translate : function(){
-//                document.l10n.formatValue('commentLabel').then(s => $("#comment")[0].setAttribute("label", s));
+
+                this.$.add_button.innerHTML     = ln["addDatalet_" + ln["localization"]];
+                this.$.inputs.innerHTML         = ln["inputs_" + ln["localization"]];
+                this.$.baseInfo.innerHTML       = ln["baseInfo_" + ln["localization"]];
+                this.$.layouts.innerHTML        = ln["layouts_" + ln["localization"]];
+                this.$.dataletPreview.innerHTML = ln["dataletPreview_" + ln["localization"]];
+
                 if(this.modify)
-                    document.l10n.formatValue('modifyDatalet').then(s => this.$.add_button.innerText = s);
+                    this.$.add_button.innerHTML = ln["modifyDatalet_" + ln["localization"]];
             },
 
             _selectDatalet : function(e){
@@ -596,6 +602,7 @@
             },
 
             _showInfo : function(e){
+                var that = this;
                 var t = e.target;
                 if(t.tagName.indexOf("IRON-ICON") != -1)
                     t = $(e.target).parents("paper-icon-button")[0];
@@ -607,8 +614,7 @@
                     dataset = $.grep(this.labels, function(e){ return e.name == name; })[0];
 
                 this.$.dialog_name.innerHTML = dataset.name;
-//                this.$.dialog_description.innerHTML = dataset.description;
-                document.l10n.formatValue(dataset.description).then(s => this.$.dialog_description.innerHTML = s);
+                this.$.dialog_description.innerHTML = ln[dataset.description + "_" +  ln["localization"]];
                 this.$.dialog_info_input.open();
 
                 var pos = t.getBoundingClientRect();
