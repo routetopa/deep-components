@@ -15,7 +15,6 @@ function build(root, meta, place_holder, select_listener, width, height) {
 
     var x = d3.scale.linear()
         .domain([0, width])
-        .domain([0, width])
         .range([0, width]);
 
     var y = d3.scale.linear()
@@ -247,8 +246,8 @@ function build(root, meta, place_holder, select_listener, width, height) {
                 line = [word],
                 lineNumber = 0,
                 lineHeight = 1.1, // ems
-                x = parseFloat(text.attr("x")),
-                y = parseFloat(text.attr("y")),
+                //x = parseFloat(text.attr("x")),
+                //y = parseFloat(text.attr("y")),
                 dy = parseFloat(text.attr("dy"));
                 text.selectAll("tspan").remove();
 
