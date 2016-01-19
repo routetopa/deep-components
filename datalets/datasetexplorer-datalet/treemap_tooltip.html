@@ -1,0 +1,180 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html" />
+
+<link rel="import" href="../../bower_components/paper-dialog/paper-dialog.html">
+
+<link rel="import" href="../../bower_components/iron-icons/editor-icons.html">
+<link rel="import" href="../../bower_components/iron-icons/communication-icons.html">
+
+<dom-module id="treemap-tooltip">
+
+    <template>
+
+        <style is="custom-style">
+
+            iron-icon {
+                padding: 0px;
+                margin: 0px;
+            }
+
+            iron-icon.this {
+                position: absolute;
+                top: -3px;
+                left: -3px;
+
+                -moz-transform: scaleX(-1);
+                -o-transform: scaleX(-1);
+                -webkit-transform: scaleX(-1);
+                transform: scaleX(-1);
+                filter: FlipH;
+                -ms-filter: "FlipH";
+            }
+
+            paper-dialog {
+                margin: 0px;
+            }
+
+            .tooltip {
+                font-family: 'Roboto', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+                padding: 16px;
+                min-width: 200px;
+                max-width: 400px;
+                position: absolute;
+
+                /*position: relative*/
+                /*top: 20px;*/
+                /*left: 20px;*/
+            }
+
+            .tooltip_top {
+                display: flex;
+                margin: 0px;
+                padding: 0px;
+                height: 64px;
+            }
+
+            /*.tooltip_logo {*/
+            /*}*/
+
+            .tooltip_name {
+                height: 20px;
+                font-weight: 700;
+                padding: 22px;
+            }
+
+            .tooltip_img {
+                margin: 0px;
+                padding: 0px;
+                height: 64px;
+                width: 64px;
+            }
+
+            p {
+                margin: 0px;
+                padding: 8px 0px 0px 0px;
+            }
+
+            .ptop{
+                padding-top: 0px;
+            }
+
+        </style>
+
+        <paper-dialog id="first_info" class="tooltip">
+            <iron-icon icon="communication:call-made" class="this" style$="color: {{color}};"></iron-icon>
+            <div class="tooltip_top">
+                <div class="tooltip_logo"><img class="tooltip_img" src$={{logoUrl}}></div>
+                <div class="tooltip_name" style$="color: {{color}};">{{name}}</div>
+            </div>
+            <p><i>{{description}}</i></p>
+            <p>There are <b>{{datasets}}</b> datasets.</p>
+        </paper-dialog>
+
+        <paper-dialog id="middle_info" class="tooltip">
+            <iron-icon icon="communication:call-made" class="this" style$="color: {{color}};"></iron-icon>
+            <p class="ptop"><b style$="color: {{color}};">{{name}}</b></p>
+            <p>There are <b>{{datasets}}</b> datasets.</p>
+        </paper-dialog>
+
+        <paper-dialog id="last_info" class="tooltip">
+            <iron-icon icon="communication:call-made" class="this" style$="color: {{color}};"></iron-icon>
+            <p class="ptop"><b style$="color: {{color}};">{{name}}</b></p>
+            <p>Dataset URL: <b>{{datasetUrl}}</b></p>
+        </paper-dialog>
+
+    </template>
+
+    <script>
+
+        Polymer({
+
+            is : 'treemap-tooltip',
+
+            properties : {
+
+                name : {
+                    type  : String,
+                    value : ""
+                },
+
+                color : {
+                    type  : String,
+                    value : "#2196F3"
+                },
+
+                description : {
+                    type  : String,
+                    value : ""
+                },
+
+                logoUrl : {
+                    type  : String,
+                    value : ""
+                },
+
+                datasets : {
+                    type  : String,
+                    value : "0"
+                },
+
+                datasetUrl : {
+                    type  : String,
+                    value : ""
+                }
+
+            },
+
+            showTooltip: function(e, lvl) {
+                var x = e.layerX + 16;//clientX
+                var y = e.layerY + 16;
+
+                this.hideTooltip();
+
+                switch (lvl) {
+                    case "first":
+                        $("#first_info").css("top", y);
+                        $("#first_info").css("left", x);
+                        this.$.first_info.open();
+                        break;
+                    case "middle":
+                        $("#middle_info").css("top", y);
+                        $("#middle_info").css("left", x);
+                        this.$.middle_info.open();
+                        break;
+                    case "last":
+                        $("#last_info").css("top", y);
+                        $("#last_info").css("left", x);
+                        this.$.last_info.open();
+                }
+            },
+
+            hideTooltip: function() {
+                this.$.first_info.close();
+                this.$.middle_info.close();
+                this.$.last_info.close();
+            }
+
+        });
+
+    </script>
+
+</dom-module>

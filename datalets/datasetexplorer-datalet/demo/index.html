@@ -10,14 +10,53 @@
 </head>
 <body>
 
+
 <script src="https://code.jquery.com/jquery-2.1.4.min.js" type="text/javascript"></script>
-<link rel="import" href="../datasetexplorer-datalet.html" />
+<script src="../../shared_js/webcomponents.min.js" type="text/javascript"></script>
+<!--<link rel="import" href="../datasetexplorer-datalet.html" />-->
 
-<datasetexplorer-datalet
-        data-url="http://spod.routetopa.eu/openwall/api/datasetTree"
-        fields='["result,provider_name","result,organization_name","result,package_name","result,resource_name","result,url","result,w"]'
-></datasetexplorer-datalet>
+<!--<datasetexplorer-datalet-->
+        <!--data-url="http://spod.routetopa.eu/openwall/api/datasetTree"-->
+        <!--fields='["result,provider_name","result,organization_name","result,package_name","result,resource_name","result,url","result,w"]'-->
+<!--&gt;</datasetexplorer-datalet>-->
 
+<link rel="import" href="../treemap_tooltip.html" />
+
+<treemap-tooltip id="treemap_tooltip" color="yellowgreen" name="CKAN" description="Ckan datasets provider bla cjaijh aiughauiha hauihauiaha djisdjdijd. Thsos jnsuihsuhs dmodjod jjjjjd dijnaiosjf saojfioasjdf!!!" logo-url="http://essi-lab.eu/twiki/pub/GIcat/CKANProfilerGuide/logo-ckan.png" datasets="151" dataset-url="http://ckan.routetopa.eu/api/action/datastore_search?resource_id=c3b52992-ba61-4a73-a637-0f2e1ca26aab"></treemap-tooltip>
+
+<div class="box" style="background-color: yellowgreen" onmousemove="showTooltip(event, 'first')" onmouseout="hideTooltip()"></div>
+<div class="box" style="background-color: aqua" onmousemove="showTooltip(event, 'middle')" onmouseout="hideTooltip()"></div>
+<div class="box" style="background-color: orchid" onmousemove="showTooltip(event, 'last')" onmouseout="hideTooltip()"></div>
+
+<style>
+    .box {
+        height: 200px;
+        width: 200px;
+        cursor: pointer;
+    }
+</style>
+
+<script>
+    function showTooltip(e, lvl) {
+        switch (lvl) {
+            case "first":
+                    //setta dati tooltip
+                treemap_tooltip.color = "yellowgreen";
+                break;
+            case "middle":
+                treemap_tooltip.color = "aqua";
+                break;
+            case "last":
+                treemap_tooltip.color = "orchid";
+        }
+
+        treemap_tooltip.showTooltip(e, lvl);
+    }
+
+    function hideTooltip() {
+        treemap_tooltip.hideTooltip();
+    }
+</script>
 
 </body>
 </html>

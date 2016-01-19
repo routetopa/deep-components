@@ -30,7 +30,7 @@
 -->
 
 <link rel="import" href="../base-ajax-json-jsonpath-datalet/base-ajax-json-jsonpath-datalet.html">
-<link rel="import" href="../base-ajax-json-jsonpath-datalet/base-ajax-json-jsonpath-datalet.html">
+<link rel="import" href="treemap_tooltip.html">
 
 <!--
 
@@ -110,8 +110,11 @@ Example:
                 fill: #bbb;
             }
         </style>
-        <div id="treemap_placeholder"></div>
+        <div id="treemap_placeholder">
+            <treemap-tooltip id="treemap_tooltip"></treemap-tooltip>
+        </div>
         <base-ajax-json-jsonpath-datalet data-url="{{dataUrl}}" fields="{{fields}}" data="{{data}}"></base-ajax-json-jsonpath-datalet>
+        <!--<treemap-tooltip id="treemap_tooltip"></treemap-tooltip>-->
     </template>
 
     <script src="../shared_js/d3.js"></script>

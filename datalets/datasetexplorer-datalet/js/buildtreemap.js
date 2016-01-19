@@ -129,8 +129,32 @@ function build(root, meta, place_holder, select_listener, width, height) {
         g.append("rect")
             .attr("class", "parent")
             .call(rect)
-            .append("title")
-            .text(function(d) { return d.name;  /*formatNumber(d.value);*/ });
+            .attr("onmousemove", function(d) {
+                //var data = ["lvl", "name", "color", "description", "logoUrl", "datasets", "datasetUrl"];
+                var data = ["", d.name, d.color, "", "", "0", ""];
+                //d.name.split(':')[1]???
+                if (d.depth == 1) {
+                    // FIRST LVL
+                    data[0] = "first";
+                    data[3] = "description";//???
+                    data[4] = "http://essi-lab.eu/twiki/pub/GIcat/CKANProfilerGuide/logo-ckan.png";//id???
+                    data[5] = "2222";//meta???
+                } else if (d._children && !d._children[0]._children) {
+                    // LAST LVL
+                    data[0] = "last";
+                    data[6] = "datasert url";//???
+                } else {
+                    // MIDDLE LVL
+                    data[0] = "middle";
+                    data[5] = "1111";//meta???
+                }
+                //console.log(data);
+                //console.log(data.toString());
+                return "showTooltip(event, '" + data + "')";
+            })
+            .attr("onmouseout", function() {return "hideTooltip()";})
+            //.append("title")
+            //.text(function(d) { return d.name;  /*formatNumber(d.value);*/ });
 
         g.append("text")
             .attr("dy", ".75em")
@@ -223,13 +247,10 @@ function build(root, meta, place_holder, select_listener, width, height) {
     }
 
     function checkProviderName(name) {
-        console.log(name);
         if (name.substr(0, 2) == 'p:') {
-            console.log("in");
             var pid = name.substr(2);
             name = meta[pid].title;
         }
-        console.log(name);
         return name;
     }
 
@@ -308,4 +329,22 @@ function build(root, meta, place_holder, select_listener, width, height) {
             ? name(d.parent) + "." + d.name
             : d.name;
     }
+
 };
+
+function showTooltip(e, data) {
+    var data = data.split(",");
+
+    treemap_tooltip.name = data[1];
+    treemap_tooltip.color = data[2];
+    treemap_tooltip.description = data[3];
+    treemap_tooltip.logoUrl = data[4];
+    treemap_tooltip.datasets = data[5];
+    treemap_tooltip.datasetUrl = data[6];
+
+    treemap_tooltip.showTooltip(e, data[0]);
+}
+
+function hideTooltip() {
+    treemap_tooltip.hideTooltip();
+}
