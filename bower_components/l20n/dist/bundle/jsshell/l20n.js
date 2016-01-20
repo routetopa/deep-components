@@ -71,8 +71,7 @@
       }
 
       const ch = this._source[this._index];
-      const hasIndex = index !== undefined;
-      const value = this.getValue(ch, hasIndex, hasIndex);
+      const value = this.getValue(ch, index === undefined);
       let attrs;
 
       if (value === undefined) {
@@ -107,17 +106,16 @@
       }
     },
 
-    getValue: function(
-      ch = this._source[this._index], index = false, required = true) {
+    getValue: function(ch = this._source[this._index], optional = false) {
       switch (ch) {
         case '\'':
         case '"':
           return this.getString(ch, 1);
         case '{':
-          return this.getHash(index);
+          return this.getHash();
       }
 
-      if (required) {
+      if (!optional) {
         throw this.error('Unknown value type');
       }
 
@@ -287,8 +285,7 @@
       }
       ++this._index;
       this.getWS();
-      const hasIndex = index !== undefined;
-      const value = this.getValue(undefined, hasIndex);
+      const value = this.getValue();
 
       if (key in attrs) {
         throw this.error('Duplicate attribute "' + key, 'duplicateerror');
@@ -304,7 +301,7 @@
       }
     },
 
-    getHash: function(index) {
+    getHash: function() {
       const items = Object.create(null);
 
       ++this._index;
@@ -340,8 +337,6 @@
 
       if (defKey) {
         items.__default = defKey;
-      } else if (!index) {
-        throw this.error('Unresolvable Hash Value');
       }
 
       return items;
@@ -654,9 +649,9 @@
         isSimpleValue = true;
       }
 
-      if (isSimpleValue) {
+      if (isSimpleValue && (!entries[id] || isSimpleNode)) {
         if (id in root) {
-          throw this.error('Duplicated id: ' + id);
+          throw this.error();
         }
         root[id] = value;
       } else {

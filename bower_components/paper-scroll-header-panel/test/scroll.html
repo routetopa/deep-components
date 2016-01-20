@@ -27,7 +27,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
   <test-fixture id="trivialProgress">
     <template>
-      <paper-scroll-header-panel condenses>
+      <paper-scroll-header-panel>
         <paper-toolbar>
         </paper-toolbar>
         <div class="content">
@@ -44,11 +44,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       setup(function() {
         scrollHeaderPanel = fixture('trivialProgress');
-        scrollHeaderPanel.measureHeaderHeight();
-      });
-
-      teardown(function() {
-        scrollHeaderPanel.scroll(0);
       });
 
       test('scroll smoothly', function(done) {
@@ -59,7 +54,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           if (scrollHeaderPanel.scroller.scrollTop === destination) {
             assert.notEqual(adjustments, 0);
             done();
-            return;
           }
           adjustments++;
           setTimeout(check, 0);
@@ -69,17 +63,18 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       });
 
       test('condense smoothly', function(done) {
+        scrollHeaderPanel.condenses = true;
+
         flush(function() {
           var destination = 100;
           var adjustments = 0;
           function check() {
-            if (scrollHeaderPanel.headerState === Polymer.PaperScrollHeaderPanel.HEADER_STATE_CONDENSED) {
+            if (scrollHeaderPanel.headerState === scrollHeaderPanel.HEADER_STATE_CONDENSED) {
               assert.notEqual(adjustments, 0);
               done();
-              return;
             }
             adjustments++;
-            setTimeout(check, 1);
+            setTimeout(check, 0);
           }
           scrollHeaderPanel.condense(true);
           check();
@@ -87,10 +82,15 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       });
 
       test('condense immediately', function(done) {
+        scrollHeaderPanel.condenses = true;
+
         flush(function() {
           scrollHeaderPanel.condense();
-          assert.equal(scrollHeaderPanel.headerState, Polymer.PaperScrollHeaderPanel.HEADER_STATE_CONDENSED);
-          done();
+
+          Polymer.Base.async(function() {
+            assert.equal(scrollHeaderPanel.headerState, scrollHeaderPanel.HEADER_STATE_CONDENSED);
+            done();
+          }, 100);
         });
       });
 
@@ -103,7 +103,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             if (scrollHeaderPanel.scroller.scrollTop === 0) {
               assert.notEqual(adjustments, 0);
               done();
-              return;
             }
             adjustments++;
             setTimeout(check, 0);

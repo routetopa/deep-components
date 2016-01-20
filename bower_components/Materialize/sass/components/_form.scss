@@ -34,7 +34,6 @@ label {
 }
 
 // Text inputs
-input:not([type]),
 input[type=text],
 input[type=password],
 input[type=email],
@@ -60,7 +59,7 @@ textarea.materialize-textarea {
   margin: 0 0 15px 0;
   padding: 0;
   box-shadow: none;
-  box-sizing: content-box;
+  @include box-sizing(content-box);
   transition: all .3s;
 
 
@@ -132,11 +131,11 @@ textarea.materialize-textarea {
     left: $gutter-width / 2;
     font-size: 1rem;
     cursor: text;
-    transition: .2s ease-out;
+    @include transition(.2s ease-out);
   }
   label.active {
     font-size: $label-font-size;
-    transform: translateY(-140%);
+    @include transform(translateY(-140%));
   }
 
   // Prefix Icons
@@ -144,7 +143,7 @@ textarea.materialize-textarea {
     position: absolute;
     width: 3rem;
     font-size: 2rem;
-    transition: color .2s;
+    @include transition(color .2s);
 
     &.active { color: $input-focus-color; }
   }
@@ -171,7 +170,10 @@ textarea.materialize-textarea {
   }
 }
 
+
 // Search Field
+
+
 .input-field input[type=search] {
   display: block;
   line-height: inherit;
@@ -222,6 +224,7 @@ textarea {
   }
 }
 
+
 // For textarea autoresize
 .hiddendiv {
   display: none;
@@ -253,10 +256,12 @@ textarea {
   height: 25px;
   line-height: 25px;
   font-size: 1rem;
-  transition: .28s ease;
+  @include transition(.28s ease);
 
+  -webkit-user-select: none; /* webkit (safari, chrome) browsers */
+  -moz-user-select: none; /* mozilla browsers */
   -khtml-user-select: none; /* webkit (konqueror) browsers */
-  user-select: none;
+  -ms-user-select: none; /* IE10+ */
 }
 
 [type="radio"] + label:before,
@@ -269,8 +274,9 @@ textarea {
   width: 16px;
   height: 16px;
   z-index: 0;
-  transition: .28s ease;
+  @include transition(.28s ease);
 }
+
 
 /* Unchecked styles */
 [type="radio"]:not(:checked) + label:before {
@@ -282,7 +288,7 @@ textarea {
   border: 2px solid $radio-empty-color;
   z-index: -1;
 
-  transform: scale(0);
+  @include transform(scale(0));
 }
 
 /* Checked styles */
@@ -295,7 +301,7 @@ textarea {
   border: 2px solid $radio-fill-color;
   background-color: $radio-fill-color;
   z-index: 0;
-  transform: scale(1.02);
+  @include transform(scale(1.02));
 }
 
 /* Radio With gap */
@@ -308,7 +314,7 @@ textarea {
   border: 2px solid $radio-fill-color;
   background-color: $radio-fill-color;
   z-index: 0;
-  transform: scale(.5);
+  @include transform(scale(.5));
 }
 
 /* Disabled Radio With gap */
@@ -337,6 +343,7 @@ textarea {
   border-color: $input-disabled-solid-color;
 }
 
+
 /***************
    Checkboxes
 ***************/
@@ -357,6 +364,7 @@ form p:last-child {
   left: -9999px;
   visibility: hidden;
 }
+
 
 // Checkbox Styles
 [type="checkbox"] {
@@ -389,13 +397,14 @@ form p:last-child {
     border: 2px solid $radio-empty-color;
     border-radius: 1px;
     margin-top: 2px;
-    transition: .2s;
+    @include transition(.2s);
   }
 
   &:not(:checked):disabled + label:before {
     border: none;
     background-color: $input-disabled-color;
   }
+
 }
 
 [type="checkbox"]:checked {
@@ -407,15 +416,16 @@ form p:last-child {
     border-left: 2px solid transparent;
     border-right: 2px solid $radio-fill-color;
     border-bottom: 2px solid $radio-fill-color;
-    transform: rotate(40deg);
-    backface-visibility: hidden;
-    transform-origin: 100% 100%;
+    @include transform(rotate(40deg));
+    -webkit-backface-visibility: hidden;
+    @include transform-origin(100% 100%);
   }
 
   &:disabled + label:before {
     border-right: 2px solid $input-disabled-color;
     border-bottom: 2px solid $input-disabled-color;
   }
+
 }
 
 /* Indeterminate checkbox */
@@ -428,9 +438,9 @@ form p:last-child {
     border-left: none;
     border-right: 2px solid $radio-fill-color;
     border-bottom: none;
-    transform: rotate(90deg);
-    backface-visibility: hidden;
-    transform-origin: 100% 100%;
+    @include transform(rotate(90deg));
+    -webkit-backface-visibility: hidden;
+    @include transform-origin(100% 100%);
   }
 
   // Disabled indeterminate
@@ -439,6 +449,7 @@ form p:last-child {
     background-color: transparent;
   }
 }
+
 
 // Filled in Style
 [type="checkbox"].filled-in {
@@ -455,7 +466,6 @@ form p:last-child {
     transition: border .25s, background-color .25s, width .20s .1s, height .20s .1s, top .20s .1s, left .20s .1s;
     z-index: 1;
   }
-
   // Unchecked style
   &:not(:checked) + label:before {
     width: 0;
@@ -469,7 +479,6 @@ form p:last-child {
      -webkit-transform-origin: 20% 40%;
              transform-origin: 100% 100%;
   }
-
   &:not(:checked) + label:after {
     height: 20px;
     width: 20px;
@@ -478,7 +487,6 @@ form p:last-child {
     top: 0px;
     z-index: 0;
   }
-
   // Checked style
   &:checked {
     + label:before {
@@ -496,7 +504,6 @@ form p:last-child {
       -webkit-transform-origin: 100% 100%;
       transform-origin: 100% 100%;
     }
-
     + label:after {
       top: 0px;
       width: 20px;
@@ -508,23 +515,23 @@ form p:last-child {
   }
   // Disabled style
   &:disabled:not(:checked) + label:before {
+
     background-color: transparent;
     border: 2px solid transparent;
   }
-
   &:disabled:not(:checked) + label:after {
     border-color: transparent;
     background-color: $input-disabled-solid-color;
   }
-
   &:disabled:checked + label:before {
     background-color: transparent;
-  }
 
+  }
   &:disabled:checked + label:after {
     background-color: $input-disabled-solid-color;
     border-color: $input-disabled-solid-color;
   }
+
 }
 
 /***************
@@ -537,25 +544,20 @@ form p:last-child {
     -khtml-user-select: none;
     -ms-user-select: none;
 }
-
 .switch label {
     cursor: pointer;
 }
-
 .switch label input[type=checkbox]{
     opacity: 0;
     width: 0;
     height: 0;
 }
-
 .switch label input[type=checkbox]:checked + .lever {
     background-color: $switch-checked-lever-bg;
 }
-
 .switch label input[type=checkbox]:checked + .lever:after {
     background-color: $switch-bg-color;
 }
-
 .switch label .lever {
     content: "";
     display: inline-block;
@@ -569,7 +571,6 @@ form p:last-child {
     vertical-align: middle;
     margin: 0 16px;
 }
-
 .switch label .lever:after {
     content: "";
     position: absolute;
@@ -583,21 +584,19 @@ form p:last-child {
     top: -3px;
     transition: left 0.3s ease, background .3s ease, box-shadow 0.1s ease;
 }
-
 // Switch active style
 input[type=checkbox]:checked:not(:disabled) ~ .lever:active:after {
        box-shadow: 0 1px 3px 1px rgba(0,0,0,.4), 0 0 0 15px transparentize($switch-bg-color, .9);
 }
-
 input[type=checkbox]:not(:disabled) ~ .lever:active:after {
        box-shadow: 0 1px 3px 1px rgba(0,0,0,.4), 0 0 0 15px rgba(0, 0, 0, .08);
 }
-
 .switch label input[type=checkbox]:checked + .lever:after {
     left: 24px;
 }
 
 // Disabled Styles
+
 .switch input[type=checkbox][disabled] + .lever{
   cursor: default;
 }
@@ -606,9 +605,13 @@ input[type=checkbox]:not(:disabled) ~ .lever:active:after {
     background-color: $input-disabled-solid-color;
 }
 
+
+
+
 /***************
   Select Field
 ***************/
+
 .select-label {
   position: absolute;
 }
@@ -632,7 +635,6 @@ input[type=checkbox]:not(:disabled) ~ .lever:active:after {
     padding: 0;
     display: block;
   }
-
   span.caret {
     color: initial;
     position: absolute;
@@ -643,7 +645,6 @@ input[type=checkbox]:not(:disabled) ~ .lever:active:after {
       color: $input-disabled-color;
     }
   }
-
   & + label {
     position: absolute;
     top: -14px;
@@ -654,11 +655,11 @@ input[type=checkbox]:not(:disabled) ~ .lever:active:after {
 select { display: none; }
 select.browser-default { display: block; }
 
+
 // Disabled styles
 select:disabled {
   color: rgba(0,0,0,.3);
 }
-
 .select-wrapper input.select-dropdown:disabled {
   color: rgba(0,0,0,.3);
   cursor: default;
@@ -667,44 +668,14 @@ select:disabled {
   -ms-user-select: none; /* IE10+ */
   border-bottom: 1px solid rgba(0,0,0,.3);
 }
-
 .select-wrapper i {
   color: rgba(0,0,0,.3);
 }
-
-.select-dropdown li.disabled,
-.select-dropdown li.disabled > span,
-.select-dropdown li.optgroup {
+.select-dropdown li.disabled {
   color: rgba(0,0,0,.3);
   background-color: transparent;
 }
 
-// Icons
-.select-dropdown li {
-  img {
-    height: $dropdown-item-height - 10;
-    width: $dropdown-item-height - 10;
-    margin: 5px 15px;
-    float: right;
-  }
-}
-
-// Optgroup styles
-.select-dropdown li.optgroup {
-  border-top: 1px solid $dropdown-hover-bg-color;
-
-  &.selected > span {
-    color: rgba(0, 0, 0, .7);
-  }
-
-  & > span {
-    color: rgba(0, 0, 0, .4);
-  }
-
-  & ~ li:not(.optgroup) {
-    padding-left: 1rem;
-  }
-}
 
 /*********************
       File Input
@@ -716,7 +687,6 @@ select:disabled {
     overflow: hidden;
     padding-left: 10px;
   }
-
   input.file-path { width: 100%; }
 
   .btn {
@@ -744,6 +714,8 @@ select:disabled {
     filter: alpha(opacity=0);
   }
 }
+
+
 
 /***************
       Range
@@ -777,8 +749,8 @@ input[type=range] + .thumb {
   top: 10px;
   margin-left: -6px;
 
-  transform-origin: 50% 50%;
-  transform: rotate(-45deg);
+  @include transform-origin(50% 50%);
+  @include transform(rotate(-45deg));
 
   .value {
     display: block;
@@ -786,7 +758,7 @@ input[type=range] + .thumb {
     text-align: center;
     color: $radio-fill-color;
     font-size: 0;
-    transform: rotate(45deg);
+    @include transform(rotate(45deg));
   }
 
   &.active {
@@ -805,6 +777,8 @@ input[type=range] + .thumb {
 input[type=range]:focus {
   outline: none;
 }
+
+
 
 // WebKit
 input[type=range]{
@@ -826,7 +800,7 @@ input[type=range]::-webkit-slider-thumb {
   background-color: $radio-fill-color;
   transform-origin: 50% 50%;
   margin: -5px 0 0 0;
-  transition: .3s;
+  @include transition(.3s);
 }
 
 input[type=range]:focus::-webkit-slider-runnable-track {
@@ -880,15 +854,12 @@ input[type=range]::-ms-track {
   /*remove default tick marks*/
   color: transparent;
 }
-
 input[type=range]::-ms-fill-lower {
   background: #777;
 }
-
 input[type=range]::-ms-fill-upper {
   background: #ddd;
 }
-
 input[type=range]::-ms-thumb {
   border: none;
   height: 14px;
@@ -896,11 +867,9 @@ input[type=range]::-ms-thumb {
   border-radius: 50%;
   background: $radio-fill-color;
 }
-
 input[type=range]:focus::-ms-fill-lower {
   background: #888;
 }
-
 input[type=range]:focus::-ms-fill-upper {
   background: #ccc;
 }
@@ -908,6 +877,7 @@ input[type=range]:focus::-ms-fill-upper {
 /***************************
    Text Inputs + Textarea
 ****************************/
+
 select {
    background-color: rgba(255, 255, 255, 0.90);
    width: 100%;
@@ -915,4 +885,4 @@ select {
    border: 1px solid #f2f2f2;
    border-radius: 2px;
    height: 3rem;
-}
+   }

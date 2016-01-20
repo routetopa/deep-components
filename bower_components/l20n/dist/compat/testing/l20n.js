@@ -3,39 +3,6 @@
 (function () {
   'use strict';
 
-  var observerConfig = {
-    attributes: true,
-    characterData: false,
-    childList: true,
-    subtree: true,
-    attributeFilter: ['data-l10n-id', 'data-l10n-args']
-  };
-
-  var observers = new WeakMap();
-
-  function disconnect(view, root, allRoots) {
-    var obs = observers.get(view);
-    if (obs) {
-      obs.observer.disconnect();
-      if (allRoots) {
-        return;
-      }
-      obs.roots.delete(root);
-      obs.roots.forEach(function (other) {
-        return obs.observer.observe(other, observerConfig);
-      });
-    }
-  }
-
-  function reconnect(view) {
-    var obs = observers.get(view);
-    if (obs) {
-      obs.roots.forEach(function (root) {
-        return obs.observer.observe(root, observerConfig);
-      });
-    }
-  }
-
   var reOverlay = /<|&#?\w+;/;
 
   var allowed = {
@@ -193,6 +160,12 @@
     '>': '&gt;'
   };
 
+  function getResourceLinks(head) {
+    return Array.prototype.map.call(head.querySelectorAll('link[rel="localization"]'), function (el) {
+      return el.getAttribute('href');
+    });
+  }
+
   function setAttributes(element, id, args) {
     element.setAttribute('data-l10n-id', id);
     if (args) {
@@ -217,7 +190,7 @@
     return nodes;
   }
 
-  function translateMutations(view, mutations) {
+  function translateMutations(view, langs, mutations) {
     var targets = new Set();
 
     for (var _iterator = mutations, _isArray = Array.isArray(_iterator), _i = 0, _iterator = _isArray ? _iterator : _iterator[Symbol.iterator]();;) {
@@ -271,14 +244,14 @@
       return;
     }
 
-    translateElements(view, Array.from(targets));
+    translateElements(view, langs, Array.from(targets));
   }
 
-  function translateFragment(view, frag) {
-    return translateElements(view, getTranslatables(frag));
+  function translateFragment(view, langs, frag) {
+    return translateElements(view, langs, getTranslatables(frag));
   }
 
-  function getElementsTranslation(view, elems) {
+  function getElementsTranslation(view, langs, elems) {
     var keys = elems.map(function (elem) {
       var id = elem.getAttribute('data-l10n-id');
       var args = elem.getAttribute('data-l10n-args');
@@ -287,24 +260,25 @@
       }))] : id;
     });
 
-    return view.formatEntities.apply(view, keys);
+    return view._resolveEntities(langs, keys);
   }
 
-  function translateElements(view, elements) {
-    return getElementsTranslation(view, elements).then(function (translations) {
+  function translateElements(view, langs, elements) {
+    return getElementsTranslation(view, langs, elements).then(function (translations) {
       return applyTranslations(view, elements, translations);
     });
   }
 
   function applyTranslations(view, elems, translations) {
-    disconnect(view, null, true);
+    view._disconnect();
     for (var i = 0; i < elems.length; i++) {
       overlayElement(elems[i], translations[i]);
     }
-    reconnect(view);
+    view._observe();
   }
 
   var dom = {
+    getResourceLinks: getResourceLinks,
     setAttributes: setAttributes,
     getAttributes: getAttributes,
     translateMutations: translateMutations,

@@ -28,7 +28,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   <test-fixture id="trivialProgress">
     <template>
       <paper-scroll-header-panel condenses>
-        <paper-toolbar class="tall"></paper-toolbar>
+        <paper-toolbar class="tall">
+        </paper-toolbar>
         <div class="content">
         <sample-content size="100"></sample-content>
         </div>
@@ -44,44 +45,43 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       setup(function() {
         scrollHeaderPanel = fixture('trivialProgress');
         toolbar = Polymer.dom(scrollHeaderPanel).querySelector('paper-toolbar');
-        scrollHeaderPanel.measureHeaderHeight();
-        scrollHeaderPanel.scroll(0);
       });
 
       test('HEADER_STATE_EXPANDED', function(done) {
-        assert.equal(scrollHeaderPanel.headerState, Polymer.PaperScrollHeaderPanel.HEADER_STATE_EXPANDED);
+        assert.equal(scrollHeaderPanel.headerState, scrollHeaderPanel.HEADER_STATE_EXPANDED);
 
-        scrollHeaderPanel.scroll(1);
+        scrollHeaderPanel.scroller.scrollTop = 1;
 
         flush(function() {
-          assert.notEqual(scrollHeaderPanel.headerState, Polymer.PaperScrollHeaderPanel.HEADER_STATE_EXPANDED);
+          assert.notEqual(scrollHeaderPanel.headerState, scrollHeaderPanel.HEADER_STATE_EXPANDED);
           done();
         });
       });
 
       test('HEADER_STATE_HIDDEN', function(done) {
-        scrollHeaderPanel.scroll(toolbar.offsetHeight + 1);
+        scrollHeaderPanel.scroller.scrollTop = toolbar.offsetHeight * 2;
 
-        //flush(function() {
-          assert.equal(scrollHeaderPanel.headerState, Polymer.PaperScrollHeaderPanel.HEADER_STATE_HIDDEN);
+        flush(function() {
+          assert.equal(scrollHeaderPanel.headerState, scrollHeaderPanel.HEADER_STATE_HIDDEN);
           done();
-        //});
+        });
       });
 
       test('HEADER_STATE_CONDENSED', function(done) {
-        scrollHeaderPanel.scroll(toolbar.offsetHeight - scrollHeaderPanel.condensedHeaderHeight);
+        scrollHeaderPanel._prevScrollTop = toolbar.offsetHeight * 10;
+        scrollHeaderPanel.scroller.scrollTop = toolbar.offsetHeight * 5;
 
-        setTimeout(function() {
-          assert.equal(scrollHeaderPanel.headerState, Polymer.PaperScrollHeaderPanel.HEADER_STATE_CONDENSED);
-          done();
-        }, 100);
+        flush(function() {
+            assert.equal(scrollHeaderPanel.headerState, scrollHeaderPanel.HEADER_STATE_CONDENSED);
+            done();
+        });
       });
 
       test('HEADER_STATE_INTERPOLATED', function(done) {
-        scrollHeaderPanel.scroll(1);
+        scrollHeaderPanel.scroller.scrollTop = toolbar.offsetHeight * 0.5;
 
         flush(function() {
-          assert.equal(scrollHeaderPanel.headerState, Polymer.PaperScrollHeaderPanel.HEADER_STATE_INTERPOLATED);
+          assert.equal(scrollHeaderPanel.headerState, scrollHeaderPanel.HEADER_STATE_INTERPOLATED);
           done();
         });
       });

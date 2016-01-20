@@ -16,8 +16,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
   <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
   <script src="../../web-component-tester/browser.js"></script>
+  <script src="../../test-fixture/test-fixture-mocha.js"></script>
   <script src="../../iron-test-helpers/mock-interactions.js"></script>
 
+  <link rel="import" href="../../test-fixture/test-fixture.html">
+  <link rel="import" href="../../paper-styles/paper-styles.html">
   <link rel="import" href="helpers.html">
   <link rel="import" href="x-list.html">
 
@@ -58,14 +61,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           );
 
           list.addEventListener('scroll', function() {
-            list.debounce('scroll', function() {
-              assert.equal(isFullOfItems(list), true);
-            });
+            assert.isTrue(isFullOfItems(list));
           });
 
           simulateScroll({
             list: list,
-            contribution: 20,
+            contribution: 15,
             target: 100000
           }, function() {
             done();
@@ -84,9 +85,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
         flush(function() {
           list.addEventListener('scroll', function() {
-            list.debounce('scroll', function() {
-              assert.equal(isFullOfItems(list), true);
-            });
+            assert.isTrue(isFullOfItems(list));
           });
 
           simulateScroll({
@@ -108,9 +107,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
         flush(function() {
           list.addEventListener('scroll', function() {
-            list.debounce('scroll', function() {
-              assert.isTrue(isFullOfItems(list));
-            });
+            assert.isTrue(isFullOfItems(list));
           });
 
           simulateScroll({

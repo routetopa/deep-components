@@ -8,62 +8,6 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
   var Client = bridge.client;
   var channel = new BroadcastChannel('l20n-channel');
 
-  var observerConfig = {
-    attributes: true,
-    characterData: false,
-    childList: true,
-    subtree: true,
-    attributeFilter: ['data-l10n-id', 'data-l10n-args']
-  };
-
-  var observers = new WeakMap();
-
-  function initMutationObserver(view) {
-    observers.set(view, {
-      roots: new Set(),
-      observer: new MutationObserver(function (mutations) {
-        return translateMutations(view, mutations);
-      })
-    });
-  }
-
-  function translateRoots(view) {
-    return Promise.all([].concat(observers.get(view).roots).map(function (root) {
-      return _translateFragment(view, root);
-    }));
-  }
-
-  function observe(view, root) {
-    var obs = observers.get(view);
-    if (obs) {
-      obs.roots.add(root);
-      obs.observer.observe(root, observerConfig);
-    }
-  }
-
-  function disconnect(view, root, allRoots) {
-    var obs = observers.get(view);
-    if (obs) {
-      obs.observer.disconnect();
-      if (allRoots) {
-        return;
-      }
-      obs.roots.delete(root);
-      obs.roots.forEach(function (other) {
-        return obs.observer.observe(other, observerConfig);
-      });
-    }
-  }
-
-  function reconnect(view) {
-    var obs = observers.get(view);
-    if (obs) {
-      obs.roots.forEach(function (root) {
-        return obs.observer.observe(root, observerConfig);
-      });
-    }
-  }
-
   var reOverlay = /<|&#?\w+;/;
 
   var allowed = {
@@ -221,6 +165,12 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
     '>': '&gt;'
   };
 
+  function getResourceLinks(head) {
+    return Array.prototype.map.call(head.querySelectorAll('link[rel="localization"]'), function (el) {
+      return el.getAttribute('href');
+    });
+  }
+
   function setAttributes(element, id, args) {
     element.setAttribute('data-l10n-id', id);
     if (args) {
@@ -245,7 +195,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
     return nodes;
   }
 
-  function translateMutations(view, mutations) {
+  function translateMutations(view, langs, mutations) {
     var targets = new Set();
 
     for (var _iterator = mutations, _isArray = Array.isArray(_iterator), _i = 0, _iterator = _isArray ? _iterator : _iterator[Symbol.iterator]();;) {
@@ -299,14 +249,14 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
       return;
     }
 
-    translateElements(view, Array.from(targets));
+    translateElements(view, langs, Array.from(targets));
   }
 
-  function _translateFragment(view, frag) {
-    return translateElements(view, getTranslatables(frag));
+  function _translateFragment(view, langs, frag) {
+    return translateElements(view, langs, getTranslatables(frag));
   }
 
-  function getElementsTranslation(view, elems) {
+  function getElementsTranslation(view, langs, elems) {
     var keys = elems.map(function (elem) {
       var id = elem.getAttribute('data-l10n-id');
       var args = elem.getAttribute('data-l10n-args');
@@ -315,21 +265,21 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
       }))] : id;
     });
 
-    return view.formatEntities.apply(view, keys);
+    return view._resolveEntities(langs, keys);
   }
 
-  function translateElements(view, elements) {
-    return getElementsTranslation(view, elements).then(function (translations) {
+  function translateElements(view, langs, elements) {
+    return getElementsTranslation(view, langs, elements).then(function (translations) {
       return applyTranslations(view, elements, translations);
     });
   }
 
   function applyTranslations(view, elems, translations) {
-    disconnect(view, null, true);
+    view._disconnect();
     for (var i = 0; i < elems.length; i++) {
       overlayElement(elems[i], translations[i]);
     }
-    reconnect(view);
+    view._observe();
   }
 
   if (typeof NodeList === 'function' && !NodeList.prototype[Symbol.iterator]) {
@@ -354,86 +304,15 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
     return ['ar', 'he', 'fa', 'ps', 'ur'].indexOf(tag) >= 0 ? 'rtl' : 'ltr';
   }
 
-  if (navigator.languages === undefined) {
-    navigator.languages = [navigator.language];
-  }
+  var observerConfig = {
+    attributes: true,
+    characterData: false,
+    childList: true,
+    subtree: true,
+    attributeFilter: ['data-l10n-id', 'data-l10n-args']
+  };
 
-  function getResourceLinks(head) {
-    return Array.prototype.map.call(head.querySelectorAll('link[rel="localization"]'), function (el) {
-      return el.getAttribute('href');
-    });
-  }
-
-  function getMeta(head) {
-    var availableLangs = Object.create(null);
-    var defaultLang = null;
-    var appVersion = null;
-
-    var metas = Array.from(head.querySelectorAll('meta[name="availableLanguages"],' + 'meta[name="defaultLanguage"],' + 'meta[name="appVersion"]'));
-    for (var _iterator3 = metas, _isArray3 = Array.isArray(_iterator3), _i3 = 0, _iterator3 = _isArray3 ? _iterator3 : _iterator3[Symbol.iterator]();;) {
-      var _ref3;
-
-      if (_isArray3) {
-        if (_i3 >= _iterator3.length) break;
-        _ref3 = _iterator3[_i3++];
-      } else {
-        _i3 = _iterator3.next();
-        if (_i3.done) break;
-        _ref3 = _i3.value;
-      }
-
-      var meta = _ref3;
-
-      var _name = meta.getAttribute('name');
-      var content = meta.getAttribute('content').trim();
-      switch (_name) {
-        case 'availableLanguages':
-          availableLangs = getLangRevisionMap(availableLangs, content);
-          break;
-        case 'defaultLanguage':
-          var _getLangRevisionTuple = getLangRevisionTuple(content),
-              lang = _getLangRevisionTuple[0],
-              rev = _getLangRevisionTuple[1];
-
-          defaultLang = lang;
-          if (!(lang in availableLangs)) {
-            availableLangs[lang] = rev;
-          }
-          break;
-        case 'appVersion':
-          appVersion = content;
-      }
-    }
-
-    return {
-      defaultLang: defaultLang,
-      availableLangs: availableLangs,
-      appVersion: appVersion
-    };
-  }
-
-  function getLangRevisionMap(seq, str) {
-    return str.split(',').reduce(function (seq, cur) {
-      var _getLangRevisionTuple2 = getLangRevisionTuple(cur);
-
-      var lang = _getLangRevisionTuple2[0];
-      var rev = _getLangRevisionTuple2[1];
-
-      seq[lang] = rev;
-      return seq;
-    }, seq);
-  }
-
-  function getLangRevisionTuple(str) {
-    var _str$trim$split = str.trim().split(':');
-
-    var lang = _str$trim$split[0];
-    var rev = _str$trim$split[1];
-
-    return [lang, parseInt(rev)];
-  }
-
-  var viewProps = new WeakMap();
+  var readiness = new WeakMap();
 
   var View = (function () {
     function View(client, doc) {
@@ -441,54 +320,42 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
       _classCallCheck(this, View);
 
+      this._doc = doc;
       this.pseudo = {
         'fr-x-psaccent': createPseudo(this, 'fr-x-psaccent'),
         'ar-x-psbidi': createPseudo(this, 'ar-x-psbidi')
       };
 
-      var initialized = documentReady().then(function () {
+      this._interactive = documentReady().then(function () {
         return init(_this, client);
       });
-      this._interactive = initialized.then(function () {
-        return client;
-      });
-      this.ready = initialized.then(function (langs) {
-        return translateView(_this, langs);
-      });
-      initMutationObserver(this);
 
-      viewProps.set(this, {
-        doc: doc,
-        ready: false
-      });
+      var observer = new MutationObserver(onMutations.bind(this));
+      this._observe = function () {
+        return observer.observe(doc, observerConfig);
+      };
+      this._disconnect = function () {
+        return observer.disconnect();
+      };
 
-      client.on('languageschangerequest', function (requestedLangs) {
-        return _this.requestLanguages(requestedLangs);
-      });
+      var translateView = function (langs) {
+        return translateDocument(_this, langs);
+      };
+      client.on('translateDocument', translateView);
+      this.ready = this._interactive.then(function (client) {
+        return client.method('resolvedLanguages');
+      }).then(translateView);
     }
 
-    View.prototype.requestLanguages = function requestLanguages(requestedLangs, isGlobal) {
-      var _this2 = this;
-
-      var method = isGlobal ? function (client) {
-        return client.method('requestLanguages', requestedLangs);
-      } : function (client) {
-        return changeLanguages(_this2, client, requestedLangs);
-      };
-      return this._interactive.then(method);
-    };
-
-    View.prototype.handleEvent = function handleEvent() {
-      return this.requestLanguages(navigator.languages);
-    };
-
-    View.prototype.formatEntities = function formatEntities() {
-      for (var _len = arguments.length, keys = Array(_len), _key = 0; _key < _len; _key++) {
-        keys[_key] = arguments[_key];
-      }
-
+    View.prototype.requestLanguages = function requestLanguages(langs, global) {
       return this._interactive.then(function (client) {
-        return client.method('formatEntities', client.id, keys);
+        return client.method('requestLanguages', langs, global);
+      });
+    };
+
+    View.prototype._resolveEntities = function _resolveEntities(langs, keys) {
+      return this._interactive.then(function (client) {
+        return client.method('resolveEntities', client.id, langs, keys);
       });
     };
 
@@ -501,8 +368,8 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
     };
 
     View.prototype.formatValues = function formatValues() {
-      for (var _len2 = arguments.length, keys = Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
-        keys[_key2] = arguments[_key2];
+      for (var _len = arguments.length, keys = Array(_len), _key = 0; _key < _len; _key++) {
+        keys[_key] = arguments[_key];
       }
 
       return this._interactive.then(function (client) {
@@ -511,15 +378,13 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
     };
 
     View.prototype.translateFragment = function translateFragment(frag) {
-      return _translateFragment(this, frag);
-    };
+      var _this2 = this;
 
-    View.prototype.observeRoot = function observeRoot(root) {
-      observe(this, root);
-    };
-
-    View.prototype.disconnectRoot = function disconnectRoot(root) {
-      disconnect(this, root);
+      return this._interactive.then(function (client) {
+        return client.method('resolvedLanguages');
+      }).then(function (langs) {
+        return _translateFragment(_this2, langs, frag);
+      });
     };
 
     return View;
@@ -544,54 +409,38 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
   }
 
   function init(view, client) {
-    var doc = viewProps.get(view).doc;
-    var resources = getResourceLinks(doc.head);
-    var meta = getMeta(doc.head);
-    view.observeRoot(doc.documentElement);
-    return getAdditionalLanguages().then(function (additionalLangs) {
-      return client.method('registerView', client.id, resources, meta, additionalLangs, navigator.languages);
+    view._observe();
+    return client.method('registerView', client.id, getResourceLinks(view._doc.head)).then(function () {
+      return client;
     });
   }
 
-  function changeLanguages(view, client, requestedLangs) {
-    var doc = viewProps.get(view).doc;
-    var meta = getMeta(doc.head);
-    return getAdditionalLanguages().then(function (additionalLangs) {
-      return client.method('changeLanguages', client.id, meta, additionalLangs, requestedLangs);
-    }).then(function (_ref4) {
-      var langs = _ref4.langs;
-      var haveChanged = _ref4.haveChanged;
-      return haveChanged ? translateView(view, langs) : undefined;
+  function onMutations(mutations) {
+    var _this3 = this;
+
+    return this._interactive.then(function (client) {
+      return client.method('resolvedLanguages');
+    }).then(function (langs) {
+      return translateMutations(_this3, langs, mutations);
     });
   }
 
-  function getAdditionalLanguages() {
-    if (navigator.mozApps && navigator.mozApps.getAdditionalLanguages) {
-      return navigator.mozApps.getAdditionalLanguages().catch(function () {
-        return Object.create(null);
-      });
-    }
+  function translateDocument(view, langs) {
+    var html = view._doc.documentElement;
 
-    return Promise.resolve(Object.create(null));
-  }
-
-  function translateView(view, langs) {
-    var props = viewProps.get(view);
-    var html = props.doc.documentElement;
-
-    if (props.ready) {
-      return translateRoots(view).then(function () {
+    if (readiness.has(html)) {
+      return _translateFragment(view, langs, html).then(function () {
         return setAllAndEmit(html, langs);
       });
     }
 
-    var translated = langs[0].code === html.getAttribute('lang') ? Promise.resolve() : translateRoots(view).then(function () {
+    var translated = langs[0].code === html.getAttribute('lang') ? Promise.resolve() : _translateFragment(view, langs, html).then(function () {
       return setLangDir(html, langs);
     });
 
     return translated.then(function () {
       setLangs(html, langs);
-      props.ready = true;
+      readiness.set(html, true);
     });
   }
 
@@ -623,16 +472,14 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
     timeout: false
   });
 
-  document.l10n = new View(client, document);
-
   window.addEventListener('pageshow', function () {
     return client.connect();
   });
   window.addEventListener('pagehide', function () {
     return client.disconnect();
   });
-  window.addEventListener('languagechange', document.l10n);
-  document.addEventListener('additionallanguageschange', document.l10n);
+
+  document.l10n = new View(client, document);
 
   navigator.mozL10n = {
     setAttributes: document.l10n.setAttributes,

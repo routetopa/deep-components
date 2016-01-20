@@ -20,8 +20,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   <script src="../../../webcomponentsjs/webcomponents-lite.js"></script>
 
   <link rel="import" href="../../../polymer/polymer.html">
-    <link rel="import" href="../../../paper-styles/paper-styles.html">
-
   <link rel="import" href="../../../iron-flex-layout/iron-flex-layout.html">
   <link rel="import" href="../../iron-list.html">
   <link rel="import" href="dummy-data.html">
@@ -37,7 +35,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       iron-list {
         @apply(--layout-flex);
-        height: 100%;
       }
 
       .item {
@@ -191,7 +188,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   </script>
 
   <style is="custom-style">
-    body, x-app {
+    x-app {
       @apply(--layout-fit);
     }
   </style>
@@ -199,7 +196,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 </head>
 <body unresolved>
 
-  <x-app></x-app>
+  <x-app class="flex"></x-app>
 
 </body>
 </html>

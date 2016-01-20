@@ -1,12 +1,4 @@
-// Required for Meteor package, the use of window prevents export by Meteor
-(function(window){
-  if(window.Package){
-    Materialize = {};
-  } else {
-    window.Materialize = {};
-  }
-})(window);
-
+window.Materialize = {};
 
 // Unique ID
 Materialize.guid = (function() {
@@ -38,8 +30,7 @@ Materialize.elementOrParentIsFixed = function(element) {
 var Vel;
 if ($) {
   Vel = $.Velocity;
-} else if (jQuery) {
-  Vel = jQuery.Velocity;
-} else {
+}
+else {
   Vel = Velocity;
 }

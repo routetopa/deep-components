@@ -1,21 +1,4 @@
-
-<!---
-
-This README is automatically generated from the comments in these files:
-paper-header-panel.html
-
-Edit those files, and our readme bot will duplicate them over here!
-Edit this file, and the bot will squash your changes :)
-
--->
-
-[![Build Status](https://travis-ci.org/PolymerElements/paper-header-panel.svg?branch=master)](https://travis-ci.org/PolymerElements/paper-header-panel)
-
-_[Demo and API Docs](https://elements.polymer-project.org/elements/paper-header-panel)_
-
-
-##&lt;paper-header-panel&gt;
-
+# paper-header-panel
 
 `paper-header-panel` contains a header section and a content panel section.
 
@@ -30,7 +13,7 @@ Using layout classes, you can make the `paper-header-panel` fill the screen
         </paper-toolbar>
       </paper-header-panel>
     </body>
-
+    
 Special support is provided for scrolling modes when one uses a paper-toolbar or equivalent for the
 header section.
 
@@ -40,7 +23,8 @@ Example:
       <paper-toolbar>Header</paper-toolbar>
       <div>Content goes here...</div>
     </paper-header-panel>
-
+    
+    
 If you want to use other than `paper-toolbar` for the header, add `paper-header` class to that
 element.
 
@@ -50,18 +34,17 @@ Example:
       <div class="paper-header">Header</div>
       <div>Content goes here...</div>
     </paper-header-panel>
-
+    
 To have the content fit to the main area, use the `fit` class.
 
     <paper-header-panel>
       <div class="paper-header">standard</div>
       <div class="fit">content fits 100% below the header</div>
     </paper-header-panel>
+    
+## Modes
 
-### Modes
-
-Controls header and scrolling behavior. Options are `standard`, `seamed`, `waterfall`, `waterfall-tall`, `scroll` and
-`cover`. Default is `standard`.
+Controls header and scrolling behavior. Options are `standard`, `seamed`, `waterfall`, `waterfall-tall`, `scroll` and `cover`. Default is `standard`.
 
 Mode | Description
 ----------------|-------------
@@ -78,9 +61,8 @@ Example:
       <div class="paper-header">standard</div>
       <div class="content fit">content fits 100% below the header</div>
     </paper-header-panel>
-
-
-### Styling
+    
+## Styling header panel:
 
 To change the shadow that shows up underneath the header:
 
@@ -91,33 +73,26 @@ To change the shadow that shows up underneath the header:
           box-shadow: inset 0px 5px 6px -3px rgba(0, 0, 0, 0.4);
       };
     }
-
 To change the panel container in different modes:
 
-    paper-header-panel {
+    paper-slider {
       --paper-header-panel-standard-container: {
         border: 1px solid gray;
       };
-
       --paper-header-panel-seamed-container: {
         border: 1px solid gray;
       };
-
       --paper-header-panel-waterfall-container: {
         border: 1px solid gray;
       };
-
       --paper-header-panel-waterfall-tall-container: {
         border: 1px solid gray;
       };
-
       --paper-header-panel-scroll-container: {
         border: 1px solid gray;
       };
-
       --paper-header-panel-cover-container: {
         border: 1px solid gray;
       };
     }
-
 

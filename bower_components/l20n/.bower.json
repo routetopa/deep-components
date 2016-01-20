@@ -1,7 +1,7 @@
 {
   "name": "l20n",
   "description": "A natural-language localization framework",
-  "version": "3.5.0",
+  "version": "3.4.1",
   "homepage": "http://l20n.org",
   "repository": {
     "type": "git",
@@ -23,13 +23,14 @@
     "**/*",
     "!dist/**/*"
   ],
-  "_release": "3.5.0",
+  "_release": "3.4.1",
   "_resolution": {
     "type": "version",
-    "tag": "v3.5.0",
-    "commit": "a950a57b0449e37d9e77fc1a010d25ae1bafbf57"
+    "tag": "v3.4.1",
+    "commit": "4b5428be54003e8dc7243665a5f844a546ddd226"
   },
   "_source": "git://github.com/l20n/l20n.js.git",
   "_target": "v3.x",
-  "_originalSource": "l20n"
+  "_originalSource": "l20n",
+  "_direct": true
 }

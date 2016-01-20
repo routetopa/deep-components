@@ -16,29 +16,33 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1, user-scalable=yes">
 
     <script src="../../../webcomponentsjs/webcomponents-lite.js"></script>
-    <link rel="import" href="../../../iron-flex-layout/iron-flex-layout.html">
+
+    <link rel="import" href="../../../paper-styles/paper-styles.html">
     <link rel="import" href="../../neon-animations.html">
     <link rel="import" href="reprojected-pages.html">
     <link rel="import" href="animated-grid.html">
     <link rel="import" href="fullsize-page-with-card.html">
 
-    <style is="custom-style">
-      body {
-        overflow: hidden;
-        @apply(--layout-fullbleed);
-      }
-      reprojected-pages {
+    <style>
+
+      neon-animated-pages {
         height: 100%;
       }
+
     </style>
+
   </head>
-  <body>
+  <body class="fullbleed">
+
     <template is="dom-bind">
 
       <reprojected-pages id="pages" selected="0">
+
         <animated-grid on-tile-click="_onTileClick"></animated-grid>
+
         <fullsize-page-with-card id="fullsize-card" hero-id="hero" on-click="_onFullsizeClick">
         </fullsize-page-with-card>
+
       </reprojected-pages>
 
     </template>
