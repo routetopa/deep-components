@@ -8,16 +8,17 @@
     <script src="../../shared_js/perfect-scrollbar/js/min/perfect-scrollbar.jquery.min.js"></script>
     <link rel="stylesheet" href="../../shared_js/perfect-scrollbar/css/perfect-scrollbar.min.css">
 
-    <meta name="availableLanguages" content="en, it">
-    <link rel="localization" href="../../../locales/it.l20n">
-    <!--<script defer src="../../../bower_components/l20n/dist/compat/web/l20n.min.js"></script>-->
+    <script src="../../../locales/lnHashMap.js"></script>
+    <script>
+        ln["localization"] = "en";
+    </script>
 
     <link rel="import" href="../datalet-selection-controllet.html" />
 </head>
 
 <body>
 
-<datalet-selection-controllet deep-url="http://172.16.15.89/DEEalerProvider/DEEP/" datalets-list-url="http://172.16.15.89/DEEalerProvider/DEEP/datalets-list" fields='["result,records,Lat","result,records,Lng"]' data-url="http://ckan.routetopa.eu/api/action/datastore_search?resource_id=73e02092-85a1-434e-85fe-0c9a43aa9a52&amp;limit=10000"></datalet-selection-controllet>
+<datalet-selection-controllet deep-url="http://172.16.15.38/DEEalerProvider/DEEP/" datalets-list-url="http://172.16.15.38/DEEalerProvider/DEEP/datalets-list" fields='["result,records,Lat","result,records,Lng"]' data-url="http://ckan.routetopa.eu/api/action/datastore_search?resource_id=73e02092-85a1-434e-85fe-0c9a43aa9a52&amp;limit=10000"></datalet-selection-controllet>
 
 </body>
 

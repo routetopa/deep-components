@@ -39,6 +39,12 @@
                 margin-top: 8px;
             }
 
+            #items_vslider_controllet {
+                position: relative;
+                height: 100vh;
+                width: 172px;
+            }
+
             #datalet_selection_inputs {
                 position: relative;
                 height: 100vh;
@@ -200,7 +206,10 @@
         <iron-ajax id="selectedDatalet_request" on-response="_handleSelectedDatalet"></iron-ajax>
 
         <div id="datalet_selection_container">
-            <items-vslider-controllet id="vslider" datalets-list-url={{dataletsListUrl}} preselected-datalet={{preselectedDatalet}}></items-vslider-controllet>
+
+            <div id="items_vslider_controllet">
+                <items-vslider-controllet id="vslider" datalets-list-url={{dataletsListUrl}} preselected-datalet={{preselectedDatalet}}></items-vslider-controllet>
+            </div>
 
             <paper-material id="datalet_selection_inputs" elevation="5">
                 <div class="input_header"><span id="inputs"></span></div>
