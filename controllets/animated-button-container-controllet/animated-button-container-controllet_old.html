@@ -1,0 +1,276 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/paper-styles/paper-styles.html">
+<link rel="import" href="../../bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="../../bower_components/paper-fab/paper-fab.html">
+<link rel="import" href="../../bower_components/paper-material/paper-material.html">
+<link rel="import" href="../../bower_components/paper-toolbar/paper-toolbar.html">
+<link rel="import" href="../../bower_components/neon-animation/neon-animatable.html">
+<link rel="import" href="../../bower_components/neon-animation/neon-animated-pages.html">
+<link rel="import" href="../../bower_components/neon-animation/neon-animations.html">
+
+<link rel="import" href="../../controllets/items-list-controllet/item-list-controllet.html">
+<link rel="import" href="../../controllets/search-panel-controllet/search-panel-controllet.html">
+
+<dom-module id="animated-button-container-controllet">
+
+    <style>
+
+        :host {
+        @apply(--layout-horizontal);
+        @apply(--layout-center-center);
+        }
+        #pages{
+            position: absolute;
+            top: -38px;
+            left: 113px;
+        }
+
+        .window {
+            display: none;
+            position: fixed;
+            right: 0;
+            left: 0;
+            top: 20%;
+            margin-right: auto;
+            margin-left: auto;
+            z-index: 1000;
+        }
+
+        .hidden{
+            display: none;
+        }
+
+        #close{
+            position: absolute;
+            top: 8px;
+            left: 28.5vw;
+            --iron-icon-height: 20px;
+            --iron-icon-width: 20px;
+            width: 24px;
+            height: 24px;
+            --paper-fab-background:#9e9e9e;
+            z-index: 1001;
+        }
+
+        #open{
+            --paper-fab-background:transparent;
+            background: transparent;
+        }
+
+        #selected_item{
+            /*margin-left: 25px;*/
+            margin-top: -5px;
+            padding: 0;
+            ms-transform: scale(0.60);
+            -moz-transform: scale(0.60);
+            -o-transform: scale(0.60);
+            -webkit-transform: scale(0.60);
+            transform: scale(0.60);
+            -ms-transform-origin: 0 0;
+            -moz-transform-origin: 0 0;
+            -o-transform-origin: 0 0;
+            -webkit-transform-origin: 0 0;
+            transform-origin: 0 0;
+            /*max-height: 64px;
+            max-width: 64px;*/
+        }
+
+        #container_content{
+            z-index: 1000;
+            position: relative;
+            overflow: auto;
+            height: 100%;
+            background-color: #e8e8e8;
+        }
+        #toolbar{
+            background: #2196F3;
+            height: 45px;
+        }
+
+        #search_from_animated_button_container{
+            position: absolute;
+            top: 0px;
+            left: 0px;
+        }
+
+        .button-container{
+            color: #fff;
+            box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
+
+            position: relative;
+        }
+
+        .button-container:hover{
+            color: #fff;
+            box-shadow: 0 5px 11px 0 rgba(0, 0, 0, 0.18), 0 4px 15px 0 rgba(0, 0, 0, 0.15);
+            -webkit-transition: 0.2s ease-out;
+            -moz-transition: 0.2s ease-out;
+            -o-transition: 0.2s ease-out;
+            -ms-transition: 0.2s ease-out;
+            transition: 0.2s ease-out;
+            cursor: pointer;
+        }
+
+        .button-container::before{
+            position: absolute;
+            content: '';
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0);
+        }
+
+
+        .button-container:hover::before{
+            background-color: rgba(0, 0, 0, .15);
+            -webkit-transition: 0.2s ease-out;
+            -moz-transition: 0.2s ease-out;
+            -o-transition: 0.2s ease-out;
+            -ms-transition: 0.2s ease-out;
+            transition: 0.2s ease-out;
+        }
+
+        .transparent
+        {
+            position:fixed;
+            top:0;
+            left:0;
+            width:100%;
+            height:100%;
+            background-color: rgba(0, 0, 0, 0.4);
+        }
+
+    </style>
+
+    <template>
+        <paper-material elevation="5" id="window" class="window">
+            <div class="transparent"></div>
+            <paper-toolbar id="toolbar">
+                <search-panel-controllet id="search_from_animated_button_container" left-direction="true"></search-panel-controllet>
+                <paper-fab id="close" mini icon="close" on-click="_onCloseClick"></paper-fab>
+            </paper-toolbar>
+           <div id="container_content"><content></content></div>
+        </paper-material>
+
+        <div id="button_container" class="horizontal layout">
+           <span class="button-container" id="open" on-click="_onOpenClick">
+              <iron-icon id="open_window_button" icon="{{icon}}"></iron-icon>
+           </span>
+           <div id="selected_item"></div>
+        </div>
+
+    </template>
+
+    <script type="text/javascript" src="../shared_js/perfect-scrollbar/js/perfect-scrollbar.jquery.js"></script>
+
+    <script>
+
+        Polymer({
+
+            is: 'animated-button-container-controllet',
+
+            listeners:{
+                'animated-button-container-controllet_element-selected' : '_elementSelected',
+                'search-panel-controllet_content-changed' : '_handleSearch',
+                'animated-button-container-controllet_close' : '_onCloseClick',
+                'animated-button-container-controllet_open-window' : '_onOpenClick'
+            },
+
+            properties: {
+                selected : {
+                    type  : Number,
+                    value : 0
+                },
+                height:{
+                    type: String,
+                    value: "300px"
+                },
+                width:{
+                    type: String,
+                    value: "450px"
+                },
+                entryAnimation : {
+                    type  : String,
+                    value : ""
+                },
+                icon:{
+                    type: String,
+                    value: "assessment"
+                },
+                iconHeight:{
+                    type: String,
+                    value: "36"
+                },
+                iconWidth:{
+                    type: String,
+                    value: "36"
+                },
+                backgroundButtonColor:{
+                    type: String,
+                    value: undefined
+
+                },
+                exitAnimation  : {
+                    type  : String,
+                    value : ""
+                },
+                searchFunction: {
+                    type: String,
+                    notify: true
+                }
+            },
+
+            ready: function(){
+                /*this.$.window.style.height = this.height + "vh";
+                this.$.window.style.width  = (this.width - 0.5) + "vw";
+                this.$.close.style.left    = (this.width - 3.5) + "vw";*/
+
+                this.$.window.style.height = this.height + "px";
+                this.$.window.style.width  = this.width + "px";
+                this.$.close.style.left    = (this.width - 30) + "px";
+
+
+                $(this.$.container_content).perfectScrollbar();
+
+                this.$.open.style.height                         = this.iconHeight + "px";
+                this.$.open.style.width                          = this.iconWidth  + "px";
+                this.$.open_window_button.style.backgroundColor  = this.backgroundButtonColor;
+                this.$.open_window_button.style.width            = this.iconWidth  + "px";
+                this.$.open_window_button.style.height           = this.iconHeight + "px";
+                this.$.button_container.style.height             = this.iconHeight + "px";
+            },
+
+            _onOpenClick: function() {
+                /*this.entryAnimation = 'fade-in-animation';
+                this.exitAnimation  = 'fade-out-animation';*/
+                //this.selected = 1;
+                $(this.$.window).show();
+            },
+
+            _onCloseClick: function(){
+                /*this.entryAnimation = 'fade-out-animation';
+                this.exitAnimation  = 'fade-in-animation';*/
+                //this.selected = 0;
+                $(this.$.window).hide();
+            },
+
+            _elementSelected: function(e){
+                this.$.selected_item.innerHTML = "";
+                this.$.selected_item.appendChild(e.detail.selectedElement);
+            },
+            _handleSearch: function(e){
+                if(this.$.container_content.children[0]._handleSearch != undefined) {
+                    this.$.container_content.children[0]._handleSearch(e);
+                }else{
+                    if(this.searchFunction != undefined){
+                        this.searchFunction = new Function('e','return '+ this.searchFunction);
+                        this.searchFunction(e);
+                    }
+                }
+            }
+
+        });
+
+    </script>
+</dom-module>
