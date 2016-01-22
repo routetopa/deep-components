@@ -113,9 +113,9 @@
 
         <paper-material id="paper_card_container" elevation="{{elevation}}">
 
-            <paper-fab class="modify" mini icon="create" on-click="_handleModifyClick"></paper-fab>
+            <paper-fab id="card_modify" class="modify" mini icon="create" on-click="_handleModifyClick"></paper-fab>
 
-            <paper-fab class="delete" mini icon="delete" on-click="_handleDeleteClick"></paper-fab>
+            <paper-fab id="card_delete" class="delete" mini icon="delete" on-click="_handleDeleteClick"></paper-fab>
 
             <div id="content">
                 <content></content>
@@ -127,19 +127,19 @@
 
                 <template is="dom-if" if="{{checkType(cardType, 'link')}}">
 
-                    <paper-fab class="open" mini icon="link" on-click="_handleOpenClick"></paper-fab>
+                    <paper-fab id="card_open_link" class="open" mini icon="link" on-click="_handleOpenClick"></paper-fab>
 
                 </template>
 
                 <template is="dom-if" if="{{checkType(cardType, 'text')}}">
 
-                    <paper-fab class="open" mini icon="text-format" on-click="_handleOpenClick"></paper-fab>
+                    <paper-fab id="card_open_text" class="open" mini icon="text-format" on-click="_handleOpenClick"></paper-fab>
 
                 </template>
 
                 <template is="dom-if" if="{{checkType(cardType, 'datalet')}}">
 
-                    <paper-fab class="open" mini icon="assessment" on-click="_handleOpenClick"></paper-fab>
+                    <paper-fab id="card_open_datalet" class="open" mini icon="assessment" on-click="_handleOpenClick"></paper-fab>
 
                 </template>
 
@@ -202,7 +202,21 @@
                     this.$.content.style.backgroundColor = "#FFFFCC";
                 }
                 $(this.$.fullscreen_container).perfectScrollbar();
+
+                this._translate();
+            },
+
+            _translate: function(){
                 ln["ln"] = ODE.user_language;
+
+                this.$.card_modify.setAttribute("title", ln["modify_"+ln["ln"]]);
+                this.$.card_delete.setAttribute("title", ln["delete_"+ln["ln"]]);
+                if(this.checkType(this.cardType, 'link'))
+                    this.$$("#card_open_link").setAttribute("title", ln["open_"+ln["ln"]]);
+                if(this.checkType(this.cardType, 'text'))
+                    this.$$("#card_open_text").setAttribute("title", ln["open_"+ln["ln"]]);
+                if(this.checkType(this.cardType, 'datalet'))
+                    this.$$("#card_open_datalet").setAttribute("title", ln["open_"+ln["ln"]]);
             },
 
             _changeWidth: function(){

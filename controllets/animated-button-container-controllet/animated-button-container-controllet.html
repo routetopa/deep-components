@@ -42,7 +42,7 @@
             width: 484px;
             display: none;
             position: fixed;
-            top: 20%;
+            top: 100px;
             right: 0;
             left: 0;
             margin-right: auto;
@@ -92,7 +92,7 @@
 
     <template>
 
-        <div class="button-container">
+        <div class="button-container" style$="display: {{buttonDisplay}};">
            <span on-click="_onOpenClick">
               <iron-icon class="myspace" icon="icons:folder-open"></iron-icon>
                <!--create-new-folder-->
@@ -136,6 +136,11 @@
                 searchFunction: {
                     type: String,
                     notify: true
+                },
+
+                buttonDisplay: {
+                    type: String,
+                    value: "none"
                 }
             },
 

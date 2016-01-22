@@ -1,8 +1,8 @@
 ln = [];
 
-ln["modify_it"] = "Modify card";
-ln["delete_it"] = "Delete card";
-ln["open_it"]   = "Open preview";
+ln["modify_it"] = "Modifica card";
+ln["delete_it"] = "Elimina card";
+ln["open_it"]   = "Apri anteprima";
 
 ln["modify_en"] = "Modify card";
 ln["delete_en"] = "Delete card";
