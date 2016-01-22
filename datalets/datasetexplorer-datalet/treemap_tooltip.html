@@ -65,7 +65,7 @@
                 margin: 0px;
                 padding: 0px;
                 height: 64px;
-                width: 64px;
+                /*width: 64px;*/
             }
 
             p {
@@ -83,9 +83,9 @@
             <iron-icon icon="communication:call-made" class="this" style$="color: {{color}};"></iron-icon>
             <div class="tooltip_top">
                 <div class="tooltip_logo"><img class="tooltip_img" src$={{logoUrl}}></div>
-                <div class="tooltip_name" style$="color: {{color}};">{{name}}</div>
+                <!--<div class="tooltip_name" style$="color: {{color}};">{{name}}</div>-->
             </div>
-            <p><i>{{description}}</i></p>
+            <p><b style$="color: {{color}};">{{name}}</b>: <i>{{description}}</i></p>
             <p>There are <b>{{datasets}}</b> datasets.</p>
         </paper-dialog>
 
