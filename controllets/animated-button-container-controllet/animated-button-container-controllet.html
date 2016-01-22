@@ -92,10 +92,9 @@
 
     <template>
 
-        <div class="button-container" style$="display: {{buttonDisplay}};">
+        <div class="button-container" style$="display: {{_display(pluginKey)}};" title$="{{tooltip}}">
            <span on-click="_onOpenClick">
-              <iron-icon class="myspace" icon="icons:folder-open"></iron-icon>
-               <!--create-new-folder-->
+              <iron-icon class="myspace" icon="icons:create-new-folder"></iron-icon>
            </span>
         </div>
 
@@ -138,14 +137,21 @@
                     notify: true
                 },
 
-                buttonDisplay: {
+                pluginKey: {
                     type: String,
-                    value: "none"
+                    value: ""
+                },
+
+                tooltip: {
+                    type: String,
+                    value: ""
                 }
             },
 
             ready: function(){
                 $(this.$.container_content).perfectScrollbar();
+                console.log(this.tooltip);
+                console.log(this.pluginKey);
             },
 
             _onOpenClick: function() {
@@ -165,6 +171,12 @@
                         this.searchFunction(e);
                     }
                 }
+            },
+
+            _display: function(pluginKey){
+                if (pluginKey == "public-room")
+                    return "none";
+                return "inline";
             }
 
         });
