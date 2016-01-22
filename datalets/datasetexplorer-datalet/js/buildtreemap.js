@@ -131,22 +131,25 @@ function build(root, meta, place_holder, select_listener, width, height) {
             .call(rect)
             .attr("onmousemove", function(d) {
                 //var data = ["lvl", "name", "color", "description", "logoUrl", "datasets", "datasetUrl"];
-                var data = ["", d.name, d.color, "", "", "0", ""];
-                //d.name.split(':')[1]???
+                var data = ["", d.name, d.color, "", "", d.value, ""]
+                var id = d.name.split(':')[1];
                 if (d.depth == 1) {
                     // FIRST LVL
                     data[0] = "first";
-                    data[3] = "description";//???
-                    data[4] = "http://essi-lab.eu/twiki/pub/GIcat/CKANProfilerGuide/logo-ckan.png";//id???
-                    data[5] = "2222";//meta???
+                    data[1] = meta[id]['title'];
+                    data[3] = meta[id]['description'];
+                    data[4] = meta[id]['logo_url'];
+                    data[4] = ODE.THEME_IMAGES_URL + "/logos/"+id+".png";
+                    console.log(data[4]);
+                    //data[5] = d.value;
                 } else if (d._children && !d._children[0]._children) {
                     // LAST LVL
                     data[0] = "last";
-                    data[6] = "datasert url";//???
+                    //data[6] = "datasert url";//???
                 } else {
                     // MIDDLE LVL
                     data[0] = "middle";
-                    data[5] = "1111";//meta???
+                    //data[5] = "1111";//meta???
                 }
                 //console.log(data);
                 //console.log(data.toString());
