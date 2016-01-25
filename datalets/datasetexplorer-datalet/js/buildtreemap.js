@@ -138,8 +138,9 @@ function build(root, meta, place_holder, select_listener, width, height) {
                     // FIRST LVL
                     data[0] = "first";
                     data[1] = meta[id]['title'];
-                    data[3] = OW.getLanguageText('openwall', 'provider_'+id);
-                    data[4] = ((ODE.THEME_IMAGES_URL == undefined) ? parent.ODE.THEME_IMAGES_URL : ODE.THEME_IMAGES_URL) + "/logos/"+id+".png";//meta[id]['logo_url'];
+                    //data[3] = OW.getLanguageText('openwall', 'provider_'+id);//???
+                    data[3] = (typeof OW == 'undefined') ? "" : OW.getLanguageText('openwall', 'provider_'+id);
+                    data[4] = ((typeof ODE == 'undefined') ? parent.ODE.THEME_IMAGES_URL : ODE.THEME_IMAGES_URL) + "/logos/"+id+".png";//meta[id]['logo_url'];
                     //data[5] = d.value;
                 } else if (d._children && !d._children[0]._children) {
                     // LAST LVL
