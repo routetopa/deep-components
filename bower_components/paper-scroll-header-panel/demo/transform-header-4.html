@@ -10,7 +10,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 -->
 <html>
 <head>
-  <title>paper-scroll-header-panel: demo4</title>
+  <title>paper-scroll-header-panel: transform header</title>
 
   <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
   <meta name="mobile-web-app-capable" content="yes">
@@ -41,29 +41,29 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       /* background for toolbar when it is at its full size */
       --paper-scroll-header-panel-full-header: {
         background-image: url(images/bg1.jpg);
-        background-position: left center;
       };
 
       /* background for toolbar when it is condensed */
       --paper-scroll-header-panel-condensed-header: {
-        background-color: var(--paper-deep-purple-500);
+        background-image: url(images/bg4.jpg);
       };
     }
 
-    paper-icon-button {
-      --paper-icon-button-ink-color: white;
-    }
-
     paper-toolbar.tall {
+      /* custom toolbar height */
+      height: 256px;
       background-color: transparent;
     }
 
     paper-toolbar.tall .title {
       font-size: 40px;
       margin-left: 60px;
-
       -webkit-transform-origin: left center;
       transform-origin: left center;
+    }
+
+    paper-icon-button {
+      --paper-icon-button-ink-color: white;
     }
 
     .content {
@@ -79,14 +79,18 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 </head>
 <body unresolved>
 
-  <paper-scroll-header-panel condenses>
+  <!-- By default condensedHeaderHeight is 1/3 of the header's height.  Here
+       we want to set the condensed header's height to be 64px. -->
+  <paper-scroll-header-panel condenses header-height="256" condensed-header-height="64">
 
     <paper-toolbar class="tall">
+
       <paper-icon-button icon="arrow-back"></paper-icon-button>
       <div class="spacer"></div>
       <paper-icon-button icon="search"></paper-icon-button>
       <paper-icon-button icon="more-vert"></paper-icon-button>
       <div class="bottom title">Title</div>
+
     </paper-toolbar>
 
     <div class="content">

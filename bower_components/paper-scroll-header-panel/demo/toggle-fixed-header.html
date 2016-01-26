@@ -10,7 +10,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 -->
 <html>
 <head>
-  <title>paper-scroll-header-panel: demo4</title>
+  <title>paper-scroll-header-panel: demo7</title>
 
   <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
   <meta name="mobile-web-app-capable" content="yes">
@@ -22,6 +22,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   <link rel="import" href="../../paper-toolbar/paper-toolbar.html">
   <link rel="import" href="../../iron-icons/iron-icons.html">
   <link rel="import" href="../../paper-icon-button/paper-icon-button.html">
+  <link rel="import" href="../../iron-media-query/iron-media-query.html">
   <link rel="import" href="../../paper-styles/color.html">
   <link rel="import" href="../../iron-flex-layout/iron-flex-layout.html">
   <link rel="import" href="sample-content.html">
@@ -40,18 +41,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       /* background for toolbar when it is at its full size */
       --paper-scroll-header-panel-full-header: {
-        background-image: url(images/bg1.jpg);
-        background-position: left center;
+        background-image: url(images/bg2.jpg);
+        background-position: left bottom;
       };
 
       /* background for toolbar when it is condensed */
       --paper-scroll-header-panel-condensed-header: {
-        background-color: var(--paper-deep-purple-500);
+        background-color: var(--google-yellow-500, #f4b400);
       };
-    }
-
-    paper-icon-button {
-      --paper-icon-button-ink-color: white;
     }
 
     paper-toolbar.tall {
@@ -66,6 +63,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       transform-origin: left center;
     }
 
+    paper-icon-button {
+      --paper-icon-button-ink-color: white;
+    }
+
     .content {
       padding: 8px;
     }
@@ -73,7 +74,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     .spacer {
       @apply(--layout-flex);
     }
-
   </style>
 
 </head>
@@ -82,22 +82,37 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   <paper-scroll-header-panel condenses>
 
     <paper-toolbar class="tall">
+
       <paper-icon-button icon="arrow-back"></paper-icon-button>
       <div class="spacer"></div>
       <paper-icon-button icon="search"></paper-icon-button>
       <paper-icon-button icon="more-vert"></paper-icon-button>
-      <div class="bottom title">Title</div>
+      <div class="bottom indent title">Title</div>
+
     </paper-toolbar>
 
     <div class="content">
 
+      <h3>Resize window to toggle between fixed header and scrolled header</h3>
       <sample-content size="100"></sample-content>
 
     </div>
 
   </paper-scroll-header-panel>
 
+  <iron-media-query id="mquery" query="min-width: 600px"></iron-media-query>
+
   <script>
+
+    // toggle fixed header based on screen size
+    var panel = document.querySelector('paper-scroll-header-panel');
+    var mquery = document.querySelector('#mquery');
+
+    mquery.addEventListener('query-matches-changed', function() {
+      panel.fixed = mquery.queryMatches;
+    });
+
+    panel.fixed = mquery.queryMatches;
 
     // custom transformation: scale header's title
     var title = document.querySelector('.title');

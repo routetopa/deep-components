@@ -75,7 +75,10 @@ Example:
             presentData: function(){
 
                 var t = this;
-                this._component.map = L.map(this._component.$.leafletjs).setView([0, 0], 13, {reset:true});
+                try{
+                    this._component.map = L.map(this._component.$.leafletjs).setView([0, 0], 13, {reset:true});
+                }catch(e){}
+
 
                 L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                     maxZoom: 18,
@@ -111,7 +114,7 @@ Example:
                     t._component.map._onResize();
                     t._component.map.invalidateSize(false);
                     t._component.map.fitBounds(coordinates);
-                }, 1000)
+                }, 1)
             }
         };
 
