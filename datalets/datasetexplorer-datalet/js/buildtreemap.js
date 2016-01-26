@@ -131,30 +131,28 @@ function build(root, meta, place_holder, select_listener, width, height) {
             .call(rect)
             .attr("onmousemove", function(d) {
                 //var data = ["lvl", "name", "color", "description", "logoUrl", "datasets", "datasetUrl"];
-                var data = ["", d.name, d.color, "", "", "0", ""];
-                //d.name.split(':')[1]???
+                var data = ["", d.name, d.color, "", "", d.value, ""];
+                data[2] = ["#000000"];
+                var id = d.name.split(':')[1];
                 if (d.depth == 1) {
                     // FIRST LVL
                     data[0] = "first";
-                    data[3] = "description";//???
-                    data[4] = "http://essi-lab.eu/twiki/pub/GIcat/CKANProfilerGuide/logo-ckan.png";//id???
-                    data[5] = "2222";//meta???
+                    data[1] = meta[id]['title'];
+                    //data[3] = OW.getLanguageText('openwall', 'provider_'+id);//???
+                    data[3] = (typeof OW == 'undefined') ? "" : OW.getLanguageText('openwall', 'provider_'+id);
+                    data[4] = ((typeof ODE == 'undefined') ? parent.ODE.THEME_IMAGES_URL : ODE.THEME_IMAGES_URL) + "/logos/"+id+".png";//meta[id]['logo_url'];
+                    //data[5] = d.value;
                 } else if (d._children && !d._children[0]._children) {
                     // LAST LVL
                     data[0] = "last";
-                    data[6] = "datasert url";//???
+                    //data[6] = "datasert url";
                 } else {
                     // MIDDLE LVL
                     data[0] = "middle";
-                    data[5] = "1111";//meta???
                 }
-                //console.log(data);
-                //console.log(data.toString());
                 return "showTooltip(event, '" + data + "')";
             })
             .attr("onmouseout", function() {return "hideTooltip()";})
-            //.append("title")
-            //.text(function(d) { return d.name;  /*formatNumber(d.value);*/ });
 
         g.append("text")
             .attr("dy", ".75em")

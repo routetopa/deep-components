@@ -36,13 +36,27 @@
             .tooltip {
                 font-family: 'Roboto', 'Helvetica Neue', Helvetica, Arial, sans-serif;
                 padding: 16px;
-                min-width: 200px;
-                max-width: 400px;
                 position: absolute;
+
+                /*min-width: 200px;*/
+                /*max-width: 400px;*/
 
                 /*position: relative*/
                 /*top: 20px;*/
                 /*left: 20px;*/
+            }
+
+            .tooltip#first_info {
+                width: 400px;
+            }
+
+            .tooltip#middle_info {
+                min-width: 200px;
+            }
+
+            .tooltip#last_info {
+                min-width: 200px;
+                max-width: 800px;
             }
 
             .tooltip_top {
@@ -65,7 +79,7 @@
                 margin: 0px;
                 padding: 0px;
                 height: 64px;
-                width: 64px;
+                /*width: 64px;*/
             }
 
             p {
@@ -83,9 +97,9 @@
             <iron-icon icon="communication:call-made" class="this" style$="color: {{color}};"></iron-icon>
             <div class="tooltip_top">
                 <div class="tooltip_logo"><img class="tooltip_img" src$={{logoUrl}}></div>
-                <div class="tooltip_name" style$="color: {{color}};">{{name}}</div>
+                <!--<div class="tooltip_name" style$="color: {{color}};">{{name}}</div>-->
             </div>
-            <p><i>{{description}}</i></p>
+            <p><b style$="color: {{color}};">{{name}}</b>: <i>{{description}}</i></p>
             <p>There are <b>{{datasets}}</b> datasets.</p>
         </paper-dialog>
 
