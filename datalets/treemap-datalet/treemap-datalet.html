@@ -145,7 +145,7 @@ Example:
                     this.checkAggragationField(treemapData[i], this.data.length , this.data.length - 1);
                 }
 
-                var json = JSON.stringify(this.map);
+                //var json = JSON.stringify(this.map);
 
             },
 
@@ -177,12 +177,11 @@ Example:
                 curchild.value = value;
             },
 
-            presentData: function(){console.log(TreemapBehavior.map.name);
-                //build(this.map, "treemap_placeholder");
+            presentData: function(){
+                //console.log(TreemapBehavior.map.name);
                 build(this.map, this._component.$.treemap_placeholder);
             }
         };
-
 
         Polymer({
             is : 'treemap-datalet' ,
@@ -204,6 +203,12 @@ Example:
             ready: function(){
                 this.behavior =  $.extend(true, {}, BaseDataletBehavior, WorkcycleBehavior, AjaxJsonJsonPathBehavior, TreemapBehavior);
                 this.async(function(){this.behavior.init(this)},0);
+            },
+
+            refresh : function(){
+                $(this.$.treemap_placeholder).html("");
+                this.behavior.transformData(null);
+                this.behavior.presentData();
             }
 
         });
