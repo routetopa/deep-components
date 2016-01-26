@@ -133,8 +133,17 @@
                     var dsc = document.getElementById("dsc");
                     dsc.setAttribute("datasets", JSON.stringify(datasets));
 
+                    $("#treeMapView").parent().parent().hide();
                     window.addEventListener("data-sevc-controllet.dataletCreated", function(e){parent.createHTML(e);});
 
+                    /*var h = $("#material_container").height() - 48;
+                    var w = $("#material_container").width();
+                    console.log($("#div_datasetexplorer"));
+                    console.log($("#div_datasetexplorer").html());
+                    $("#div_datasetexplorer").html("CIAO !!");
+                    console.log($("#div_datasetexplorer").html());
+                    $("#div_datasetexplorer").html("<datasetexplorer-datalet width=\""+w+"\" height=\""+h+"\" data-url=\"http://spod.routetopa.eu/openwall/api/datasetTree\" fields=\"[\"result,datasets,provider_name\",\"result,datasets,organization_name\",\"result,datasets,package_name\",\"result,datasets,resource_name\",\"result,datasets,url\",\"result,datasets,w\"]\"></datasetexplorer-datalet>");
+                    console.log($("#div_datasetexplorer").html());*/
                 });
             </script>
         </head>
