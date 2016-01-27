@@ -32,6 +32,8 @@
 <link rel="import" href="../base-ajax-json-jsonpath-datalet/base-ajax-json-jsonpath-datalet.html">
 <link rel="import" href="treemap_tooltip.html">
 
+<script src="../../locales/datasetexplorer_ln.js"></script>
+
 <!--
 
 `datasetexplorer-datalet` is a treemap datalet based on d3js treemap project http://bl.ocks.org/mbostock/4063582
@@ -257,6 +259,10 @@ Example:
 
                 this.behavior =  $.extend(true, {}, BaseDataletBehavior, WorkcycleBehavior, AjaxJsonJsonPathBehavior, DatasetexplorerBehavior);
                 this.async(function(){this.behavior.init(this)},0);
+            },
+
+            attached: function(){
+                datasetexplorer_ln["ln"] = ODE.user_language;
             }
 
         });
