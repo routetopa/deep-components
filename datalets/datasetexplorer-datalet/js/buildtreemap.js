@@ -106,7 +106,7 @@ function build(root, meta, place_holder, select_listener, width, height) {
             .datum(d.parent)
             .on("click", transition)
             .select("text")
-            .text(name(d));
+            .text( name(d) );
 
         var g1 = svg.insert("g", ".grandparent")
             .datum(d)
@@ -145,6 +145,7 @@ function build(root, meta, place_holder, select_listener, width, height) {
                 } else if (d._children && !d._children[0]._children) {
                     // LAST LVL
                     data[0] = "last";
+                    data[6] = d._children[0].name;
                     //data[6] = "datasert url";
                 } else {
                     // MIDDLE LVL
@@ -324,8 +325,8 @@ function build(root, meta, place_holder, select_listener, width, height) {
 
     function name(d) {
         return d.parent
-            ? name(d.parent) + "." + d.name
-            : d.name;
+            ? name(d.parent) + " >> " + checkProviderName(d.name)
+            : checkProviderName(d.name);
     }
 
 };
