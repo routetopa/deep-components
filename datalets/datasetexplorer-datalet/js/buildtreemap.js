@@ -152,7 +152,7 @@ function build(root, meta, place_holder, select_listener, width, height) {
                     // MIDDLE LVL
                     data[0] = "middle";
                 }
-                return "showTooltip(event, '" + data + "')";
+                return "showTooltip(evt, '" + data + "')";
             })
             .attr("onmouseout", function() {return "hideTooltip()";})
 
