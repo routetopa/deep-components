@@ -158,6 +158,9 @@
             _allowSecondStep : function(e){
                 this.dataUrl = e.detail.url;
 
+                var wrongUrl = ln["wrongUrl_" + this.localization];
+                console.log(ln["wrongUrl_en"]);
+
                 $.ajax({
                     url: e.detail.url,
                     dataType: "json",
@@ -169,6 +172,7 @@
                     error: function(){
 //                        this.jsonData = undefined;
                         slider.chevronRight(false);
+                        dataset_selection.dataUrl = wrongUrl;
                     }
                 });
 

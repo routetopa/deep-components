@@ -14,6 +14,7 @@ ln["mostPopular_it"] = "I PIÙ VISTI";
 ln["availableDatasets_it"] = "Dataset disponibili";
 ln["suggestedDatasets_it"] = "Dataset suggeriti";
 ln["selectedUrl_it"] = "Url selezionata";
+ln["wrongUrl_it"] = "Url invalido o data provider non ancora supportato.";
 
 ln["inputs_it"] = "DATI DI INPUT";
 ln["layouts_it"] = "ETICHETTE / OPZIONI";
@@ -66,6 +67,7 @@ ln["mostPopular_en"] = "MOST POPULAR";
 ln["availableDatasets_en"] = "Available datasets";
 ln["suggestedDatasets_en"] = "Suggested datasets";
 ln["selectedUrl_en"] = "Selected url";
+ln["wrongUrl_en"] = "Invalid url or data provider not supported yet.";
 
 ln["inputs_en"] = "INPUTS";
 ln["layouts_en"] = "LABELS / OPTIONS";
@@ -119,6 +121,7 @@ ln["mostPopular_fr"] = "LES PLUS POPULAIRES";
 ln["availableDatasets_fr"] = "Jeux de données disponibles";
 ln["suggestedDatasets_fr"] = "Jeux de données suggérés";
 ln["selectedUrl_fr"] = "Sélectionner URL";
+ln["wrongUrl_fr"] = "Invalid url or data provider not supported yet.";
 
 ln["inputs_fr"] = "SORTIES";
 ln["layouts_fr"] = "VIGNETTES/OPTIONSs";
@@ -171,6 +174,7 @@ ln["mostPopular_nl"] = "MOST POPULAR";
 ln["availableDatasets_nl"] = "Available datasets";
 ln["suggestedDatasets_nl"] = "Suggested datasets";
 ln["selectedUrl_nl"] = "Selected url";
+ln["wrongUrl_nl"] = "Invalid url or data provider not supported yet.";
 
 ln["inputs_nl"] = "INPUTS";
 ln["layouts_nl"] = "LABELS / OPTIONS";
