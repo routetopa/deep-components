@@ -589,6 +589,8 @@
 
             _addDatalet : function(){
 
+                this._updateParams();
+
                 var selectedFields = [];
                 for (var i = 0; i < this.selectedFields.length; i++)
                     if(this.selectedFields[i])
