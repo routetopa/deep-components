@@ -2,10 +2,9 @@
  * Created by Utente on 17/07/2015.
  */
 
-function build(root, meta, place_holder, select_listener, width, height) {
-
-    var plwidth = width >= 0 ? width : $("#" + place_holder).width(),
-        plheight = height >= 0 ? height : $("#" + place_holder).height();
+function build2(root, meta, place_holder, select_listener, width, height) {
+    var plwidth = width >= 0 ? width : $(place_holder).width(),
+        plheight = height >= 0 ? height : $(place_holder).height();
 
     var margin = {top: 20, right: 0, bottom: 0, left: 0},
         width  = plwidth,
@@ -27,8 +26,7 @@ function build(root, meta, place_holder, select_listener, width, height) {
         .ratio(height / width * 0.5 * (1 + Math.sqrt(5)))
         .round(false);
 
-    var svg = d3.select("#" + place_holder)
-        .append("svg")
+    var svg = d3.select(place_holder).append("svg")
         .attr("width", width + margin.left + margin.right)
         .attr("height", height + margin.bottom + margin.top)
         .style("margin-left", -margin.left + "px")

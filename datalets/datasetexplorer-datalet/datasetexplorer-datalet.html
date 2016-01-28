@@ -120,7 +120,7 @@ Example:
     </template>
 
     <script src="../shared_js/d3.js"></script>
-    <script src="js/buildtreemap.js"></script>
+    <script src="js/buildtreemap2.js"></script>
     <script>
 
         var DatasetexplorerBehavior = {
@@ -130,7 +130,8 @@ Example:
                 children : []
             },
 
-            transformData: function(e){
+            transformData: function(e)
+            {
                 var treemapData = [];
                 DatasetexplorerBehavior.map.name = this._component.title;
 
@@ -192,7 +193,7 @@ Example:
                 var xyz = function(url) {
                     me.selectResource(url);
                 }
-                build(this.map, this.meta, "treemap_placeholder", xyz, this._component.width, this._component.height);
+                build2(this.map, this.meta, this._component.$.treemap_placeholder, xyz, this._component.width, this._component.height);
             },
 
             selectResource: function(url) {
@@ -223,9 +224,9 @@ Example:
                     });
                 }
                 this.deleteWaitImage();
-            },
-        };
+            }
 
+        };
 
         Polymer({
             is : 'datasetexplorer-datalet' ,
