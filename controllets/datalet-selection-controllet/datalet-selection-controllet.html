@@ -463,10 +463,10 @@
                     var labels = this.$.datalet_selection_labels.querySelectorAll("paper-input");
                     for (var i = 0; i < labels.length; i++)
                         labels[i].value = this.dataletPreset[labels[i].label];
-                }, 300);
 
-                this.loadPreview = true;
-                this._loadDatalet(this.selectedFields);
+                    this.loadPreview = true;
+                    this._loadDatalet(this.selectedFields);
+                }, 300);
             },
 
             _handleSelectedDatalet : function(e){
