@@ -153,6 +153,10 @@
 
             attached : function() {
                 this.fire('page-slider-controllet_selected', {selected : this.selected});
+
+                var buttons = document.getElementsByTagName("paper-icon-button");
+                buttons[0].setAttribute("title", ln["back_" + ln["localization"]]);
+                buttons[1].setAttribute("title", ln["forward_" + ln["localization"]]);
             },
 
             setTitle : function(title, subtitle) {

@@ -8,11 +8,11 @@ ln["modify_en"] = "Modify card";
 ln["delete_en"] = "Delete card";
 ln["open_en"]   = "Open preview";
 
-ln["modify_fr"] = "Modify card";
-ln["delete_fr"] = "Delete card";
-ln["open_fr"]   = "Open preview";
+ln["modify_fr"] = "Modifier la card";
+ln["delete_fr"] = "Supprimer la card";
+ln["open_fr"]   = "Ouvrir aperçu";
 
-ln["modify_nl"] = "Modify card";
-ln["delete_nl"] = "Delete card";
+ln["modify_nl"] = "Wijzigen card";
+ln["delete_nl"] = "Wissen card";
 ln["open_nl"]   = "Open preview";
 

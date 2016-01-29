@@ -65,7 +65,7 @@ Example:
                 --paper-input-container-input-color: #ffffff;
                 --paper-input-container-focus-color: #ffffff;
                 --paper-input-container-color: #ffffff;
-                /*position: absolute;*/
+                position: absolute;
                 /*top: -12px;*/
                 /*width: 20vw;*/
                 width: 392px;
@@ -84,7 +84,7 @@ Example:
             <neon-animated-pages selected="[[selected]]" entry-animation="[[entryAnimation]]" exit-animation="[[exitAnimation]]">
                 <neon-animatable></neon-animatable>
                 <neon-animatable>
-                    <paper-input id="search_text" class="search-text" autofocus label="search" autosave="search_text" results="5" transition="fade-in-animation" value="{{searchKey}}" no-label-float>
+                    <paper-input id="search_text" class="search-text" autofocus autosave="search_text" results="5" transition="fade-in-animation" value="{{searchKey}}" no-label-float>
                     </paper-input>
                 </neon-animatable>
             </neon-animated-pages>

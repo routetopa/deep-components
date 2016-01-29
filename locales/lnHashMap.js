@@ -8,6 +8,9 @@ ln["slide2Subtitle_it"] = "Seleziona i campi dalla struttura ad albero. Nella ta
 ln["slide3Title_it"] = "SELEZIONA LA VISUALIZZAZIONE";
 ln["slide3Subtitle_it"] = "Seleziona una visualizzazione, inserisci dati di input ed etichette (opzionale).";
 
+ln["back_it"] = "INDIETRO";
+ln["forward_it"] = "AVANTI";
+
 ln["listView_it"] = "ELENCO";
 ln["treeMapView_it"] = "GRAFICO AD ALBERO";
 ln["mostPopular_it"] = "I PIÙ VISTI";
@@ -60,6 +63,9 @@ ln["slide2Title_en"] = "SELECT DATA";
 ln["slide2Subtitle_en"] = "Select the fields from tree-view. The multi-table will show the values related to the selected fields.";
 ln["slide3Title_en"] = "SELECT VISUALIZATION";
 ln["slide3Subtitle_en"] = "Select a visualization, fill out inputs and labels (optional).";
+
+ln["back_en"] = "BACK";
+ln["forward_en"] = "FORWARD";
 
 ln["listView_en"] = "LIST VIEW";
 ln["treeMapView_en"] = "TREE MAP VIEW";
@@ -115,6 +121,9 @@ ln["slide2Subtitle_fr"] = "Sélectionner les champs à partir de l’arborescenc
 ln["slide3Title_fr"] = "SELECTIONNER UN MODE DE VISUALISATION";
 ln["slide3Subtitle_fr"] = "Sélectionner un mode de visualisation, remplir les entrées et les vignettes (optionnel).";
 
+ln["back_fr"] = "RETOUR";
+ln["forward_fr"] = "AVANT";
+
 ln["listView_fr"] = "VUE EN LISTE";
 ln["treeMapView_fr"] = "VUE EN ARBORESCENCE";
 ln["mostPopular_fr"] = "LES PLUS POPULAIRES";
@@ -161,54 +170,57 @@ ln["LongitudeDescription_fr"] = "Longitude des points que vous souhaitez montrer
 ln["BalloonContentDescription_fr"] = "It is the text associated to the marker or the link to the image related to the camera associated to each points.";
 
 /* NL */
-ln["slide1Title_nl"] = "SELECT DATASET";
-ln["slide1Subtitle_nl"] = "Search or copy and paste the url of dataset.";
-ln["slide2Title_nl"] = "SELECT DATA";
-ln["slide2Subtitle_nl"] = "Select the fields from tree-view. The multi-table will show the values related to the selected fields.";
-ln["slide3Title_nl"] = "SELECT VISUALIZATION";
-ln["slide3Subtitle_nl"] = "Select a visualization, fill out inputs and labels (optional).";
+ln["slide1Title_nl"] = "SELECTEER DATASET";
+ln["slide1Subtitle_nl"] = "Zoek of kopieer en plak de url van de dataset.";
+ln["slide2Title_nl"] = "SELECTEER DATA";
+ln["slide2Subtitle_nl"] = "Selecteer de velden uit de boomstructuur. De multi-tabel laat de waarden zien van de geselecteerde velden.";
+ln["slide3Title_nl"] = "SELECTEER VISUALISATIE";
+ln["slide3Subtitle_nl"] = "Selecteer een visualisatie, vul de invoer en labels in.";
 
-ln["listView_nl"] = "LIST VIEW";
-ln["treeMapView_nl"] = "TREE MAP VIEW";
-ln["mostPopular_nl"] = "MOST POPULAR";
-ln["availableDatasets_nl"] = "Available datasets";
-ln["suggestedDatasets_nl"] = "Suggested datasets";
-ln["selectedUrl_nl"] = "Selected url";
-ln["wrongUrl_nl"] = "Invalid url or data provider not supported yet.";
+ln["back_nl"] = "TERUG";
+ln["forward_nl"] = "VOOTUIT";
+
+ln["listView_nl"] = "LIJSTWEERGAVE";
+ln["treeMapView_nl"] = "BOOMSTRUCTUUR WEEERGAVE";
+ln["mostPopular_nl"] = "POPULAIRSTE";
+ln["availableDatasets_nl"] = "Beschikbare datasets";
+ln["suggestedDatasets_nl"] = "Voeg aanbevolen datasets";
+ln["selectedUrl_nl"] = "selecteer url";
+ln["wrongUrl_nl"] = "Ongeldige url of data provider nog niet ondersteund.";
 
 ln["inputs_nl"] = "INPUTS";
-ln["layouts_nl"] = "LABELS / OPTIONS";
-ln["baseInfo_nl"] = "BASE INFO";
-ln["comment_nl"] = "COMMENT";
-ln["commentLabel_nl"] = "comment (max 100 characters)";
-ln["dataletPreview_nl"] = "PREVIEW";
-ln["addDatalet_nl"] = "ADD";
-ln["modifyDatalet_nl"] = "MODIFY";
+ln["layouts_nl"] = "LABELS / OPTIES";
+ln["baseInfo_nl"] = "BASIS INFO";
+ln["comment_nl"] = "COMMENTAAR";
+ln["commentLabel_nl"] = "commentaar (maximaal 100 tekens)";
+ln["dataletPreview_nl"] = "VOORBEELD";
+ln["addDatalet_nl"] = "TOEVOEGEN";
+ln["modifyDatalet_nl"] = "WIJZIGEN";
 
-ln["cellDescription_nl"] = "The cell of table.";
-ln["levelDescription_nl"] = "It is the level field that the datalet will use to group the values at corrisponding field number level.";
+ln["cellDescription_nl"] = "De cel van een tabel.";
+ln["levelDescription_nl"] = "Het is het veldniveau dat de datalet gebruikt om waarden te groeperen die corresponderen met veldniveau aantallen.";
 
-ln["categoriesDescription_nl"] = "The chart categories. Its values will be put in the horizontal axis. You need one value for each series.";
-ln["seriesDescription_nl"] = "The chart series. Its values will be put in the vertical axis.";
+ln["categoriesDescription_nl"] = "De categorieen van het diagram. De waarden worden op de horizontale as geplaatst. Voor elke reeks is één waarde nodig.";
+ln["seriesDescription_nl"] = "De reeksen van het diagram. De waarden worden op de verticale as geplaatst.";
 
-ln["XAxisLabelDescription_nl"] = "The label for the X axis.";
-ln["YAxisLabelDescription_nl"] = "The label for the Y axis.";
-ln["suffixDescription_nl"] = "The values suffix (eg units, dollars, euro, ...).";
+ln["XAxisLabelDescription_nl"] = "Label voor de x-as.";
+ln["YAxisLabelDescription_nl"] = "Label voor de y-as.";
+ln["suffixDescription_nl"] = "De waarden van de index (bijvoorbeeld de eenheid).";
 
-ln["pieSeriesDescription_nl"] = "The chart series. Its values will be put on slice of each series.";
-ln["pieSizeDescription_nl"] = "The size for each series to create a concentric rings.";
+ln["pieSeriesDescription_nl"] = "De reeksen van het diagram. De waarden zullen worden opgedeeld voor iedere reeks.";
+ln["pieSizeDescription_nl"] = "De grootte van iedere reeks die samen een cirkelvormige ring vormen.";
 
-ln["bubbleCategoriesDescription_nl"] = "The chart categories. Its values will be put in the horizontal axis. You need one value for each series.";
-ln["bubbleYValuesDescription_nl"] = "The chart plots y values. Its values will be put in the vertical axis.";
-ln["bubbleZValuesDescription_nl"] = "The chart plots z value. Its values represent the size of the bubble.";
-ln["bubbleSeriesDescription_nl"] = "The chart series. Its values visualize multi- series bubbles chart.";
+ln["bubbleCategoriesDescription_nl"] = "De categorieen van het diagram. Voor elke reeks is één waarde nodig.";
+ln["bubbleYValuesDescription_nl"] = "De grafiek plot Y-waarden. De waarden worden op de verticale as geplaatst.";
+ln["bubbleZValuesDescription_nl"] = "De grafiek plot Z-waarden. De waarden representeren de grootte van de bellen.";
+ln["bubbleSeriesDescription_nl"] = "De reeksen van het diagram. De waarden visualiseren meerdere reeksen van bellen.";
 
-ln["scatterCategoriesDescription_nl"] = "The chart categories. You need one value for each series.";
-ln["scatterXValuesDescription_nl"] = "The chart plots x values. Its values will be put in the horizontal axis.";
-ln["scatterYValuesDescription_nl"] = "The chart plots y value. Its values will be put in the vertical axis.";
+ln["scatterCategoriesDescription_nl"] = "De categorieen van het diagram. Voor elke reeks is één waarde nodig.";
+ln["scatterXValuesDescription_nl"] = "De grafiek plot X-waarden. De waarden worden op de horizontale as geplaatst.";
+ln["scatterYValuesDescription_nl"] = "De grafiek plot Y-waarden. De waarden worden op de verticale as geplaatst.";
 
-ln["heatmapCategoriesDescription_nl"] = "The chart categories. Its values will be put in the horizontal axis.";
+ln["heatmapCategoriesDescription_nl"] = "De categorieën van het diagram. De waarden worden op de horizontale as geplaatst.";
 
-ln["LatitudeDescription_nl"] = "It is latitude of the points you want to show in the map.";
-ln["LongitudeDescription_nl"] = "It is longitude of the points you want to show in the map.";
-ln["BalloonContentDescription_nl"] = "It is the text associated to the marker or the link to the image related to the camera associated to each points.";
+ln["LatitudeDescription_nl"] = "Het is de breedtegraad van de punten in de kaart.";
+ln["LongitudeDescription_nl"] = "Het is de hoogtegraad van de punten in de kaart";
+ln["BalloonContentDescription_nl"] = "Het is de tekst die hoort bij de markering of link (naar een foto van de camera van ieder punt).";
