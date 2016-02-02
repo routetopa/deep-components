@@ -84,8 +84,7 @@ Example:
                 stroke: #fff;
             }
 
-            :host ::content rect.parent,
-            .grandparent rect {
+            :host ::content rect.parent {
                 stroke-width: 2px;
             }
 
@@ -97,8 +96,12 @@ Example:
                 fill: #ee9700;
             }
 
-            :host ::content .children rect.parent,
-            .grandparent rect {
+            :host ::content .children rect.parent {
+                cursor: pointer;
+            }
+
+            :host ::content .grandparent rect {
+                stroke-width: 2px;
                 cursor: pointer;
             }
 

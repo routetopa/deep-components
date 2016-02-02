@@ -43,7 +43,18 @@ function build2(root, meta, place_holder, select_listener, width, height) {
     grandparent.append("rect")
         .attr("y", -margin.top)
         .attr("width", width)
-        .attr("height", margin.top);
+        .attr("height", margin.top)
+        //.call(rect)
+        .attr("onmousemove", function() {
+            //var data = ["lvl", "name", "color", "description", "logoUrl", "datasets", "datasetUrl"];
+            var data = ["top", "", "#000000", "", "", "", ""];
+            //data[3] = OW.getLanguageText('ode', 'back');
+            data[3] = datasetexplorer_ln["ode+back_"+datasetexplorer_ln["ln"]];
+            console.log(data[3]);
+
+            return "showTooltip(evt, '" + data + "')";
+        })
+        .attr("onmouseout", function() {return "hideTooltip()";})
 
     grandparent.append("text")
         .attr("x", 6)

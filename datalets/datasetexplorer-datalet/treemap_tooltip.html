@@ -46,6 +46,10 @@
                 /*left: 20px;*/
             }
 
+            .tooltip#top_info {
+                white-space: nowrap;
+            }
+
             .tooltip#first_info {
                 width: 400px;
             }
@@ -92,6 +96,10 @@
             }
 
         </style>
+
+        <paper-dialog id="top_info" class="tooltip">
+            <p class="ptop"><b>{{description}}</b></p>
+        </paper-dialog>
 
         <paper-dialog id="first_info" class="tooltip">
             <iron-icon icon="communication:call-made" class="this" style$="color: {{color}};"></iron-icon>
@@ -165,6 +173,11 @@
                 this.hideTooltip();
 
                 switch (lvl) {
+                    case "top":
+                        $("#top_info").css("top", y);
+                        $("#top_info").css("left", x);
+                        this.$.top_info.open();
+                        break;
                     case "first":
                         $("#first_info").css("top", y);
                         $("#first_info").css("left", x);
@@ -183,6 +196,7 @@
             },
 
             hideTooltip: function() {
+                this.$.top_info.close();
                 this.$.first_info.close();
                 this.$.middle_info.close();
                 this.$.last_info.close();
