@@ -211,7 +211,8 @@ function build2(root, meta, place_holder, select_listener, width, height) {
         if (!d._children[0]._children) {
             if (select_listener) {
                 var url = d._children[0].name;
-                var ret = "Data provider not supported yet."
+                //var ret = "Data provider not supported yet."
+                var ret = url;
 
                 // Check if CKAN
                 var strDatasetPos = url.indexOf('/dataset/');

@@ -169,7 +169,7 @@
 
                         </template>
 
-                        <paper-textarea id="selected_url" label="Selected url" value={{dataUrl}}></paper-textarea>
+                        <paper-textarea id="selected_url" label="Selected url" value={{dataUrl}} error-message={{errorMessage}}></paper-textarea>
 
                         <paper-dialog id="dialog_info">
                             <h2 id="dialog_name"></h2>
@@ -230,6 +230,11 @@
                     type  : String,
                     value : undefined,
                     observer : '_fireDataUrl'
+                },
+
+                errorMessage : {
+                    type  : String,
+                    value : "",
                 }
 
             },
@@ -242,6 +247,8 @@
             ready : function(){
                 $(this.$.material_container).perfectScrollbar();
                 $(this.$.dialog_info).perfectScrollbar();
+
+                this.errorMessage = ln["wrongUrl_" + ln["localization"]];
             },
 
             attached : function(){

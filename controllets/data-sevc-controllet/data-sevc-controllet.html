@@ -158,9 +158,6 @@
             _allowSecondStep : function(e){
                 this.dataUrl = e.detail.url;
 
-                var wrongUrl = ln["wrongUrl_" + this.localization];
-                console.log(ln["wrongUrl_en"]);
-
                 $.ajax({
                     url: e.detail.url,
                     dataType: "json",
@@ -168,11 +165,12 @@
 //                        this.dataUrl = e.detail.url
 //                        this.jsonData = JSON.stringify(data);
                         slider.chevronRight(true);
+                        dataset_selection.$.selected_url.invalid = false;
                     },
                     error: function(){
 //                        this.jsonData = undefined;
                         slider.chevronRight(false);
-                        dataset_selection.dataUrl = wrongUrl;
+                        dataset_selection.$.selected_url.invalid = true;
                     }
                 });
 
