@@ -263,7 +263,7 @@ Example:
             },
 
             attached: function(){
-                datasetexplorer_ln["ln"] = ODE.user_language;
+                datasetexplorer_ln["ln"] = (typeof ODE != 'undefined') ? ODE.user_language : parent.ODE.user_language;
             }
 
         });
