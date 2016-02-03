@@ -245,19 +245,19 @@ ln["Z values_fr"] = "Z values";
 ln["cellDescription_fr"] = "Cellules du tableau.";
 ln["levelDescription_fr"] = "C’est le niveau local que le graphique utilisera pour grouper les valeurs correspondantes au nombre de niveaux de champs";
 
-ln["categoriesDescription_fr"] = "Catégories de graphiques. Ses valeurs seront insérées dans l’axe horizontal. Vous devez insérer une valeur pour chaque série.";
-ln["seriesDescription_fr"] = "Catégories de graphique. Ses valeurs seront insérées dans l’axe vertical.";
+ln["categoriesDescription_fr"] = "Catégories de graphiques. Ces valeurs seront insérées dans l’axe horizontal. Vous devez insérer une valeur pour chaque série.";
+ln["seriesDescription_fr"] = "Catégories de graphique. Ces valeurs seront insérées dans l’axe vertical.";
 
 ln["XAxisLabelDescription_fr"] = "Vignette pour l’axe X.";
 ln["YAxisLabelDescription_fr"] = "Vignette pour l’axe Y.";
 ln["suffixDescription_fr"] = "Unités de mesures (ex:  dollars, euros.";
 
-ln["pieSeriesDescription_fr"] = "Série de graphiques. Ses valeurs seront intégrées au sein des segments de chaque série.";
+ln["pieSeriesDescription_fr"] = "Série de graphiques. Ces valeurs seront intégrées au sein des segments de chaque série.";
 ln["pieSizeDescription_fr"] = "Taille de chaque série afin de créer un anneau concentrique.";
 
-ln["bubbleCategoriesDescription_fr"] = "Catégories de graphique. Ses valeurs seront insérées dans l’axe horizontal. Vous devez insérer une valeur pour chaque série.";
-ln["bubbleYValuesDescription_fr"] = "Le graphique présente les valeurs Y. Ses valeurs seront insérées dans l’axe vertical.";
-ln["bubbleZValuesDescription_fr"] = "Le graphique présente les valeurs Z. Ses valeurs représentent la taille des bulles.";
+ln["bubbleCategoriesDescription_fr"] = "Catégories de graphique. Ces valeurs seront insérées dans l’axe horizontal. Vous devez insérer une valeur pour chaque série.";
+ln["bubbleYValuesDescription_fr"] = "Le graphique présente les valeurs Y. Ces valeurs seront insérées dans l’axe vertical.";
+ln["bubbleZValuesDescription_fr"] = "Le graphique présente les valeurs Z. Ces valeurs représentent la taille des bulles.";
 ln["bubbleSeriesDescription_fr"] = "The chart series. Its values visualize multi- series bubbles chart.";
 
 ln["scatterCategoriesDescription_fr"] = "The chart categories. You need one value for each series.";
