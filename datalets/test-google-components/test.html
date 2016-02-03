@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Google spreadsheet and document test page</title>
+
+    <script type="text/javascript" src="../../bower_components/webcomponentsjs/webcomponents-lite.min.js"></script>
+    <script type="text/javascript" src="../shared_js/jquery-1.11.2.min.js"></script>
+
+    <link rel="import"  href="../../bower_components/google-sheets/google-sheets.html">
+    <link rel="import"  href="../../bower_components/iron-flex-layout/iron-flex-layout.html">
+    <link rel="import"  href="../../bower_components/iron-icons/iron-icons.html">
+    <link rel="import"  href="../../bower_components/paper-fab/paper-fab.html">
+    <link rel="import"  href="../linechart-datalet/linechart-datalet.html">
+
+    <style>
+        #sheet{
+            height: 400px;
+            width: 40%;
+            margin: 40px;
+        }
+
+        #showVisualization{
+            background-color: #2196F3;
+            color: #ffffff;
+            margin-left: 50px;
+        }
+
+
+        #datalet_placeholder{
+            height: 400px;
+            width: 40%;
+            margin: 40px;/
+        }
+
+        #doc{
+            height: 400px;
+            width: 100%;
+        }
+    </style>
+
+    <script>
+
+        getData = function()
+        {
+            var sheet = document.querySelector('google-sheets');
+
+            sheet.addEventListener('google-sheet-data', function(e)
+            {
+                var data = [];
+                //get the keys
+                for(var key in this.rows[0]) {
+                    if (key.match(/gsx\$*/)) {
+                        data.push({name: key.replace("gsx$", ""), data: []});
+                    }
+                }
+                //fill the structure with values
+                for(var row in this.rows){
+                    var i = 0;
+                    for(var key in this.rows[row]){
+                        if(key.match(/gsx\$*/)){
+                            data[i++].data.push(this.rows[row][key].$t.replace("'",""));
+                        }
+                    }
+
+                }
+
+                $("#datalet_placeholder").html('<linechart-datalet ' +
+                        'data-url="https://docs.google.com/spreadsheets/d/1EYJ88pOsbc0GkUTTdPhuReUjHewk1fhis9VZBXes_Ao" ' +
+                            //'fields=\'[]\'' +
+                        'title="Google spreadsheet realtime data visualization"' +
+                        'data=\'' + JSON.stringify(data) + '\'>' +
+                        '</linechart-datalet>');
+
+                $("#spreadsheet_url").html('<a href="' + this.openInGoogleDocsUrl + '" target="_blank">' + this.openInGoogleDocsUrl + '</a>');
+
+            });
+
+            sheet.addEventListener('error', function(e) {
+                // e.detail.response
+            });
+
+        }
+
+        refresh = function(){
+            $("#sheet-component").html('<google-sheets key="1EYJ88pOsbc0GkUTTdPhuReUjHewk1fhis9VZBXes_Ao" published></google-sheets>');
+            getData();
+        }
+
+        $( document ).ready(function() {
+            getData();
+        });
+
+    </script>
+
+</head>
+<body is="dom-bind">
+    <div class="layout vertical">
+        <div class="layout vertical">
+            <div class="layout horizontal" style="width: 100%;">
+                <h1>Google Spreadsheet realtime visualization with Datalet</h1>
+                <paper-fab id="showVisualization" icon="refresh" onClick="refresh()"></paper-fab>
+            </div>
+            <div class="layout horizontal" style="width: 100%;">
+                <h3 id="spreadsheet_url"></h3>
+            </div>
+            <div class="layout horizontal">
+                <iframe id="sheet" src="https://docs.google.com/spreadsheets/d/1EYJ88pOsbc0GkUTTdPhuReUjHewk1fhis9VZBXes_Ao/edit?usp=sharing?embedded=true"></iframe>
+                <div id="datalet_placeholder"></div>
+            </div>
+        </div>
+
+        <div class="layout vertical">
+            <h1 style="width: 100%;margin-top: 100px;">Google Docs realtime visualization with Datalet</h1>
+            <iframe id="doc" src="https://docs.google.com/document/d/1IIfmqTGBpTkEMHPnuxJeoOJI3u-8wQu9dkf49X2T6SE/edit?usp=sharing?embedded=true"></iframe>
+        </div>
+    </div>
+
+    <div id="sheet-component">
+        <google-sheets key="1EYJ88pOsbc0GkUTTdPhuReUjHewk1fhis9VZBXes_Ao" published></google-sheets>
+    </div>
+
+</body>
+</html>

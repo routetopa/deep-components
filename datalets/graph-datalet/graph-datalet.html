@@ -246,11 +246,11 @@ Example:
                                                                                                     return "fill:" + t.color + "; stroke:white"
                                                                                                 });
 
-                d3.selectAll('circle').attr("style", function(t){
-                    return  "fill :" + (t.image ? 'url(#image_' + t.id +')' : t.color)
-                });
-
                 d3.selectAll(".drag").call(force.drag), this.svg.selectAll("g.node").call(this.text);
+
+                d3.selectAll('circle').attr("style", function(t){
+                    return  (t != undefined) ? "fill :" + (t.image ? 'url(#image_' + t.id +')' : t.color) : "";
+                });
 
             },
 
