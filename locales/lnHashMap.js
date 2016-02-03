@@ -28,6 +28,40 @@ ln["dataletPreview_it"] = "ANTEPRIMA";
 ln["addDatalet_it"] = "AGGIUNGI";
 ln["modifyDatalet_it"] = "MODIFICA";
 
+ln["datatable_it"] = "tabella";
+ln["barchart_it"] = "bar-chart";
+ln["columnchart_it"] = "column-chart";
+ln["linechart_it"] = "line-chart";
+ln["column3Dchart_it"] = "3D column-chart";
+ln["areachart_it"] = "area-chart";
+ln["donutpie3dchart_it"] = "3D donutpie-chart";
+ln["piechart_it"] = "pie-chart";
+ln["treemap_it"] = "tree-map";
+ln["leafletjs_it"] = "map";
+ln["bubble3d_it"] = "3D bubble-chart";
+ln["bubblechart_it"] = "bubble-chart";
+ln["scatterchart_it"] = "scatter-chart";
+ln["heatmap_it"] = "heat-map";
+
+ln["title_it"] = "titolo";
+ln["description_it"] = "descrizione";
+
+ln["Cell_it"] = "Cella";
+ln["Level_it"] = "Livello";
+ln["Categories_it"] = "Categorie";
+ln["Series_it"] = "Serie";
+ln["x-axis-label_it"] = "etichetta asse X";
+ln["y-axis-label_it"] = "etichetta asse Y";
+ln["z-axis-label_it"] = "etichetta asse Z";
+ln["suffix_it"] = "Suffisso";
+ln["Size_it"] = "Dimensione";
+ln["Latitude_it"] = "Latitudine";
+ln["Longitude_it"] = "Longitudine";
+ln["Balloon content_it"] = "Contenuto della bolla";
+ln["X values_it"] = "Valori asse X";
+ln["Y values_it"] = "Valori asse Y";
+ln["Z values_it"] = "Valori asse Z";
+
 ln["cellDescription_it"] = "Cella della tabella.";
 ln["levelDescription_it"] = "Livello utilizzato per il raggruppamento dei valori corrispondenti.";
 
@@ -84,6 +118,40 @@ ln["dataletPreview_en"] = "PREVIEW";
 ln["addDatalet_en"] = "ADD";
 ln["modifyDatalet_en"] = "MODIFY";
 
+ln["datatable_en"] = "table";
+ln["barchart_en"] = "bar-chart";
+ln["columnchart_en"] = "column-chart";
+ln["linechart_en"] = "line-chart";
+ln["column3Dchart_en"] = "3D column-chart";
+ln["areachart_en"] = "area-chart";
+ln["donutpie3dchart_en"] = "3D donutpie-chart";
+ln["piechart_en"] = "pie-chart";
+ln["treemap_en"] = "tree-map";
+ln["leafletjs_en"] = "map";
+ln["bubble3d_en"] = "3D bubble-chart";
+ln["bubblechart_en"] = "bubble-chart";
+ln["scatterchart_en"] = "scatter-chart";
+ln["heatmap_en"] = "heat-map";
+
+ln["title_en"] = "title";
+ln["description_en"] = "description";
+
+ln["Cell_en"] = "Cell";
+ln["Level_en"] = "Level";
+ln["Categories_en"] = "Categories";
+ln["Series_en"] = "Series";
+ln["x-axis-label_en"] = "X axis label";
+ln["y-axis-label_en"] = "Y axis label";
+ln["z-axis-label_en"] = "Z axis label";
+ln["suffix_en"] = "Suffix";
+ln["Size_en"] = "Size";
+ln["Latitude_en"] = "Latitude";
+ln["Longitude_en"] = "Longitude";
+ln["Balloon content_en"] = "Balloon content";
+ln["X values_en"] = "X values";
+ln["Y values_en"] = "Y values";
+ln["Z values_en"] = "Z values";
+
 ln["cellDescription_en"] = "The cell of table.";
 ln["levelDescription_en"] = "It is the level field that the datalet will use to group the values at corrisponding field number level.";
 
@@ -112,7 +180,6 @@ ln["LatitudeDescription_en"] = "It is latitude of the points you want to show in
 ln["LongitudeDescription_en"] = "It is longitude of the points you want to show in the map.";
 ln["BalloonContentDescription_en"] = "It is the text associated to the marker or the link to the image related to the camera associated to each points.";
 
-
 /* FR */
 ln["slide1Title_fr"] = "SELECTIONNER UN JEU DE DONNEES";
 ln["slide1Subtitle_fr"] = "Rechercher ou copier/coller l’url du jeu de données.";
@@ -140,6 +207,40 @@ ln["commentLabel_fr"] = "Commentaires (maximum 100 caractères)";
 ln["dataletPreview_fr"] = "PREVISUALISATION";
 ln["addDatalet_fr"] = "AJOUTER";
 ln["modifyDatalet_fr"] = "MODIFIER";
+
+ln["datatable_fr"] = "table fr";
+ln["barchart_fr"] = "barchart";
+ln["columnchart_fr"] = "columnchart";
+ln["linechart_fr"] = "linechart";
+ln["column3Dchart_fr"] = "column3Dchart";
+ln["areachart_fr"] = "areachart";
+ln["donutpie3dchart_fr"] = "donutpie3dchart";
+ln["piechart_fr"] = "piechart";
+ln["treemap_fr"] = "treemap";
+ln["leafletjs_fr"] = "map";
+ln["bubble3d_fr"] = "bubble3d";
+ln["bubblechart_fr"] = "bubblechart";
+ln["scatterchart_fr"] = "scatterchart";
+ln["heatmap_fr"] = "heatmap";
+
+ln["title_fr"] = "title";
+ln["description_fr"] = "description";
+
+ln["Cell_fr"] = "Cell";
+ln["Level_fr"] = "Level";
+ln["Categories_fr"] = "Categories";
+ln["Series_fr"] = "Series";
+ln["x-axis-label_fr"] = "x-axis-label";
+ln["y-axis-label_fr"] = "y-axis-label";
+ln["z-axis-label_fr"] = "z-axis-label";
+ln["suffix_fr"] = "suffix";
+ln["Size_fr"] = "Size";
+ln["Latitude_fr"] = "Latitude";
+ln["Longitude_fr"] = "Longitude";
+ln["Balloon content_fr"] = "Balloon content";
+ln["X values_fr"] = "X values";
+ln["Y values_fr"] = "Y values";
+ln["Z values_fr"] = "Z values";
 
 ln["cellDescription_fr"] = "Cellules du tableau.";
 ln["levelDescription_fr"] = "C’est le niveau local que le graphique utilisera pour grouper les valeurs correspondantes au nombre de niveaux de champs";
@@ -196,6 +297,40 @@ ln["commentLabel_nl"] = "commentaar (maximaal 100 tekens)";
 ln["dataletPreview_nl"] = "VOORBEELD";
 ln["addDatalet_nl"] = "TOEVOEGEN";
 ln["modifyDatalet_nl"] = "WIJZIGEN";
+
+ln["datatable_nl"] = "tafel";
+ln["barchart_nl"] = "barchart";
+ln["columnchart_nl"] = "columnchart";
+ln["linechart_nl"] = "linechart";
+ln["column3Dchart_nl"] = "column3Dchart";
+ln["areachart_nl"] = "areachart";
+ln["donutpie3dchart_nl"] = "donutpie3dchart";
+ln["piechart_nl"] = "piechart";
+ln["treemap_nl"] = "treemap";
+ln["leafletjs_nl"] = "map";
+ln["bubble3d_nl"] = "bubble3d";
+ln["bubblechart_nl"] = "bubblechart";
+ln["scatterchart_nl"] = "scatterchart";
+ln["heatmap_nl"] = "heatmap";
+
+ln["title_fr"] = "title";
+ln["description_fr"] = "description";
+
+ln["Cell_nl"] = "Cell";
+ln["Level_nl"] = "Level";
+ln["Categories_nl"] = "Categories";
+ln["Series_nl"] = "Series";
+ln["x-axis-label_nl"] = "x-axis-label";
+ln["y-axis-label_nl"] = "y-axis-label";
+ln["z-axis-label_nl"] = "z-axis-label";
+ln["suffix_nl"] = "suffix";
+ln["Size_nl"] = "Size";
+ln["Latitude_nl"] = "Latitude";
+ln["Longitude_nl"] = "Longitude";
+ln["Balloon content_nl"] = "Balloon content";
+ln["X values_nl"] = "X values";
+ln["Y values_nl"] = "Y values";
+ln["Z values_nl"] = "Z values";
 
 ln["cellDescription_nl"] = "De cel van een tabel.";
 ln["levelDescription_nl"] = "Het is het veldniveau dat de datalet gebruikt om waarden te groeperen die corresponderen met veldniveau aantallen.";

@@ -214,7 +214,7 @@
                 <div class="input_header"><span id="inputs"></span></div>
                 <template is="dom-repeat" items="{{inputs}}" index-as="ddl_index">
                     <div class="inputs">
-                        <paper-dropdown-menu id={{ddl_index}} label={{item.name}}>
+                        <paper-dropdown-menu id={{ddl_index}} label={{_getLabelName(item.name)}}>
                             <paper-menu class="dropdown-content">
                                 <template is="dom-repeat" items={{fields}}>
                                     <paper-item id={{index}} on-tap="_addInput">{{_fieldName(item)}}</paper-item>
@@ -223,7 +223,7 @@
                             </paper-menu>
                         </paper-dropdown-menu>
                         <div class="info_button">
-                            <paper-icon-button id="info_button" on-click="_showInfo" icon="info-outline" title="{{item.name}} info"></paper-icon-button>
+                            <paper-icon-button id={{item.name}} on-click="_showInfo" icon="info-outline" title="{{_getLabelName(item.name)}} info"></paper-icon-button>
                         </div>
                     </div>
                 </template>
@@ -233,20 +233,20 @@
                 <div class="input_header"><span id="baseInfo"></span></div>
 
                 <div class="inputs">
-                    <paper-input maxlength="32" label="title" class="base_input"></paper-input>
+                    <paper-input id="base_title" maxlength="32" class="base_input"></paper-input>
                 </div>
 
                 <div class="inputs">
-                    <paper-textarea maxlength="100" label="description" class="base_input"></paper-textarea>
+                    <paper-textarea id="base_description" maxlength="100" class="base_input"></paper-textarea>
                 </div>
 
                 <div class="input_header"><span id="layouts"></span></div>
 
                 <template is="dom-repeat" items="{{labels}}" index-as="index">
                     <div class="inputs">
-                        <paper-input label={{item.name}}></paper-input>
+                        <paper-input label={{_getLabelName(item.name)}}></paper-input>
                         <div class="info_button">
-                            <paper-icon-button id="info_button" on-click="_showInfo" icon="info-outline" title="{{item.name}} info"></paper-icon-button>
+                            <paper-icon-button id={{item.name}} on-click="_showInfo" icon="info-outline" title="{{_getLabelName(item.name)}} info"></paper-icon-button>
                         </div>
                     </div>
                 </template>
@@ -416,6 +416,9 @@
                 this.$.baseInfo.innerHTML       = ln["baseInfo_" + ln["localization"]];
                 this.$.layouts.innerHTML        = ln["layouts_" + ln["localization"]];
                 this.$.dataletPreview.innerHTML = ln["dataletPreview_" + ln["localization"]];
+
+                this.$.base_title.label = ln["title_" + ln["localization"]];
+                this.$.base_description.label = ln["description_" + ln["localization"]];
 
                 if(this.modify)
                     this.$.add_button.innerHTML = ln["modifyDatalet_" + ln["localization"]];
@@ -617,13 +620,14 @@
                 if(t.tagName.indexOf("IRON-ICON") != -1)
                     t = $(e.target).parents("paper-icon-button")[0];
 
-                var name = t.getAttribute("title").replace(" info", "");
+//                var name = t.getAttribute("title").replace(" info", "");
+                var name = t.getAttribute("id");
 
                 var dataset = $.grep(this.inputs, function(e){ return e.name == name; })[0];
                 if(!dataset)
                     dataset = $.grep(this.labels, function(e){ return e.name == name; })[0];
 
-                this.$.dialog_name.innerHTML = dataset.name;
+                this.$.dialog_name.innerHTML = ln[dataset.name + "_" +  ln["localization"]];
                 this.$.dialog_description.innerHTML = ln[dataset.description + "_" +  ln["localization"]];
                 this.$.dialog_info_input.open();
 
@@ -644,6 +648,10 @@
                     out[key] = (typeof v === "object") ? this._copy(v) : v;
                 }
                 return out;
+            },
+
+            _getLabelName: function(key) {
+                return ln[key + "_" +ln["localization"]];
             },
 
             _resize : function(){

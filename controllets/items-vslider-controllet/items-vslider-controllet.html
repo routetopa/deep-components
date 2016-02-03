@@ -120,7 +120,7 @@
             <div id="div_datalets_container" class="flex">
                 <template is="dom-repeat" items="{{filteredDatalets}}">
                     <paper-material id={{item.imageName}} elevation="1" class='content-card' on-click="_selectDatalet">
-                        <div class="legend">{{item.imageName}}</div>
+                        <div class="legend">{{_getChartName(item.imageName)}}</div>
                         <div><img src={{item.imageUrl}}></div>
                     </paper-material>
                 </template>
@@ -296,6 +296,10 @@
                 $("#div_datalets_container").animate({ scrollTop: scroll}, 300);
 
             },
+
+            _getChartName: function(key) {
+                return ln[key + "_" +ln["localization"]];
+            }
 
 //            _resize : function(){
 //                var h = Math.max(document.documentElement.clientHeight, window.innerHeight || 0) - 16;
