@@ -1,0 +1,178 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html"/>
+<link rel="import" href="../../bower_components/paper-material/paper-material.html"/>
+<link rel="import" href="../../bower_components/paper-fab/paper-fab.html"/>
+<link rel="import" href="../../bower_components/iron-icons/iron-icons.html"/>
+<link rel="import" href="../../bower_components/paper-dialog/paper-dialog.html"/>
+<link rel="import" href="../../bower_components/neon-animation/neon-animation.html"/>
+
+<script src="../../locales/paper-card-ln.js"></script>
+
+<dom-module id="google-card-controllet">
+
+    <template>
+        <link rel="stylesheet" href="../shared_js/perfect-scrollbar/css/perfect-scrollbar.min.css">
+        <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
+        <style>
+
+            #paper_card_container {
+                font-family: 'Roboto', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+                font-size: 16px;
+                background-color: white;
+            }
+
+            #content {
+                padding: 4px 4px 0px 4px;
+                position:relative;
+                width: 100%;
+                height: 90%;
+            }
+
+            .footer {
+                height: 16px;
+            }
+
+            .comment {
+                position: relative;
+                top: -50px;
+                height: 50px;
+                background-color: white;
+                padding: 8px;
+                font-size: small;
+                color: #727272;
+                word-wrap: break-word;
+                overflow: hidden;
+            }
+
+            paper-fab#fullscreen-button {
+                position: absolute;
+                z-index: 100;
+                top: -20px;
+                right: 8px;
+                --paper-fab-background:#2196F3;
+            }
+
+            paper-dialog {
+                margin: 0px;
+                padding: 0px;
+                z-index: 1100;
+            }
+
+            #fullscreen_container {
+                display: inline;
+                position: fixed;
+                width: 90%;
+                height: 80vh;
+                right: 0;
+                left: 0;
+                top: 64px;
+                margin-right: auto;
+                margin-left: auto;
+                padding: 8px;
+                background-color: white;
+            }
+
+            #fullscreen_content {
+                margin: 0px;
+            }
+
+            #resource{
+                height: 100%;
+                width: 100%;
+            }
+
+        </style>
+
+
+        <paper-material id="paper_card_container" elevation="{{elevation}}">
+
+            <div id="content">
+                <iframe id="resource" src="{{resourceUrl}}?embedded=true"></iframe>
+            </div>
+
+            <paper-fab id="fullscreen-button" class="open" mini icon="fullscreen" on-click="_handleOpenClick"></paper-fab>
+
+            <div class="footer">
+                <div class="comment">{{comment}}</div>
+            </div>
+
+            <paper-dialog id="fullscreen_container" entry-animation="scale-up-animation" exit-animation="fade-out-animation">
+                <!--with-backdrop-->
+                <div id="fullscreen_content"></div>
+            </paper-dialog>
+
+        </paper-material>
+
+    </template>
+
+    <script src="../shared_js/perfect-scrollbar/js/min/perfect-scrollbar.jquery.min.js"></script>
+
+    <script>
+        _this = null;
+
+        Polymer({
+            is: "google-card-controllet",
+            properties: {
+
+                width: {
+                    type: Number,
+                    observer: "_changeWidth"
+                },
+
+                height: {
+                    type: Number,
+                    observer: "_changeHeight"
+                },
+
+                elevation:{
+                    type: Number,
+                    value: 3
+                },
+
+                createNewType : {
+                    type : String,
+                    value : undefined
+                },
+
+                comment:{
+                    cardType: String,
+                    value: ""
+                },
+
+                resourceUrl : {
+                    type : String,
+                    value : undefined
+                }
+            },
+
+            ready : function(){
+            },
+
+            attached: function(){
+                $(this.$.fullscreen_container).perfectScrollbar();
+            },
+
+
+            _changeWidth: function(){
+                this.style.width = this.width + "px";
+                this.$.paper_card_container.style.width = this.width + "px";
+                this.$.content.style.width = this.width - 8 + "px";
+            },
+
+            _changeHeight: function(){
+                this.style.height = this.height + 64 + "px";
+                this.$.paper_card_container.style.height = this.height + "px";
+                this.$.content.style.height = this.height - 4 + "px";
+                $(this.$.content).perfectScrollbar();
+            },
+
+            _handleOpenClick: function(){
+                this.$.fullscreen_content.style.height = "80vh";
+                this.$.fullscreen_content.innerHTML = this.$.content.innerHTML;
+                this.$.fullscreen_container.style.display = "inline";//datalet res
+                this.$.fullscreen_container.open();
+            }
+
+        })
+    </script>
+
+</dom-module>

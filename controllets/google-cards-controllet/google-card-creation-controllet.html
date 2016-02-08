@@ -1,0 +1,251 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html"/>
+<link rel="import" href="../../bower_components/paper-material/paper-material.html"/>
+<link rel="import" href="../../bower_components/paper-fab/paper-fab.html"/>
+<link rel="import" href="../../bower_components/paper-input/paper-input.html"/>
+<link rel="import" href="../../bower_components/iron-icons/iron-icons.html"/>
+<link rel="import" href="../../bower_components/paper-dialog/paper-dialog.html"/>
+<link rel="import" href="../../bower_components/neon-animation/neon-animation.html"/>
+
+<script src="../../locales/paper-card-ln.js"></script>
+
+<dom-module id="google-card-creation-controllet">
+
+    <template>
+        <link rel="stylesheet" href="../shared_js/perfect-scrollbar/css/perfect-scrollbar.min.css">
+        <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
+        <style>
+
+            #title{
+                font-family: 'Roboto', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+                font-size: 22px;
+                color: #2196F3;
+                width: 100%;
+                margin : 20px;
+            }
+
+            #message{
+                font-family: 'Roboto', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+                font-size: 16px;
+                color: #000000;
+                margin: 20px;
+            }
+
+            paper-fab#add-button {
+                position: absolute;
+                z-index: 100;
+                bottom: 200px;
+                right: 30px;
+                --paper-fab-background:#2196F3;
+            }
+
+            paper-dialog#fullscreen_container {
+                display: inline;
+                position: fixed;
+                width: 90%;
+                height: 80vh;
+                left: 5%;
+                top: 64px;
+                margin: 0px;
+                padding: 20px;
+                background-color: white;
+                z-index: 9999;
+            }
+
+            #fullscreen_content {
+                margin: 0px;
+                z-index:100;
+            }
+
+            #resource{
+                height: 100%;
+                width: 100%;
+            }
+
+        </style>
+
+        <paper-dialog id="fullscreen_container" entry-animation="scale-up-animation" exit-animation="fade-out-animation">
+            <!--with-backdrop-->
+            <div id="fullscreen_content">
+                <paper-fab id="add-button" class="add" mini icon="add" on-click="_handleAddClick"></paper-fab>
+                <div id="title">{{resourceType}}</div>
+                <div id="message">
+                    Choose a name to create a new resource or copy and paste an existing resource url(after sharing it on google drive).
+                    If you use an existing resource a new one will not be create.
+                </div>
+                <paper-input id="name" label="New resource name"></paper-input>
+                <paper-input id="url" label="Existing resource Url"></paper-input>
+            </div>
+        </paper-dialog>
+
+    </template>
+
+    <script src="../shared_js/perfect-scrollbar/js/min/perfect-scrollbar.jquery.min.js"></script>
+    <script src="https://apis.google.com/js/client.js"></script>
+
+    <script>
+        _this = null;
+
+        Polymer({
+            is: "google-card-creation-controllet",
+            properties: {
+
+                elevation:{
+                    type: Number,
+                    value: 3
+                },
+
+                resourceType : {
+                    type : String,
+                    value : undefined
+                },
+
+                comment:{
+                    cardType: String,
+                    value: ""
+                },
+
+                CLIENT_ID : {
+                    type : String,
+                    value : "1051697215951-q0gt5h8v4tgi0vdliogiqcsa2e7lvjqv.apps.googleusercontent.com"
+                },
+
+                SCOPES: {
+                    type : Array,
+                    value : ["https://www.googleapis.com/auth/drive.file"]
+                },
+
+                resourceId : {
+                    type : String,
+                    value : undefined
+                }
+            },
+
+            /* GOOGLE API FUNCTION*/
+            /**
+            * Check if current user has authorized this application.
+            */
+            checkAuth : function () {
+                gapi.auth.authorize(
+                    {
+                        'client_id': _this.CLIENT_ID,
+                        'scope'    : _this.SCOPES.join(' '),
+                        'immediate': true
+                    }, _this.handleAuthResult);
+            },
+            /**
+             * Handle response from authorization server.
+             *
+             * @param {Object} authResult Authorization result.
+             */
+            handleAuthResult : function(authResult) {
+                if (authResult && !authResult.error) {
+                    console.log("Authorized");
+                    _this.loadDriveApi();
+                } else {
+                    console.log("Authorization failed");
+                }
+            },
+
+            /**
+             * Initiate auth flow in response to user clicking authorize button.
+             *
+             * @param {Event} event Button click event.
+             */
+            handleAuthClick : function (event) {
+                gapi.auth.authorize(
+                        {client_id: CLIENT_ID, scope: SCOPES, immediate: false},
+                        _this.handleAuthResult);
+                return false;
+            },
+            /**
+             * Load Drive API client library.
+             */
+            loadDriveApi : function() {
+                gapi.client.load('drive', 'v3', function() {
+                    console.log("DRIVER V3 API LOADED");
+                    _this.createNewDocument();
+                });
+            },
+            /**
+             * Create new doc
+             * */
+            createNewDocument : function(){
+                var request = gapi.client.request({
+                    'path': '/drive/v3/files',
+                    'method': 'POST',
+                    'body':{
+                        'name': _this.$.name.value,//'Shared document from api',
+                        'mimeType' : "application/vnd.google-apps." + _this.resourceType,
+                    }
+                });
+
+                request.execute(function(resp) {
+                    console.log("FILE CREATED  " + resp.id );
+                    console.log(resp);
+                    _this.resourceId = resp.id;
+                    _this.getPremissions();
+                    _this.insertPermission("spod.platform@gmail.com", "anyone", "writer");
+                });
+
+            },
+            /**
+             * Get permission for a file
+             * */
+            getPremissions : function(){
+
+                var request = gapi.client.request({
+                    'path': '/drive/v3/files/' + _this.resourceId + '/permissions',
+                    'method': 'GET',
+                    'body':{}
+                });
+
+                request.execute(function(resp) {
+                    console.log("FILE PERMISSION FOR " + _this.resourceId );
+                    console.log(resp);
+                });
+
+            },
+
+           insertPermission : function(value, type, role) {
+                var request = gapi.client.request({
+                    'path': '/drive/v3/files/' + _this.resourceId + '/permissions',
+                    'method': 'POST',
+                    'body':{
+                        'value': value,
+                        'type' : type,
+                        'role' : role
+                    }
+                });
+
+                request.execute(function(resp) {
+                    console.log("FILE PERMISSIONS SET FOR" + _this.resourceId);
+                    console.log(resp);
+                    //_this.$.content.innerHTML = '<iframe id="doc" src="https://docs.google.com/' + _this.resourceType + ((_this.resourceType != "document") ? "s" : "") + '/d/' + _this.resourceId +'/edit?usp=sharing&embedded=true"></iframe>';
+                    _this.fire('google-card-creation_new-card-created', {
+                                                                    type : this.resourceType,
+                                                                    url : 'https://docs.google.com/' + _this.resourceType + ((_this.resourceType != "document") ? "s" : "") + '/d/' + _this.resourceId +'/edit?usp=sharing&embedded=true'
+                                                                  }
+                    );
+
+                });
+            },
+            /*END GOOGLE API FUNCTION*/
+
+            ready : function(){
+                this.$.fullscreen_container.open();
+                this.$.fullscreen_container.style.zIndex = 100;
+            },
+
+            _handleAddClick : function(e){
+                if(this.$.url.value == ""){
+                    _this = this;
+                    this.checkAuth();
+                }else{
+                    this.fire('google-card-creation_new-card-created', { type : this.resourceType, url : this.$.url.value })
+                }
+                this.$.fullscreen_container.close();
+            }
+        })
+    </script>
+
+</dom-module>
