@@ -6,6 +6,8 @@
 <link rel="import" href="../../bower_components/iron-icons/communication-icons.html">
 <link rel="import" href="../../bower_components/iron-icon/iron-icon.html">
 
+<script src="../../locales/room_controllet_ln.js"></script>
+
 <dom-module id="room-controllet">
 
     <template>
@@ -69,11 +71,11 @@
 
             <paper-dialog id="room_info" class="room-tooltip">
                 <iron-icon icon="communication:call-made" class="this" style="color: #2196F3;"></iron-icon>
-                <p class="ptop">This room <b style="color: #2196F3;">{{subject}}</b>,</p>
-                <p>created by <b style="color: #2196F3;">{{roomOwner}}</b> has:</p>
-                <p><iron-icon class="div_icon" style$="background-color: {{roomColor}};"></iron-icon><b style$="color: {{roomColor}};">{{_howMany(roomShape, 0)}} views</b> (<b style$="color: {{roomColor}};">{{roomViews}}</b>),</p>
-                <p><iron-icon icon="editor:border-left"></iron-icon> <b>{{_howMany(roomShape, 1)}} comments</b> (<b>{{comments}}</b>) and</p>
-                <p><iron-icon icon="editor:border-bottom"></iron-icon> <b>{{_howMany(roomShape, 2)}} datasets</b> (<b>{{datasets}}</b>).</p>
+                <p class="ptop">{{_thisRoom}} <b style="color: #2196F3;">{{subject}}</b>,</p>
+                <p>{{_createdBy}} <b style="color: #2196F3;">{{roomOwner}}</b> {{_has}}:</p>
+                <p><iron-icon class="div_icon" style$="background-color: {{roomColor}};"></iron-icon><b style$="color: {{roomColor}};">{{_howManyViews}} {{_views}}</b> (<b style$="color: {{roomColor}};">{{roomViews}}</b>),</p>
+                <p><iron-icon icon="editor:border-left"></iron-icon> <b>{{_howManyComments}} {{_comments}}</b> (<b>{{comments}}</b>) {{_and}}</p>
+                <p><iron-icon icon="editor:border-bottom"></iron-icon> <b>{{_howManyDatasets}} {{_datasets}}</b> (<b>{{datasets}}</b>).</p>
             </paper-dialog>
         </div>
 
@@ -145,12 +147,38 @@
                 datasets : {
                     type  : Number,
                     value : undefined
-                }
+                },
 
+                //LN
+                _thisRoom : { type : String },
+                _createdBy : { type : String },
+                _has : { type : String },
+                _views : { type : String },
+                _comments : { type : String },
+                _datasets : { type : String },
+                _and : { type : String },
+                _howManyViews : { type : String },
+                _howManyComments : { type : String },
+                _howManyDatasets : { type : String }
             },
 
             attached : function() {
-                //console.log(this.views);
+                this._translate();
+            },
+
+            _translate : function() {
+                room_ln["ln"] = ODE.user_language;
+
+                this._thisRoom = room_ln["thisRoom_" + room_ln["ln"]];
+                this._createdBy = room_ln["createdBy_" + room_ln["ln"]];
+                this._has = room_ln["has_" + room_ln["ln"]];
+                this._views = room_ln["views_" + room_ln["ln"]];
+                this._comments = room_ln["comments_" + room_ln["ln"]];
+                this._datasets = room_ln["datasets_" + room_ln["ln"]];
+                this._and = room_ln["and_" + room_ln["ln"]];
+                this._howManyViews = room_ln[this.roomShape[0] + "_" + room_ln["ln"]];
+                this._howManyComments = room_ln[this.roomShape[1] + "_" + room_ln["ln"]];
+                this._howManyDatasets = room_ln[this.roomShape[2] + "_" + room_ln["ln"]];
             },
 
             _showTooltip: function() {
@@ -159,12 +187,6 @@
 
             _hideTooltip: function() {
                 this.$.room_info.close();
-            },
-
-            _howMany: function(A, i) {
-//                return this.roomShape[i];
-//                console.log(i);
-                return A[i];
             }
 
         });
