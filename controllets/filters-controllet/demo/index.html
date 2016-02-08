@@ -1,0 +1,51 @@
+<html>
+
+<head>
+    <script src="../../shared_js/jquery-1.11.2.min.js"></script>
+
+    <script src="../../../bower_components/webcomponentsjs/webcomponents-lite.min.js"></script>
+
+    <link rel="import" href="../filters-controllet.html" />
+
+    <script src="../../shared_js/perfect-scrollbar/js/min/perfect-scrollbar.jquery.min.js"></script>
+    <link rel="stylesheet" href="../../shared_js/perfect-scrollbar/css/perfect-scrollbar.min.css">
+</head>
+
+<body>
+
+    <style>
+
+        .container {
+            height: 400px;
+            width: 50%;
+            /*width: 400px;*/
+            position: relative;
+            top: 100px;
+            left:25%;
+        }
+
+    </style>
+
+    <div class="container">
+        <filters-controllet id="filters_controllet"></filters-controllet>
+    </div>
+
+    <script>
+
+        var fields = ["result,records,Lat","result,records,Lng", "Sbiricos"];
+
+        var filters_controllet = document.getElementById('filters_controllet');
+
+        filters_controllet.setFields(fields);
+
+        filters_controllet.filters = [{field: "Lat", operation: "<=", value: "16"}, {field: "Long", operation: "!=", value: "32"}, {field: "Sbiricos", operation: "!=", value: "12AAA32+DAO"}];
+
+        var filters = filters_controllet.getFilters();
+
+        console.log(filters);
+
+    </script>
+
+</body>
+
+</html>

@@ -1,0 +1,249 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html" />
+
+<link rel="import" href="../../bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
+<link rel="import" href="../../bower_components/paper-menu/paper-menu.html">
+<link rel="import" href="../../bower_components/paper-item/paper-item.html">
+
+<link rel="import" href="../../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../../bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="../../bower_components/iron-icon/iron-icon.html">
+
+<dom-module id="filters-controllet">
+
+    <template>
+
+        <style is="custom-style">
+
+            :host {
+            --paper-dropdown-menu-icon: {
+                 color: #2196F3;
+             };
+            }
+
+            #filters_container {
+                height: 100%;
+                width: 100%;
+
+                font-family: 'Roboto', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+                font-size: 16px;
+            }
+
+            #filters_panel {
+                display: none;
+                position: relative;
+                height: calc(100% - 48px);
+            }
+
+            .filters_header {
+                height: 32px;
+                padding-top: 16px;
+                text-align: center;
+                font-weight: 700;
+
+                color: #00BCD4;
+                cursor: pointer;
+            }
+
+            paper-dropdown-menu {
+                height: 48px;
+                width: 248px;;
+                --paper-input-container-focus-color: #2196F3;
+            }
+
+            paper-item.iron-selected {
+                background-color: #2196F3;
+                color: #FFFFFF;
+            }
+
+            paper-icon-button {
+                color: #2196F3;
+                --paper-icon-button-ink-color: #2196F3;
+                margin: 0px;
+            }
+
+            paper-icon-button.cancel {
+                color: #F44336;
+                --paper-icon-button-ink-color: #F44336;
+                margin-bottom: -6px;
+                margin-left: -8px;
+            }
+            paper-icon-button.add {
+                margin-bottom: -6px;
+                margin-left: -8px;
+            }
+
+            paper-input {
+                display: inline-block;
+                height: 48px;
+                width: 248px;
+                --paper-input-container-focus-color: #2196F3;
+            }
+
+            td {
+                height: 48px;
+                padding: 0px;
+                padding-bottom: 4px;
+                margin: 0px;
+                width: 248px;
+                border-bottom: 1px solid  #2196F3;
+                vertical-align: bottom;
+            }
+
+            th {
+                height: 48px;
+                padding: 0px;
+                margin: 0px;
+                vertical-align: bottom;
+                text-align: left ;
+            }
+
+            .filters_cell_button {
+                width: 24px;
+                border-bottom: none;
+            }
+
+    </style>
+
+        <div id="filters_container">
+
+            <div id="filters_header" class="filters_header" on-click="_showFiltersPanel"><span id="filters">ADVANCED: FILTERS</span></div>
+
+            <div id="filters_panel">
+
+                <table cellspacing="12px">
+                    <tr>
+                        <th>
+                            <paper-dropdown-menu id="filter_field" label="Field">
+                                <paper-menu class="dropdown-content">
+                                    <template is="dom-repeat" items={{fields}}>
+                                        <paper-item id={{index}} on-tap="">{{_fieldName(item)}}</paper-item>
+                                    </template>
+                                </paper-menu>
+                            </paper-dropdown-menu>
+                        </th>
+                        <th>
+                            <paper-dropdown-menu id="filter_operation" label="Operation">
+                                <paper-menu class="dropdown-content">
+                                    <template is="dom-repeat" items={{operations}}>
+                                        <paper-item id={{index}} on-tap="">{{item}}</paper-item>
+                                    </template>
+                                </paper-menu>
+                            </paper-dropdown-menu>
+                        </th>
+                        <th>
+                            <paper-input id="filter_value" class="base_input"></paper-input>
+                        </th>
+                        <th class="filters_cell_button">
+                            <paper-icon-button on-click="_addFilter" icon="add-circle" class="add"></paper-icon-button>
+                        </th>
+                    </tr>
+                    <template is="dom-repeat" items={{filters}}>
+                        <tr>
+                            <td>{{item.field}}</td>
+                            <td>{{item.operation}}</td>
+                            <td class="filters_cell_value">{{item.value}}</td>
+                            <td class="filters_cell_button"><paper-icon-button on-click="_deleteFilter" icon="cancel" class="cancel"></paper-icon-button></td>
+                        </tr>
+                    </template>
+                </table>
+
+            </div>
+
+        </div>
+
+    </template>
+
+    <script>
+
+        Polymer({
+
+            is : 'filters-controllet',
+
+            properties : {
+
+                fields : {
+                    type : Array,
+                    value : []
+                },
+
+                operations : {
+                    type : Array,
+                    value : ["=", "!=", ">", ">=", "<", "<=", "like"]
+                },
+
+                filters : {
+                    type : Array,
+                    value : []
+                },
+
+                show : {
+                    type  : Boolean,
+                    value : false
+                }
+
+            },
+
+            ready : function() {
+                $(this.$.filters_panel).perfectScrollbar();
+            },
+
+            setFields : function(fields) {
+                this.fields = this._copy(fields);
+            },
+
+            getFilters : function() {
+                return this.filters;
+            },
+
+            _fieldName : function(field) {
+                return field.substring(field.lastIndexOf(",")+1, field.length);
+            },
+
+            _showFiltersPanel : function() {
+                if(!this.show) {
+                    this.$.filters_header.style.color = "#000000";
+                    this.$.filters_header.style.background = "#B6B6B6";
+                    this.$.filters_panel.style.display = "block";
+                }
+                else {
+                    this.$.filters_header.style.color = "#00BCD4";
+                    this.$.filters_header.style.background = "#FFFFFF";
+                    this.$.filters_panel.style.display = "none";
+                }
+
+                this.show = !this.show;
+            },
+
+            _addFilter : function() {
+                var field = this.$.filter_field.value;
+                var operation = this.$.filter_operation.value;
+                var value = this.$.filter_value.value;
+
+                var filters = this.filters;
+                filters.push({field: field, operation: operation, value: value});
+                this.filters = this._copy(filters);
+            },
+
+            _deleteFilter : function(e) {
+                var index = e.model.index;
+
+                var filters = this.filters;
+                filters.splice(index, 1);
+                this.filters = this._copy(filters);
+            },
+
+            _copy : function(o) {
+                var out, v, key;
+                out = Array.isArray(o) ? [] : {};
+                for (key in o) {
+                    v = o[key];
+                    out[key] = (typeof v === "object") ? this._copy(v) : v;
+                }
+                return out;
+            }
+
+        });
+
+    </script>
+
+</dom-module>

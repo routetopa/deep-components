@@ -1,0 +1,164 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html" />
+
+<link rel="import" href="../../bower_components/paper-material/paper-material.html" />
+
+<link rel="import" href="../tree-view-controllet/tree-view-controllet.html" />
+<link rel="import" href="../multi-table-controllet/multi-table-controllet.html" />
+<link rel="import" href="../filters-controllet/filters-controllet.html" />
+
+<dom-module id="select-data-controllet">
+
+    <style is="custom-style">
+        .div_container {
+            display: flex;
+            flex-direction: row;
+        }
+        #material_tree_view {
+            position: relative;
+            width: 25%;
+            min-width: 200px;
+            height: 100vh;
+        }
+        #material_multi_table_filters {
+            position: relative;
+            width: 75%;
+
+            margin-left: 64px;
+            margin-top: 8px;
+        }
+
+        #div_multi_table {
+            height: 70%;
+            width: 100%;
+            position: relative;
+        }
+        #div_filters {
+            height: 30%;
+            width: 100%;
+            position: relative;
+        }
+    </style>
+
+    <template>
+
+        <div class="div_container">
+            <paper-material id="material_tree_view" elevation="5">
+                <tree-view-controllet id="tree_view" root-name={{rootName}} opened-path={{openedPath}} preselected-fields={{preselectedFields}}></tree-view-controllet>
+            </paper-material>
+            <paper-material id="material_multi_table_filters" elevation="5">
+                <div id="div_multi_table">
+                    <multi-table-controllet id="multi_table" data-url={{dataUrl}}></multi-table-controllet>
+                </div>
+                <div id="div_filters">
+                    <filters-controllet id="filters"></filters-controllet>
+                </div>
+            </paper-material>
+        </div>
+
+    </template>
+
+    <script>
+        Polymer({
+
+            is : 'select-data-controllet',
+
+            properties : {
+
+                rootName : {
+                    type  : String,
+                    value : "root"
+                },
+
+                preselectedFields : {
+                    type : Array,
+                    value : []
+                },
+
+                openedPath : {
+                    type : String,
+                    value : undefined
+                },
+
+                dataUrl : {
+                    type  : String,
+                    value : undefined,
+                    observer : '_init'
+                }
+
+            },
+
+            listeners: {
+                'tree-view-controllet_selected-fields': '_updateSelectedFields'
+            },
+
+            ready : function() {
+//                if(this.dataUrl)
+//                    this._init();
+
+                $(this.$.material_tree_view).perfectScrollbar();
+            },
+
+            attached : function(){
+                this._resize();
+                var that = this;
+                window.addEventListener("resize", function() { that._resize(); });
+            },
+
+            getFields : function() {
+                return this.$.tree_view.getFields();
+            },
+
+            getFlatFields : function() {
+                return this.$.tree_view.getFlatFields();
+            },
+
+            _init : function() {
+                var tree = document.getElementById('tree_view');
+                var that = this;
+
+                $.ajax({
+                    url: this.dataUrl,
+                    dataType: "json",
+                    success: function(data){
+                        that.rootName = "data"
+                        data = that._filterJson(data);
+                        tree.setAttribute("json-data", JSON.stringify(data));
+                        tree.selectedFields = [];
+                        that._updateSelectedFields();
+                        tree.ready();
+                    }
+                });
+
+                this.$.multi_table.ready();
+            },
+
+            _filterJson : function(data){
+//                console.log(data);
+//                console.log(this.dataUrl);
+                if(data.result != undefined && data.result.resource_id != undefined) {
+                    this.rootName = "result,records"
+                    return data.result.records;
+                }
+                return data;
+            },
+
+            _updateSelectedFields : function() {
+                var fields = this.$.tree_view.getFields();
+                this.$.multi_table.setSelectedFields(fields);
+
+                var flatFields = this.$.tree_view.getFlatFields();
+                this.$.filters.setFields(flatFields);
+            },
+
+            _resize : function(){
+                var h = Math.max(document.documentElement.clientHeight, window.innerHeight || 0) - 16;
+                h = h - 64; //height with page scroller
+                $("#material_tree_view").height(h);
+                $("#material_multi_table_filters").height(h-8);
+            }
+
+        });
+
+    </script>
+
+</dom-module>
