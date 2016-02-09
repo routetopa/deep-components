@@ -543,16 +543,17 @@
             },
 
             _updateParams : function(){
+                var textarea = this.$.datalet_selection_labels.querySelectorAll("paper-textarea");
+                this.params["description"] = textarea[0].value;
 
-                var labels = this.$.datalet_selection_labels.querySelectorAll("paper-textarea");
-                this.params[labels[0].label] = labels[0].value;
+                if(!textarea[0].value)
+                    this.params[textarea[0].label] = "";
 
-                if(!labels[0].value)
-                    this.params[labels[0].label] = "";
+                var inputs = this.$.datalet_selection_labels.querySelectorAll("paper-input");
+                this.params["title"] = inputs[0].value;
 
-                var labels = this.$.datalet_selection_labels.querySelectorAll("paper-input");
-                for (var i = 0; i < labels.length; i++)
-                    this.params[labels[i].label] = labels[i].value;
+                for (var i = 1; i < inputs.length; i++)
+                    this.params[this.labels[i-1].name] = inputs[i].value;
             },
 
             _paramsChanged : function(){
