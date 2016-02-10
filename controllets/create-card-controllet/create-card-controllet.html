@@ -121,8 +121,6 @@
                             id="create_card_link"
                             value="{{link}}"
                             label="link"
-                            auto-validate
-                            pattern="^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$"
                             error-message="Invalid link">
                     </paper-input>
 
@@ -219,7 +217,7 @@
                     if (value.indexOf("http") != 0)
                         value = "http://" + value;
 
-                    if(!link.invalid && value.length > 16) {
+                    if(/*!link.invalid &&*/ value.length > 16) {
                         iframe.setAttribute("src", value);
                         this.link = value;
                         this._resize();
