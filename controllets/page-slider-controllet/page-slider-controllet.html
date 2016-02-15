@@ -119,6 +119,11 @@
                     value : ""
                 },
 
+                prevEntryAnimation : {type  : String, value : 'slide-from-left-animation'},
+                prevExitAnimation : {type  : String, value : 'slide-right-animation'},
+                nextEntryAnimation : {type  : String, value : 'slide-from-right-animation'},
+                nextExitAnimation : {type  : String, value : 'slide-left-animation'},
+
                 selected : {
                     type  : Number,
                     value : 0
@@ -206,13 +211,23 @@
                 return this.prevSelected;
             },
 
+            setPrevAnimation  : function(entryAnimation, exitAnimation) {
+                this.prevEntryAnimation = entryAnimation;
+                this.prevExitAnimation  = exitAnimation;
+            },
+
+            setNextAnimation  : function(entryAnimation, exitAnimation) {
+                this.nextEntryAnimation = entryAnimation;
+                this.nextExitAnimation  = exitAnimation;
+            },
+
             _onPrevClick : function() {
                 var buttons = document.getElementsByTagName("paper-icon-button");
                 buttons[0].setAttribute("disabled", "true");
                 buttons[1].setAttribute("disabled", "true");
 
-                this.entryAnimation = 'slide-from-left-animation';
-                this.exitAnimation  = 'slide-right-animation';
+                this.entryAnimation = this.prevEntryAnimation;
+                this.exitAnimation  = this.prevExitAnimation;
 
                 this.prevSelected = this.selected;
                 this.selected = this.selected === 0 ? (this.pages-1) : (this.selected - 1);
@@ -223,8 +238,8 @@
                 buttons[0].setAttribute("disabled", "true");
                 buttons[1].setAttribute("disabled", "true");
 
-                this.entryAnimation = 'slide-from-right-animation';
-                this.exitAnimation  = 'slide-left-animation';
+                this.entryAnimation = this.nextEntryAnimation;
+                this.exitAnimation  = this.nextExitAnimation;
 
                 this.prevSelected = this.selected;
                 this.selected = this.selected === (this.pages-1) ? 0 : (this.selected + 1);
