@@ -5,7 +5,7 @@
 <link rel="import" href="../../bower_components/paper-dialog/paper-dialog.html"/>
 <link rel="import" href="../../bower_components/neon-animation/neon-animation.html"/>
 
-<script src="../../locales/paper-card-ln.js"></script>
+<script src="../../locales/paper_card_controllet_ln.js"></script>
 
 <dom-module id="paper-card-controllet">
 
@@ -207,16 +207,16 @@
             },
 
             _translate: function(){
-                ln["ln"] = ODE.user_language;
+                paper_ln["ln"] = ODE.user_language;
 
-                this.$.card_modify.setAttribute("title", ln["modify_"+ln["ln"]]);
-                this.$.card_delete.setAttribute("title", ln["delete_"+ln["ln"]]);
+                this.$.card_modify.setAttribute("title", paper_ln["modify_"+paper_ln["ln"]]);
+                this.$.card_delete.setAttribute("title", paper_ln["delete_"+paper_ln["ln"]]);
                 if(this.checkType(this.cardType, 'link'))
-                    this.$$("#card_open_link").setAttribute("title", ln["open_"+ln["ln"]]);
+                    this.$$("#card_open_link").setAttribute("title", paper_ln["open_"+paper_ln["ln"]]);
                 if(this.checkType(this.cardType, 'text'))
-                    this.$$("#card_open_text").setAttribute("title", ln["open_"+ln["ln"]]);
+                    this.$$("#card_open_text").setAttribute("title", paper_ln["open_"+paper_ln["ln"]]);
                 if(this.checkType(this.cardType, 'datalet'))
-                    this.$$("#card_open_datalet").setAttribute("title", ln["open_"+ln["ln"]]);
+                    this.$$("#card_open_datalet").setAttribute("title", paper_ln["open_"+paper_ln["ln"]]);
             },
 
             _changeWidth: function(){
