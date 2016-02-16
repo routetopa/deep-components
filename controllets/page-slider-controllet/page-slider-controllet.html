@@ -83,8 +83,8 @@
         </style>
 
         <div class="header">
-            <paper-icon-button class="chevron-left" on-click="_onPrevClick" icon="arrow-back" title="back"></paper-icon-button>
-            <paper-icon-button class="chevron-right" on-click="_onNextClick" icon="arrow-forward" title="forward"></paper-icon-button>
+            <paper-icon-button id="slider_chevron_left" class="chevron-left" on-click="_onPrevClick" icon="arrow-back"></paper-icon-button>
+            <paper-icon-button id="slider_chevron_right" class="chevron-right" on-click="_onNextClick" icon="arrow-forward"></paper-icon-button>
 
             <div class="box">
                 <div class="avatar">[[avatar]]</div>
@@ -159,9 +159,8 @@
             attached : function() {
                 this.fire('page-slider-controllet_selected', {selected : this.selected});
 
-                var buttons = document.getElementsByTagName("paper-icon-button");
-                buttons[0].setAttribute("title", ln["back_" + ln["localization"]]);
-                buttons[1].setAttribute("title", ln["forward_" + ln["localization"]]);
+                this.$.slider_chevron_left.setAttribute("title", ln["back_" + ln["localization"]]);
+                this.$.slider_chevron_right.setAttribute("title", ln["forward_" + ln["localization"]]);
             },
 
             setTitle : function(title, subtitle) {
@@ -174,37 +173,31 @@
             },
 
             chevronLeft : function(flag) {
-                var buttons = document.getElementsByTagName("paper-icon-button");
-
                 if(flag == "invisible") {
-                    buttons[0].style.visibility = "hidden";
-//                    buttons[0].style.width = "0px";
+                    this.$.slider_chevron_left.style.visibility = "hidden";
                     return;
                 }
                 else
-                    buttons[0].style.visibility = "visible";
-//                    buttons[0].style.width = "64px";
+                    this.$.slider_chevron_left.style.visibility = "visible";
 
                 if(flag)
-                    buttons[0].removeAttribute("disabled");
+                    this.$.slider_chevron_left.removeAttribute("disabled");
                 else
-                    buttons[0].setAttribute("disabled", "true");
+                    this.$.slider_chevron_left.setAttribute("disabled", "true");
             },
 
             chevronRight : function(flag) {
-                var buttons = document.getElementsByTagName("paper-icon-button");
-
                 if(flag == "invisible") {
-                    buttons[1].style.visibility = "hidden";
+                    this.$.slider_chevron_right.style.visibility = "hidden";
                     return;
                 }
                 else
-                    buttons[1].style.visibility = "visible";
+                    this.$.slider_chevron_right.style.visibility = "visible";
 
                 if(flag)
-                    buttons[1].removeAttribute("disabled");
+                    this.$.slider_chevron_right.removeAttribute("disabled");
                 else
-                    buttons[1].setAttribute("disabled", "true");
+                    this.$.slider_chevron_right.setAttribute("disabled", "true");
             },
 
             getPrevSelected : function() {
@@ -222,9 +215,8 @@
             },
 
             _onPrevClick : function() {
-                var buttons = document.getElementsByTagName("paper-icon-button");
-                buttons[0].setAttribute("disabled", "true");
-                buttons[1].setAttribute("disabled", "true");
+                this.$.slider_chevron_left.setAttribute("disabled", "true");
+                this.$.slider_chevron_right.setAttribute("disabled", "true");
 
                 this.entryAnimation = this.prevEntryAnimation;
                 this.exitAnimation  = this.prevExitAnimation;
@@ -234,9 +226,8 @@
             },
 
             _onNextClick : function() {
-                var buttons = document.getElementsByTagName("paper-icon-button");
-                buttons[0].setAttribute("disabled", "true");
-                buttons[1].setAttribute("disabled", "true");
+                this.$.slider_chevron_left.setAttribute("disabled", "true");
+                this.$.slider_chevron_right.setAttribute("disabled", "true");
 
                 this.entryAnimation = this.nextEntryAnimation;
                 this.exitAnimation  = this.nextExitAnimation;
@@ -246,9 +237,8 @@
             },
 
             _onNeonAnimationFinish: function() {
-                var buttons = document.getElementsByTagName("paper-icon-button");
-                buttons[0].removeAttribute("disabled");
-                buttons[1].removeAttribute("disabled");
+                this.$.slider_chevron_left.removeAttribute("disabled");
+                this.$.slider_chevron_right.removeAttribute("disabled");
 
                 this.avatar = this.selected+1;
 
