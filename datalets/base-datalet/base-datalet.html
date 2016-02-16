@@ -154,7 +154,13 @@ Example :
                     //OpenDataSoft check
                     if(this.dataUrl.indexOf("/records/") > -1 )
                     {
-                        this.$.base_datalet_link.setAttribute("href", urlSource + "/explore/dataset/" + this.dataUrl.substring(this.dataUrl.indexOf("=")+1,this.dataUrl.indexOf("&")));
+                        var i;
+                        if(this.dataUrl.indexOf("&") > -1)
+                            i = this.dataUrl.indexOf("&");
+                        else
+                            i = this.dataUrl.length;
+
+                        this.$.base_datalet_link.setAttribute("href", urlSource + "/explore/dataset/" + this.dataUrl.substring(this.dataUrl.indexOf("=")+1, i));
                     }
                     // CKAN
                     else if(this.dataUrl.indexOf("datastore_search?resource_id") > -1 )
