@@ -1,0 +1,339 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+
+<link rel="import" href="../../bower_components/iron-icon/iron-icon.html">
+<link rel="import" href="../../bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="../../bower_components/paper-material/paper-material.html">
+<link rel="import" href="../../bower_components/paper-toolbar/paper-toolbar.html">
+<link rel="import" href="../../bower_components/paper-fab/paper-fab.html">
+
+<link rel="import" href="../../controllets/search-panel-controllet/search-panel-controllet.html">
+
+<dom-module id="postit-container-controllet">
+
+    <style>
+
+        iron-icon.postit {
+            padding: 2px;
+            margin: 0px;
+            color: #FFFFFF;
+            height: 32px;
+            width: 32px;
+            background-color: #00BCD4;
+        }
+
+        .button-container {
+            cursor: pointer;
+            text-decoration:none;
+            color:#000;
+            background:#ffc;
+            display:block;
+            height:40px;
+            width:40px;
+            padding:10px;
+            /* Firefox */
+            -moz-box-shadow:5px 5px 7px rgba(33,33,33,1);
+            /* Safari+Chrome */
+            -webkit-box-shadow: 5px 5px 7px rgba(33,33,33,.7);
+            /* Opera */
+            box-shadow: 5px 5px 7px rgba(33,33,33,.7);
+            -o-transform:rotate(4deg);
+            -webkit-transform:rotate(4deg);
+            -moz-transform:rotate(4deg);
+        }
+
+        .button-container p{
+            -o-transform:rotate(4deg);
+            -webkit-transform:rotate(4deg);
+            -moz-transform:rotate(4deg);
+            font-size: 5px;
+            line-height: 3px;
+        }
+
+        .button-container:hover {
+            box-shadow: 0 5px 11px 0 rgba(0, 0, 0, 0.18), 0 4px 15px 0 rgba(0, 0, 0, 0.15);
+            -webkit-transition: 0.2s ease-out;
+            -moz-transition: 0.2s ease-out;
+            -o-transition: 0.2s ease-out;
+            -ms-transition: 0.2s ease-out;
+            transition: 0.2s ease-out;
+        }
+
+        .window {
+            /*height: 80vh;
+            width: 120vh;*/
+            display: none;
+            height: 80%;
+            position: fixed;
+            top: 15%;
+            left: 50%;
+            margin-right: auto;
+            margin-left: auto;
+            z-index: 1000;
+        }
+
+        .transparent {
+            position:absolute;
+            top:0;
+            left:0;
+            width: 100%;
+            height: 12%;
+            background-color: rgba(0, 0, 0, 0.4);
+        }
+
+        paper-fab.close {
+            position: absolute;
+            height: 32px;
+            width: 32px;
+            margin: 8px;
+            top: 0px;
+            right: 0px;
+            --paper-fab-background:#B6B6B6;
+            z-index: 9999;
+        }
+
+        paper-fab#addPostit {
+            position: absolute;
+            height: 32px;
+            width: 32px;
+            margin: 8px;
+            top: 0px;
+            right: 48px;
+            --paper-fab-background:#2196F3;
+            z-index: 9999;
+        }
+
+        #container_content {
+            position: relative;
+            overflow: auto;
+            height: 100%;
+            background-color: transparent;
+            z-index: 1000;
+            margin-top : 7%;
+        }
+
+        h2,p{
+            font-size:100%;
+            font-weight:normal;
+        }
+        ul,li{
+            list-style:none;
+        }
+        ul{
+            overflow:hidden;
+            padding:3em;
+        }
+        ul li a{
+            text-decoration:none;
+            color:#000;
+            background:#ffc;
+            display:block;
+            height:10em;
+            width:10em;
+            padding:1em;
+            -moz-box-shadow:5px 5px 7px rgba(33,33,33,1);
+            -webkit-box-shadow: 5px 5px 7px rgba(33,33,33,.7);
+            box-shadow: 5px 5px 7px rgba(33,33,33,.7);
+            -moz-transition:-moz-transform .15s linear;
+            -o-transition:-o-transform .15s linear;
+            -webkit-transition:-webkit-transform .15s linear;
+        }
+        ul li{
+            margin:10px;
+            float:left;
+        }
+        ul li h3{
+            font-size:100%;
+            font-weight:bold;
+        }
+        ul li p{
+            /*font-family:"Reenie Beanie",arial,sans-serif;*/
+            font-size:60%;
+        }
+        ul li a{
+            -webkit-transform: rotate(-6deg);
+            -o-transform: rotate(-6deg);
+            -moz-transform:rotate(-6deg);
+        }
+        ul li:nth-child(even) a{
+            -o-transform:rotate(4deg);
+            -webkit-transform:rotate(4deg);
+            -moz-transform:rotate(4deg);
+            position:relative;
+            top:5px;
+            background:#cfc;
+        }
+        ul li:nth-child(3n) a{
+            -o-transform:rotate(-3deg);
+            -webkit-transform:rotate(-3deg);
+            -moz-transform:rotate(-3deg);
+            position:relative;
+            top:-5px;
+            background:#ccf;
+        }
+        ul li:nth-child(5n) a{
+            -o-transform:rotate(5deg);
+            -webkit-transform:rotate(5deg);
+            -moz-transform:rotate(5deg);
+            position:relative;
+            top:-10px;
+        }
+        ul li a:hover,ul li a:focus{
+            box-shadow:10px 10px 7px rgba(0,0,0,.7);
+            -moz-box-shadow:10px 10px 7px rgba(0,0,0,.7);
+            -webkit-box-shadow: 10px 10px 7px rgba(0,0,0,.7);
+            -webkit-transform: scale(1.25);
+            -moz-transform: scale(1.25);
+            -o-transform: scale(1.25);
+            position:relative;
+            z-index:5;
+        }
+
+    </style>
+
+    <template>
+
+        <div class="button-container" title$="{{tooltip}}" on-click="_onOpenClick">
+            <p>
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+            </p>
+        </div>
+
+        <paper-material id="window" class="window" elevation="0">
+
+            <div class="transparent"></div>
+
+            <paper-fab class="close" mini icon="close" on-click="_onCloseClick"></paper-fab>
+            <paper-fab id="addPostit" icon="add" title='{text key="spodcollaborative+add_content"}' class="dropdown-trigger"></paper-fab>
+            <div id="container_content">
+                <content>
+                    <ul>
+                        <!--<template is="dom-repeat" items="{{data}}">
+                            <li>
+                                <a href="#">
+                                    <h3>{{items.title}}</h3>
+                                    <p>{{items.content}}</p>
+                                </a>
+                            </li>
+                        </template>-->
+
+                        <li>
+                            <a href="#">
+                                <h3>My note #1</h3>
+                                <p>
+                                    At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis
+                                    praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias
+                                    excepturi sint occaecati cupiditate non provident
+                                </p>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                <h2>My note #2</h2>
+                                <p>
+                                    Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus id quod
+                                    maxime placeat facere possimus
+                                </p>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                <h2>My note #3</h2>
+                                <p>
+                                    Similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga.
+                                    Et harum quidem rerum facilis est et expedita distinctio
+                                </p>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                <h2>My note #4</h2>
+                                <p>
+                                    Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet
+                                    ut et voluptates repudiandae sint et molestiae non recusandae.
+                                </p>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                <h2>My note #5</h2>
+                                <p>
+                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
+                                    tempor incididunt ut labore et dolore magna aliqua
+                                </p>
+                            </a>
+                        </li>
+                       <!-- <li>
+                            <a href="#">
+                                <h2>My note #6</h2>
+                                <p>
+                                    Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+                                </p>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                <h2>My note #7</h2>
+                                <p>
+                                    Itaque earum rerum hic tenetur a sapiente delectus, ut aut reiciendis voluptatibus maiores alias
+                                    consequatur aut perferendis doloribus asperiores repellat
+                                </p>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                <h2>My note #8</h2>
+                                <p>
+                                    Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
+                                    Excepteur sint occaecat cupidatat non proident
+                                </p>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                <h2>My note #9</h2>
+                                <p>Sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+                            </a>
+                        </li>-->
+                    </ul>
+                </content>
+            </div>
+
+        </paper-material>
+
+    </template>
+
+    <script type="text/javascript" src="../shared_js/perfect-scrollbar/js/perfect-scrollbar.jquery.js"></script>
+
+    <script>
+
+        Polymer({
+
+            is: 'postit-container-controllet',
+
+            properties: {
+                tooltip: {
+                    type: String,
+                    value: ""
+                },
+                data : {
+                    type: Array,
+                    value: undefined
+                }
+            },
+
+            ready: function(){
+                $(this.$.container_content).perfectScrollbar();
+            },
+
+            _onOpenClick: function() {
+                $(this.$.window).show();
+            },
+
+            _onCloseClick: function(){
+                $(this.$.window).hide();
+            }
+
+        });
+
+    </script>
+</dom-module>

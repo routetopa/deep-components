@@ -5,7 +5,7 @@
 <link rel="import" href="../../bower_components/paper-dialog/paper-dialog.html"/>
 <link rel="import" href="../../bower_components/neon-animation/neon-animation.html"/>
 
-<script src="../../locales/paper-card-ln.js"></script>
+<script src="../../locales/paper_card_controllet_ln.js"></script>
 
 <dom-module id="google-card-controllet">
 
@@ -23,7 +23,7 @@
             #content {
                 padding: 4px 4px 0px 4px;
                 position:relative;
-                width: 100%;
+                width: 98%;
                 height: 90%;
             }
 
@@ -45,10 +45,14 @@
 
             paper-fab#fullscreen-button {
                 position: absolute;
-                z-index: 100;
-                top: -20px;
-                right: 8px;
+                /*z-index: 10;*/
+                top: 0px;
+                right: 0px;
                 --paper-fab-background:#2196F3;
+                padding : 0px;
+                margin: 0px;
+                height: 24px;
+                width: 24px;
             }
 
             paper-dialog {
@@ -86,14 +90,11 @@
         <paper-material id="paper_card_container" elevation="{{elevation}}">
 
             <div id="content">
-                <iframe id="resource" src="{{resourceUrl}}?embedded=true"></iframe>
+                <iframe id="resource" src="{{resourceUrl}}&embedded=true"></iframe>
+                <!--<iframe id="resource" src="{{resourceUrl}}"></iframe>-->
             </div>
 
             <paper-fab id="fullscreen-button" class="open" mini icon="fullscreen" on-click="_handleOpenClick"></paper-fab>
-
-            <div class="footer">
-                <div class="comment">{{comment}}</div>
-            </div>
 
             <paper-dialog id="fullscreen_container" entry-animation="scale-up-animation" exit-animation="fade-out-animation">
                 <!--with-backdrop-->
@@ -153,15 +154,16 @@
 
 
             _changeWidth: function(){
-                this.style.width = this.width + "px";
-                this.$.paper_card_container.style.width = this.width + "px";
-                this.$.content.style.width = this.width - 8 + "px";
+                //this.style.width = this.width + "px";
+                //this.$.paper_card_container.style.width = this.width + "px";
+                //this.$.content.style.width = this.width - 8 + "px";
             },
 
             _changeHeight: function(){
-                this.style.height = this.height + 64 + "px";
-                this.$.paper_card_container.style.height = this.height + "px";
-                this.$.content.style.height = this.height - 4 + "px";
+                this.style.height = this.height +  "vh";
+                //this.$.content.width = this.width  - 4 + "vh";
+                this.$.paper_card_container.style.height = this.height + "vh";
+                this.$.content.style.height = this.height - 1 + "vh";
                 $(this.$.content).perfectScrollbar();
             },
 
