@@ -13,8 +13,8 @@
 
 <body>
 
-    <select-data-controllet id="tvmt" root-name="data" opened-path="records,geometry" preselected-fields='["nhits", "records,datasetid", "records,recordid"]' data-url="https://data.issy.com/api/records/1.0/search?dataset=liste-des-restaurants-a-issy-les-moulineaux&sort=type&facet=type&facet=terrasse"></select-data-controllet>
-    <!--<tree-view-multi-table-controllet id="tvmt" root-name="data" data-url="http://ckan.routetopa.eu/api/action/datastore_search?resource_id=73e02092-85a1-434e-85fe-0c9a43aa9a52&limit=5"></tree-view-multi-table-controllet>-->
+    <!--<select-data-controllet id="tvmt" root-name="data" opened-path="records,geometry" preselected-fields='["nhits", "records,datasetid", "records,recordid"]' data-url="http://ckan.routetopa.eu/api/action/datastore_search?resource_id=73e02092-85a1-434e-85fe-0c9a43aa9a52&limit=5"></select-data-controllet>-->
+    <select-data-controllet id="tvmt" root-name="data" data-url="http://ckan.routetopa.eu/api/action/datastore_search?resource_id=73e02092-85a1-434e-85fe-0c9a43aa9a52&limit=5"></select-data-controllet>
 
     <script>
         var tvmt = document.getElementById('tvmt');

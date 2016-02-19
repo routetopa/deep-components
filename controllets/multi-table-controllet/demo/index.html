@@ -5,12 +5,30 @@
 
     <script src="../../../bower_components/webcomponentsjs/webcomponents-lite.min.js"></script>
 
+    <script src="../../shared_js/perfect-scrollbar/js/min/perfect-scrollbar.jquery.min.js"></script>
+    <link rel="stylesheet" href="../../shared_js/perfect-scrollbar/css/perfect-scrollbar.min.css">
+
     <link rel="import" href="../multi-table-controllet.html" />
 </head>
 
 <body>
 
-    <multi-table-controllet id="multi" data-url="http://ckan.routetopa.eu/api/action/datastore_search?resource_id=73e02092-85a1-434e-85fe-0c9a43aa9a52&amp;limit=10000"></multi-table-controllet>
+    <style>
+
+        .container {
+            height: 400px;
+            width: 50%;
+            /*width: 400px;*/
+            position: relative;
+            top: 100px;
+            left:25%;
+        }
+
+    </style>
+
+    <div class="container">
+        <multi-table-controllet id="multi" data-url="http://ckan.routetopa.eu/api/action/datastore_search?resource_id=73e02092-85a1-434e-85fe-0c9a43aa9a52&amp;limit=10000"></multi-table-controllet>
+    </div>
 
     <script>
 

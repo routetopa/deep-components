@@ -14,14 +14,15 @@
     <template>
 
         <style is="custom-style">
-            paper-tabs{
+
+            paper-tabs {
                 font-family: 'Roboto', 'Helvetica Neue', Helvetica, Arial, sans-serif;
                 font-size: 16px;
                 font-weight: bold;
                 --paper-tabs-selection-bar-color: #2196F3;
             }
 
-            paper-tab{
+            paper-tab {
                 transition: all 1.0s;
             }
 
@@ -29,25 +30,44 @@
                 background-color: #B6B6B6;
             }
 
-            paper-tab:hover{
+            paper-tab:hover {
                 color: #2196F3;
             }
+
+            #multi_table_container {
+                height: 100%;
+                width: 100%;
+
+                font-family: 'Roboto', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+                font-size: 16px;
+            }
+
+            #multi_table_tables {
+                position: relative;
+                height: calc(100% - 48px);
+            }
+
         </style>
 
-        <paper-tabs selected="{{selected}}">
-            <template id="dom-tabs" is="dom-repeat" items="{{_toArrayTabs(selectedFields)}}">
-                <paper-tab noink>{{item.name}}</paper-tab>
-            </template>
-        </paper-tabs>
+        <div id="multi_table_container">
 
-        <neon-animated-pages selected="{{selected}}" entry-animation="fade-in-animation" exit-animation="fade-out-animation">
-            <template id="dom-pages" is="dom-repeat" items="{{_toArrayPages(selectedFields)}}">
-                <neon-animatable>
-                        <dynamic-datatable-datalet id="{{item.name}}" data-url={{dataUrl}} fields$='{{_getFields(item.value)}}'></dynamic-datatable-datalet>
-                </neon-animatable>
-            </template>
+            <paper-tabs selected="{{selected}}">
+                <template id="dom-tabs" is="dom-repeat" items="{{_toArrayTabs(selectedFields)}}">
+                    <paper-tab noink>{{item.name}}</paper-tab>
+                </template>
+            </paper-tabs>
 
-        </neon-animated-pages>
+            <div id="multi_table_tables">
+                <neon-animated-pages selected="{{selected}}" entry-animation="fade-in-animation" exit-animation="fade-out-animation">
+                    <template id="dom_pages" is="dom-repeat" items="{{_toArrayPages(selectedFields)}}">
+                        <neon-animatable>
+                                <dynamic-datatable-datalet id="{{item.name}}" data-url={{dataUrl}} fields$='{{_getFields(item.value)}}' filters$='{{_getFilters(item.value)}}'></dynamic-datatable-datalet>
+                        </neon-animatable>
+                    </template>
+                </neon-animated-pages>
+            </div>
+
+        </div>
 
     </template>
 
@@ -83,6 +103,10 @@
 
             listeners: {
                 'dom-change': '_onDomChange'
+            },
+
+            ready : function() {
+                $(this.$.multi_table_tables).perfectScrollbar();
             },
 
             setSelectedFields : function(selectedFields) {
@@ -141,24 +165,28 @@
             },
 
             _onDomChange : function(e) {
-                if (e.target.id == "dom-pages")
+                if (e.target.id == "dom_pages")
                     this.async(function () {this.selected = this.toSelect;}, 0);
             },
 
-            _toArrayTabs: function(obj) {
+            _toArrayTabs : function(obj) {
                 return Object.keys(obj).map(function(key) {
                     return {name: key.replace(/,/g, " / "), value: obj[key]};
                 });
             },
 
-            _toArrayPages: function(obj) {
+            _toArrayPages : function(obj) {
                 return Object.keys(obj).map(function(key) {
                     return {name: key, value: obj[key]};
                 });
             },
 
-            _getFields: function(value) {
+            _getFields : function(value) {
                 return value;
+            },
+
+            _getFilters : function(value) {
+                return JSON.stringify(this.filters);
             }
 
         });
