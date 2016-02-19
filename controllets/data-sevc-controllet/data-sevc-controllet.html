@@ -1,17 +1,13 @@
-<!--<script src="../shared_js/jquery-1.11.2.min.js"></script>-->
-<!--<script src="../../bower_components/webcomponentsjs/webcomponents-lite.min.js"></script>-->
 <script src="../shared_js/perfect-scrollbar/js/min/perfect-scrollbar.jquery.min.js"></script>
 <link rel="stylesheet" href="../shared_js/perfect-scrollbar/css/perfect-scrollbar.min.css">
 
-<!--<script defer src="../../bower_components/l20n/dist/compat/web/l20n.min.js"></script>-->
 <script src="../../locales/controllet_ln.js"></script>
-
 
 <link rel="import" href="../../bower_components/polymer/polymer.html">
 
 <link rel="import" href="../page-slider-controllet/page-slider-controllet.html">
 <link rel="import" href="../dataset-selection-controllet/dataset-selection-controllet.html">
-<link rel="import" href="../tree-view-multi-table-controllet/tree-view-multi-table-controllet.html" />
+<link rel="import" href="../select-data-controllet/select-data-controllet.html" />
 <link rel="import" href="../datalet-selection-controllet/datalet-selection-controllet.html">
 
 <dom-module id="data-sevc-controllet">
@@ -23,20 +19,20 @@
             <neon-animatable>
 
                 <template is="dom-if" if={{!modify}}>
-                    <dataset-selection-controllet id="dataset_selection" datasets={{datasets}} suggested-datasets={{suggestedDatasets}}></dataset-selection-controllet>
+                    <dataset-selection-controllet id="select_dataset" datasets={{datasets}} suggested-datasets={{suggestedDatasets}}></dataset-selection-controllet>
                 </template>
 
             </neon-animatable>
 
             <neon-animatable>
 
-                <tree-view-multi-table-controllet id="tree_view_multi_table" data-url={{dataUrl}} preselected-fields={{selectedFields}}></tree-view-multi-table-controllet>
+                <select-data-controllet id="select_data" data-url={{dataUrl}} preselected-fields={{selectedFields}} datalet-preset="{{dataletPreset}}"></select-data-controllet>
 
             </neon-animatable>
 
             <neon-animatable>
 
-                <datalet-selection-controllet id="datalet_selection" deep-url={{deepUrl}} datalets-list-url={{dataletsListUrl}} data-url={{dataUrl}} preselected-datalet={{selectedDatalet}} datalet-preset={{dataletPreset}}></datalet-selection-controllet>
+                <datalet-selection-controllet id="select_visualization" deep-url={{deepUrl}} datalets-list-url={{dataletsListUrl}} data-url={{dataUrl}} preselected-datalet={{selectedDatalet}} datalet-preset={{dataletPreset}}></datalet-selection-controllet>
 
             </neon-animatable>
 
@@ -119,7 +115,6 @@
                 if(this.selectedDatalet){
                     this.modify = true;
                     this.$.slider.selected = 1;
-//                    console.log(this.selectedDatalet);
                     this.dataUrl = this.dataletPreset["data-url"];
                 }
                 ln["localization"] = this.localization;
@@ -143,15 +138,18 @@
                             slider.chevronLeft(true);
                         }
                         slider.chevronRight(false);
-                        this.$.tree_view_multi_table.ready();
-                        this._allowThirdStep({detail: {fields: tree_view_multi_table.getFlatFields()}});
+                        this.$.select_data.ready();
+//                        this.async(function () {this.dataletPreset["filters"] = undefined;}, 1000);
+                        this._allowThirdStep({detail: {fields: select_data.getFlatFields()}});
+                        this._allowThirdStep({detail: {fields: select_data.getFlatFields()}});
                         break;
                     case 2:
                         slider.setTitle(ln["slide3Title_" + this.localization], ln["slide3Subtitle_" + this.localization]);
                         slider.chevronLeft(true);
                         slider.chevronRight("invisible");
-                        this.$.datalet_selection.setFields(tree_view_multi_table.getFlatFields());
-                        this.$.datalet_selection.ready();
+                        this.$.select_visualization.setFields(select_data.getFlatFields());
+                        this.$.select_visualization.setFilters(select_data.getFilters());
+                        this.$.select_visualization.ready();
                 }
             },
 
@@ -165,16 +163,16 @@
 //                        this.dataUrl = e.detail.url
 //                        this.jsonData = JSON.stringify(data);
                         slider.chevronRight(true);
-                        dataset_selection.$.selected_url.invalid = false;
+                        select_dataset.$.selected_url.invalid = false;
                     },
                     error: function(){
 //                        this.jsonData = undefined;
                         slider.chevronRight(false);
-                        dataset_selection.$.selected_url.invalid = true;
+                        select_dataset.$.selected_url.invalid = true;
                     }
                 });
 
-                this.$.datalet_selection.reset();
+                this.$.select_visualization.reset();
             },
 
             _allowThirdStep : function(e){
@@ -182,6 +180,8 @@
                     slider.chevronRight(true);
                 else
                     slider.chevronRight(false);
+
+                //this.$.select_visualization.reset();
             }
 
         });
