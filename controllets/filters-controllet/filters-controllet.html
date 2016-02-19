@@ -106,7 +106,7 @@
 
         <div id="filters_container">
 
-            <div id="filters_header" class="filters_header" on-click="_showFiltersPanel"><span id="filters">ADVANCED: FILTERS</span></div>
+            <div id="filters_header" class="filters_header" on-click="_showFiltersPanel"><span id="filters">ADD FILTERS</span></div>
 
             <div id="filters_panel">
 
@@ -114,7 +114,7 @@
                     <tr>
                         <th>
                             <paper-dropdown-menu id="filter_field" label="Field">
-                                <paper-menu class="dropdown-content">
+                                <paper-menu id="filter_field_menu" class="dropdown-content">
                                     <template is="dom-repeat" items={{fields}}>
                                         <paper-item id={{index}} on-tap="">{{_fieldName(item)}}</paper-item>
                                     </template>
@@ -123,7 +123,7 @@
                         </th>
                         <th>
                             <paper-dropdown-menu id="filter_operation" label="Operation">
-                                <paper-menu class="dropdown-content">
+                                <paper-menu id="filter_operation_menu" class="dropdown-content">
                                     <template is="dom-repeat" items={{operations}}>
                                         <paper-item id={{index}} on-tap="">{{item}}</paper-item>
                                     </template>
@@ -131,7 +131,7 @@
                             </paper-dropdown-menu>
                         </th>
                         <th>
-                            <paper-input id="filter_value" class="base_input"></paper-input>
+                            <paper-input id="filter_value" label="Value" class="base_input" maxlength="16" auto-validate pattern="^[_a-zA-Z0-9]*" error-message="Invalid value!"></paper-input>
                         </th>
                         <th class="filters_cell_button">
                             <paper-icon-button on-click="_addFilter" icon="add-circle" class="add"></paper-icon-button>
@@ -187,10 +187,6 @@
                 $(this.$.filters_panel).perfectScrollbar();
             },
 
-            attached : function() {
-//                this.fire('filters-controllet_filters', {filters: this.filters});
-            },
-
             setFields : function(fields) {
                 this.fields = this._copy(fields);
             },
@@ -219,7 +215,6 @@
             },
 
             _addFilter : function() {
-//                var field = "["+this.$.filter_field.value+"]";
                 var field = this.$.filter_field.value;
                 var operation = this.$.filter_operation.value;
                 var value = this.$.filter_value.value;
@@ -227,6 +222,10 @@
                 var filters = this.filters;
                 filters.push({"field": field, "operation": operation, "value": value});
                 this.filters = this._copy(filters);
+
+                this.$.filter_field_menu.select(-1);
+                this.$.filter_operation_menu.select(-1);
+                this.$.filter_value.value = "";
 
                 this.fire('filters-controllet_filters', {filters: this.filters});
             },
