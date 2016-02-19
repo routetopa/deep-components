@@ -101,7 +101,7 @@
                 $(this.$.material_tree_view).perfectScrollbar();
 
                 if(this.filters == undefined){
-                    if(this.dataletPreset["filters"] != undefined)
+                    if(this.dataletPreset && this.dataletPreset["filters"] != undefined)
                         this.filters = JSON.parse(this.dataletPreset["filters"]);
                     else
                         this.filters = [];
