@@ -27,7 +27,8 @@
 
         <div id="tree_container">
 
-            <tree-view-controllet id="tree" root-name="data" opened-path="records,geometry" preselected-fields='["records,datasetid", "records,recordid", "nhits"]'></tree-view-controllet>
+            <!--<tree-view-controllet id="tree" root-name="data" opened-path="records,geometry" preselected-fields='["records,datasetid", "records,recordid", "nhits"]'></tree-view-controllet>-->
+            <tree-view-controllet id="tree" root-name="create-datalet-controllet"></tree-view-controllet>
 
         </div>
 
@@ -38,24 +39,31 @@
 
     </div>
 
+
     <script>
+
+        var json = {"select-dataset-controllet": "s", "select-data-controllet": {"tree-view-controllet": "", "multi-table-controllet": "", "filters-controllet": ""}, "select-visualization-controllet": {"items-vslider-controllet": ""}};
         var tree = document.getElementById('tree');
+        tree.setAttribute("json-data", JSON.stringify(json));
+        tree.ready();
+
+//        var tree = document.getElementById('tree');
         var fields = document.getElementById('fields');
-
-        $.ajax({
-            url: 'https://data.issy.com/api/records/1.0/search?dataset=liste-des-restaurants-a-issy-les-moulineaux&sort=type&facet=type&facet=terrasse',
-            dataType: "json",
-            success: function(data){
-                tree.setAttribute("json-data", JSON.stringify(data));
-                tree.ready();//chrome
-            }
-        });
-
-        tree.addEventListener("tree-view-controllet_selected-fields", function (e) {
-            fields.innerHTML = e.detail.fields;
-//            console.log(tree.getFlatFields());
-//            console.log(tree.getFields());//firefox console.log does not recognize associative array?
-        });
+//
+//        $.ajax({
+//            url: 'http://ckan.routetopa.eu/api/action/datastore_search?resource_id=c3b52992-ba61-4a73-a637-0f2e1ca26aab',
+//            dataType: "json",
+//            success: function(data){
+//                tree.setAttribute("json-data", JSON.stringify(data));
+//                tree.ready();//chrome
+//            }
+//        });
+//
+//        tree.addEventListener("tree-view-controllet_selected-fields", function (e) {
+//            fields.innerHTML = e.detail.fields;
+////            console.log(tree.getFlatFields());
+////            console.log(tree.getFields());//firefox console.log does not recognize associative array?
+//        });
 
     </script>
 

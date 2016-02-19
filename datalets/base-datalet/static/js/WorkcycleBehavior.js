@@ -101,7 +101,7 @@ var WorkcycleBehavior = {
         if(this._component.data === undefined || this._component.data == ""){
             this.requestData();
         }else{
-            this.deleteWaitImage();
+            this._deleteWaitImage();
             this.data = JSON.parse(this._component.data);
             this.transformData();
             this.presentData();

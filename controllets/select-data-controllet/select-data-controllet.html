@@ -83,25 +83,43 @@
                     type  : String,
                     value : undefined,
                     observer : '_init'
-                }
+                },
+
+                filters : {
+                    type : Array,
+                    value : undefined
+                },
 
             },
 
             listeners: {
-                'tree-view-controllet_selected-fields': '_updateSelectedFields'
+                'tree-view-controllet_selected-fields': '_updateSelectedFields',
+                'filters-controllet_filters': '_updateFilters'
             },
 
             ready : function() {
-//                if(this.dataUrl)
-//                    this._init();
-
                 $(this.$.material_tree_view).perfectScrollbar();
+
+                if(this.filters == undefined){
+                    if(this.dataletPreset["filters"] != undefined)
+                        this.filters = JSON.parse(this.dataletPreset["filters"]);
+                    else
+                        this.filters = [];
+                }
+
+                this.$.filters.filters = this.filters;
+                this.$.multi_table.filters = this.filters;
+                this._refreshTables();
             },
 
             attached : function(){
                 this._resize();
                 var that = this;
                 window.addEventListener("resize", function() { that._resize(); });
+            },
+
+            getFilters : function() {
+                return this.$.filters.getFilters();
             },
 
             getFields : function() {
@@ -113,19 +131,20 @@
             },
 
             _init : function() {
-                var tree = document.getElementById('tree_view');
                 var that = this;
 
                 $.ajax({
                     url: this.dataUrl,
                     dataType: "json",
                     success: function(data){
-                        that.rootName = "data"
-                        data = that._filterJson(data);
-                        tree.setAttribute("json-data", JSON.stringify(data));
-                        tree.selectedFields = [];
+                        that.rootName = "data";
+                        var data = that._filterJson(data);
+                        that.$.tree_view.setAttribute("json-data", JSON.stringify(data));
+                        that.$.tree_view.selectedFields = [];
                         that._updateSelectedFields();
-                        tree.ready();
+                        that.$.tree_view.ready();
+                        that.$.filters.filters = [];
+                        that.$.multi_table.filters = [];
                     }
                 });
 
@@ -133,8 +152,6 @@
             },
 
             _filterJson : function(data){
-//                console.log(data);
-//                console.log(this.dataUrl);
                 if(data.result != undefined && data.result.resource_id != undefined) {
                     this.rootName = "result,records"
                     return data.result.records;
@@ -148,6 +165,20 @@
 
                 var flatFields = this.$.tree_view.getFlatFields();
                 this.$.filters.setFields(flatFields);
+            },
+
+            _updateFilters : function(e) {
+                this.filters = e.detail.filters;
+                this.$.multi_table.filters = e.detail.filters;
+                this._refreshTables();
+            },
+
+            _refreshTables : function() {
+                this.$.multi_table.setSelectedFields([]);
+                this.async(function () {
+                    var fields = this.$.tree_view.getFields();
+                    this.$.multi_table.setSelectedFields(fields);
+                }, 0);
             },
 
             _resize : function(){

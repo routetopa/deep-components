@@ -29,7 +29,7 @@
 *
 -->
 
-<link rel="import" href="../base-ajax-json-jsonpath-datalet/base-ajax-json-jsonpath-datalet.html">
+<link rel="import" href="../base-ajax-json-alasql-datalet/base-ajax-json-alasql-datalet.html">
 
 <!--
 
@@ -56,7 +56,7 @@ Example:
         </style>
 
         <div id="leafletjs"></div>
-        <base-ajax-json-jsonpath-datalet data-url="{{dataUrl}}" fields="{{fields}}" data="{{data}}" title="{{title}}" description="{{description}}"></base-ajax-json-jsonpath-datalet>
+        <base-ajax-json-alasql-datalet data-url="{{dataUrl}}" fields="{{fields}}" data="{{data}}" title="{{title}}" description="{{description}}"></base-ajax-json-alasql-datalet>
 
     </template>
 
@@ -165,7 +165,7 @@ Example:
              * @method ready
              */
             attached: function(){
-                this.behavior =  $.extend(true, {}, BaseDataletBehavior, WorkcycleBehavior, AjaxJsonJsonPathBehavior, leafletjsBehavior);
+                this.behavior =  $.extend(true, {}, BaseDataletBehavior, WorkcycleBehavior, AjaxJsonAlasqlBehavior, leafletjsBehavior);
                 this.behavior.init(this);
             }
         });

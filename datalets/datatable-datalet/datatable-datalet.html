@@ -28,7 +28,7 @@
 *
 -->
 
-<link rel="import" href="../base-ajax-json-jsonpath-datalet/base-ajax-json-jsonpath-datalet.html">
+<link rel="import" href="../base-ajax-json-alasql-datalet/base-ajax-json-alasql-datalet.html">
 
 <!--
 The `datatable-datalet` is a porting of Datatables JQuery library in a web component that has built up by using Polymer.
@@ -54,7 +54,7 @@ Example:
 
         <table id="datatable" class="stripe row-border" cellspacing="0" style="height: auto; width: auto;">
         </table>
-        <base-ajax-json-jsonpath-datalet data-url="{{dataUrl}}" fields="{{fields}}" data="{{data}}" title="{{title}}" description="{{description}}"></base-ajax-json-jsonpath-datalet>
+        <base-ajax-json-alasql-datalet data-url="{{dataUrl}}" fields="{{fields}}" data="{{data}}" title="{{title}}" description="{{description}}"></base-ajax-json-alasql-datalet>
     </template>
 
     <script type="text/javascript" src="js/DataTables/datatables.js"></script>
@@ -83,35 +83,8 @@ Example:
                 }
                 html += '</tbody>';
 
-
-//                if(!this.data || this.data[0] == undefined) return;
-//                html = "";
-//                html += '<thead>'+
-//                           '<tr>';
-//                for(var x = 0; x<this.data.length; x++){
-//                   html += '<th>' + this.data[x].name + '</th>';
-//                }
-//                html +=  '</tr>' +
-//                         '</thead>' +
-//                         '<tfoot>' +
-//                         '<tr>';
-//                for(var x = 0; x<this.data.length; x++){
-//                    html += '<th>' + this.data[x].name + '</th>';
-//                }
-//                html += '</tr>' +
-//                        '</tfoot>' +
-//                        '<tbody>';
-//                for(var i = 0; i<this.data[0].data.length; i++){
-//                    html += '<tr>';
-//                    for(var x = 0; x<this.data.length; x++){
-//                      html += '<td>' + this.data[x].data[i] + '</td>';
-//                    }
-//                    html += '</tr>';
-//                }
-//                html += '</tbody>';
-
                 $(this._component.$.datatable).html(html);
-                $(this._component.$.datatable).DataTable();
+                $(this._component.$.datatable).DataTable({"order": []});
             }
         };
 
@@ -133,7 +106,7 @@ Example:
             },
 
             ready: function(){
-                this.behavior =  $.extend(true, {}, BaseDataletBehavior, WorkcycleBehavior, AjaxJsonJsonPathBehavior, DatatableBehavior);
+                this.behavior =  $.extend(true, {}, BaseDataletBehavior, WorkcycleBehavior, AjaxJsonAlasqlBehavior, DatatableBehavior);
                 this.async(function(){this.behavior.init(this)},0);
             }
         });

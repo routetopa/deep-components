@@ -29,7 +29,7 @@
 *
 -->
 
-<link rel="import" href="../base-ajax-json-jsonpath-datalet/base-ajax-json-jsonpath-datalet.html">
+<link rel="import" href="../base-ajax-json-alasql-datalet/base-ajax-json-alasql-datalet.html">
 
 <!--
 The `highcharts-datalet` uses the base-ajax-json-jsonpath-datalet as data retriving and selection mechanism. It defines the common properties
@@ -57,11 +57,12 @@ Example :
 
     <template>
         <div id="container" style="width:auto; height:auto;"></div>
-        <base-ajax-json-jsonpath-datalet data-url="{{dataUrl}}" fields="{{fields}}" data="{{data}}" title="{{title}}" description="{{description}}"></base-ajax-json-jsonpath-datalet>
+        <base-ajax-json-alasql-datalet data-url="{{dataUrl}}" fields="{{fields}}" data="{{data}}" title="{{title}}" description="{{description}}"></base-ajax-json-alasql-datalet>
     </template>
 
     <script src="static/js/highcharts.js"></script>
     <script src="static/js/exporting.js"></script>
+    <script src="themes/themes.js"></script>
 
     <script>
         var HighchartsBehavior = {
@@ -87,24 +88,24 @@ Example :
             /**
              * Normalizes a number in agreement with javascript's conventions. Delete all NaN characters. Exception: number representing lat & long remain unchanged.
              */
-            jNumConverter: function(num) {
-                //lat-long
-                if(num.charAt(num.length-7) == "." && (num.match(/[\.,]/g) || []).length == 1)
-                    return num;
-
-                var jNum = "";
-                for (var i = 0; i < num.length; i++) {
-                    if(num[i].match(/[\.,]/g))
-                        if (i == num.length - 3)
-                            jNum += ".";
-                        else
-                            ;
-                    else if (!isNaN(num[i]))
-                        jNum += num[i];
-                }
-
-                return jNum;
-            },
+//            jNumConverter: function(num) {
+//                //lat-long
+//                if(num.charAt(num.length-7) == "." && (num.match(/[\.,]/g) || []).length == 1)
+//                    return num;
+//
+//                var jNum = "";
+//                for (var i = 0; i < num.length; i++) {
+//                    if(num[i].match(/[\.,]/g))
+//                        if (i == num.length - 3)
+//                            jNum += ".";
+//                        else
+//                            ;
+//                    else if (!isNaN(num[i]))
+//                        jNum += num[i];
+//                }
+//
+//                return jNum;
+//            },
             /**
              * Populate the categories and the series array.
              *
@@ -121,16 +122,16 @@ Example :
                 for (var i = 1; i < this.data.length; i++)
                 {
 
-                    this.data[i].data.every(function (element, index, array) {
-                        try {
-                            var e = HighchartsBehavior.jNumConverter(element);
-                            (isNaN(element)) ? array[index] = parseFloat(HighchartsBehavior.jNumConverter(element)) :
-                                    array[index] = parseFloat(element);
-                        }catch(e){
-                            //console.log("Parsing data error. Highchart-datalet.selectData");
-                        }
-                        return true;
-                    });
+//                    this.data[i].data.every(function (element, index, array) {
+//                        try {
+//                            var e = HighchartsBehavior.jNumConverter(element);
+//                            (isNaN(element)) ? array[index] = parseFloat(HighchartsBehavior.jNumConverter(element)) :
+//                                    array[index] = parseFloat(element);
+//                        }catch(e){
+//                            //console.log("Parsing data error. Highchart-datalet.selectData");
+//                        }
+//                        return true;
+//                    });
 
                     this.properties.series.value.push(this.data[i]);
                 }
@@ -155,7 +156,7 @@ Example :
 
         };
 
-        var HighchartsComponentBehavior = $.extend(true, {}, BaseDataletBehavior, WorkcycleBehavior, AjaxJsonJsonPathBehavior, HighchartsBehavior);
+        var HighchartsComponentBehavior = $.extend(true, {}, BaseDataletBehavior, WorkcycleBehavior, AjaxJsonAlasqlBehavior, HighchartsBehavior);
 
         HighchartsDatalet = Polymer({
             is : 'highcharts-datalet'

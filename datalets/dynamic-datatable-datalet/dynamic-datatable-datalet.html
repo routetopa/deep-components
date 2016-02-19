@@ -28,7 +28,7 @@
 *
 -->
 
-<link rel="import" href="../base-ajax-json-jsonpath-datalet/base-ajax-json-jsonpath-datalet.html">
+<link rel="import" href="../base-ajax-json-alasql-datalet/base-ajax-json-alasql-datalet.html">
 
 <!--
 The `datatable-datalet` is a porting of Datatables JQuery library in a web component that has built up by using Polymer.
@@ -54,7 +54,7 @@ Example:
 
         <span id="_span"></span>
 
-        <base-ajax-json-jsonpath-datalet data-url="{{dataUrl}}" fields="{{fields}}" data="{{data}}"></base-ajax-json-jsonpath-datalet>
+        <base-ajax-json-alasql-datalet data-url="{{dataUrl}}" fields="{{fields}}" data="{{data}}"></base-ajax-json-alasql-datalet>
     </template>
 
     <script type="text/javascript" src="js/DataTables/datatables.js"></script>
@@ -84,7 +84,7 @@ Example:
                 html += '</tbody></table>';
 
                 $(this._component.$._span).html(html);
-                $(this._component.$._span.childNodes[0]).DataTable();
+                $(this._component.$._span.childNodes[0]).DataTable({"order": []});
             },
 
             _destroy: function(){
@@ -118,12 +118,16 @@ Example:
                     observer: '_reload'
                 }
 
+//                filters : {
+//                    observer: '_reload'
+//                }
+
             },
 
             ready: function(){
                 $(this).find("base-datalet")[0].hideFooter();
 
-                this.behavior =  $.extend(true, {}, BaseDataletBehavior, WorkcycleBehavior, AjaxJsonJsonPathBehavior, DynamicDatatableBehavior);
+                this.behavior =  $.extend(true, {}, BaseDataletBehavior, WorkcycleBehavior, AjaxJsonAlasqlBehavior, DynamicDatatableBehavior);
                 this.async(function(){this.behavior.init(this)}, 0);
             },
 

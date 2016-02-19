@@ -45,6 +45,7 @@ var AjaxJsonAlasqlBehavior = {
             type: Object,
             value: {}
         }
+
     },
 
     /**
@@ -74,23 +75,6 @@ var AjaxJsonAlasqlBehavior = {
         this.properties.json_results.value = e;
         this.runWorkcycle();
     },
-    /**
-     * Check if input field(passed as an array of separated value that mach with field path in received object) is an array of objet.
-     * The field is checked on current json object retrieved from the async request.
-     *
-     * @param field
-     */
-    isFieldArray : function(field){
-       if(field.length == 0) return false;
-
-       var obj = this.properties.json_results.value[field[0]];
-       for(var i=1; i < field.length; i++){
-          obj = (obj.constructor == Array) ? obj[0][field[i]] : obj[field[i]];
-       }
-
-       if(obj == null) return false;
-       return (obj.constructor === Array && obj[0].constructor == Object) ? true : false;
-    },
 
     /**
      * selectData built a JSONPATH query based on the user selected fields then extract data from the JSON response.
@@ -99,88 +83,97 @@ var AjaxJsonAlasqlBehavior = {
      * @method selectData
      */
     selectData : function() {
-
-        this.data = [];
+        var jsonData = [this.properties.json_results.value];
 
         this._component.fields = JSON.parse(this._component.fields);
 
-        var jsonData = [this.properties.json_results.value];
+        var fields = [];
+        for (var i=0; i < this._component.fields.length; i++){
+            fields.push("["+this._fieldName(this._component.fields[i])+"]");
+        }
 
-        var res = alasql('SELECT result->records FROM ?', [jsonData]);
+        //console.log(fields);
 
-        var records = res[0]["result->records"];
+        var path = this._path(this._component.fields[0]);
+        var filters = JSON.parse(this._component.getAttribute("filters"));
+        var aggregators = JSON.parse(this._component.getAttribute("aggregators"));
+        var orders = JSON.parse(this._component.getAttribute("orders"));
 
-        var obj = alasql('SELECT Lat, COUNT(Lng) as CLng \
-        FROM ? \
-        WHERE Lat >= 53.298164\
-        GROUP BY Lat \
-        ORDER BY Lng ASC', [records]);
-        console.log(obj);
-        console.log(JSON.stringify(obj));
+        //WHERE
+        var where = "";
+        if(filters && filters.length) {
+            where = "WHERE ";
+            for (var i=0; i < filters.length; i++) {
+                if(filters[i]["operation"] == "contains")
+                    where += "[" + filters[i]["field"] + "] like '%" + filters[i]["value"] + "%' AND ";
+                else if(filters[i]["operation"] == "start")
+                    where += "[" + filters[i]["field"] + "] like '" + filters[i]["value"] + "%' AND ";
+                else if(filters[i]["operation"] == "ends")
+                    where += "[" + filters[i]["field"] + "] like '%" + filters[i]["value"] + "' AND ";
+                else
+                    where += "[" + filters[i]["field"] + "] " + filters[i]["operation"] + " " + filters[i]["value"] + " AND ";
+            }
+            where = where.slice(0, -5);
+        }
 
-        this.pushData(obj);
+        //ORDER BY
+        var orderBy = "";
+        if(orders && orders.length) {
+            orderBy = "ORDER BY ";
+            for (var i = 0; i < orders.length; i++)
+                orderBy += "[" + orders[i]["field"] + "] " + orders[i]["operation"] + ", ";
+            orderBy = orderBy.slice(0, -2);
+        }
 
-        //var jsonArray = [
-        //    { "user": { "id": 100, "screen_name": "pippo" }, "text": "bla bla" , "num": 5},
-        //    { "user": { "id": 130, "screen_name": "pippo" }, "text": "gigggggggggginho", "num": 2 },
-        //    { "user": { "id": 155, "screen_name": "ciao" }, "text": "kabushiki kaisha", "num": 44 },
-        //    { "user": { "id": 301, "screen_name": "wow" }, "text": "halo reach", "num": 51 }
-        //];
-        //
-        //var data=[
-        //    { "category" : "Search Engines", "hits" : 5, "bytes" : 50189 },
-        //    { "category" : "Content Server", "hits" : 10, "bytes" : 17308 },
-        //    { "category" : "Content Server", "hits" : 1, "bytes" : 47412 },
-        //    { "category" : "Search Engines", "hits" : 1, "bytes" : 7601 },
-        //    { "category" : "Business", "hits" : 1, "bytes" : 2847 },
-        //    { "category" : "Content Server", "hits" : 1, "bytes" : 24210 },
-        //    { "category" : "Internet Services", "hits" : 1, "bytes" : 3690 },
-        //    { "category" : "Search Engines", "hits" : 6, "bytes" : 613036 },
-        //    { "category" : "Search Engines", "hits" : 1, "bytes" : 2858 }
-        //];
-        //
-        //var res = alasql('SELECT category, sum(hits) AS hits, sum(bytes) as bytes \
-        //FROM ? \
-        //GROUP BY category \
-        //ORDER BY bytes DESC',[data]);
-        //
-        //
-        //var res = alasql('SELECT user->screen_name as name, user->id as id, text, num \
-        //FROM ? ORDER BY num DESC', [jsonArray]);
+        //SELECT;
+        var select = "SELECT ";
+        for (var i = 0; i < fields.length; i++)
+            select += fields[i] + ", ";
+        select = select.slice(0, -2);
 
-        //jsonPath
+        //GROUP BY
+        var groupBy = "";
+        if(aggregators && aggregators.length) {
+            groupBy = "GROUP BY [" + aggregators[0]["field"] + "]";
+            select = "SELECT ["  + aggregators[0]["field"] + "]";
+            for (var i = 1; i < aggregators.length; i++)
+                select += ", " + aggregators[i]["operation"] + "([" + aggregators[i]["field"] + "]) as [" + aggregators[i]["field"] + "]";
+        }
 
-            //for (var i = 0; i < this._component.fields.length; i++) {
-            //    var query = "$";
-            //    var query_elements = this._component.fields[i].split(',');
-            //    for (var j = 0; j < query_elements.length; j++) {
-            //        query += "['" + query_elements[j] + "']";
-            //        if (this.isFieldArray(query_elements.slice(0, j + 1))) {
-            //            query += "[*]";
-            //        }
-            //    }
-            //    this.data.push({
-            //        name: query_elements[query_elements.length - 1],
-            //        data: jsonPath(this.properties.json_results.value, query)
-            //    });
-            //}
+        //QUERY
+        console.log('SELECT '+ path +' FROM ?');
+        var res = alasql("SELECT "+ path +" FROM ?", [jsonData]);
 
-        this.deleteWaitImage();
+        var records = res[0][path];
+
+        console.log(select + ' FROM ? ' + where + ' ' + groupBy + ' ' + orderBy + '');
+        var obj = alasql(select + " FROM ? " + where + " " + groupBy + " " + orderBy + "", [records]);
+
+        //var query = "SELECT [Lat], COUNT([Lng]) as Lng FROM ?  GROUP BY [Lat] ORDER BY Lng";
+        //console.log(query);
+        //var obj = alasql(query, [records]);
+
+        this._pushData(obj);
+
+        this._deleteWaitImage();
     },
 
-    pushData : function(obj) {
-        //qui è possibile modificare valori nulli o errati
+    _pushData : function(obj) {
+        this.data = [];
 
         for (var key in Object.keys(obj[0])){
 
             var name = Object.keys(obj[0])[key];
             var data = [];
+            var value;
 
             for (var i in obj) {
                 data.push(obj[i][name]);
+                //value = obj[i][name];
+                //if(!isNaN(value) && value != "")
+                //    value = parseFloat(obj[i][name]);
+                //data.push(value);
             }
-
-            //console.log(data);//attenzione i dati vengono ORDINATI ALTROVE!
 
             this.data.push({
                 name: name,
@@ -189,10 +182,19 @@ var AjaxJsonAlasqlBehavior = {
         }
     },
 
+    _fieldName : function(field) {
+        return field.substring(field.lastIndexOf(",")+1, field.length);
+    },
+
+    _path : function(field) {
+        return field.substring(0, field.lastIndexOf(",")).replace(",", "->");
+    },
+
     /**
      * Delete a image after loading a datalet
      */
-    deleteWaitImage : function() {
+    _deleteWaitImage : function() {
         $("img[src$='spin.svg']").remove();
     }
+
 };

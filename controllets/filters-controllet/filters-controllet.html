@@ -168,7 +168,7 @@
 
                 operations : {
                     type : Array,
-                    value : ["=", "!=", ">", ">=", "<", "<=", "like"]
+                    value : ["=", "!=", ">", ">=", "<", "<=", "contains", "start", "ends"]
                 },
 
                 filters : {
@@ -185,6 +185,10 @@
 
             ready : function() {
                 $(this.$.filters_panel).perfectScrollbar();
+            },
+
+            attached : function() {
+//                this.fire('filters-controllet_filters', {filters: this.filters});
             },
 
             setFields : function(fields) {
@@ -215,13 +219,16 @@
             },
 
             _addFilter : function() {
+//                var field = "["+this.$.filter_field.value+"]";
                 var field = this.$.filter_field.value;
                 var operation = this.$.filter_operation.value;
                 var value = this.$.filter_value.value;
 
                 var filters = this.filters;
-                filters.push({field: field, operation: operation, value: value});
+                filters.push({"field": field, "operation": operation, "value": value});
                 this.filters = this._copy(filters);
+
+                this.fire('filters-controllet_filters', {filters: this.filters});
             },
 
             _deleteFilter : function(e) {
@@ -230,6 +237,8 @@
                 var filters = this.filters;
                 filters.splice(index, 1);
                 this.filters = this._copy(filters);
+
+                this.fire('filters-controllet_filters', {filters: this.filters});
             },
 
             _copy : function(o) {

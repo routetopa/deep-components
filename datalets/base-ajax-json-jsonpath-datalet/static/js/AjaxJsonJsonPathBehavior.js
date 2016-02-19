@@ -121,13 +121,13 @@ var AjaxJsonJsonPathBehavior = {
                 data: jsonPath(this.properties.json_results.value, query)
             });
         }
-        this.deleteWaitImage();
+        this._deleteWaitImage();
     },
 
     /**
      * Delete a image after loading a datalet
      */
-    deleteWaitImage : function() {
+    _deleteWaitImage : function() {
         $("img[src$='spin.svg']").remove();
     }
 };
