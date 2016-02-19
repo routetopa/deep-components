@@ -106,7 +106,7 @@
 
         <div id="filters_container">
 
-            <div id="filters_header" class="filters_header" on-click="_showFiltersPanel"><span id="filters">ADD FILTERS</span></div>
+            <div id="filters_header" class="filters_header" on-click="_showFiltersPanel"><span id="filters"><span id="addFilters"></span></span></div>
 
             <div id="filters_panel">
 
@@ -116,7 +116,8 @@
                             <paper-dropdown-menu id="filter_field" label="Field">
                                 <paper-menu id="filter_field_menu" class="dropdown-content">
                                     <template is="dom-repeat" items={{fields}}>
-                                        <paper-item id={{index}} on-tap="">{{_fieldName(item)}}</paper-item>
+                                        <paper-item id={{index}}>{{_fieldName(item)}}</paper-item>
+                                        <!--on-tap=""-->
                                     </template>
                                 </paper-menu>
                             </paper-dropdown-menu>
@@ -125,7 +126,7 @@
                             <paper-dropdown-menu id="filter_operation" label="Operation">
                                 <paper-menu id="filter_operation_menu" class="dropdown-content">
                                     <template is="dom-repeat" items={{operations}}>
-                                        <paper-item id={{index}} on-tap="">{{item}}</paper-item>
+                                        <paper-item id={{index}}>{{_getOperationlName(item)}}</paper-item>
                                     </template>
                                 </paper-menu>
                             </paper-dropdown-menu>
@@ -187,12 +188,23 @@
                 $(this.$.filters_panel).perfectScrollbar();
             },
 
+            attached : function() {
+                this._translate();
+            },
+
             setFields : function(fields) {
                 this.fields = this._copy(fields);
             },
 
             getFilters : function() {
                 return this.filters;
+            },
+
+            _translate : function() {
+                this.$.addFilters.innerHTML = ln["addFilters_" + ln["localization"]];
+                this.$.filter_field.setAttribute("label", ln["filterField_" + ln["localization"]]);
+                this.$.filter_operation.setAttribute("label", ln["filterOperation_" + ln["localization"]]);
+                this.$.filter_value.setAttribute("label", ln["filterValue_" + ln["localization"]]);
             },
 
             _fieldName : function(field) {
@@ -215,19 +227,21 @@
             },
 
             _addFilter : function() {
-                var field = this.$.filter_field.value;
-                var operation = this.$.filter_operation.value;
-                var value = this.$.filter_value.value;
+                if (this.$.filter_field.selectedItem && this.$.filter_operation_menu.selectedItem && this.$.filter_value.value != "" && !this.$.filter_value.invalid) {
+                    var field = this.$.filter_field.value;
+                    var operation = this.$.filter_operation.value;
+                    var value = this.$.filter_value.value;
 
-                var filters = this.filters;
-                filters.push({"field": field, "operation": operation, "value": value});
-                this.filters = this._copy(filters);
+                    var filters = this.filters;
+                    filters.push({"field": field, "operation": operation, "value": value});
+                    this.filters = this._copy(filters);
 
-                this.$.filter_field_menu.select(-1);
-                this.$.filter_operation_menu.select(-1);
-                this.$.filter_value.value = "";
+                    this.$.filter_field_menu.select(-1);
+                    this.$.filter_operation_menu.select(-1);
+                    this.$.filter_value.value = "";
 
-                this.fire('filters-controllet_filters', {filters: this.filters});
+                    this.fire('filters-controllet_filters', {filters: this.filters});
+                }
             },
 
             _deleteFilter : function(e) {
@@ -238,6 +252,16 @@
                 this.filters = this._copy(filters);
 
                 this.fire('filters-controllet_filters', {filters: this.filters});
+            },
+
+            _getOperationlName: function(operation) {
+                if(operation.indexOf("contains") > -1)
+                    return ln["contains_" + ln["localization"]];
+                if(operation.indexOf("start") > -1)
+                    return ln["start_" + ln["localization"]];
+                if(operation.indexOf("ends") > -1)
+                    return ln["ends_" + ln["localization"]];
+                return operation;
             },
 
             _copy : function(o) {

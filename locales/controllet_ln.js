@@ -28,6 +28,15 @@ ln["dataletPreview_it"] = "ANTEPRIMA";
 ln["addDatalet_it"] = "AGGIUNGI";
 ln["modifyDatalet_it"] = "MODIFICA";
 
+ln["addFilters_en"] = "ADD FILTERS";
+ln["filterField_en"] = "Field";
+ln["filterOperation_en"] = "Operation";
+ln["filterValue_en"] = "Value";
+ln["contains_en"] = "contains";
+ln["start_en"] = "start";
+ln["ends_en"] = "ends";
+
+
 ln["datatable_it"] = "tabella";
 ln["barchart_it"] = "bar-chart";
 ln["columnchart_it"] = "column-chart";
