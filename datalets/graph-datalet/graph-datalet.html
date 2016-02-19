@@ -116,7 +116,7 @@ Example:
                  */
                 graph : {
                     type : Object,
-                    value : undefined
+                    value : {}
                 },
 
                 gnodes : {
@@ -373,6 +373,15 @@ Example:
                     this.mouseout();
             },
 
+            init : function(){
+
+                if(this.graph.nodes.length > 0){
+                    this.graph.nodes[0].x = this.width / 2;
+                    this.graph.nodes[0].y = this.height / 8;
+                    this.buildGraph();
+                }
+            },
+
             /**
              * It is called after the element’s template has been stamped and all elements inside the element’s local
              * DOM have been configured (with values bound from parents, deserialized attributes, or else default values)
@@ -395,12 +404,6 @@ Example:
                         .attr("pointer-events", "all")
                         .attr("style", "transform:translate(0px)")
                         .style("position", "absolute");
-
-                if(this.graph.nodes.length > 0){
-                    this.graph.nodes[0].x = this.width / 2;
-                    this.graph.nodes[0].y = this.height / 8;
-                    this.buildGraph();
-                }
             }
         });
     </script>
