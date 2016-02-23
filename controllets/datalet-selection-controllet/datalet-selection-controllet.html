@@ -566,21 +566,47 @@
                 this.selectedDatalet = this.preselectedDatalet;
                 this.selectedFields = this._copy(this.fields);
 
+
+//                this.params["filters"] = JSON.stringify(this.filters);
+//                this.params["aggregators"] = JSON.stringify(this.aggregators);
+//                this.params["orders"] = JSON.stringify(this.orders);
+
+//                this.filters = JSON.parse(this.dataletPreset["filters"]);/*no?*/
+//                this.aggregators = JSON.parse(this.dataletPreset["aggregators"]);
+//                this.orders = JSON.parse(this.dataletPreset["orders"]);
+
+                /*sss*/
+
                 this.async(function() {
                     this.selectedFields = this._copy(this.fields);
 
-                    var inputs = document.getElementsByTagName("paper-dropdown-menu");
-                    for (var i = 0; i < inputs.length; i++)
-                        $(inputs[i]).find("paper-menu")[0].select(i);
+
 
                     //set info labels options
-                    var labels = this.$.datalet_selection_labels.querySelectorAll("paper-textarea");
-                    for (var i = 0; i < labels.length; i++)
-                        labels[i].value = this.dataletPreset[labels[i].label];
+                    var textarea = this.$.datalet_selection_labels.querySelectorAll("paper-textarea");
+                    textarea[0].value = this.dataletPreset["description"];
 
-                    var labels = this.$.datalet_selection_labels.querySelectorAll("paper-input");
-                    for (var i = 0; i < labels.length; i++)
-                        labels[i].value = this.dataletPreset[labels[i].label];
+                    var inputs = this.$.datalet_selection_labels.querySelectorAll("paper-input");
+                    inputs[0].value = this.dataletPreset["title"];
+
+                    for (var i = 1; i < inputs.length; i++)
+                        inputs[i].value = this.dataletPreset[this.labels[i-1].name];
+
+                    //set inputs --> prima apri GB e riempi CALCULATE e poi gli ORDERBY???
+                    var ddls = document.getElementsByTagName("paper-dropdown-menu");
+                    for (var i = 0; i < ddls.length; i++) {
+                        var id = ddls[i].id;
+                        if (!isNaN(id)) {
+//                            id = parseInt(id);
+                            $(ddls[i]).find("paper-menu")[0].select(id);
+                        }
+                        else if (id.indexOf("group_by") > -1) {
+                            ;
+                        }
+                        else if (id.indexOf("calculate") > -1) {
+                            ;
+                        }
+                    }
 
                     this.loadPreview = true;
                     this._loadDatalet(this.selectedFields);
@@ -747,7 +773,7 @@
                 }
             },
 
-            _updateParams : function(){
+            _updateParams : function(){/*sss*/
                 var textarea = this.$.datalet_selection_labels.querySelectorAll("paper-textarea");
                 this.params["description"] = textarea[0].value;
 
