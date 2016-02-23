@@ -87,57 +87,76 @@ var AjaxJsonAlasqlBehavior = {
 
         this._component.fields = JSON.parse(this._component.fields);
 
-        var fields = [];
-        for (var i=0; i < this._component.fields.length; i++){
-            fields.push("["+this._fieldName(this._component.fields[i])+"]");
-        }
+        var provider = this._getProvider(this._component.fields[0]);
 
-        //console.log(fields);
-
-        var path = this._path(this._component.fields[0]);
         var filters = JSON.parse(this._component.getAttribute("filters"));
         var aggregators = JSON.parse(this._component.getAttribute("aggregators"));
         var orders = JSON.parse(this._component.getAttribute("orders"));
 
+        var path = this._path(this._component.fields[0], provider);
+
+        var fields = [];
+        for (var i=0; i < this._component.fields.length; i++)
+            fields.push(this._fieldName(this._component.fields[i], provider));
+
+
+
         //WHERE
         var where = "";
         if(filters && filters.length) {
+
+            for (var i=0; i < filters.length; i++)
+                filters[i]["field"] = this._fieldName(filters[i]["field"], provider);
+
             where = "WHERE ";
             for (var i=0; i < filters.length; i++) {
                 if(filters[i]["operation"] == "contains")
-                    where += "[" + filters[i]["field"] + "] like '%" + filters[i]["value"] + "%' AND ";
+                    where += filters[i]["field"] + " like '%" + filters[i]["value"] + "%' AND ";
                 else if(filters[i]["operation"] == "start")
-                    where += "[" + filters[i]["field"] + "] like '" + filters[i]["value"] + "%' AND ";
+                    where += filters[i]["field"] + " like '" + filters[i]["value"] + "%' AND ";
                 else if(filters[i]["operation"] == "ends")
-                    where += "[" + filters[i]["field"] + "] like '%" + filters[i]["value"] + "' AND ";
+                    where += filters[i]["field"] + " like '%" + filters[i]["value"] + "' AND ";
                 else
-                    where += "[" + filters[i]["field"] + "] " + filters[i]["operation"] + " " + filters[i]["value"] + " AND ";
+                    where += filters[i]["field"] + " " + filters[i]["operation"] + " " + filters[i]["value"] + " AND ";
             }
             where = where.slice(0, -5);
         }
 
+        provider="";
+
         //ORDER BY
         var orderBy = "";
         if(orders && orders.length) {
+
+            for (var i=0; i < orders.length; i++)
+                orders[i]["field"] = this._fieldName(orders[i]["field"], provider);
+
             orderBy = "ORDER BY ";
             for (var i = 0; i < orders.length; i++)
-                orderBy += "[" + orders[i]["field"] + "] " + orders[i]["operation"] + ", ";
+                orderBy += orders[i]["field"] + " " + orders[i]["operation"] + ", ";
             orderBy = orderBy.slice(0, -2);
         }
 
         //SELECT;
         var select = "SELECT ";
         for (var i = 0; i < fields.length; i++)
-            select += fields[i] + ", ";
+            //select += fields[i] + ", ";
+            select += fields[i] + " as " + this._fieldName(this._component.fields[i], "") + ", ";
         select = select.slice(0, -2);
+
+        var pureSelect = select;
 
         //GROUP BY
         var groupBy = "";
         if(aggregators && aggregators.length) {
-            groupBy = "GROUP BY [" + aggregators[0]["field"] + "]";
-            select = "SELECT ["  + aggregators[0]["field"] + "]";
+
+            for (var i=0; i < aggregators.length; i++)
+                aggregators[i]["field"] = this._fieldName(aggregators[i]["field"], provider);
+
+            groupBy = "GROUP BY " + aggregators[0]["field"];
+            select = "SELECT "  + aggregators[0]["field"];
             for (var i = 1; i < aggregators.length; i++)
-                select += ", " + aggregators[i]["operation"] + "([" + aggregators[i]["field"] + "]) as [" + aggregators[i]["field"] + "]";
+                select += ", " + aggregators[i]["operation"] + "(" + aggregators[i]["field"] + ") as " + aggregators[i]["field"];
         }
 
         //QUERY
@@ -146,14 +165,22 @@ var AjaxJsonAlasqlBehavior = {
 
         var records = res[0][path];
 
-        console.log(select + ' FROM ? ' + where + ' ' + groupBy + ' ' + orderBy + '');
-        var obj = alasql(select + " FROM ? " + where + " " + groupBy + " " + orderBy + "", [records]);
+        //console.log(select + ' FROM ? ' + where + ' ' + groupBy + ' ' + orderBy + '');
+        //var obj = alasql(select + " FROM ? " + where + " " + groupBy + " " + orderBy + "", [records]);
 
-        //var query = "SELECT [Lat], COUNT([Lng]) as Lng FROM ?  GROUP BY [Lat] ORDER BY Lng";
-        //console.log(query);
-        //var obj = alasql(query, [records]);
+        console.log(pureSelect + ' FROM ? ' + where);
+        var obj = alasql(pureSelect + " FROM ? " + where, [records]);
 
-        this._pushData(obj);
+        if (groupBy != "") {
+            console.log(select + ' FROM ? ' + groupBy + ' ' + orderBy + '');
+            var obj = alasql(select + " FROM ? " + groupBy + " " + orderBy + "", [obj]);
+        }
+
+        //PUSH DATA
+        if(!obj || obj.length == 0)
+            this.data = []
+        else
+            this._pushData(obj);
 
         this._deleteWaitImage();
     },
@@ -182,12 +209,37 @@ var AjaxJsonAlasqlBehavior = {
         }
     },
 
-    _fieldName : function(field) {
-        return field.substring(field.lastIndexOf(",")+1, field.length);
+    _getProvider : function(field) {
+        if(field.indexOf("result,records") > -1)
+            return "ckan";
+        else if(field.indexOf("records,fields") > -1)
+            return "openDataSoft";
+        else
+            return "provider";
     },
 
-    _path : function(field) {
-        return field.substring(0, field.lastIndexOf(",")).replace(",", "->");
+    _fieldName : function(field, provider) {
+        if(provider.indexOf("ckan") > -1) {
+            return "[" + field.substring(field.lastIndexOf(",") + 1, field.length) + "]";
+        }
+        else if(provider.indexOf("openDataSoft") > -1) {
+            return "fields->["+field.substring(field.lastIndexOf(",")+1, field.length)+"]";
+        }
+        else {
+            return "["+field.substring(field.lastIndexOf(",")+1, field.length)+"]";
+        }
+    },
+
+    _path : function(field, provider) {
+        if(provider.indexOf("ckan") > -1) {
+            return "result->records"
+        }
+        else if(provider.indexOf("openDataSoft") > -1) {
+            return "records";
+        }
+        else {
+            return field.substring(0, field.lastIndexOf(",")).replace(",", "->");
+        }
     },
 
     /**

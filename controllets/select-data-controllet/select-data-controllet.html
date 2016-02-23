@@ -152,11 +152,19 @@
             },
 
             _filterJson : function(data){
+                //ckan
                 if(data.result != undefined && data.result.resource_id != undefined) {
                     this.rootName = "result,records"
                     return data.result.records;
                 }
-                return data;
+                //openDataSoft
+                else if(data.parameters != undefined && data.parameters.dataset != undefined) {
+                    this.rootName = "records,fields";
+                    return data.records[0].fields;
+                }
+                else{
+                    return data;
+                }
             },
 
             _updateSelectedFields : function() {

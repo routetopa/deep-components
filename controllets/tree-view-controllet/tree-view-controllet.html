@@ -135,7 +135,7 @@
                         list.push(this._createTree(nodeName+","+child, node[0][child]));
                 else
                     for(var child in node)
-                        list.push(this._createTree(child, node[child]));
+                        list.push(this._createTree(nodeName+","+child, node[child]));
 
                 return this._paper_submenu(nodeName, list);
             },
