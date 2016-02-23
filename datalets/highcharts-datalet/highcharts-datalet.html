@@ -88,24 +88,26 @@ Example :
             /**
              * Normalizes a number in agreement with javascript's conventions. Delete all NaN characters. Exception: number representing lat & long remain unchanged.
              */
-//            jNumConverter: function(num) {
-//                //lat-long
-//                if(num.charAt(num.length-7) == "." && (num.match(/[\.,]/g) || []).length == 1)
-//                    return num;
-//
-//                var jNum = "";
-//                for (var i = 0; i < num.length; i++) {
-//                    if(num[i].match(/[\.,]/g))
-//                        if (i == num.length - 3)
-//                            jNum += ".";
-//                        else
-//                            ;
-//                    else if (!isNaN(num[i]))
-//                        jNum += num[i];
-//                }
-//
-//                return jNum;
-//            },
+            jNumConverter: function(num) {
+                //lat-long
+                if(num.charAt(num.length-7) == "." && (num.match(/[\.,]/g) || []).length == 1)
+                    return num;
+
+                num = num.replace(/[^0-9\.]/, '');
+
+                var jNum = "";
+                for (var i = 0; i < num.length; i++) {
+                    if(num[i].match(/[\.,]/g))
+                        if (i == num.length - 3)
+                            jNum += ".";
+                        else
+                            ;
+                    else if (!isNaN(num[i]))
+                        jNum += num[i];
+                }
+
+                return jNum;
+            },
             /**
              * Populate the categories and the series array.
              *
@@ -121,17 +123,16 @@ Example :
 
                 for (var i = 1; i < this.data.length; i++)
                 {
-
-//                    this.data[i].data.every(function (element, index, array) {
-//                        try {
-//                            var e = HighchartsBehavior.jNumConverter(element);
-//                            (isNaN(element)) ? array[index] = parseFloat(HighchartsBehavior.jNumConverter(element)) :
-//                                    array[index] = parseFloat(element);
-//                        }catch(e){
-//                            //console.log("Parsing data error. Highchart-datalet.selectData");
-//                        }
-//                        return true;
-//                    });
+                    this.data[i].data.every(function (element, index, array) {
+                        try {
+                            var e = HighchartsBehavior.jNumConverter(element);
+                            (isNaN(element)) ? array[index] = parseFloat(HighchartsBehavior.jNumConverter(element)) :
+                                    array[index] = parseFloat(element);
+                        }catch(e){
+                            //console.log("Parsing data error. Highchart-datalet.selectData");
+                        }
+                        return true;
+                    });
 
                     this.properties.series.value.push(this.data[i]);
                 }
