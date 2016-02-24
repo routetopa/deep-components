@@ -224,7 +224,7 @@
                 <div id="expert_container">
 
                     <div class="inputs">
-                        <paper-dropdown-menu id="group_by" label="GROUP BY">
+                        <paper-dropdown-menu id="group_by">
                             <paper-menu class="dropdown-content">
                                 <template is="dom-repeat" items={{selectedFields}}>
                                     <paper-item id={{index}} on-tap="_showGroupedFields">{{_fieldName(item)}}</paper-item>
@@ -238,15 +238,16 @@
 
                     <template is="dom-repeat" items="{{groupedFields}}">
                         <div class="inputs">
-                            <paper-dropdown-menu id="calculate_{{index}}" label="CALCULATE">
+                            <paper-dropdown-menu id="calculate_{{index}}" label="{{_calculateLabel()}}">
                                 <paper-menu class="dropdown-content">
-                                    <paper-item on-tap="_addGroupByInput">COUNT of {{_fieldName(item)}}</paper-item>
-                                    <paper-item on-tap="_addGroupByInput">SUM of {{_fieldName(item)}}</paper-item>
-                                    <paper-item on-tap="_addGroupByInput">MIN of {{_fieldName(item)}}</paper-item>
-                                    <paper-item on-tap="_addGroupByInput">MAX of {{_fieldName(item)}}</paper-item>
-                                    <paper-item on-tap="_addGroupByInput">AVG of {{_fieldName(item)}}</paper-item>
-                                    <paper-item on-tap="_addGroupByInput">FIRST of {{_fieldName(item)}}</paper-item>
-                                    <paper-item on-tap="_addGroupByInput">LAST of {{_fieldName(item)}}</paper-item>
+                                    <!--foreach functions-->
+                                    <paper-item id="0" on-tap="_addGroupByInput">{{_operationName(0)}} {{_fieldName(item)}}</paper-item>
+                                    <paper-item id="1" on-tap="_addGroupByInput">{{_operationName(1)}} {{_fieldName(item)}}</paper-item>
+                                    <paper-item id="2" on-tap="_addGroupByInput">{{_operationName(2)}} {{_fieldName(item)}}</paper-item>
+                                    <paper-item id="3" on-tap="_addGroupByInput">{{_operationName(3)}} {{_fieldName(item)}}</paper-item>
+                                    <paper-item id="4" on-tap="_addGroupByInput">{{_operationName(4)}} {{_fieldName(item)}}</paper-item>
+                                    <paper-item id="5" on-tap="_addGroupByInput">{{_operationName(5)}} {{_fieldName(item)}}</paper-item>
+                                    <paper-item id="6" on-tap="_addGroupByInput">{{_operationName(6)}} {{_fieldName(item)}}</paper-item>
                                 </paper-menu>
                             </paper-dropdown-menu>
                             <div class="info_button">
@@ -409,6 +410,11 @@
                     value : false
                 },
 
+                functions : {
+                    type  : Array,
+                    value : ["COUNT", "SUM", "MIN", "MAX", "AVG", "FIRST", "LAST"]
+                },
+
                 modify : {
                     type  : Boolean,
                     value : false
@@ -542,6 +548,7 @@
                 this.$.base_description.label = ln["description_" + ln["localization"]];
 
                 this.$.groupBy.innerHTML = ln["groupBy_" + ln["localization"]];
+                this.$.group_by.setAttribute("label", ln["groupBy_" + ln["localization"]]);
 
                 if(this.modify)
                     this.$.add_button.innerHTML = ln["modifyDatalet_" + ln["localization"]];
@@ -799,12 +806,14 @@
                         this.aggregators.push({"field": label, "operation": "GROUP BY"});
                     }
                     if(id.indexOf("calculate") > -1) {
-                        var label = $(ddls[i]).find("paper-menu")[0].selectedItem.textContent.trim();
-//                        var field = label.substring(label.lastIndexOf(" ")+1, label.length);
-                        var index = label.split(" ", 2).join(" ").length;
-                        var field = label.substring(index+1, label.length);
-                        var operation = label.substring(0, label.indexOf(" "));
-                        this.aggregators.push({"field": field, "operation": operation});
+                        var menu = $(ddls[i]).find("paper-menu")[0];
+                        var label = menu.selectedItem.textContent.trim();
+                        var index = menu.selectedItem.id;
+                        var ii = label.split(" ", 2).join(" ").length;
+                        //attenzione BUG --> non funziona se la traduzione non ha solo 1 spazio
+                        var field = label.substring(ii+1, label.length);
+//                        var operation = label.substring(0, label.indexOf(" "));
+                        this.aggregators.push({"field": field, "operation": this.functions[index]});
                     }
                 }
             },
@@ -914,6 +923,15 @@
                     return ln["Level" + "_" +ln["localization"]] + key.slice(-2);
                 }
 
+                return ln[key + "_" +ln["localization"]];
+            },
+
+            _calculateLabel: function() {
+                return ln["calculate" + "_" +ln["localization"]];
+            },
+
+            _operationName: function(index) {
+                var key = this.functions[index];
                 return ln[key + "_" +ln["localization"]];
             },
 
