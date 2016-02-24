@@ -79,8 +79,8 @@ Example:
                         text: this._component.title
                     },
                     xAxis: {
-//                        categories: this.properties.categories.value,
-                        categories: ['Cinesi', 'Albanesi', 'Rumeni', 'Pakistani', 'Marocchini', 'Altri stranieri'],
+                        categories: this.properties.categories.value,
+//                        categories: ['Cinesi', 'Albanesi', 'Rumeni', 'Pakistani', 'Marocchini', 'Altri stranieri'],
                         title: {
                             text: this._component.xAxisLabel
                         }
@@ -104,6 +104,10 @@ Example:
                                 enabled: true
                             }
                         }
+//
+//                        series: {
+//                            stacking: 'normal'
+//                        }
                     },
                     legend: {
                         layout: 'vertical',
@@ -119,23 +123,24 @@ Example:
                     credits: {
                         enabled: false
                     },
-//                    series: this.properties.series.value
-                     series: [{
-                         name: '2010',
-                         data: [107, 31, 635, 203, 2]
-                     }, {
-                         name: '2011',
-                         data: [1353, 156, 947, 408, 6]
-                     }, {
-                         name: '2012',
-                         data: [133, 156, 947, 408, 64]
-                     }, {
-                         name: '2013',
-                         data: [133, 156, 947, 48, 6]
-                     }, {
-                         name: '2014',
-                         data: [1052, 954, 4250, 740, 38]
-                     }]
+
+                    series: this.properties.series.value
+//                     series: [{
+//                         name: '2010',
+//                         data: [107, 31, 635, 203, 2]
+//                     }, {
+//                         name: '2011',
+//                         data: [1353, 156, 947, 408, 6]
+//                     }, {
+//                         name: '2012',
+//                         data: [133, 156, 947, 408, 64]
+//                     }, {
+//                         name: '2013',
+//                         data: [133, 156, 947, 48, 6]
+//                     }, {
+//                         name: '2014',
+//                         data: [1052, 954, 4250, 740, 38]
+//                     }]
                 });
 
 

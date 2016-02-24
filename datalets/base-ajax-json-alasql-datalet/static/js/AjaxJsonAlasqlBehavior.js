@@ -137,14 +137,33 @@ var AjaxJsonAlasqlBehavior = {
             orderBy = orderBy.slice(0, -2);
         }
 
-        //SELECT;
+        //SELECT
         var select = "SELECT ";
         for (var i = 0; i < fields.length; i++)
-            //select += fields[i] + ", ";
             select += fields[i] + " as " + this._fieldName(this._component.fields[i], "") + ", ";
         select = select.slice(0, -2);
 
         var pureSelect = select;
+
+        /**/
+        var res = alasql("SELECT "+ path +" FROM ?", [jsonData]);
+        var records = res[0][path];
+        var obj = alasql(pureSelect + " FROM ?", [records]);
+        //console.log(obj);
+
+        var select = "SELECT ";
+        for (var i = 0; i < fields.length; i++) {
+            var key = Object.keys(obj[0])[i];
+            var v = obj[0][key];
+            if (!isNaN(v))
+                select += fields[i] + "::NUMBER as " + this._fieldName(this._component.fields[i], "") + ", ";
+            else
+                select += fields[i] + " as " + this._fieldName(this._component.fields[i], "") + ", ";
+        }
+        select = select.slice(0, -2);
+
+        var pureSelect = select;
+        /**/
 
         //GROUP BY
         var groupBy = "";
