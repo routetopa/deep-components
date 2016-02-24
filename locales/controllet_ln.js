@@ -38,7 +38,8 @@ ln["ends_en"] = "ends with";
 ln["sortAscending_en"] = "sorted ascending";
 ln["sortDescending_en"] = "sorted descending";
 ln["unsort_en"] = "unsorted";
-ln["countOf_en"] = "COUNT of";
+//ln["countOf_en"] = "COUNT of";
+ln["groupBy_en"] = "GROUP BY";
 
 ln["datatable_it"] = "tabella";
 ln["barchart_it"] = "bar-chart";

@@ -229,7 +229,9 @@
             _addFilter : function() {
                 if (this.$.filter_field.selectedItem && this.$.filter_operation_menu.selectedItem && this.$.filter_value.value != "" && !this.$.filter_value.invalid) {
                     var field = this.$.filter_field.value;
-                    var operation = this.$.filter_operation.value;
+                    var id = this.$.filter_operation.selectedItem.id;
+                    var operation = this.operations[id];
+//                    var operation = this.$.filter_operation.value;
                     var value = this.$.filter_value.value;
 
                     var filters = this.filters;

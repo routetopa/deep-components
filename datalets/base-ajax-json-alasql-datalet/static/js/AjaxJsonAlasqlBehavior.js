@@ -117,7 +117,7 @@ var AjaxJsonAlasqlBehavior = {
                 else if(filters[i]["operation"] == "ends")
                     where += filters[i]["field"] + " like '%" + filters[i]["value"] + "' AND ";
                 else
-                    where += filters[i]["field"] + " " + filters[i]["operation"] + " " + filters[i]["value"] + " AND ";
+                    where += filters[i]["field"] + " " + filters[i]["operation"] + " '" + filters[i]["value"] + "' AND ";
             }
             where = where.slice(0, -5);
         }
