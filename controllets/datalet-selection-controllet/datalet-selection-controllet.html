@@ -232,7 +232,7 @@
                             </paper-menu>
                         </paper-dropdown-menu>
                         <div class="info_button">
-                            <paper-icon-button id="gb" on-click="_addOrder" icon="unfold-more" title="unsort"></paper-icon-button>
+                            <paper-icon-button id="gb" on-click="_addOrder" icon="unfold-more" title=""></paper-icon-button>
                         </div>
                     </div>
 
@@ -250,7 +250,7 @@
                                 </paper-menu>
                             </paper-dropdown-menu>
                             <div class="info_button">
-                                <paper-icon-button id={{_fieldName(item)}} on-click="_addOrder" icon="unfold-more" title="unsort"></paper-icon-button>
+                                <paper-icon-button id={{_fieldName(item)}} on-click="_addOrder" icon="unfold-more" title=""></paper-icon-button>
                             </div>
                         </div>
                     </template>
@@ -439,24 +439,34 @@
 
             _showGroupedFields : function(e) {
                 var index = e.target.id;
-                var isSelected = false;
                 var temp = [];
+
+//                var isSelected = false;
+//                for (var i = 0; i < this.selectedFields.length; i++) {
+//                    if (this.selectedFields[i]) {
+//                        if (this.selectedFields[i].indexOf(this.fields[index]) > -1) {
+//                            isSelected = true;
+//                        }
+//                        else {
+//                            temp.push(this.selectedFields[i]);
+//                        }
+//                    }
+//                }
+//
+//                if (isSelected)
+//                    this.groupedFields = this._copy(temp);
+//                else
+//                    this.groupedFields =[];
 
                 for (var i = 0; i < this.selectedFields.length; i++) {
                     if (this.selectedFields[i]) {
-                        if (this.selectedFields[i].indexOf(this.fields[index]) > -1) {
-                            isSelected = true;
-                        }
-                        else {
-                            temp.push(this.selectedFields[i])
+                        if (i != index) {
+                            temp.push(this.selectedFields[i]);
                         }
                     }
                 }
 
-                if (isSelected)
-                    this.groupedFields = this._copy(temp);
-                else
-                    this.groupedFields =[];
+                this.groupedFields = this._copy(temp);
 
                 this.async(function() {
                     var ddls = document.getElementsByTagName("paper-dropdown-menu");
@@ -566,21 +576,12 @@
                 this.selectedDatalet = this.preselectedDatalet;
                 this.selectedFields = this._copy(this.fields);
 
-
-//                this.params["filters"] = JSON.stringify(this.filters);
-//                this.params["aggregators"] = JSON.stringify(this.aggregators);
-//                this.params["orders"] = JSON.stringify(this.orders);
-
-//                this.filters = JSON.parse(this.dataletPreset["filters"]);/*no?*/
+//                this.filters = JSON.parse(this.dataletPreset["filters"]);
 //                this.aggregators = JSON.parse(this.dataletPreset["aggregators"]);
 //                this.orders = JSON.parse(this.dataletPreset["orders"]);
 
-                /*sss*/
-
                 this.async(function() {
                     this.selectedFields = this._copy(this.fields);
-
-
 
                     //set info labels options
                     var textarea = this.$.datalet_selection_labels.querySelectorAll("paper-textarea");
@@ -710,21 +711,21 @@
 
                 if(icon.indexOf("unfold-more") > -1){
                     t.setAttribute("icon", "expand-less");
-                    t.setAttribute("title", "sort ascending");
+                    t.setAttribute("title", ln["sortAscending_" + ln["localization"]]);
                     var orders = this.orders.filter(function (el) { return el.field !== name; });
                     orders.push({"field": name, "operation": "ASC"});
                     this.orders = this._copy(orders);
                 }
                 else if(icon.indexOf("expand-less") > -1){
                     t.setAttribute("icon", "expand-more");
-                    t.setAttribute("title", "sort descending");
+                    t.setAttribute("title", ln["sortDescending_" + ln["localization"]]);
                     var orders = this.orders.filter(function (el) { return el.field !== name; });
                     orders.push({"field": name, "operation": "DESC"});
                     this.orders = this._copy(orders);
                 }
                 else if(icon.indexOf("expand-more") > -1){
                     t.setAttribute("icon", "unfold-more");
-                    t.setAttribute("title", "unsort");
+                    t.setAttribute("title", ln["unsort_" + ln["localization"]]);
                     var orders = this.orders.filter(function (el) { return el.field !== name; });
                     this.orders = this._copy(orders);
                 }
@@ -773,7 +774,7 @@
                 }
             },
 
-            _updateParams : function(){/*sss*/
+            _updateParams : function(){
                 var textarea = this.$.datalet_selection_labels.querySelectorAll("paper-textarea");
                 this.params["description"] = textarea[0].value;
 
@@ -922,9 +923,6 @@
 
                 $("#datalet_selection_inputs").height(h);
                 $("#datalet_selection_labels").height(h);
-//                if(this.modify)
-//                    $("#datalet_selection_datalet").height(h-128);
-//                else
                 $("#datalet_selection_datalet").height(h);
             }
 

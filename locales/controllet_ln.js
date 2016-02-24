@@ -33,9 +33,12 @@ ln["filterField_en"] = "Field";
 ln["filterOperation_en"] = "Operation";
 ln["filterValue_en"] = "Value";
 ln["contains_en"] = "contains";
-ln["start_en"] = "start";
-ln["ends_en"] = "ends";
-
+ln["start_en"] = "start with";
+ln["ends_en"] = "ends with";
+ln["sortAscending_en"] = "sorted ascending";
+ln["sortDescending_en"] = "sorted descending";
+ln["unsort_en"] = "unsorted";
+ln["countOf_en"] = "COUNT of";
 
 ln["datatable_it"] = "tabella";
 ln["barchart_it"] = "bar-chart";
