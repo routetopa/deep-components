@@ -85,6 +85,7 @@ var AjaxJsonAlasqlBehavior = {
     selectData : function() {
         var jsonData = [this.properties.json_results.value];
 
+        //his._component.fields = (this._component.fields.constructor == Array) ? this._component.fields : JSON.parse(this._component.fields);
         this._component.fields = JSON.parse(this._component.fields);
 
         var provider = this._getProvider(this._component.fields[0]);
@@ -117,7 +118,7 @@ var AjaxJsonAlasqlBehavior = {
                 else if(filters[i]["operation"] == "ends")
                     where += filters[i]["field"] + " like '%" + filters[i]["value"] + "' AND ";
                 else
-                    where += filters[i]["field"] + " " + filters[i]["operation"] + " '" + filters[i]["value"] + "' AND ";
+                    where += filters[i]["field"] + " " + filters[i]["operation"] + " " + filters[i]["value"] + " AND ";
             }
             where = where.slice(0, -5);
         }
