@@ -305,7 +305,7 @@
                     $("#info_s_dataset")[0].setAttribute("disabled", "true");
                 }
 
-                this.dataUrl = e.detail.url;
+                this.dataUrl = this._addlimitUrl(e.detail.url);
                 this.selected=0;
             },
 
@@ -318,7 +318,7 @@
 
                 var dataset = this.filteredDatasets[parseInt(e.target.id)]
 
-                this.dataUrl = dataset.url;
+                this.dataUrl = this._addlimitUrl(dataset.url);
 
                 if(dataset.description != ""){
                     $("#info_dataset")[0].removeAttribute("disabled");
@@ -336,7 +336,7 @@
 
                 var dataset = this.suggestedDatasets[parseInt(e.target.id)]
 
-                this.dataUrl = dataset.url;
+                this.dataUrl = this._addlimitUrl(dataset.url);
 
                 if(dataset.description != ""){
                     $("#info_s_dataset")[0].removeAttribute("disabled");
@@ -361,6 +361,19 @@
 
             _fireDataUrl : function(){
                 this.fire('dataset-selection-controllet_data-url', {url: this.dataUrl});
+            },
+
+            _addlimitUrl : function(url){
+                //CKAN --> action no limit
+                if((url.indexOf("api/action") > -1) && !(url.indexOf("limit") > -1))
+                {
+                    url += "&limit=99999";
+                }
+                //OpenDataSoft --> action no limit
+                if((url.indexOf("api/records") > -1) && !(url.indexOf("rows") > -1)){
+                    url += "&rows=10000";
+                }
+                return url;
             },
 
             _resize : function(){
