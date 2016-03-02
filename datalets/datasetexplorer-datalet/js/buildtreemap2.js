@@ -50,7 +50,6 @@ function build2(root, meta, place_holder, select_listener, width, height) {
             var data = ["top", "", "#000000", "", "", "", ""];
             //data[3] = OW.getLanguageText('ode', 'back');
             data[3] = datasetexplorer_ln["ode+back_"+datasetexplorer_ln["ln"]];
-            console.log(data[3]);
 
             return "showTooltip(evt, '" + data + "')";
         })
@@ -80,7 +79,7 @@ function build2(root, meta, place_holder, select_listener, width, height) {
     // the children being overwritten when when layout is computed.
     function accumulate(d) {
         return (d._children = d.children)
-            ? d.value = d.children.reduce(function(p, v) { return p + accumulate(v); }, 5)
+            ? d.value = d.children.reduce(function(p, v) { return p + accumulate(v); }, 0)
             : d.value;
     }
 
@@ -141,6 +140,7 @@ function build2(root, meta, place_holder, select_listener, width, height) {
             .attr("onmousemove", function(d) {
                 //var data = ["lvl", "name", "color", "description", "logoUrl", "datasets", "datasetUrl"];
                 var data = ["", d.name, d.color, "", "", d.value, ""];
+                console.log(d);
                 data[2] = ["#000000"];
                 var id = d.name.split(':')[1];
                 if (d.depth == 1) {
