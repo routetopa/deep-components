@@ -84,7 +84,7 @@ Example:
                 html += '</tbody>';
 
                 $(this._component.$.datatable).html(html);
-                $(this._component.$.datatable).DataTable({"order": []});
+                $(this._component.$.datatable).DataTable({"order": [], destroy: true});
             }
         };
 
