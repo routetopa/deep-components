@@ -85,22 +85,26 @@ var AjaxJsonAlasqlBehavior = {
     selectData : function() {
         var jsonData = [this.properties.json_results.value];
 
-        //his._component.fields = (this._component.fields.constructor == Array) ? this._component.fields : JSON.parse(this._component.fields);
         this._component.fields = JSON.parse(this._component.fields);
-
-        var provider = this._getProvider(this._component.fields[0]);
 
         var filters = JSON.parse(this._component.getAttribute("filters"));
         var aggregators = JSON.parse(this._component.getAttribute("aggregators"));
         var orders = JSON.parse(this._component.getAttribute("orders"));
+
+        //preview my space
+        if(filters[0] && filters[0].constructor == Array){
+            filters = filters[0];
+            aggregators = aggregators[0];
+            orders = orders[0];
+        }
+
+        var provider = this._getProvider(this._component.fields[0]);
 
         var path = this._path(this._component.fields[0], provider);
 
         var fields = [];
         for (var i=0; i < this._component.fields.length; i++)
             fields.push(this._fieldName(this._component.fields[i], provider));
-
-
 
         //WHERE
         var where = "";
