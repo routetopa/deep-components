@@ -92,7 +92,7 @@ var AjaxJsonAlasqlBehavior = {
         var orders = JSON.parse(this._component.getAttribute("orders"));
 
         //preview my space
-        if(filters[0] && filters[0].constructor == Array){
+        if(filters && filters[0] && filters[0].constructor == Array){
             filters = filters[0];
             aggregators = aggregators[0];
             orders = orders[0];
