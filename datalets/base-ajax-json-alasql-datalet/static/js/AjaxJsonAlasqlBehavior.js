@@ -160,10 +160,19 @@ var AjaxJsonAlasqlBehavior = {
         for (var i = 0; i < fields.length; i++) {
             var key = Object.keys(obj[0])[i];
             var v = obj[0][key];
+            //if (!isNaN(v))
+            //    select += fields[i] + "::NUMBER as " + this._fieldName(this._component.fields[i], "") + ", ";
+            //else
+            //    select += fields[i] + " as " + this._fieldName(this._component.fields[i], "") + ", ";
+
+            //omg!
+            var key2 = "["+key+"]";
+            if(fields[0].indexOf("->") > -1)
+                key2 = "fields->["+key+"]";
             if (!isNaN(v))
-                select += key + "::NUMBER as " + this._fieldName(this._component.fields[i], "") + ", ";
+                select += key2 + "::NUMBER as " + this._fieldName(key, "") + ", ";
             else
-                select += key + " as " + this._fieldName(this._component.fields[i], "") + ", ";
+                select += key2 + " as " + this._fieldName(key, "") + ", ";
         }
         select = select.slice(0, -2);
 
