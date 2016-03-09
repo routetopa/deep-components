@@ -83,8 +83,9 @@ var AjaxJsonAlasqlBehavior = {
      * @method selectData
      */
     selectData : function() {
+        var jsonData = [this.properties.json_results.value];
+
         this._component.fields = JSON.parse(this._component.fields);
-        var provider = this._getProvider(this._component.fields[0]);
 
         var filters = JSON.parse(this._component.getAttribute("filters"));
         var aggregators = JSON.parse(this._component.getAttribute("aggregators"));
@@ -97,22 +98,13 @@ var AjaxJsonAlasqlBehavior = {
             orders = orders[0];
         }
 
+        var provider = this._getProvider(this._component.fields[0]);
+
+        var path = this._path(this._component.fields[0], provider);
+
         var fields = [];
         for (var i=0; i < this._component.fields.length; i++)
             fields.push(this._fieldName(this._component.fields[i], provider));
-
-        //if(aggregators)
-        //    for (var i=0; i < aggregators.length; i++)
-        //        aggregators[i]["field"] = this._fieldName(aggregators[i]["field"], provider);
-
-        //var jsonData = [this.properties.json_results.value];
-
-        //jsdatachecker
-        var _converter = new DataTypeConverter();
-        var path2 = this._arrayPath(provider);
-        var processingResult = _converter.inferJsonDataType(this.properties.json_results.value, path2);
-        var processingResults = _converter.convert(processingResult);
-        var jsonData = [processingResults.dataset];
 
         //WHERE
         var where = "";
@@ -135,12 +127,14 @@ var AjaxJsonAlasqlBehavior = {
             where = where.slice(0, -5);
         }
 
+        provider="";
+
         //ORDER BY
         var orderBy = "";
         if(orders && orders.length) {
 
             for (var i=0; i < orders.length; i++)
-                orders[i]["field"] = this._fieldName(orders[i]["field"], "");
+                orders[i]["field"] = this._fieldName(orders[i]["field"], provider);
 
             orderBy = "ORDER BY ";
             for (var i = 0; i < orders.length; i++)
@@ -149,49 +143,56 @@ var AjaxJsonAlasqlBehavior = {
         }
 
         //SELECT
-        var pureSelect = "SELECT ";
+        var select = "SELECT ";
         for (var i = 0; i < fields.length; i++)
-            pureSelect += fields[i] + " as " + this._fieldName(this._component.fields[i], "") + ", ";
-        pureSelect = pureSelect.slice(0, -2);
+            select += fields[i] + " as " + this._fieldName(this._component.fields[i], "") + ", ";
+        select = select.slice(0, -2);
 
-        //GROUP BY
-        //var groupBy = "";
-        //if(aggregators && aggregators.length) {
-        //
-        //    for (var i=0; i < aggregators.length; i++)
-        //        aggregators[i]["field"] = this._fieldName(aggregators[i]["field"], provider);
-        //
-        //    groupBy = "GROUP BY " + aggregators[0]["field"];
-        //    select = "SELECT "  + aggregators[0]["field"];
-        //    for (var i = 1; i < aggregators.length; i++)
-        //        select += ", " + aggregators[i]["operation"] + "(" + aggregators[i]["field"] + ") as " + aggregators[i]["field"];
-        //}
+        var pureSelect = select;
 
-        //var groupBy = "";
-        //if(aggregators && aggregators.length) {
-        //
-        //    groupBy = "GROUP BY " + this._fieldName(aggregators[0]["field"], "");
-        //    select = "SELECT "  + this._fieldName(aggregators[0]["field"], provider) + " as " + this._fieldName(aggregators[0]["field"], "");
-        //    for (var i = 1; i < aggregators.length; i++)
-        //        select += ", " + aggregators[i]["operation"] + "(" + this._fieldName(aggregators[i]["field"], provider) + ") as " + this._fieldName(aggregators[i]["field"], "");
-        //}
+        /**/
+        var res = alasql("SELECT "+ path +" FROM ?", [jsonData]);
+        var records = res[0][path];
+        var obj = alasql(pureSelect + " FROM ?", [records]);
+        //console.log(obj);
+
+        var select = "SELECT ";
+        for (var i = 0; i < fields.length; i++) {
+            var key = Object.keys(obj[0])[i];
+            var v = obj[0][key];
+            if (!isNaN(v))
+                select += fields[i] + "::NUMBER as " + this._fieldName(this._component.fields[i], "") + ", ";
+            else
+                select += fields[i] + " as " + this._fieldName(this._component.fields[i], "") + ", ";
+
+            //omg!
+            //var key2 = "["+key+"]";
+            //if(fields[0].indexOf("->") > -1)
+            //    key2 = "fields->["+key+"]";
+            //if (!isNaN(v))
+            //    select += key2 + "::NUMBER as " + this._fieldName(key, "") + ", ";
+            //else
+            //    select += key2 + " as " + this._fieldName(key, "") + ", ";
+        }
+        select = select.slice(0, -2);
+
+        var pureSelect = select;
+        /**/
 
         //GROUP BY
         var groupBy = "";
         if(aggregators && aggregators.length) {
 
             for (var i=0; i < aggregators.length; i++)
-                aggregators[i]["field"] = this._fieldName(aggregators[i]["field"], "");
+                aggregators[i]["field"] = this._fieldName(aggregators[i]["field"], provider);
 
             groupBy = "GROUP BY " + aggregators[0]["field"];
-            var select = "SELECT "  + aggregators[0]["field"];
+            select = "SELECT "  + aggregators[0]["field"];
             for (var i = 1; i < aggregators.length; i++)
                 select += ", " + aggregators[i]["operation"] + "(" + aggregators[i]["field"] + ") as " + aggregators[i]["field"];
         }
 
         //QUERY
-        var path = this._path(this._component.fields[0], provider);
-
         console.log('SELECT '+ path +' FROM ?');
         var res = alasql("SELECT "+ path +" FROM ?", [jsonData]);
 
@@ -205,37 +206,40 @@ var AjaxJsonAlasqlBehavior = {
 
         if (groupBy != "") {
             console.log(select + ' FROM ? ' + groupBy + ' ' + orderBy + '');
-            obj = alasql(select + " FROM ? " + groupBy + " " + orderBy + "", [obj]);
+            var obj = alasql(select + " FROM ? " + groupBy + " " + orderBy + "", [obj]);
         }
 
-        //TEST
+        //multiserie test
         //var query = "SELECT [preteur], [annee] as [annee], SUM([capital_restant_du]) as [capital_restant_du] FROM ? GROUP BY [preteur], [annee]"
         //var obj = alasql(query, [obj]);
         //console.log(obj);
         //this.data = obj;
 
+
         //PUSH DATA
         if(!obj || obj.length == 0)
             this.data = []
         else
-            this._pushData(obj, fields);
+            this._pushData(obj);
 
         this._deleteWaitImage();
     },
 
-    _pushData : function(obj, keys) {
+    _pushData : function(obj) {
         this.data = [];
 
-        if (typeof keys == 'undefined')
-            keys = Object.keys(obj[0]);
+        for (var key in Object.keys(obj[0])){
 
-        for (var key in keys){
-
-            var name = keys[key].replace(/(\[|\]|fields->)/g, "");
+            var name = Object.keys(obj[0])[key];
             var data = [];
+            var value;
 
             for (var i in obj) {
                 data.push(obj[i][name]);
+                //value = obj[i][name];
+                //if(!isNaN(value) && value != "")
+                //    value = parseFloat(obj[i][name]);
+                //data.push(value);
             }
 
             this.data.push({
@@ -259,10 +263,10 @@ var AjaxJsonAlasqlBehavior = {
             return "[" + field.substring(field.lastIndexOf(",") + 1, field.length) + "]";
         }
         else if(provider.indexOf("openDataSoft") > -1) {
-            return "fields->[" + field.substring(field.lastIndexOf(",") + 1, field.length)+ "]";
+            return "fields->["+field.substring(field.lastIndexOf(",")+1, field.length)+"]";
         }
         else {
-            return "[" + field.substring(field.lastIndexOf(",") + 1, field.length) + "]";
+            return "["+field.substring(field.lastIndexOf(",")+1, field.length)+"]";
         }
     },
 
@@ -275,18 +279,6 @@ var AjaxJsonAlasqlBehavior = {
         }
         else {
             return field.substring(0, field.lastIndexOf(",")).replace(",", "->");
-        }
-    },
-
-    _arrayPath : function(provider) {
-        if(provider.indexOf("ckan") > -1) {
-            return ["result", "records", "*"];
-        }
-        else if(provider.indexOf("openDataSoft") > -1) {
-            return ["records", "fields", "*"];
-        }
-        else {
-            return ["*"];
         }
     },
 
