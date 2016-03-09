@@ -161,9 +161,9 @@ var AjaxJsonAlasqlBehavior = {
             var key = Object.keys(obj[0])[i];
             var v = obj[0][key];
             if (!isNaN(v))
-                select += fields[i] + "::NUMBER as " + this._fieldName(this._component.fields[i], "") + ", ";
+                select += key + "::NUMBER as " + this._fieldName(this._component.fields[i], "") + ", ";
             else
-                select += fields[i] + " as " + this._fieldName(this._component.fields[i], "") + ", ";
+                select += key + " as " + this._fieldName(this._component.fields[i], "") + ", ";
         }
         select = select.slice(0, -2);
 
@@ -199,6 +199,13 @@ var AjaxJsonAlasqlBehavior = {
             console.log(select + ' FROM ? ' + groupBy + ' ' + orderBy + '');
             var obj = alasql(select + " FROM ? " + groupBy + " " + orderBy + "", [obj]);
         }
+
+        //multiserie test
+        //var query = "SELECT [preteur], [annee] as [annee], SUM([capital_restant_du]) as [capital_restant_du] FROM ? GROUP BY [preteur], [annee]"
+        //var obj = alasql(query, [obj]);
+        //console.log(obj);
+        //this.data = obj;
+
 
         //PUSH DATA
         if(!obj || obj.length == 0)

@@ -1,0 +1,953 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html" />
+
+<link rel="import" href="../../bower_components/paper-material/paper-material.html" />
+
+<link rel="import" href="../../bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
+<link rel="import" href="../../bower_components/paper-menu/paper-menu.html">
+<link rel="import" href="../../bower_components/paper-item/paper-item.html">
+
+<link rel="import" href="../../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../../bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="../../bower_components/iron-icon/iron-icon.html">
+
+<link rel="import" href="../../bower_components/paper-input/paper-textarea.html">
+<link rel="import" href="../../bower_components/paper-input/paper-input.html">
+
+<link rel="import" href="../../bower_components/paper-button/paper-button.html">
+
+<link rel="import" href="../../bower_components/paper-dialog/paper-dialog.html">
+
+<link rel="import" href="../items-vslider-controllet/items-vslider-controllet.html" />
+
+<script src="../../../DEEPCLIENT/js/deepClient.js"></script>
+
+<dom-module id="datalet-selection-controllet">
+
+    <template>
+
+        <style is="custom-style">
+            :host {
+            --paper-dropdown-menu-icon: {
+                 color: #2196F3;
+             };
+            }
+
+            #datalet_selection_container {
+                display: flex;
+                font-family: 'Roboto', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+                font-size: 16px;
+                margin-top: 8px;
+            }
+
+            #items_vslider_controllet {
+                position: relative;
+                min-width: 172px;
+            }
+
+            #datalet_selection_inputs {
+                position: relative;
+                height: 100vh;
+                margin-left: 32px;
+                min-width: 258px;
+            }
+
+            #datalet_selection_labels {
+                position: relative;
+                height: 100vh;
+                margin-left: 32px;
+                min-width: 258px;
+            }
+
+            #datalet_selection_column {
+                position: relative;
+                width: 100%;
+                margin-left: 32px;
+            }
+
+            #datalet_selection_datalet {
+                position: relative;
+                height: 100vh;
+                width: 100%;
+            }
+
+            #datalet_selection_datalet_placeholder {
+                padding: 16px;
+            }
+
+            .inputs{
+                position: relative;
+            }
+
+            .input_header {
+                height: 32px;
+                padding-top: 16px;
+                text-align: center;
+                font-weight: 700;
+                background-color: #B6B6B6;
+            }
+
+            #expert_container {
+                display: none;
+            }
+
+            #expert_header {
+                display: none;
+
+                height: 32px;
+                padding-top: 16px;
+                margin-top: 8px;
+                text-align: center;
+                font-weight: 700;
+                color: #00BCD4;
+                cursor: pointer;
+            }
+
+            .field_nema {
+                height: 40px;
+                padding-top: 8px;
+
+                margin-top: 8px;
+                padding-left: 16px;
+                font-weight: 700;
+                color: #2196F3;
+                background-color: #E0E0E0;
+            }
+
+            .info_button {
+                position: absolute;
+                top: 18px;
+                right: 0px;
+            }
+
+            paper-input {
+                display: inline-block;
+                height: 48px;
+                /*padding: 0px 8px;*/
+                width: 210px;
+                padding-left: 8px;
+                padding-bottom: 8px;
+                --paper-input-container-focus-color: #2196F3;
+            }
+
+            paper-input.base_input {
+                width: 242px;
+            }
+
+            paper-textarea {
+                width: 242px;
+                padding-left: 8px;
+                padding-bottom: 4px;
+                --paper-input-container-focus-color: #2196F3;
+            }
+
+            paper-dropdown-menu {
+                height: 48px;
+                width: 210px;;
+                padding-left: 8px;
+                padding-bottom: 8px;
+                --paper-input-container-focus-color: #2196F3;
+            }
+
+            paper-item.iron-selected {
+                background-color: #2196F3;
+                color: #FFFFFF;
+            }
+
+            paper-icon-button {
+                color: #2196F3;
+                --paper-icon-button-ink-color: #2196F3;
+                margin: 0px;
+            }
+
+            paper-button {
+                position: absolute;
+                bottom: 16px;
+                right: 11px;
+
+                height: 48px;
+                width: 172px;
+                background-color: #00BCD4;
+                color: white;
+                font-weight: 700;
+                padding: 16px;
+            }
+
+            paper-button:hover {
+                background-color: #00AABF;
+
+                box-shadow: 0px 8px 12px #888;
+                -webkit-box-shadow: 0px 8px 12px #888;
+                -moz-box-shadow: 0px 8px 12px #888;
+            }
+
+            paper-button[disabled] {
+                background-color: #B6B6B6;
+            }
+
+            #dialog_info_input {
+                border: 2px solid #2196F3;
+                background-color: #E0E0E0;
+                min-width: 248px;
+            }
+        </style>
+
+        <iron-ajax id="selectedDatalet_request" on-response="_handleSelectedDatalet"></iron-ajax>
+
+        <div id="datalet_selection_container">
+
+            <div id="items_vslider_controllet">
+                <items-vslider-controllet id="vslider" datalets-list-url={{dataletsListUrl}} preselected-datalet={{preselectedDatalet}}></items-vslider-controllet>
+            </div>
+
+            <paper-material id="datalet_selection_inputs" elevation="5">
+                <div class="input_header"><span id="inputs"></span></div>
+                <template is="dom-repeat" items="{{inputs}}" index-as="ddl_index">
+                    <div class="inputs">
+                        <paper-dropdown-menu id={{ddl_index}} label={{_getLabelName(item.name)}}>
+                            <paper-menu class="dropdown-content">
+                                <template is="dom-repeat" items={{fields}}>
+                                    <paper-item id={{index}} on-tap="_addInput">{{_fieldName(item)}}</paper-item>
+                                    <!--{{_fieldName(item)}}-->
+                                </template>
+                            </paper-menu>
+                        </paper-dropdown-menu>
+                        <div class="info_button">
+                            <paper-icon-button id={{item.name}} on-click="_showInfo" icon="info-outline" title="{{_getLabelName(item.name)}} info"></paper-icon-button>
+                        </div>
+                    </div>
+                </template>
+
+                <!-- EXPERT MODE EXPERT MODE EXPERT MODE EXPERT MODE EXPERT MODE EXPERT MODE EXPERT MODE EXPERT MODE -->
+
+                <div id="expert_header" on-click="_showExpertMode"><span id="groupBy"></span></div>
+
+                <div id="expert_container">
+
+                    <div class="inputs">
+                        <paper-dropdown-menu id="group_by">
+                            <paper-menu class="dropdown-content">
+                                <template is="dom-repeat" items={{selectedFields}}>
+                                    <paper-item id={{index}} on-tap="_showGroupedFields">{{_fieldName(item)}}</paper-item>
+                                </template>
+                            </paper-menu>
+                        </paper-dropdown-menu>
+                        <div class="info_button">
+                            <paper-icon-button id="gb" on-click="_addOrder" icon="unfold-more" title=""></paper-icon-button>
+                        </div>
+                    </div>
+
+                    <template is="dom-repeat" items="{{groupedFields}}">
+                        <div class="inputs">
+                            <paper-dropdown-menu id="calculate_{{index}}" label="{{_calculateLabel()}}">
+                                <paper-menu class="dropdown-content">
+                                    <!--foreach functions-->
+                                    <paper-item id="0" on-tap="_addGroupByInput">{{_operationName(0)}} {{_fieldName(item)}}</paper-item>
+                                    <paper-item id="1" on-tap="_addGroupByInput">{{_operationName(1)}} {{_fieldName(item)}}</paper-item>
+                                    <paper-item id="2" on-tap="_addGroupByInput">{{_operationName(2)}} {{_fieldName(item)}}</paper-item>
+                                    <paper-item id="3" on-tap="_addGroupByInput">{{_operationName(3)}} {{_fieldName(item)}}</paper-item>
+                                    <paper-item id="4" on-tap="_addGroupByInput">{{_operationName(4)}} {{_fieldName(item)}}</paper-item>
+                                    <paper-item id="5" on-tap="_addGroupByInput">{{_operationName(5)}} {{_fieldName(item)}}</paper-item>
+                                    <paper-item id="6" on-tap="_addGroupByInput">{{_operationName(6)}} {{_fieldName(item)}}</paper-item>
+                                </paper-menu>
+                            </paper-dropdown-menu>
+                            <div class="info_button">
+                                <paper-icon-button id={{_fieldName(item)}} on-click="_addOrder" icon="unfold-more" title=""></paper-icon-button>
+                            </div>
+                        </div>
+                    </template>
+
+                </div>
+
+                <!-- EXPERT MODE EXPERT MODE EXPERT MODE EXPERT MODE EXPERT MODE EXPERT MODE EXPERT MODE EXPERT MODE -->
+
+            </paper-material>
+
+            <paper-material id="datalet_selection_labels" elevation="5">
+                <div class="input_header"><span id="baseInfo"></span></div>
+
+                <div class="inputs">
+                    <paper-input id="base_title" maxlength="32" class="base_input"></paper-input>
+                </div>
+
+                <div class="inputs">
+                    <paper-textarea id="base_description" maxlength="100" class="base_input"></paper-textarea>
+                </div>
+
+                <div class="input_header"><span id="layouts"></span></div>
+
+                <template is="dom-repeat" items="{{labels}}" index-as="index">
+                    <div class="inputs">
+                        <paper-input label={{_getLabelName(item.name)}}></paper-input>
+                        <div class="info_button">
+                            <paper-icon-button id={{item.name}} on-click="_showInfo" icon="info-outline" title="{{_getLabelName(item.name)}} info"></paper-icon-button>
+                        </div>
+                    </div>
+                </template>
+            </paper-material>
+
+
+            <div id="datalet_selection_column">
+
+                <paper-material id="datalet_selection_datalet" elevation="5">
+                    <div class="input_header"><span id="dataletPreview"></span></div>
+                    <div id="datalet_selection_datalet_placeholder"></div>
+
+                </paper-material>
+
+                <paper-button id="add_button" disabled raised on-click="_addDatalet"></paper-button>
+
+            </div>
+
+            <paper-dialog id="dialog_info_input">
+                <h2 id="dialog_name"></h2>
+                <p id="dialog_description"></p>
+            </paper-dialog>
+
+        </div>
+
+    </template>
+
+    <script>
+
+        Polymer({
+
+            is : 'datalet-selection-controllet',
+
+            properties : {
+
+                deepUrl : {
+                    type : String,
+                    value : undefined
+                },
+
+                dataletsListUrl : {
+                    type : String,
+                    value : undefined
+                },
+
+                selectedDatalet : {
+                    type  : String,
+                    value : undefined
+                },
+
+                preselectedDatalet : {
+                    type  : String,
+                    value : undefined
+                },
+
+                loadPreview : {
+                    type :  Boolean,
+                    value : false
+                },
+
+                type : {
+                    type : String,
+                    value : undefined
+                },
+
+                inputs : {
+                    type : Array,
+                    value : []
+                },
+
+                labels : {
+                    type : Array,
+                    value : []
+                },
+
+                filters : {
+                    type : Array,
+                    value : []
+                },
+
+                aggregators : {
+                    type : Array,
+                    value : []
+                },
+
+                orders : {
+                    type : Array,
+                    value : []
+                },
+
+                fields : {
+                    type : Array,
+                    value : []
+                },
+
+                selectedFields : {
+                    type : Array,
+                    value : []
+                },
+
+                groupedFields : {
+                    type : Array,
+                    value : []
+                },
+
+                dataletPreset : {
+                    type  : Object,
+                    value : []
+                },
+
+//                selectableFields : {
+//                    type : Array,
+//                    value : []
+//                },
+
+                dataUrl : {
+                    type  : String,
+                    value : undefined
+                },
+
+                params:{
+                    type: Object,
+                    value: undefined
+                },
+
+                expert : {
+                    type  : Boolean,
+                    value : false
+                },
+
+                functions : {
+                    type  : Array,
+                    value : ["COUNT", "SUM", "MIN", "MAX", "AVG", "FIRST", "LAST"]
+                },
+
+                modify : {
+                    type  : Boolean,
+                    value : false
+                }
+
+            },
+
+            listeners: {
+                'items-vslider-controllet_selected-datalet': '_selectDatalet',
+//                'tree-view-controllet_selected-fields': '_updateSelectedFields'
+                'change': '_paramsChanged'
+            },
+
+            _showExpertMode : function() {
+                if(!this.expert) {
+                    this.$.expert_header.style.color = "#000000";
+                    this.$.expert_header.style.background = "#B6B6B6";
+                    this.$.expert_container.style.display = "block";
+                }
+                else {
+                    this.$.expert_header.style.color = "#00BCD4";
+                    this.$.expert_header.style.background = "#FFFFFF";
+                    this.$.expert_container.style.display = "none";
+                }
+
+                this.expert = !this.expert;
+            },
+
+            _showGroupedFields : function(e) {
+                var index = e.target.id;
+                var temp = [];
+
+//                var isSelected = false;
+//                for (var i = 0; i < this.selectedFields.length; i++) {
+//                    if (this.selectedFields[i]) {
+//                        if (this.selectedFields[i].indexOf(this.fields[index]) > -1) {
+//                            isSelected = true;
+//                        }
+//                        else {
+//                            temp.push(this.selectedFields[i]);
+//                        }
+//                    }
+//                }
+//
+//                if (isSelected)
+//                    this.groupedFields = this._copy(temp);
+//                else
+//                    this.groupedFields =[];
+
+                for (var i = 0; i < this.selectedFields.length; i++) {
+                    if (this.selectedFields[i]) {
+                        if (i != index) {
+                            temp.push(this.selectedFields[i]);
+                        }
+                    }
+                }
+
+                this.groupedFields = this._copy(temp);
+
+                this.async(function() {
+                    var ddls = document.getElementsByTagName("paper-dropdown-menu");
+                    for (var i = 0; i < ddls.length; i++){
+                        var id = ddls[i].id;
+                        if(id.indexOf("calculate") > -1) {
+                            $(ddls[i]).find("paper-menu")[0].select(-1);
+                            $(ddls[i]).find("paper-menu")[0].select(0);
+                        }
+                    }
+                }, 0);
+
+                this._addGroupByInput();
+            },
+
+            ready : function() {
+                this._resize();
+                $(this.$.datalet_selection_inputs).perfectScrollbar();
+                $(this.$.datalet_selection_labels).perfectScrollbar();
+                $(this.$.datalet_selection_datalet).perfectScrollbar();
+
+                this.params = {'data-url' : this.dataUrl};
+
+                //this.modify = true;//da eliminare in futuro
+                if(this.preselectedDatalet){
+                    if(this.modify)
+                        this._preselectDatalet();
+
+                    this.modify = true;
+                    this.preselectedDatalet = undefined;
+                }
+            },
+
+            attached : function() {
+                this._resize();
+                var that = this;
+                window.addEventListener("resize", function() { that._resize(); });
+
+                this._translate();
+            },
+
+            setFilters : function(filters) {
+                this.filters = filters;
+            },
+
+            setFields : function(fields) {
+                this.fields = fields;
+            },
+
+            reset : function() {
+                this.selectedDatalet = undefined;//non va!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                this.preselectedDatalet = undefined;
+                this.type = undefined;
+                this.inputs = [];
+                this.labels = [];
+                this.$.expert_header.style.display = "none";
+                this.expert = true;
+                this._showExpertMode();
+                this.loadPreview = false;
+                this.$.datalet_selection_datalet_placeholder.innerHTML = "";
+                this._resetGroupBy();
+            },
+
+            _translate : function(){
+
+                this.$.add_button.innerHTML     = ln["addDatalet_" + ln["localization"]];
+                this.$.inputs.innerHTML         = ln["inputs_" + ln["localization"]];
+                this.$.baseInfo.innerHTML       = ln["baseInfo_" + ln["localization"]];
+                this.$.layouts.innerHTML        = ln["layouts_" + ln["localization"]];
+                this.$.dataletPreview.innerHTML = ln["dataletPreview_" + ln["localization"]];
+
+                this.$.base_title.label = ln["title_" + ln["localization"]];
+                this.$.base_description.label = ln["description_" + ln["localization"]];
+
+                this.$.groupBy.innerHTML = ln["groupBy_" + ln["localization"]];
+                this.$.group_by.setAttribute("label", ln["groupBy_" + ln["localization"]]);
+
+                if(this.modify)
+                    this.$.add_button.innerHTML = ln["modifyDatalet_" + ln["localization"]];
+            },
+
+            _selectDatalet : function(e){
+                this.$.add_button.setAttribute("disabled", "true");
+
+                this.selectedDatalet = e.detail.datalet;
+
+                this.$.datalet_selection_datalet_placeholder.innerHTML = "";
+
+                if(!this.selectedDatalet){
+                    this.type = undefined;
+                    this.inputs = [];
+                    this.labels = [];
+                    this.$.expert_header.style.display = "none";
+                    this.expert = true;
+                    this._showExpertMode();
+                    this.loadPreview = false;
+                }
+                else{
+                    this.$.selectedDatalet_request.url = this.deepUrl + e.detail.datalet + "-datalet";
+                    this.$.selectedDatalet_request.generateRequest();
+                    this.$.expert_header.style.display = "block";
+                }
+            },
+
+            _preselectDatalet : function() {
+                this.type = "undefined";
+                this.$.selectedDatalet_request.url = this.deepUrl + this.preselectedDatalet + "-datalet";
+                this.$.selectedDatalet_request.generateRequest();
+
+                this.selectedDatalet = this.preselectedDatalet;
+                this.selectedFields = this._copy(this.fields);
+
+//                this.filters = JSON.parse(this.dataletPreset["filters"]);
+//                this.aggregators = JSON.parse(this.dataletPreset["aggregators"]);
+//                this.orders = JSON.parse(this.dataletPreset["orders"]);
+
+                this.async(function() {
+                    this.selectedFields = this._copy(this.fields);
+
+                    //set info labels options
+                    var textarea = this.$.datalet_selection_labels.querySelectorAll("paper-textarea");
+                    textarea[0].value = this.dataletPreset["description"];
+
+                    var inputs = this.$.datalet_selection_labels.querySelectorAll("paper-input");
+                    inputs[0].value = this.dataletPreset["title"];
+
+                    for (var i = 1; i < inputs.length; i++)
+                        inputs[i].value = this.dataletPreset[this.labels[i-1].name];
+
+                    //set inputs --> prima apri GB e riempi CALCULATE e poi gli ORDERBY???
+                    var ddls = document.getElementsByTagName("paper-dropdown-menu");
+                    for (var i = 0; i < ddls.length; i++) {
+                        var id = ddls[i].id;
+                        if (!isNaN(id)) {
+//                            id = parseInt(id);
+                            $(ddls[i]).find("paper-menu")[0].select(id);
+                        }
+                        else if (id.indexOf("group_by") > -1) {
+                            ;
+                        }
+                        else if (id.indexOf("calculate") > -1) {
+                            ;
+                        }
+                    }
+
+                    this.loadPreview = true;
+                    this._loadDatalet(this.selectedFields);
+                }, 300);
+            },
+
+            _handleSelectedDatalet : function(e){
+
+                if(this.type != e.detail.response.type) {
+
+                    this.inputs = [];
+                    this.labels = [];
+
+                    var inputs = e.detail.response.idm.inputs.input;
+
+                    if (inputs.constructor == Object) {//not Array && inputs.input.selection == "*"
+                        var name = inputs.name;
+                        var description = inputs.description;
+                        var selection = inputs.selection;
+                        inputs = [];
+                        for (var i in this.fields)
+                            inputs.push({name: name + " " + i, description: description, selection: selection});
+                    }
+
+                    this.async(function(){
+                        this.type = e.detail.response.type;
+                        this.inputs = inputs;
+                        this.labels = e.detail.response.idm.inputs.layouts.input;
+
+                        this.selectedFields = new Array(inputs.length);
+                    },0);
+
+                    this._resetGroupBy();
+
+                    this.loadPreview = false;
+                }
+
+                else if (this.loadPreview)
+                    this._loadDatalet(this.selectedFields);
+            },
+
+            _resetGroupBy : function(){
+                $(this.$.group_by).find("paper-menu")[0].select(-1);
+                this.groupedFields = [];
+                this.aggregators = [];
+            },
+
+            _addGroupByInput : function(){
+                this.async(function() {//codice reprlicato!
+                    var selectedFields = this.selectedFields;
+
+                    var load = true;
+
+                    if(this.inputs[0].selection == "*"){
+                        var temp = [];
+                        for (var i = 0; i < selectedFields.length; i++)
+                            if(selectedFields[i])
+                                temp.push(selectedFields[i]);
+                        selectedFields = temp;
+                    }
+                    else {
+                        for (var i = 0; i < selectedFields.length; i++)
+                            if (!selectedFields[i]) {
+                                load = false;
+                                break;
+                            }
+                    }
+
+                    if(load){
+                        this.loadPreview = true;
+                        this._loadDatalet(selectedFields);
+                    }
+                }, 0);
+            },
+
+            _addOrder : function(e){
+                var t = e.target;
+                if(t.tagName.indexOf("IRON-ICON") > -1)
+                    t = $(e.target).parents("paper-icon-button")[0];
+
+                var icon = t.getAttribute("icon");
+                var name = t.getAttribute("id");
+
+                if(name.indexOf("gb") > -1){
+                    var selectedItem = $(this.$.group_by).find("paper-menu")[0].selectedItem;
+                    if(selectedItem)
+                        name = selectedItem.textContent.trim();
+//                        name = "[" + selectedItem.textContent.trim() + "]";
+                    else
+                        return;
+                }// else {
+//                    var i = name;
+//                    var ddl = $("#calculate_"+i);
+//
+//                    var label = $(ddl).find("paper-menu")[0].selectedItem.textContent.trim();
+//                    var index = label.split(" ", 2).join(" ").length;
+//                    var field = label.substring(index+1, label.length);
+//                    var operation = label.substring(0, label.indexOf(" "));
+//                    name = operation + "([" + field + "])";
+//                }
+
+                if(icon.indexOf("unfold-more") > -1){
+                    t.setAttribute("icon", "expand-less");
+                    t.setAttribute("title", ln["sortAscending_" + ln["localization"]]);
+                    var orders = this.orders.filter(function (el) { return el.field !== name; });
+                    orders.push({"field": name, "operation": "ASC"});
+                    this.orders = this._copy(orders);
+                }
+                else if(icon.indexOf("expand-less") > -1){
+                    t.setAttribute("icon", "expand-more");
+                    t.setAttribute("title", ln["sortDescending_" + ln["localization"]]);
+                    var orders = this.orders.filter(function (el) { return el.field !== name; });
+                    orders.push({"field": name, "operation": "DESC"});
+                    this.orders = this._copy(orders);
+                }
+                else if(icon.indexOf("expand-more") > -1){
+                    t.setAttribute("icon", "unfold-more");
+                    t.setAttribute("title", ln["unsort_" + ln["localization"]]);
+                    var orders = this.orders.filter(function (el) { return el.field !== name; });
+                    this.orders = this._copy(orders);
+                }
+
+                this._addGroupByInput();//no buoono
+//                if(load){
+//                    this.loadPreview = true;
+//                    this._loadDatalet(selectedFields);
+//                }
+            },
+
+            _addInput : function(e){
+                var selectedFields = this._copy(this.selectedFields);
+
+//                var index = $(e.target).parents("paper-dropdown-menu")[0].id;
+//                selectedFields[index] = e.target.innerHTML.trim();
+
+                var ddl_index = $(e.target).parents("paper-dropdown-menu")[0].id;
+                var index = e.target.id;
+                selectedFields[ddl_index] = this.fields[index];
+
+                this.selectedFields = this._copy(selectedFields);
+
+                var load = true;
+
+                if(this.inputs[0].selection == "*"){
+                    var temp = [];
+                    for (var i = 0; i < selectedFields.length; i++)
+                        if(selectedFields[i])
+                            temp.push(selectedFields[i]);
+                    selectedFields = temp;
+                }
+                else {
+                    for (var i = 0; i < selectedFields.length; i++)
+                        if (!selectedFields[i]) {
+                            load = false;
+                            break;
+                        }
+                }
+
+                this._resetGroupBy();//--> conflitto, in _updateparams valorizza this.aggregators
+
+                if(load){
+                    this.loadPreview = true;
+                    this._loadDatalet(selectedFields);
+                }
+            },
+
+            _updateParams : function(){
+                var textarea = this.$.datalet_selection_labels.querySelectorAll("paper-textarea");
+                this.params["description"] = textarea[0].value;
+
+                if(!textarea[0].value)
+                    this.params[textarea[0].label] = "";
+
+                var inputs = this.$.datalet_selection_labels.querySelectorAll("paper-input");
+                this.params["title"] = inputs[0].value;
+
+                for (var i = 1; i < inputs.length; i++)
+                    this.params[this.labels[i-1].name] = inputs[i].value;
+
+                this.aggregators = [];
+
+                var ddls = document.getElementsByTagName("paper-dropdown-menu");
+                for (var i = 0; i < ddls.length; i++){
+                    var id = ddls[i].id;
+                    if(id.indexOf("group_by") > -1 && $(ddls[i]).find("paper-menu")[0].selectedItem) {
+                        var label = $(ddls[i]).find("paper-menu")[0].selectedItem.textContent.trim();
+                        this.aggregators.push({"field": label, "operation": "GROUP BY"});
+                    }
+                    if(id.indexOf("calculate") > -1) {
+                        var menu = $(ddls[i]).find("paper-menu")[0];
+                        var label = menu.selectedItem.textContent.trim();
+                        var index = menu.selectedItem.id;
+                        var ii = label.split(" ", 2).join(" ").length;
+                        //attenzione BUG --> non funziona se la traduzione non ha solo 1 spazio
+                        var field = label.substring(ii+1, label.length);
+//                        var operation = label.substring(0, label.indexOf(" "));
+                        this.aggregators.push({"field": field, "operation": this.functions[index]});
+                    }
+                }
+            },
+
+            _paramsChanged : function(){
+
+                this._updateParams();
+
+                if(this.$.datalet_selection_datalet_placeholder.children[1])
+                    this.$.datalet_selection_datalet_placeholder.children[1].behavior.setParameters(this.params);
+            },
+
+            _loadDatalet : function(selectedFields){
+
+                this._updateParams();
+
+                this.params["filters"] = JSON.stringify(this.filters);
+                this.params["aggregators"] = JSON.stringify(this.aggregators);
+                this.params["orders"] = JSON.stringify(this.orders);
+
+//                this.params["filters"] = '[{"field": "Lat", "operation": ">=", "value": "53.298164"}, {"field": "Lat", "operation": "<", "value": "54"}]';
+//                this.params["aggregators"] = '[{"field": "Lat", "operation": "GROUP BY"}, {"field": "Lng", "operation": "COUNT"}]';
+//                this.params["orders"] = '[{"field": "Lat", "operation": "DESC"}, {"field": "Lat", "operation": "ASC"}]';
+
+                //this.params["aggregators"] = '[{"field": "Value", "operation": "GROUP BY"}, {"field": "LOCATION", "operation": "COUNT"}]';
+                //this.params["orders"] = '[{"field": "Value", "operation": "ASC"}, {"field": "Value", "operation": "ASC"}]';
+
+                var dataletParams ={
+                    component   : this.selectedDatalet+"-datalet",
+                    params      : this.params,
+                    fields      : selectedFields,
+                    placeHolder : this.$.datalet_selection_datalet_placeholder
+                };
+
+                ComponentService.deep_url = this.deepUrl;
+                ComponentService.getComponent(dataletParams);
+
+                this.$.add_button.removeAttribute("disabled");
+            },
+
+            _addDatalet : function(){
+
+                this._updateParams();
+
+                var selectedFields = [];
+                for (var i = 0; i < this.selectedFields.length; i++)
+                    if(this.selectedFields[i])
+                        selectedFields.push(this.selectedFields[i]);
+
+                var data = {
+                    dataUrl : this.dataUrl,
+                    params :  this.params,
+                    fields :  selectedFields,
+                    datalet : this.selectedDatalet+"-datalet",
+//                    comment : "",//DEPRECATED!!!
+                    staticData : JSON.stringify(this.$.datalet_selection_datalet_placeholder.children[1].behavior.data)
+                }
+
+                this.fire('data-sevc-controllet.dataletCreated', {data : data});
+
+            },
+
+            _showInfo : function(e){
+//                var that = this;
+                var t = e.target;
+                if(t.tagName.indexOf("IRON-ICON") != -1)
+                    t = $(e.target).parents("paper-icon-button")[0];
+
+//                var name = t.getAttribute("title").replace(" info", "");
+                var name = t.getAttribute("id");
+
+                var dataset = $.grep(this.inputs, function(e){ return e.name == name; })[0];
+                if(!dataset)
+                    dataset = $.grep(this.labels, function(e){ return e.name == name; })[0];
+
+                this.$.dialog_name.innerHTML = this._getLabelName(dataset.name);
+                this.$.dialog_description.innerHTML = ln[dataset.description + "_" +  ln["localization"]];
+                this.$.dialog_info_input.open();
+
+                var pos = t.getBoundingClientRect();
+                $("#dialog_info_input").css("top", pos.top - 4);
+                $("#dialog_info_input").css("left", pos.left - 4);
+            },
+
+            _fieldName : function(field) {
+                if(!field)//when?
+                    return "";
+                return field.substring(field.lastIndexOf(",")+1, field.length);
+            },
+
+            _copy : function(o) {
+                var out, v, key;
+                out = Array.isArray(o) ? new Array(o.length) : {};
+                for (key in o) {
+                    v = o[key];
+                    out[key] = (typeof v === "object") ? this._copy(v) : v;
+                }
+                return out;
+            },
+
+            _getLabelName: function(key) {
+                //* exceptions
+                if(key.indexOf("Cell") > -1) {
+                    return ln["Cell" + "_" +ln["localization"]] + key.slice(-2);
+                }
+                if(key.indexOf("Level") > -1) {
+                    return ln["Level" + "_" +ln["localization"]] + key.slice(-2);
+                }
+
+                return ln[key + "_" +ln["localization"]];
+            },
+
+            _calculateLabel: function() {
+                return ln["calculate" + "_" +ln["localization"]];
+            },
+
+            _operationName: function(index) {
+                var key = this.functions[index];
+                return ln[key + "_" +ln["localization"]];
+            },
+
+            _resize : function(){
+                var h = Math.max(document.documentElement.clientHeight, window.innerHeight || 0) - 16;
+                h = h - 64 - 8; //height with page scroller
+
+                $("#items_vslider_container").height(h);//vslider controllet
+
+                $("#datalet_selection_inputs").height(h);
+                $("#datalet_selection_labels").height(h);
+                $("#datalet_selection_datalet").height(h);
+            }
+
+        });
+
+    </script>
+
+</dom-module>
