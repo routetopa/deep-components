@@ -142,7 +142,7 @@ function build2(root, meta, place_holder, select_listener, width, height) {
                 var data = ["", d.name, d.color, "", "", d.value, ""];
                 console.log(d);
                 data[2] = ["#000000"];
-                var id = d.name.split(':')[1];
+                var id = (d.name) ? d.name.split(':')[1] : undefined;
                 if (d.depth == 1) {
                     // FIRST LVL
                     data[0] = "first";
@@ -272,7 +272,7 @@ function build2(root, meta, place_holder, select_listener, width, height) {
         d.each(function(){
             var text = d3.select(this),
                 d = text[0][0].__data__,
-                name = checkProviderName(d.name.trim());
+                name = (d.name) ? checkProviderName(d.name.trim()) : "";
                 words = name.search(/\s+/) >= 0 ? name.split(/\s+/).reverse() : [name],
                 word = words.pop(),
                 line = [word],
