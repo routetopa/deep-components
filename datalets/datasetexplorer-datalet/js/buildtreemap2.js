@@ -150,7 +150,8 @@ function build2(root, meta, place_holder, select_listener, width, height) {
                     var key = (typeof OW == 'undefined') ? "" : OW.getLanguageText('openwall', 'provider_'+id);
                     //data[3] = key;
                     data[3] = datasetexplorer_ln[key+"_"+datasetexplorer_ln["ln"]];
-                    data[4] = ((typeof ODE == 'undefined') ? parent.ODE.THEME_IMAGES_URL : ODE.THEME_IMAGES_URL) + "/logos/"+id+".png";//meta[id]['logo_url'];
+                    //data[4] = ((typeof ODE == 'undefined') ? parent.ODE.THEME_IMAGES_URL : ODE.THEME_IMAGES_URL) + "/logos/"+id+".png";//meta[id]['logo_url'];
+                    data[4] = "/ow_static/themes/spod_theme_matter/images/logos/"+id+".png";//meta[id]['logo_url'];
                     //data[5] = d.value;
                 } else if (d._children && !d._children[0]._children) {
                     // LAST LVL
