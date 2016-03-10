@@ -56,9 +56,72 @@ var AjaxJsonJsonPathBehavior = {
 
         var comp = this;
 
+        /*if(typeof(Worker) !== "undefined") {
+
+            var myWorker = function() {
+
+                self.onmessage = function(event)
+                {
+                    console.log(event.data);
+
+                    var xmlhttp;
+
+                    if ( XMLHttpRequest) {
+                        // code for IE7+, Firefox, Chrome, Opera, Safari
+                        xmlhttp = new XMLHttpRequest();
+                    } else {
+                        // code for IE6, IE5
+                        xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+                    }
+
+                    xmlhttp.onreadystatechange = function() {
+                        if (xmlhttp.readyState == XMLHttpRequest.DONE ) {
+                            if(xmlhttp.status == 200){
+                                //console.log(xmlhttp.responseText);
+                                self.postMessage(xmlhttp.responseText);
+                            }
+                            else if(xmlhttp.status == 400) {
+                                console.log('There was an error 400')
+                            }
+                            else {
+                                console.log('something else other than 200 was returned')
+                            }
+                        }
+                    }
+
+                    //xmlhttp.open("GET", event.data, true);
+                    xmlhttp.open("GET", "http://172.16.15.77/openwall/api/datasetTree", true);
+                    xmlhttp.send();
+                }
+            };
+
+            var workerData = new Blob(['(' + myWorker.toString() + ')()'], {
+                type: "text/javascript"
+            });
+
+            myWorker = new Worker(window.URL.createObjectURL(workerData));
+            myWorker.postMessage(this._component.dataUrl);
+            myWorker.onmessage = function (e) {
+                console.log(e);
+                comp.handleResponse(JSON.parse(e.data));
+            };
+
+        } else {
+            $.ajax({
+                url: this._component.dataUrl,
+                dataType: "json",
+                async : true,
+                success: function(e){
+                    comp.handleResponse(e);
+                }
+            });
+        }*/
+
         $.ajax({
             url: this._component.dataUrl,
             dataType: "json",
+            async : true,
+            cache : false,
             success: function(e){
                 comp.handleResponse(e);
             }
