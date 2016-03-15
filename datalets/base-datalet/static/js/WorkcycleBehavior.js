@@ -103,6 +103,7 @@ var WorkcycleBehavior = {
         }else{
             this._deleteWaitImage();
             this.data = JSON.parse(this._component.data);
+            this.filterData();
             this.transformData();
             this.presentData();
         }

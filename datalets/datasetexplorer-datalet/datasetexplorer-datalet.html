@@ -203,8 +203,13 @@ Example:
                 this._component.fire("datasetexplorer-datalet_data-url", { url: url });
             },
 
-            selectData : function() {
-                this.data = [];
+            filterData : function() {
+
+                var tmpData = [];
+
+                if(!this.properties.json_results.value.result)
+                    this.properties.json_results.value = this.data;
+
                 this.meta = this.properties.json_results.value.result.providers;
 
                 //Deal the fields with "'" char
@@ -221,11 +226,13 @@ Example:
                             query += "[*]";
                         }
                     }
-                    this.data.push({
+
+                    tmpData.push({
                         name: query_elements[query_elements.length - 1],
                         data: jsonPath(this.properties.json_results.value, query)
                     });
                 }
+                this.data = tmpData;
                 this._deleteWaitImage();
             }
 

@@ -142,7 +142,7 @@ function build2(root, meta, place_holder, select_listener, width, height) {
                 var data = ["", d.name, d.color, "", "", d.value, ""];
                 console.log(d);
                 data[2] = ["#000000"];
-                var id = d.name.split(':')[1];
+                var id = (d.name) ? d.name.split(':')[1] : undefined;
                 if (d.depth == 1) {
                     // FIRST LVL
                     data[0] = "first";
@@ -150,7 +150,8 @@ function build2(root, meta, place_holder, select_listener, width, height) {
                     var key = (typeof OW == 'undefined') ? "" : OW.getLanguageText('openwall', 'provider_'+id);
                     //data[3] = key;
                     data[3] = datasetexplorer_ln[key+"_"+datasetexplorer_ln["ln"]];
-                    data[4] = ((typeof ODE == 'undefined') ? parent.ODE.THEME_IMAGES_URL : ODE.THEME_IMAGES_URL) + "/logos/"+id+".png";//meta[id]['logo_url'];
+                    //data[4] = ((typeof ODE == 'undefined') ? parent.ODE.THEME_IMAGES_URL : ODE.THEME_IMAGES_URL) + "/logos/"+id+".png";//meta[id]['logo_url'];
+                    data[4] = "/ow_static/themes/spod_theme_matter/images/logos/"+id+".png";//meta[id]['logo_url'];
                     //data[5] = d.value;
                 } else if (d._children && !d._children[0]._children) {
                     // LAST LVL
@@ -271,7 +272,7 @@ function build2(root, meta, place_holder, select_listener, width, height) {
         d.each(function(){
             var text = d3.select(this),
                 d = text[0][0].__data__,
-                name = checkProviderName(d.name.trim());
+                name = (d.name) ? checkProviderName(d.name.trim()) : "";
                 words = name.search(/\s+/) >= 0 ? name.split(/\s+/).reverse() : [name],
                 word = words.pop(),
                 line = [word],
