@@ -18,6 +18,9 @@
                 font-family: 'Roboto', 'Helvetica Neue', Helvetica, Arial, sans-serif;
                 font-size: 16px;
                 background-color: white;
+                position: relative;
+                float: left;
+                margin: 40px;
             }
 
             #content {
@@ -30,7 +33,7 @@
                 top: -48px;
                 height: 32px;
                 padding: 16px 0px 0px 8px;
-                z-index: 1000;
+                /*z-index: 1000;*/
                 background: rgba(0,0,0,0.8);
                 color: white;
                 font-weight: 700;
@@ -222,11 +225,13 @@
             _changeWidth: function(){
                 this.style.width = this.width + "px";
                 this.$.content.style.width = this.width - 8 + "px";
+                this.$.paper_card_container.style.width = this.width + "px";
             },
 
             _changeHeight: function(){
                 this.style.height = this.height + 64 + "px";
                 this.$.content.style.height = this.height - 4 + "px";
+                this.$.paper_card_container.style.height = this.height + "px";
                 $(this.$.content).perfectScrollbar();
             },
 

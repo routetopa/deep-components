@@ -62,6 +62,7 @@
             /*height: 80vh;
             width: 120vh;*/
             display: none;
+            width: 50%;
             height: 80%;
             position: fixed;
             top: 15%;
@@ -88,7 +89,7 @@
             top: 0px;
             right: 0px;
             --paper-fab-background:#B6B6B6;
-            z-index: 9999;
+            /*z-index: 9999;*/
         }
 
         paper-fab#addPostit {
@@ -99,7 +100,7 @@
             top: 0px;
             right: 48px;
             --paper-fab-background:#2196F3;
-            z-index: 9999;
+            /*z-index: 9999;*/
         }
 
         #container_content {
@@ -114,6 +115,7 @@
         h2,p{
             font-size:100%;
             font-weight:normal;
+            word-break: break-all;
         }
         ul,li{
             list-style:none;
@@ -188,6 +190,52 @@
             z-index:5;
         }
 
+        #addForm{
+            text-decoration:none;
+            color:#000;
+            background:#ffc;
+            display:none;
+            height:20em;
+            width:20em;
+            padding:1em;
+            -moz-box-shadow:5px 5px 7px rgba(33,33,33,1);
+            -webkit-box-shadow: 5px 5px 7px rgba(33,33,33,.7);
+            box-shadow: 5px 5px 7px rgba(33,33,33,.7);
+            -moz-transition:-moz-transform .15s linear;
+            -o-transition:-o-transform .15s linear;
+            -webkit-transition:-webkit-transform .15s linear;
+            position: absolute;
+            top: 25%;
+            left: 25%;
+        }
+
+        #newTitle{
+            background: #E6E6E6;
+            border-radius: 3px;
+        }
+
+        #newTitle:focus{
+            background: transparent;
+            border-radius: 3px;
+            border: 2px solid #2196F3;
+        }
+
+        #newContent{
+            background: #E6E6E6;
+            border-radius: 3px;
+        }
+
+        #newContent:focus{
+            background: transparent;
+            border-radius: 3px;
+            border: 2px solid #2196F3;
+        }
+
+        [contenteditable=true]:empty:before {
+            content: attr(placeholder);
+            display: block; /* For Firefox */
+        }
+
     </style>
 
     <template>
@@ -203,102 +251,33 @@
             <div class="transparent"></div>
 
             <paper-fab class="close" mini icon="close" on-click="_onCloseClick"></paper-fab>
-            <paper-fab id="addPostit" icon="add" title='{text key="spodcollaborative+add_content"}' class="dropdown-trigger"></paper-fab>
+            <paper-fab id="addPostit" icon="add" title='Add new postit' class="dropdown-trigger" on-click="_onAddPostitClick"></paper-fab>
             <div id="container_content">
                 <content>
-                    <ul>
-                        <!--<template is="dom-repeat" items="{{data}}">
+                    <ul id="postit_container">
+
+                        <template is="dom-repeat" items="{{data}}">
                             <li>
                                 <a href="#">
-                                    <h3>{{items.title}}</h3>
-                                    <p>{{items.content}}</p>
+                                    <h3>{{item.title}}</h3>
+                                    <p>{{item.content}}</p>
                                 </a>
                             </li>
-                        </template>-->
-
-                        <li>
-                            <a href="#">
-                                <h3>My note #1</h3>
-                                <p>
-                                    At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis
-                                    praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias
-                                    excepturi sint occaecati cupiditate non provident
-                                </p>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#">
-                                <h2>My note #2</h2>
-                                <p>
-                                    Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus id quod
-                                    maxime placeat facere possimus
-                                </p>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#">
-                                <h2>My note #3</h2>
-                                <p>
-                                    Similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga.
-                                    Et harum quidem rerum facilis est et expedita distinctio
-                                </p>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#">
-                                <h2>My note #4</h2>
-                                <p>
-                                    Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet
-                                    ut et voluptates repudiandae sint et molestiae non recusandae.
-                                </p>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#">
-                                <h2>My note #5</h2>
-                                <p>
-                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-                                    tempor incididunt ut labore et dolore magna aliqua
-                                </p>
-                            </a>
-                        </li>
-                       <!-- <li>
-                            <a href="#">
-                                <h2>My note #6</h2>
-                                <p>
-                                    Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-                                </p>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#">
-                                <h2>My note #7</h2>
-                                <p>
-                                    Itaque earum rerum hic tenetur a sapiente delectus, ut aut reiciendis voluptatibus maiores alias
-                                    consequatur aut perferendis doloribus asperiores repellat
-                                </p>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#">
-                                <h2>My note #8</h2>
-                                <p>
-                                    Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
-                                    Excepteur sint occaecat cupidatat non proident
-                                </p>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#">
-                                <h2>My note #9</h2>
-                                <p>Sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-                            </a>
-                        </li>-->
+                        </template>
                     </ul>
+
+                    <div id="addForm">
+                        <h3 id="newTitle" contentEditable="true" onkeypress="return (this.innerText.length <= 13)" placeholder="Title"></h3>
+                        <p id="newContent" contentEditable="true" onkeypress="return (this.innerText.length <= 199)" placeholder="Content"></p>
+                        <paper-fab class="close" mini icon="close" on-click="_onCloseCreatePostitFormClick"></paper-fab>
+                        <paper-fab id="addPostit" icon="save" title='Add new postit' class="dropdown-trigger" on-click="_onAddNewPostitFormClick" ></paper-fab>
+                    </div>
+
                 </content>
             </div>
 
         </paper-material>
+
 
     </template>
 
@@ -318,11 +297,17 @@
                 data : {
                     type: Array,
                     value: undefined
+                },
+
+                open : {
+                    type: Boolean,
+                    value: false
                 }
             },
 
             ready: function(){
                 $(this.$.container_content).perfectScrollbar();
+                if(this.open == true) $(this.$.window).show();
             },
 
             _onOpenClick: function() {
@@ -331,6 +316,23 @@
 
             _onCloseClick: function(){
                 $(this.$.window).hide();
+            },
+
+            _onAddPostitClick: function(){
+                this.$.addForm.style.display = "block";
+            },
+
+            _onCloseCreatePostitFormClick: function(){
+                this.$.addForm.style.display = "none";
+            },
+
+            _onAddNewPostitFormClick: function(){
+                //$(this.$.postit_container).append('<li><a href="#"><h2>' + this.$.newTitle.innerText + '</h2><p>' + this.$.newContent.innerText + '</p></a></li>');
+                this.fire('postit-container-controllet_create-new-postit', {title : this.$.newTitle.innerText, content: this.$.newContent.innerText, id: this.id});
+                this.$.addForm.style.display  = "none";
+                this.$.newTitle.innerHTML   = "Title";
+                this.$.newContent.innerHTML = "Content";
+
             }
 
         });
