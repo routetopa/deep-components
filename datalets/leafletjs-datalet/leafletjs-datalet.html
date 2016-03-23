@@ -103,10 +103,16 @@ Example:
 
                         if(t.data.length > 2)
                         {
-                            if(t.data[t.data.length - 1].data[i].toString().match(new RegExp("^(http[s]?:\\/\\/(www\\.)?|ftp:\\/\\/(www\\.)?|www\\.){1}([0-9A-Za-z-\\.@:%_\+~#=]+)+((\\.[a-zA-Z]{2,3})+)(/(.)*)?(\\?(.)*)?")))
-                               var popup = L.popup().setContent('<image height="100" width="100" src="' + t.data[t.data.length - 1].data[i] + '" />');
-                            else
-                                var popup = L.popup().setContent('<span>' + t.data[t.data.length - 1].data[i] + '</span>');
+                            var popupText = "";
+                            for(var j=2; j<t.data.length; j++)
+                            {
+                                if(t.data[j].data[i].toString().match(new RegExp("^(http[s]?:\\/\\/(www\\.)?|ftp:\\/\\/(www\\.)?|www\\.){1}([0-9A-Za-z-\\.@:%_\+~#=]+)+((\\.[a-zA-Z]{2,3})+)(/(.)*)?(\\?(.)*)?")))
+                                        popupText += '<image height="100" width="100" src="' + t.data[j].data[i] + '" /><br/>';
+                                else
+                                        popupText += '<span>' + t.data[j].data[i] + '</span><br/>'
+                            }
+
+                            var popup = L.popup().setContent(popupText);
                             marker.bindPopup(popup);
                         }
                     }
