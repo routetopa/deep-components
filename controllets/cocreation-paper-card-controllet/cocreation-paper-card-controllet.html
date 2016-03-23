@@ -83,7 +83,7 @@
                     </div>
                 </div>
                 <div class="card-actions">
-                    <paper-button>Explore</paper-button>
+                    <paper-button on-click="_onExplore">Explore</paper-button>
                     <paper-icon-button icon="expand-less" on-click="_toggle" style="float:right;">
                     </paper-icon-button>
                     <iron-collapse class="iron-collapse-over" id="more_info" no-animation>
@@ -124,6 +124,10 @@
                     type: String,
                     value: "text"
                 },
+                roomUrl: {
+                    type: String,
+                    value: undefined
+                }
             },
 
             attached: function(){
@@ -134,6 +138,10 @@
                 var iconButton = Polymer.dom(event).localTarget;
                 iconButton.icon = moreInfo.opened ? 'expand-less' : 'expand-more';
                 moreInfo.toggle();
+            },
+
+            _onExplore: function(e){
+                window.location = this.roomUrl;
             }
 
         })

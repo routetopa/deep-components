@@ -18,6 +18,7 @@
     "paper-fab-transitions": "~0.1.0",
     "paper-scroll-header-panel": "PolymerElements/paper-scroll-header-panel#~1.0.14",
     "iron-icon": "PolymerElements/iron-icon#~1.0.7",
-    "iron-icons": "PolymerElements/iron-icons#~1.1.2"
+    "iron-icons": "PolymerElements/iron-icons#~1.1.2",
+    "paper-toast": "PolymerElements/paper-toast#~1.2.1"
   }
 }
