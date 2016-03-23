@@ -31,7 +31,6 @@
 <link rel="import" href="../../bower_components/polymer/polymer.html">
 <link rel="import" href="../highcharts-datalet/highcharts-datalet.html">
 
-
 <!--
 `piechart-datalet` is a piechart datalet based on highcharts project <http://www.highcharts.com/>
 
@@ -60,49 +59,65 @@ Example:
              * @method presentData
              */
             presentData: function(){
+                var series = [{"name": this.data[1].name, "data": []}];
 
-                var PieSeries = [{"name": this.data[1].name, "data":[]}];
+                var sum = 0;
+                for(var i = 0; i < this.data[0].data.length; i++)
+                    sum += this.data[1].data[i];
 
-                for(var i=0; i<this.data[0].data.length; i++)
-                {
-                    var PieArr = [this.data[0].data[i], this.data[1].data[i]];
-                    PieSeries[0].data.push(PieArr);
+                var other = ['other', 0];
+                for(var i = 0; i < this.data[0].data.length; i++) {
+                    if (this.data[0].data.length <= 20 || this.data[1].data[i] / sum >= 0.02) {
+                        var slice = ['' + this.data[0].data[i], this.data[1].data[i]];
+                        series[0].data.push(slice);
+                    }
+                    else {
+                        other[1] += this.data[1].data[i];
+                    }
                 }
 
-                //Build Highchart element
-                $(this._component.$.charts.$.container).highcharts({
+                if(other[1] > 0)
+                    series[0].data.push(other);
+
+                var innerSize = 0;
+                if(this._component.donut == "true")
+                    innerSize = 100;
+
+                options = {
                     chart: {
-                        plotBackgroundColor: null,
-                        plotBorderWidth: null,
-                        plotShadow: false,
-                        type: 'pie'
+                        type: 'pie',
+                        zoomType: 'xy',
                     },
                     title: {
-                        text: "" + this._component.title
+                        text: this._component.title
+                    },
+                    tooltip: {
+                        valueSuffix: ' ' + this._component.suffix
                     },
                     plotOptions: {
                         pie: {
+                            innerSize: innerSize,
                             allowPointSelect: true,
                             cursor: 'pointer',
                             dataLabels: {
                                 enabled: true,
-                                formatter: function() {
-                                    if (this.point.name.length > 10) {
-                                        return this.point.name.substr(0, 10) + "...";
-                                    } else {
-                                        return this.point.name;
-                                    }
+                                format: '<b>{point.name}</b>: {point.percentage:.1f} %',
+                                style: {
+                                    color: (Highcharts[this._component.theme] && Highcharts[this._component.theme].contrastTextColor) || 'black'
                                 }
-                                },
-                            showInLegend: true
+                            }
                         }
                     },
-                    //hide link HighChart
                     credits: {
                         enabled: false
                     },
-                   series: PieSeries
-                });
+                    series: series
+                };
+
+                if(this._component.theme != "themeBase" && this._component.theme != "")
+                    jQuery.extend(true, options, Highcharts[this._component.theme]);
+
+                $(this._component.$.charts.$.container).highcharts(options);
             }
         };
 
@@ -111,13 +126,18 @@ Example:
             is: 'piechart-datalet',
 
             properties: {
-                /**
-                 * It's the component behavior
-                 *
-                 * @attribute behavior
-                 * @type Object
-                 * @default {}
-                 */
+                suffix : {
+                    type : String,
+                    value : ""
+                },
+                theme : {
+                    type : String,
+                    value : ""
+                },
+                donut : {
+                    type : String,
+                    value : "false"
+                },
                 behavior : {
                     type : Object,
                     value : {}

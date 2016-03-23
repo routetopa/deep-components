@@ -62,13 +62,12 @@ Example:
              * @method presentData
              */
             presentData: function(){
-
-                $(this._component.$.charts.$.container).highcharts({
-                    title: {
-                        text: "" + this._component.title
-                    },
+                options = {
                     chart: {
                         zoomType: 'xy'
+                    },
+                    title: {
+                        text: this._component.title
                     },
                     xAxis: {
                         categories: this.properties.categories.value,//this._component.categories,
@@ -77,14 +76,14 @@ Example:
                         }
                     },
                     yAxis: {
+                        min: 0,
                         title: {
-                            text: this._component.yAxisLabel
+                            text: this._component.yAxisLabel,
+                            align: 'high'
                         },
-                        plotLines: [{
-                            value: 0,
-                            width: 1,
-                            color: '#808080'
-                        }]
+                        labels: {
+                            overflow: 'justify'
+                        }
                     },
                     tooltip: {
                         valueSuffix: ' ' + this._component.suffix
@@ -94,17 +93,22 @@ Example:
                         align: 'right',
                         verticalAlign: 'top',
                         x: -40,
-                        y: 100,
+                        y: 80,
                         floating: true,
                         borderWidth: 1,
-                        backgroundColor: ((Highcharts.theme && Highcharts.theme.legendBackgroundColor) || '#FFFFFF'),
+                        backgroundColor: ((Highcharts[this._component.theme] && Highcharts[this._component.theme].legendBackgroundColor) || '#FFFFFF'),
                         shadow: true
                     },
                     credits: {
                         enabled: false
                     },
                     series: this.properties.series.value
-                });
+                };
+
+                if(this._component.theme != "themeBase" && this._component.theme != "")
+                    jQuery.extend(true, options, Highcharts[this._component.theme]);
+
+                $(this._component.$.charts.$.container).highcharts(options);
             }
         };
 
@@ -145,6 +149,10 @@ Example:
                 suffix : {
                     type : String,
                     value : "units"
+                },
+                theme : {
+                    type : String,
+                    value : ""
                 },
                 /**
                  * It's the component behavior

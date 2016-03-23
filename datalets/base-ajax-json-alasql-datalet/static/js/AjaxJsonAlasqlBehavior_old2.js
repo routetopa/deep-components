@@ -101,6 +101,12 @@ var AjaxJsonAlasqlBehavior = {
         for (var i=0; i < this._component.fields.length; i++)
             fields.push(this._fieldName(this._component.fields[i], provider));
 
+        //if(aggregators)
+        //    for (var i=0; i < aggregators.length; i++)
+        //        aggregators[i]["field"] = this._fieldName(aggregators[i]["field"], provider);
+
+        //var jsonData = [this.properties.json_results.value];
+
         //jsdatachecker
         var _converter = new DataTypeConverter();
         var path2 = this._arrayPath(provider);
@@ -149,45 +155,64 @@ var AjaxJsonAlasqlBehavior = {
         pureSelect = pureSelect.slice(0, -2);
 
         //GROUP BY
+        //var groupBy = "";
+        //if(aggregators && aggregators.length) {
+        //
+        //    for (var i=0; i < aggregators.length; i++)
+        //        aggregators[i]["field"] = this._fieldName(aggregators[i]["field"], provider);
+        //
+        //    groupBy = "GROUP BY " + aggregators[0]["field"];
+        //    select = "SELECT "  + aggregators[0]["field"];
+        //    for (var i = 1; i < aggregators.length; i++)
+        //        select += ", " + aggregators[i]["operation"] + "(" + aggregators[i]["field"] + ") as " + aggregators[i]["field"];
+        //}
+
+        //var groupBy = "";
+        //if(aggregators && aggregators.length) {
+        //
+        //    groupBy = "GROUP BY " + this._fieldName(aggregators[0]["field"], "");
+        //    select = "SELECT "  + this._fieldName(aggregators[0]["field"], provider) + " as " + this._fieldName(aggregators[0]["field"], "");
+        //    for (var i = 1; i < aggregators.length; i++)
+        //        select += ", " + aggregators[i]["operation"] + "(" + this._fieldName(aggregators[i]["field"], provider) + ") as " + this._fieldName(aggregators[i]["field"], "");
+        //}
+
+        //GROUP BY
         var groupBy = "";
-        var select = "";
         if(aggregators && aggregators.length) {
 
             for (var i=0; i < aggregators.length; i++)
                 aggregators[i]["field"] = this._fieldName(aggregators[i]["field"], "");
 
             groupBy = "GROUP BY " + aggregators[0]["field"];
-            select = "SELECT "  + aggregators[0]["field"];
+            var select = "SELECT "  + aggregators[0]["field"];
             for (var i = 1; i < aggregators.length; i++)
                 select += ", " + aggregators[i]["operation"] + "(" + aggregators[i]["field"] + ") as " + aggregators[i]["field"];
-
-            if(aggregators[1] && aggregators[1]["operation"] == "GROUP BY") {
-                groupBy = "GROUP BY " + aggregators[0]["field"] + ", " + aggregators[1]["field"];
-                select = "SELECT "  + aggregators[0]["field"] + ", " + aggregators[1]["field"];
-                for (var i = 2; i < aggregators.length; i++)
-                    select += ", " + aggregators[i]["operation"] + "(" + aggregators[i]["field"] + ") as " + aggregators[i]["field"];
-            }
         }
 
         //QUERY
         var path = this._path(this._component.fields[0], provider);
-        var query;
 
-        query = "SELECT "+ path +" FROM ?";
-        //console.log(query);
-        var res = alasql(query, [jsonData]);
+        console.log('SELECT '+ path +' FROM ?');
+        var res = alasql("SELECT "+ path +" FROM ?", [jsonData]);
 
         var records = res[0][path];
 
-        query = pureSelect + " FROM ? " + where  + " " + orderBy;
-        //console.log(query);
-        var obj = alasql(query, [records]);
+        //console.log(select + ' FROM ? ' + where + ' ' + groupBy + ' ' + orderBy + '');
+        //var obj = alasql(select + " FROM ? " + where + " " + groupBy + " " + orderBy + "", [records]);
+
+        console.log(pureSelect + ' FROM ? ' + where);
+        var obj = alasql(pureSelect + " FROM ? " + where, [records]);
 
         if (groupBy != "") {
-            query = select + " FROM ? " + groupBy + " " + orderBy;
-            //console.log(query);
-            obj = alasql(query, [obj]);
+            console.log(select + ' FROM ? ' + groupBy + ' ' + orderBy + '');
+            obj = alasql(select + " FROM ? " + groupBy + " " + orderBy + "", [obj]);
         }
+
+        //TEST
+        //var query = "SELECT [preteur], [annee] as [annee], SUM([capital_restant_du]) as [capital_restant_du] FROM ? GROUP BY [preteur], [annee]"
+        //var obj = alasql(query, [obj]);
+        //console.log(obj);
+        //this.data = obj;
 
         //PUSH DATA
         if(!obj || obj.length == 0)

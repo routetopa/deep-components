@@ -13,21 +13,59 @@
         ln["localization"] = "en";
     </script>
 
-    <link rel="import" href="../datalet-selection-controllet.html" />
+    <link rel="import" href="../select-dataset-controllet.html" />
 </head>
 
 <body>
 
-<!--<datalet-selection-controllet fields='["result,records,Anno","result,records,Cinesi","result,records,Albanesi","result,records,Rumeni","result,records,Pakistani","result,records,Marocchini","result,records,Altri stranieri" ]' data-url="http://ckan.routetopa.eu/api/action/datastore_search?resource_id=e04338cf-7a92-4221-81c6-fe12f41003d5" deep-url="http://172.16.15.38/DEEalerProvider/DEEP/" datalets-list-url="http://172.16.15.38/DEEalerProvider/DEEP/datalets-list"></datalet-selection-controllet>-->
+<style>
 
-<!--<datalet-selection-controllet fields='["records,fields,title", "records,fields,published"]' data-url="https://data.issy.com/api/records/1.0/search?dataset=flux-rss-des-offres-demplois-a-issy-les-moulineaux&sort=published&facet=published&refine.published=2015%2F10" deep-url="http://172.16.15.38/DEEalerProvider/DEEP/" datalets-list-url="http://172.16.15.38/DEEalerProvider/DEEP/datalets-list"></datalet-selection-controllet>-->
-<datalet-selection-controllet fields='["records,fields,annee", "records,fields,preteur", "records,fields,capital_restant_du"]' data-url="https://data.issy.com/api/records/1.0/search/?dataset=repartitiondeladetteparpreteursau3112n-feuille1&rows=56&sort=-annee" deep-url="http://172.16.15.38/DEEalerProvider/DEEP/" datalets-list-url="http://172.16.15.38/DEEalerProvider/DEEP/datalets-list"></datalet-selection-controllet>
+    .container {
+        height: calc(90px * 5 - 8px);
+        width: 50%;
+        /*width: 400px;*/
+        position: relative;
+        top: 100px;
+        left:25%;
+        /*background-color: red;*/
+    }
+
+</style>
+
+<div class="container">
+    <select-dataset-controllet id="ds"></select-dataset-controllet>
+</div>
+
+<script>
+    var description = "aaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaa aaaaaaaaaaaa aaaaaaaaa aaaaaaaaaaaaaaaaaaaaaaaaaa "+
+            " aaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaa aaaaaaaaaaaa aaaaaaaaa aaaaaaaaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaa "+
+            " aaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaa aaaaaaaaaaaa aaaaaaaaa aaaaaaaaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaa "+
+            "aaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaa aaaaaaaaaaaa aaaaaaaaa aaaaaaaaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaa"+
+            "aaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaa aaaaaaaaaaaa aaaaaaaaa aaaaaaaaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaa"+
+            "aaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaa aaaaaaaaaaaa aaaaaaaaa aaaaaaaaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaa"+
+            "aaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaa aaaaaaaaaaaa aaaaaaaaa aaaaaaaaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaa"+
+            "aaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaa aaaaaaaaaaaa aaaaaaaaa aaaaaaaaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaa"+
+            "aaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaa aaaaaaaaaaaa aaaaaaaaa aaaaaaaaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaa"+
+            "aaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaa aaaaaaaaaaaa aaaaaaaaa aaaaaaaaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaa"+
+            "aaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaa aaaaaaaaaaaa aaaaaaaaa aaaaaaaaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaa"+
+            "aaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaa aaaaaaaaaaaa aaaaaaaaa aaaaaaaaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaa"+
+            "aaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaa aaaaaaaaaaaa aaaaaaaaa aaaaaaaaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaa"+
+            "aaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaa aaaaaaaaaaaa aaaaaaaaa aaaaaaaaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaa"+
+            "aaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaa aaaaaaaaaaaa aaaaaaaaa aaaaaaaaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaa"+
+            "aaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaa aaaaaaaaaaaa aaaaaaaaa aaaaaaaaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaa"+
+            "aaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaa aaaaaaaaaaaa aaaaaaaaa aaaaaaaaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaa";
+
+    var dataset1 = {description: description, name: "Data", url: "http://ckan.routetopa.eu/api/action/datastore_search?resource_id=c3b52992-ba61-4a73-a637-0f2e1ca26aab"};
+    var dataset2 = {description: "", name: "Klassen", url: "http://ckan.routetopa.eu/api/action/datastore_search?resource_id=dfd27de5-0790-466c-af59-6a82509e7fbb"};
+    var dataset3 = {description: "descrizione bellissima purissima levissima sbiricuda antani", name: "Derelict Sites", url: "http://ckan.routetopa.eu/api/action/datastore_search?resource_id=fcbee83e-3d3d-4303-a568-24dd33d02adc"};
+    var datasets = [dataset1, dataset2, dataset3];
+    var datasets = [dataset1, dataset2, dataset3, dataset1, dataset2, dataset3, dataset1, dataset2, dataset3, dataset1, dataset2, dataset3, dataset1, dataset2, dataset3];
+
+    var ds = document.getElementById('ds');
+    ds.setAttribute("items", JSON.stringify(datasets));
+
+</script>
 
 </body>
 
-<!--urls:-->
-<!--https://yperdiavgeia.gr/analytics/counts/source:Decision/query:linux/method:count_organization.json-->
-<!--http://dati.lazio.it/catalog/api/action/datastore_search?resource_id=114baf3d-6d4f-42ff-b4af-481beef59ae1-->
-<!--url: 'http://ckan.routetopa.eu/api/action/datastore_search?resource_id=73e02092-85a1-434e-85fe-0c9a43aa9a52&limit=5',-->
-<!--url: 'https://data.issy.com/api/records/1.0/search?dataset=liste-des-restaurants-a-issy-les-moulineaux&sort=type&facet=type&facet=terrasse',-->
-<!--url: 'https://data.issy.com/api/records/1.0/search?dataset=flux-rss-des-offres-demplois-a-issy-les-moulineaux&sort=published&facet=published&refine.published=2015',-->
+</html>

@@ -212,11 +212,14 @@
                 this.$.card_modify.setAttribute("title", paper_ln["modify_"+paper_ln["ln"]]);
                 this.$.card_delete.setAttribute("title", paper_ln["delete_"+paper_ln["ln"]]);
                 if(this.checkType(this.cardType, 'link'))
-                    this.$$("#card_open_link").setAttribute("title", paper_ln["open_"+paper_ln["ln"]]);
+                    if(this.$$("#card_open_link"))
+                        this.$$("#card_open_link").setAttribute("title", paper_ln["open_"+paper_ln["ln"]]);
                 if(this.checkType(this.cardType, 'text'))
-                    this.$$("#card_open_text").setAttribute("title", paper_ln["open_"+paper_ln["ln"]]);
+                    if(this.$$("#card_open_text"))
+                        this.$$("#card_open_text").setAttribute("title", paper_ln["open_"+paper_ln["ln"]]);
                 if(this.checkType(this.cardType, 'datalet'))
-                    this.$$("#card_open_datalet").setAttribute("title", paper_ln["open_"+paper_ln["ln"]]);
+                    if(this.$$("#card_open_datalet"))
+                        this.$$("#card_open_datalet").setAttribute("title", paper_ln["open_"+paper_ln["ln"]]);
             },
 
             _changeWidth: function(){

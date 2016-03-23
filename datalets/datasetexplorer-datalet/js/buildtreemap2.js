@@ -140,7 +140,7 @@ function build2(root, meta, place_holder, select_listener, width, height) {
             .attr("onmousemove", function(d) {
                 //var data = ["lvl", "name", "color", "description", "logoUrl", "datasets", "datasetUrl"];
                 var data = ["", d.name, d.color, "", "", d.value, ""];
-                console.log(d);
+                //console.log(d);
                 data[2] = ["#000000"];
                 var id = (d.name) ? d.name.split(':')[1] : undefined;
                 if (d.depth == 1) {
@@ -169,6 +169,14 @@ function build2(root, meta, place_holder, select_listener, width, height) {
         g.append("text")
             .attr("dy", ".75em")
             .call(text);
+
+        //g.append("svg")
+        //    .attr("class", "foreignObject")
+        //    .attr("width", function(d) { return x(d.x + d.dx) - x(d.x); })
+        //    .attr("height", function(d) { return y(d.y + d.dy) - y(d.y); })
+        //    .append("text")
+        //    .attr("dy", ".75em")
+        //    .call(text);
 
         function transition(d) {
             if (transitioning || !d) return;

@@ -30,10 +30,7 @@
 -->
 
 <link rel="import" href="../highcharts-datalet/highcharts-datalet.html">
-<script src="https://code.highcharts.com/highcharts-more.js"></script>
-<script type='text/javascript' src='https://code.highcharts.com/maps/1.1.6/modules/map.js'></script>
-
-<!--script src="https://code.highcharts.com/modules/heatmap.js"></script>
+<script src="js/heatmap.js"></script>
 
 <!--
 
@@ -66,38 +63,37 @@ Example:
              * @method presentData
              */
             presentData: function(){
-                campi = [];
-                serie = [];
-
-            for (i = 0; i < this.properties.series.value.length; i++) {
-                campi.push(this.properties.series.value[i].name);
-                for (j = 0; j < this.properties.series.value[i].data.length; j++) {
-                    serie.push([j,i,this.properties.series.value[i].data[j]])
+                var Xcategories = this.properties.categories.value
+                var Ycategories = [];
+                var series = [];
+                for (var i = 0; i < this.properties.series.value.length; i++) {
+                    Ycategories.push(this.properties.series.value[i].name);
+                    for (var j = 0; j < this.properties.series.value[i].data.length; j++) {
+                        series.push([j, i,this.properties.series.value[i].data[j]]);
+                    }
                 }
-            }
 
-                $(this._component.$.charts.$.container).highcharts({
+                options = {
                     chart: {
                         type: 'heatmap',
                         marginTop: 40,
-                        marginBottom: 80,
+//                        marginBottom: 80,
                         plotBorderWidth: 1
                     },
 
                     title: {
-                        text: this._component.Title
+                        text: this._component.title
                     },
 
                     xAxis: {
-                        categories: this.properties.categories.value,
+                        categories: Xcategories,
                         title: {
                             text: this._component.xAxisLabel
                         }
                     },
 
                     yAxis: {
-                        categories: campi,
-                        //categories: this.properties.categories.value,
+                        categories: Ycategories,
                         title: {
                             text: this._component.yAxisLabel
                         }
@@ -117,33 +113,27 @@ Example:
                         y: 25,
                         symbolHeight: 280
                     },
-                    /*tooltip: {
-                        formatter: function () {
-                            return '<b>' + this.series.xAxis.categories[this.point.x] + '</b><br>Abitanti:   <b>' +  this._component.prototype.xAxis
-                                this.point.value + '</b><br>Anno <b>' + this.series.yAxis.categories[this.point.y] + '</b>';
-                        }*/
+                    tooltip: {
+                        valueSuffix: ' ' + this._component.suffix
+                    },
 
-                    //},
-                   /* tooltip: {
-                     formatter: function () {
-                     return '<b>' + this.series.xAxis.categories[this.point.x] +  this._component.prototype.xAxis
-                     this.point.value  + this.series.yAxis.categories[this.point.y];
-                     }
-*/
-                     //},
                     credits: {
                         enabled: false
                     },
                     series: [{
-                        //name: 'Popolazione',
                         borderWidth: 1,
-                        data: serie,
+                        data: series,
                         dataLabels: {
                             enabled: true,
                             color: '#000000'
                         }
                     }]
-                });
+                };
+
+                if(this._component.theme != "themeBase" && this._component.theme != "")
+                    jQuery.extend(true, options, Highcharts[this._component.theme]);
+
+                $(this._component.$.charts.$.container).highcharts(options);
             }
         };
 
@@ -175,17 +165,6 @@ Example:
                     value: ""
                 },
                 /**
-                 * It's the title of the chart
-                 *
-                 * @attribute title
-                 * @type String
-                 * @default ''
-                 */
-                Title: {
-                    type: String,
-                    value: ""
-                },
-                /**
                  * It's the values suffix
                  *
                  * @attribute suffix
@@ -193,6 +172,10 @@ Example:
                  * @default 'units'
                  */
                 suffix : {
+                    type : String,
+                    value : ""
+                },
+                theme : {
                     type : String,
                     value : ""
                 },

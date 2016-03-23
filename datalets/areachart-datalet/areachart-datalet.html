@@ -62,7 +62,7 @@ Example:
              * @method transformData
              */
             presentData: function(){
-                $(this._component.$.charts.$.container).highcharts({
+                options = {
                     chart: {
                         type: 'area',
                         zoomType: 'xy'
@@ -91,7 +91,16 @@ Example:
                     },
                     plotOptions: {
                         area: {
-
+                            marker: {
+                                enabled: false,
+                                symbol: 'circle',
+                                radius: 2,
+                                states: {
+                                    hover: {
+                                        enabled: true
+                                    }
+                                }
+                            }
                         }
                     },
                     legend: {
@@ -99,17 +108,22 @@ Example:
                         align: 'right',
                         verticalAlign: 'top',
                         x: -40,
-                        y: 100,
+                        y: 80,
                         floating: true,
                         borderWidth: 1,
-                        backgroundColor: ((Highcharts.theme && Highcharts.theme.legendBackgroundColor) || '#FFFFFF'),
+                        backgroundColor: ((Highcharts[this._component.theme] && Highcharts[this._component.theme].legendBackgroundColor) || '#FFFFFF'),
                         shadow: true
                     },
                     credits: {
                         enabled: false
                     },
-                    series: this.properties.series.value//this._component.series
-                });
+                    series: this.properties.series.value
+                };
+
+                if(this._component.theme != "themeBase" && this._component.theme != "")
+                    jQuery.extend(true, options, Highcharts[this._component.theme]);
+
+                $(this._component.$.charts.$.container).highcharts(options);
             }
         };
 
@@ -150,6 +164,21 @@ Example:
                 suffix : {
                     type : String,
                     value : "units"
+                },
+                theme : {
+                    type : String,
+                    value : ""
+                },
+                /**
+                 * It's the component behavior
+                 *
+                 * @attribute behavior
+                 * @type Object
+                 * @default {}
+                 */
+                behavior : {
+                    type : Object,
+                    value : {}
                 }
             },
             /**

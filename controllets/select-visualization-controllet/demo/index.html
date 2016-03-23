@@ -13,19 +13,21 @@
         ln["localization"] = "en";
     </script>
 
-    <link rel="import" href="../datalet-selection-controllet.html" />
+    <link rel="import" href="../select-visualization-controllet.html" />
+    <link rel="import" href="../select-datalet-inputs_series.html" />
+    <link rel="import" href="../select-datalet-options.html" />
 </head>
 
 <body>
 
-<!--<datalet-selection-controllet fields='["result,records,Anno","result,records,Cinesi","result,records,Albanesi","result,records,Rumeni","result,records,Pakistani","result,records,Marocchini","result,records,Altri stranieri" ]' data-url="http://ckan.routetopa.eu/api/action/datastore_search?resource_id=e04338cf-7a92-4221-81c6-fe12f41003d5" deep-url="http://172.16.15.38/DEEalerProvider/DEEP/" datalets-list-url="http://172.16.15.38/DEEalerProvider/DEEP/datalets-list"></datalet-selection-controllet>-->
-
-<!--<datalet-selection-controllet fields='["records,fields,title", "records,fields,published"]' data-url="https://data.issy.com/api/records/1.0/search?dataset=flux-rss-des-offres-demplois-a-issy-les-moulineaux&sort=published&facet=published&refine.published=2015%2F10" deep-url="http://172.16.15.38/DEEalerProvider/DEEP/" datalets-list-url="http://172.16.15.38/DEEalerProvider/DEEP/datalets-list"></datalet-selection-controllet>-->
-<datalet-selection-controllet fields='["records,fields,annee", "records,fields,preteur", "records,fields,capital_restant_du"]' data-url="https://data.issy.com/api/records/1.0/search/?dataset=repartitiondeladetteparpreteursau3112n-feuille1&rows=56&sort=-annee" deep-url="http://172.16.15.38/DEEalerProvider/DEEP/" datalets-list-url="http://172.16.15.38/DEEalerProvider/DEEP/datalets-list"></datalet-selection-controllet>
+<select-visualization-controllet fields='["records,fields,annee", "records,fields,preteur", "records,fields,capital_restant_du"]' data-url="https://data.issy.com/api/records/1.0/search/?dataset=repartitiondeladetteparpreteursau3112n-feuille1&rows=56&sort=-annee" deep-url="http://172.16.15.38/DEEalerProvider/DEEP/" datalets-list-url="http://172.16.15.38/DEEalerProvider/DEEP/datalets-list"></select-visualization-controllet>
+<!--<select-datalet-inputs_series></select-datalet-inputs_series>-->
+<!--<select-datalet-options></select-datalet-options>-->
 
 </body>
 
 <!--urls:-->
+<!--https://data.issy.com/api/records/1.0/search/?dataset=repartitiondeladetteparpreteursau3112n-feuille1&rows=56&sort=-annee-->
 <!--https://yperdiavgeia.gr/analytics/counts/source:Decision/query:linux/method:count_organization.json-->
 <!--http://dati.lazio.it/catalog/api/action/datastore_search?resource_id=114baf3d-6d4f-42ff-b4af-481beef59ae1-->
 <!--url: 'http://ckan.routetopa.eu/api/action/datastore_search?resource_id=73e02092-85a1-434e-85fe-0c9a43aa9a52&limit=5',-->

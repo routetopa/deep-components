@@ -67,19 +67,27 @@ var BaseDataletBehavior ={
         data: {
             type: Array,
             value: []
+        },
+        title: {
+            type: String,
+            value: ""
+        },
+        description: {
+            type: String,
+            value: ""
         }
 
     },
 
-    factoryImpl: function(data_url, fields) {
-        this.data_url = data_url;
-        this.fields   = fields;
-    },
+    //factoryImpl: function(data_url, fields) {
+    //    this.dataUrl = data_url;
+    //    this.fields   = fields;
+    //},
 
-    setParameters: function(params)
-    {
-        this.title = params['title'];
-        this.description = params['description'];
-    }
+    //setParameters: function(params)
+    //{
+    //    this.title = params['title'];
+    //    this.description = params['description'];
+    //}
 
 };

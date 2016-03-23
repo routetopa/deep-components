@@ -17,8 +17,8 @@
         <style is="custom-style">
             paper-icon-button{
                 color: #FFFFFF;
-                height: 48px;
-                width: 48px;
+                height: 32px;/*48*/
+                width: 32px;/*48*/
                 padding: 0px;
                 margin: 0px;
                 --paper-icon-button-ink-color: white;
@@ -27,7 +27,7 @@
             #items_vslider_container{
                 display: flex;
                 flex-direction: column;
-                height: 100vh;
+                height: 100%;
                 width: 172px;
                 background-color: #E0E0E0;
             }
@@ -39,18 +39,17 @@
 
             .arrow-up{
                 background-color: #2196F3;
-                padding-left: 63px;
+                padding-left: 70px;/*62*/
             }
 
             .arrow-down{
                 background-color: #2196F3;
-                padding-left: 63px;
+                padding-left: 70px;
             }
 
             .content-card{
                 position: relative;
                 float: left;/*firefox*/
-                /*margin : 16px;*/
                 margin : 16px 16px 0px 16px;
                 padding: 8px;
                 height: 124px;
@@ -60,7 +59,6 @@
             }
 
             img{
-                /*height: 100%;*/
                 width: 100%;
             }
 
@@ -70,23 +68,24 @@
                 bottom: 16px;
                 padding: 8px;
                 width: 124px;
-                background-color: #9E9E9E;
-                color: #FFFFFF;
-                opacity: 0.87;
+                color: #000000;
+                background-color: rgba(158, 158, 158, 0.8);
                 z-index: 1;
                 font-family: 'Roboto', 'Helvetica Neue', Helvetica, Arial, sans-serif;
                 font-size: 16px;
+                line-height: 16px;
+                font-weight: 700;
             }
 
             .legend.selected {
-                font-weight: 700;
                 background-color: #2196F3;
-                opacity: 1;
+                color: #FFFFFF;
             }
 
             #items_vslider_search{
                 height: 48px;
                 padding: 0px 8px;
+                /*padding-top: 8px;*/
                 background-color: #B6B6B6;
                 --paper-input-container-focus-color: #2196F3;
             }
@@ -99,7 +98,7 @@
                 width: 24px;
                 height: 24px;
                 padding: 0px 4px;
-                color: #FFFFFF;
+                color: #F44336;
                 --paper-icon-button-ink-color: #FFFFFF;
             }
         </style>
@@ -108,7 +107,7 @@
 
         <paper-material id="items_vslider_container" elevation="5">
 
-            <paper-input id="items_vslider_search" value={{filter}} no-label-float> <!--label="search"-->
+            <paper-input id="items_vslider_search" value={{filter}} no-label-float label="">
                 <iron-icon class="search" icon="search" prefix></iron-icon>
                 <paper-icon-button class="clear" suffix on-click="_clearInput" icon="clear" tabindex="0"></paper-icon-button>
             </paper-input>
@@ -179,19 +178,30 @@
             },
 
             ready : function() {
-//                this._resize();
                 $(this.$.div_datalets_container).perfectScrollbar();
             },
 
             attached : function() {
-//                this._resize();
-//                var that = this;
-//                window.addEventListener("resize", function() { that._resize(); });
-
                 if(this.preselectedDatalet){
                     this._preselectDatalet();
                     this.preselectedDatalet = undefined;
                 }
+
+                this._translate();
+            },
+
+            _reset : function() {
+                if(this.selectedDatalet != undefined && (document.getElementById(this.selectedDatalet) != null)){
+                    var dataletCard = document.getElementById(this.selectedDatalet);
+                    dataletCard.elevation = "1";
+                    dataletCard.getElementsByClassName("legend")[0].className = dataletCard.getElementsByClassName("legend")[0].className.replace(" selected", "");
+                }
+                this.selectedDatalet = undefined;
+                this.filter = "";
+            },
+
+            _translate : function(){
+                this.$.items_vslider_search.setAttribute("label", ln["search_" + ln["localization"]]);
             },
 
             _clearInput : function() {
@@ -214,7 +224,10 @@
                 var datalets = new Array();
                 for(var i=0; i < this.datalets.length; i++){
                     var datalet = this.datalets[i];
-                    if(datalet.imageName.indexOf(this.filter) != -1)
+                    var imageName = this._getChartName(datalet.imageName).toLowerCase();
+                    console.log(imageName);
+                    console.log(this.filter);
+                    if(imageName.indexOf(this.filter.toLowerCase()) > -1)
                         datalets.push(datalet);
                 }
 

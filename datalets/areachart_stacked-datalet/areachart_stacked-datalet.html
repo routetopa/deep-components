@@ -33,28 +33,28 @@
 
 <!--
 
-`barchart-datalet` is a barchart datalet based on highcharts project http://www.highcharts.com/
+`areachart-datalet` is a areachart datalet based on highcharts project http://www.highcharts.com/
 
 Example:
 
-    <barchart-datalet
+    <areachart-datalet
         data-url="http://ckan.routetopa.eu/api/action/datastore_search?resource_id=#"
         fields='["field1","field2"]'>
-    </barchart-datalet>
+    </areachart-datalet>
 
-@element barchart-datalet
+@element areachart-datalet
 @status v0.1
 @demo demo/index.html
 @group datalets
 -->
 
-<dom-module name="bar-chart-datalet">
+<dom-module name="areachart_stacked-datalet">
     <template>
         <highcharts-datalet id="charts" data-url="{{dataUrl}}" fields="{{fields}}" data="{{data}}" title="{{title}}" description="{{description}}"></highcharts-datalet>
     </template>
     <script>
 
-        var Bar_chartBehavior = {
+        var AreachartStackedBehavior = {
 
             /**
              * Bluid Highchart object
@@ -62,94 +62,63 @@ Example:
              * @method transformData
              */
             presentData: function(){
-
-//                var a = "theme";//default
-//                var a = "themeDarkUnika";
-                var a = "themeSandSignika";
-//                var a = "themeGridLight";
-
-                Highcharts.setOptions(Highcharts[a]);
-
-                $(this._component.$.charts.$.container).highcharts({
+                options = {
                     chart: {
-                        type: 'bar',
-                        zoomType: 'xy'
+                        type: 'area',
+                        zoomType: 'xy',
                     },
                     title: {
                         text: this._component.title
                     },
                     xAxis: {
                         categories: this.properties.categories.value,
-//                        categories: ['Cinesi', 'Albanesi', 'Rumeni', 'Pakistani', 'Marocchini', 'Altri stranieri'],
                         title: {
-                            text: this._component.xAxisLabel
+                            text: this._component.yAxisLabel
                         }
                     },
                     yAxis: {
                         min: 0,
                         title: {
-                            text: this._component.yAxisLabel,
-                            align: 'high'
+                            text: this._component.xAxisLabel,
                         },
-                        labels: {
-                            overflow: 'justify'
-                        }
                     },
                     tooltip: {
                         valueSuffix: ' ' + this._component.suffix
                     },
                     plotOptions: {
-                        bar: {
-                            dataLabels: {
-                                enabled: true
+                        series: {
+                            stacking: this._component.stack
+                        },
+                        area: {
+                            marker: {
+                                enabled: false,
+                                symbol: 'circle',
+                                radius: 2,
+                                states: {
+                                    hover: {
+                                        enabled: true
+                                    }
+                                }
                             }
                         }
-//
-//                        series: {
-//                            stacking: 'normal'
+//                        bar: {
+//                            dataLabels: {
+//                                enabled: true
+//                            }
 //                        }
                     },
-                    legend: {
-                        layout: 'vertical',
-                        align: 'right',
-                        verticalAlign: 'top',
-                        x: -40,
-                        y: 40,
-                        floating: true,
-                        borderWidth: 1,
-                        backgroundColor: ((Highcharts.theme && Highcharts.theme.legendBackgroundColor) || '#FFFFFF'),
-                        shadow: true
-                    },
-                    credits: {
-                        enabled: false
-                    },
-
                     series: this.properties.series.value
-//                     series: [{
-//                         name: '2010',
-//                         data: [107, 31, 635, 203, 2]
-//                     }, {
-//                         name: '2011',
-//                         data: [1353, 156, 947, 408, 6]
-//                     }, {
-//                         name: '2012',
-//                         data: [133, 156, 947, 408, 64]
-//                     }, {
-//                         name: '2013',
-//                         data: [133, 156, 947, 48, 6]
-//                     }, {
-//                         name: '2014',
-//                         data: [1052, 954, 4250, 740, 38]
-//                     }]
-                });
+                };
 
+                if(this._component.theme != "themeBase" && this._component.theme != "")
+                    jQuery.extend(true, options, Highcharts[this._component.theme]);
 
-
+                $(this._component.$.charts.$.container).highcharts(options);
             }
         };
 
-        BarchartDatalet = Polymer({
-            is: 'bar-chart-datalet',
+        AreachartStackedDatalet = Polymer({
+            is: 'areachart_stacked-datalet',
 
             properties: {
                 /**
@@ -183,7 +152,17 @@ Example:
                  */
                 suffix : {
                     type : String,
-                    value : "units"
+                    value : ""
+                },
+
+                stack : {
+                    type : String,
+                    value : "normal"
+                },
+
+                theme : {
+                    type : String,
+                    value : ""
                 },
                 /**
                  * It's the component behavior
@@ -200,13 +179,13 @@ Example:
             },
 
             /**
-             * 'ready' callback extend the BarchartComponentBehavior with HighchartsComponentBehavior and BarchartBehavior
+             * 'ready' callback extend the areachartComponentBehavior with HighchartsComponentBehavior and areachartBehavior
              * and run the Datalet workcycle.
              *
              * @method ready
              */
             ready: function(){
-                this.behavior = $.extend(true, {}, HighchartsComponentBehavior, Bar_chartBehavior);
+                this.behavior = $.extend(true, {}, HighchartsComponentBehavior, AreachartStackedBehavior);
                 this.async(function(){this.behavior.init(this)},0);
             }
         });

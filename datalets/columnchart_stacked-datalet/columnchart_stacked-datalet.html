@@ -33,28 +33,28 @@
 
 <!--
 
-`barchart-datalet` is a barchart datalet based on highcharts project http://www.highcharts.com/
+`columnchart-datalet` is a columnchart datalet based on highcharts project http://www.highcharts.com/
 
 Example:
 
-    <barchart-datalet
+    <columnchart-datalet
         data-url="http://ckan.routetopa.eu/api/action/datastore_search?resource_id=#"
         fields='["field1","field2"]'>
-    </barchart-datalet>
+    </columnchart-datalet>
 
-@element barchart-datalet
+@element columnchart-datalet
 @status v0.1
 @demo demo/index.html
 @group datalets
 -->
 
-<dom-module name="barchart-datalet">
+<dom-module name="columnchart_stacked-datalet">
     <template>
         <highcharts-datalet id="charts" data-url="{{dataUrl}}" fields="{{fields}}" data="{{data}}" title="{{title}}" description="{{description}}"></highcharts-datalet>
     </template>
     <script>
 
-        var BarchartBehavior = {
+        var ColumnchartStackedBehavior = {
 
             /**
              * Bluid Highchart object
@@ -64,8 +64,8 @@ Example:
             presentData: function(){
                 options = {
                     chart: {
-                        type: 'bar',
-                        zoomType: 'xy'
+                        type: 'column',
+                        zoomType: 'xy',
                     },
                     title: {
                         text: this._component.title
@@ -80,35 +80,20 @@ Example:
                         min: 0,
                         title: {
                             text: this._component.xAxisLabel,
-                            align: 'high'
                         },
-                        labels: {
-                            overflow: 'justify'
-                        }
                     },
                     tooltip: {
                         valueSuffix: ' ' + this._component.suffix
                     },
                     plotOptions: {
-                        bar: {
-                            dataLabels: {
-                                enabled: true
-                            }
-                        }
-                    },
-                    legend: {
-                        layout: 'vertical',
-                        align: 'right',
-                        verticalAlign: 'top',
-                        x: -40,
-                        y: 80,
-                        floating: true,
-                        borderWidth: 1,
-                        backgroundColor: ((Highcharts[this._component.theme] && Highcharts[this._component.theme].legendBackgroundColor) || '#FFFFFF'),
-                        shadow: true
-                    },
-                    credits: {
-                        enabled: false
+                        series: {
+                            stacking: this._component.stack
+                        },
+//                        column: {
+//                            dataLabels: {
+//                                enabled: true
+//                            }
+//                        }
                     },
                     series: this.properties.series.value
                 };
@@ -120,40 +105,75 @@ Example:
             }
         };
 
-        BarchartDatalet = Polymer({
-            is: 'barchart-datalet',
+        ColumnchartStackedDatalet = Polymer({
+            is: 'columnchart_stacked-datalet',
 
             properties: {
+                /**
+                 * It's the label for X axis
+                 *
+                 * @attribute xAxisLabel
+                 * @type String
+                 * @default ''
+                 */
                 xAxisLabel: {
                     type: String,
                     value: ""
                 },
+                /**
+                 * It's the label for Y axis
+                 *
+                 * @attribute yAxisLabel
+                 * @type String
+                 * @default ''
+                 */
                 yAxisLabel: {
                     type: String,
                     value: ""
                 },
+                /**
+                 * It's the values suffix
+                 *
+                 * @attribute suffix
+                 * @type Strig
+                 * @default 'units'
+                 */
                 suffix : {
                     type : String,
                     value : ""
                 },
+
+                stack : {
+                    type : String,
+                    value : "normal"
+                },
+
                 theme : {
                     type : String,
                     value : ""
                 },
+                /**
+                 * It's the component behavior
+                 *
+                 * @attribute behavior
+                 * @type Object
+                 * @default {}
+                 */
                 behavior : {
                     type : Object,
                     value : {}
                 }
+
             },
 
             /**
-             * 'ready' callback extend the BarchartComponentBehavior with HighchartsComponentBehavior and BarchartBehavior
+             * 'ready' callback extend the VolumnchartComponentBehavior with HighchartsComponentBehavior and ColumnchartBehavior
              * and run the Datalet workcycle.
              *
              * @method ready
              */
             ready: function(){
-                this.behavior = $.extend(true, {}, HighchartsComponentBehavior, BarchartBehavior);
+                this.behavior = $.extend(true, {}, HighchartsComponentBehavior, ColumnchartStackedBehavior);
                 this.async(function(){this.behavior.init(this)},0);
             }
         });

@@ -62,7 +62,7 @@ Example :
 
     <script src="static/js/highcharts.js"></script>
     <script src="static/js/exporting.js"></script>
-    <script src="themes/themes.js"></script>
+    <script src="static/themes/themes.js"></script>
 
     <script>
         var HighchartsBehavior = {
@@ -79,35 +79,35 @@ Example :
                     value: []
                 },
 
-                series_type:{
-                    type: String,
-                    value: "line"//spline,time
-                }
+//                series_type:{
+//                    type: String,
+//                    value: "line"//spline,time
+//                }
 
             },
             /**
              * Normalizes a number in agreement with javascript's conventions. Delete all NaN characters. Exception: number representing lat & long remain unchanged.
              */
-            jNumConverter: function(num) {
-                //lat-long
-                if(num.charAt(num.length-7) == "." && (num.match(/[\.,]/g) || []).length == 1)
-                    return num;
-
-                num = num.replace(/[^0-9\.]/, '');
-
-                var jNum = "";
-                for (var i = 0; i < num.length; i++) {
-                    if(num[i].match(/[\.,]/g))
-                        if (i == num.length - 3)
-                            jNum += ".";
-                        else
-                            ;
-                    else if (!isNaN(num[i]))
-                        jNum += num[i];
-                }
-
-                return jNum;
-            },
+//            jNumConverter: function(num) {
+//                //lat-long
+//                if(num.charAt(num.length-7) == "." && (num.match(/[\.,]/g) || []).length == 1)
+//                    return num;
+//
+//                num = num.replace(/[^0-9\.]/, '');
+//
+//                var jNum = "";
+//                for (var i = 0; i < num.length; i++) {
+//                    if(num[i].match(/[\.,]/g))
+//                        if (i == num.length - 3)
+//                            jNum += ".";
+//                        else
+//                            ;
+//                    else if (!isNaN(num[i]))
+//                        jNum += num[i];
+//                }
+//
+//                return jNum;
+//            },
             /**
              * Populate the categories and the series array.
              *
@@ -115,45 +115,89 @@ Example :
              *
              * @param {Event} e
              */
+//            transformData: function () {
+//
+//                if(this.data.length == 0) return;
+//
+//                this.properties.categories.value = this.data[0].data;
+//
+//                for (var i = 1; i < this.data.length; i++)
+//                {
+//                    this.data[i].data.every(function (element, index, array) {
+//                        try {
+//                            var e = HighchartsBehavior.jNumConverter(element);
+//                            (isNaN(element)) ? array[index] = parseFloat(HighchartsBehavior.jNumConverter(element)) :
+//                                    array[index] = parseFloat(element);
+//                        }catch(e){
+//                            //console.log("Parsing data error. Highchart-datalet.selectData");
+//                        }
+//                        return true;
+//                    });
+//
+//                    this.properties.series.value.push(this.data[i]);
+//                }
+//            },
+
             transformData: function () {
+                if(this.data.length == 0)
+                    return;
 
-                if(this.data.length == 0) return;
+                if(this.data.length == 2){
+                    this.properties.categories.value = this.data[0].data;
+                    this.properties.series.value = [this.data[1]];
+                }
 
-                this.properties.categories.value = this.data[0].data;
+                if(this.data.length == 3){//multi series
+                    var x = this.data[0]["data"];
+                    var gb = this.data[1]["data"];
+                    var y = this.data[2]["data"];
 
-                for (var i = 1; i < this.data.length; i++)
-                {
-                    this.data[i].data.every(function (element, index, array) {
-                        try {
-                            var e = HighchartsBehavior.jNumConverter(element);
-                            (isNaN(element)) ? array[index] = parseFloat(HighchartsBehavior.jNumConverter(element)) :
-                                    array[index] = parseFloat(element);
-                        }catch(e){
-                            //console.log("Parsing data error. Highchart-datalet.selectData");
-                        }
-                        return true;
-                    });
+                    var categories = x.filter(function(item, pos) {
+                        return x.indexOf(item) == pos;
+                    })
 
-                    this.properties.series.value.push(this.data[i]);
+                    var s = gb.filter(function(item, pos) {
+                        return gb.indexOf(item) == pos;
+                    })
+
+                    var series = [];
+                    for(var i = 0; i < s.length; i++) {
+                        series.push({name: s[i], data: new Array(categories.length+1).join('0').split('').map(parseFloat)});
+                    }
+
+                    for (var i = 0; i < y.length; i++){
+                        var index = categories.indexOf(x[i]);
+                        var s = series.filter(function( obj ) {
+                            return obj.name == gb[i];
+                        });
+                       s[0]["data"][index] = y[i];
+                    }
+
+                    this.properties.categories.value = categories;
+                    this.properties.series.value = series;
                 }
             },
 
-            setParameters: function(params)
-            {
-                this._component.title = params['title'];
-                this._component.description = params['description'];
-
-                var chart = $(this._component.$.charts.$.container).highcharts();
-
-                chart.setTitle({text: params['title']});
-                chart.xAxis[0].setTitle({text: params['x-axis-label']});
-                chart.yAxis[0].setTitle({text: params['y-axis-label']});
-
-                chart.tooltip.options.formatter = function() {
-                    return this.x + '<br/><br/><span style="fill:#7cb5ec" x="8" dy="15">●</span> ' + this.series.name + ': <b>' + this.y + ' ' + params['suffix'] + '</b>';
-                }
-
-            }
+//            setParameters: function(params)
+//            {
+//                this._component.title = params['title'];
+//                this._component.description = params['description'];
+//
+//                var chart = $(this._component.$.charts.$.container).highcharts();
+//
+//                chart.setTitle({text: params['title']});
+//                chart.xAxis[0].setTitle({text: params['x-axis-label']});
+//                chart.yAxis[0].setTitle({text: params['y-axis-label']});
+//
+//                chart.tooltip.options.formatter = function() {
+//                    return this.x + '<br/><br/><span style="fill:#7cb5ec" x="8" dy="15">●</span> ' + this.series.name + ': <b>' + this.y + ' ' + params['suffix'] + '</b>';
+//                }
+//
+//                //theme default
+//                Highcharts.setOptions(Highcharts[params['theme']]);
+//
+//                this._component.stack = params['stack'];
+//            }
 
         };
 

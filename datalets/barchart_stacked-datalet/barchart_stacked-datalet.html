@@ -48,13 +48,13 @@ Example:
 @group datalets
 -->
 
-<dom-module name="barchart-datalet">
+<dom-module name="barchart_stacked-datalet">
     <template>
         <highcharts-datalet id="charts" data-url="{{dataUrl}}" fields="{{fields}}" data="{{data}}" title="{{title}}" description="{{description}}"></highcharts-datalet>
     </template>
     <script>
 
-        var BarchartBehavior = {
+        var BarchartStackedBehavior = {
 
             /**
              * Bluid Highchart object
@@ -65,7 +65,7 @@ Example:
                 options = {
                     chart: {
                         type: 'bar',
-                        zoomType: 'xy'
+                        zoomType: 'xy',
                     },
                     title: {
                         text: this._component.title
@@ -80,35 +80,20 @@ Example:
                         min: 0,
                         title: {
                             text: this._component.xAxisLabel,
-                            align: 'high'
                         },
-                        labels: {
-                            overflow: 'justify'
-                        }
                     },
                     tooltip: {
                         valueSuffix: ' ' + this._component.suffix
                     },
                     plotOptions: {
-                        bar: {
-                            dataLabels: {
-                                enabled: true
-                            }
-                        }
-                    },
-                    legend: {
-                        layout: 'vertical',
-                        align: 'right',
-                        verticalAlign: 'top',
-                        x: -40,
-                        y: 80,
-                        floating: true,
-                        borderWidth: 1,
-                        backgroundColor: ((Highcharts[this._component.theme] && Highcharts[this._component.theme].legendBackgroundColor) || '#FFFFFF'),
-                        shadow: true
-                    },
-                    credits: {
-                        enabled: false
+                        series: {
+                            stacking: this._component.stack
+                        },
+//                        bar: {
+//                            dataLabels: {
+//                                enabled: true
+//                            }
+//                        }
                     },
                     series: this.properties.series.value
                 };
@@ -120,30 +105,65 @@ Example:
             }
         };
 
-        BarchartDatalet = Polymer({
-            is: 'barchart-datalet',
+        BarchartStackedDatalet = Polymer({
+            is: 'barchart_stacked-datalet',
 
             properties: {
+                /**
+                 * It's the label for X axis
+                 *
+                 * @attribute xAxisLabel
+                 * @type String
+                 * @default ''
+                 */
                 xAxisLabel: {
                     type: String,
                     value: ""
                 },
+                /**
+                 * It's the label for Y axis
+                 *
+                 * @attribute yAxisLabel
+                 * @type String
+                 * @default ''
+                 */
                 yAxisLabel: {
                     type: String,
                     value: ""
                 },
+                /**
+                 * It's the values suffix
+                 *
+                 * @attribute suffix
+                 * @type Strig
+                 * @default 'units'
+                 */
                 suffix : {
                     type : String,
                     value : ""
                 },
+
+                stack : {
+                    type : String,
+                    value : "normal"
+                },
+
                 theme : {
                     type : String,
                     value : ""
                 },
+                /**
+                 * It's the component behavior
+                 *
+                 * @attribute behavior
+                 * @type Object
+                 * @default {}
+                 */
                 behavior : {
                     type : Object,
                     value : {}
                 }
+
             },
 
             /**
@@ -153,7 +173,7 @@ Example:
              * @method ready
              */
             ready: function(){
-                this.behavior = $.extend(true, {}, HighchartsComponentBehavior, BarchartBehavior);
+                this.behavior = $.extend(true, {}, HighchartsComponentBehavior, BarchartStackedBehavior);
                 this.async(function(){this.behavior.init(this)},0);
             }
         });

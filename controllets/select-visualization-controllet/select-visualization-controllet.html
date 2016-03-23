@@ -2,37 +2,21 @@
 
 <link rel="import" href="../../bower_components/paper-material/paper-material.html" />
 
-<link rel="import" href="../../bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
-<link rel="import" href="../../bower_components/paper-menu/paper-menu.html">
-<link rel="import" href="../../bower_components/paper-item/paper-item.html">
-
-<link rel="import" href="../../bower_components/paper-icon-button/paper-icon-button.html">
-<link rel="import" href="../../bower_components/iron-icons/iron-icons.html">
-<link rel="import" href="../../bower_components/iron-icon/iron-icon.html">
-
-<link rel="import" href="../../bower_components/paper-input/paper-textarea.html">
-<link rel="import" href="../../bower_components/paper-input/paper-input.html">
-
 <link rel="import" href="../../bower_components/paper-button/paper-button.html">
 
-<link rel="import" href="../../bower_components/paper-dialog/paper-dialog.html">
-
 <link rel="import" href="../items-vslider-controllet/items-vslider-controllet.html" />
+<link rel="import" href="select-datalet-inputs_series.html" />
+<link rel="import" href="select-datalet-inputs.html" />
+<link rel="import" href="select-datalet-options.html" />
 
 <script src="../../../DEEPCLIENT/js/deepClient.js"></script>
 
-<dom-module id="datalet-selection-controllet">
+<dom-module id="select-visualization-controllet">
 
     <template>
 
         <style is="custom-style">
-            :host {
-            --paper-dropdown-menu-icon: {
-                 color: #2196F3;
-             };
-            }
-
-            #datalet_selection_container {
+            #select_visualization_container {
                 display: flex;
                 font-family: 'Roboto', 'Helvetica Neue', Helvetica, Arial, sans-serif;
                 font-size: 16px;
@@ -46,19 +30,17 @@
 
             #datalet_selection_inputs {
                 position: relative;
-                height: 100vh;
                 margin-left: 32px;
                 min-width: 258px;
             }
 
-            #datalet_selection_labels {
+            #datalet_selection_options {
                 position: relative;
-                height: 100vh;
                 margin-left: 32px;
                 min-width: 258px;
             }
 
-            #datalet_selection_column {
+            #datalet_preview_container {
                 position: relative;
                 width: 100%;
                 margin-left: 32px;
@@ -74,88 +56,12 @@
                 padding: 16px;
             }
 
-            .inputs{
-                position: relative;
-            }
-
             .input_header {
                 height: 32px;
                 padding-top: 16px;
                 text-align: center;
                 font-weight: 700;
                 background-color: #B6B6B6;
-            }
-
-            #expert_container {
-                display: none;
-            }
-
-            #expert_header {
-                display: none;
-
-                height: 32px;
-                padding-top: 16px;
-                margin-top: 8px;
-                text-align: center;
-                font-weight: 700;
-                color: #00BCD4;
-                cursor: pointer;
-            }
-
-            .field_nema {
-                height: 40px;
-                padding-top: 8px;
-
-                margin-top: 8px;
-                padding-left: 16px;
-                font-weight: 700;
-                color: #2196F3;
-                background-color: #E0E0E0;
-            }
-
-            .info_button {
-                position: absolute;
-                top: 18px;
-                right: 0px;
-            }
-
-            paper-input {
-                display: inline-block;
-                height: 48px;
-                width: 210px;
-                padding-left: 8px;
-                padding-bottom: 8px;
-                --paper-input-container-focus-color: #2196F3;
-            }
-
-            paper-input.base_input {
-                width: 242px;
-            }
-
-            paper-textarea {
-                width: 242px;
-                padding-left: 8px;
-                padding-bottom: 4px;
-                --paper-input-container-focus-color: #2196F3;
-            }
-
-            paper-dropdown-menu {
-                height: 48px;
-                width: 210px;;
-                padding-left: 8px;
-                padding-bottom: 8px;
-                --paper-input-container-focus-color: #2196F3;
-            }
-
-            paper-item.iron-selected {
-                background-color: #2196F3;
-                color: #FFFFFF;
-            }
-
-            paper-icon-button {
-                color: #2196F3;
-                --paper-icon-button-ink-color: #2196F3;
-                margin: 0px;
             }
 
             paper-button {
@@ -182,124 +88,42 @@
             paper-button[disabled] {
                 background-color: #B6B6B6;
             }
-
-            #dialog_info_input {
-                border: 2px solid #2196F3;
-                background-color: #E0E0E0;
-                min-width: 248px;
-            }
         </style>
 
         <iron-ajax id="selectedDatalet_request" on-response="_handleSelectedDatalet"></iron-ajax>
 
-        <div id="datalet_selection_container">
+        <div id="select_visualization_container">
 
             <div id="items_vslider_controllet">
                 <items-vslider-controllet id="vslider" datalets-list-url={{dataletsListUrl}} preselected-datalet={{preselectedDatalet}}></items-vslider-controllet>
             </div>
 
-            <paper-material id="datalet_selection_inputs" elevation="5">
-                <div class="input_header"><span id="inputs"></span></div>
-                <template is="dom-repeat" items="{{inputs}}" index-as="ddl_index">
-                    <div class="inputs">
-                        <paper-dropdown-menu id={{ddl_index}} label={{_getLabelName(item.name)}}>
-                            <paper-menu class="dropdown-content">
-                                <template is="dom-repeat" items={{fields}}>
-                                    <paper-item id={{index}} on-tap="_addInput">{{_fieldName(item)}}</paper-item>
-                                    <!--{{_fieldName(item)}}-->
-                                </template>
-                            </paper-menu>
-                        </paper-dropdown-menu>
-                        <div class="info_button">
-                            <paper-icon-button id={{item.name}} on-click="_showInfo" icon="info-outline" title="{{_getLabelName(item.name)}} info"></paper-icon-button>
-                        </div>
-                    </div>
+            <div id="datalet_selection_inputs">
+                <template is="dom-if" if="{{_checkType(type, 'multiseries')}}">
+                    <select-datalet-inputs_series id="inputs_series"></select-datalet-inputs_series>
                 </template>
-
-                <!-- EXPERT MODE EXPERT MODE EXPERT MODE EXPERT MODE EXPERT MODE EXPERT MODE EXPERT MODE EXPERT MODE -->
-
-                <div id="expert_header" on-click="_showExpertMode"><span id="expert">ADVANCED: GROUP BY</span></div>
-
-                <div id="expert_container">
-
-                    <div class="inputs">
-                        <paper-dropdown-menu id="group_by" label="GROUP BY">
-                            <paper-menu class="dropdown-content">
-                                <template is="dom-repeat" items={{selectedFields}}>
-                                    <paper-item id={{index}} on-tap="_showGroupedFields">{{_fieldName(item)}}</paper-item>
-                                </template>
-                            </paper-menu>
-                        </paper-dropdown-menu>
-                        <div class="info_button">
-                            <paper-icon-button id="gb" on-click="_addOrder" icon="unfold-more" title="unsort"></paper-icon-button>
-                        </div>
-                    </div>
-
-                    <template is="dom-repeat" items="{{groupedFields}}">
-                        <div class="inputs">
-                            <paper-dropdown-menu id="calculate_{{index}}" label="CALCULATE">
-                                <paper-menu class="dropdown-content">
-                                    <paper-item on-tap="_addGroupByInput">COUNT of {{_fieldName(item)}}</paper-item>
-                                    <paper-item on-tap="_addGroupByInput">SUM of {{_fieldName(item)}}</paper-item>
-                                    <paper-item on-tap="_addGroupByInput">MIN of {{_fieldName(item)}}</paper-item>
-                                    <paper-item on-tap="_addGroupByInput">MAX of {{_fieldName(item)}}</paper-item>
-                                    <paper-item on-tap="_addGroupByInput">AVG of {{_fieldName(item)}}</paper-item>
-                                    <paper-item on-tap="_addGroupByInput">FIRST of {{_fieldName(item)}}</paper-item>
-                                    <paper-item on-tap="_addGroupByInput">LAST of {{_fieldName(item)}}</paper-item>
-                                </paper-menu>
-                            </paper-dropdown-menu>
-                            <div class="info_button">
-                                <paper-icon-button id={{_fieldName(item)}} on-click="_addOrder" icon="unfold-more" title="unsort"></paper-icon-button>
-                            </div>
-                        </div>
-                    </template>
-
-                </div>
-
-                <!-- EXPERT MODE EXPERT MODE EXPERT MODE EXPERT MODE EXPERT MODE EXPERT MODE EXPERT MODE EXPERT MODE -->
-
-            </paper-material>
-
-            <paper-material id="datalet_selection_labels" elevation="5">
-                <div class="input_header"><span id="baseInfo"></span></div>
-
-                <div class="inputs">
-                    <paper-input id="base_title" maxlength="32" class="base_input"></paper-input>
-                </div>
-
-                <div class="inputs">
-                    <paper-textarea id="base_description" maxlength="100" class="base_input"></paper-textarea>
-                </div>
-
-                <div class="input_header"><span id="layouts"></span></div>
-
-                <template is="dom-repeat" items="{{labels}}" index-as="index">
-                    <div class="inputs">
-                        <paper-input label={{_getLabelName(item.name)}}></paper-input>
-                        <div class="info_button">
-                            <paper-icon-button id={{item.name}} on-click="_showInfo" icon="info-outline" title="{{_getLabelName(item.name)}} info"></paper-icon-button>
-                        </div>
-                    </div>
+                <template is="dom-if" if="{{_checkType(type, 'default')}}">
+                    <select-datalet-inputs id="inputs"></select-datalet-inputs>
                 </template>
-            </paper-material>
+                <template is="dom-if" if="{{_checkType(type, '')}}">
+                    <select-datalet-inputs></select-datalet-inputs>
+                </template>
+            </div>
 
+            <div id="datalet_selection_options">
+                <select-datalet-options id="options"></select-datalet-options>
+            </div>
 
-            <div id="datalet_selection_column">
+            <div id="datalet_preview_container">
 
                 <paper-material id="datalet_selection_datalet" elevation="5">
                     <div class="input_header"><span id="dataletPreview"></span></div>
                     <div id="datalet_selection_datalet_placeholder"></div>
-
                 </paper-material>
 
                 <paper-button id="add_button" disabled raised on-click="_addDatalet"></paper-button>
 
             </div>
-
-            <paper-dialog id="dialog_info_input">
-                <h2 id="dialog_name"></h2>
-                <p id="dialog_description"></p>
-            </paper-dialog>
 
         </div>
 
@@ -309,7 +133,7 @@
 
         Polymer({
 
-            is : 'datalet-selection-controllet',
+            is : 'select-visualization-controllet',
 
             properties : {
 
@@ -333,37 +157,12 @@
                     value : undefined
                 },
 
-                loadPreview : {
-                    type :  Boolean,
-                    value : false
-                },
-
                 type : {
                     type : String,
-                    value : undefined
-                },
-
-                inputs : {
-                    type : Array,
-                    value : []
-                },
-
-                labels : {
-                    type : Array,
-                    value : []
+                    value : ""
                 },
 
                 filters : {
-                    type : Array,
-                    value : []
-                },
-
-                aggregators : {
-                    type : Array,
-                    value : []
-                },
-
-                orders : {
                     type : Array,
                     value : []
                 },
@@ -378,20 +177,10 @@
                     value : []
                 },
 
-                groupedFields : {
-                    type : Array,
-                    value : []
-                },
-
                 dataletPreset : {
                     type  : Object,
                     value : []
                 },
-
-//                selectableFields : {
-//                    type : Array,
-//                    value : []
-//                },
 
                 dataUrl : {
                     type  : String,
@@ -401,92 +190,25 @@
                 params:{
                     type: Object,
                     value: undefined
-                },
-
-                expert : {
-                    type  : Boolean,
-                    value : false
-                },
-
-                modify : {
-                    type  : Boolean,
-                    value : false
                 }
 
             },
 
             listeners: {
                 'items-vslider-controllet_selected-datalet': '_selectDatalet',
-//                'tree-view-controllet_selected-fields': '_updateSelectedFields'
-                'change': '_paramsChanged'
-            },
-
-            _showExpertMode : function() {
-                if(!this.expert) {
-                    this.$.expert_header.style.color = "#000000";
-                    this.$.expert_header.style.background = "#B6B6B6";
-                    this.$.expert_container.style.display = "block";
-                }
-                else {
-                    this.$.expert_header.style.color = "#00BCD4";
-                    this.$.expert_header.style.background = "#FFFFFF";
-                    this.$.expert_container.style.display = "none";
-                }
-
-                this.expert = !this.expert;
-            },
-
-            _showGroupedFields : function(e) {
-                var index = e.target.id;
-                var isSelected = false;
-                var temp = [];
-
-                for (var i = 0; i < this.selectedFields.length; i++) {
-                    if (this.selectedFields[i]) {
-                        if (this.selectedFields[i].indexOf(this.fields[index]) > -1) {
-                            isSelected = true;
-                        }
-                        else {
-                            temp.push(this.selectedFields[i])
-                        }
-                    }
-                }
-
-                if (isSelected)
-                    this.groupedFields = this._copy(temp);
-                else
-                    this.groupedFields =[];
-
-                this.async(function() {
-                    var ddls = document.getElementsByTagName("paper-dropdown-menu");
-                    for (var i = 0; i < ddls.length; i++){
-                        var id = ddls[i].id;
-                        if(id.indexOf("calculate") > -1) {
-                            $(ddls[i]).find("paper-menu")[0].select(-1);
-                            $(ddls[i]).find("paper-menu")[0].select(0);
-                        }
-                    }
-                }, 0);
-
-                this._addGroupByInput();
+                'select_visualization_inputs_ready': '_loadDatalet',
+                'select_visualization_options_changed': '_tryLoadDatalet',
             },
 
             ready : function() {
                 this._resize();
-                $(this.$.datalet_selection_inputs).perfectScrollbar();
-                $(this.$.datalet_selection_labels).perfectScrollbar();
+
                 $(this.$.datalet_selection_datalet).perfectScrollbar();
 
                 this.params = {'data-url' : this.dataUrl};
 
-                //this.modify = true;//da eliminare in futuro
-                if(this.preselectedDatalet){
-                    if(this.modify)
-                        this._preselectDatalet();
-
-                    this.modify = true;
-                    this.preselectedDatalet = undefined;
-                }
+                if(this.preselectedDatalet)
+                    this._preselectDatalet();
             },
 
             attached : function() {
@@ -498,43 +220,34 @@
             },
 
             setFilters : function(filters) {
-                this.filters = filters;
+                this.filters = this._copy(filters);
             },
 
             setFields : function(fields) {
-                this.fields = fields;
+                this.fields = this._copy(fields);
+
+                var inputs = this._getInputs();
+                if(inputs)
+                    inputs.setFields(this.fields);
             },
 
             reset : function() {
-                this.selectedDatalet = undefined;//non va!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-                this.preselectedDatalet = undefined;
-                this.type = undefined;
-                this.inputs = [];
-                this.labels = [];
-                this.$.expert_header.style.display = "none";
-                this.expert = true;
-                this._showExpertMode();
-                this.loadPreview = false;
+                this.$.vslider._reset();
+                this.type = "";
                 this.$.datalet_selection_datalet_placeholder.innerHTML = "";
-                this._resetGroupBy();
             },
 
             _translate : function(){
-
-                this.$.add_button.innerHTML     = ln["addDatalet_" + ln["localization"]];
-                this.$.inputs.innerHTML         = ln["inputs_" + ln["localization"]];
-                this.$.baseInfo.innerHTML       = ln["baseInfo_" + ln["localization"]];
-                this.$.layouts.innerHTML        = ln["layouts_" + ln["localization"]];
-                this.$.dataletPreview.innerHTML = ln["dataletPreview_" + ln["localization"]];
-
-                this.$.base_title.label = ln["title_" + ln["localization"]];
-                this.$.base_description.label = ln["description_" + ln["localization"]];
-
-                if(this.modify)
+                if(this.preselectedDatalet)
                     this.$.add_button.innerHTML = ln["modifyDatalet_" + ln["localization"]];
+                else
+                    this.$.add_button.innerHTML = ln["addDatalet_" + ln["localization"]];
+
+                this.$.dataletPreview.innerHTML = ln["dataletPreview_" + ln["localization"]];
             },
 
             _selectDatalet : function(e){
+
                 this.$.add_button.setAttribute("disabled", "true");
 
                 this.selectedDatalet = e.detail.datalet;
@@ -542,289 +255,79 @@
                 this.$.datalet_selection_datalet_placeholder.innerHTML = "";
 
                 if(!this.selectedDatalet){
-                    this.type = undefined;
-                    this.inputs = [];
-                    this.labels = [];
-                    this.$.expert_header.style.display = "none";
-                    this.expert = true;
-                    this._showExpertMode();
-                    this.loadPreview = false;
+                    this.type = "";
+                    this.$.options.setOptions([]);
                 }
                 else{
                     this.$.selectedDatalet_request.url = this.deepUrl + e.detail.datalet + "-datalet";
                     this.$.selectedDatalet_request.generateRequest();
-                    this.$.expert_header.style.display = "block";
                 }
             },
 
             _preselectDatalet : function() {
-                this.type = "undefined";
-                this.$.selectedDatalet_request.url = this.deepUrl + this.preselectedDatalet + "-datalet";
-                this.$.selectedDatalet_request.generateRequest();
+//                console.log("_preselectDatalet to implement");
+//                console.log(this.preselectedDatalet);
+//                console.log(this.fields);
+//                console.log(this.dataletPreset);
 
-                this.selectedDatalet = this.preselectedDatalet;
-                this.selectedFields = this._copy(this.fields);
+                var dataletParams ={
+                    component   : this.preselectedDatalet+"-datalet",
+                    params      : this.dataletPreset,
+                    fields      : this.fields,
+                    placeHolder : this.$.datalet_selection_datalet_placeholder
+                };
 
-                this.async(function() {
-                    this.selectedFields = this._copy(this.fields);
+                ComponentService.deep_url = this.deepUrl;
+                ComponentService.getComponent(dataletParams);
 
-                    var inputs = document.getElementsByTagName("paper-dropdown-menu");
-                    for (var i = 0; i < inputs.length; i++)
-                        $(inputs[i]).find("paper-menu")[0].select(i);
-
-                    //set info labels options
-                    var labels = this.$.datalet_selection_labels.querySelectorAll("paper-textarea");
-                    for (var i = 0; i < labels.length; i++)
-                        labels[i].value = this.dataletPreset[labels[i].label];
-
-                    var labels = this.$.datalet_selection_labels.querySelectorAll("paper-input");
-                    for (var i = 0; i < labels.length; i++)
-                        labels[i].value = this.dataletPreset[labels[i].label];
-
-                    this.loadPreview = true;
-                    this._loadDatalet(this.selectedFields);
-                }, 300);
+                this.$.add_button.removeAttribute("disabled");
             },
 
             _handleSelectedDatalet : function(e){
 
                 if(this.type != e.detail.response.type) {
 
-                    this.inputs = [];
-                    this.labels = [];
+                    this.type = e.detail.response.type;
 
-                    var inputs = this._copy(e.detail.response.idm.inputs.input);
+                    this.async(function () {
+                        var inputs = this._getInputs();
+                        inputs.setFields(this.fields);
+                        inputs.setInputs(e.detail.response.idm.inputs.input);// Cannot read property '0' of undefined
+                    }, 0);
 
-                    if (inputs.constructor == Object) {//not Array && inputs.input.selection == "*"
-                        var name = inputs.name;
-                        var description = inputs.description;
-                        var selection = inputs.selection;
-                        inputs = [];
-                        for (var i in this.fields)
-                            inputs.push({name: name + " " + i, description: description, selection: selection});
-                    }
-
-                    /**/
-                    var computedInputs = [];
-                    computedInputs.push(inputs[0]);
-
-                    for(var i = 0; i < inputs.length; i++) {
-                        var input = inputs[i];
-                        if(input.selection == "*") {
-                            var name = input.name;
-                            var description = input.description;
-                            var selection = input.selection;
-                            for(var j = 0; j < (this.fields.length - inputs.length +1); j++)
-                                computedInputs.push({name: name + " " + j, description: description, selection: selection});
-                        }
-                    }
-
-                    if(computedInputs.length > inputs.length)
-                        inputs = computedInputs;
-                    /**/
-
-                    this.async(function(){
-                        this.type = e.detail.response.type;
-                        this.inputs = inputs;
-                        this.labels = e.detail.response.idm.inputs.layouts.input;
-
-                        this.selectedFields = new Array(inputs.length);
-                    },0);
-
-                    this._resetGroupBy();
-
-                    this.loadPreview = false;
+                    this.$.options.setOptions(e.detail.response.idm.inputs.layouts.input);
+                }
+                else {
+                    this.$.options.ceckOptions(e.detail.response.idm.inputs.layouts.input);
                 }
 
-                else if (this.loadPreview)
-                    this._loadDatalet(this.selectedFields);
-            },
-
-            _resetGroupBy : function(){
-                $(this.$.group_by).find("paper-menu")[0].select(-1);
-                this.groupedFields = [];
-                this.aggregators = [];
-            },
-
-            _addGroupByInput : function(){
-                this.async(function() {//codice reprlicato!
-                    var selectedFields = this.selectedFields;
-
-                    var load = true;
-
-                    if(this.inputs[0].selection == "*"){
-                        var temp = [];
-                        for (var i = 0; i < selectedFields.length; i++)
-                            if(selectedFields[i])
-                                temp.push(selectedFields[i]);
-                        selectedFields = temp;
-                    }
-                    else {
-                        for (var i = 0; i < selectedFields.length; i++)
-                            if (!selectedFields[i]) {
-                                load = false;
-                                break;
-                            }
-                    }
-
-                    if(load){
-                        this.loadPreview = true;
-                        this._loadDatalet(selectedFields);
-                    }
+                this.async(function () {
+                    var inputs = this._getInputs();
+                    inputs.fireReady();
                 }, 0);
             },
 
-            _addOrder : function(e){
-                var t = e.target;
-                if(t.tagName.indexOf("IRON-ICON") > -1)
-                    t = $(e.target).parents("paper-icon-button")[0];
-
-                var icon = t.getAttribute("icon");
-                var name = t.getAttribute("id");
-
-                if(name.indexOf("gb") > -1){
-                    var selectedItem = $(this.$.group_by).find("paper-menu")[0].selectedItem;
-                    if(selectedItem)
-                        name = selectedItem.textContent.trim();
-//                        name = "[" + selectedItem.textContent.trim() + "]";
-                    else
-                        return;
-                }// else {
-//                    var i = name;
-//                    var ddl = $("#calculate_"+i);
-//
-//                    var label = $(ddl).find("paper-menu")[0].selectedItem.textContent.trim();
-//                    var index = label.split(" ", 2).join(" ").length;
-//                    var field = label.substring(index+1, label.length);
-//                    var operation = label.substring(0, label.indexOf(" "));
-//                    name = operation + "([" + field + "])";
-//                }
-
-                if(icon.indexOf("unfold-more") > -1){
-                    t.setAttribute("icon", "expand-less");
-                    t.setAttribute("title", "sort ascending");
-                    var orders = this.orders.filter(function (el) { return el.field !== name; });
-                    orders.push({"field": name, "operation": "ASC"});
-                    this.orders = this._copy(orders);
-                }
-                else if(icon.indexOf("expand-less") > -1){
-                    t.setAttribute("icon", "expand-more");
-                    t.setAttribute("title", "sort descending");
-                    var orders = this.orders.filter(function (el) { return el.field !== name; });
-                    orders.push({"field": name, "operation": "DESC"});
-                    this.orders = this._copy(orders);
-                }
-                else if(icon.indexOf("expand-more") > -1){
-                    t.setAttribute("icon", "unfold-more");
-                    t.setAttribute("title", "unsort");
-                    var orders = this.orders.filter(function (el) { return el.field !== name; });
-                    this.orders = this._copy(orders);
-                }
-
-                this._addGroupByInput();//no buoono
-//                if(load){
-//                    this.loadPreview = true;
-//                    this._loadDatalet(selectedFields);
-//                }
+            _tryLoadDatalet : function(){
+                var inputs = this._getInputs();
+                inputs.fireReady();
             },
 
-            _addInput : function(e){
-                var selectedFields = this._copy(this.selectedFields);
+            _loadDatalet : function(){
+                var inputs = this._getInputs();
 
-//                var index = $(e.target).parents("paper-dropdown-menu")[0].id;
-//                selectedFields[index] = e.target.innerHTML.trim();
-
-                var ddl_index = $(e.target).parents("paper-dropdown-menu")[0].id;
-                var index = e.target.id;
-                selectedFields[ddl_index] = this.fields[index];
-
-                this.selectedFields = this._copy(selectedFields);
-
-                var load = true;
-
-                if(this.inputs[0].selection == "*"){
-                    var temp = [];
-                    for (var i = 0; i < selectedFields.length; i++)
-                        if(selectedFields[i])
-                            temp.push(selectedFields[i]);
-                    selectedFields = temp;
-                }
-                else {
-                    for (var i = 0; i < selectedFields.length; i++)
-                        if (!selectedFields[i]) {
-                            load = false;
-                            break;
-                        }
-                }
-
-                this._resetGroupBy();//--> conflitto, in _updateparams valorizza this.aggregators
-
-                if(load){
-                    this.loadPreview = true;
-                    this._loadDatalet(selectedFields);
-                }
-            },
-
-            _updateParams : function(){
-                var textarea = this.$.datalet_selection_labels.querySelectorAll("paper-textarea");
-                this.params["description"] = textarea[0].value;
-
-                if(!textarea[0].value)
-                    this.params[textarea[0].label] = "";
-
-                var inputs = this.$.datalet_selection_labels.querySelectorAll("paper-input");
-                this.params["title"] = inputs[0].value;
-
-                for (var i = 1; i < inputs.length; i++)
-                    this.params[this.labels[i-1].name] = inputs[i].value;
-
-                this.aggregators = [];
-
-                var ddls = document.getElementsByTagName("paper-dropdown-menu");
-                for (var i = 0; i < ddls.length; i++){
-                    var id = ddls[i].id;
-                    if(id.indexOf("group_by") > -1 && $(ddls[i]).find("paper-menu")[0].selectedItem) {
-                        var label = $(ddls[i]).find("paper-menu")[0].selectedItem.textContent.trim();
-                        this.aggregators.push({"field": label, "operation": "GROUP BY"});
-                    }
-                    if(id.indexOf("calculate") > -1) {
-                        var label = $(ddls[i]).find("paper-menu")[0].selectedItem.textContent.trim();
-//                        var field = label.substring(label.lastIndexOf(" ")+1, label.length);
-                        var index = label.split(" ", 2).join(" ").length;
-                        var field = label.substring(index+1, label.length);
-                        var operation = label.substring(0, label.indexOf(" "));
-                        this.aggregators.push({"field": field, "operation": operation});
-                    }
-                }
-            },
-
-            _paramsChanged : function(){
-
-                this._updateParams();
-
-                if(this.$.datalet_selection_datalet_placeholder.children[1])
-                    this.$.datalet_selection_datalet_placeholder.children[1].behavior.setParameters(this.params);
-            },
-
-            _loadDatalet : function(selectedFields){
-
-                this._updateParams();
+                this.selectedFields = inputs.getSelectedFields();
 
                 this.params["filters"] = JSON.stringify(this.filters);
-                this.params["aggregators"] = JSON.stringify(this.aggregators);
-                this.params["orders"] = JSON.stringify(this.orders);
+                this.params["aggregators"] = JSON.stringify(inputs.getAggregators());
+                this.params["orders"] = JSON.stringify(inputs.getOrders());
 
-//                this.params["filters"] = '[{"field": "Lat", "operation": ">=", "value": "53.298164"}, {"field": "Lat", "operation": "<", "value": "54"}]';
-//                this.params["aggregators"] = '[{"field": "Lat", "operation": "GROUP BY"}, {"field": "Lng", "operation": "COUNT"}]';
-//                this.params["orders"] = '[{"field": "Lat", "operation": "DESC"}, {"field": "Lat", "operation": "ASC"}]';
-
-                //this.params["aggregators"] = '[{"field": "Value", "operation": "GROUP BY"}, {"field": "LOCATION", "operation": "COUNT"}]';
-                //this.params["orders"] = '[{"field": "Value", "operation": "ASC"}, {"field": "Value", "operation": "ASC"}]';
+                var params = this.$.options.getParams();
+                for (var key in params) { this.params[key] = params[key]; }
 
                 var dataletParams ={
                     component   : this.selectedDatalet+"-datalet",
                     params      : this.params,
-                    fields      : selectedFields,
+                    fields      : this.selectedFields,
                     placeHolder : this.$.datalet_selection_datalet_placeholder
                 };
 
@@ -835,53 +338,29 @@
             },
 
             _addDatalet : function(){
-
-                this._updateParams();
-
-                var selectedFields = [];
-                for (var i = 0; i < this.selectedFields.length; i++)
-                    if(this.selectedFields[i])
-                        selectedFields.push(this.selectedFields[i]);
-
                 var data = {
                     dataUrl : this.dataUrl,
                     params :  this.params,
-                    fields :  selectedFields,
+                    fields :  this.selectedFields,
                     datalet : this.selectedDatalet+"-datalet",
-//                    comment : "",//DEPRECATED!!!
                     staticData : JSON.stringify(this.$.datalet_selection_datalet_placeholder.children[1].behavior.data)
                 }
 
                 this.fire('data-sevc-controllet.dataletCreated', {data : data});
-
             },
 
-            _showInfo : function(e){
-//                var that = this;
-                var t = e.target;
-                if(t.tagName.indexOf("IRON-ICON") != -1)
-                    t = $(e.target).parents("paper-icon-button")[0];
-
-//                var name = t.getAttribute("title").replace(" info", "");
-                var name = t.getAttribute("id");
-
-                var dataset = $.grep(this.inputs, function(e){ return e.name == name; })[0];
-                if(!dataset)
-                    dataset = $.grep(this.labels, function(e){ return e.name == name; })[0];
-
-                this.$.dialog_name.innerHTML = this._getLabelName(dataset.name);
-                this.$.dialog_description.innerHTML = ln[dataset.description + "_" +  ln["localization"]];
-                this.$.dialog_info_input.open();
-
-                var pos = t.getBoundingClientRect();
-                $("#dialog_info_input").css("top", pos.top - 4);
-                $("#dialog_info_input").css("left", pos.left - 4);
+            _checkType: function(type, check){
+                if (type == "multiseries" || type == "")
+                    return (type == check);
+                else if(check == "default")
+                    return true;
+                return false;
             },
 
-            _fieldName : function(field) {
-                if(!field)//when?
-                    return "";
-                return field.substring(field.lastIndexOf(",")+1, field.length);
+            _getInputs  : function(){
+                if(this.type == "multiseries")
+                    return this.$$("#inputs_series")
+                return this.$$("#inputs");
             },
 
             _copy : function(o) {
@@ -894,32 +373,14 @@
                 return out;
             },
 
-            _getLabelName: function(key) {
-                //* exceptions
-                if(key.indexOf("Cell") > -1) {
-                    return ln["Cell" + "_" +ln["localization"]] + key.slice(-2);
-                }
-                if(key.indexOf("Level") > -1) {
-                    return ln["Level" + "_" +ln["localization"]] + key.slice(-2);
-                }
-                if(key.indexOf("Category") > -1) {
-                    return ln["Category" + "_" +ln["localization"]] + key.slice(-2);
-                }
-
-                return ln[key + "_" +ln["localization"]];
-            },
-
             _resize : function(){
                 var h = Math.max(document.documentElement.clientHeight, window.innerHeight || 0) - 16;
                 h = h - 64 - 8; //height with page scroller
 
-                $("#items_vslider_container").height(h);//vslider controllet
-
+                $("#items_vslider_controllet").height(h);//vslider controllet
                 $("#datalet_selection_inputs").height(h);
-                $("#datalet_selection_labels").height(h);
-//                if(this.modify)
-//                    $("#datalet_selection_datalet").height(h-128);
-//                else
+                $("#datalet_selection_options").height(h);
+
                 $("#datalet_selection_datalet").height(h);
             }
 

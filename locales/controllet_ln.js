@@ -1,6 +1,107 @@
 var ln = [];
 
-/* IT */
+/******** EN ********/
+
+//PAGE SLIDER
+ln["slide1Title_en"] = "SELECT DATASET";
+ln["slide1Subtitle_en"] = "Search or copy and paste the url of dataset.";
+ln["slide2Title_en"] = "SELECT DATA";
+ln["slide2Subtitle_en"] = "Select the fields from tree-view. The multi-table will show the values related to the selected fields.";
+ln["slide3Title_en"] = "SELECT VISUALIZATION";
+ln["slide3Subtitle_en"] = "Select a visualization, fill out inputs and labels (optional).";
+ln["back_en"] = "Back";
+ln["forward_en"] = "Forward";
+
+//SELECT DATASET
+ln["listView_en"] = "LIST VIEW";
+ln["treeMapView_en"] = "TREE MAP VIEW";
+ln["availableDatasets_en"] = "Available datasets";
+ln["suggestedDatasets_en"] = "Suggested datasets";
+ln["selectedUrl_en"] = "Selected url";
+ln["wrongUrl_en"] = "Invalid url or data provider not supported yet.";
+
+//SELECT DATA
+ln["addFilters_en"] = "ADD FILTERS";
+
+//filters
+ln["filterField_en"] = "Field";
+ln["filterOperation_en"] = "Operation";
+ln["filterValue_en"] = "Value";
+ln["contains_en"] = "contains";
+ln["start_en"] = "start with";
+ln["ends_en"] = "ends with";
+
+//SELECT VISUALIZATION
+ln["inputs_en"] = "INPUTS";
+ln["baseInfo_en"] = "BASE INFO";
+ln["layouts_en"] = "LABELS / OPTIONS";
+ln["dataletPreview_en"] = "DATALET PREVIEW";
+ln["addDatalet_en"] = "ADD";
+ln["modifyDatalet_en"] = "MODIFY";
+
+//vslider
+ln["search_en"] = "Search";
+
+ln["datatable_en"] = "Table";
+ln["barchart_en"] = "Bar";
+ln["columnchart_en"] = "Column";
+ln["areachart_en"] = "Area";
+ln["linechart_en"] = "Line";
+ln["heatmap_en"] = "Heat Map";
+ln["barchart_stacked_en"] = "Stacked Bar";
+ln["columnchart_stacked_en"] = "Stacked Column";
+ln["areachart_stacked_en"] = "Stacked Area";
+ln["piechart_en"] = "Pie";
+//ln["scatterchart_en"] = "Scatter";
+//ln["bubblechart_en"] = "Bubble";
+//ln["treemap_en"] = "Tree Map";
+ln["leafletjs_en"] = "Map";
+
+//inputs
+ln["sortAscending_en"] = "sorted ascending";
+ln["sortDescending_en"] = "sorted descending";
+ln["unsort_en"] = "unsorted";
+
+ln["groupBy_en"] = "GROUP BY";
+ln["calculate_en"] = "CALCULATE";
+
+ln["COUNT_en"] = "COUNT of";
+ln["SUM_en"] = "SUM of";
+ln["MIN_en"] = "MIN of";
+ln["MAX_en"] = "MAX of";
+ln["AVG_en"] = "AVG of";
+ln["FIRST_en"] = "FIRST of";
+ln["LAST_en"] = "LAST of";
+
+ln["XAxis_en"] = "X AXIS";
+ln["YAxis_en"] = "Y AXIS (numeric)";
+ln["Column_en"] = "COLUMN";
+ln["SliceLabels_en"] = "LABELS";
+ln["SliceSizes_en"] = "SIZES (numeric)";
+ln["Latitude_en"] = "LATITUDE";
+ln["Longitude_en"] = "LONGITUDE";
+ln["BalloonContent_en"] = "BALLOON CONTENT";
+
+//options
+ln["title_en"] = "Title"
+ln["description_en"] = "Description";
+
+ln["x-axis-label_en"] = "X Axis Label";
+ln["y-axis-label_en"] = "Y Axis Label";
+ln["suffix_en"] = "Tooltip Suffix";
+ln["theme_en"] = "Theme";
+ln["stack_en"] = "Stack";
+ln["donut_en"] = "Donut";
+
+ln["x-axis-label_description_en"] = "X Axis Label";
+ln["y-axis-label_description_en"] = "Y Axis Label";
+ln["suffix_description_en"] = "Tooltip Suffix";
+ln["theme_description_en"] = "Theme";
+ln["stack_description_en"] = "Stack";
+ln["donut_description_en"] = "Donut";
+
+/******** IT ********/
+
 ln["slide1Title_it"] = "SELEZIONA IL DATASET";
 ln["slide1Subtitle_it"] = "Ricerca o copia e incolla la url del dataset.";
 ln["slide2Title_it"] = "SELEZIONA I DATI";
@@ -110,120 +211,8 @@ ln["LatitudeDescription_it"] = "Latitudine del punto da riportare sulla mappa.";
 ln["LongitudeDescription_it"] = "Longitudine del punto da riportare sulla mappa.";
 ln["BalloonContentDescription_it"] = "Descrizione del segnaposto o link all'immagine che visualizza il luogo specificato sulla mappa.";
 
-/* EN */
-ln["slide1Title_en"] = "SELECT DATASET";
-ln["slide1Subtitle_en"] = "Search or copy and paste the url of dataset.";
-ln["slide2Title_en"] = "SELECT DATA";
-ln["slide2Subtitle_en"] = "Select the fields from tree-view. The multi-table will show the values related to the selected fields.";
-ln["slide3Title_en"] = "SELECT VISUALIZATION";
-ln["slide3Subtitle_en"] = "Select a visualization, fill out inputs and labels (optional).";
+/******** FR ********/
 
-ln["back_en"] = "BACK";
-ln["forward_en"] = "FORWARD";
-
-ln["listView_en"] = "LIST VIEW";
-ln["treeMapView_en"] = "TREE MAP VIEW";
-ln["mostPopular_en"] = "MOST POPULAR";
-ln["availableDatasets_en"] = "Available datasets";
-ln["suggestedDatasets_en"] = "Suggested datasets";
-ln["selectedUrl_en"] = "Selected url";
-ln["wrongUrl_en"] = "Invalid url or data provider not supported yet.";
-
-ln["inputs_en"] = "INPUTS";
-ln["layouts_en"] = "LABELS / OPTIONS";
-ln["baseInfo_en"] = "BASE INFO";
-ln["comment_en"] = "COMMENT";
-ln["commentLabel_en"] = "comment (max 100 characters)";
-ln["dataletPreview_en"] = "PREVIEW";
-ln["addDatalet_en"] = "ADD";
-ln["modifyDatalet_en"] = "MODIFY";
-
-ln["addFilters_en"] = "ADD FILTERS";
-ln["filterField_en"] = "Field";
-ln["filterOperation_en"] = "Operation";
-ln["filterValue_en"] = "Value";
-ln["contains_en"] = "contains";
-ln["start_en"] = "start with";
-ln["ends_en"] = "ends with";
-ln["sortAscending_en"] = "sorted ascending";
-ln["sortDescending_en"] = "sorted descending";
-ln["unsort_en"] = "unsorted";
-ln["groupBy_en"] = "GROUP BY";
-ln["calculate_en"] = "CALCULATE";
-ln["COUNT_en"] = "COUNT of";
-ln["SUM_en"] = "SUM of";
-ln["MIN_en"] = "MIN of";
-ln["MAX_en"] = "MAX of";
-ln["AVG_en"] = "AVG of";
-ln["FIRST_en"] = "FIRST of";
-ln["LAST_en"] = "LAST of";
-
-ln["datatable_en"] = "table";
-ln["barchart_en"] = "bar-chart";
-//ln["bar-chart_en"] = "DDR bar-chart";
-ln["columnchart_en"] = "column-chart";
-ln["linechart_en"] = "line-chart";
-ln["column3Dchart_en"] = "3D column-chart";
-ln["areachart_en"] = "area-chart";
-ln["donutpie3dchart_en"] = "3D donutpie-chart";
-ln["piechart_en"] = "pie-chart";
-ln["treemap_en"] = "tree-map";
-ln["leafletjs_en"] = "map";
-ln["bubble3d_en"] = "3D bubble-chart";
-ln["bubblechart_en"] = "bubble-chart";
-ln["scatterchart_en"] = "scatter-chart";
-ln["heatmap_en"] = "heat-map";
-
-ln["title_en"] = "title";
-ln["description_en"] = "description";
-
-ln["Cell_en"] = "Cell";
-ln["Level_en"] = "Level";
-ln["Categories_en"] = "Categories";
-//ln["Category_en"] = "Category";
-ln["Series_en"] = "Series";
-ln["x-axis-label_en"] = "X axis label";
-ln["y-axis-label_en"] = "Y axis label";
-ln["z-axis-label_en"] = "Z axis label";
-ln["suffix_en"] = "Suffix";
-//ln["theme_en"] = "Theme";
-ln["Size_en"] = "Size";
-ln["Latitude_en"] = "Latitude";
-ln["Longitude_en"] = "Longitude";
-ln["Balloon content_en"] = "Balloon content";
-ln["X values_en"] = "X values";
-ln["Y values_en"] = "Y values";
-ln["Z values_en"] = "Z values";
-
-ln["cellDescription_en"] = "The cell of table.";
-ln["levelDescription_en"] = "It is the level field that the datalet will use to group the values at corrisponding field number level.";
-
-ln["categoriesDescription_en"] = "The chart categories. Its values will be put in the horizontal axis. You need one value for each series.";
-ln["seriesDescription_en"] = "The chart series. Its values will be put in the vertical axis.";
-
-ln["XAxisLabelDescription_en"] = "The label for the X axis.";
-ln["YAxisLabelDescription_en"] = "The label for the Y axis.";
-ln["suffixDescription_en"] = "The values suffix (eg units, dollars, euro, ...).";
-
-ln["pieSeriesDescription_en"] = "The chart series. Its values will be put on slice of each series.";
-ln["pieSizeDescription_en"] = "The size for each series to create a concentric rings.";
-
-ln["bubbleCategoriesDescription_en"] = "The chart categories. Its values will be put in the horizontal axis. You need one value for each series.";
-ln["bubbleYValuesDescription_en"] = "The chart plots y values. Its values will be put in the vertical axis.";
-ln["bubbleZValuesDescription_en"] = "The chart plots z value. Its values represent the size of the bubble.";
-ln["bubbleSeriesDescription_en"] = "The chart series. Its values visualize multi- series bubbles chart.";
-
-ln["scatterCategoriesDescription_en"] = "The chart categories. You need one value for each series.";
-ln["scatterXValuesDescription_en"] = "The chart plots x values. Its values will be put in the horizontal axis.";
-ln["scatterYValuesDescription_en"] = "The chart plots y value. Its values will be put in the vertical axis.";
-
-ln["heatmapCategoriesDescription_en"] = "The chart categories. Its values will be put in the horizontal axis.";
-
-ln["LatitudeDescription_en"] = "It is latitude of the points you want to show in the map.";
-ln["LongitudeDescription_en"] = "It is longitude of the points you want to show in the map.";
-ln["BalloonContentDescription_en"] = "It is the text associated to the marker or the link to the image related to the camera associated to each points.";
-
-/* FR */
 ln["slide1Title_fr"] = "SELECTIONNER UN JEU DE DONNEES";
 ln["slide1Subtitle_fr"] = "Rechercher ou copier/coller l’url du jeu de données.";
 ln["slide2Title_fr"] = "SELECTIONNER DONNEES";
@@ -333,7 +322,8 @@ ln["LatitudeDescription_fr"] = "Latitude des points que vous souhaitez montrer s
 ln["LongitudeDescription_fr"] = "Longitude des points que vous souhaitez montrer sur la carte.";
 ln["BalloonContentDescription_fr"] = "It is the text associated to the marker or the link to the image related to the camera associated to each points.";
 
-/* NL */
+/******** NL ********/
+
 ln["slide1Title_nl"] = "SELECTEER DATASET";
 ln["slide1Subtitle_nl"] = "Zoek of kopieer en plak de url van de dataset.";
 ln["slide2Title_nl"] = "SELECTEER DATA";

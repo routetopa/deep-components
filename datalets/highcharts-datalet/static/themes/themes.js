@@ -1,3 +1,12 @@
+Highcharts.themeSpod = {
+    colors: ["#2196F3", "#00BCD4", "#B6B6B6", "#F44336", "#FFEB3B", "#4CAF50", "#FF9800", "#795548", "#9C27B0", "#E91E63"],
+    chart: {
+        style: {
+            fontFamily: "'Roboto', 'Helvetica Neue', Helvetica, Arial, sans-serif"
+        }
+    }
+}
+
 /**
  * Dark theme for Highcharts JS
  * @author Torstein Honsi
@@ -221,12 +230,11 @@ Highcharts.createElement('link', {
     type: 'text/css'
 }, null, document.getElementsByTagName('head')[0]);
 
-// Add the background image to the container
-Highcharts.wrap(Highcharts.Chart.prototype, 'getContainer', function (proceed) {
-    proceed.call(this);
-    this.container.style.background = 'url(http://www.highcharts.com/samples/graphics/sand.png)';
-});
-
+//Add the background image to the container
+//Highcharts.wrap(Highcharts.Chart.prototype, 'getContainer', function (proceed) {
+//    proceed.call(this);
+//    this.container.style.background = 'url(http://www.highcharts.com/samples/graphics/sand.png)';
+//});
 
 Highcharts.themeSandSignika = {
     colors: ["#f45b5b", "#8085e9", "#8d4654", "#7798BF", "#aaeeee", "#ff0066", "#eeaaee",

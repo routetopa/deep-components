@@ -63,7 +63,7 @@ Example:
              * @method transformData
              */
             presentData: function(){
-                $(this._component.$.charts.$.container).highcharts({
+                options = {
                     chart: {
                         type: 'column',
                         zoomType: 'xy',
@@ -75,7 +75,8 @@ Example:
                         categories: this.properties.categories.value,
                         title: {
                             text: this._component.xAxisLabel
-                        }
+                        },
+//                        crosshair: true
                     },
                     yAxis: {
                         min: 0,
@@ -87,11 +88,25 @@ Example:
                             overflow: 'justify'
                         }
                     },
+//                    tooltip: {
+//                        headerFormat: '<span style="font-size:16px; font-weight: bold">{point.key}</span><table  style="font-size:16px; white-space: nowrap ">',
+//                        pointFormat: '<tr style="color:{series.color}"><td>{series.name}: </td>' +
+//                        '<td>{point.y} ' + this._component.suffix + '</span></td></tr>',
+//                        footerFormat: '</table>',
+//                        shared: true,
+//                        useHTML: true
+//                    },
+//                    plotOptions: {
+//                        column: {
+//                            pointPadding: 0.2,
+//                            borderWidth: 0
+//                        }
+//                    },
                     tooltip: {
                         valueSuffix: ' ' + this._component.suffix
                     },
                     plotOptions: {
-                        bar: {
+                        column: {
                             dataLabels: {
                                 enabled: true
                             }
@@ -102,20 +117,24 @@ Example:
                         align: 'right',
                         verticalAlign: 'top',
                         x: -40,
-                        y: 100,
+                        y: 80,
                         floating: true,
                         borderWidth: 1,
-                        backgroundColor: ((Highcharts.theme && Highcharts.theme.legendBackgroundColor) || '#FFFFFF'),
+                        backgroundColor: ((Highcharts[this._component.theme] && Highcharts[this._component.theme].legendBackgroundColor) || '#FFFFFF'),
                         shadow: true
                     },
                     credits: {
                         enabled: false
                     },
-                    series: this.properties.series.value//this._component.series
-                });
+                    series: this.properties.series.value
+                };
+
+                if(this._component.theme != "themeBase" && this._component.theme != "")
+                    jQuery.extend(true, options, Highcharts[this._component.theme]);
+
+                $(this._component.$.charts.$.container).highcharts(options);
             }
         };
-
 
         LinechartDatalet = Polymer({
             is: 'columnchart-datalet',
@@ -152,7 +171,12 @@ Example:
                  */
                 suffix : {
                     type : String,
-                    value : "units"
+                    value : ""
+                },
+
+                theme : {
+                    type : String,
+                    value : ""
                 },
                 /**
                  * It's the component behavior

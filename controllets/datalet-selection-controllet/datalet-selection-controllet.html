@@ -226,7 +226,7 @@
                     <div class="inputs">
                         <paper-dropdown-menu id="group_by">
                             <paper-menu class="dropdown-content">
-                                <template is="dom-repeat" items={{selectedFields}}>
+                                <template is="dom-repeat" items={{fields}}>
                                     <paper-item id={{index}} on-tap="_showGroupedFields">{{_fieldName(item)}}</paper-item>
                                 </template>
                             </paper-menu>

@@ -8,7 +8,8 @@
 <link rel="import" href="../page-slider-controllet/page-slider-controllet.html">
 <link rel="import" href="../dataset-selection-controllet/dataset-selection-controllet.html">
 <link rel="import" href="../select-data-controllet/select-data-controllet.html" />
-<link rel="import" href="../datalet-selection-controllet/datalet-selection-controllet.html">
+<link rel="import" href="../select-visualization-controllet/select-visualization-controllet.html" />
+<!--<link rel="import" href="../datalet-selection-controllet/datalet-selection-controllet.html">-->
 
 <dom-module id="data-sevc-controllet">
 
@@ -32,7 +33,8 @@
 
             <neon-animatable>
 
-                <datalet-selection-controllet id="select_visualization" deep-url={{deepUrl}} datalets-list-url={{dataletsListUrl}} data-url={{dataUrl}} preselected-datalet={{selectedDatalet}} datalet-preset={{dataletPreset}}></datalet-selection-controllet>
+                <!--<datalet-selection-controllet id="select_visualization" deep-url={{deepUrl}} datalets-list-url={{dataletsListUrl}} data-url={{dataUrl}} preselected-datalet={{selectedDatalet}} datalet-preset={{dataletPreset}}></datalet-selection-controllet>-->
+                <select-visualization-controllet id="select_visualization" deep-url={{deepUrl}} datalets-list-url={{dataletsListUrl}} data-url={{dataUrl}} preselected-datalet={{selectedDatalet}} datalet-preset={{dataletPreset}}></select-visualization-controllet>
 
             </neon-animatable>
 
