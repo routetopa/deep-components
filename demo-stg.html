@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
+
+    <link rel="import"  href="bower_components/iron-component-page/iron-component-page.html">
+    <link rel="import"  href="bower_components/paper-item/paper-item.html">
+    <link rel="import"  href="bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
+    <link rel="import"  href="bower_components/paper-icon-button/paper-icon-button.html">
+    <link rel="import"  href="bower_components/iron-flex-layout/iron-flex-layout.html">
+
+    <script type="text/javascript" src="bower_components/webcomponentsjs/webcomponents-lite.min.js"></script>
+    <script type="text/javascript" src="datalets/shared_js/jquery-1.11.2.min.js"></script>
+    <script type="text/javascript" src="docs/js/editarea_0_8_2/edit_area/edit_area_full.js"></script>
+
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            editAreaLoader.init({
+                id : "sbiricuda",         // textarea id
+                syntax: "html",           // syntax to be uses for highgliting
+                start_highlight: true,    // to display with highlight mode on start-up
+                replace_tab_by_spaces: 4,
+                isEditable : false
+            });
+        });
+
+        var createHTML = function(e)
+        {
+            var dataletHTML = "";
+
+            dataletHTML = '<' + e.detail.data.datalet;
+
+            for (var property in e.detail.data.params) {
+                if (e.detail.data.params.hasOwnProperty(property)) {
+                    if(property != "_colorIndex")
+                        dataletHTML += ' ' + property + '="' + e.detail.data.params[property] + '"';
+                }
+            }
+
+            dataletHTML += ' fields=\'' + JSON.stringify(e.detail.data.fields) + '\'';
+            //dataletHTML += ' data=\''   + e.detail.data.staticData + '\'>';
+            dataletHTML += '\'>';
+            dataletHTML += '</'+e.detail.data.datalet+'>';
+
+            var dataletImport   = '\<script type="text/javascript" src="https://cdn.jsdelivr.net/webcomponentsjs/0.7.16/webcomponents-lite.min.js"\>\<\/script\>\n' +
+                                  '\<script type="text/javascript" src="https://code.jquery.com/jquery-2.1.4.min.js"\>\<\/script\>\n' +
+                                  '<!-- REMOVE THE PREVIOUS SCRIPT TAGS IF YOUR PAGE ALREADY USES JQUERY AND POLYFILL LIBRARIES  -->\n';
+
+            var dataletLink     = '<link rel="import" href="http://stage.routetopa.eu/deep/COMPONENTS/datalets/'+e.detail.data.datalet+'/'+e.detail.data.datalet+'.html" /> \n';
+
+            editAreaLoader.setValue("sbiricuda", dataletImport+dataletLink+dataletHTML);
+        }
+
+    </script>
+
+    <style>
+
+        body {
+            font-family: 'Roboto', sans-serif;
+        }
+
+        #toolbar{
+            background: #2196F3 ;
+        }
+
+        #logo{
+            width: 56px;
+            height: 56px;
+            background-image: url("http://spod.routetopa.eu/ow_static/themes/rtpa_matter/images/logo.png");
+            background-size: auto 41px;
+            background-repeat: no-repeat;
+            background-position: center center;
+
+        }
+    </style>
+
+</head>
+<body>
+
+    <paper-toolbar id="toolbar">
+        <paper-menu-button>
+            <paper-icon-button icon="menu" class="dropdown-trigger"></paper-icon-button>
+            <paper-menu class="dropdown-content">
+                <paper-item><a href="http://routetopa.eu/" target="_blank">ROUTE-TO PA European Project</a></paper-item>
+                <paper-item><a href="docs/docs.html" target="_blank">DEEP Documentation</a></paper-item>
+            </paper-menu>
+        </paper-menu-button>
+        <span class="title">DatalEts-Ecosystem Provider - Datalet Creator</span>
+        <a href="http://routetopa.eu/" target="_blank"><paper-icon-button id="logo"></paper-icon-button></a>
+    </paper-toolbar>
+
+    <div class="">
+        <p>
+            Using this page you can create a Datalet, a off-the-shelf, reusable web-component able to load,
+            query, filter, and visualise any dataset content (e.g. through HighCharts Javascript library).
+            Datalet are reusable since they can be placed in every web page, like institutional web-sites,
+            blogs, forums and so on, without any knowledge on how it effectively is implemented.
+        </p>
+    </div>
+
+    <iframe style="width:100%; height:62vh" frameborder="0" srcdoc='
+        <head>
+            <script type="text/javascript" src="bower_components/webcomponentsjs/webcomponents-lite.min.js"></script>
+            <script type="text/javascript" src="datalets/shared_js/jquery-1.11.2.min.js"></script>
+            <link rel="import" href="controllets/data-sevc-controllet/data-sevc-controllet.html" />
+            <script src="controllets/shared_js/perfect-scrollbar/js/min/perfect-scrollbar.jquery.min.js"></script>
+            <link rel="stylesheet" href="controllets/shared_js/perfect-scrollbar/css/perfect-scrollbar.min.css">
+            <script type="text/javascript">
+                $(document).ready(function () {
+
+                    var datasets = [
+                        {decription:"", name:"Italy - Consuntivo entrate 2009", url:"http://ckan.routetopa.eu/api/action/datastore_search?resource_id=07843fc3-07e1-4c66-9be4-fed43ca4a26f"},
+                        {decription:"", name:"Italy - Consuntivo entrate 2010",url:"http://ckan.routetopa.eu/api/action/datastore_search?resource_id=48a4db73-d3d4-4639-bbc2-9c797d0e6cda"},
+                        {decription:"", name:"Italy - Consuntivo entrate 2011",url:"http://ckan.routetopa.eu/api/action/datastore_search?resource_id=a14cc2fb-0c24-48d7-9370-834045797d89"},
+                        {decription:"", name:"Italy - Consuntivo entrate 2012",url:"http://ckan.routetopa.eu/api/action/datastore_search?resource_id=fb32fcb6-5e44-4e52-b132-01c6540ddbee"},
+                        {decription:"", name:"Italy - Consuntivo entrate 2014",url:"http://ckan.routetopa.eu/api/action/datastore_search?resource_id=0cb600fc-19ad-4aaf-9794-1e6ea851840a"},
+                        {decription:"", name:"Holland - Vestigingen register gemeente Groningen",url:"http://ckan.routetopa.eu/api/action/datastore_search?resource_id=ba554c1f-02a7-4d76-b449-fb9daa1f8bfd"},
+                        {decription:"", name:"Holland - Woonruimte gemeente Groningen",url:"http://ckan.routetopa.eu/api/action/datastore_search?resource_id=af7b3916-4347-469a-8354-3c2d559bd92f"},
+                        {decription:"", name:"Ireland - SDCC Traffic Cameras",url:"http://ckan.routetopa.eu/api/action/datastore_search?resource_id=73e02092-85a1-434e-85fe-0c9a43aa9a52"},
+                        {decription:"", name:"Ireland - Derelict Site Register",url:"http://ckan.routetopa.eu/api/action/datastore_search?resource_id=fcbee83e-3d3d-4303-a568-24dd33d02adc"},
+                        {decription:"", name:"Ireland - Dublin City Council Commencement Notices",url:"http://ckan.routetopa.eu/api/action/datastore_search?resource_id=ee00de68-f2e4-482f-a003-3c0561351075"},
+                        {decription:"", name:"Ireland - Dublin City Council Planning Applications",url:"http://ckan.routetopa.eu/api/action/datastore_search?resource_id=2f4a9d44-b52f-4c8b-a5db-d8f4a676d81e"},
+                        {decription:"", name:"Ireland - Dun Laoghaire-Rathdown County Council Planning Application 2008-2014",url:"http://ckan.routetopa.eu/api/action/datastore_search?resource_id=c479f061-9638-489d-ac55-0c68765548ff"},
+                        {decription:"", name:"Ireland - Fingal Council Planning Applications for last 7 years",url:"http://ckan.routetopa.eu/api/action/datastore_search?resource_id=d29a477a-4734-43ef-8002-048c8640d441"},
+                        {decription:"", name:"Ireland - Planning Register",url:"http://ckan.routetopa.eu/api/action/datastore_search?resource_id=2b23f32d-e27e-4eef-af1e-27e05103df7d"},
+                        {decription:"", name:"Ireland - Fingal Development Plan 2011-2017 Record of Protected Structures",url:"http://ckan.routetopa.eu/api/action/datastore_search?resource_id=5ea813bc-fdf9-4edb-b3b1-0142b593d5c6"},
+                        {decription:"", name:"Bubble example",url:"http://ckan.routetopa.eu/api/action/datastore_search?resource_id=0cb600fc-19ad-4aaf-9794-1e6ea851840a"},
+                        {decription:"", name:"Issy -  3d pie chart", url:"https://data.issy.com/api/records/1.0/search?dataset=flux-rss-des-offres-demplois-a-issy-les-moulineaux&sort=published&facet=published&refine.published=2015%2F10"}
+                    ];
+
+                    var dsc = document.getElementById("dsc");
+                    dsc.setAttribute("datasets", JSON.stringify(datasets));
+
+                    $("#treeMapView").parent().parent().hide();
+                    window.addEventListener("data-sevc-controllet.dataletCreated", function(e){parent.createHTML(e);});
+
+                    /*var h = $("#material_container").height() - 48;
+                    var w = $("#material_container").width();
+                    console.log($("#div_datasetexplorer"));
+                    console.log($("#div_datasetexplorer").html());
+                    $("#div_datasetexplorer").html("CIAO !!");
+                    console.log($("#div_datasetexplorer").html());
+                    $("#div_datasetexplorer").html("<datasetexplorer-datalet width=\""+w+"\" height=\""+h+"\" data-url=\"http://spod.routetopa.eu/openwall/api/datasetTree\" fields=\"[\"result,datasets,provider_name\",\"result,datasets,organization_name\",\"result,datasets,package_name\",\"result,datasets,resource_name\",\"result,datasets,url\",\"result,datasets,w\"]\"></datasetexplorer-datalet>");
+                    console.log($("#div_datasetexplorer").html());*/
+                });
+            </script>
+        </head>
+        <body>
+            <data-sevc-controllet localization="en" id="dsc" deep-url="http://stage.routetopa.eu/deep/DEEP/" datalets-list-url="http://stage.routetopa.eu/deep/DEEP/datalets-list"></data-sevc-controllet>
+        </body>
+    '>
+    </iframe>
+
+    <div id="code_area">
+        <textarea id="sbiricuda" style="position:relative;width: 100%;min-height: 15vh;max-height: 15vh;" style="" rows="4" cols="50">
+Copy and paste this code to inject the datalet in you page.
+        </textarea>
+    </div>
+
+    <!--<div>
+        <textarea style="width: 90%; margin-left:10px; height: 110px"  id="code-textarea"></textarea>
+    </div>-->
+
+</body>
+</html>
