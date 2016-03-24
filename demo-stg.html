@@ -49,7 +49,7 @@
                     '\<script type="text/javascript" src="https://code.jquery.com/jquery-2.1.4.min.js"\>\<\/script\>\n' +
                     '<!-- REMOVE THE PREVIOUS SCRIPT TAGS IF YOUR PAGE ALREADY USES JQUERY AND POLYFILL LIBRARIES  -->\n';
 
-            var dataletLink     = '<link rel="import" href="http://deep.routetopa.eu/COMPONENTS/datalets/'+e.detail.data.datalet+'/'+e.detail.data.datalet+'.html" /> \n';
+            var dataletLink     = '<link rel="import" href="http://stage.routetopa.eu/COMPONENTS/datalets/'+e.detail.data.datalet+'/'+e.detail.data.datalet+'.html" /> \n';
 
             editAreaLoader.setValue("sbiricuda", dataletImport+dataletLink+dataletHTML);
         }
@@ -143,13 +143,13 @@
                     console.log($("#div_datasetexplorer").html());
                     $("#div_datasetexplorer").html("CIAO !!");
                     console.log($("#div_datasetexplorer").html());
-                    $("#div_datasetexplorer").html("<datasetexplorer-datalet width=\""+w+"\" height=\""+h+"\" data-url=\"http://spod.routetopa.eu/openwall/api/datasetTree\" fields=\"[\"result,datasets,provider_name\",\"result,datasets,organization_name\",\"result,datasets,package_name\",\"result,datasets,resource_name\",\"result,datasets,url\",\"result,datasets,w\"]\"></datasetexplorer-datalet>");
+                    $("#div_datasetexplorer").html("<datasetexplorer-datalet width=\""+w+"\" height=\""+h+"\" data-url=\"http://stage.routetopa.eu/openwall/api/datasetTree\" fields=\"[\"result,datasets,provider_name\",\"result,datasets,organization_name\",\"result,datasets,package_name\",\"result,datasets,resource_name\",\"result,datasets,url\",\"result,datasets,w\"]\"></datasetexplorer-datalet>");
                     console.log($("#div_datasetexplorer").html());*/
                 });
             </script>
         </head>
         <body>
-            <data-sevc-controllet localization="en" id="dsc" deep-url="http://deep.routetopa.eu/DEEP/" datalets-list-url="http://deep.routetopa.eu/DEEP/datalets-list"></data-sevc-controllet>
+            <data-sevc-controllet localization="en" id="dsc" deep-url="http://stage.routetopa.eu/deep/DEEP/" datalets-list-url="http://deep.routetopa.eu/deep/DEEP/datalets-list"></data-sevc-controllet>
         </body>
     '>
 </iframe>
