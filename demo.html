@@ -36,13 +36,13 @@
             for (var property in e.detail.data.params) {
                 if (e.detail.data.params.hasOwnProperty(property)) {
                     if(property != "_colorIndex")
-                        dataletHTML += ' ' + property + '="' + e.detail.data.params[property] + '"';
+                        dataletHTML += ' ' + property + '=\'' + e.detail.data.params[property] + '\'';
                 }
             }
 
             dataletHTML += ' fields=\'' + JSON.stringify(e.detail.data.fields) + '\'';
             //dataletHTML += ' data=\''   + e.detail.data.staticData + '\'>';
-            dataletHTML += '\'>';
+            dataletHTML += '>';
             dataletHTML += '</'+e.detail.data.datalet+'>';
 
             var dataletImport   = '\<script type="text/javascript" src="https://cdn.jsdelivr.net/webcomponentsjs/0.7.16/webcomponents-lite.min.js"\>\<\/script\>\n' +
