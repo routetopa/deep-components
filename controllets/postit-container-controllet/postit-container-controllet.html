@@ -260,7 +260,7 @@
                             <li>
                                 <a href="#">
                                     <h3>{{item.title}}</h3>
-                                    <p>{{item.content}}</p>
+                                    <p>{{unescapeString(item.content)}}</p>
                                 </a>
                             </li>
                         </template>
@@ -333,6 +333,12 @@
                 this.$.newTitle.innerHTML   = "Title";
                 this.$.newContent.innerHTML = "Content";
 
+            },
+
+            unescapeString: function(string){
+                return string
+                        .replace("&quot;", "\"", 'g')
+                        .replace("&#039;", '\'', 'g');
             }
 
         });
