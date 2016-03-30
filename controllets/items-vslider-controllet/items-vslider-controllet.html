@@ -69,7 +69,8 @@
                 padding: 8px;
                 width: 124px;
                 color: #000000;
-                background-color: rgba(158, 158, 158, 0.8);
+                background-color: rgba(158, 158, 158, 0.8);/*9E*/
+                /*background-color: rgba(182, 182, 182, 0.9);/!*B&*!/*/
                 z-index: 1;
                 font-family: 'Roboto', 'Helvetica Neue', Helvetica, Arial, sans-serif;
                 font-size: 16px;
@@ -79,7 +80,9 @@
 
             .legend.selected {
                 background-color: #2196F3;
+                /*background-color: rgba(33, 150, 243, 0.8);*/
                 color: #FFFFFF;
+
             }
 
             #items_vslider_search{
@@ -225,8 +228,8 @@
                 for(var i=0; i < this.datalets.length; i++){
                     var datalet = this.datalets[i];
                     var imageName = this._getChartName(datalet.imageName).toLowerCase();
-                    console.log(imageName);
-                    console.log(this.filter);
+//                    console.log(imageName);
+//                    console.log(this.filter);
                     if(imageName.indexOf(this.filter.toLowerCase()) > -1)
                         datalets.push(datalet);
                 }

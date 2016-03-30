@@ -197,12 +197,13 @@
 
             setOptions : function(options) {
                 this.options = [];
+                this.params = [];
                 this.async(function() {
                     this.options = options;
                 }, 0);
 
-                this.params["title"] = "";
-                this.params["description"] = "";
+//                this.params["title"] = "";
+//                this.params["description"] = "";
             },
 
             ceckOptions : function(options) {

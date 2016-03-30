@@ -52,9 +52,9 @@ ln["barchart_stacked_en"] = "Stacked Bar";
 ln["columnchart_stacked_en"] = "Stacked Column";
 ln["areachart_stacked_en"] = "Stacked Area";
 ln["piechart_en"] = "Pie";
-//ln["scatterchart_en"] = "Scatter";
-//ln["bubblechart_en"] = "Bubble";
-//ln["treemap_en"] = "Tree Map";
+ln["scatterchart_en"] = "Scatter";
+ln["bubblechart_en"] = "Bubble";
+ln["treemap_en"] = "Tree Map";
 ln["leafletjs_en"] = "Map";
 
 //inputs
@@ -74,13 +74,16 @@ ln["FIRST_en"] = "FIRST of";
 ln["LAST_en"] = "LAST of";
 
 ln["XAxis_en"] = "X AXIS";
-ln["YAxis_en"] = "Y AXIS (numeric)";
+ln["YAxis_en"] = "Y AXIS";
+ln["numericXAxis_en"] = "X AXIS (numeric)";
+ln["numericYAxis_en"] = "Y AXIS (numeric)";
 ln["Column_en"] = "COLUMN";
 ln["SliceLabels_en"] = "LABELS";
 ln["SliceSizes_en"] = "SIZES (numeric)";
 ln["Latitude_en"] = "LATITUDE";
 ln["Longitude_en"] = "LONGITUDE";
 ln["BalloonContent_en"] = "BALLOON CONTENT";
+ln["Categories_en"] = "CATEGORIES";
 
 //options
 ln["title_en"] = "Title"
