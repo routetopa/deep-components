@@ -59,17 +59,10 @@ Example:
 
         <style is="custom-style">
 
-            .legend span{
-                position: relative;
-                top: 8px;
-            }
-
             .card_grid
             {
                 width: 100%;
                 z-index: 0;
-                margin: auto;
-                padding: 5%;
             }
 
             .card_grid:after {
@@ -79,7 +72,7 @@ Example:
             }
 
             ::content .card{
-                margin: 10px;
+                margin: 40px 0px 0px 40px;
                 float: left;
             }
 
@@ -100,25 +93,13 @@ Example:
                 display: none;
             }
 
-            ::content .empty{
-                position: absolute;
-                right: 0;
-                left: 27%;
-                top: 40%;
-                margin-right: auto;
-                margin-left: auto;
-                font-family: 'Roboto', sans-serif;
-                font-weight: 500;
-                font-size: large;
-            }
-
         </style>
 
-        <div id="container" class="layout vertical">
-            <div class="card_grid" id="card_grid">
+        <!--<div id="container">-->
+            <div class="card_grid">
                 <content></content>
             </div>
-        </div>
+        <!--</div>-->
     </template>
 
     <script>
