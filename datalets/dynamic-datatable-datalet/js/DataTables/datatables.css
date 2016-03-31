@@ -1722,7 +1722,7 @@ table.dataTable tfoot th.ui-state-default:last-child {
   font-weight: normal;
 }
 .dataTables_wrapper .ui-toolbar {
-  padding: 16px;
+  padding: 8px;/*16*/
 }
 .dataTables_wrapper.no-footer .dataTables_scrollBody {
   border-bottom: none;

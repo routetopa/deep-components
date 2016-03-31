@@ -67,6 +67,7 @@ Example :
                 font-family: 'Roboto', 'Helvetica Neue', Helvetica, Arial, sans-serif;
                 padding-top: 2px;
                 border-top: 2px solid #B6B6B6;
+                margin-top: 8px;
             }
             #base_datalet_rtp {
                 display: flex;
@@ -75,7 +76,7 @@ Example :
             #rtp {
                 padding-top: 8px;
                 padding-right: 8px;
-                font-size: small;
+                font-size: 12px;
             }
             #rtpalogo {
                 height: 32px;
@@ -191,6 +192,7 @@ Example :
 
             hideFooter: function() {
                 this.$.base_datalet_container.innerHTML = "";
+                this.$.base_datalet_container.style.margin = 0;
                 this.$.base_datalet_container.style.border = 0;
             }
          });

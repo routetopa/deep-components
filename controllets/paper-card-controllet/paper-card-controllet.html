@@ -17,41 +17,40 @@
             #paper_card_container {
                 font-family: 'Roboto', 'Helvetica Neue', Helvetica, Arial, sans-serif;
                 font-size: 16px;
-                background-color: white;
-                position: relative;
-                float: left;
-                margin: 40px;
+                line-height: 16px;
             }
 
             #content {
-                padding: 4px 4px 0px 4px;
-                position:relative;
+                width: 100%;
+                height: calc(100% - 64px);
+                overflow: hidden;
             }
 
-            .legend {
+            #content.text {
+                background-color: #FFFFCC;
+                padding: 4px;
+                width: calc(100% - 8px);
+                height: calc(100% - 72px);
+            }
+
+            #paper_card_container .legend {
                 position: relative;
-                top: -48px;
+                bottom: 48px;
                 height: 32px;
                 padding: 16px 0px 0px 8px;
-                /*z-index: 1000;*/
-                background: rgba(0,0,0,0.8);
+                background-color: rgba(0, 0, 0, 0.8);
                 color: white;
                 font-weight: 700;
                 word-wrap: break-word;
             }
 
-            .footer {
-                height: 16px;
-            }
-
-            .comment {
+            #paper_card_container .footer {
+                height: 64px;
+                width: 100%;
                 position: relative;
-                top: -50px;
-                height: 50px;
-                background-color: white;
-                padding: 8px;
-                font-size: small;
-                color: #727272;
+                bottom: 48px;
+                padding: 4px;
+                font-size: 12px;
                 word-wrap: break-word;
                 overflow: hidden;
             }
@@ -63,7 +62,6 @@
             }
 
             paper-fab.open {
-                /*bottom: 28px;*/
                 bottom: -20px;
                 right: 8px;
             }
@@ -114,7 +112,7 @@
         </style>
 
 
-        <paper-material id="paper_card_container" elevation="{{elevation}}">
+        <paper-material id="paper_card_container" elevation="3">
 
             <paper-fab id="card_modify" class="modify" mini icon="create" on-click="_handleModifyClick"></paper-fab>
 
@@ -149,7 +147,7 @@
             </div>
 
             <div class="footer">
-                <div class="comment">{{comment}}</div>
+                {{comment}}
             </div>
 
             <paper-dialog id="fullscreen_container" entry-animation="scale-up-animation" exit-animation="fade-out-animation">
@@ -170,22 +168,17 @@
 
                 width: {
                     type: Number,
-                    observer: "_changeWidth"
+                    value: 200
                 },
 
                 height: {
                     type: Number,
-                    observer: "_changeHeight"
-                },
-
-                elevation:{
-                    type: Number,
-                    value: 3
+                    value: 200
                 },
 
                 cardType:{
                     type: String,
-                    value: "text"
+                    value: ""
                 },
 
                 cardTitle:{
@@ -200,10 +193,14 @@
 
             },
 
+            ready: function(){
+                this._resize();
+            },
+
             attached: function(){
-                if(this.cardType == "text"){
-                    this.$.content.style.backgroundColor = "#FFFFCC";
-                }
+                if(this.cardType == "text")
+                    this.$.content.className += this.$.content.className ? ' text' : 'text';
+
                 $(this.$.fullscreen_container).perfectScrollbar();
 
                 this._translate();
@@ -225,17 +222,9 @@
                         this.$$("#card_open_datalet").setAttribute("title", paper_ln["open_"+paper_ln["ln"]]);
             },
 
-            _changeWidth: function(){
-                this.style.width = this.width + "px";
-                this.$.content.style.width = this.width - 8 + "px";
-                this.$.paper_card_container.style.width = this.width + "px";
-            },
-
-            _changeHeight: function(){
-                this.style.height = this.height + 64 + "px";
-                this.$.content.style.height = this.height - 4 + "px";
-                this.$.paper_card_container.style.height = this.height + "px";
-                $(this.$.content).perfectScrollbar();
+            _resize: function(){
+                $(this.$.paper_card_container).height(this.height);
+                $(this.$.paper_card_container).width(this.width);
             },
 
             checkType: function(type, check){
