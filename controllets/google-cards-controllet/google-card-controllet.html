@@ -46,8 +46,8 @@
             paper-fab#fullscreen-button {
                 position: absolute;
                 /*z-index: 10;*/
-                top: 0px;
-                right: 0px;
+                top: 10px;
+                left: 10px;
                 --paper-fab-background:#2196F3;
                 padding : 0px;
                 margin: 0px;
@@ -84,13 +84,17 @@
                 width: 100%;
             }
 
+            :host #docs-header{
+                display : none;
+            }
+
         </style>
 
 
         <paper-material id="paper_card_container" elevation="{{elevation}}">
 
             <div id="content">
-                <iframe id="resource" src="{{resourceUrl}}&embedded=true"></iframe>
+                <iframe id="resource" src="{{resourceUrl}}&embedded=true&rm=embedded"></iframe>
                 <!--<iframe id="resource" src="{{resourceUrl}}"></iframe>-->
             </div>
 
