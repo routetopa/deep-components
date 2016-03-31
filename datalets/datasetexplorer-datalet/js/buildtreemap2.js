@@ -50,6 +50,7 @@ function build2(root, meta, place_holder, select_listener, width, height) {
             var data = ["top", "", "#000000", "", "", "", ""];
             //data[3] = OW.getLanguageText('ode', 'back');
             data[3] = datasetexplorer_ln["ode+back_"+datasetexplorer_ln["ln"]];
+            /*error*/data[3] = "<< Click to navigate back to the top level.";
 
             return "showTooltip(evt, '" + data + "')";
         })

@@ -62,91 +62,58 @@ Example:
              * @method presentData
              */
             presentData: function(){
-                var categoryName = [];
-                var color = {};
-                var scatterSeriesData = {};
-                var scattserie = [];
+                var x = this.data[0]["data"];
 
-                ScatterArr = [];
-                var dataTmp = [];
-                //Example 1: No Series name is specified in the query
-                if(this.data.length == 2){
-                    for (var i = 0; i < this.data[0].data.length; i++) {
-                            ScatterArr = [parseFloat(this.data[0].data[i]), parseFloat(this.data[1].data[i])];
-                            dataTmp.push(ScatterArr)
-                        }
-                    //add data to the series
-                    scatterSeriesData = {
-                        name: "Series",
-                        data: dataTmp,
-                        marker: color
-                    }
-                    scattserie.push(scatterSeriesData);
-                }
-                //Example 2: multi-series charts
-                else{
-                    var categoryNameDuplicateValue = [];
-                    for (i = 0; i < this.data[0].data.length; i++) {
-                            categoryNameDuplicateValue.push(this.data[0].data[i]);
-                    }
-                    categoryName = categoryNameDuplicateValue.filter(function (itm, i, categoryNameDuplicateValue) {
-                        return i == categoryNameDuplicateValue.indexOf(itm);
-                    });
-                    for (var index = 0; index < categoryName.length; index++) {
-                        for (var i = 0; i < this.data[0].data.length; i++) {
-                            if (this.data[0].data[i] == categoryName[index]) {
-                                ScatterArr = [this.data[1].data[i], this.data[2].data[i]];
-                                dataTmp.push(ScatterArr);
-                            }
-                        }
-                        //add data to the series
-                        scatterSeriesData = {
-                            name: "Series: " + categoryName[index],
-                            data: dataTmp,
-                            marker: color
-                        }
+                var categories = x.filter(function(item, pos) {
+                    return x.indexOf(item) == pos;
+                });
 
-                        scattserie.push(scatterSeriesData);
-                        dataTmp = [];
+                var scatterSeries = [];
+                var series = [];
+                var point = [];
+
+                for (var i = 0; i < categories.length; i++) {
+                    for (var j = 0; j < x.length; j++) {
+                        if (this.data[0].data[j] == categories[i]) {
+                            point = [this.data[1].data[j], this.data[2].data[j]];
+                            series.push(point);
+                        }
                     }
+
+                    scatterSeries.push({name: categories[i], data: series});
+                    series = [];
                 }
-                
-                $(this._component.$.charts.$.container).highcharts({
+
+                this.properties.series = scatterSeries;
+
+                options = {
                     chart: {
                         type: 'scatter',
                         zoomType: 'xy'
                     },
                     title: {
-                        text: "" + this._component.title
+                        text: this._component.title
                     },
-                    plotOptions: {
-                        scatter: {
-                            marker: {
-                                radius: 5,
-                                states: {
-                                    hover: {
-                                        enabled: true,
-                                        lineColor: 'rgb(100,100,100)'
-                                    }
-                                }
-                            },
-                            /*tooltip: {
-                                headerFormat: '<b>{series.name}</b><br>',
-                                pointFormat: '{point.x} ab, {point.y} kmq',
-                                valueSuffix: ' ' + this._component.suffix
-                            }*/
-                            tooltip: {
-                             headerFormat: '<b>{series.name}</b><br>',
-                             pointFormat: '{point.x}' + this._component.xAxisLabel + ', {point.y}' + this._component.yAxisLabel,
-                             valueSuffix: ' ' + this._component.suffix
-                             }
+                    xAxis: {
+                        title: {
+                            text: this._component.xAxisLabel
+                        }
+                    },
+                    yAxis: {
+                        title: {
+                            text: this._component.yAxisLabel,
                         }
                     },
                     credits: {
                         enabled: false
                     },
-                    series: scattserie
-                });
+                    series: this.properties.series
+                };
+
+                if(this._component.theme != "themeBase" && this._component.theme != "")
+                    jQuery.extend(true, options, Highcharts[this._component.theme]);
+
+                $(this._component.$.charts.$.container).highcharts(options);
             }
         };
 
@@ -154,35 +121,22 @@ Example:
         scatterchartDatalet = Polymer({
             is: 'scatterchart-datalet',
             properties: {
-                /**
-                 * It's the label for X axis
-                 *
-                 * @attribute xAxisLabel
-                 * @type String
-                 * @default ''
-                 */
                 xAxisLabel: {
                     type: String,
                     value: ""
                 },
-                /**
-                 * It's the label for Y axis
-                 *
-                 * @attribute yAxisLabel
-                 * @type String
-                 * @default ''
-                 */
                 yAxisLabel: {
                     type: String,
                     value: ""
                 },
-                /**
-                 * It's the component behavior
-                 *
-                 * @attribute behavior
-                 * @type Object
-                 * @default {}
-                 */
+                suffix : {
+                    type : String,
+                    value : ""
+                },
+                theme : {
+                    type : String,
+                    value : ""
+                },
                 behavior : {
                     type : Object,
                     value : {}
@@ -197,7 +151,7 @@ Example:
              */
             ready: function(){
                 this.behavior = $.extend(true, {}, HighchartsComponentBehavior, scatterchartBehavior);
-                this.async(function(){this.behavior.init(this)},1000);
+                this.async(function(){this.behavior.init(this)},0);
             }
         });
     </script>

@@ -108,7 +108,7 @@
                         <paper-dropdown-menu id="group_by" disabled>
                             <paper-menu class="dropdown-content">
                                 <template is="dom-repeat" items={{groupableFields}}>
-                                    <paper-item id={{index}} on-tap="_setAggregators">{{_fieldName(item)}}</paper-item>
+                                    <paper-item id={{index}} on-tap="_setAggregatorsFields">{{_fieldName(item)}}</paper-item>
                                 </template>
                             </paper-menu>
                         </paper-dropdown-menu>
@@ -237,7 +237,7 @@
 
                 this.async(function () {
                     //reset ddl
-                    var ddls = document.getElementsByTagName("paper-dropdown-menu");
+                    var ddls = this.$.inputs_series_container.getElementsByTagName("paper-dropdown-menu");
                     for (var i = 0; i < ddls.length; i++)
                         $(ddls[i]).find("paper-menu")[0].select(-1);
                     this.$.group_by.setAttribute("disabled", "");
@@ -308,6 +308,17 @@
                     }, 0);
                 }
                 this._setAggregators();
+            },
+
+            _setAggregatorsFields : function(e){
+                this.async(function() {
+                    var c_menu = $("#calculate_0").find("paper-menu")[0];
+                    var selected =  c_menu.selected > 0 ? c_menu.selected : 0;
+                    c_menu.select(-1);
+                    c_menu.select(selected);
+
+                    this._setAggregators();
+                }, 0);
             },
 
             _setAggregators : function(){

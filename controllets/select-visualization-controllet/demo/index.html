@@ -20,7 +20,8 @@
 
 <body>
 
-<select-visualization-controllet fields='["records,fields,annee", "records,fields,preteur", "records,fields,capital_restant_du"]' data-url="https://data.issy.com/api/records/1.0/search/?dataset=repartitiondeladetteparpreteursau3112n-feuille1&rows=56&sort=-annee" deep-url="http://172.16.15.38/DEEalerProvider/DEEP/" datalets-list-url="http://172.16.15.38/DEEalerProvider/DEEP/datalets-list"></select-visualization-controllet>
+<!--<select-visualization-controllet fields='["records,fields,annee", "records,fields,preteur", "records,fields,capital_restant_du"]' data-url="https://data.issy.com/api/records/1.0/search/?dataset=repartitiondeladetteparpreteursau3112n-feuille1&rows=56&sort=-annee" deep-url="http://172.16.15.38/DEEalerProvider/DEEP/" datalets-list-url="http://172.16.15.38/DEEalerProvider/DEEP/datalets-list"></select-visualization-controllet>-->
+<select-visualization-controllet fields='["result,records,x", "result,records,y", "result,records,cat"]' data-url="http://ckan.routetopa.eu/api/action/datastore_search?resource_id=b056c5e6-76af-4526-a35d-7dee664fb6ee&limit=99999" deep-url="http://172.16.15.38/DEEalerProvider/DEEP/" datalets-list-url="http://172.16.15.38/DEEalerProvider/DEEP/datalets-list"></select-visualization-controllet>
 <!--<select-datalet-inputs_series></select-datalet-inputs_series>-->
 <!--<select-datalet-options></select-datalet-options>-->
 
