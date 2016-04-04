@@ -75,15 +75,18 @@ ln["LAST_en"] = "LAST of";
 
 ln["XAxis_en"] = "X AXIS";
 ln["YAxis_en"] = "Y AXIS";
-ln["numericXAxis_en"] = "X AXIS (numeric)";
-ln["numericYAxis_en"] = "Y AXIS (numeric)";
+ln["NumericXAxis_en"] = "X AXIS [num]";
+ln["NumericYAxis_en"] = "Y AXIS [num]";
 ln["Column_en"] = "COLUMN";
-ln["SliceLabels_en"] = "LABELS";
-ln["SliceSizes_en"] = "SIZES (numeric)";
+ln["Level_en"] = "LEVEL";
+ln["SliceLabels_en"] = "LABEL";
+ln["SliceSizes_en"] = "SIZE [num]";
 ln["Latitude_en"] = "LATITUDE";
 ln["Longitude_en"] = "LONGITUDE";
-ln["BalloonContent_en"] = "BALLOON CONTENT";
-ln["Categories_en"] = "CATEGORIES";
+ln["BalloonContent_en"] = "BALLOON CONTENT";// [opt]
+ln["BubbleContent_en"] = "BUBBLE CONTENT";
+ln["BubbleSize_en"] = "BUBBLE SIZE [num]";
+ln["Categories_en"] = "CATEGORY [opt]";
 
 //options
 ln["title_en"] = "Title"

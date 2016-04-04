@@ -53,15 +53,16 @@ Example:
     <template>
         <style is="custom-style">
 
-            :host ::content h6 {
-                color: red;
-            }
+            /*:host ::content h6 {*/
+                /*color: red;*/
+            /*}*/
 
             :host ::content #treemap_placeholder {
                 width: 100%;
                 height: 70%;
-                min-height: 500px;
-                background: #ddd;
+                /*min-height: 500px;*/
+                background: #bbb;
+                /*position: relative;*/
             }
 
             :host ::content text {
@@ -77,8 +78,7 @@ Example:
                 stroke: #fff;
             }
 
-            :host ::content rect.parent,
-            .grandparent rect {
+            :host ::content rect.parent {
                 stroke-width: 2px;
             }
 
@@ -90,14 +90,19 @@ Example:
                 fill: #ee9700;
             }
 
-            :host ::content .children rect.parent,
-            .grandparent rect {
+            :host ::content .children rect.parent {
+                cursor: pointer;
+            }
+
+            :host ::content .grandparent rect {
+                stroke-width: 2px;
                 cursor: pointer;
             }
 
             :host ::content .children rect.parent {
                 fill: #bbb;
-                fill-opacity: .5;
+                -fill-opacity: .5;
+                fill-opacity: 1;
             }
 
             :host ::content .children:hover rect.child {
@@ -119,12 +124,11 @@ Example:
                 children : []
             },
 
-            transformData: function(e)
+            transformData: function()
             {
                 var treemapData = [];
-                TreemapBehavior.map.name = this._component.title;
 
-                if(this.data.length > 1) {
+//                if(this.data.length > 1) {
                     for (i = 0; i < this.data.length; i++) {
                         var propName = this.data[i].name;
 
@@ -135,17 +139,15 @@ Example:
                             jQuery.extend(treemapData[j], currObj);
                         }
                     }
-                }else{
-                    treemapData = this.data[0].data;
-                }
+//                }else{
+//                    treemapData = this.data[0].data;
+//                }
 
                 this.map.children = [];
 
                 for(var i = 0; i < treemapData.length; i++){
                     this.checkAggragationField(treemapData[i], this.data.length , this.data.length - 1);
                 }
-
-                //var json = JSON.stringify(this.map);
 
             },
 
@@ -178,7 +180,7 @@ Example:
             },
 
             presentData: function(){
-                //console.log(TreemapBehavior.map.name);
+                this.map.name = this._component.title;
                 build(this.map, this._component.$.treemap_placeholder);
             }
         };

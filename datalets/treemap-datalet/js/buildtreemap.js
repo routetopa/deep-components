@@ -81,12 +81,14 @@ function build(root, place_holder) {
     function layout(d) {
         if (d._children) {
             treemap.nodes({_children: d._children});
+            var i = 0;
             d._children.forEach(function(c) {
                 c.x = d.x + c.x * d.dx;
                 c.y = d.y + c.y * d.dy;
                 c.dx *= d.dx;
                 c.dy *= d.dy;
                 c.parent = d;
+                c.color = d3.scale.ordinal().domain(d3.range(d._children.length)).range(["#8dd3c7","#ffffb3","#bebada","#fb8072","#80b1d3","#fdb462","#b3de69","#fccde5","#d9d9d9","#bc80bd","#ccebc5","#ffed6f"])(i++)
                 layout(c);
             });
         }
@@ -174,7 +176,8 @@ function build(root, place_holder) {
         rect.attr("x", function(d) { return x(d.x); })
             .attr("y", function(d) { return y(d.y); })
             .attr("width", function(d) { return x(d.x + d.dx) - x(d.x); })
-            .attr("height", function(d) { return y(d.y + d.dy) - y(d.y); });
+            .attr("height", function(d) { return y(d.y + d.dy) - y(d.y); })
+            .style("fill", function(d) { return d.color; });
     }
 
     function name(d) {

@@ -223,9 +223,19 @@
                     description = inputs[2].description;
                     selection = inputs[2].selection;
                     temp = [inputs[0], inputs[1]];
-                    for (var i = 3; i < this.fields.length; i++)
-                        temp.push({name: name + " " + (i-2), description: description, selection: selection});
+                    temp.push({name: name + " 1", description: description, selection: selection});
+                    for (var i = 4; i < this.fields.length; i++)
+                        temp.push({name: name + " " +(i-2), description: description, selection: selection});
                 }
+//                else if (inputs.length > 4 && inputs[4].selection == "+") {//bubble --> multiple bubble content
+//                    name = inputs[4].name;
+//                    description = inputs[4].description;
+//                    selection = inputs[4].selection;
+//                    temp = [inputs[0], inputs[1], inputs[2], inputs[3]];
+//                    temp.push({name: name + " 1", description: description, selection: selection});
+//                    for (var i = 6; i < this.fields.length; i++)
+//                        temp.push({name: name + " " + (i-4), description: description, selection: selection});
+//                }
 
                 this.inputs = this._copy(temp);
 
@@ -234,21 +244,23 @@
 
             fireReady : function() {
                 if(this._isReady())
-                    this.fire('select_visualization_inputs_ready');
+                    this.fire('select_visualization_inputs_ready', {isReady: true});
+                else
+                    this.fire('select_visualization_inputs_ready', {isReady: false});
             },
 
             _isReady : function() {
                 var fire = true;
                 for (var i = 0; i < this.selectedFields.length; i++) {
-                    if (!this.selectedFields[i] && this.inputs[i].selection != "*")
+                    if (!this.selectedFields[i] && this.inputs[i].selection != "+" && this.inputs[i].selection != "*" && this.inputs[i].selection != "?")
                         return false;
-                    if(this.inputs[i].selection == "*")
+                    if(this.inputs[i].selection == "+")
                         fire = false;
                 }
 
                 if(!fire) {
                     for (var i = 0; i < this.selectedFields.length; i++) {
-                        if (this.selectedFields[i] && this.inputs[i].selection == "*") {
+                        if (this.selectedFields[i] && this.inputs[i].selection == "+") {
                             fire = true;
                             break;
                         }
@@ -430,9 +442,15 @@
                 if(key.indexOf("Column") > -1) {
                     return ln["Column" + "_" +ln["localization"]] + key.slice(-2);
                 }
+                if(key.indexOf("Level") > -1) {
+                    return ln["Level" + "_" +ln["localization"]] + key.slice(-2);
+                }
                 if(key.indexOf("BalloonContent") > -1) {
                     return ln["BalloonContent" + "_" +ln["localization"]] + key.slice(-2);
                 }
+//                if(key.indexOf("BubbleContent") > -1) {
+//                    return ln["BubbleContent" + "_" +ln["localization"]] + key.slice(-2);
+//                }
 
                 return ln[key + "_" +ln["localization"]];
             },
