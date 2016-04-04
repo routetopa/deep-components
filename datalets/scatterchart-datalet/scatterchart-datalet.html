@@ -53,8 +53,7 @@ Example:
         <highcharts-datalet id="charts" data-url="{{dataUrl}}" fields="{{fields}}" data="{{data}}" title="{{title}}" description="{{description}}"></highcharts-datalet>
     </template>
     <script>
-
-        var scatterchartBehavior = {
+        var ScatterchartBehavior = {
 
             /**
              * Bluid Highchart object
@@ -62,29 +61,47 @@ Example:
              * @method presentData
              */
             presentData: function(){
-                var x = this.data[0]["data"];
+                if(this.data.length == 3) {// multiseries
+                    var x = this.data[2]["data"];
 
-                var categories = x.filter(function(item, pos) {
-                    return x.indexOf(item) == pos;
-                });
+                    var categories = x.filter(function (item, pos) {
+                        return x.indexOf(item) == pos;
+                    });
 
-                var scatterSeries = [];
-                var series = [];
-                var point = [];
+                    var scatterSeries = [];
+                    var series = [];
+                    var point = [];
 
-                for (var i = 0; i < categories.length; i++) {
-                    for (var j = 0; j < x.length; j++) {
-                        if (this.data[0].data[j] == categories[i]) {
-                            point = [this.data[1].data[j], this.data[2].data[j]];
-                            series.push(point);
+                    for (var i = 0; i < categories.length; i++) {
+                        for (var j = 0; j < x.length; j++) {
+                            if (this.data[2].data[j] == categories[i]) {
+                                point = [this.data[0].data[j], this.data[1].data[j]];
+                                series.push(point);
+                            }
                         }
+
+                        scatterSeries.push({name: categories[i], data: series});
+                        series = [];
                     }
 
-                    scatterSeries.push({name: categories[i], data: series});
-                    series = [];
+                    this.properties.series = scatterSeries;
+                    this._component.legend = true;
                 }
+                else {// == 2
+                    var scatterSeries = [];
+                    var series = [];
+                    var point = [];
 
-                this.properties.series = scatterSeries;
+                    for (var j = 0; j < this.data[0]["data"].length; j++) {
+                        point = [this.data[0].data[j], this.data[1].data[j]];;
+                        series.push(point);
+                    }
+
+                    scatterSeries.push({data: series});
+
+                    this.properties.series = scatterSeries;
+                    this._component.legend = false;
+                }
 
                 options = {
                     chart: {
@@ -104,6 +121,9 @@ Example:
                             text: this._component.yAxisLabel,
                         }
                     },
+                    legend: {
+                        enabled: this._component.legend,
+                    },
                     credits: {
                         enabled: false
                     },
@@ -118,7 +138,7 @@ Example:
         };
 
 
-        scatterchartDatalet = Polymer({
+        ScatterchartDatalet = Polymer({
             is: 'scatterchart-datalet',
             properties: {
                 xAxisLabel: {
@@ -150,7 +170,7 @@ Example:
              * @method ready
              */
             ready: function(){
-                this.behavior = $.extend(true, {}, HighchartsComponentBehavior, scatterchartBehavior);
+                this.behavior = $.extend(true, {}, HighchartsComponentBehavior, ScatterchartBehavior);
                 this.async(function(){this.behavior.init(this)},0);
             }
         });

@@ -221,7 +221,9 @@
 
             fireReady : function() {
                 if(this.selectedFields[0] != "" && this.selectedFields[1] != "")
-                    this.fire('select_visualization_inputs_ready');
+                    this.fire('select_visualization_inputs_ready', {isReady: true});
+                else
+                    this.fire('select_visualization_inputs_ready', {isReady: false});
             },
 
             _reset : function() {
@@ -310,7 +312,7 @@
                 this._setAggregators();
             },
 
-            _setAggregatorsFields : function(e){
+            _setAggregatorsFields : function(){
                 this.async(function() {
                     var c_menu = $("#calculate_0").find("paper-menu")[0];
                     var selected =  c_menu.selected > 0 ? c_menu.selected : 0;

@@ -312,7 +312,12 @@
                 inputs.fireReady();
             },
 
-            _loadDatalet : function(){
+            _loadDatalet : function(e){
+                if(!e.detail.isReady) {
+                    this.$.datalet_selection_datalet_placeholder.innerHTML = "";
+                    return;
+                }
+
                 var inputs = this._getInputs();
 
                 this.selectedFields = inputs.getSelectedFields();

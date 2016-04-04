@@ -30,7 +30,7 @@
 -->
 
 <link rel="import" href="../highcharts-datalet/highcharts-datalet.html">
-<script src="http://code.highcharts.com/highcharts-more.js"></script>
+<!--<script src="http://code.highcharts.com/highcharts-more.js"></script>-->
 
 <!--
 `bubblechart` is a bubbles chart datalet based on highcharts project <http://www.highcharts.com/>
@@ -57,7 +57,7 @@ Examples:
 @group datalets
 -->
 
-<dom-module name="bubblechart-datalet">
+<dom-module id="bubblechart-datalet">
     <template>
         <highcharts-datalet id="charts" data-url="{{dataUrl}}"  fields="{{fields}}" data="{{data}}" title="{{title}}" description="{{description}}"></highcharts-datalet>
     </template>
@@ -69,128 +69,91 @@ Examples:
              * @method presentData
              */
             presentData: function() {
-                var categoryName = [];
-                var color = {};
-                var bubblechartSeriesData = {};
-                var bcserie = [];
+                if(this.data.length == 5) {// multiseries
+                    var x = this.data[4]["data"];
 
-                BubblechartArr = [];
-                var dataTmp = [];
-                
-                //Example 1: No Series name is specified in the query
-                if(this.data.length == 3){
-                    for (var i = 0; i < this.data[0].data.length; i++) {
-                            BubblechartArr = [this.data[0].data[i], parseFloat(this.data[1].data[i]), parseFloat(this.data[2].data[i])];
-                            dataTmp.push(BubblechartArr)
-                        }
-                    color = {
-                        fillColor: {
-                            radialGradient: {cx: 0.4, cy: 0.3, r: 0.7},
-                            stops: [
-                                [0, 'rgba(255,255,255,0.5)']
-                            ]
-                        }
-                    }
-                    //add data to the series
-                    bubblechartSeriesData = {
-                        name: "Series",
-                        data: dataTmp,
-                        marker: color
-                    }
-                    bcserie.push(bubblechartSeriesData);
-                }
-                //Example 2: A multi-series bubbles chart
-                else{
-                    var categoryNameDuplicateValue = [];
-                    for (i = 0; i < this.data[0].data.length; i++) {
-                            categoryNameDuplicateValue.push(this.data[3].data[i]);
-                    }
-                    categoryName = categoryNameDuplicateValue.filter(function (itm, i, categoryNameDuplicateValue) {
-                        return i == categoryNameDuplicateValue.indexOf(itm);
+                    var categories = x.filter(function (item, pos) {
+                        return x.indexOf(item) == pos;
                     });
-                    for (var index = 0; index < categoryName.length; index++) {
-                        for (var i = 0; i < this.data[0].data.length; i++) {
-                            if (this.data[3].data[i] == categoryName[index]) {
-                                BubblechartArr = [this.data[0].data[i], this.data[1].data[i], parseFloat(this.data[2].data[i])];
-                                dataTmp.push(BubblechartArr);
-                                //A different color for each series
-/*  blocco usato per 3d
-                                color = {
-                                    fillColor: {
-                                        radialGradient: {cx: 0.4, cy: 0.3, r: 0.7},
-                                        stops: [
-                                            [0, 'rgba(255,255,255,0.5)'],
-                                            [1, Highcharts.Color(Highcharts.getOptions().colors[index]).setOpacity(0.5).get('rgba')]
-                                        ]
-                                    }
-                                }
-*/                                
+
+                    var bubbleSeries = [];
+                    var series = [];
+                    var point = [];
+
+                    for (var i = 0; i < categories.length; i++) {
+                        for (var j = 0; j < x.length; j++) {
+                            if (this.data[4].data[j] == categories[i]) {
+                                point = {x: this.data[0].data[j], y: this.data[1].data[j], z: this.data[2].data[j], content: this.data[3].data[j]};
+                                series.push(point);
                             }
                         }
-                        //add data to the series
-                        bubblechartSeriesData = {
-                            name: "Series: " + categoryName[index],
-                            data: dataTmp,
-                            marker: color
-                        }
 
-                        bcserie.push(bubblechartSeriesData);
-                        dataTmp = [];
+                        bubbleSeries.push({name: categories[i], data: series});
+                        series = [];
                     }
+
+                    this.properties.series = bubbleSeries;
+                    this._component.legend = true;
                 }
-                $(this._component.$.charts.$.container).highcharts({
+                else {// == 4
+                    var bubbleSeries = [];
+                    var series = [];
+                    var point = [];
+
+                    for (var j = 0; j < this.data[0]["data"].length; j++) {
+                        point = {x: this.data[0].data[j], y: this.data[1].data[j], z: this.data[2].data[j], content: this.data[3].data[j]};
+                        series.push(point);
+                    }
+
+                    bubbleSeries.push({data: series});
+
+                    this.properties.series = bubbleSeries;
+                    this._component.legend = false;
+                }
+
+                options = {
                     chart: {
                         type: 'bubble',
-                        plotBorderWidth: 1,
-                        zoomType: 'xy'
+                        zoomType: 'xy',
+                        plotBorderWidth: 1
                     },
-                    legend: {
-                        enabled: true
+                    title: {
+                        text: this._component.title
+                    },
+                    subtitle: {
+                        text: this._component.description
                     },
                     xAxis: {
-                        categories: this.properties.categories.value,
                         title: {
                             text: this._component.xAxisLabel
                         }
                     },
                     yAxis: {
-                        categories: this.properties.categories.value,
                         title: {
-                            text: this._component.yAxisLabel
+                            text: this._component.yAxisLabel,
                         }
                     },
-                    title: {
-                        text: this._component.Title
-                    },
-                    subtitle: {
-                        text: this._component.SubTitle
-                    },
-                    //A custom tooltip
-                    tooltip: {
-                        shared: true,
-                        useHTML: true,
-                        headerFormat:
-                        '<table ><tr><td style="color: {series.color}">{series.name}</td></tr>' +
-                        '<tr><td  <b> {point.key}</b> , <b>{point.y}</b></tr>',
-                        pointFormat:
-                        '<td style="text-align: right"><b>{point.z}</b></td></tr>',
-                        footerFormat: '</table>',
-                        followPointer: true
+                    legend: {
+                        enabled: this._component.legend,
                     },
                     plotOptions: {
                         series: {
                             dataLabels: {
-                                enabled: false,         //enable for label for each bubble
-                                format: '{point.z}'
+                                enabled: true,
+                                format: '{point.content}'
                             }
                         }
                     },
-                    //hide link HighChart
                     credits: {
                         enabled: false
                     },
-                   series: bcserie
-                });
+                    series: this.properties.series
+                };
+
+                if(this._component.theme != "themeBase" && this._component.theme != "")
+                    jQuery.extend(true, options, Highcharts[this._component.theme]);
+
+                $(this._component.$.charts.$.container).highcharts(options);
             }
         };
         /**
@@ -199,50 +162,18 @@ Examples:
         BubblechartDatalet = Polymer({
             is: 'bubblechart-datalet',
             properties: {
-                /**
-                 * It's the label for X axis
-                 *
-                 * @attribute xAxisLabel
-                 * @type String
-                 * @default ''
-                 */
                 xAxisLabel: {
                     type: String,
                     value: ""
                 },
-                /**
-                 * It's the label for Y axis
-                 *
-                 * @attribute yAxisLabel
-                 * @type String
-                 * @default ''
-                 */
                 yAxisLabel: {
                     type: String,
                     value: ""
                 },
-                /**
-                 * It's the title of the chart
-                 *
-                 * @attribute title
-                 * @type Strig
-                 * @default ''
-                 */
-                Title: {
-                    type: String,
-                    value: ""
+                theme : {
+                    type : String,
+                    value : ""
                 },
-                SubTitle: {
-                    type: String,
-                    value: ""
-                },
-                /**
-                 * It's the component behavior
-                 *
-                 * @attribute behavior
-                 * @type Object
-                 * @default {}
-                 */
                 behavior : {
                     type : Object,
                     value : {}
@@ -256,7 +187,7 @@ Examples:
              */
             ready: function(){
                 this.behavior = $.extend(true, {}, HighchartsComponentBehavior, BubblechartBehavior);
-                this.async(function(){this.behavior.init(this)},1);
+                this.async(function(){this.behavior.init(this)},0);
             }
         });
     </script>

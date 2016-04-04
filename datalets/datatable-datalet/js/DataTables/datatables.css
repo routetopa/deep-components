@@ -18,6 +18,22 @@
 
 /* Layout helpers
 ----------------------------------*/
+/*spod theme conflict*/
+datatable-datalet input[type=search] {
+	border: 2px inset;
+	/*height: 15px;*/
+	/*width: 175px;*/
+	height: auto;
+	width: auto;
+}
+
+datatable-datalet input[type=search]:focus:not([readonly]) {
+	border: 2px inset;
+	box-shadow: none;
+}
+/*input[type=search]:disabled, input[type=search][readonly="readonly"] {}*/
+/*spod theme conflict*/
+
 .ui-helper-hidden {
 	display: none;
 }
