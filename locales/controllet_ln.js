@@ -219,21 +219,21 @@ ln["donut_description_it"] = "Se 'true' il grafico a torta diventerà a ciambell
 /******** FR ********/
 
 //PAGE SLIDER
-ln["slide1Title_fr"] = "SELECT DATASET";
-ln["slide1Subtitle_fr"] = "Search or copy and paste the url of dataset.";
-ln["slide2Title_fr"] = "SELECT DATA";
-ln["slide2Subtitle_fr"] = "Select the fields from tree-view. The multi-table will show the values related to the selected fields.";
-ln["slide3Title_fr"] = "SELECT VISUALIZATION";
-ln["slide3Subtitle_fr"] = "Select a visualization, fill out inputs and labels (optional).";
-ln["back_fr"] = "Back";
-ln["forward_fr"] = "Forward";
+ln["slide1Title_fr"] = "SELECTIONNER UN JEU DE DONNEES";
+ln["slide1Subtitle_fr"] = "Rechercher ou copier/coller l’url du jeu de données.";
+ln["slide2Title_fr"] = "SELECTIONNER DONNEES";
+ln["slide2Subtitle_fr"] = "Sélectionner les champs à partir de l’arborescence. Une fenêtre vous indiquera les valeurs relatives aux champs sélectionnés.";
+ln["slide3Title_fr"] = "SELECTIONNER UN MODE DE VISUALISATION";
+ln["slide3Subtitle_fr"] = "Sélectionner un mode de visualisation, remplir les entrées et les vignettes (optionnel).";
+ln["back_fr"] = "RETOUR";
+ln["forward_fr"] = "AVANT";
 
 //SELECT DATASET
-ln["listView_fr"] = "LIST VIEW";
-ln["treeMapView_fr"] = "TREE MAP VIEW";
-ln["availableDatasets_fr"] = "Available datasets";
-ln["suggestedDatasets_fr"] = "Suggested datasets";
-ln["selectedUrl_fr"] = "Selected url";
+ln["listView_fr"] = "VUE EN LISTE";
+ln["treeMapView_fr"] = "VUE EN ARBORESCENCE";
+ln["availableDatasets_fr"] = "Jeux de données disponibles";
+ln["suggestedDatasets_fr"] = "Jeux de données suggérés";
+ln["selectedUrl_fr"] = "Sélectionner URL";
 ln["wrongUrl_fr"] = "Invalid url or data provider not supported yet.";
 
 //SELECT DATA
@@ -248,12 +248,12 @@ ln["start_fr"] = "start with";
 ln["ends_fr"] = "ends with";
 
 //SELECT VISUALIZATION
-ln["inputs_fr"] = "INPUTS";
-ln["baseInfo_fr"] = "BASE INFO";
-ln["layouts_fr"] = "LABELS / OPTIONS";
-ln["dataletPreview_fr"] = "DATALET PREVIEW";
-ln["addDatalet_fr"] = "ADD";
-ln["modifyDatalet_fr"] = "MODIFY";
+ln["inputs_fr"] = "SORTIES";
+ln["baseInfo_fr"] = "INFORMATION DE BASE";
+ln["layouts_fr"] = "VIGNETTES/OPTIONSs";
+ln["dataletPreview_fr"] = "PREVISUALISATION";
+ln["addDatalet_fr"] = "AJOUTER";
+ln["modifyDatalet_fr"] = "MODIFIER";
 
 //vslider
 ln["search_fr"] = "Search";
@@ -317,9 +317,9 @@ ln["theme_fr"] = "Theme";
 ln["stack_fr"] = "Stack";
 ln["donut_fr"] = "Donut";
 
-ln["x-axis-label_description_fr"] = "X Axis Label";
-ln["y-axis-label_description_fr"] = "Y Axis Label";
-ln["suffix_description_fr"] = "Tooltip Suffix";
+ln["x-axis-label_description_fr"] = "Vignette pour l’axe X.";
+ln["y-axis-label_description_fr"] = "Vignette pour l’axe Y.";
+ln["suffix_description_fr"] = "Unités de mesures (ex:  dollars, euros.";
 ln["theme_description_fr"] = "Theme";
 ln["stack_description_fr"] = "Stack";
 ln["donut_description_fr"] = "Donut";
@@ -327,22 +327,22 @@ ln["donut_description_fr"] = "Donut";
 /******** NL ********/
 
 //PAGE SLIDER
-ln["slide1Title_nl"] = "SELECT DATASET";
-ln["slide1Subtitle_nl"] = "Search or copy and paste the url of dataset.";
-ln["slide2Title_nl"] = "SELECT DATA";
-ln["slide2Subtitle_nl"] = "Select the fields from tree-view. The multi-table will show the values related to the selected fields.";
-ln["slide3Title_nl"] = "SELECT VISUALIZATION";
-ln["slide3Subtitle_nl"] = "Select a visualization, fill out inputs and labels (optional).";
-ln["back_nl"] = "Back";
-ln["forward_nl"] = "Forward";
+ln["slide1Title_nl"] = "SELECTEER DATASET";
+ln["slide1Subtitle_nl"] = "Zoek of kopieer en plak de url van de dataset.";
+ln["slide2Title_nl"] = "SELECTEER DATA";
+ln["slide2Subtitle_nl"] = "Selecteer de velden uit de boomstructuur. De multi-tabel laat de waarden zien van de geselecteerde velden.";
+ln["slide3Title_nl"] = "SELECTEER VISUALISATIE";
+ln["slide3Subtitle_nl"] = "Selecteer een visualisatie, vul de invoer en labels in.";
+ln["back_nl"] = "TERUG";
+ln["forward_nl"] = "VOOTUIT";
 
 //SELECT DATASET
-ln["listView_nl"] = "LIST VIEW";
-ln["treeMapView_nl"] = "TREE MAP VIEW";
-ln["availableDatasets_nl"] = "Available datasets";
-ln["suggestedDatasets_nl"] = "Suggested datasets";
-ln["selectedUrl_nl"] = "Selected url";
-ln["wrongUrl_nl"] = "Invalid url or data provider not supported yet.";
+ln["listView_nl"] = "LIJSTWEERGAVE";
+ln["treeMapView_nl"] = "BOOMSTRUCTUUR WEEERGAVE";
+ln["availableDatasets_nl"] = "Beschikbare datasets";
+ln["suggestedDatasets_nl"] = "Voeg aanbevolen datasets";
+ln["selectedUrl_nl"] = "Selecteer url";
+ln["wrongUrl_nl"] = "Ongeldige url of data provider nog niet ondersteund.";
 
 //SELECT DATA
 ln["expertAddFilters_nl"] = "EXPERT : ADD FILTERS";
@@ -357,16 +357,16 @@ ln["ends_nl"] = "ends with";
 
 //SELECT VISUALIZATION
 ln["inputs_nl"] = "INPUTS";
-ln["baseInfo_nl"] = "BASE INFO";
-ln["layouts_nl"] = "LABELS / OPTIONS";
-ln["dataletPreview_nl"] = "DATALET PREVIEW";
-ln["addDatalet_nl"] = "ADD";
-ln["modifyDatalet_nl"] = "MODIFY";
+ln["baseInfo_nl"] = "BASIS INFO";
+ln["layouts_nl"] = "LABELS / OPTIES";
+ln["dataletPreview_nl"] = "VOORBEELD";
+ln["addDatalet_nl"] = "TOEVOEGEN";
+ln["modifyDatalet_nl"] = "WIJZIGEN";
 
 //vslider
 ln["search_nl"] = "Search";
 
-ln["datatable_nl"] = "Table";
+ln["datatable_nl"] = "Tafel";
 ln["barchart_nl"] = "Bar";
 ln["columnchart_nl"] = "Column";
 ln["areachart_nl"] = "Area";
