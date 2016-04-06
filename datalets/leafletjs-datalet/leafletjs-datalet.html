@@ -85,42 +85,41 @@ Example:
                     attribution: 'Map data © <a href="http://openstreetmap.org">OpenStreetMap</a> contributors'
                 }).addTo(this._component.map);
 
-//                setTimeout(function() {
 
-                    L.Icon.Default.imagePath = 'http://services.routetopa.eu/DEEalerProvider/COMPONENTS/datalets/leafletjs-datalet/leafletsjs/images';
+                L.Icon.Default.imagePath = 'http://services.routetopa.eu/DEEalerProvider/COMPONENTS/datalets/leafletjs-datalet/leafletsjs/images';
 
-                    var coordinates = [];
-                    var isArray = t.data[0].data[0].constructor === Array;
+                var coordinates = [];
+                var isArray = t.data[0].data[0].constructor === Array;
 
-                    for(var i=0; i<t.data[0].data.length; i++)
+                for(var i=0; i<t.data[0].data.length; i++)
+                {
+                    if(isArray)
+                        coordinates.push([parseFloat(t.data[0].data[i][0]), parseFloat(t.data[0].data[i][1])]);
+                    else
+                        coordinates.push([parseFloat(t.data[0].data[i]), parseFloat(t.data[1].data[i])]);
+
+                    var marker = L.marker([coordinates[i][0], coordinates[i][1]]).addTo(t._component.map);
+
+                    if(t.data.length > 2)
                     {
-                        if(isArray)
-                            coordinates.push([parseFloat(t.data[0].data[i][0]), parseFloat(t.data[0].data[i][1])]);
-                        else
-                            coordinates.push([parseFloat(t.data[0].data[i]), parseFloat(t.data[1].data[i])]);
-
-                        var marker = L.marker([coordinates[i][0], coordinates[i][1]]).addTo(t._component.map);
-
-                        if(t.data.length > 2)
+                        var popupText = "";
+                        for(var j=2; j<t.data.length; j++)
                         {
-                            var popupText = "";
-                            for(var j=2; j<t.data.length; j++)
-                            {
-                                if(t.data[j].data[i].toString().match(new RegExp("^(http[s]?:\\/\\/(www\\.)?|ftp:\\/\\/(www\\.)?|www\\.){1}([0-9A-Za-z-\\.@:%_\+~#=]+)+((\\.[a-zA-Z]{2,3})+)(/(.)*)?(\\?(.)*)?")))
-                                        popupText += '<image height="100" width="100" src="' + t.data[j].data[i] + '" /><br/>';
-                                else
-                                        popupText += '<span>' + t.data[j].data[i] + '</span><br/>'
-                            }
-
-                            var popup = L.popup().setContent(popupText);
-                            marker.bindPopup(popup);
+                            if(t.data[j].data[i].toString().match(new RegExp("^(http[s]?:\\/\\/(www\\.)?|ftp:\\/\\/(www\\.)?|www\\.){1}([0-9A-Za-z-\\.@:%_\+~#=]+)+((\\.[a-zA-Z]{2,3})+)(/(.)*)?(\\?(.)*)?")))
+                                    popupText += '<image height="100" width="100" src="' + t.data[j].data[i] + '" /><br/>';
+                            else
+                                    popupText += '<span>' + t.data[j].data[i] + '</span><br/>'
                         }
-                    }
 
-                    t._component.map._onResize();
-                    t._component.map.invalidateSize(false);
-                    t._component.map.fitBounds(coordinates);
-//                }, 0)
+                        var popup = L.popup().setContent(popupText);
+                        marker.bindPopup(popup);
+                    }
+                }
+
+                t._component.map._onResize();
+                t._component.map.invalidateSize(false);
+                t._component.map.fitBounds(coordinates);
+
             }
         };
 
@@ -172,8 +171,7 @@ Example:
              */
             ready: function(){
                 this.behavior =  $.extend(true, {}, BaseDataletBehavior, WorkcycleBehavior, AjaxJsonAlasqlBehavior, leafletjsBehavior);
-//                this.behavior.init(this);
-                this.async(function(){this.behavior.init(this)},0);
+                this.async(function(){this.behavior.init(this)},100);
             }
         });
     </script>
