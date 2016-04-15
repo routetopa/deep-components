@@ -205,10 +205,7 @@
 
                 $(this.$.datalet_selection_datalet).perfectScrollbar();
 
-                this.params = {'data-url' : this.dataUrl};
-
-                if(this.preselectedDatalet)
-                    this._preselectDatalet();
+//                this.params = {'data-url' : this.dataUrl};//not here
             },
 
             attached : function() {
@@ -224,17 +221,27 @@
             },
 
             setFields : function(fields) {
+                if (this.fields.length > 0 && JSON.stringify(this.fields) != JSON.stringify(fields))
+                    this.reset();
+
                 this.fields = this._copy(fields);
 
                 var inputs = this._getInputs();
-                if(inputs)
+                if (inputs)
                     inputs.setFields(this.fields);
             },
 
             reset : function() {
                 this.$.vslider._reset();
-                this.type = "";
-                this.$.datalet_selection_datalet_placeholder.innerHTML = "";
+            },
+
+            show : function() {//show --> preselect
+                if(this.preselectedDatalet)
+                    this._preselectDatalet();
+//                if (this.$.datalet_selection_datalet_placeholder.innerHTML == "") {
+//                    var inputs = this._getInputs();
+//                    inputs.fireReady();
+//                }
             },
 
             _translate : function(){
@@ -264,25 +271,6 @@
                 }
             },
 
-            _preselectDatalet : function() {
-//                console.log("_preselectDatalet to implement");
-//                console.log(this.preselectedDatalet);
-//                console.log(this.fields);
-//                console.log(this.dataletPreset);
-
-                var dataletParams ={
-                    component   : this.preselectedDatalet+"-datalet",
-                    params      : this.dataletPreset,
-                    fields      : this.fields,
-                    placeHolder : this.$.datalet_selection_datalet_placeholder
-                };
-
-                ComponentService.deep_url = this.deepUrl;
-                ComponentService.getComponent(dataletParams);
-
-                this.$.add_button.removeAttribute("disabled");
-            },
-
             _handleSelectedDatalet : function(e){
 
                 if(this.type != e.detail.response.type) {
@@ -305,6 +293,23 @@
                     var inputs = this._getInputs();
                     inputs.fireReady();
                 }, 0);
+
+//                this.async(function () {
+//                    if(this.preselectedDatalet)
+//                        this._preselectDatalet();
+//                }, 1);
+            },
+
+            _preselectDatalet : function() {
+                var inputs = this._getInputs();
+                inputs._preselectInputs(this.fields, this.dataletPreset["aggregators"], this.dataletPreset["orders"]);
+                this.$.options._preselectOptions(this.dataletPreset);
+                this.dataletPreset = undefined;
+
+//                this.async(function () {
+//                var inputs = this._getInputs();
+//                inputs.fireReady();
+//                }, 500);
             },
 
             _tryLoadDatalet : function(){
@@ -321,6 +326,8 @@
                 var inputs = this._getInputs();
 
                 this.selectedFields = inputs.getSelectedFields();
+
+                this.params = {'data-url' : this.dataUrl};
 
                 this.params["filters"] = JSON.stringify(this.filters);
                 this.params["aggregators"] = JSON.stringify(inputs.getAggregators());

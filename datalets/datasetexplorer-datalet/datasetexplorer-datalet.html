@@ -164,7 +164,7 @@ Example:
                 this.map.children = [];
 
                 for(var i = 0; i < treemapData.length; i++){
-                    this.checkAggragationField(treemapData[i], this._component.fields.length - 1, this._component.fields.length - 1);
+                    this.checkAggragationField(treemapData[i], this._component.fields.length - 2, this._component.fields.length - 2);
                 }
 
                 var json = JSON.stringify(this.map);
@@ -204,6 +204,7 @@ Example:
                 var xyz = function(url) {
                     me.selectResource(url);
                 }
+                this.map.name = this._component.name;
                 build2(this.map, this.meta, this._component.$.treemap_placeholder, xyz, this._component.width, this._component.height);
             },
 
@@ -260,6 +261,11 @@ Example:
                 behavior : {
                     type : Object,
                     value : {}
+                },
+
+                name : {
+                    type : String,
+                    value: ""
                 },
 
                 width : {

@@ -87,7 +87,7 @@
 
                 filters : {
                     type : Array,
-                    value : undefined
+                    value : []
                 },
 
             },
@@ -99,23 +99,25 @@
 
             ready : function() {
                 $(this.$.material_tree_view).perfectScrollbar();
-
-                if(this.filters == undefined){
-                    if(this.dataletPreset && this.dataletPreset["filters"] != undefined)
-                        this.filters = JSON.parse(this.dataletPreset["filters"]);
-                    else
-                        this.filters = [];
-                }
-
-                this.$.filters.filters = this.filters;
-                this.$.multi_table.filters = this.filters;
-                this._refreshTables();
             },
 
             attached : function(){
                 this._resize();
                 var that = this;
                 window.addEventListener("resize", function() { that._resize(); });
+
+                if(this.dataletPreset && this.dataletPreset["filters"] != undefined)
+                    this._preselectFilters();
+            },
+
+            _preselectFilters : function() {
+                this.async(function() {
+                    this.filters = JSON.parse(this.dataletPreset["filters"]);
+                    this.dataletPreset["filters"] = undefined;
+                    this.$.filters.filters = this.filters;
+                    this.$.multi_table.filters = this.filters;
+                    this._refreshTables();
+                }, 1);
             },
 
             getFilters : function() {

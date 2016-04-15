@@ -66,9 +66,8 @@ Example:
                 --paper-input-container-focus-color: #ffffff;
                 --paper-input-container-color: #ffffff;
                 position: absolute;
-                /*top: -12px;*/
-                /*width: 20vw;*/
-                width: 392px;
+                width: 340px;
+                margin-left: -5px;
             }
 
             paper-icon-button
@@ -171,7 +170,7 @@ Example:
             _valueChanged : function(oldvalue, newValue){
                 var t = this;
                 clearTimeout(this.timer);
-                this.timer = setTimeout(function(){t.fire('search-panel-controllet_content-changed', {searchKey: t.searchKey, id : t.id})}, 500);
+                this.timer = setTimeout(function(){t.fire('search-panel-controllet_content-changed', {searchKey: t.searchKey, id : t.id})}, 0);
             },
             /**
              * It returns the value in text area

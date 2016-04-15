@@ -6,10 +6,13 @@
 <link rel="import" href="../../bower_components/polymer/polymer.html">
 
 <link rel="import" href="../page-slider-controllet/page-slider-controllet.html">
-<link rel="import" href="../dataset-selection-controllet/dataset-selection-controllet.html">
+
+<!--<link rel="import" href="../dataset-selection-controllet/dataset-selection-controllet.html">-->
+<link rel="import" href="../select-dataset-controllet/select-dataset-controllet.html">
 <link rel="import" href="../select-data-controllet/select-data-controllet.html" />
 <link rel="import" href="../select-visualization-controllet/select-visualization-controllet.html" />
-<!--<link rel="import" href="../datalet-selection-controllet/datalet-selection-controllet.html">-->
+
+
 
 <dom-module id="data-sevc-controllet">
 
@@ -20,7 +23,8 @@
             <neon-animatable>
 
                 <template is="dom-if" if={{!modify}}>
-                    <dataset-selection-controllet id="select_dataset" data={{data}} datasets={{datasets}} suggested-datasets={{suggestedDatasets}}></dataset-selection-controllet>
+                    <!--<dataset-selection-controllet id="select_dataset" data={{data}} datasets={{datasets}} suggested-datasets={{suggestedDatasets}}></dataset-selection-controllet>-->
+                    <select-dataset-controllet id="select_dataset" data={{data}} datasets={{datasets}} suggested-datasets={{suggestedDatasets}}></select-dataset-controllet>
                 </template>
 
             </neon-animatable>
@@ -33,7 +37,6 @@
 
             <neon-animatable>
 
-                <!--<datalet-selection-controllet id="select_visualization" deep-url={{deepUrl}} datalets-list-url={{dataletsListUrl}} data-url={{dataUrl}} preselected-datalet={{selectedDatalet}} datalet-preset={{dataletPreset}}></datalet-selection-controllet>-->
                 <select-visualization-controllet id="select_visualization" deep-url={{deepUrl}} datalets-list-url={{dataletsListUrl}} data-url={{dataUrl}} preselected-datalet={{selectedDatalet}} datalet-preset={{dataletPreset}}></select-visualization-controllet>
 
             </neon-animatable>
@@ -140,22 +143,32 @@
                             slider.chevronLeft(true);
                         }
                         slider.chevronRight(false);
-                        this.$.select_data.ready();
-//                        this.async(function () {this.dataletPreset["filters"] = undefined;}, 1000);
                         this._allowThirdStep({detail: {fields: select_data.getFlatFields()}});
-                        this._allowThirdStep({detail: {fields: select_data.getFlatFields()}});
+                        if(this.modify){
+                            this.$.select_visualization.setFields(select_data.getFlatFields());
+                            this.$.select_visualization.setFilters(select_data.getFilters());
+                        }
                         break;
                     case 2:
                         slider.setTitle(ln["slide3Title_" + this.localization], ln["slide3Subtitle_" + this.localization]);
                         slider.chevronLeft(true);
                         slider.chevronRight("invisible");
+
                         this.$.select_visualization.setFields(select_data.getFlatFields());
                         this.$.select_visualization.setFilters(select_data.getFilters());
-                        this.$.select_visualization.ready();
+                        if(this.modify) {
+                            this.$.select_visualization.show();//resize
+                        }
                 }
             },
 
             _allowSecondStep : function(e){
+                if(e.detail.url == "") {
+                    slider.chevronRight(false);
+                    select_dataset.$.selected_url.invalid = false;
+                    return;
+                }
+
                 this.dataUrl = e.detail.url;
 
                 $.ajax({

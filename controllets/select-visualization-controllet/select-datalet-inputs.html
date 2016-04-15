@@ -186,6 +186,18 @@
                 this._translate();
             },
 
+            _preselectInputs : function(fields, aggregators, orders) {
+                var ddls = this.$.inputs_container.querySelectorAll("paper-dropdown-menu");
+
+//                this.async(function () {
+                for (var i = 0; i < fields.length; i++) {
+                    var menu = $(ddls[i]).find("paper-menu")[0];
+                        menu.select(i+1);
+                }
+                    this.selectedFields = this._copy(fields);
+//                }, 2);
+            },
+
             getSelectedFields : function () {
                 return this.selectedFields.filter(function(field){ return field != "" });
             },
@@ -201,11 +213,12 @@
             setFields : function(fields) {
                 var temp = this._copy(fields);
                 temp.unshift("");
-                this.fields = this._copy(temp);
 
-                this.$.expert_header.style.display = "block";
-
-                this._reset();
+                if (JSON.stringify(this.fields) != JSON.stringify(temp)) {
+                    this.fields = this._copy(temp);
+                    this.$.expert_header.style.display = "block";
+                    this._reset();
+                }
             },
 
             setInputs : function(inputs) {

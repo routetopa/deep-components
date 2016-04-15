@@ -195,6 +195,28 @@
                 this._translate();
             },
 
+            _preselectOptions : function(params) {
+                var textarea = this.$.select_datalet_options_container.querySelectorAll("paper-textarea");
+                textarea[0].value = params["description"];
+
+                var inputs = this.$.select_datalet_options_container.querySelectorAll("paper-input");
+                inputs[0].value = params["title"];
+
+                for (var i = 1; i < inputs.length; i++)
+                    if(params[this.options[i - 1].name])
+                        inputs[i].value = params[this.options[i - 1].name];
+
+                this._updateParams();
+
+//                var menus = this.$.select_datalet_options_container.querySelectorAll("paper-menu");
+//                var ddls = this.$.select_datalet_options_container.querySelectorAll("paper-dropdown-menu");
+//                for (var i = 0; i < ddls.length; i++) {
+//                    var menu = $(ddls[i]).find("paper-menu")[0];
+//                    if(params[ddls[i].label])
+//                        menu.select(1);//select item con nome params[ddls[i].label]
+//                }
+            },
+
             setOptions : function(options) {
                 this.options = [];
                 this.params = [];

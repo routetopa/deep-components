@@ -187,6 +187,18 @@
                 this._translate();
             },
 
+            _preselectInputs : function(fields, aggregators, orders) {
+                var ddls = this.$.inputs_series_container.querySelectorAll("paper-dropdown-menu");
+
+//                this.async(function () {
+                    for (var i = 0; i < fields.length; i++) {
+                        var menu = $(ddls[i]).find("paper-menu")[0];
+                        menu.select(i+1);
+                    }
+                    this.selectedFields = this._copy(fields);
+//                }, 0);
+            },
+
             getSelectedFields : function () {
                 var gb_menu = $(this.$.group_by).find("paper-menu")[0];
                 var c_menu = $("#calculate_0").find("paper-menu")[0];
@@ -210,9 +222,11 @@
             setFields : function(fields) {
                 var temp = this._copy(fields);
                 temp.unshift("");
-                this.fields = this._copy(temp);
 
-                this._reset();
+                if (JSON.stringify(this.fields) != JSON.stringify(temp)) {
+                    this.fields = this._copy(temp);
+                    this._reset();
+                }
             },
 
             setInputs : function(inputs) {

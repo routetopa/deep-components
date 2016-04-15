@@ -201,6 +201,8 @@
                 }
                 this.selectedDatalet = undefined;
                 this.filter = "";
+
+                this.fire('items-vslider-controllet_selected-datalet', {datalet: undefined});
             },
 
             _translate : function(){

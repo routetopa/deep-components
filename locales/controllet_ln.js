@@ -4,7 +4,7 @@ var ln = [];
 
 //PAGE SLIDER
 ln["slide1Title_en"] = "SELECT DATASET";
-ln["slide1Subtitle_en"] = "Search or copy and paste the url of dataset.";
+ln["slide1Subtitle_en"] = "Select a dataset from the list or copy and paste the url of dataset.";
 ln["slide2Title_en"] = "SELECT DATA";
 ln["slide2Subtitle_en"] = "Select the fields from tree-view. The multi-table will show the values related to the selected fields.";
 ln["slide3Title_en"] = "SELECT VISUALIZATION";
@@ -15,7 +15,12 @@ ln["forward_en"] = "Forward";
 //SELECT DATASET
 ln["listView_en"] = "LIST VIEW";
 ln["treeMapView_en"] = "TREE MAP VIEW";
-ln["availableDatasets_en"] = "Available datasets";
+ln["provider_en"] = "Provider";
+ln["showing_en"] = "Showing";
+ln["to_en"] = "to";
+ln["of_en"] = "of";
+ln["datasets_en"] = "datasets";
+//ln["availableDatasets_en"] = "Available datasets";
 ln["suggestedDatasets_en"] = "Suggested datasets";
 ln["selectedUrl_en"] = "Selected url";
 ln["wrongUrl_en"] = "Invalid url or data provider not supported yet.";
@@ -112,7 +117,7 @@ ln["donut_description_en"] = "If 'true' Pie will become Donut! :)";
 
 //PAGE SLIDER
 ln["slide1Title_it"] = "SELEZIONA IL DATASET";
-ln["slide1Subtitle_it"] = "Ricerca o copia e incolla la url del dataset.";
+ln["slide1Subtitle_it"] = "Seleziona il dataset dalla lista o copia e incolla la url del dataset.";
 ln["slide2Title_it"] = "SELEZIONA I DATI";
 ln["slide2Subtitle_it"] = "Seleziona i campi dalla struttura ad albero. Nella tabella saranno mostrati i valori dei campi selezionati.";
 ln["slide3Title_it"] = "SELEZIONA LA VISUALIZZAZIONE";
@@ -123,7 +128,12 @@ ln["forward_it"] = "Avanti";
 //SELECT DATASET
 ln["listView_it"] = "ELENCO";
 ln["treeMapView_it"] = "GRAFICO AD ALBERO";
-ln["availableDatasets_it"] = "Dataset disponibili";
+ln["provider_it"] = "Provider";
+ln["showing_it"] = "Visualizzati";
+ln["to_it"] = "a";
+ln["of_it"] = "di";
+ln["datasets_it"] = "datasets";
+//ln["availableDatasets_it"] = "Dataset disponibili";
 ln["suggestedDatasets_it"] = "Dataset suggeriti";
 ln["selectedUrl_it"] = "Url selezionata";
 ln["wrongUrl_it"] = "Url invalido o data provider non ancora supportato.";
@@ -231,7 +241,12 @@ ln["forward_fr"] = "AVANT";
 //SELECT DATASET
 ln["listView_fr"] = "VUE EN LISTE";
 ln["treeMapView_fr"] = "VUE EN ARBORESCENCE";
-ln["availableDatasets_fr"] = "Jeux de données disponibles";
+ln["provider_fr"] = "Provider";
+ln["showing_fr"] = "Showing";
+ln["to_fr"] = "to";
+ln["of_fr"] = "of";
+ln["datasets_fr"] = "datasets";
+//ln["availableDatasets_fr"] = "Jeux de données disponibles";
 ln["suggestedDatasets_fr"] = "Jeux de données suggérés";
 ln["selectedUrl_fr"] = "Sélectionner URL";
 ln["wrongUrl_fr"] = "Invalid url or data provider not supported yet.";
@@ -339,7 +354,12 @@ ln["forward_nl"] = "VOOTUIT";
 //SELECT DATASET
 ln["listView_nl"] = "LIJSTWEERGAVE";
 ln["treeMapView_nl"] = "BOOMSTRUCTUUR WEEERGAVE";
-ln["availableDatasets_nl"] = "Beschikbare datasets";
+ln["provider_nl"] = "Provider";
+ln["showing_nl"] = "Showing";
+ln["to_nl"] = "to";
+ln["of_nl"] = "of";
+ln["datasets_nl"] = "datasets";
+//ln["availableDatasets_nl"] = "Beschikbare datasets";
 ln["suggestedDatasets_nl"] = "Voeg aanbevolen datasets";
 ln["selectedUrl_nl"] = "Selecteer url";
 ln["wrongUrl_nl"] = "Ongeldige url of data provider nog niet ondersteund.";

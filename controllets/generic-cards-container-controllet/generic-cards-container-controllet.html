@@ -132,7 +132,6 @@ Example:
                 var cards = document.querySelectorAll('paper-card-controllet');
 
 //                if(cards.length == 0){
-//
 //                   this.$.card_grid.innerHTML += "<div class='empty'>There is nothing to show.</div>";
 //                }
 
@@ -161,11 +160,9 @@ Example:
                 if(e.detail.id == "search_from_animated_button_container") {
                     var cards = document.querySelectorAll('.card');
                     for (var i = 0; i < cards.length; i++) {
-                        var title = cards[i].cardTitle;
-                        var comment = cards[i].comment;
-                        var type = cards[i].cardType;
-
-                        var searchFlag = title.indexOf(e.detail.searchKey) == -1 && comment.indexOf(e.detail.searchKey) == -1 && type.indexOf(e.detail.searchKey) == -1;
+                        var title = cards[i].cardTitle ? cards[i].cardTitle : "";
+                        var comment = cards[i].comment ? cards[i].comment : "";
+                        var searchFlag = title.indexOf(e.detail.searchKey) == -1 && comment.indexOf(e.detail.searchKey) == -1;
 
                         if (!searchFlag || e.detail.searchKey == "") {
                             cards[i].style.display = "inline-block";
