@@ -193,9 +193,29 @@
             }
 
             #select_dataset_container #header {
+                position: relative;
+                z-index: 1;
+                -webkit-box-shadow: 0 30px 24px -12px rgba(0, 0, 0, 0.14), 0 20px 30px -9px rgba(0, 0, 0, 0.12), 0 20px 10px -19px rgba(0, 0, 0, 0.4);
+                -moz-box-shadow: 0 30px 24px -12px rgba(0, 0, 0, 0.14), 0 20px 30px -9px rgba(0, 0, 0, 0.12), 0 20px 10px -19px rgba(0, 0, 0, 0.4);
+                box-shadow: 0 30px 24px -12px rgba(0, 0, 0, 0.14), 0 20px 30px -9px rgba(0, 0, 0, 0.12), 0 20px 10px -19px rgba(0, 0, 0, 0.4);
+
                 background-color: #B6B6B6;
                 display: flex;
                 padding: 0px 4px;
+            }
+
+            #select_dataset_container #footer_list {
+                position: relative;
+                z-index: 1;
+                -webkit-box-shadow: 0 -30px 24px -12px rgba(0, 0, 0, 0.14), 0 -20px 30px -9px rgba(0, 0, 0, 0.12), 0 -20px 10px -19px rgba(0, 0, 0, 0.4);
+                -moz-box-shadow: 0 -30px 24px -12px rgba(0, 0, 0, 0.14), 0 -20px 30px -9px rgba(0, 0, 0, 0.12), 0 -20px 10px -19px rgba(0, 0, 0, 0.4);
+                box-shadow: 0 -30px 24px -12px rgba(0, 0, 0, 0.14), 0 -20px 30px -9px rgba(0, 0, 0, 0.12), 0 -20px 10px -19px rgba(0, 0, 0, 0.4);
+            }
+
+            .noshadow {
+                -webkit-box-shadow: none !important;
+                -moz-box-shadow: none !important;
+                box-shadow: none !important;
             }
 
             #select_dataset_container #footer_list,
@@ -250,7 +270,7 @@
             <paper-tabs selected="{{selected}}" no-bar>
                 <paper-tab noink on-tap="_refreshList"><span id="listView"></span></paper-tab>
                 <!--<paper-tab noink ><span id="listView"></span></paper-tab>-->
-                <paper-tab noink><span id="treeMapView"></span></paper-tab>
+                <paper-tab on-tap="_noShadow" noink><span id="treeMapView"></span></paper-tab>
             </paper-tabs>
 
             <div id="header">
@@ -515,6 +535,12 @@
 
                 _refreshList : function() {
                     this.shownDatasets = this.filteredDatasets.slice(this.prev - 1, this.next);
+                    this.$.header.className = this.$.header.className.replace(" noshadow", "");
+                },
+
+                _noShadow : function() {
+                    console.log(this.$.header);
+                    this.$.header.className += " noshadow";
                 },
 
                 _clearInput : function() {
