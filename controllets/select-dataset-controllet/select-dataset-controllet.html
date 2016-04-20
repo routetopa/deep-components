@@ -429,7 +429,7 @@
                 attached: function() {
                     this._resize();
                     var that = this;
-                    window.addEventListener("resize", function() { that._resize(); });
+                    window.addEventListener("resize", function() { that._resize(); that._loadTreeMap();});
 
                     this.providers = this.datasets["result"]["providers"];
                     this.datasets = this.datasets["result"]["datasets"];
