@@ -1,0 +1,453 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html" />
+
+<link rel="import" href="../../bower_components/paper-material/paper-material.html" />
+
+<link rel="import" href="../../bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
+<link rel="import" href="../../bower_components/paper-menu/paper-menu.html">
+<link rel="import" href="../../bower_components/paper-item/paper-item.html">
+
+<link rel="import" href="../../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../../bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="../../bower_components/iron-icon/iron-icon.html">
+
+<dom-module id="select-datalet-inputs_series">
+
+    <template>
+
+        <style is="custom-style">
+            :host {
+            --paper-dropdown-menu-icon: {
+                 color: #2196F3;
+             };
+            }
+
+            #inputs_series_container {
+                font-family: 'Roboto', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+                font-size: 16px;
+
+                height: 100%;
+                width: 258px;
+            }
+
+            .inputs{
+                position: relative;
+            }
+
+            .input_header {
+                height: 32px;
+                padding-top: 16px;
+                text-align: center;
+                font-weight: 700;
+                background-color: #B6B6B6;
+            }
+
+            #expert_container {
+                display: none;
+            }
+
+            #expert_header {
+                height: 32px;
+                padding-top: 16px;
+                margin-top: 8px;
+                text-align: center;
+                font-weight: 700;
+                color: #00BCD4;
+                cursor: pointer;
+            }
+
+            .info_button {
+                position: absolute;
+                top: 18px;
+                right: 0px;
+            }
+
+            paper-dropdown-menu {
+                height: 48px;
+                width: 210px;;
+                padding-left: 8px;
+                padding-bottom: 8px;
+                --paper-input-container-focus-color: #2196F3;
+            }
+
+            paper-item.iron-selected {
+                background-color: #2196F3;
+                color: #FFFFFF;
+            }
+
+            paper-icon-button {
+                color: #2196F3;
+                --paper-icon-button-ink-color: #2196F3;
+                margin: 0px;
+            }
+        </style>
+
+            <paper-material id="inputs_series_container" elevation="5">
+
+                <div class="input_header"><span id="inputs"></span></div>
+
+                <template is="dom-repeat" items="{{inputs}}" index-as="ddl_index">
+                    <div class="inputs">
+                        <paper-dropdown-menu id={{ddl_index}} label={{_getLabelName(item.name)}}>
+                            <paper-menu class="dropdown-content">
+                                <template is="dom-repeat" items={{fields}}>
+                                    <paper-item id={{index}} on-tap="_addInput">{{_fieldName(item)}}</paper-item>
+                                </template>
+                            </paper-menu>
+                        </paper-dropdown-menu>
+                        <div class="info_button">
+                            <paper-icon-button id="{{ddl_index}}" on-click="_setOrders" icon="unfold-more" title=""></paper-icon-button>
+                        </div>
+                    </div>
+                </template>
+
+                <div id="expert_header" on-click="_showExpertMode"><span id="groupBy"></span></div>
+
+                <div id="expert_container">
+
+                    <div class="inputs">
+                        <paper-dropdown-menu id="group_by" disabled>
+                            <paper-menu class="dropdown-content">
+                                <template is="dom-repeat" items={{groupableFields}}>
+                                    <paper-item id={{index}} on-tap="_setAggregatorsFields">{{_fieldName(item)}}</paper-item>
+                                </template>
+                            </paper-menu>
+                        </paper-dropdown-menu>
+                        <div class="info_button">
+                            <paper-icon-button id="gb" on-click="_setOrders" icon="unfold-more" title="" disabled></paper-icon-button>
+                        </div>
+                    </div>
+
+                    <template is="dom-repeat" items="{{aggregateFields}}" as="field">
+                        <div class="inputs">
+                            <paper-dropdown-menu id="calculate_{{index}}" label="{{_calculateLabel()}}" disabled>
+                                <paper-menu class="dropdown-content">
+                                    <template is="dom-repeat" items="{{functions}}">
+                                        <paper-item id={{index}} on-tap="_setAggregators">{{_operationName(index)}} : {{_fieldName(field)}}</paper-item>
+                                    </template>
+                                </paper-menu>
+                            </paper-dropdown-menu>
+                        </div>
+                    </template>
+
+                </div>
+
+            </paper-material>
+
+
+    </template>
+
+    <script>
+
+        Polymer({
+
+            is : 'select-datalet-inputs_series',
+
+            properties : {
+
+                //INPUT
+                fields : {type : Array, value : []},
+
+                //OUTPUT
+                selectedFields : {type : Array, value : ["", ""]},
+                aggregators : {type : Array, value : []},
+                orders : {type : Array, value : []},
+
+                expert : {
+                    type  : Boolean,
+                    value : false
+                },
+
+                functions : {
+                    type  : Array,
+                    value : ["COUNT", "SUM", "MIN", "MAX", "AVG", "FIRST", "LAST"]
+                },
+
+                inputs : {
+                    type : Array,
+                    value : []
+                },
+
+                groupableFields : {
+                    type : Array,
+                    value : []
+                },
+
+                aggregateFields : {
+                    type : Array,
+                    value : [""]
+                }
+
+            },
+
+            ready : function() {
+                $(this.$.inputs_series_container).perfectScrollbar();
+            },
+
+            attached : function() {
+                this._translate();
+            },
+
+            _preselectInputs : function(fields, aggregators, orders) {
+                var ddls = this.$.inputs_series_container.querySelectorAll("paper-dropdown-menu");
+
+//                this.async(function () {
+                    for (var i = 0; i < fields.length; i++) {
+                        var menu = $(ddls[i]).find("paper-menu")[0];
+                        menu.select(i+1);
+                    }
+                    this.selectedFields = this._copy(fields);
+//                }, 0);
+            },
+
+            getSelectedFields : function () {
+                var gb_menu = $(this.$.group_by).find("paper-menu")[0];
+                var c_menu = $("#calculate_0").find("paper-menu")[0];
+
+                if(gb_menu.selectedItem && c_menu.selectedItem && gb_menu.selectedItem.id != 0) {
+                    var groupByField = this.groupableFields[gb_menu.selected];
+                    if (groupByField != this.selectedFields[0])
+                        return [this.selectedFields[0], groupByField, this.selectedFields[1]];
+                }
+                return this.selectedFields;
+            },
+
+            getAggregators : function () {
+                return this.aggregators;
+            },
+
+            getOrders : function () {
+                return this.orders;
+            },
+
+            setFields : function(fields) {
+                var temp = this._copy(fields);
+                temp.unshift("");
+
+                if (JSON.stringify(this.fields) != JSON.stringify(temp)) {
+                    this.fields = this._copy(temp);
+                    this._reset();
+                }
+            },
+
+            setInputs : function(inputs) {
+                this.inputs = this._copy(inputs);
+            },
+
+            fireReady : function() {
+                if(this.selectedFields[0] != "" && this.selectedFields[1] != "")
+                    this.fire('select_visualization_inputs_ready', {isReady: true});
+                else
+                    this.fire('select_visualization_inputs_ready', {isReady: false});
+            },
+
+            _reset : function() {
+                //this.fields = []; --> setFields
+                //this.inputs = []; --> setInputs
+                this.selectedFields = ["", ""];
+                this.aggregators = [];
+                //this.orders = []; --> _resetOrders
+                this.expert = true;
+                this._showExpertMode();//expert --> false
+                this.groupableFields = [];
+                this.aggregateFields = [""];
+
+                this.async(function () {
+                    //reset ddl
+                    var ddls = this.$.inputs_series_container.getElementsByTagName("paper-dropdown-menu");
+                    for (var i = 0; i < ddls.length; i++)
+                        $(ddls[i]).find("paper-menu")[0].select(-1);
+                    this.$.group_by.setAttribute("disabled", "");
+                    $("#calculate_0")[0].setAttribute("disabled", "");
+                    //reset orders
+                    this._resetOrders();
+                }, 1);
+            },
+
+            _translate : function(){
+                this.$.inputs.innerHTML = ln["inputs_" + ln["localization"]];
+                this.$.groupBy.innerHTML = ln["expertGroupBy_" + ln["localization"]];
+
+                this.$.group_by.setAttribute("label", ln["groupBy_" + ln["localization"]]);
+            },
+
+            _showExpertMode : function() {
+                if(!this.expert) {
+                    this.$.expert_header.style.color = "#000000";
+                    this.$.expert_header.style.background = "#B6B6B6";
+                    this.$.expert_container.style.display = "block";
+                }
+                else {
+                    this.$.expert_header.style.color = "#00BCD4";
+                    this.$.expert_header.style.background = "#FFFFFF";
+                    this.$.expert_container.style.display = "none";
+                }
+
+                this.expert = !this.expert;
+            },
+
+            _addInput : function(e){
+                var selectedFields = this._copy(this.selectedFields);
+
+                var ddl_index = $(e.target).parents("paper-dropdown-menu")[0].id;
+                var index = e.target.id;
+                selectedFields[ddl_index] = this.fields[index];
+
+                this.selectedFields = this._copy(selectedFields);
+
+                if(this.selectedFields[0] == "" || this.selectedFields[1] == "") {
+                    this.$.group_by.setAttribute("disabled", "");
+                    $("#calculate_0")[0].setAttribute("disabled", "");
+
+                    this.groupableFields = [];
+                    this.aggregateFields = [""];
+                    var menu = $("#calculate_0").find("paper-menu")[0];
+                    menu.select(-1);
+                }
+                else {
+                    this.$.group_by.removeAttribute("disabled");
+                    $("#calculate_0")[0].removeAttribute("disabled");
+
+                    var groupableFields = [];
+                    for (var i = 0; i < this.fields.length; i++) {
+                        if(this.fields[i] != this.selectedFields[1])
+                            groupableFields.push(this.fields[i]);
+                    }
+                    this.groupableFields = this._copy(groupableFields);
+                    this.aggregateFields = [this.selectedFields[1]];
+
+                    this.async(function () {
+                        var menu = $(this.$.group_by).find("paper-menu")[0];
+                        menu.select(-1);
+                        var menu = $("#calculate_0").find("paper-menu")[0];
+                        //var selected =  menu.selected;
+                        menu.select(-1);
+                        //menu.select(selected);
+                    }, 0);
+                }
+                this._setAggregators();
+            },
+
+            _setAggregatorsFields : function(){
+                this.async(function() {
+                    var c_menu = $("#calculate_0").find("paper-menu")[0];
+                    var selected =  c_menu.selected > 0 ? c_menu.selected : 0;
+                    c_menu.select(-1);
+                    c_menu.select(selected);
+
+                    this._setAggregators();
+                }, 0);
+            },
+
+            _setAggregators : function(){
+                this.async(function() {
+                    this.aggregators = [];
+
+                    this._resetOrders();
+
+                    $("#gb")[0].setAttribute("disabled", "");
+
+                    var gb_menu = $(this.$.group_by).find("paper-menu")[0];
+                    var c_menu = $("#calculate_0").find("paper-menu")[0];
+
+                    if(gb_menu.selectedItem && c_menu.selectedItem && gb_menu.selectedItem.id != 0) {
+                        var groupByField = this.groupableFields[gb_menu.selected];
+                        var operationIndex = c_menu.selectedItem.id;
+
+                        if (groupByField == this.selectedFields[0]){// X Axis field
+                            this.aggregators.push({"field": groupByField, "operation": "GROUP BY"});
+                        }
+                        else{
+                            $("#gb")[0].removeAttribute("disabled");
+                            this.aggregators.push({"field": this.selectedFields[0], "operation": "GROUP BY"});
+                            this.aggregators.push({"field": groupByField, "operation": "GROUP BY"});
+                        }
+
+                        this.aggregators.push({"field": this.selectedFields[1], "operation": this.functions[operationIndex]});
+                    }
+
+                    this.fireReady();
+                }, 0);
+            },
+
+            _setOrders : function(e){
+                var t = e.target;
+                if(t.tagName.indexOf("IRON-ICON") > -1)
+                    t = $(e.target).parents("paper-icon-button")[0];
+
+                var icon = t.getAttribute("icon");
+                var id = t.getAttribute("id");
+                var field;
+
+                if(id == "gb"){
+                    var gb_menu = $(this.$.group_by).find("paper-menu")[0];
+                    field = this.groupableFields[gb_menu.selected];
+                }
+                else {
+                    field = this.selectedFields[id];
+                }
+
+                if(icon.indexOf("unfold-more") > -1){
+                    t.setAttribute("icon", "expand-less");
+                    t.setAttribute("title", ln["sortAscending_" + ln["localization"]]);
+                    var orders = this.orders.filter(function (el) { return el.field !== field; });
+                    orders.unshift({"field": field, "operation": "ASC"});
+                    this.orders = this._copy(orders);
+                }
+                else if(icon.indexOf("expand-less") > -1){
+                    t.setAttribute("icon", "expand-more");
+                    t.setAttribute("title", ln["sortDescending_" + ln["localization"]]);
+                    var orders = this.orders.filter(function (el) { return el.field !== field; });
+                    orders.unshift({"field": field, "operation": "DESC"});
+                    this.orders = this._copy(orders);
+                }
+                else if(icon.indexOf("expand-more") > -1){
+                    t.setAttribute("icon", "unfold-more");
+                    t.setAttribute("title", ln["unsort_" + ln["localization"]]);
+                    var orders = this.orders.filter(function (el) { return el.field !== field; });
+                    this.orders = this._copy(orders);
+                }
+
+                this.fireReady();
+            },
+
+            _resetOrders : function(){
+                var icons = this.$.inputs_series_container.querySelectorAll("paper-icon-button");
+                for (var i = 0; i < icons.length; i++){
+                    icons[i].setAttribute("icon", "unfold-more");
+                    icons[i].setAttribute("title", ln["unsort_" + ln["localization"]]);
+                }
+                this.orders = [];
+            },
+
+            _fieldName : function(field) {
+                return field.substring(field.lastIndexOf(",")+1, field.length);
+            },
+
+            _getLabelName: function(key) {
+                return ln[key + "_" +ln["localization"]];
+            },
+
+            _operationName: function(index) {
+                var key = this.functions[index];
+                return ln[key + "_" +ln["localization"]];
+            },
+
+            _calculateLabel: function() {
+                return ln["calculate" + "_" +ln["localization"]];
+            },
+
+            _copy : function(o) {
+                var out, v, key;
+                out = Array.isArray(o) ? new Array(o.length) : {};
+                for (key in o) {
+                    v = o[key];
+                    out[key] = (typeof v === "object") ? this._copy(v) : v;
+                }
+                return out;
+            }
+
+        });
+
+    </script>
+
+</dom-module>
