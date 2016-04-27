@@ -89,13 +89,30 @@
                 display : none;
             }
 
+            #info_close_button{
+                z-index: 1;
+                color: #fff;
+                box-shadow: 0 5px 11px 0 rgba(0, 0, 0, 0.18), 0 4px 15px 0 rgba(0, 0, 0, 0.15);
+                -webkit-transition: 0.2s ease-out;
+                -moz-transition: 0.2s ease-out;
+                -o-transition: 0.2s ease-out;
+                transition: 0.2s ease-out;
+                cursor: pointer;
+                background-color: #2196F3;
+                float: right;
+                top: 50px;
+                right: 38px;
+                margin: 0px;
+                position: absolute;
+            }
+
         </style>
 
 
         <paper-material id="paper_card_container" elevation="{{elevation}}">
 
             <div id="content">
-                <iframe id="resource" src="{{resourceUrl}}?userName={{userName}}&showLineNumbers=false"></iframe>
+                <iframe id="resource" src="{{resourceUrl}}?userName={{userName}}"></iframe>
                 <!--<iframe id="resource" src="{{resourceUrl}}"></iframe>-->
             </div>
 
@@ -104,6 +121,7 @@
             <paper-dialog id="fullscreen_container" entry-animation="scale-up-animation" exit-animation="fade-out-animation">
                 <!--with-backdrop-->
                 <div id="fullscreen_content"></div>
+                <paper-button id="info_close_button" dialog-confirm autofocus>x</paper-button>
             </paper-dialog>
 
         </paper-material>
