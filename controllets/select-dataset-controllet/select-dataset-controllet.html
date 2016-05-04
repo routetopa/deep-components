@@ -291,6 +291,12 @@
             #suggested_div {
                 visibility: hidden;
             }
+
+            /*.info_resource_name {*/
+                /*color: #2196F3;*/
+                /*font-weight: bold;*/
+                /*line-height: 48px;*/
+            /*}*/
         </style>
 
         <paper-material id="select_dataset_container" elevation="5">
@@ -699,7 +705,9 @@
                         if(this.$.list.selectedItem) {
 
                             var metas = JSON.parse(this.$.list.selectedItem.metas);
-                            var html = "";
+                            var html = "<span style=\"color: #2196F3; font-weight: bold;\">" + this.$.list.selectedItem.resource_name + "</span><br><br>";
+                            /*font-weight: bold;*/
+                            /*line-height: 48px;*/
                             for(var i in metas)
                                 html += "<b>" + i + ":</b> " + metas[i] + "<br>";
                             this.$.info.innerHTML = html;
