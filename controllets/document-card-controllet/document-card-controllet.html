@@ -1,0 +1,215 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html"/>
+<link rel="import" href="../../bower_components/paper-material/paper-material.html"/>
+<link rel="import" href="../../bower_components/paper-fab/paper-fab.html"/>
+<link rel="import" href="../../bower_components/iron-icons/iron-icons.html"/>
+<link rel="import" href="../../bower_components/paper-dialog/paper-dialog.html"/>
+<link rel="import" href="../../bower_components/neon-animation/neon-animation.html"/>
+
+<script src="../../locales/paper_card_controllet_ln.js"></script>
+
+<dom-module id="document-card-controllet">
+
+    <template>
+        <link rel="stylesheet" href="../shared_js/perfect-scrollbar/css/perfect-scrollbar.min.css">
+        <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
+        <style>
+
+            #paper_card_container {
+                font-family: 'Roboto', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+                font-size: 16px;
+                background-color: white;
+            }
+
+            #content {
+                padding: 4px 4px 0px 4px;
+                position:relative;
+                width: 98%;
+                height: 90%;
+            }
+
+            .footer {
+                height: 16px;
+            }
+
+            .comment {
+                position: relative;
+                top: -50px;
+                height: 50px;
+                background-color: white;
+                padding: 8px;
+                font-size: small;
+                color: #727272;
+                word-wrap: break-word;
+                overflow: hidden;
+            }
+
+            paper-fab#fullscreen-button {
+                position: absolute;
+                /*z-index: 10;*/
+                top: 11px;
+                right: 15px;
+                --paper-fab-background:#FFFFFF;
+                padding : 0px;
+                margin: 0px;
+                height: 24px;
+                width: 24px;
+                color: #666666;
+            }
+
+            paper-dialog {
+                margin: 0px;
+                padding: 0px;
+                z-index: 1100;
+            }
+
+            #fullscreen_container {
+                display: inline;
+                position: fixed;
+                width: 90%;
+                height: 80vh;
+                right: 0;
+                left: 0;
+                top: 64px;
+                margin-right: auto;
+                margin-left: auto;
+                padding: 8px;
+                background-color: white;
+            }
+
+            #fullscreen_content {
+                margin: 0px;
+            }
+
+            #resource{
+                height: 100%;
+                width: 100%;
+            }
+
+            :host #docs-header{
+                display : none;
+            }
+
+            #info_close_button{
+                z-index: 1;
+                color: #666666;
+                box-shadow: 0 5px 11px 0 rgba(0, 0, 0, 0.18), 0 4px 15px 0 rgba(0, 0, 0, 0.15);
+                -webkit-transition: 0.2s ease-out;
+                -moz-transition: 0.2s ease-out;
+                -o-transition: 0.2s ease-out;
+                transition: 0.2s ease-out;
+                cursor: pointer;
+                background: linear-gradient(#f4f4f4,#e4e4e4);
+                float: right;
+                top: 11px;
+                right: 8px;
+                margin: 0px;
+                position: absolute;
+                height: 29px;
+                min-width: 30px;
+                padding: 5px;
+            }
+
+        </style>
+
+
+        <paper-material id="paper_card_container" elevation="{{elevation}}">
+
+            <div id="content">
+                <iframe id="resource" src="{{resourceUrl}}?userName={{userName}}"></iframe>
+                <!--<iframe id="resource" src="{{resourceUrl}}"></iframe>-->
+            </div>
+
+            <paper-fab id="fullscreen-button" class="open" mini icon="fullscreen" on-click="_handleOpenClick"></paper-fab>
+
+            <paper-dialog id="fullscreen_container" entry-animation="scale-up-animation" exit-animation="fade-out-animation">
+                <!--with-backdrop-->
+                <div id="fullscreen_content"></div>
+                <paper-button id="info_close_button" dialog-confirm autofocus>x</paper-button>
+            </paper-dialog>
+
+        </paper-material>
+
+    </template>
+
+    <script src="../shared_js/perfect-scrollbar/js/min/perfect-scrollbar.jquery.min.js"></script>
+
+    <script>
+        _this = null;
+
+        Polymer({
+            is: "document-card-controllet",
+            properties: {
+
+                width: {
+                    type: Number,
+                    observer: "_changeWidth"
+                },
+
+                height: {
+                    type: Number,
+                    observer: "_changeHeight"
+                },
+
+                elevation:{
+                    type: Number,
+                    value: 3
+                },
+
+                createNewType : {
+                    type : String,
+                    value : undefined
+                },
+
+                comment:{
+                    cardType: String,
+                    value: ""
+                },
+
+                resourceUrl : {
+                    type : String,
+                    value : undefined
+                },
+
+                userName: {
+                    type: String,
+                    value: undefined
+                },
+                lang:{
+                    type: String,
+                    value: navigator.language
+                }
+            },
+
+            ready : function(){
+            },
+
+            attached: function(){
+                $(this.$.fullscreen_container).perfectScrollbar();
+            },
+
+
+            _changeWidth: function(){
+                //this.style.width = this.width + "px";
+                //this.$.paper_card_container.style.width = this.width + "px";
+                //this.$.content.style.width = this.width - 8 + "px";
+            },
+
+            _changeHeight: function(){
+                this.style.height = this.height +  "vh";
+                //this.$.content.width = this.width  - 4 + "vh";
+                this.$.paper_card_container.style.height = this.height + "vh";
+                this.$.content.style.height = this.height - 1 + "vh";
+                $(this.$.content).perfectScrollbar();
+            },
+
+            _handleOpenClick: function(){
+                this.$.fullscreen_content.style.height = "80vh";
+                this.$.fullscreen_content.innerHTML = this.$.content.innerHTML;
+                this.$.fullscreen_container.style.display = "inline";//datalet res
+                this.$.fullscreen_container.open();
+            }
+
+        })
+    </script>
+
+</dom-module>

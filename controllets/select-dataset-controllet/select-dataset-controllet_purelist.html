@@ -135,11 +135,6 @@
                 background-color: #E0E0E0;
             }
 
-            .item.expanded {
-                /*border: 2px solid #2196F3;*/
-                border-color: #2196F3;
-            }
-
             .pad {
                 @apply(--layout-flex);
                 /*@apply(--layout-vertical);*/
@@ -176,37 +171,15 @@
                 width: calc(100% - 8px);
             }
 
-            #select_dataset_container #list_info {
-                display: flex;
-                height: calc(100% - 48px);
-                width: calc(100% + 8px);/*bad*/
-            }
-
             #select_dataset_container #list_container {
+                /*height: calc(100% - 244px);*/
+                /*width: calc(100% - 8px);*/
+                height: calc(100% - 48px);
+                width: 100%;
+                border: 4px solid #B6B6B6;
+                border-top: 0px;
+                border-bottom: 0px;
                 position: relative;
-                height: 100%;
-                width: 50%;
-                border-left: 4px solid #B6B6B6;;
-            }
-
-            #select_dataset_container #info_container {
-                position: relative;
-                height: 100%;
-                width: 50%;
-                border-right: 4px solid #B6B6B6;
-
-                /*background-color: red;*/
-            }
-
-            #select_dataset_container #info {
-                position: relative;
-                height: calc(100% - 56px);
-                width: calc(100% - 56px);
-                padding: 11px;
-                border: 1px solid #B6B6B6;
-                border-radius: 4px;
-                background-color: #E0E0E0;
-                margin: 16px;
             }
 
             #select_dataset_container #treemap_container {
@@ -291,12 +264,6 @@
             #suggested_div {
                 visibility: hidden;
             }
-
-            /*.info_resource_name {*/
-                /*color: #2196F3;*/
-                /*font-weight: bold;*/
-                /*line-height: 48px;*/
-            /*}*/
         </style>
 
         <paper-material id="select_dataset_container" elevation="5">
@@ -336,32 +303,30 @@
             <neon-animated-pages id="neon_container" selected="{{selected}}" entry-animation="fade-in-animation" exit-animation="fade-out-animation">
 
                 <neon-animatable>
-                    <div id="list_info">
-                        <div id="list_container">
-                            <iron-list id="list" items="{{shownDatasets}}" selection-enabled>
-                                <template>
-                                    <div>
-                                        <div class$="{{getClassForItem(selected)}}" on-tap="_selectDataUrl" style$="background: {{_getColorForItem(item)}};">
-                                            <span style="display:none;">{{item.url}}</span>
-                                            <div class="pad">
-                                                <div class="primary">{{item.resource_name}}</div>
-                                                <!--<div class="longText">-->
-                                                    <!--<template is="dom-repeat" items="{{_stringToArray(item.metas)}}" as="mata">-->
-                                                        <!--<b>{{mata.name}}:</b>-->
-                                                        <!--<span inner-h-t-m-l="{{mata.value}}"></span> <br>-->
-                                                    <!--</template>-->
-                                                <!--</div>-->
+                    <div id="list_container">
+                        <iron-list id="list" items="{{shownDatasets}}" selection-enabled><!--multi-selection-->
+                            <template>
+                                <div>
+                                    <div class$="{{getClassForItem(selected)}}" on-tap="_selectDataUrl" style$="background: {{_getColorForItem(item)}};">
+                                    <!--<div class$="{{getClassForItem(selected)}}" on-tap="_selectDataUrl">-->
+                                        <span style="display:none;">{{item.url}}</span>
+                                        <div class="pad">
+                                            <div class="primary">{{item.resource_name}}</div>
+                                            <!--<div class="shortText" style="display:none;">{{item.url}}</div>-->
+                                            <div class="longText">
+                                                <template is="dom-repeat" items="{{_stringToArray(item.metas)}}" as="mata">
+                                                    <b>{{mata.name}}:</b>
+                                                    <span inner-h-t-m-l="{{mata.value}}"></span> <br>
+                                                </template>
                                             </div>
-                                            <iron-icon icon$="{{_getIconForItem(item)}}" style$="color: {{_getColorForIcon(item)}};"></iron-icon>
                                         </div>
+                                        <!--<iron-icon icon$="[[iconForItem(item)]]"></iron-icon>-->
+                                        <!--<iron-icon icon="bookmark" style$="color: {{_getColorForItem(item)}};"></iron-icon>-->
+                                        <iron-icon icon$="{{_getIconForItem(item)}}" style$="color: {{_getColorForIcon(item)}};"></iron-icon>
                                     </div>
-                                </template>
-                            </iron-list>
-                        </div>
-                        <div id="info_container">
-                            <div id="info">
-                            </div>
-                        </div>
+                                </div>
+                            </template>
+                        </iron-list>
                     </div>
 
                     <div id="footer_list">
@@ -457,7 +422,6 @@
 
                 ready : function() {
                     $(this.$.list_container).perfectScrollbar();
-                    $(this.$.info).perfectScrollbar();
 
 //                    this.$.selected_url.invalid = true;
                 },
@@ -703,15 +667,6 @@
                 _selectDataUrl : function(){
                     this.async(function () {
                         if(this.$.list.selectedItem) {
-
-                            var metas = JSON.parse(this.$.list.selectedItem.metas);
-                            var html = "<span style=\"color: #2196F3; font-weight: bold;\">" + this.$.list.selectedItem.resource_name + "</span><br><br>";
-                            /*font-weight: bold;*/
-                            /*line-height: 48px;*/
-                            for(var i in metas)
-                                html += "<b>" + i + ":</b> " + metas[i] + "<br>";
-                            this.$.info.innerHTML = html;
-
                             var url = this.$.list.selectedItem.url;
 
                             // Check if CKAN
@@ -737,7 +692,6 @@
                         }
                         else {
                             this.dataUrl = "";
-                            this.$.info.innerHTML = "";
                         }
                     }, 0);
                 },
