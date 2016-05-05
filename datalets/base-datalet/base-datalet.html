@@ -100,6 +100,46 @@ Example :
                 font-style: italic;
                 color: #727272;
             }
+/*EXPORT*/
+            .export
+            {
+                cursor: pointer;
+                background-image:url("./static/images/more_horiz_grey600_36x36.png");
+                background-repeat: no-repeat;
+                position: absolute;
+                padding: 31px;
+                right: 21px;
+                top: 85px;
+            }
+
+            .highcharts-contextmenu
+            {
+                position: absolute;
+                right: 50px;
+                top: 114px;
+                display: none;
+                border: solid 1px #000000;
+            }
+
+            .highcharts-contextmenu-container
+            {
+                background: rgb(255, 255, 255);
+            }
+
+            .highcharts-contextmenu-container div
+            {
+                cursor: pointer;
+                padding: 0px 10px;
+                color: rgb(48, 48, 48);
+                font-size: 11px;
+                background: none;
+            }
+
+            .highcharts-contextmenu-container div:hover
+            {
+                background: #cccccc;
+            }
+/*EXPORT*/
         </style>
 
         <div id="base_datalet_imgWaitDatalet">
@@ -119,6 +159,18 @@ Example :
             <div id="base_datalet_rtp">
                 <div id="rtp">Powered by ROUTE-TO-PA</div>
                 <div><a href="http://www.routetopa.eu/" target="_blank"><img id="rtpalogo" src="static/images/rtpalogo.png" ></a></div>
+            </div>
+
+            <div id="export">
+                <div class="export" on-click="showHideExportMenu"></div>
+                <div class="highcharts-contextmenu" id="highcharts-contextmenu">
+                    <div class="highcharts-contextmenu-container">
+                        <div id="export_html" on-click="exportToHTML">Export to HTML</div>
+                        <div id="export_png"  on-click="exportToIMG">Export to PNG</div>
+                        <div id="export_rtf">Export to RTF</div>
+                        <div id="export_my_space" on-click="importToMySpace">Import in My Space</div>
+                    </div>
+                </div>
             </div>
 
         </div>
@@ -145,6 +197,9 @@ Example :
              * @method ready
              */
             ready: function(){
+
+                this.setExportMenu();
+
                 if(this.dataUrl != undefined) {
 
                     var urlSource = this.dataUrl.split("/")[0] + "//" + this.dataUrl.split("/")[2];
@@ -194,7 +249,133 @@ Example :
                 this.$.base_datalet_container.innerHTML = "";
                 this.$.base_datalet_container.style.margin = 0;
                 this.$.base_datalet_container.style.border = 0;
+            },
+
+            setExportMenu: function()
+            {
+                // xxxx BITMASK. FROM RIGHT : HTML, PNG, RTF, MY SPACE (eg. 1111 show all, 0000 hide all)
+                var bitmask = this.export_menu;
+                var menu = ["export_html", "export_png", "export_rtf", "export_my_space"];
+
+                if(bitmask == 15) return;
+
+                if(bitmask == 0)
+                {
+                    this.$.export.style.display = "none";
+                    return;
+                }
+
+                //var max_i = Math.floor(Math.log2(this.export_menu))+1;
+                for(var i=0; i<menu.length; i++)
+                {
+                    if(bitmask % 2 == 0)
+                        this.$[menu[i]].style.display = "none";
+
+                    bitmask = Math.floor(bitmask/2);
+                }
+            },
+
+            showHideExportMenu: function()
+            {
+                if(this.$["highcharts-contextmenu"].style.display == "block")
+                    this.$["highcharts-contextmenu"].style.display = "none";
+                else
+                    this.$["highcharts-contextmenu"].style.display = "block";
+            },
+
+            exportToHTML: function () {
+                var parent = this.parentElement;
+                var html = '';
+                while(!parent.hasAttribute("data-url"))
+                    parent = parent.parentElement;
+
+                html += '<'+parent.is;
+                for(var i=0; i<parent.attributes.length; i++)
+                    html += ' '+parent.attributes[i].name+'=\''+parent.attributes[i].value+'\'';
+                html += '></'+parent.is+'>';
+
+                var dataletImport = '\<script type="text/javascript" src="https://cdn.jsdelivr.net/webcomponentsjs/0.7.16/webcomponents-lite.min.js"\>\<\/script\>\n' +
+                        '\<script type="text/javascript" src="https://code.jquery.com/jquery-2.1.4.min.js"\>\<\/script\>\n' +
+                        '<!-- REMOVE THE PREVIOUS SCRIPT TAGS IF YOUR PAGE ALREADY USES JQUERY AND POLYFILL LIBRARIES  -->\n';
+
+                var dataletLink = '<link rel="import" href="http://deep.routetopa.eu/COMPONENTS/datalets/'+parent.is+'/'+parent.is+'.html" /> \n';
+
+                window.prompt("Copy to clipboard: Ctrl+C, Enter", dataletImport+dataletLink+html);
+            },
+
+
+            exportToIMG: function () {
+                var parent = this.parentElement;
+                while(!parent.hasAttribute("data-url"))
+                    parent = parent.parentElement;
+
+
+                var svg = $(parent.is + " .highcharts-container");
+                svg = $(svg[0]).html();
+
+                var xhr = new XMLHttpRequest();
+
+                xhr.onreadystatechange = function(){
+                    if (this.readyState == 4 && this.status == 200){
+                        var blob = new Blob([this.response], {type:'octet/stream'});
+                        var downloadUrl = window.URL.createObjectURL(blob);
+                        var a = document.createElement("a");
+                        a.href = downloadUrl;
+                        a.download = "image.png";
+                        document.body.appendChild(a);
+                        a.click();
+                        //window.URL.revokeObjectURL(downloadUrl);
+                    }
+                };
+
+                //xhr.open('POST', 'http://172.16.15.77/DEEalerProvider/DEEP/export/export-datalet-as-img', true);
+                xhr.open('POST', 'http://stage.routetopa.eu/deep/DEEP/export/export-datalet-as-img', true);
+                xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+
+                var post = 'svg_data=' + window.encodeURIComponent(svg);
+                xhr.responseType = 'blob';
+                xhr.send(post);
+            },
+
+            importToMySpace: function() {
+                var parent = this.parentElement;
+                var html = '';
+                while(!parent.hasAttribute("data-url"))
+                    parent = parent.parentElement;
+
+                var params = {};
+                var fields;
+                var component = parent.is;
+
+                for(var i=0; i<parent.attributes.length; i++)
+                    params[parent.attributes[i].name] = parent.attributes[i].value;
+
+                delete params["fields"];
+                fields = parent.attributes["fields"].value.replace(/\[|\]/g, "");
+                params = JSON.stringify(params);
+
+                $.ajax({
+                    type: 'post',
+                    url: ODE.ajax_private_room_datalet,
+                    data: {"component":component, "fields":fields, "params":params, "data":""},
+                    dataType: 'JSON',
+                    success: function(data){
+                        if(data.status == "ok")
+                        {
+                            alert("Datalet added to private room");
+                        }
+                        else
+                        {
+                            alert("Error");
+                        }
+                    },
+                    error: function( XMLHttpRequest, textStatus, errorThrown ){
+                        OW.error(textStatus);
+                    },
+                    complete: function(){}
+                });
             }
+
          });
     </script>
 </dom-module>
