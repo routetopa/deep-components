@@ -105,10 +105,13 @@ Example:
                         var popupText = "";
                         for(var j=2; j<t.data.length; j++)
                         {
-                            if(t.data[j].data[i].toString().match(new RegExp("^(http[s]?:\\/\\/(www\\.)?|ftp:\\/\\/(www\\.)?|www\\.){1}([0-9A-Za-z-\\.@:%_\+~#=]+)+((\\.[a-zA-Z]{2,3})+)(/(.)*)?(\\?(.)*)?")))
+                            if(typeof t.data[j] != 'undefined' && typeof t.data[j].data[i] != 'undefined')
+                            {
+                                if (t.data[j].data[i].toString().match(new RegExp("^(http[s]?:\\/\\/(www\\.)?|ftp:\\/\\/(www\\.)?|www\\.){1}([0-9A-Za-z-\\.@:%_\+~#=]+)+((\\.[a-zA-Z]{2,3})+)(/(.)*)?(\\?(.)*)?")))
                                     popupText += '<image height="100" width="100" src="' + t.data[j].data[i] + '" /><br/>';
-                            else
-                                    popupText += '<span>' + t.data[j].data[i] + '</span><br/>'
+                                else
+                                    popupText += '<span>' + t.data[j].name + ' : ' + t.data[j].data[i] + '</span><br/>'
+                            }
                         }
 
                         var popup = L.popup().setContent(popupText);
