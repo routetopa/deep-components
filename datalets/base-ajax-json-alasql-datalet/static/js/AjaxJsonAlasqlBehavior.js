@@ -210,7 +210,12 @@ var AjaxJsonAlasqlBehavior = {
             var data = [];
 
             for (var i in obj) {
-                data.push(obj[i][name]);
+                var v = obj[i][name];
+                if(!isNaN(v) && v % 1 != 0)
+                    v = Math.floor(v * 100) / 100;
+                data.push(v);
+
+                //data.push(obj[i][name]);
             }
 
             this.data.push({
