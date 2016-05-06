@@ -310,7 +310,7 @@ Example :
                     parent = parent.parentElement;
 
 
-                var svg = $(parent.is + " .highcharts-container");
+                var svg = $(parent).find(".highcharts-container");
                 svg = $(svg[0]).html();
 
                 var xhr = new XMLHttpRequest();
@@ -343,7 +343,7 @@ Example :
                     parent = parent.parentElement;
 
 
-                var svg = $(parent.is + " .highcharts-container");
+                var svg = $(parent).find(".highcharts-container");
                 svg = $(svg[0]).html();
 
                 var xhr = new XMLHttpRequest();
