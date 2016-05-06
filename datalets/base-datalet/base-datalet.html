@@ -165,9 +165,9 @@ Example :
                 <div class="export" on-click="showHideExportMenu"></div>
                 <div class="highcharts-contextmenu" id="highcharts-contextmenu">
                     <div class="highcharts-contextmenu-container">
-                        <div id="export_html" on-click="exportToHTML">Export to HTML</div>
-                        <div id="export_png"  on-click="exportToIMG">Export to PNG</div>
-                        <div id="export_rtf">Export to RTF</div>
+                        <div id="export_html"     on-click="exportToHTML">Export to HTML</div>
+                        <div id="export_png"      on-click="exportToIMG">Export to PNG</div>
+                        <div id="export_rtf"      on-click="exportRTF">Export to RTF</div>
                         <div id="export_my_space" on-click="importToMySpace">Import in My Space</div>
                     </div>
                 </div>
@@ -333,6 +333,39 @@ Example :
                 xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 
                 var post = 'svg_data=' + window.encodeURIComponent(svg);
+                xhr.responseType = 'blob';
+                xhr.send(post);
+            },
+
+            exportRTF: function () {
+                var parent = this.parentElement;
+                while(!parent.hasAttribute("data-url"))
+                    parent = parent.parentElement;
+
+
+                var svg = $(parent.is + " .highcharts-container");
+                svg = $(svg[0]).html();
+
+                var xhr = new XMLHttpRequest();
+
+                xhr.onreadystatechange = function(){
+                    if (this.readyState == 4 && this.status == 200){
+                        var blob = new Blob([this.response], {type:'octet/stream'});
+                        var downloadUrl = window.URL.createObjectURL(blob);
+                        var a = document.createElement("a");
+                        a.href = downloadUrl;
+                        a.download = "datalet.rtf";
+                        document.body.appendChild(a);
+                        a.click();
+                        //window.URL.revokeObjectURL(downloadUrl);
+                    }
+                };
+
+                //xhr.open('POST', 'http://172.16.15.77/DEEalerProvider/DEEP/export/export-datalet-as-rtf', true);
+                xhr.open('POST', 'http://stage.routetopa.eu/deep/DEEP/export/export-datalet-as-rtf', true);
+                xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+
+                var post = 'svg_data=' + window.encodeURIComponent(svg) + '&datalet=' + parent.is + '&dataset=' + this.$.base_datalet_link.getAttribute("href");
                 xhr.responseType = 'blob';
                 xhr.send(post);
             },
