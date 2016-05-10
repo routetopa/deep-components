@@ -21,10 +21,11 @@
             }
 
             #content {
-                padding: 4px 4px 0px 4px;
                 position:relative;
+                padding: 2px;
+                /*padding: 4px 4px 0px 4px;
                 width: 98%;
-                height: 90%;
+                height: 90%;*/
             }
 
             .footer {
@@ -115,17 +116,19 @@
         <paper-material id="paper_card_container" elevation="{{elevation}}">
 
             <div id="content">
-                <iframe id="resource" src="{{resourceUrl}}?userName={{userName}}"></iframe>
+                <iframe id="resource" src="{{resourceUrl}}?userName={{userName}}&showControls={{showControls}}&showLineNumbers=false&readOnly={{readOnly}}"></iframe>
                 <!--<iframe id="resource" src="{{resourceUrl}}"></iframe>-->
             </div>
 
-            <paper-fab id="fullscreen-button" class="open" mini icon="fullscreen" on-click="_handleOpenClick"></paper-fab>
+            <template id="dom-if" if="{{showControls}}">
+                <paper-fab id="fullscreen-button" class="open" mini icon="fullscreen" on-click="_handleOpenClick"></paper-fab>
 
-            <paper-dialog id="fullscreen_container" entry-animation="scale-up-animation" exit-animation="fade-out-animation">
-                <!--with-backdrop-->
-                <div id="fullscreen_content"></div>
-                <paper-button id="info_close_button" dialog-confirm autofocus>x</paper-button>
-            </paper-dialog>
+                <paper-dialog id="fullscreen_container" entry-animation="scale-up-animation" exit-animation="fade-out-animation">
+                    <!--with-backdrop-->
+                    <div id="fullscreen_content"></div>
+                    <paper-button id="info_close_button" dialog-confirm autofocus>x</paper-button>
+                </paper-dialog>
+            </template>
 
         </paper-material>
 
@@ -134,7 +137,6 @@
     <script src="../shared_js/perfect-scrollbar/js/min/perfect-scrollbar.jquery.min.js"></script>
 
     <script>
-        _this = null;
 
         Polymer({
             is: "document-card-controllet",
@@ -174,6 +176,16 @@
                     type: String,
                     value: undefined
                 },
+
+                showControls: {
+                    type: Boolean,
+                    value: false
+                },
+                readOnly: {
+                    type: Boolean,
+                    value: false
+                },
+
                 lang:{
                     type: String,
                     value: navigator.language
@@ -186,7 +198,6 @@
             attached: function(){
                 $(this.$.fullscreen_container).perfectScrollbar();
             },
-
 
             _changeWidth: function(){
                 //this.style.width = this.width + "px";
