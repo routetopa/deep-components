@@ -185,10 +185,10 @@
             },
 
             attached : function() {
-                if(this.preselectedDatalet){
-                    this._preselectDatalet();
-                    this.preselectedDatalet = undefined;
-                }
+//                if(this.preselectedDatalet){
+//                    this._preselectDatalet();
+//                    this.preselectedDatalet = undefined;
+//                }
 
                 this._translate();
             },
@@ -279,12 +279,23 @@
             },
 
             _preselectDatalet : function(){
+//                this.async(function() {
                 var dataletCard = document.getElementById(this.preselectedDatalet);
+//                console.log(dataletCard);
+//                console.log(this.preselectedDatalet);
+//                var id = "#"+this.preselectedDatalet;
+//                var dataletCard = $(id);
+//                var dataletCard = this.$$("#datatable");
+//                console.log(dataletCard);
+
                 dataletCard.elevation = "5";
                 dataletCard.getElementsByClassName("legend")[0].className = dataletCard.getElementsByClassName("legend")[0].className + " selected";
+
+//                dataletCard.find(".legend")[0].className += " selected";
                 this.selectedDatalet = this.preselectedDatalet;
 
                 this.fire('items-vslider-controllet_selected-datalet', {datalet: this.selectedDatalet});
+//                }, 500);
             },
 
             _getImageUrl : function(index){
