@@ -188,15 +188,55 @@
             },
 
             _preselectInputs : function(fields, aggregators, orders) {
+                aggregators = JSON.parse(aggregators);
+                orders = JSON.parse(orders);
+
+                //fields = [f1 gb(opt) f2] --> si può cambiare in f1 f2 gb ???
+
+                this.selectedFields = this._copy(fields);
+
                 var ddls = this.$.inputs_series_container.querySelectorAll("paper-dropdown-menu");
 
-//                this.async(function () {
-                    for (var i = 0; i < fields.length; i++) {
-                        var menu = $(ddls[i]).find("paper-menu")[0];
-                        menu.select(i+1);
+                $(ddls[0]).find("paper-menu")[0].select(1);
+                $(ddls[1]).find("paper-menu")[0].select(2);
+
+                if(orders.length > 0) {
+                    this.orders = this._copy(orders);//wrong
+                }
+
+                if(aggregators.length > 0) {
+                    this.selectedFields = [fields[0], fields[2]];
+
+                    this.$.group_by.removeAttribute("disabled");
+                    $("#calculate_0")[0].removeAttribute("disabled");
+                    $("#gb")[0].removeAttribute("disabled");
+                    this._showExpertMode();
+
+                    var groupableFields = [];
+                    for (var i = 0; i < this.fields.length; i++) {
+                        if(this.fields[i] != this.selectedFields[1])
+                            groupableFields.push(this.fields[i]);
                     }
-                    this.selectedFields = this._copy(fields);
-//                }, 0);
+                    this.groupableFields = this._copy(groupableFields);
+                    this.aggregateFields = [this.selectedFields[1]];
+
+                    $(ddls[0]).find("paper-menu")[0].select(1);
+                    $(ddls[1]).find("paper-menu")[0].select(3);
+
+                    this.async(function () {
+                        var i = this.functions.indexOf(aggregators[2].operation);
+
+                        $(this.$.group_by).find("paper-menu")[0].select(2);
+                        $("#calculate_0").find("paper-menu")[0].select(i);
+
+//                        this._setAggregators();//if dont --> $("#gb")[0].removeAttribute("disabled");
+                        this.aggregators = this._copy(aggregators);
+
+                        this.fireReady();
+                    }, 0);
+                }
+                else
+                    this.fireReady();
             },
 
             getSelectedFields : function () {
