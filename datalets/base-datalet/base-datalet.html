@@ -367,7 +367,43 @@ Example :
 
                 var post = 'svg_data=' + window.encodeURIComponent(svg) + '&datalet=' + parent.is + '&dataset=' + this.$.base_datalet_link.getAttribute("href");
                 xhr.responseType = 'blob';
-                xhr.send(post);
+
+                //OpenDataSoft check
+                if(this.dataUrl.indexOf("/records/") > -1 )
+                {
+                    var urlSource = this.dataUrl.split("/")[0] + "//" + this.dataUrl.split("/")[2];
+
+                    var i;
+                    if(this.dataUrl.indexOf("&") > -1)
+                        i = this.dataUrl.indexOf("&");
+                    else
+                        i = this.dataUrl.length;
+
+                    $.ajax({
+                        url: urlSource + "/api/dataset/1.0/" + this.dataUrl.substring(this.dataUrl.indexOf("=")+1, i),
+                        dataType: "json",
+                        success: function(e){
+                            post += '&name=' + e.metas.title + '&description=' + e.metas.description + '&created=' + e.metas.data_processed  + '&lastModified=' + e.metas.modified;
+                            xhr.send(post);
+                        }
+                    });
+                }
+                else if(this.dataUrl.indexOf("datastore_search?resource_id") > -1 )
+                {
+                    $.ajax({
+                        url: this.dataUrl.replace("datastore_search?resource_id", "resource_show?id"),
+                        dataType: "json",
+                        success: function(e){
+                            post += '&name=' + e.result.name + '&description=' + e.result.description + '&created=' + e.result.created + '&format=' + e.result.format + '&lastModified=' + e.result.last_modified;
+                            xhr.send(post);
+                        }
+                    });
+                }
+                else
+                {
+                    xhr.send(post);
+                }
+
             },
 
             importToMySpace: function() {
