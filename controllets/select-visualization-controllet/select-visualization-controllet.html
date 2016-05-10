@@ -236,8 +236,10 @@
             },
 
             show : function() {//show --> preselect
-                if(this.preselectedDatalet)
+//                if(this.preselectedDatalet)
+                if(this.dataletPreset)
                     this._preselectDatalet();
+                
 //                if (this.$.datalet_selection_datalet_placeholder.innerHTML == "") {
 //                    var inputs = this._getInputs();
 //                    inputs.fireReady();
@@ -286,7 +288,7 @@
                     this.$.options.setOptions(e.detail.response.idm.inputs.layouts.input);
                 }
                 else {
-                    this.$.options.ceckOptions(e.detail.response.idm.inputs.layouts.input);
+                    this.$.options.checkOptions(e.detail.response.idm.inputs.layouts.input);
                 }
 
                 this.async(function () {
@@ -300,16 +302,18 @@
 //                }, 1);
             },
 
-            _preselectDatalet : function() {
-                var inputs = this._getInputs();
-                inputs._preselectInputs(this.fields, this.dataletPreset["aggregators"], this.dataletPreset["orders"]);
-                this.$.options._preselectOptions(this.dataletPreset);
-                this.dataletPreset = undefined;
+            _preselectDatalet : function() {console.log("preselzionando si impara");
+                this.$.vslider._preselectDatalet();
 
-//                this.async(function () {
-//                var inputs = this._getInputs();
-//                inputs.fireReady();
-//                }, 500);
+                this.async(function () {
+                    this.$.options._preselectOptions(this.dataletPreset);
+                }, 100);
+
+                this.async(function () {
+                    var inputs = this._getInputs();
+                    inputs._preselectInputs(this.fields, this.dataletPreset["aggregators"], this.dataletPreset["orders"]);
+                    this.dataletPreset = undefined;
+                }, 200);
             },
 
             _tryLoadDatalet : function(){

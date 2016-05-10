@@ -187,15 +187,66 @@
             },
 
             _preselectInputs : function(fields, aggregators, orders) {
+                aggregators = JSON.parse(aggregators);
+                orders = JSON.parse(orders);
+
+                this.selectedFields = this._copy(fields);
+
                 var ddls = this.$.inputs_container.querySelectorAll("paper-dropdown-menu");
 
-//                this.async(function () {
-                for (var i = 0; i < fields.length; i++) {
-                    var menu = $(ddls[i]).find("paper-menu")[0];
-                        menu.select(i+1);
+                for (var i = 0; i < fields.length; i++)
+                   $(ddls[i]).find("paper-menu")[0].select(i+1);
+
+                if(orders.length > 0) {
+                    this.orders = this._copy(orders);//wrong
                 }
-                    this.selectedFields = this._copy(fields);
-//                }, 2);
+
+                if(aggregators.length > 0) {
+
+                    this.$.group_by.removeAttribute("disabled");
+                    this._showExpertMode();
+
+                    var groupableFields = [];
+                    for (var i = 0; i < this.selectedFields.length; i++) {
+                        if(this.selectedFields[i])
+                            groupableFields.push(this.selectedFields[i]);
+                    }
+                    this.groupableFields = this._copy(groupableFields);
+                    this.aggregateFields = [];
+
+                    var index = this.groupableFields.indexOf(aggregators[0].field);
+
+                    this.async(function () {
+                        var menu = $(this.$.group_by).find("paper-menu")[0];
+                        menu.select(index);
+                    }, 0);
+
+                    var aggregateFields = [];
+                    for (var i = 0; i < this.groupableFields.length; i++) {
+                        if (i != index && this.groupableFields[i])
+                            aggregateFields.push(this.groupableFields[i]);
+                    }
+                    this.aggregateFields = this._copy(aggregateFields);
+
+                    this.async(function() {
+                        var ddls = document.getElementsByTagName("paper-dropdown-menu");
+                        var j = 1;
+                        for (var i = 0; i < ddls.length; i++){
+                            var id = ddls[i].id;
+                            if(id.indexOf("calculate") > -1) {
+                                var ii = this.functions.indexOf(aggregators[j].operation);
+                                j++;
+                                $(ddls[i]).find("paper-menu")[0].select(-1);
+                                $(ddls[i]).find("paper-menu")[0].select(ii);
+                            }
+                        }
+
+//                        this._setAggregators();
+                        this.aggregators = this._copy(aggregators);
+
+                        this.fireReady();
+                    }, 0);
+                }
             },
 
             getSelectedFields : function () {
