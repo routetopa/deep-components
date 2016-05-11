@@ -116,7 +116,7 @@
         <paper-material id="paper_card_container" elevation="{{elevation}}">
 
             <div id="content">
-                <iframe id="resource" src="{{resourceUrl}}?userName={{userName}}&showControls={{showControls}}&showLineNumbers=false&readOnly={{readOnly}}"></iframe>
+                <iframe id="resource" src="{{resourceUrl}}?userName={{userName}}&showControls={{showControls}}&showLineNumbers=false&pageview=true"></iframe>
                 <!--<iframe id="resource" src="{{resourceUrl}}"></iframe>-->
             </div>
 
@@ -178,10 +178,6 @@
                 },
 
                 showControls: {
-                    type: Boolean,
-                    value: false
-                },
-                readOnly: {
                     type: Boolean,
                     value: false
                 },
