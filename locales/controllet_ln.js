@@ -15,6 +15,7 @@ ln["forward_en"] = "Forward";
 //SELECT DATASET
 ln["listView_en"] = "LIST VIEW";
 ln["treeMapView_en"] = "TREE MAP VIEW";
+ln["extendedSearch_en"] = "EXTENDED SEARCH";
 ln["provider_en"] = "Provider";
 ln["showing_en"] = "Showing";
 ln["to_en"] = "to";
@@ -128,6 +129,7 @@ ln["forward_it"] = "Avanti";
 //SELECT DATASET
 ln["listView_it"] = "ELENCO";
 ln["treeMapView_it"] = "GRAFICO AD ALBERO";
+ln["extendedSearch_it"] = "RICERCA ESTESA";
 ln["provider_it"] = "Provider";
 ln["showing_it"] = "Visualizzati";
 ln["to_it"] = "a";
@@ -241,6 +243,7 @@ ln["forward_fr"] = "AVANT";
 //SELECT DATASET
 ln["listView_fr"] = "VUE EN LISTE";
 ln["treeMapView_fr"] = "VUE EN ARBORESCENCE";
+ln["extendedSearch_fr"] = "EXTENDED SEARCH";
 ln["provider_fr"] = "Provider";
 ln["showing_fr"] = "Showing";
 ln["to_fr"] = "to";
@@ -354,6 +357,7 @@ ln["forward_nl"] = "VOOTUIT";
 //SELECT DATASET
 ln["listView_nl"] = "LIJSTWEERGAVE";
 ln["treeMapView_nl"] = "BOOMSTRUCTUUR WEEERGAVE";
+ln["extendedSearch_nl"] = "EXTENDED SEARCH";
 ln["provider_nl"] = "Provider";
 ln["showing_nl"] = "Showing";
 ln["to_nl"] = "to";

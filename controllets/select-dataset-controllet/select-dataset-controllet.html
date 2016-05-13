@@ -33,6 +33,7 @@
 
 <link rel="import" href="../../bower_components/paper-checkbox/paper-checkbox.html">
 
+<link rel="import" href="ortelio-controllet.html">
 <link rel="import" href="../../datalets/datasetexplorer-datalet/datasetexplorer-datalet.html">
 
 <dom-module id="select-dataset-controllet">
@@ -186,7 +187,7 @@
                 position: relative;
                 height: 100%;
                 width: 50%;
-                border-left: 4px solid #B6B6B6;;
+                border-left: 4px solid #B6B6B6;
             }
 
             #select_dataset_container #info_container {
@@ -194,8 +195,6 @@
                 height: 100%;
                 width: 50%;
                 border-right: 4px solid #B6B6B6;
-
-                /*background-color: red;*/
             }
 
             #select_dataset_container #info {
@@ -297,14 +296,22 @@
                 /*font-weight: bold;*/
                 /*line-height: 48px;*/
             /*}*/
+
+            /*#ortelio {*/
+                /*/!*height: calc(100% - 172px);*!/*/
+                /*/!*width: calc(100% - 8px);*!/*/
+                /*height: 100%;*/
+                /*width: 100%;*/
+                /*background-color: red;*/
+            /*}*/
         </style>
 
         <paper-material id="select_dataset_container" elevation="5">
 
             <paper-tabs selected="{{selected}}" no-bar>
-                <paper-tab noink on-tap="_refreshList"><span id="listView"></span></paper-tab>
-                <!--<paper-tab noink ><span id="listView"></span></paper-tab>-->
+                <paper-tab on-tap="_refreshList" noink><span id="listView"></span></paper-tab>
                 <paper-tab on-tap="_noShadow" noink><span id="treeMapView"></span></paper-tab>
+                <paper-tab on-tap="_hideSearch" noink><span id="extendedSearch"></span></paper-tab>
             </paper-tabs>
 
             <div id="header">
@@ -386,6 +393,12 @@
                         <div class="footer_block"></div>
                         <div class="footer_block"></div>
                     </div>
+                </neon-animatable>
+
+                <neon-animatable>
+                    <!--<div id="ortelio">-->
+                        <ortelio-controllet datasets={{datasets}}></ortelio-controllet>
+                    <!--</div>-->
                 </neon-animatable>
 
             </neon-animated-pages>
@@ -496,6 +509,7 @@
                 _translate : function(){
                     this.$.listView.innerHTML    = ln["listView_" + ln["localization"]];
                     this.$.treeMapView.innerHTML = ln["treeMapView_" + ln["localization"]];
+                    this.$.extendedSearch.innerHTML = ln["extendedSearch_" + ln["localization"]];
 
                     this.$.ddl_provider.setAttribute("label", ln["provider_" + ln["localization"]]);
                     this.$.datasets_filter.setAttribute("label", ln["search_" + ln["localization"]]);
@@ -572,12 +586,26 @@
 
                 _refreshList : function() {
                     this.shownDatasets = this.filteredDatasets.slice(this.prev - 1, this.next);
+
+                    this.$.header.style.display = "flex";
+                    this.$.header.style.visibility = "visible";
+//                    this.$.url.style.marginTop = "-4px";
+
                     this.$.header.className = this.$.header.className.replace(" noshadow", "");
                 },
 
                 _noShadow : function() {
-                    console.log(this.$.header);
+                    this.$.header.style.display = "flex";
+                    this.$.header.style.visibility = "visible";
+//                    this.$.url.style.marginTop = "-4px";
+
                     this.$.header.className += " noshadow";
+                },
+
+                _hideSearch : function() {
+//                    this.$.header.style.display = "none";
+                    this.$.header.style.visibility = "hidden";
+//                    this.$.url.style.marginTop = "44px";
                 },
 
                 _clearInput : function() {

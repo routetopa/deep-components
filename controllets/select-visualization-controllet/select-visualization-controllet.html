@@ -337,6 +337,8 @@
                 this.params["aggregators"] = JSON.stringify(inputs.getAggregators());
                 this.params["orders"] = JSON.stringify(inputs.getOrders());
 
+                this.params["export_menu"] = "0";
+
                 var params = this.$.options.getParams();
                 for (var key in params) { this.params[key] = params[key]; }
 

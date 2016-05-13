@@ -1,0 +1,551 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+
+<link rel="import" href="../../bower_components/iron-ajax/iron-ajax.html">
+
+<link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout.html">
+<!--<link rel="import" href="../../bower_components/app-layout/app-toolbar/app-toolbar.html">-->
+<link rel="import" href="../../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../../bower_components/paper-styles/color.html">
+<link rel="import" href="../../bower_components/paper-styles/typography.html">
+<link rel="import" href="../../bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="../../bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="../../bower_components/iron-image/iron-image.html">
+<link rel="import" href="../../bower_components/iron-list/iron-list.html">
+
+<link rel="import" href="../../bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
+<link rel="import" href="../../bower_components/paper-menu/paper-menu.html">
+<link rel="import" href="../../bower_components/paper-item/paper-item.html">
+
+<link rel="import" href="../../bower_components/paper-input/paper-input.html">
+
+<link rel="import" href="../../bower_components/paper-input/paper-textarea.html">
+
+<link rel="import" href="../../bower_components/paper-material/paper-material.html" />
+
+<link rel="import" href="../../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../../bower_components/iron-icons/hardware-icons.html">
+<!--<link rel="import" href="../../bower_components/iron-icons/iron-icons.html">-->
+
+<link rel="import" href="../../bower_components/paper-radio-button/paper-radio-button.html">
+<link rel="import" href="../../bower_components/paper-radio-group/paper-radio-group.html">
+
+<link rel="import" href="../../bower_components/paper-checkbox/paper-checkbox.html">
+
+
+<dom-module id="ortelio-controllet">
+    <template>
+        <style>
+            :host {
+            --paper-dropdown-menu-icon: {
+                 color: #000000;
+             };
+            --paper-dropdown-menu-ripple: {
+                 color: #FFFFFF;
+             };
+            /*--paper-tab-ink: {*/
+                 /*color: #FFFFFF;*/
+             /*};*/
+            }
+
+            iron-list {
+            --iron-list-items-container: {
+                margin:16px 16px 8px 16px;
+             };
+            }
+
+            paper-textarea {
+                width: 100%;
+                --paper-input-container-focus-color: #2196F3;
+            }
+
+            paper-input {
+                --paper-input-container-focus-color: #2196F3;
+            }
+            paper-dropdown-menu {
+                width: 100%;
+                --paper-input-container-focus-color: #2196F3;
+            }
+
+            paper-item.iron-selected {
+                background-color: #2196F3;
+                color: #FFFFFF;
+            }
+
+            paper-radio-button {
+                height: 24px;
+                --paper-radio-button-checked-color: #2196F3;
+                --paper-radio-button-checked-ink-color: #FFFFFF;
+                --paper-radio-button-unchecked-color: #000000;
+                --paper-radio-button-unchecked-ink-color: #FFFFFF;
+                --paper-radio-button-label-color: #000000;
+            }
+
+            paper-icon-button{
+                height: 48px;
+                width: 48px;
+                padding: 0px;
+                --paper-icon-button-ink-color: #FFFFFF;
+            }
+
+            paper-icon-button:hover{
+                color: #2196F3;
+            }
+
+            paper-icon-button[disabled]{
+                color: #B6B6B6;
+            }
+
+            paper-icon-button.clear {
+                width: 24px;
+                height: 24px;
+                padding: 0px 4px;
+                color: #F44336;
+                --paper-icon-button-ink-color: #FFFFFF;
+            }
+
+            paper-tabs {
+                font-weight: bold;
+            }
+
+            paper-tab {
+                transition: all 1.0s;
+            }
+
+            paper-tab.iron-selected {
+                background-color: #2196F3;
+                color: #FFFFFF;
+            }
+
+            paper-tab:not(.iron-selected):hover {
+                color: #2196F3;
+            }
+
+            .item {
+                /*@apply(--layout-horizontal);*/
+                display: flex;
+                padding: 11px;
+                border: 1px solid #B6B6B6;
+                border-radius: 4px;
+                cursor: pointer;
+                margin-bottom: 8px;
+                background-color: #E0E0E0;
+            }
+
+            .item.expanded {
+                /*border: 2px solid #2196F3;*/
+                border-color: #2196F3;
+            }
+
+            .pad {
+                @apply(--layout-flex);
+                /*@apply(--layout-vertical);*/
+            }
+
+            .primary {
+                font-weight: bold;
+            }
+
+            .item.expanded .primary {
+                color: #2196F3;
+            }
+
+            .longText {
+                display: none;
+            }
+
+            .item.expanded .longText {
+                display: block;
+            }
+
+            #ortelio_container * {
+                font-family: 'Roboto', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+                font-size: 16px;
+                line-height: 24px;
+            }
+
+            #ortelio_container {
+                height: 100%;
+                width: 100%;
+                margin-top: -48px;/*bad*/
+            }
+
+            #ortelio_container #list_info {
+                display: flex;
+                height: calc(100% - 48px);
+                width: calc(100% + 8px);/*bad*/
+            }
+
+            #ortelio_container #list_container {
+                position: relative;
+                height: 100%;
+                width: 50%;
+                border-left: 4px solid #B6B6B6;
+            }
+
+            #ortelio_container #info_container {
+                position: relative;
+                height: 100%;
+                width: 50%;
+                border-right: 4px solid #B6B6B6;
+            }
+
+            #ortelio_container #info {
+                position: relative;
+                height: calc(100% - 56px);
+                width: calc(100% - 56px);
+                padding: 11px;
+                border: 1px solid #B6B6B6;
+                border-radius: 4px;
+                background-color: #E0E0E0;
+                margin: 16px;
+
+                /*cursor: url(http://www.i2clipart.com/cliparts/f/5/9/a/clipart-pointer-f59a.png), auto;*/
+            }
+
+            #ortelio_container #header {
+                width: 100%;
+                position: relative;
+                z-index: 1;
+                -webkit-box-shadow: 0 30px 24px -12px rgba(0, 0, 0, 0.14), 0 20px 30px -9px rgba(0, 0, 0, 0.12), 0 20px 10px -19px rgba(0, 0, 0, 0.4);
+                -moz-box-shadow: 0 30px 24px -12px rgba(0, 0, 0, 0.14), 0 20px 30px -9px rgba(0, 0, 0, 0.12), 0 20px 10px -19px rgba(0, 0, 0, 0.4);
+                box-shadow: 0 30px 24px -12px rgba(0, 0, 0, 0.14), 0 20px 30px -9px rgba(0, 0, 0, 0.12), 0 20px 10px -19px rgba(0, 0, 0, 0.4);
+
+                background-color: #B6B6B6;
+                display: flex;
+                padding: 0px 4px;
+            }
+
+            #header .header_block {
+                width: 20%;
+                height: 40px;
+                padding: 4px 16px 4px 16px;
+            }
+
+            #header .header_block:nth-child(4) {
+                text-align: center;
+            }
+
+            #ortelio_container #footer_list {
+                position: relative;
+                z-index: 1;
+                -webkit-box-shadow: 0 -30px 24px -12px rgba(0, 0, 0, 0.14), 0 -20px 30px -9px rgba(0, 0, 0, 0.12), 0 -20px 10px -19px rgba(0, 0, 0, 0.4);
+                -moz-box-shadow: 0 -30px 24px -12px rgba(0, 0, 0, 0.14), 0 -20px 30px -9px rgba(0, 0, 0, 0.12), 0 -20px 10px -19px rgba(0, 0, 0, 0.4);
+                box-shadow: 0 -30px 24px -12px rgba(0, 0, 0, 0.14), 0 -20px 30px -9px rgba(0, 0, 0, 0.12), 0 -20px 10px -19px rgba(0, 0, 0, 0.4);
+            }
+
+            #ortelio_container #footer_list{
+                width: 100%;
+                background-color: #B6B6B6;
+                display: flex;
+                padding: 0px 4px;
+            }
+
+            .footer_block {
+                width: calc((100% - 0px) / 3);
+                height: 24px;
+                padding: 12px 8px 12px 8px;
+                text-align: center;
+            }
+
+            .footer_block:nth-child(2) {
+                height: 48px;
+                padding: 0px 8px;
+            }
+
+            .footer_block:nth-child(3) {
+                height: 48px;
+                padding: 0px 8px;
+            }
+        </style>
+
+        <iron-ajax id="filteredDatasets_request" handle-as="json" url="http://uc1.ortelio.co.uk/api/" on-response="_getFilteredDatasets"></iron-ajax>
+
+        <div id="ortelio_container">
+            <div id="header">
+                <div class="header_block">
+                </div>
+                <div class="header_block">
+                </div>
+                <div class="header_block">
+                </div>
+                <div class="header_block">
+                </div>
+                <div class="header_block">
+                    <paper-input id="datasets_filter" value={{filter}} no-label-float label="">
+                        <iron-icon class="search" icon="search" prefix></iron-icon>
+                        <paper-icon-button class="clear" suffix on-click="_clearInput" icon="clear" tabindex="0"></paper-icon-button>
+                    </paper-input>
+                </div>
+            </div>
+
+            <div id="list_info">
+                <div id="list_container">
+                    <iron-list id="list" items="{{shownDatasets}}" selection-enabled>
+                        <template>
+                            <div>
+                                <div class$="{{getClassForItem(selected)}}" on-tap="_selectDataUrl">
+                                    <div class="pad">
+                                        <div class="primary">{{item.package_name}}</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </template>
+                    </iron-list>
+                </div>
+                <div id="info_container">
+                    <div id="info">
+                    </div>
+                </div>
+            </div>
+
+            <div id="footer_list">
+                <div class="footer_block"><span id="showing"></span> {{shownPrev}} <span id="to"></span> {{shownNext}} <span id="of"></span> {{length}} <span id="datasets"></span></div>
+                <div class="footer_block">
+                    <paper-icon-button id="slider_chevron_left" class="chevron-left" on-click="_onPrevClick" icon="chevron-left"></paper-icon-button>
+                    <paper-icon-button id="slider_chevron_right" class="chevron-right" on-click="_onNextClick" icon="chevron-right"></paper-icon-button>
+                </div>
+                <div class="footer_block">
+                    <!--<paper-radio-group id="radio_sort" on-change="_changeSorting" selected="date">-->
+                        <!--<paper-radio-button name="date">Date</paper-radio-button>-->
+                        <!--<paper-radio-button name="relevance">Relevance</paper-radio-button>-->
+                    <!--</paper-radio-group>-->
+                </div>
+            </div>
+        </div>
+
+    </template>
+
+    <script>
+        HTMLImports.whenReady(function() {
+            Polymer({
+                is: 'ortelio-controllet',
+                properties: {
+//                    datasets: {
+//                        type: Object,
+//                        value: undefined
+//                    },
+                    filteredDatasets : {
+                        type : Array,
+                        value : undefined
+                    },
+                    shownDatasets : {
+                        type : Array,
+                        value : undefined
+                    },
+                    suggestedDatasets : {
+                        type : Array,
+                        value : undefined
+                    },
+
+                    providers : {
+                        type : Array,
+                        value : undefined
+                    },
+                    dataUrl : {
+                        type  : String,
+                        value : undefined,
+                        observer : '_fireDataUrl'
+                    },
+                    filter : {
+                        type  : String,
+                        value : "",
+                        observer : '_filter'
+                    },
+                    sort : {
+                        type  : String,
+                        value : "date",
+                    },
+                    selected : {
+                        type  : Number,
+                        value : 0
+                    },
+                    prev : {type  : Number, value : undefined},
+                    next : {type  : Number, value : undefined},
+                    shownPrev : {type  : Number, value : undefined},
+                    shownNext : {type  : Number, value : undefined},
+                    length : {type  : Number, value : undefined},
+                    step : {type  : Number, value : 20},
+                },
+
+                ready : function() {
+                    $(this.$.list_container).perfectScrollbar();
+                    $(this.$.info).perfectScrollbar();
+
+//                    this.$.selected_url.invalid = true;
+                },
+//
+                attached: function() {
+                    var that = this;
+                    window.addEventListener("resize", function() { that._refreshList();});///??????????????
+
+//                    this.providers = this.datasets["result"]["providers"];
+//                    this.datasets = this.datasets["result"]["datasets"];
+//                    this.datasets = [{"package_name":"openbilancio-provincia-di-prato","package_url":"http:\/\/ckan.routetopa.eu\/dataset\/openbilancio-provincia-di-prato","ckan_id":"0cb600fc-19ad-4aaf-9794-1e6ea851840a","portal":"http:\/\/ckan.routetopa.eu\/","resource_url":"http:\/\/ckan.routetopa.eu\/dataset\/58e0c611-8d26-4efe-ad77-af2c7a16234d\/resource\/0cb600fc-19ad-4aaf-9794-1e6ea851840a\/download\/CONSUNTIVOENTRATE2014.csv"},{"package_name":"albo-regionale-delle-concessioni-demaniali-marittime-per-finalita-turistico-ricreative","package_url":"http:\/\/dati.lazio.it\/catalog\/en\/dataset\/albo-regionale-delle-concessioni-demaniali-marittime-per-finalita-turistico-ricreative","ckan_id":"c8772359-fc32-4c8f-8e93-8e9bb3ccb17b","portal":"http:\/\/dati.lazio.it\/","resource_url":"http:\/\/dati.lazio.it\/catalog\/dataset\/c18aec8b-f33c-41dd-80f6-c1c9777ec842\/resource\/c8772359-fc32-4c8f-8e93-8e9bb3ccb17b\/download\/datianno2013.csv"},{"package_name":"artes-registro-regionale-delle-associazioni","package_url":"http:\/\/dati.lazio.it\/catalog\/en\/dataset\/artes-registro-regionale-delle-associazioni","ckan_id":"3dcbe73c-6724-458d-9976-9b420be95e74","portal":"http:\/\/dati.lazio.it\/","resource_url":"http:\/\/dati.lazio.it\/catalog\/dataset\/bdcbd139-c5d7-45f9-8d30-433e090bad02\/resource\/3dcbe73c-6724-458d-9976-9b420be95e74\/download\/associazioni.csv"},{"package_name":"bilanci-preventivi-della-regione-lazio","package_url":"http:\/\/dati.lazio.it\/catalog\/en\/dataset\/bilanci-preventivi-della-regione-lazio","ckan_id":"722b6cbd-28d3-4151-ac50-9c4261298168","portal":"http:\/\/dati.lazio.it\/","resource_url":"http:\/\/dati.lazio.it\/catalog\/dataset\/6febe802-8344-4734-b11b-ce4638234b45\/resource\/722b6cbd-28d3-4151-ac50-9c4261298168\/download\/preventivospese2013.csv"},{"package_name":"contributi-per-gli-spettacoli-dal-vivo","package_url":"http:\/\/dati.lazio.it\/catalog\/en\/dataset\/contributi-per-gli-spettacoli-dal-vivo","ckan_id":"e7c66956-5a08-4c2f-bee9-366e3035b0b7","portal":"http:\/\/dati.lazio.it\/","resource_url":"http:\/\/dati.lazio.it\/catalog\/dataset\/00bc8d2f-1513-4c45-89a1-75fc65d09c03\/resource\/e7c66956-5a08-4c2f-bee9-366e3035b0b7\/download\/contributi2010.csv"}]
+
+                    this._reset();
+//
+//                    this.prev = 1;
+//                    this.next = this.step;
+//                    this.length = this.filteredDatasets.length;
+//
+//                    this.shownPrev = Math.min(this.prev, this.length);
+//                    this.shownNext = Math.min(this.next, this.length);
+//                    this.shownDatasets = this.filteredDatasets.slice(this.prev-1, this.next);
+//
+//                    this.$.list.scrollTarget = this.ownerDocument.documentElement;
+
+                    this._translate();
+                },
+
+                _translate : function(){
+                    this.$.showing.innerHTML = ln["showing_" + ln["localization"]];
+                    this.$.to.innerHTML = ln["to_" + ln["localization"]];
+                    this.$.of.innerHTML = ln["of_" + ln["localization"]];
+                    this.$.datasets.innerHTML = ln["datasets_" + ln["localization"]];
+                },
+
+                _refreshList : function() {
+                    this.shownDatasets = this.filteredDatasets.slice(this.prev - 1, this.next);
+                },
+
+                _getFilteredDatasets : function(e) {
+//                    console.log(e.detail.response);
+
+                    if(e.detail.response == null)
+                        return;
+
+                    this.filteredDatasets = e.detail.response["results"];
+
+                    this.prev = 1;
+                    this.next = this.step;
+                    this.length = this.filteredDatasets.length;
+
+                    this.shownPrev = Math.min(this.prev, this.length);
+                    this.shownNext = Math.min(this.next, this.length);
+                    this.shownDatasets = this.filteredDatasets.slice(this.prev-1, this.next);
+
+                    this.$.list.scrollTarget = this.ownerDocument.documentElement;
+                },
+
+                _reset : function() {
+                    this.filteredDatasets = [];
+//
+                    this.prev = 1;
+                    this.next = this.step;
+                    this.length = this.filteredDatasets.length;
+
+                    this.shownPrev = Math.min(this.prev, this.length);
+                    this.shownNext = Math.min(this.next, this.length);
+                    this.shownDatasets = this.filteredDatasets.slice(this.prev-1, this.next);
+
+                    this.$.list.scrollTarget = this.ownerDocument.documentElement;
+                },
+
+                _filter : function() {
+                    if(this.filter.length > 0)
+                        this.debounce('filter', function () {
+                            this.$.filteredDatasets_request.url = "http://uc1.ortelio.co.uk/api/" + this.filter + "/order:" + this.sort + "/limit:99999";
+                            this.$.filteredDatasets_request.generateRequest();
+                        }, 500);
+                    else
+                        this._reset();
+                },
+
+                _clearInput : function() {
+                    this.$.datasets_filter.value = "";
+                    this._filter();
+                },
+
+                _changeSorting : function() {
+                    this.async(function () {
+                        this.sort = this.$.radio_sort.selectedItem.name;
+                        this._filter();
+                    }, 0);
+                },
+
+                getClassForItem: function(selected) {
+                    return selected ? 'item expanded' : 'item';
+                },
+
+                _onPrevClick : function(){
+                    if(this.prev != 1) {
+                        this.prev -= this.step;
+                        this.next -= this.step;
+
+                        this.shownPrev = Math.min(this.prev, this.length);
+                        this.shownNext = Math.min(this.next, this.length);
+                        this.shownDatasets = this.filteredDatasets.slice(this.prev - 1, this.next);
+                    }
+                    $("#list_container").animate({ scrollTop: 0}, 0);
+                },
+
+                _onNextClick : function(){
+                    if(this.next < this.length) {
+                        this.prev += this.step;
+                        this.next += this.step;
+
+                        this.shownPrev = Math.min(this.prev, this.length);
+                        this.shownNext = Math.min(this.next, this.length);
+                        this.shownDatasets = this.filteredDatasets.slice(this.prev - 1, this.next);
+                    }
+                    $("#list_container").animate({ scrollTop: 0}, 0);
+                },
+
+                _selectDataUrl : function(){
+                    this.async(function () {
+                        if(this.$.list.selectedItem) {
+
+                            var metas = this.$.list.selectedItem;
+                            var html = "<span style=\"color: #2196F3; font-weight: bold;\">" + this.$.list.selectedItem.package_name + "</span><br><br>";
+                            for(var i in metas)
+                                html += "<b>" + i + ":</b> " + metas[i] + "<br>";
+                            this.$.info.innerHTML = html;
+
+                            var url = this.$.list.selectedItem.resource_url;
+
+                            // Check if CKAN
+                            var strDatasetPos = url.indexOf('/dataset/');
+                            var strResourcePos = (strDatasetPos >= 0) ? url.indexOf('/resource/') : -1;
+                            if (strDatasetPos >= 0 && strResourcePos > strDatasetPos) {
+                                var urlSegment1 = url.substring(0, strDatasetPos);
+                                var urlResourceEnd = url.indexOf('/', strResourcePos + 10);
+                                var resourceId = url.substring(strResourcePos + 10, urlResourceEnd);
+                                url = urlSegment1 + "/api/action/datastore_search?resource_id=" + resourceId;
+                            }
+
+                            // Check if OPENDATASOFT
+                            var strExploreDatasetPos = url.indexOf('/explore/dataset/');
+                            if (strExploreDatasetPos >= 0) {
+                                var urlSegment1 = url.substring(0, strExploreDatasetPos);
+                                var datasetEnd = url.indexOf(strExploreDatasetPos + 17, '/');
+                                var datasetId = url.substring(strExploreDatasetPos + 17, datasetEnd >= 0 ? datasetEnd : url.length);
+                                url = urlSegment1 + '/api/records/1.0/search?dataset=' + datasetId;
+                            }
+
+                            url = this._addlimitUrl(url);
+
+                            this.fire("datasetexplorer-datalet_data-url", { url: url });//change event name
+                        }
+                        else {
+                            this.fire("datasetexplorer-datalet_data-url", { url: "" });
+                            this.$.info.innerHTML = "";
+                        }
+                    }, 0);
+                },
+
+                _addlimitUrl : function(url){
+                    //CKAN --> action no limit
+                    if((url.indexOf("api/action") > -1) && !(url.indexOf("limit") > -1))
+                    {
+                        url += "&limit=99999";
+                    }
+                    //OpenDataSoft --> action no limit
+                    if((url.indexOf("api/records") > -1) && !(url.indexOf("rows") > -1)){
+                        url += "&rows=10000";
+                    }
+                    return url;
+                }
+            });
+        });
+    </script>
+</dom-module>
