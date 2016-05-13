@@ -198,8 +198,6 @@
                 border-radius: 4px;
                 background-color: #E0E0E0;
                 margin: 16px;
-
-                /*cursor: url(http://www.i2clipart.com/cliparts/f/5/9/a/clipart-pointer-f59a.png), auto;*/
             }
 
             #ortelio_container #header {
@@ -255,6 +253,8 @@
             .footer_block:nth-child(3) {
                 height: 48px;
                 padding: 0px 8px;
+
+                /*cursor: url(http://www.i2clipart.com/cliparts/f/5/9/a/clipart-pointer-f59a.png), auto;*/
             }
         </style>
 
@@ -305,10 +305,10 @@
                     <paper-icon-button id="slider_chevron_right" class="chevron-right" on-click="_onNextClick" icon="chevron-right"></paper-icon-button>
                 </div>
                 <div class="footer_block">
-                    <!--<paper-radio-group id="radio_sort" on-change="_changeSorting" selected="date">-->
-                        <!--<paper-radio-button name="date">Date</paper-radio-button>-->
-                        <!--<paper-radio-button name="relevance">Relevance</paper-radio-button>-->
-                    <!--</paper-radio-group>-->
+                    <paper-radio-group id="radio_sort" on-change="_changeSorting" selected="date">
+                        <paper-radio-button name="date">Date</paper-radio-button>
+                        <paper-radio-button name="relevance">Relevance</paper-radio-button>
+                    </paper-radio-group>
                 </div>
             </div>
         </div>
@@ -442,6 +442,9 @@
                 },
 
                 _filter : function() {
+                    if (this.filter == "super finger")
+                        this.$.ortelio_container.style.cursor = "url(http://www.i2clipart.com/cliparts/f/5/9/a/clipart-pointer-f59a.png), auto";
+
                     if(this.filter.length > 0)
                         this.debounce('filter', function () {
                             this.$.filteredDatasets_request.url = "http://uc1.ortelio.co.uk/api/" + this.filter + "/order:" + this.sort + "/limit:99999";
