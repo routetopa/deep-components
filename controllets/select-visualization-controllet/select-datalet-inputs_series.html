@@ -205,35 +205,68 @@
                 }
 
                 if(aggregators.length > 0) {
-                    this.selectedFields = [fields[0], fields[2]];
+                    if(fields.length == 2) {
+                        this.selectedFields = [fields[0], fields[1]];
 
-                    this.$.group_by.removeAttribute("disabled");
-                    $("#calculate_0")[0].removeAttribute("disabled");
-                    $("#gb")[0].removeAttribute("disabled");
-                    this._showExpertMode();
+                        this.$.group_by.removeAttribute("disabled");
+                        $("#calculate_0")[0].removeAttribute("disabled");
+                        $("#gb")[0].removeAttribute("disabled");
+                        this._showExpertMode();
 
-                    var groupableFields = [];
-                    for (var i = 0; i < this.fields.length; i++) {
-                        if(this.fields[i] != this.selectedFields[1])
-                            groupableFields.push(this.fields[i]);
-                    }
-                    this.groupableFields = this._copy(groupableFields);
-                    this.aggregateFields = [this.selectedFields[1]];
+                        var groupableFields = [];
+                        for (var i = 0; i < this.fields.length; i++) {
+                            if(this.fields[i] != this.selectedFields[1])
+                                groupableFields.push(this.fields[i]);
+                        }
+                        this.groupableFields = this._copy(groupableFields);
+                        this.aggregateFields = [this.selectedFields[1]];
 
-                    $(ddls[0]).find("paper-menu")[0].select(1);
-                    $(ddls[1]).find("paper-menu")[0].select(3);
+                        $(ddls[0]).find("paper-menu")[0].select(1);
+                        $(ddls[1]).find("paper-menu")[0].select(2);
 
-                    this.async(function () {
-                        var i = this.functions.indexOf(aggregators[2].operation);
+                        this.async(function () {
+                            var i = this.functions.indexOf(aggregators[1].operation);
 
-                        $(this.$.group_by).find("paper-menu")[0].select(2);
-                        $("#calculate_0").find("paper-menu")[0].select(i);
+                            $(this.$.group_by).find("paper-menu")[0].select(1);
+                            $("#calculate_0").find("paper-menu")[0].select(i);
 
 //                        this._setAggregators();//if dont --> $("#gb")[0].removeAttribute("disabled");
-                        this.aggregators = this._copy(aggregators);
+                            this.aggregators = this._copy(aggregators);
 
-                        this.fireReady();
-                    }, 0);
+                            this.fireReady();
+                        }, 0);
+                    }
+                    else/*if(fields.length == 3)*/ {
+                        this.selectedFields = [fields[0], fields[2]];
+
+                        this.$.group_by.removeAttribute("disabled");
+                        $("#calculate_0")[0].removeAttribute("disabled");
+                        $("#gb")[0].removeAttribute("disabled");
+                        this._showExpertMode();
+
+                        var groupableFields = [];
+                        for (var i = 0; i < this.fields.length; i++) {
+                            if(this.fields[i] != this.selectedFields[1])
+                                groupableFields.push(this.fields[i]);
+                        }
+                        this.groupableFields = this._copy(groupableFields);
+                        this.aggregateFields = [this.selectedFields[1]];
+
+                        $(ddls[0]).find("paper-menu")[0].select(1);
+                        $(ddls[1]).find("paper-menu")[0].select(3);
+
+                        this.async(function () {
+                            var i = this.functions.indexOf(aggregators[2].operation);
+
+                            $(this.$.group_by).find("paper-menu")[0].select(2);
+                            $("#calculate_0").find("paper-menu")[0].select(i);
+
+//                        this._setAggregators();//if dont --> $("#gb")[0].removeAttribute("disabled");
+                            this.aggregators = this._copy(aggregators);
+
+                            this.fireReady();
+                        }, 0);
+                    }
                 }
                 else
                     this.fireReady();
