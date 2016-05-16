@@ -356,6 +356,8 @@
             },
 
             _addDatalet : function(){
+                delete this.params["export_menu"];
+
                 var data = {
                     dataUrl : this.dataUrl,
                     params :  this.params,
