@@ -422,6 +422,8 @@ Example :
                     params[parent.attributes[i].name] = parent.attributes[i].value;
 
                 delete params["fields"];
+                delete params["data"];
+
                 fields = parent.attributes["fields"].value.replace(/\[|\]/g, "");
                 params = JSON.stringify(params);
 
