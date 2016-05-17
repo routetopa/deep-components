@@ -64,6 +64,7 @@ Example :
                 text-decoration: underline;
             }
             #base_datalet_container {
+                position: relative;
                 font-family: 'Roboto', 'Helvetica Neue', Helvetica, Arial, sans-serif;
                 padding-top: 2px;
                 border-top: 2px solid #B6B6B6;
@@ -103,41 +104,48 @@ Example :
 /*EXPORT*/
             .export
             {
-                cursor: pointer;
-                background-image:url("./static/images/more_horiz_grey600_36x36.png");
-                background-repeat: no-repeat;
                 position: absolute;
-                padding: 31px;
-                right: 5px;
-                bottom: 70px;
+                right: 0px;
+                top: 0px;
+                --paper-icon-button-ink-color: #2196F3;
+                padding: 4px;
+            }
+
+            .export:hover {
+                color: #2196F3;
             }
 
             .highcharts-contextmenu
             {
                 position: absolute;
-                right: 65px;
-                bottom: 43px;
-                display: none;
+                top: 4px;
+                right: 40px;
+                font-size: small;
+                font-size: small;
                 border: solid 1px #000000;
+
+                display: none;
             }
 
             .highcharts-contextmenu-container
             {
-                background: rgb(255, 255, 255);
+                /*background: rgb(255, 255, 255);*/
+                /*background-color: #E0E0E0;*/
             }
 
             .highcharts-contextmenu-container div
             {
                 cursor: pointer;
-                padding: 0px 10px;
-                color: rgb(48, 48, 48);
+                padding: 0px 4px;
+                /*color: rgb(48, 48, 48);*/
                 font-size: 11px;
-                background: none;
+                line-height: 15px;
+                /*background: none;*/
             }
 
             .highcharts-contextmenu-container div:hover
             {
-                background: #cccccc;
+                background: #00BCD4;
             }
 /*EXPORT*/
         </style>
@@ -162,7 +170,8 @@ Example :
             </div>
 
             <div id="export">
-                <div class="export" on-click="showHideExportMenu"></div>
+                <!--<div class="export" on-click="showHideExportMenu"></div>-->
+                <paper-icon-button class="export" on-click="showHideExportMenu" icon="more-horiz"></paper-icon-button>
                 <div class="highcharts-contextmenu" id="highcharts-contextmenu">
                     <div class="highcharts-contextmenu-container">
                         <div id="export_html"     on-click="exportToHTML">Export to HTML</div>
