@@ -132,7 +132,8 @@
                             </paper-dropdown-menu>
                         </th>
                         <th>
-                            <paper-input id="filter_value" label="Value" class="base_input" maxlength="16" auto-validate pattern="^[_a-zA-Z0-9]*" error-message="Invalid value!"></paper-input>
+                            <paper-input id="filter_value" label="Value" class="base_input" maxlength="32" auto-validate pattern="^[.:,;+-_ a-zA-Z0-9]*" error-message="Invalid value!"></paper-input>
+                            <!--"^[_a-zA-Z0-9]*"-->
                         </th>
                         <th class="filters_cell_button">
                             <paper-icon-button on-click="_addFilter" icon="add-circle" class="add"></paper-icon-button>
@@ -169,7 +170,7 @@
 
                 operations : {
                     type : Array,
-                    value : ["=", "!=", ">", ">=", "<", "<=", "contains", "start", "ends"]
+                    value : ["=", "!=", ">", ">=", "<", "<=", "contains", "not contains", "start", "ends"]
                 },
 
                 filters : {
@@ -257,6 +258,8 @@
             },
 
             _getOperationlName: function(operation) {
+                if(operation.indexOf("not") > -1)
+                    return ln["notContains_" + ln["localization"]];
                 if(operation.indexOf("contains") > -1)
                     return ln["contains_" + ln["localization"]];
                 if(operation.indexOf("start") > -1)

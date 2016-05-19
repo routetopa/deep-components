@@ -34,6 +34,7 @@ ln["filterField_en"] = "Field";
 ln["filterOperation_en"] = "Operation";
 ln["filterValue_en"] = "Value";
 ln["contains_en"] = "contains";
+ln["notContains_en"] = "not contains";
 ln["start_en"] = "start with";
 ln["ends_en"] = "ends with";
 
@@ -148,6 +149,7 @@ ln["filterField_it"] = "Campo";
 ln["filterOperation_it"] = "Operazione";
 ln["filterValue_it"] = "Valore";
 ln["contains_it"] = "contiene";
+ln["notContains_it"] = "non contiene";
 ln["start_it"] = "inizia con";
 ln["ends_it"] = "finisce con";
 
@@ -262,6 +264,7 @@ ln["filterField_fr"] = "Field";
 ln["filterOperation_fr"] = "Operation";
 ln["filterValue_fr"] = "Value";
 ln["contains_fr"] = "contains";
+ln["notContains_fr"] = "not contains";
 ln["start_fr"] = "start with";
 ln["ends_fr"] = "ends with";
 
@@ -376,6 +379,7 @@ ln["filterField_nl"] = "Field";
 ln["filterOperation_nl"] = "Operation";
 ln["filterValue_nl"] = "Value";
 ln["contains_nl"] = "contains";
+ln["notContains_nl"] = "not contains";
 ln["start_nl"] = "start with";
 ln["ends_nl"] = "ends with";
 

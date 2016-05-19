@@ -119,6 +119,8 @@ var AjaxJsonAlasqlBehavior = {
             for (var i=0; i < filters.length; i++) {
                 if(filters[i]["operation"] == "contains")
                     where += filters[i]["field"] + " like '%" + filters[i]["value"] + "%' AND ";
+                else if(filters[i]["operation"] == "not contains")
+                    where += filters[i]["field"] + " not like '%" + filters[i]["value"] + "%' AND ";
                 else if(filters[i]["operation"] == "start")
                     where += filters[i]["field"] + " like '" + filters[i]["value"] + "%' AND ";
                 else if(filters[i]["operation"] == "ends")
