@@ -1,0 +1,79 @@
+<html>
+
+<head>
+    <script src="../../shared_js/jquery-1.11.2.min.js"></script>
+
+    <script src="../../../bower_components/webcomponentsjs/webcomponents-lite.min.js"></script>
+
+    <link rel="import" href="../tree-view-controllet.html" />
+</head>
+
+<body>
+
+    <style>
+        .container {
+            display: flex;
+            flex-direction: row;
+        }
+        #tree_container {
+            width: 300px;
+        }
+        #fields_container {
+            margin-left: 100px;
+        }
+    </style>
+
+    <div class="container">
+
+        <div id="tree_container">
+
+            <!--<tree-view-controllet id="tree" root-name="data" opened-path="records,geometry" preselected-fields='["records,datasetid", "records,recordid", "nhits"]'></tree-view-controllet>-->
+            <tree-view-controllet id="tree" root-name="create-datalet-controllet"></tree-view-controllet>
+
+        </div>
+
+        <div id="fields_container">
+            <h3>Selected fields:</h3>
+            <p id="fields">&nbsp;</p>
+        </div>
+
+    </div>
+
+
+    <script>
+
+        var json = {"select-dataset-controllet": "s", "select-data-controllet": {"tree-view-controllet": "", "multi-table-controllet": "", "filters-controllet": ""}, "select-visualization-controllet": {"items-vslider-controllet": ""}};
+        var tree = document.getElementById('tree');
+        tree.setAttribute("json-data", JSON.stringify(json));
+        tree.ready();
+
+//        var tree = document.getElementById('tree');
+        var fields = document.getElementById('fields');
+//
+//        $.ajax({
+//            url: 'http://ckan.routetopa.eu/api/action/datastore_search?resource_id=c3b52992-ba61-4a73-a637-0f2e1ca26aab',
+//            dataType: "json",
+//            success: function(data){
+//                tree.setAttribute("json-data", JSON.stringify(data));
+//                tree.ready();//chrome
+//            }
+//        });
+//
+//        tree.addEventListener("tree-view-controllet_selected-fields", function (e) {
+//            fields.innerHTML = e.detail.fields;
+////            console.log(tree.getFlatFields());
+////            console.log(tree.getFields());//firefox console.log does not recognize associative array?
+//        });
+
+    </script>
+
+</body>
+
+</html>
+
+<!--urls:-->
+<!--https://yperdiavgeia.gr/analytics/counts/source:Decision/query:linux/method:count_organization.json-->
+<!--http://dati.lazio.it/catalog/api/action/datastore_search?resource_id=114baf3d-6d4f-42ff-b4af-481beef59ae1-->
+<!--url: 'http://ckan.routetopa.eu/api/action/datastore_search?resource_id=73e02092-85a1-434e-85fe-0c9a43aa9a52&limit=5',-->
+<!--url: 'https://data.issy.com/api/records/1.0/search?dataset=liste-des-restaurants-a-issy-les-moulineaux&sort=type&facet=type&facet=terrasse',-->
+<!--url: 'https://data.issy.com/api/records/1.0/search?dataset=flux-rss-des-offres-demplois-a-issy-les-moulineaux&sort=published&facet=published&refine.published=2015',-->
