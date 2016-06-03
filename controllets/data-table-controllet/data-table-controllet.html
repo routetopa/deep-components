@@ -38,6 +38,16 @@
                 --paper-icon-button-ink-color: #FFFFFF;
             }
 
+            paper-icon-button.order {
+                height: 24px;
+                width: 24px;
+                cursor: pointer;
+            }
+
+            paper-icon-button.order:hover {
+               color: #FFFFFF;
+            }
+
             paper-tooltip {
                 --paper-tooltip-background: black;
             }
@@ -145,22 +155,22 @@
                 text-align: left;
             }
 
-            br {
+            #data_table_container br {
                 display: block;
                 margin-top: 8px;
                 content: " ";
             }
 
-            p {
+            #data_table_container p {
                 margin: 0;
                 padding: 0;
             }
 
-            p .type{
+            #data_table_container p .type{
                 font-weight: 700;
             }
 
-            p .warning{
+            #data_table_container p .warning{
                 font-weight: 700;
                 color: #F44336;
             }
@@ -175,10 +185,13 @@
                 <tbody id="tbody">
                     <tr>
                         <template is="dom-repeat" items="{{fields}}">
-                            <th id="id_{{index}}">{{item.name}}</th>
+                            <th id="id_{{index}}">
+                                {{item.name}}
+                                <paper-icon-button id="{{index}}" class="order" on-click="_order" icon="unfold-more"></paper-icon-button>
+                            </th>
                         </template>
                     </tr>
-                    <template is="dom-repeat" items="{{data}}">
+                    <template is="dom-repeat" items="{{shownData}}">
                         <tr>
                             <template is="dom-repeat" items="{{_toArray(item)}}">
                                 <td title="{{item.value}}">{{item.value}}</td>
@@ -189,7 +202,7 @@
             </table>
 
             <template is="dom-repeat" items="{{fields}}">
-                <paper-tooltip for="{{_fieldId(index)}}" offset="-12">
+                <paper-tooltip for="{{_fieldId(index)}}" offset="8">
                     <p>
                         <span class="type">{{_type()}}:</span> {{item.type}}
                         <template is="dom-if" if={{item.errorsDescription.length}}>
@@ -202,17 +215,16 @@
 
             <div id="footer">
                 <div class="footer_block">
-                    <!--<span id="showing"></span> {{shownPrev}} <span id="to"></span> {{shownNext}} <span id="of"></span> {{length}} <span id="datasets">-->
-                    <span id="showing"></span> 1 <span id="to"></span> 100 <span id="of"></span> 1234 <span id="rows"></span>
+                    <span id="showing"></span> {{shownPrev}} <span id="to"></span> {{shownNext}} <span id="of"></span> {{length}} <span id="rows"></span>
                 </div>
                 <div class="footer_block">
                     <paper-icon-button id="slider_chevron_left" class="chevron-left" on-click="_onPrevClick" icon="chevron-left"></paper-icon-button>
                     <paper-icon-button id="slider_chevron_right" class="chevron-right" on-click="_onNextClick" icon="chevron-right"></paper-icon-button>
                 </div>
                 <div class="footer_block">
-                    <paper-input id="datasets_filter" value={{filter}} no-label-float label="">
+                    <paper-input id="filter" value={{filter}} no-label-float>
                         <iron-icon class="search" icon="search" prefix></iron-icon>
-                        <paper-icon-button class="clear" suffix on-click="_clearInput" icon="clear" tabindex="0"></paper-icon-button>
+                        <paper-icon-button class="clear" suffix on-click="_clearInput" icon="clear"></paper-icon-button>
                     </paper-input>
                 </div>
             </div>
@@ -234,15 +246,18 @@
                     value : []
                 },
 
-                fields : {
-                    type  : Array,
-                    value : []
+                filter : {
+                    type  : String,
+                    value : "",
+                    observer : '_filter'
                 }
 
             },
 
             ready : function() {
                 $(this.$.tbody).perfectScrollbar();
+
+                this.step = 100;
             },
 
             attached : function(){
@@ -261,7 +276,7 @@
                 this.$.of.innerHTML = ln["of_" + ln["localization"]];
                 this.$.rows.innerHTML = ln["rows_" + ln["localization"]];
 
-                this.$.datasets_filter.setAttribute("label", ln["search_" + ln["localization"]]);
+                this.$.filter.setAttribute("label", ln["search_" + ln["localization"]]);
             },
 
             _type : function() {return ln["type_" + ln["localization"]];},
@@ -276,6 +291,119 @@
                 result = converter.cast(result);
                 this.fields = ArrayUtils.toFieldsArray(result.types);
                 this.data = result.dataset;
+
+                this.filter = "";
+                $(".order").attr("icon", "unfold-more");
+
+                this.prev = 1;
+                this.next = this.step;
+                this.length = this.data.length;
+
+                this.shownPrev = Math.min(this.prev, this.length);
+                this.shownNext = Math.min(this.next, this.length);
+                this.shownData = this.data.slice(this.prev-1, this.next);
+            },
+
+            _onPrevClick : function(){
+                if(this.prev != 1) {
+                    this.prev -= this.step;
+                    this.next -= this.step;
+
+                    this.shownPrev = Math.min(this.prev, this.length);
+                    this.shownNext = Math.min(this.next, this.length);
+                    this.shownData = this.data.slice(this.prev - 1, this.next);
+                }
+                $(this.$.tbody).animate({ scrollTop: 0}, 0);
+            },
+
+            _onNextClick : function(){
+                if(this.next < this.length) {
+                    this.prev += this.step;
+                    this.next += this.step;
+
+                    this.shownPrev = Math.min(this.prev, this.length);
+                    this.shownNext = Math.min(this.next, this.length);
+                    this.shownData = this.data.slice(this.prev - 1, this.next);
+                }
+                $(this.$.tbody).animate({ scrollTop: 0}, 0);
+            },
+
+            _filter : function() {
+                this.debounce('_filter', function () {
+                    if(this.data.length) {
+                        var filter = this.filter.toLowerCase();
+
+                        if(filter == "")
+                            this.shownData = this.data
+                        else {
+                            var keys = Object.keys(this.data[0]);
+                            this.shownData = this.data.filter(function (el) {
+                                var values = keys.map(function (key) {
+                                    return el[key];
+                                });
+                                for (var i in values)
+                                    if (values[i] && String(values[i]).toLowerCase().indexOf(filter) > -1)
+                                        return true;
+                                return false;
+                            });
+                        }
+
+                        this.prev = 1;
+                        this.next = this.step;
+                        this.length = this.shownData.length;
+
+                        this.shownPrev = Math.min(this.prev, this.length);
+                        this.shownNext = Math.min(this.next, this.length);
+                        this.shownData = this.shownData.slice(this.prev - 1, this.next);
+
+                        $(this.$.tbody).animate({ scrollTop: 0}, 0);
+                    }
+                }, 300);
+            },
+
+            _clearInput : function() {
+                this.$.filter.value = "";
+            },
+
+            _order : function(e) {
+                t = $(e.target).parents("paper-icon-button")[0];
+
+                var icon = t.getAttribute("icon");
+                var id = t.getAttribute("id");
+                var field = this.fields[id];
+                var reverse = false;
+
+                if(icon.indexOf("unfold-more") > -1){
+                    t.setAttribute("icon", "arrow-drop-up");
+                }
+                else if(icon.indexOf("arrow-drop-up") > -1){
+                    t.setAttribute("icon", "arrow-drop-down");
+                    reverse = true;
+                }
+                else if(icon.indexOf("arrow-drop-down") > -1){
+                    t.setAttribute("icon", "arrow-drop-up");
+                }
+
+
+                if(field.type == "NUMBER")
+//                    this.data = this.data.sort(this._sort_by(field.name, reverse, parseInt));
+                    this.data = this.data.sort(this._sort_by(field.name, reverse, function(a){return (isNaN(a) ? -Number.MAX_VALUE : a)}));
+                else
+                    this.data = this.data.sort(this._sort_by(field.name, reverse, function(a){return (a ? a.toLowerCase() : "")}));
+                this._filter();
+            },
+
+            _sort_by : function(field, reverse, primer){
+
+                var key = primer ?
+                        function(x) {return primer(x[field])} :
+                        function(x) {return x[field]};
+
+                reverse = !reverse ? 1 : -1;
+
+                return function (a, b) {
+                    return a = key(a), b = key(b), reverse * ((a > b) - (b > a));
+                }
             },
 
             _toArray: function(obj) {
