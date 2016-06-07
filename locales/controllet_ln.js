@@ -1,5 +1,7 @@
 var ln = [];
 
+ln["localization"] = "en";
+
 /******** EN ********/
 
 //PAGE SLIDER
@@ -28,6 +30,18 @@ ln["wrongUrl_en"] = "Invalid url or data provider not supported yet.";
 
 //SELECT DATA
 ln["expertAddFilters_en"] = "EXPERT : ADD FILTERS";
+
+//select-fields
+ln["fields_en"] = "FIELDS";
+
+//data-table
+ln["selectedData_en"] = "SELECTED DATA";
+//ln["showing_en"] = "Showing";
+//ln["to_en"] = "to";
+//ln["of_en"] = "of";
+ln["rows_en"] = "rows";
+ln["type_en"] = "TYPE";
+ln["warning_en"] = "WARNING";
 
 //filters
 ln["filterField_en"] = "Field";
@@ -144,6 +158,15 @@ ln["wrongUrl_it"] = "Url invalido o data provider non ancora supportato.";
 //SELECT DATA
 ln["expertAddFilters_it"] = "ESPERTO : AGGIUNGI FILTRI";
 
+//select-fields
+ln["fields_it"] = "CAMPI";
+
+//data-table
+ln["selectedData_it"] = "DATI SELEZIONATI";
+ln["rows_it"] = "righe";
+ln["type_it"] = "TIPO";
+ln["warning_it"] = "ATTENZIONE";
+
 //filters
 ln["filterField_it"] = "Campo";
 ln["filterOperation_it"] = "Operazione";
@@ -259,6 +282,15 @@ ln["wrongUrl_fr"] = "Invalid url or data provider not supported yet.";
 //SELECT DATA
 ln["expertAddFilters_fr"] = "EXPERT : ADD FILTERS";
 
+//select-fields
+ln["fields_fr"] = "FIELDS";
+
+//data-table
+ln["selectedData_fr"] = "SELECTED DATA";
+ln["rows_fr"] = "rows";
+ln["type_fr"] = "TYPE";
+ln["warning_fr"] = "WARNING";
+
 //filters
 ln["filterField_fr"] = "Field";
 ln["filterOperation_fr"] = "Operation";
@@ -373,6 +405,15 @@ ln["wrongUrl_nl"] = "Ongeldige url of data provider nog niet ondersteund.";
 
 //SELECT DATA
 ln["expertAddFilters_nl"] = "EXPERT : ADD FILTERS";
+
+//select-fields
+ln["fields_nl"] = "FIELDS";
+
+//data-table
+ln["selectedData_nl"] = "SELECTED DATA";
+ln["rows_nl"] = "rows";
+ln["type_nl"] = "TYPE";
+ln["warning_nl"] = "WARNING";
 
 //filters
 ln["filterField_nl"] = "Field";
