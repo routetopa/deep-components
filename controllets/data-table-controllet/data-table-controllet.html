@@ -255,12 +255,12 @@
             },
 
             ready : function() {
-                $(this.$.tbody).perfectScrollbar();
-
                 this.step = 100;
             },
 
             attached : function(){
+                $(this.$.tbody).perfectScrollbar();
+
                 this._resize();
                 var that = this;
                 window.addEventListener("resize", function() { that._resize(); });
