@@ -266,6 +266,9 @@
                 window.addEventListener("resize", function() { that._resize(); });
 
                 this._translate();
+
+                if(this.data.length > 0)
+                    this.setData(this.data);
             },
 
             _translate : function(){
@@ -305,7 +308,8 @@
 
             reset : function(){
                 this.setData([]);
-                this.filter = "";
+                $(this.$.tbody).animate({ scrollTop: 0}, 0);
+//                this.filter = "";
             },
 
             _onPrevClick : function(){
