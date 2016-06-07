@@ -283,9 +283,6 @@
             _warning : function() {return ln["warning_" + ln["localization"]];},
 
             setData : function(data) {
-//                this.data = data.slice();
-
-                //jsdatachecker
                 var converter = new DataTypeConverter();
                 var result = converter.inferJsonDataType(data, ["*"]);
                 result = converter.cast(result);
@@ -302,6 +299,13 @@
                 this.shownPrev = Math.min(this.prev, this.length);
                 this.shownNext = Math.min(this.next, this.length);
                 this.shownData = this.data.slice(this.prev-1, this.next);
+
+                this._resize();
+            },
+
+            reset : function(){
+                this.setData([]);
+                this.filter = "";
             },
 
             _onPrevClick : function(){
