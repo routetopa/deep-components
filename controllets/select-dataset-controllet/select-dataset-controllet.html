@@ -33,6 +33,7 @@
 
 <link rel="import" href="../../bower_components/paper-checkbox/paper-checkbox.html">
 
+<link rel="import" href="../providers-utility-controllet/providers-utility-controllet.html">
 <link rel="import" href="ortelio-controllet.html">
 <link rel="import" href="../../datalets/datasetexplorer-datalet/datasetexplorer-datalet.html">
 
@@ -740,28 +741,32 @@
                                 html += "<b>" + i + ":</b> " + metas[i] + "<br>";
                             this.$.info.innerHTML = html;
 
-                            var url = this.$.list.selectedItem.url;
+                            this.dataUrl = this.$.list.selectedItem.url;
+//                            var url = this.$.list.selectedItem.url;
 
-                            // Check if CKAN
-                            var strDatasetPos = url.indexOf('/dataset/');
-                            var strResourcePos = (strDatasetPos >= 0) ? url.indexOf('/resource/') : -1;
-                            if (strDatasetPos >= 0 && strResourcePos > strDatasetPos) {
-                                var urlSegment1 = url.substring(0, strDatasetPos);
-                                var urlResourceEnd = url.indexOf('/', strResourcePos + 10);
-                                var resourceId = url.substring(strResourcePos + 10, urlResourceEnd);
-                                url = urlSegment1 + "/api/action/datastore_search?resource_id=" + resourceId;
-                            }
+//                            url = utility_getResourceUrl(url);
 
-                            // Check if OPENDATASOFT
-                            var strExploreDatasetPos = url.indexOf('/explore/dataset/');
-                            if (strExploreDatasetPos >= 0) {
-                                var urlSegment1 = url.substring(0, strExploreDatasetPos);
-                                var datasetEnd = url.indexOf(strExploreDatasetPos + 17, '/');
-                                var datasetId = url.substring(strExploreDatasetPos + 17, datasetEnd >= 0 ? datasetEnd : url.length);
-                                url = urlSegment1 + '/api/records/1.0/search?dataset=' + datasetId;
-                            }
+//                            // Check if CKAN
+//                            var strDatasetPos = url.indexOf('/dataset/');
+//                            var strResourcePos = (strDatasetPos >= 0) ? url.indexOf('/resource/') : -1;
+//                            if (strDatasetPos >= 0 && strResourcePos > strDatasetPos) {
+//                                var urlSegment1 = url.substring(0, strDatasetPos);
+//                                var urlResourceEnd = url.indexOf('/', strResourcePos + 10);
+//                                var resourceId = url.substring(strResourcePos + 10, urlResourceEnd);
+//                                url = urlSegment1 + "/api/action/datastore_search?resource_id=" + resourceId;
+//                            }
+//
+//                            // Check if OPENDATASOFT
+//                            var strExploreDatasetPos = url.indexOf('/explore/dataset/');
+//                            if (strExploreDatasetPos >= 0) {
+//                                var urlSegment1 = url.substring(0, strExploreDatasetPos);
+//                                var datasetEnd = url.indexOf(strExploreDatasetPos + 17, '/');
+//                                var datasetId = url.substring(strExploreDatasetPos + 17, datasetEnd >= 0 ? datasetEnd : url.length);
+//                                url = urlSegment1 + '/api/records/1.0/search?dataset=' + datasetId;
+//                            }
 
-                            this.dataUrl = this._addlimitUrl(url);
+//                            this.dataUrl = this._addlimitUrl(url);
+//                            this.dataUrl = url;
                         }
                         else {
                             this.dataUrl = "";
@@ -771,25 +776,26 @@
                 },
 
                 _selectDataUrl_treeMap : function(e) {
-                    this.dataUrl = this._addlimitUrl(e.detail.url);
+//                    this.dataUrl = this._addlimitUrl(e.detail.url);
+                    this.dataUrl = e.detail.url;
                 },
 
                 _fireDataUrl : function(){
                     this.fire('dataset-selection-controllet_data-url', {url: this.dataUrl});
                 },
 
-                _addlimitUrl : function(url){
-                    //CKAN --> action no limit
-                    if((url.indexOf("api/action") > -1) && !(url.indexOf("limit") > -1))
-                    {
-                        url += "&limit=99999";
-                    }
-                    //OpenDataSoft --> action no limit
-                    if((url.indexOf("api/records") > -1) && !(url.indexOf("rows") > -1)){
-                        url += "&rows=10000";
-                    }
-                    return url;
-                },
+//                _addlimitUrl : function(url){
+//                    //CKAN --> action no limit
+//                    if((url.indexOf("api/action") > -1) && !(url.indexOf("limit") > -1))
+//                    {
+//                        url += "&limit=99999";
+//                    }
+//                    //OpenDataSoft --> action no limit
+//                    if((url.indexOf("api/records") > -1) && !(url.indexOf("rows") > -1)){
+//                        url += "&rows=10000";
+//                    }
+//                    return url;
+//                },
 
                 _resize : function(){
                     var h = Math.max(document.documentElement.clientHeight, window.innerHeight || 0) - 16;

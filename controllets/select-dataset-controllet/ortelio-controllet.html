@@ -506,26 +506,26 @@
 
                             var url = this.$.list.selectedItem.resource_url;
 
-                            // Check if CKAN
-                            var strDatasetPos = url.indexOf('/dataset/');
-                            var strResourcePos = (strDatasetPos >= 0) ? url.indexOf('/resource/') : -1;
-                            if (strDatasetPos >= 0 && strResourcePos > strDatasetPos) {
-                                var urlSegment1 = url.substring(0, strDatasetPos);
-                                var urlResourceEnd = url.indexOf('/', strResourcePos + 10);
-                                var resourceId = url.substring(strResourcePos + 10, urlResourceEnd);
-                                url = urlSegment1 + "/api/action/datastore_search?resource_id=" + resourceId;
-                            }
+//                            // Check if CKAN
+//                            var strDatasetPos = url.indexOf('/dataset/');
+//                            var strResourcePos = (strDatasetPos >= 0) ? url.indexOf('/resource/') : -1;
+//                            if (strDatasetPos >= 0 && strResourcePos > strDatasetPos) {
+//                                var urlSegment1 = url.substring(0, strDatasetPos);
+//                                var urlResourceEnd = url.indexOf('/', strResourcePos + 10);
+//                                var resourceId = url.substring(strResourcePos + 10, urlResourceEnd);
+//                                url = urlSegment1 + "/api/action/datastore_search?resource_id=" + resourceId;
+//                            }
+//
+//                            // Check if OPENDATASOFT
+//                            var strExploreDatasetPos = url.indexOf('/explore/dataset/');
+//                            if (strExploreDatasetPos >= 0) {
+//                                var urlSegment1 = url.substring(0, strExploreDatasetPos);
+//                                var datasetEnd = url.indexOf(strExploreDatasetPos + 17, '/');
+//                                var datasetId = url.substring(strExploreDatasetPos + 17, datasetEnd >= 0 ? datasetEnd : url.length);
+//                                url = urlSegment1 + '/api/records/1.0/search?dataset=' + datasetId;
+//                            }
 
-                            // Check if OPENDATASOFT
-                            var strExploreDatasetPos = url.indexOf('/explore/dataset/');
-                            if (strExploreDatasetPos >= 0) {
-                                var urlSegment1 = url.substring(0, strExploreDatasetPos);
-                                var datasetEnd = url.indexOf(strExploreDatasetPos + 17, '/');
-                                var datasetId = url.substring(strExploreDatasetPos + 17, datasetEnd >= 0 ? datasetEnd : url.length);
-                                url = urlSegment1 + '/api/records/1.0/search?dataset=' + datasetId;
-                            }
-
-                            url = this._addlimitUrl(url);
+//                            url = this._addlimitUrl(url);
 
                             this.fire("datasetexplorer-datalet_data-url", { url: url });//change event name
                         }
@@ -536,18 +536,18 @@
                     }, 0);
                 },
 
-                _addlimitUrl : function(url){
-                    //CKAN --> action no limit
-                    if((url.indexOf("api/action") > -1) && !(url.indexOf("limit") > -1))
-                    {
-                        url += "&limit=99999";
-                    }
-                    //OpenDataSoft --> action no limit
-                    if((url.indexOf("api/records") > -1) && !(url.indexOf("rows") > -1)){
-                        url += "&rows=10000";
-                    }
-                    return url;
-                }
+//                _addlimitUrl : function(url){
+//                    //CKAN --> action no limit
+//                    if((url.indexOf("api/action") > -1) && !(url.indexOf("limit") > -1))
+//                    {
+//                        url += "&limit=99999";
+//                    }
+//                    //OpenDataSoft --> action no limit
+//                    if((url.indexOf("api/records") > -1) && !(url.indexOf("rows") > -1)){
+//                        url += "&rows=10000";
+//                    }
+//                    return url;
+//                }
             });
         });
     </script>

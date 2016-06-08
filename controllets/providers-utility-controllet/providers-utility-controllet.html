@@ -1,10 +1,63 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title></title>
-</head>
-<body>
+<link rel="import" href="../../bower_components/polymer/polymer.html" />
 
-</body>
-</html>
+<script src="ckan.js"></script>
+<script src="openDataSoft.js"></script>
+<script src="generic.js"></script>
+
+<script>
+    var providerFactory = {
+        getProvider: function(dataUrl) {
+            if (dataUrl.indexOf("datastore_search?resource_id") > -1)
+                return new ckan_Provider();
+            else if (dataUrl.indexOf("search?dataset") > -1)
+                return new openDataSoft_Provider();
+            else
+                return generic_Provider();
+        }
+    };
+
+    //jsdatachecker
+    utility_getFields = function(types) {
+        return Object.keys(types).map(function(key) { return key; });
+    };
+
+    utility_getSelectedFields = function(fields, indices) {
+        selectedFileds = [];
+        for (var i = 0; i < indices.length; i++)
+            selectedFileds.push(fields[indices[i]]);
+        return selectedFileds;
+    };
+
+    //    utility_getResourceUrl = function(url) {
+    //        //CKAN
+    //        var strDatasetPos = url.indexOf('/dataset/');
+    //        var strResourcePos = url.indexOf('/resource/');
+    //        if (strDatasetPos >= 0 && strResourcePos > strDatasetPos) {
+    //            var urlSegment1 = url.substring(0, strDatasetPos);
+    //            var urlResourceEnd = url.indexOf('/', strResourcePos + 10);
+    //            var resourceId = url.substring(strResourcePos + 10, urlResourceEnd);
+    //            return urlSegment1 + "/api/action/datastore_search?resource_id=" + resourceId;
+    //        }
+    //        //OPENDATASOFT
+    //        var strExploreDatasetPos = url.indexOf('/explore/dataset/');
+    //        if (strExploreDatasetPos >= 0) {
+    //            var urlSegment1 = url.substring(0, strExploreDatasetPos);
+    //            var datasetEnd = url.indexOf(strExploreDatasetPos + 17, '/');
+    //            var datasetId = url.substring(strExploreDatasetPos + 17, datasetEnd >= 0 ? datasetEnd : url.length);
+    //            return urlSegment1 + '/api/records/1.0/search?dataset=' + datasetId;
+    //        }
+    //        return "";
+    //    };
+</script>
+
+<dom-module id="providers-utility-controllet">
+
+    <template></template>
+
+    <script>
+        Polymer({
+            is : 'providers-utility-controllet',
+        });
+    </script>
+
+</dom-module>

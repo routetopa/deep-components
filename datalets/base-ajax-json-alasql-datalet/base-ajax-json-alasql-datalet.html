@@ -29,7 +29,12 @@
 -->
 
 <link rel="import" href="../base-datalet/base-datalet.html">
-<script type="text/javascript" src="../../bower_components/jsdatachecker/jsdatachecker.min.js"></script>
+<link rel="import" href="../../controllets/providers-utility-controllet/providers-utility-controllet.html" />
+
+<script type="text/javascript" src="../../alasql-utility/alasql.min.js"></script>
+<script type="text/javascript" src="../../alasql-utility/alasql-utility.js"></script>
+
+<script type="text/javascript" src="../../bower_components/JSDataChecker/jsdatachecker.min.js"></script>
 
 <!--
 The `base-ajax-json-jsonpath-datalet` extend the base component and define the mechanism to access and select data.
@@ -52,6 +57,9 @@ Example :
 -->
 
 <dom-module id="base-ajax-json-alasql-datalet">
+
+    <providers-utility-controllet></providers-utility-controllet>
+
     <template>
         <base-datalet data-url="{{dataUrl}}" fields="{{fields}}" data="{{data}}" title="{{title}}" description="{{description}}" export_menu="{{export_menu}}"></base-datalet>
     </template>

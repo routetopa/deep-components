@@ -1,0 +1,163 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html" />
+
+<link rel="import" href="../../bower_components/paper-material/paper-material.html" />
+<link rel="import" href="../../bower_components/paper-menu/paper-menu.html">
+<link rel="import" href="../../bower_components/paper-item/paper-item.html">
+
+<dom-module id="select-fields-controllet">
+
+    <style is="custom-style">
+
+        #select_fields_controllet_container {
+            height: 100%;
+            width: 100%;
+        }
+
+        #select_fields_controllet_container * {
+            font-family: 'Roboto', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            font-size: 16px;
+            line-height: 24px;
+        }
+
+        #select_fields_controllet_container #header {
+            background: #B6B6B6;
+            height: 24px;
+            padding: 12px;
+            text-align: center;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        #select_fields_controllet_container #menu_container {
+            position: relative;
+            height: calc(100% - 48px);
+            width: 100%;
+        }
+
+        paper-menu {
+            padding: 0px;
+        }
+
+        paper-item {
+            cursor: pointer;
+            color: #000000;
+            margin: 4px;
+        }
+
+        paper-item.iron-selected {
+            background: #2196F3;
+            color: #FFFFFF;
+        }
+
+        paper-item:focus:before {
+            opacity: 0 !important;
+            background: white;
+        }
+
+        paper-item:focus:after {
+            opacity: 0 !important;
+            background: white;
+        }
+
+        paper-item:hover:not(.iron-selected) {
+            background-color: rgba(0, 0, 0, 0.12);
+        }
+
+    </style>
+
+    <template>
+
+        <paper-material id="select_fields_controllet_container" elevation="5">
+
+            <div id="header" on-click="_invertSelection"><span id="fields"></span></div>
+            <div id="menu_container">
+                <paper-menu id="menu" multi>
+                    <template is="dom-repeat" items="{{fields}}">
+                        <paper-item>{{item}}</paper-item>
+                    </template>
+                </paper-menu>
+            </div>
+
+        </paper-material>
+
+    </template>
+
+    <script>
+        Polymer({
+
+            is : 'select-fields-controllet',
+
+            properties : {
+
+                fields : {
+                    type  : Array,
+                    value : []
+                },
+
+//                preselectedFields : {
+//                    type : Array,
+//                    value : []
+//                }
+            },
+
+            listeners: {
+                'iron-activate': '_fireSelectedFields'
+            },
+
+            ready : function() {
+                $(this.$.menu_container).perfectScrollbar();
+            },
+
+            attached : function() {
+                this._translate();
+
+//                if (this.preselectedFields.length > 0)
+//                    this._preselectFields();
+            },
+
+            setFields : function(fields) {
+                this.fields = fields;
+            },
+
+            setSelectFields : function(selectFields) {
+                for(var i=0; i<selectFields.length; i++)
+                    this.$.menu.select(selectFields[i]);
+                this._fireSelectedFields();
+            },
+
+            reset: function() {
+                this.$.menu.selectedValues = [];
+                this.setFields([]);
+            },
+
+            _translate : function() {
+                this.$.fields.innerHTML = ln["fields_" + ln["localization"]];
+            },
+
+//            _preselectFields : function() {
+//                for(var i=0; i<this.preselectedFields.length; i++)
+//                    this.$.menu.select(this.preselectedFields[i]);
+//                this._fireSelectedFields();
+//            },
+
+            _fireSelectedFields : function() {
+                this.debounce('_fireSelectedFields', function () {
+                    this.fire('select-fields-controllet_selected-fields', {selectedFields: this.$.menu.selectedValues});
+                }, 300);
+            },
+
+            _invertSelection : function() {
+//                for(var i=this.fields.length-1; i>=0; i--)
+                for(var i=0; i<this.fields.length; i++)
+                    this.$.menu.select(i);
+
+                $(this.$.menu_container).animate({ scrollTop: 0}, 0);
+
+                this._fireSelectedFields();
+            }
+
+        });
+
+    </script>
+
+</dom-module>

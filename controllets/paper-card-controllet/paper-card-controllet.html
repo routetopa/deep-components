@@ -36,12 +36,15 @@
             #paper_card_container .legend {
                 position: relative;
                 bottom: 48px;
-                height: 32px;
-                padding: 16px 0px 0px 8px;
+                height: 16px;
+                padding: 16px 8px;
                 background-color: rgba(0, 0, 0, 0.8);
                 color: white;
                 font-weight: 700;
-                word-wrap: break-word;
+                /*word-wrap: break-word;*/
+                overflow: hidden;
+                white-space: nowrap;
+                text-overflow: ellipsis;
             }
 
             #paper_card_container .footer {
@@ -51,8 +54,10 @@
                 bottom: 48px;
                 padding: 4px;
                 font-size: 12px;
-                word-wrap: break-word;
+                /*word-wrap: break-word;*/
                 overflow: hidden;
+                white-space: nowrap;
+                text-overflow: ellipsis;
             }
 
             paper-fab {
@@ -62,7 +67,7 @@
             }
 
             paper-fab.open {
-                bottom: -20px;
+                bottom: 40px;
                 right: 8px;
             }
 
@@ -122,31 +127,23 @@
                 <content></content>
             </div>
 
-            <div class="legend">
-
+            <div class="legend" title="{{cardTitle}}">
                 {{cardTitle}}
-
-                <template is="dom-if" if="{{checkType(cardType, 'link')}}">
-
-                    <paper-fab id="card_open_link" class="open" mini icon="link" on-click="_handleOpenClick"></paper-fab>
-
-                </template>
-
-                <template is="dom-if" if="{{checkType(cardType, 'text')}}">
-
-                    <paper-fab id="card_open_text" class="open" mini icon="text-format" on-click="_handleOpenClick"></paper-fab>
-
-                </template>
-
-                <template is="dom-if" if="{{checkType(cardType, 'datalet')}}">
-
-                    <paper-fab id="card_open_datalet" class="open" mini icon="assessment" on-click="_handleOpenClick"></paper-fab>
-
-                </template>
-
             </div>
 
-            <div class="footer">
+            <template is="dom-if" if="{{checkType(cardType, 'link')}}">
+                <paper-fab id="card_open_link" class="open" mini icon="link" on-click="_handleOpenClick"></paper-fab>
+            </template>
+
+            <template is="dom-if" if="{{checkType(cardType, 'text')}}">
+                <paper-fab id="card_open_text" class="open" mini icon="text-format" on-click="_handleOpenClick"></paper-fab>
+            </template>
+
+            <template is="dom-if" if="{{checkType(cardType, 'datalet')}}">
+                <paper-fab id="card_open_datalet" class="open" mini icon="assessment" on-click="_handleOpenClick"></paper-fab>
+            </template>
+
+            <div class="footer" title="{{comment}}">
                 {{comment}}
             </div>
 

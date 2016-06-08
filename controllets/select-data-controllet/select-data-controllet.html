@@ -1,59 +1,75 @@
 <link rel="import" href="../../bower_components/polymer/polymer.html" />
 
-<link rel="import" href="../../bower_components/paper-material/paper-material.html" />
-
-<link rel="import" href="../tree-view-controllet/tree-view-controllet.html" />
-<link rel="import" href="../multi-table-controllet/multi-table-controllet.html" />
+<link rel="import" href="../select-fields-controllet/select-fields-controllet.html" />
+<link rel="import" href="../data-table-controllet/data-table-controllet.html" />
 <link rel="import" href="../filters-controllet/filters-controllet.html" />
+
+<link rel="import" href="../providers-utility-controllet/providers-utility-controllet.html" />
+
+<script type="text/javascript" src="../../alasql-utility/alasql.min.js"></script>
+<script type="text/javascript" src="../../alasql-utility/alasql-utility.js"></script>
+
+<script type="text/javascript" src="../../bower_components/JSDataChecker/jsdatachecker.min.js"></script>
 
 <dom-module id="select-data-controllet">
 
     <style is="custom-style">
-        .div_container {
+
+        #select_data_controllet_container {
             display: flex;
             flex-direction: row;
-        }
-        #material_tree_view {
-            position: relative;
-            width: 25%;
-            min-width: 200px;
-            height: 100vh;
-        }
-        #material_multi_table_filters {
-            position: relative;
-            width: 75%;
-
-            margin-left: 64px;
             margin-top: 8px;
         }
 
-        #div_multi_table {
-            height: 70%;
-            width: 100%;
-            position: relative;
+        #select_data_controllet_container * {
+            font-family: 'Roboto', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            font-size: 16px;
+            line-height: 24px;
         }
-        #div_filters {
-            height: 30%;
-            width: 100%;
-            position: relative;
+
+        #select_data_controllet_container #fields_container {
+            height: 100%;
+            width: 20%;
+            min-width: 192px;
         }
+
+        #select_data_controllet_container #right_container {
+            height: 100%;
+            width: calc(80% - 24px);
+            margin-left: 24px;
+        }
+
+        #select_data_controllet_container #table_container {
+            height: calc(100% - 72px);
+            width: 100%;
+        }
+
+        #select_data_controllet_container #filters_container {
+            height: 48px;
+            width: 100%;
+            margin-top: 24px;
+        }
+
     </style>
 
     <template>
 
-        <div class="div_container">
-            <paper-material id="material_tree_view" elevation="5">
-                <tree-view-controllet id="tree_view" root-name={{rootName}} opened-path={{openedPath}} preselected-fields={{preselectedFields}}></tree-view-controllet>
-            </paper-material>
-            <paper-material id="material_multi_table_filters" elevation="5">
-                <div id="div_multi_table">
-                    <multi-table-controllet id="multi_table" data-url={{dataUrl}}></multi-table-controllet>
+        <providers-utility-controllet></providers-utility-controllet>
+
+        <div id="select_data_controllet_container">
+            <div id="fields_container">
+                <select-fields-controllet id="select_fields"></select-fields-controllet>
+            </div>
+            <div id="right_container">
+                <div id="table_container">
+                    <data-table-controllet id="data_table"></data-table-controllet>
                 </div>
-                <div id="div_filters">
+                <div id="filters_container">
                     <filters-controllet id="filters"></filters-controllet>
                 </div>
-            </paper-material>
+            </div>
         </div>
+
 
     </template>
 
@@ -64,139 +80,160 @@
 
             properties : {
 
-                rootName : {
+                dataUrl : {
                     type  : String,
-                    value : "root"
+                    value : undefined
+//                    observer : '_init'
                 },
 
-                preselectedFields : {
-                    type : Array,
-                    value : []
-                },
-
-                openedPath : {
-                    type : String,
+                data : {
+                    type  : Object,
                     value : undefined
                 },
 
-                dataUrl : {
-                    type  : String,
-                    value : undefined,
-                    observer : '_init'
+                filters : {
+                    type  : Array,
+                    value : []
+//                    value : [{logicalOperator: "OR"}, {field: "annee", operation: "=", value: "2014"}, {field: "annee", operation: "=", value: "2015"}]
                 },
 
-                filters : {
+                selectedFields : {
                     type : Array,
                     value : []
-                },
+//                    value : [0,2,4]
+                }
 
             },
 
             listeners: {
-                'tree-view-controllet_selected-fields': '_updateSelectedFields',
+                'filters-controllet_show': '_resizeFilters',
+                'select-fields-controllet_selected-fields': '_updateFields',
                 'filters-controllet_filters': '_updateFilters'
             },
 
             ready : function() {
-                $(this.$.material_tree_view).perfectScrollbar();
+                this.showFilter = false;
             },
 
             attached : function(){
                 this._resize();
                 var that = this;
                 window.addEventListener("resize", function() { that._resize(); });
-
-                if(this.dataletPreset && this.dataletPreset["filters"] != undefined)
-                    this._preselectFilters();
             },
 
-            _preselectFilters : function() {
-                this.async(function() {
-                    this.filters = JSON.parse(this.dataletPreset["filters"]);
-                    this.dataletPreset["filters"] = undefined;
-                    this.$.filters.filters = this.filters;
-                    this.$.multi_table.filters = this.filters;
-                    this._refreshTables();
-                }, 1);
+            getSelectedFields : function() {
+                return utility_getSelectedFields(this.fields, this.selectedFields);;
             },
 
             getFilters : function() {
-                return this.$.filters.getFilters();
+                return this.filters;
             },
 
-            getFields : function() {
-                return this.$.tree_view.getFields();
+            getData : function() {
+                return this.data;
             },
 
-            getFlatFields : function() {
-                return this.$.tree_view.getFlatFields();
-            },
-
-            _init : function() {
-                var that = this;
-
-                $.ajax({
-                    url: this.dataUrl,
-                    dataType: "json",
-                    success: function(data){
-                        that.rootName = "data";
-                        var data = that._filterJson(data);
-                        that.$.tree_view.setAttribute("json-data", JSON.stringify(data));
-                        that.$.tree_view.selectedFields = [];
-                        that._updateSelectedFields();
-                        that.$.tree_view.ready();
-                        that.filters = [];
-                        that.$.filters.filters = [];
-                        that.$.multi_table.filters = [];
-                    }
-                });
-
-                this.$.multi_table.ready();
-            },
-
-            _filterJson : function(data){
-                //ckan
-                if(data.result != undefined && data.result.resource_id != undefined) {
-                    this.rootName = "result,records"
-                    return data.result.records;
+            _resizeFilters : function() {
+                if(!this.showFilter) {
+                    this.$.table_container.style.height = "calc(50% - 12px)";
+                    this.$.filters_container.style.height = "calc(50% - 12px)";
                 }
-                //openDataSoft
-                else if(data.parameters != undefined && data.parameters.dataset != undefined) {
-                    this.rootName = "records,fields";
-                    return data.records[0].fields;
+                else {
+                    this.$.table_container.style.height = "calc(100% - 72px)";
+                    this.$.filters_container.style.height = "48px";
                 }
-                else{
-                    return data;
-                }
+
+                this.$.data_table._resize();
+
+                this.showFilter = !this.showFilter;
             },
 
-            _updateSelectedFields : function() {
-                var fields = this.$.tree_view.getFields();
-                this.$.multi_table.setSelectedFields(fields);
-
-                var flatFields = this.$.tree_view.getFlatFields();
-                this.$.filters.setFields(flatFields);
+            _updateFields : function(e) {
+                this.selectedFields = e.detail.selectedFields;
+                var fields = utility_getSelectedFields(this.fields, this.selectedFields);
+                var data = alasql_selectData(this.data, fields, this.filters);
+                this.$.data_table.setData(data);
             },
 
             _updateFilters : function(e) {
                 this.filters = e.detail.filters;
-                this.$.multi_table.filters = e.detail.filters;
-                this._refreshTables();
+                var fields = utility_getSelectedFields(this.fields, this.selectedFields);
+                var data = alasql_selectData(this.data, fields, this.filters);
+                this.$.data_table.setData(data);
             },
 
-            _refreshTables : function() {
-                this.$.multi_table.setSelectedFields([]);
-                this.async(function () {
-                    var fields = this.$.tree_view.getFields();
-                    this.$.multi_table.setSelectedFields(fields);
+            init : function() {
+                if(this.dataUrl) {
+
+                    var that = this;
+
+                    $.ajax({
+                        url: this.dataUrl,
+                        dataType: "json",
+                        success: function(data){
+                            that.reset();
+
+                            var f = Object.create(providerFactory);
+                            var provider = f.getProvider(that.dataUrl);
+                            data = provider.selectData(data);
+
+                            var converter = new DataTypeConverter();
+                            var result = converter.inferJsonDataType(data, ["*"]);
+                            result = converter.cast(result);
+                            that.fields = utility_getFields(result.types);
+                            data = result.dataset;
+                            that.data = alasql_selectData(data, that.fields);
+
+                            that.$.select_fields.setFields(that.fields);
+                            that.$.filters.setFields(that.fields);
+//                            that.$.data_table.setData(data);
+
+                            that._preselect();
+                        }
+                    });
+                }
+
+                else {
+                    this.reset();
+
+                    var converter = new DataTypeConverter();
+                    var result = converter.inferJsonDataType(this.data, ["*"]);
+                    result = converter.cast(result);
+                    this.fields = utility_getFields(result.types);
+                    data = result.dataset;
+                    this.data = alasql_selectData(data, this.fields);
+
+                    this.$.select_fields.setFields(this.fields);
+                    this.$.filters.setFields(this.fields);
+//                    this.$.data_table.setData(data);
+
+                    this._preselect();
+                }
+            },
+
+            reset : function() {
+//                this.dataUrl = undefined;
+//                this.data = undefined;
+                this.filters = [];
+                this.selectedFields = [];
+                this.$.select_fields.reset();
+                this.$.data_table.reset();
+                this.$.filters.reset();
+            },
+
+            _preselect : function() {
+                this.async(function() {
+                    if(this.filters.length > 1)
+                        this.$.filters.setFilters(this.filters);
+                    if(this.selectedFields.length > 0)
+                        this.$.select_fields.setSelectFields(this.selectedFields);
                 }, 0);
             },
 
             _resize : function(){
                 var h = Math.max(document.documentElement.clientHeight, window.innerHeight || 0) - 16;
-                h = h - 64; //height with page scroller
-                $("#material_tree_view").height(h);
-                $("#material_multi_table_filters").height(h-8);
+                h = h - 64 - 8; //height with page scroller + margin-top
+                $("#select_data_controllet_container").height(h);
             }
 
         });

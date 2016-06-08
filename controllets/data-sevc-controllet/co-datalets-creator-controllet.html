@@ -7,11 +7,10 @@
 
 <link rel="import" href="../page-slider-controllet/page-slider-controllet.html">
 
-<link rel="import" href="../select-dataset-controllet/select-dataset-controllet.html">
 <link rel="import" href="../select-data-controllet/select-data-controllet.html" />
 <link rel="import" href="../select-visualization-controllet/select-visualization-controllet.html" />
 
-<dom-module id="data-sevc-controllet">
+<dom-module id="co-datalets-creator-controllet">
 
     <template>
 
@@ -19,13 +18,7 @@
 
             <neon-animatable>
 
-                <select-dataset-controllet id="select_dataset" datasets={{datasets}} suggested-datasets={{suggestedDatasets}}></select-dataset-controllet>
-
-            </neon-animatable>
-
-            <neon-animatable>
-
-                <select-data-controllet id="select_data"></select-data-controllet>
+                <select-data-controllet id="select_data" data-url={{dataUrl}} data={{data}}></select-data-controllet>
 
             </neon-animatable>
 
@@ -43,7 +36,7 @@
 
         Polymer({
 
-            is : 'data-sevc-controllet',
+            is : 'co-datalets-creator-controllet',
 
             listeners : {
                 'page-slider-controllet_selected' : '_updateSlider',
@@ -54,14 +47,14 @@
 
             properties : {
 
-                datasets : {
-                    type : Object,
+                dataUrl : {
+                    type  : String,
                     value : undefined
                 },
 
-                suggestedDatasets : {
+                data : {
                     type : Array,
-                    value : undefined
+                    value : []
                 },
 
                 deepUrl : {
@@ -83,64 +76,27 @@
 
             ready : function(){
                 ln["localization"] = this.localization;
+
+                this.$.select_data.init();
             },
 
             _updateSlider : function(e){
                 switch (e.detail.selected) {
                     case 0:
-                        this.$.slider.setTitle(ln["slide1Title_" + this.localization], ln["slide1Subtitle_" + this.localization]);
-
-                        this.$.slider.chevronLeft("invisible");
-                        this.$.slider.chevronRight(false);
-
-                        if(this.$.slider.getPrevSelected() == 1)
-                            this.$.slider.chevronRight(true);
-                        break;
-                    case 1:
                         this.$.slider.setTitle(ln["slide2Title_" + this.localization], ln["slide2Subtitle_" + this.localization]);
 
-                        this.$.slider.chevronLeft(true);
+                        this.$.slider.chevronLeft("invisible");
                         this.$.slider.chevronRight(false);
 
                         if(this.$.slider.getPrevSelected() == 2)
                             this.$.slider.chevronRight(true);
                         break;
-                    case 2:
+                    case 1:
                         this.$.slider.setTitle(ln["slide3Title_" + this.localization], ln["slide3Subtitle_" + this.localization]);
 
                         this.$.slider.chevronLeft(true);
                         this.$.slider.chevronRight("invisible");
                 }
-            },
-
-            _allowSecondStep : function(e){
-                if(e.detail.url == "") {
-                    this.$.slider.chevronRight(false);
-                    this.$.select_dataset.$.selected_url.invalid = false;
-                    return;
-                }
-
-                var that = this;
-
-                $.ajax({
-                    url: e.detail.url,
-                    dataType: "json",
-                    success: function(){
-                        that.$.select_dataset.$.selected_url.invalid = false;
-                        var f = Object.create(providerFactory);
-                        var provider = f.getProvider(e.detail.url);
-                        var dataUrl = provider.addLimit(e.detail.url);
-                        that.$.select_data.dataUrl = dataUrl;
-                        that.$.select_data.init();
-                        that.$.select_visualization.dataUrl = dataUrl;
-                        that.$.select_visualization.init();
-                        that.$.slider.chevronRight(true);
-                    },
-                    error: function(){
-                        that.$.slider.chevronRight(false);
-                        that.$.select_dataset.$.selected_url.invalid = true;
-                    }
-                });
             },
 
             _allowThirdStep : function(){

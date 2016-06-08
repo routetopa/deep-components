@@ -19,11 +19,11 @@
 
         .container {
             height: 400px;
-            width: 50%;
+            width: 1200px;
             /*width: 400px;*/
             position: relative;
             top: 100px;
-            left:25%;
+            left:300px;
         }
 
     </style>
@@ -41,7 +41,8 @@
 
         filters_controllet.setFields(fields);
 
-        filters_controllet.filters = [{field: "Lat", operation: "<=", value: "16"}, {field: "Long", operation: "!=", value: "32"}, {field: "Sbiricos", operation: "!=", value: "12AAA32+DAO"}];
+        filters_controllet.filters = [{logicalOperator: "OR"}, {field: "Lat", operation: "<=", value: "16"}, {field: "Long", operation: "!=", value: "32"}, {field: "Sbiricos", operation: "!=", value: "12AAA32+DAO"}];
+//        filters_controllet.logicalOperator = "or";
 
         var filters = filters_controllet.getFilters();
 

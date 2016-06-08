@@ -1,5 +1,7 @@
 <link rel="import" href="../../bower_components/polymer/polymer.html" />
 
+<link rel="import" href="../../bower_components/paper-material/paper-material.html" />
+
 <link rel="import" href="../../bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
 <link rel="import" href="../../bower_components/paper-menu/paper-menu.html">
 <link rel="import" href="../../bower_components/paper-item/paper-item.html">
@@ -8,11 +10,60 @@
 <link rel="import" href="../../bower_components/iron-icons/iron-icons.html">
 <link rel="import" href="../../bower_components/iron-icon/iron-icon.html">
 
+<link rel="import" href="../../bower_components/paper-button/paper-button.html">
+
 <dom-module id="filters-controllet">
 
     <template>
 
         <style is="custom-style">
+
+            #filters_container {
+                height: 48px;
+                width: 100%;
+            }
+
+            #filters_container * {
+                font-family: 'Roboto', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+                font-size: 16px;
+                line-height: 24px;
+            }
+
+            #filters_container #header {
+                height: 32px;
+                padding-top: 16px;
+                text-align: center;
+                font-weight: 700;
+
+                background: #FFFFFF;
+                color: #00BCD4;
+                cursor: pointer;
+            }
+
+            #filters_container #header.hide{
+                color: #00BCD4;
+                background: #FFFFFF;
+            }
+
+            /*#filters_container #header.hide:hover{*/
+            /*}*/
+
+            #filters_container #header.show{
+                color: #000000;
+                background: #B6B6B6;
+            }
+
+            #filters_container #panel {
+                display: none;
+                position: relative;
+                height: calc(100% - 48px);
+                background: #FFFFFF;
+            }
+
+            paper-dropdown-menu {
+                width: 100%;
+                --paper-input-container-focus-color: #2196F3;
+            }
 
             :host {
             --paper-dropdown-menu-icon: {
@@ -20,34 +71,8 @@
              };
             }
 
-            #filters_container {
-                height: 100%;
-                width: 100%;
-
-                font-family: 'Roboto', 'Helvetica Neue', Helvetica, Arial, sans-serif;
-                font-size: 16px;
-            }
-
-            #filters_panel {
-                display: none;
-                position: relative;
-                height: calc(100% - 48px);
-            }
-
-            .filters_header {
-                height: 32px;
-                padding-top: 16px;
-                text-align: center;
-                font-weight: 700;
-
-                color: #00BCD4;
-                cursor: pointer;
-            }
-
-            paper-dropdown-menu {
-                height: 48px;
-                width: 248px;;
-                --paper-input-container-focus-color: #2196F3;
+            paper-item {
+                min-width: 128px;
             }
 
             paper-item.iron-selected {
@@ -55,103 +80,146 @@
                 color: #FFFFFF;
             }
 
+            paper-input {
+                width: 100%;
+                --paper-input-container-focus-color: #2196F3;
+            }
+
+            paper-button {
+                margin: 0px;
+                height: 44px;
+                color: #FFFFFF;
+                background: #2196F3;
+                font-weight: 700;
+            }
+
+            paper-button:hover {
+                box-shadow: 0px 8px 12px #888;
+                -webkit-box-shadow: 0px 8px 12px #888;
+                -moz-box-shadow: 0px 8px 12px #888;
+            }
+
             paper-icon-button {
+                padding: 4px;
+            }
+
+            paper-icon-button.add {
                 color: #2196F3;
                 --paper-icon-button-ink-color: #2196F3;
-                margin: 0px;
             }
 
             paper-icon-button.cancel {
                 color: #F44336;
                 --paper-icon-button-ink-color: #F44336;
-                margin-bottom: -6px;
-                margin-left: -8px;
-            }
-            paper-icon-button.add {
-                margin-bottom: -6px;
-                margin-left: -8px;
             }
 
-            paper-input {
+            #filters_container .row {
+                display: flex;
+                height: 60px;
+                width: 100%;
+            }
+
+            #filters_container .ddl_container {
+                display: flex;
+                height: 60px;
+                width: 25%;
+                padding: 0px 8px;
+            }
+
+            #filters_container .add_container {
+                height: 40px;
+                width: 40px;
+                padding: 10px 0px;
+            }
+
+            #filters_container .andOr_container {
                 display: inline-block;
-                height: 48px;
-                width: 248px;
-                --paper-input-container-focus-color: #2196F3;
+                height: 44px;
+                width: calc(100% - 40px);
+                padding: 8px 0px;
+                text-align: right;
             }
 
-            td {
+            #filters_container .row2 {
+                display: flex;
                 height: 48px;
-                padding: 0px;
-                padding-bottom: 4px;
-                margin: 0px;
-                width: 248px;
-                border-bottom: 1px solid  #2196F3;
-                vertical-align: bottom;
+                width: 100%;
             }
 
-            th {
-                height: 48px;
-                padding: 0px;
-                margin: 0px;
-                vertical-align: bottom;
-                text-align: left ;
+            #filters_container .row2 .highlighted {
+                color: #2196F3;
+                font-weight: 700;
             }
 
-            .filters_cell_button {
-                width: 24px;
-                border-bottom: none;
+            #filters_container .filter {
+                height: 24px;
+                width: calc(75% - 16px);
+                padding: 12px 8px;
+            }
+
+            #filters_container .remove_container {
+                height: 40px;
+                width: 40px;
+                padding: 4px 8px;
+
             }
 
     </style>
 
-        <div id="filters_container">
+        <paper-material id="filters_container" elevation="5">
 
-            <div id="filters_header" class="filters_header" on-click="_showFiltersPanel"><span id="filters"><span id="addFilters"></span></span></div>
+            <div id="header" class="hide" on-click="_showFiltersPanel"><span id="filters"><span id="addFilters"></span></span></div>
 
-            <div id="filters_panel">
+            <div id="panel">
 
-                <table cellspacing="12px">
-                    <tr>
-                        <th>
-                            <paper-dropdown-menu id="filter_field" label="Field">
-                                <paper-menu id="filter_field_menu" class="dropdown-content">
-                                    <template is="dom-repeat" items={{fields}}>
-                                        <paper-item id={{index}}>{{_fieldName(item)}}</paper-item>
-                                        <!--on-tap=""-->
-                                    </template>
-                                </paper-menu>
-                            </paper-dropdown-menu>
-                        </th>
-                        <th>
-                            <paper-dropdown-menu id="filter_operation" label="Operation">
-                                <paper-menu id="filter_operation_menu" class="dropdown-content">
-                                    <template is="dom-repeat" items={{operations}}>
-                                        <paper-item id={{index}}>{{_getOperationlName(item)}}</paper-item>
-                                    </template>
-                                </paper-menu>
-                            </paper-dropdown-menu>
-                        </th>
-                        <th>
-                            <paper-input id="filter_value" label="Value" class="base_input" maxlength="32" auto-validate pattern="^[.:,;+-_ a-zA-Z0-9]*" error-message="Invalid value!"></paper-input>
-                            <!--"^[_a-zA-Z0-9]*"-->
-                        </th>
-                        <th class="filters_cell_button">
+                <div class="row">
+                    <div class="ddl_container">
+                        <paper-dropdown-menu id="filter_field" label="Field">
+                            <paper-menu id="filter_field_menu" class="dropdown-content">
+                                <template is="dom-repeat" items={{fields}}>
+                                    <paper-item id={{index}}>{{_fieldName(item)}}</paper-item>
+                                </template>
+                            </paper-menu>
+                        </paper-dropdown-menu>
+                    </div>
+                    <div class="ddl_container">
+                        <paper-dropdown-menu id="filter_operation" label="Operation">
+                            <paper-menu id="filter_operation_menu" class="dropdown-content">
+                                <template is="dom-repeat" items={{operations}}>
+                                    <paper-item id={{index}}>{{_getOperationlName(item)}}</paper-item>
+                                </template>
+                            </paper-menu>
+                        </paper-dropdown-menu>
+                    </div>
+                    <div class="ddl_container">
+                        <paper-input id="filter_value" label="Value" class="base_input" maxlength="32" auto-validate pattern="^[.:,;+-_ a-zA-Z0-9]*" error-message="Invalid value!"></paper-input>
+                    </div>
+                    <div class="ddl_container">
+                        <div class="add_container">
                             <paper-icon-button on-click="_addFilter" icon="add-circle" class="add"></paper-icon-button>
-                        </th>
-                    </tr>
-                    <template is="dom-repeat" items={{filters}}>
-                        <tr>
-                            <td>{{item.field}}</td>
-                            <td>{{item.operation}}</td>
-                            <td class="filters_cell_value">{{item.value}}</td>
-                            <td class="filters_cell_button"><paper-icon-button on-click="_deleteFilter" icon="cancel" class="cancel"></paper-icon-button></td>
-                        </tr>
+                        </div>
+                        <div class="andOr_container">
+                            <paper-button raised on-click="_changeLogicalOperator"><span id="andOr">{{logicalOperator}}</span></paper-button>
+                        </div>
+                    </div>
+                </div>
+
+                <template is="dom-repeat" items={{filters}}>
+                    <template is="dom-if" if="{{index}}"><!--excludes logicalOperator-->
+                        <div class="row2">
+                            <div class="filter">
+                                {{item.field}}&nbsp;&nbsp;&nbsp;<span class="highlighted">{{item.operation}}</span>&nbsp;&nbsp;&nbsp;"{{item.value}}"&nbsp;&nbsp;&nbsp;<span class="highlighted">{{_getLogicalOperator(index)}}</span>
+                            </div>
+                            <div class="remove_container">
+                                <paper-icon-button on-click="_deleteFilter" icon="cancel" class="cancel"></paper-icon-button>
+                            </div>
+                        </div>
                     </template>
-                </table>
+                </template>
 
             </div>
 
-        </div>
+        </paper-material>
 
     </template>
 
@@ -175,7 +243,7 @@
 
                 filters : {
                     type : Array,
-                    value : []
+                    value :  [{logicalOperator: "AND"}]
                 },
 
                 show : {
@@ -186,19 +254,35 @@
             },
 
             ready : function() {
-                $(this.$.filters_panel).perfectScrollbar();
+                $(this.$.panel).perfectScrollbar();
+//                this._showFiltersPanel();
             },
 
             attached : function() {
+                this.logicalOperator = this.filters[0].logicalOperator;
+
                 this._translate();
             },
 
             setFields : function(fields) {
-                this.fields = this._copy(fields);
+//                this.fields = this._copy(fields);
+                this.fields = fields.slice();
+                this.fields = fields;
+            },
+
+            setFilters : function(filters) {
+                this.filters = filters.slice();
+                this.logicalOperator = this.filters[0].logicalOperator;
+                this._fire();
             },
 
             getFilters : function() {
                 return this.filters;
+            },
+
+            reset : function() {
+                this.fields = [];
+                this.filters = [{logicalOperator: "AND"}];
             },
 
             _translate : function() {
@@ -213,18 +297,32 @@
             },
 
             _showFiltersPanel : function() {
+//                ? filter class hiddend & hover:
+
                 if(!this.show) {
-                    this.$.filters_header.style.color = "#000000";
-                    this.$.filters_header.style.background = "#B6B6B6";
-                    this.$.filters_panel.style.display = "block";
+                    this.$.filters_container.style.height = "100%";
+                    $(this.$.header).removeClass("hide");
+                    $(this.$.header).addClass("show");
+                    this.$.panel.style.display = "block";
+
                 }
                 else {
-                    this.$.filters_header.style.color = "#00BCD4";
-                    this.$.filters_header.style.background = "#FFFFFF";
-                    this.$.filters_panel.style.display = "none";
+                    this.$.filters_container.style.height = "48px";
+                    $(this.$.header).removeClass("show");
+                    $(this.$.header).addClass("hide");
+                    this.$.panel.style.display = "none";
                 }
 
+                this.fire('filters-controllet_show', {show: this.show});
+
                 this.show = !this.show;
+            },
+
+            _fire : function() {
+                if (this.filters.length > 1)
+                    this.fire('filters-controllet_filters', {filters: this.filters});
+                else
+                    this.fire('filters-controllet_filters', {filters: []});
             },
 
             _addFilter : function() {
@@ -235,26 +333,34 @@
 //                    var operation = this.$.filter_operation.value;
                     var value = this.$.filter_value.value;
 
-                    var filters = this.filters;
-                    filters.push({"field": field, "operation": operation, "value": value});
-                    this.filters = this._copy(filters);
+//                    var filters = this.filters;
+//                    filters.push({"field": field, "operation": operation, "value": value});
+//                    this.filters = filters;
+
+                    this.filters.push({"field": field, "operation": operation, "value": value});
 
                     this.$.filter_field_menu.select(-1);
                     this.$.filter_operation_menu.select(-1);
                     this.$.filter_value.value = "";
 
-                    this.fire('filters-controllet_filters', {filters: this.filters});
+                    this._fire();
+
+                    this._renderFilters();
                 }
             },
 
             _deleteFilter : function(e) {
                 var index = e.model.index;
 
-                var filters = this.filters;
-                filters.splice(index, 1);
-                this.filters = this._copy(filters);
+//                var filters = this.filters;
+//                filters.splice(index, 1);
+//                this.filters = this._copy(filters);
 
-                this.fire('filters-controllet_filters', {filters: this.filters});
+                this.filters.splice(index, 1);
+
+                this._fire();
+
+                this._renderFilters();
             },
 
             _getOperationlName: function(operation) {
@@ -269,15 +375,54 @@
                 return operation;
             },
 
-            _copy : function(o) {
-                var out, v, key;
-                out = Array.isArray(o) ? [] : {};
-                for (key in o) {
-                    v = o[key];
-                    out[key] = (typeof v === "object") ? this._copy(v) : v;
-                }
-                return out;
-            }
+//            _changeLogicalOperator : function() {
+//                if(this.logicalOperator == "AND")
+//                    this.logicalOperator = "OR";
+//                else
+//                    this.logicalOperator = "AND";
+//
+//                this._fire();
+//
+//                this._renderFilters();
+//            },
+
+            _changeLogicalOperator : function() {
+                if(this.logicalOperator == "AND")
+                    this.logicalOperator = "OR";
+                else
+                    this.logicalOperator = "AND";
+
+                this.filters[0] = {logicalOperator: this.logicalOperator}
+
+                this._fire();
+
+                this._renderFilters();
+            },
+
+            _renderFilters : function() {
+                var filters = this.filters.slice();
+                this.filters = [];
+                this.async(function() {
+                    this.filters = filters;
+                }, 0);
+            },
+
+            _getLogicalOperator : function(index) {
+                if(index == this.filters.length -1)
+                    return "";
+                else
+                    return this.filters[0].logicalOperator;
+            },
+
+//            _copy : function(o) {
+//                var out, v, key;
+//                out = Array.isArray(o) ? [] : {};
+//                for (key in o) {
+//                    v = o[key];
+//                    out[key] = (typeof v === "object") ? this._copy(v) : v;
+//                }
+//                return out;
+//            }
 
         });
 

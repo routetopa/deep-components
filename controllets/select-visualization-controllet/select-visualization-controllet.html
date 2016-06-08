@@ -190,14 +190,21 @@
                 params:{
                     type: Object,
                     value: undefined
-                }
+                },
+
+                data : {
+                    type  : Object,
+                    value : undefined
+                },
 
             },
 
             listeners: {
+//                'select-fields-controllet_selected-fields': '_updateFields',
+//                'filters-controllet_filters': '_updateFilters',
                 'items-vslider-controllet_selected-datalet': '_selectDatalet',
                 'select_visualization_inputs_ready': '_loadDatalet',
-                'select_visualization_options_changed': '_tryLoadDatalet',
+                'select_visualization_options_changed': '_tryLoadDatalet'
             },
 
             ready : function() {
@@ -221,8 +228,8 @@
             },
 
             setFields : function(fields) {
-                if (this.fields.length > 0 && JSON.stringify(this.fields) != JSON.stringify(fields))
-                    this.reset();
+//                if (this.fields.length > 0 && JSON.stringify(this.fields) != JSON.stringify(fields))
+//                    this.init();
 
                 this.fields = this._copy(fields);
 
@@ -231,7 +238,11 @@
                     inputs.setFields(this.fields);
             },
 
-            reset : function() {
+            setData : function(data) {
+                this.data = this._copy(data);
+            },
+
+            init : function() {
                 this.$.vslider._reset();
             },
 
@@ -342,11 +353,15 @@
                 var params = this.$.options.getParams();
                 for (var key in params) { this.params[key] = params[key]; }
 
+                var data = alasql_complexSelectData(this.data, this.selectedFields, this.filters, inputs.getAggregators(), inputs.getOrders());
+                data = transformData(data, this.selectedFields, true);
+                this.params["data"] = JSON.stringify(data);
+
                 var dataletParams ={
-                    component   : this.selectedDatalet+"-datalet",
-                    params      : this.params,
-                    fields      : this.selectedFields,
-                    placeHolder : this.$.datalet_selection_datalet_placeholder
+                    component: this.selectedDatalet+"-datalet",
+                    params: this.params,
+                    fields: this.selectedFields,
+                    placeHolder: this.$.datalet_selection_datalet_placeholder,
                 };
 
                 ComponentService.deep_url = this.deepUrl;
@@ -359,11 +374,11 @@
                 delete this.params["export_menu"];
 
                 var data = {
-                    dataUrl : this.dataUrl,
-                    params :  this.params,
-                    fields :  this.selectedFields,
-                    datalet : this.selectedDatalet+"-datalet",
-                    staticData : JSON.stringify(this.$.datalet_selection_datalet_placeholder.children[1].behavior.data)
+                    dataUrl: this.dataUrl,
+                    params: this.params,
+                    fields: this.selectedFields,
+                    datalet: this.selectedDatalet+"-datalet",
+                    staticData: JSON.stringify(this.$.datalet_selection_datalet_placeholder.children[1].behavior.data)
                 }
 
                 this.fire('data-sevc-controllet.dataletCreated', {data : data});
