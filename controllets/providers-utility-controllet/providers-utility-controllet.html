@@ -12,7 +12,7 @@
             else if (dataUrl.indexOf("search?dataset") > -1)
                 return new openDataSoft_Provider();
             else
-                return generic_Provider();
+                return new generic_Provider();
         }
     };
 
