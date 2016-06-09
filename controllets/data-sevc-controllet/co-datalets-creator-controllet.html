@@ -40,7 +40,6 @@
 
             listeners : {
                 'page-slider-controllet_selected' : '_updateSlider',
-                'dataset-selection-controllet_data-url' : '_allowSecondStep',
                 'select-fields-controllet_selected-fields' : '_allowThirdStep',
                 'filters-controllet_filters': '_allowThirdStep'
             },
@@ -77,7 +76,10 @@
             ready : function(){
                 ln["localization"] = this.localization;
 
+                this.$.select_data.dataUrl = this.dataUrl;
                 this.$.select_data.init();
+                this.$.select_visualization.dataUrl = this.dataUrl;
+                this.$.select_visualization.init();
             },
 
             _updateSlider : function(e){
@@ -88,7 +90,7 @@
                         this.$.slider.chevronLeft("invisible");
                         this.$.slider.chevronRight(false);
 
-                        if(this.$.slider.getPrevSelected() == 2)
+                        if(this.$.slider.getPrevSelected() == 1)
                             this.$.slider.chevronRight(true);
                         break;
                     case 1:
