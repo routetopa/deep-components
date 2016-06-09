@@ -342,7 +342,8 @@
 
                 this.selectedFields = inputs.getSelectedFields();
 
-                this.params = {'data-url' : this.dataUrl};
+                this.params = {'data-url' : this.dataUrl};//??????????????????
+//                this.params = {};
 
                 this.params["filters"] = JSON.stringify(this.filters);
                 this.params["aggregators"] = JSON.stringify(inputs.getAggregators());
@@ -355,12 +356,12 @@
 
                 var data = alasql_complexSelectData(this.data, this.selectedFields, this.filters, inputs.getAggregators(), inputs.getOrders());
                 data = transformData(data, this.selectedFields, true);
-                this.params["data"] = JSON.stringify(data);
+                this.params["data"] = JSON.stringify(data).replace(/'/g, "&#39;");
 
                 var dataletParams ={
                     component: this.selectedDatalet+"-datalet",
-                    params: this.params,
                     fields: this.selectedFields,
+                    params: this.params,
                     placeHolder: this.$.datalet_selection_datalet_placeholder,
                 };
 
@@ -375,9 +376,9 @@
 
                 var data = {
                     dataUrl: this.dataUrl,
-                    params: this.params,
-                    fields: this.selectedFields,
                     datalet: this.selectedDatalet+"-datalet",
+                    fields: this.selectedFields,
+                    params: this.params,
                     staticData: JSON.stringify(this.$.datalet_selection_datalet_placeholder.children[1].behavior.data)
                 }
 
