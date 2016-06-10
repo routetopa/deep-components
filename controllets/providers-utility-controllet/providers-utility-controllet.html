@@ -22,10 +22,19 @@
     };
 
     utility_getSelectedFields = function(fields, indices) {
-        selectedFileds = [];
+        var selectedFileds = [];
         for (var i = 0; i < indices.length; i++)
             selectedFileds.push(fields[indices[i]]);
         return selectedFileds;
+    };
+
+    utility_getSelectedIndices = function(fields, selectedFileds) {
+        console.log("we");
+        var selectedIndices = [];
+        for (var i = 0; i < fields.length; i++)
+            if($.inArray(fields[i], selectedFileds) > -1)
+                selectedIndices.push(i);
+        return selectedIndices;
     };
 
     //    utility_getResourceUrl = function(url) {

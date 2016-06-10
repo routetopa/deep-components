@@ -506,15 +506,15 @@
 
                             var url = this.$.list.selectedItem.resource_url;
 
-//                            // Check if CKAN
-//                            var strDatasetPos = url.indexOf('/dataset/');
-//                            var strResourcePos = (strDatasetPos >= 0) ? url.indexOf('/resource/') : -1;
-//                            if (strDatasetPos >= 0 && strResourcePos > strDatasetPos) {
-//                                var urlSegment1 = url.substring(0, strDatasetPos);
-//                                var urlResourceEnd = url.indexOf('/', strResourcePos + 10);
-//                                var resourceId = url.substring(strResourcePos + 10, urlResourceEnd);
-//                                url = urlSegment1 + "/api/action/datastore_search?resource_id=" + resourceId;
-//                            }
+                            // Check if CKAN
+                            var strDatasetPos = url.indexOf('/dataset/');
+                            var strResourcePos = (strDatasetPos >= 0) ? url.indexOf('/resource/') : -1;
+                            if (strDatasetPos >= 0 && strResourcePos > strDatasetPos) {
+                                var urlSegment1 = url.substring(0, strDatasetPos);
+                                var urlResourceEnd = url.indexOf('/', strResourcePos + 10);
+                                var resourceId = url.substring(strResourcePos + 10, urlResourceEnd);
+                                url = urlSegment1 + "/api/action/datastore_search?resource_id=" + resourceId;
+                            }
 //
 //                            // Check if OPENDATASOFT
 //                            var strExploreDatasetPos = url.indexOf('/explore/dataset/');

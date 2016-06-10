@@ -133,6 +133,21 @@
                 return this.data;
             },
 
+            setSelectedFields : function(selectedFields) {
+                this.async(function() {
+                    var selectedIndices = utility_getSelectedIndices(this.fields, selectedFields);
+
+                    console.log(selectedIndices);
+                    this.$.select_fields.setSelectFields(selectedIndices);
+                }, 0);
+            },
+
+            setFilters : function(filters) {
+                this.async(function() {
+                    this.$.filters.setFilters(filters);
+                }, 0);
+            },
+
             _resizeFilters : function() {
                 if(!this.showFilter) {
                     this.$.table_container.style.height = "calc(50% - 12px)";
@@ -186,9 +201,8 @@
 
                             that.$.select_fields.setFields(that.fields);
                             that.$.filters.setFields(that.fields);
-//                            that.$.data_table.setData(data);
 
-                            that._preselect();
+                            that.fire('data-ready');
                         }
                     });
                 }
@@ -205,29 +219,15 @@
 
                     this.$.select_fields.setFields(this.fields);
                     this.$.filters.setFields(this.fields);
-//                    this.$.data_table.setData(data);
-
-                    this._preselect();
                 }
             },
 
             reset : function() {
-//                this.dataUrl = undefined;
-//                this.data = undefined;
                 this.filters = [];
                 this.selectedFields = [];
                 this.$.select_fields.reset();
                 this.$.data_table.reset();
                 this.$.filters.reset();
-            },
-
-            _preselect : function() {
-                this.async(function() {
-                    if(this.filters.length > 1)
-                        this.$.filters.setFilters(this.filters);
-                    if(this.selectedFields.length > 0)
-                        this.$.select_fields.setSelectFields(this.selectedFields);
-                }, 0);
             },
 
             _resize : function(){
