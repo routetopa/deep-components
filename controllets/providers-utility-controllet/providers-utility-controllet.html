@@ -31,9 +31,9 @@
     utility_getSelectedIndices = function(fields, selectedFileds) {
         console.log("we");
         var selectedIndices = [];
-        for (var i = 0; i < fields.length; i++)
-            if($.inArray(fields[i], selectedFileds) > -1)
-                selectedIndices.push(i);
+        for (var i = 0; i < selectedFileds.length; i++)
+            if($.inArray(selectedFileds[i], fields) > -1)
+                selectedIndices.push(fields.indexOf(selectedFileds[i]));
         return selectedIndices;
     };
 
