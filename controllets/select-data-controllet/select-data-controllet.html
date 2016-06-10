@@ -202,7 +202,10 @@
                             that.$.select_fields.setFields(that.fields);
                             that.$.filters.setFields(that.fields);
 
-                            that.fire('data-ready');
+                            that.fire('data-ready', {ready : true});
+                        },
+                        error: function(){
+                            that.fire('data-ready', {ready : false});
                         }
                     });
                 }

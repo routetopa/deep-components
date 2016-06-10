@@ -69,6 +69,7 @@
                 padding: 12px;
                 text-align: center;
                 font-weight: 700;
+                cursor: help;
             }
 
             #data_table_container table {
@@ -180,6 +181,16 @@
         <paper-material id="data_table_container" elevation="5">
 
             <div id="header"><span id="selected_data"></span></div>
+
+            <paper-tooltip id="tooltip_wornings" for="header" offset="56">
+                <template is="dom-repeat" items="{{fields}}">
+                    <template is="dom-if" if={{item.errorsDescription.length}}>
+                        <p>
+                            <span class="warning">{{_warning()}}:</span> {{item.errorsDescription}}
+                        </p>
+                    </template>
+                </template>
+            </paper-tooltip>
 
             <table>
                 <tbody id="tbody">
@@ -304,6 +315,8 @@
                 this.shownData = this.data.slice(this.prev-1, this.next);
 
                 this._resize();
+
+                this.$.tooltip_wornings.show();
             },
 
             reset : function(){

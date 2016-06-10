@@ -49,7 +49,8 @@
                 'page-slider-controllet_selected' : '_updateSlider',
                 'dataset-selection-controllet_data-url' : '_allowSecondStep',
                 'select-fields-controllet_selected-fields' : '_allowThirdStep',
-                'filters-controllet_filters': '_allowThirdStep'
+                'filters-controllet_filters': '_allowThirdStep',
+                'data-ready': '_dataReady'
             },
 
             properties : {
@@ -114,33 +115,25 @@
             },
 
             _allowSecondStep : function(e){
-                if(e.detail.url == "") {
-                    this.$.slider.chevronRight(false);
+                this.$.slider.chevronRight(false);
+//
+                var f = Object.create(providerFactory);
+                var provider = f.getProvider(e.detail.url);
+                var dataUrl = provider.addLimit(e.detail.url);
+
+                this.$.select_data.dataUrl = dataUrl;
+                this.$.select_data.init();
+                this.$.select_visualization.dataUrl = dataUrl;
+                this.$.select_visualization.init();
+            },
+
+            _dataReady : function(e){
+                if(e.detail.ready) {
+                    this.$.slider.chevronRight(true);
                     this.$.select_dataset.$.selected_url.invalid = false;
-                    return;
                 }
-
-                var that = this;
-
-                $.ajax({
-                    url: e.detail.url,
-                    dataType: "json",
-                    success: function(){
-                        that.$.select_dataset.$.selected_url.invalid = false;
-                        var f = Object.create(providerFactory);
-                        var provider = f.getProvider(e.detail.url);
-                        var dataUrl = provider.addLimit(e.detail.url);
-                        that.$.select_data.dataUrl = dataUrl;
-                        that.$.select_data.init();
-                        that.$.select_visualization.dataUrl = dataUrl;
-                        that.$.select_visualization.init();
-                        that.$.slider.chevronRight(true);
-                    },
-                    error: function(){
-                        that.$.slider.chevronRight(false);
-                        that.$.select_dataset.$.selected_url.invalid = true;
-                    }
-                });
+                else
+                    this.$.select_dataset.$.selected_url.invalid = true;
             },
 
             _allowThirdStep : function(){
