@@ -481,30 +481,40 @@
                     var that = this;
                     window.addEventListener("resize", function() { that._resize(); that._loadTreeMap();});
 
-                    this.providers = this.datasets["result"]["providers"];
-                    this.datasets = this.datasets["result"]["datasets"];
+//                    this.providers = that.datasets["result"]["providers"];
+//                    this.datasets = that.datasets["result"]["datasets"];
 
-                    if(this.suggestedDatasets) {
-                        this.tempDatasets = this.datasets;
-                        this.datasets = this.suggestedDatasets.concat(this.datasets);
-                        this.$.suggested_div.style.visibility = "visible";
-                    }
+                    $.ajax({
+                        url: "/cocreation/ajax/get-all-dataset",
+                        dataType: "json",
+                        success: function(spodDatasets){
 
-                    this.filteredDatasets = this.datasets;
+                            that.providers = $.extend(that.datasets["result"]["providers"], {99: {api_url: "/cocreation/ajax/get-all-dataset", id: "99", image_hash: "SPOD", title: "SPOD"}});
+                            that.datasets = $.merge(spodDatasets, that.datasets["result"]["datasets"]);
 
-                    this.prev = 1;
-                    this.next = this.step;
-                    this.length = this.filteredDatasets.length;
+                            if(that.suggestedDatasets) {
+                                that.tempDatasets = that.datasets;
+                                that.datasets = that.suggestedDatasets.concat(that.datasets);
+                                that.$.suggested_div.style.visibility = "visible";
+                            }
 
-                    this.shownPrev = Math.min(this.prev, this.length);
-                    this.shownNext = Math.min(this.next, this.length);
-                    this.shownDatasets = this.filteredDatasets.slice(this.prev-1, this.next);
+                            that.filteredDatasets = that.datasets;
 
-                    this.$.list.scrollTarget = this.ownerDocument.documentElement;
+                            that.prev = 1;
+                            that.next = that.step;
+                            that.length = that.filteredDatasets.length;
 
-                    this._translate();
+                            that.shownPrev = Math.min(that.prev, that.length);
+                            that.shownNext = Math.min(that.next, that.length);
+                            that.shownDatasets = that.filteredDatasets.slice(that.prev-1, that.next);
 
-                    this._loadTreeMap();
+                            that.$.list.scrollTarget = that.ownerDocument.documentElement;
+
+                            that._translate();
+
+                            that._loadTreeMap();
+                        }
+                    });
                 },
 
                 _translate : function(){
