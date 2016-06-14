@@ -1,0 +1,655 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html" />
+
+<link rel="import" href="../../bower_components/paper-material/paper-material.html" />
+<link rel="import" href="../../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../../bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="../../bower_components/paper-tooltip/paper-tooltip.html">
+<link rel="import" href="../../bower_components/paper-checkbox/paper-checkbox.html">
+<link rel="import" href="../../bower_components/paper-dialog/paper-dialog.html">
+<link rel="import" href="../data-table-controllet/data-table-controllet.html">
+
+<script type="text/javascript" src="../../bower_components/JSDataChecker/jsdatachecker.min.js"></script>
+
+<dom-module id="dataset-table-controllet">
+
+    <template>
+
+        <style is="custom-style">
+
+            paper-checkbox {
+                height: 24px;
+                /*margin-top: 8px*/
+                --paper-checkbox-checked-color: #2196F3;
+                --paper-checkbox-checked-ink-color: #FFFFFF;
+                --paper-checkbox-unchecked-color: #000000;
+                --paper-checkbox-unchecked-ink-color: #FFFFFF;
+                --paper-checkbox-label-color: #000000;
+            }
+
+            paper-input {
+                max-width: 288px;
+                --paper-input-container-focus-color: #2196F3;
+            }
+
+            paper-icon-button.preview-close
+            {
+                height: 28px;
+                width: 28px;
+            }
+
+            paper-icon-button{
+                height: 48px;
+                width: 48px;
+                padding: 0px;
+                --paper-icon-button-ink-color: #FFFFFF;
+            }
+
+            paper-icon-button.tools
+            {
+                height: 24px;
+                width: 24px;
+                padding: 0px;
+                --paper-icon-button-ink-color: #2196F3;
+            }
+
+            paper-icon-button:hover{
+                color: #2196F3;
+            }
+
+            paper-icon-button.clear {
+                width: 24px;
+                height: 24px;
+                padding: 0px 4px;
+                color: #F44336;
+                --paper-icon-button-ink-color: #FFFFFF;
+            }
+
+            paper-icon-button.order {
+                height: 24px;
+                width: 24px;
+                cursor: pointer;
+            }
+
+            paper-icon-button.order:hover {
+                color: #FFFFFF;
+            }
+
+            paper-tooltip {
+                --paper-tooltip-background: black;
+            }
+
+            #data_table_container {
+                height: 100%;
+                width: 100%;
+            }
+
+            #data_table_container * {
+                font-family: 'Roboto', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+                font-size: 16px;
+                line-height: 24px;
+            }
+
+            #data_table_container #header {
+                background: #B6B6B6;
+                height: 24px;
+                padding: 12px;
+                text-align: center;
+                font-weight: 700;
+            }
+
+            #data_table_container table {
+                height: calc(100% - 96px);
+                width: 100%;
+
+                border-spacing: 0px;
+            }
+
+            #data_table_container tbody {
+                width: 100%;
+                display: block;
+                position: relative;
+            }
+
+            #data_table_container .even-row{
+
+            }
+
+            #data_table_container .odd-row{
+                background: #E0E0E0;
+            }
+
+            /*#data_table_container tr:nth-child(odd) {
+                background: #E0E0E0;
+            }*/
+
+            #data_table_container th,
+            #data_table_container td{
+                height: 24px;
+                padding: 12px;
+                text-align: center;
+                max-width: 224px;
+                overflow: hidden;
+                white-space: nowrap;
+                text-overflow: ellipsis;
+                width: 1%;
+                vertical-align: middle;
+            }
+
+            #data_table_container th {
+                background: #2196F3;
+                color: #FFFFFF;
+                font-weight: 700;
+                /*cursor: help;*/
+            }
+
+            #data_table_container td {
+                font-size: 14px;
+                padding: 4px;
+            }
+
+            #data_table_container tfoot td {
+                height: 48px;
+                padding: 0px;
+                font-size: 16px;
+                background: #B6B6B6;
+            }
+
+            #data_table_container #footer {
+                width: 100%;
+                height: 48px;
+                background: #B6B6B6;
+
+                display: flex;
+                flex-direction: row;
+            }
+
+            #data_table_container .footer_block {
+                height: 24px;
+                padding: 12px 8px;
+                text-align: right;
+            }
+
+            #data_table_container .footer_block:nth-child(1) {
+                width: 30%;
+                overflow: hidden;
+                white-space: nowrap;
+                text-overflow: ellipsis;
+            }
+
+            #data_table_container .footer_block:nth-child(2) {
+                width: 40%;
+                height: 48px;
+                padding: 0px 8px;
+                text-align: center;
+            }
+
+            #data_table_container .footer_block:nth-child(3) {
+                width: 30%;
+                height: 40px;
+                padding: 4px 8px;
+                text-align: left;
+            }
+
+            #data_table_container br {
+                display: block;
+                margin-top: 8px;
+                content: " ";
+            }
+
+            #data_table_container p {
+                margin: 0;
+                padding: 0;
+            }
+
+            #data_table_container p .type{
+                font-weight: 700;
+            }
+
+            #data_table_container p .warning{
+                font-weight: 700;
+                color: #F44336;
+            }
+
+            paper-dialog {
+                /*position: fixed;*/
+                min-height: 80%;
+                min-width: 85%;
+                height: 80%;
+                width: 85%;
+            }
+
+            paper-dialog > *
+            {
+                padding: 0;
+                margin: 0;
+            }
+
+            .buttons_position
+            {
+                position: absolute;
+                top: 10px;
+                right: 10px;
+            }
+
+        </style>
+
+        <paper-material id="data_table_container" elevation="5">
+
+            <div id="header">
+                <span id="selected_data"></span>
+                <div style="float: right; right: 10px">
+                    <paper-checkbox checked on-change="showAll"><span id="suggested_datasets">Last Version</span></paper-checkbox>
+                </div>
+            </div>
+
+            <table>
+                <tbody id="tbody">
+                <tr>
+                    <template is="dom-repeat" items="{{fields}}">
+                        <th id="id_{{index}}">
+                            {{item.name}}
+                            <paper-icon-button id="{{index}}" class="order" on-click="_order" icon="unfold-more"></paper-icon-button>
+                        </th>
+                    </template>
+                    <th>
+                        TOOLS
+                    </th>
+                </tr>
+                <template is="dom-repeat" items="{{shownData}}">
+                    <tr class$="{{item.cssClass}}">
+                        <template is="dom-repeat" items="{{_toArray(item)}}">
+                            <template is="dom-if" if="{{!item.isLink}}">
+                                <td title="{{item.value}}">{{item.value}}</td>
+                            </template>
+                            <template is="dom-if" if="{{item.isLink}}">
+                                <td>
+                                    <template is="dom-repeat" items="{{item.value}}" as="user" >
+                                        <div class="ow_avatar">
+                                            <a href="#">
+                                                <img alt="" src="{{user}}" style="max-width: 100%;">
+                                            </a>
+                                        </div>
+                                    </template>
+                                </td>
+                            </template>
+                        </template>
+                        <td>
+                            <paper-icon-button class="tools" icon="open-in-new" on-click="_onOpenDatasetClick"></paper-icon-button>
+                            <paper-icon-button class="tools" icon="file-download"></paper-icon-button>
+                            <paper-icon-button class="tools" icon="content-copy"></paper-icon-button>
+                        </td>
+                    </tr>
+                </template>
+                </tbody>
+            </table>
+
+            <!--<template is="dom-repeat" items="{{fields}}">
+                <paper-tooltip for="{{_fieldId(index)}}" offset="8">
+                    <p>
+                        <span class="type">{{_type()}}:</span> {{item.type}}
+                        <template is="dom-if" if={{item.errorsDescription.length}}>
+                            <br/>
+                            <span class="warning">{{_warning()}}:</span> {{item.errorsDescription}}
+                        </template>
+                    </p>
+                </paper-tooltip>
+            </template>-->
+
+            <div id="footer">
+                <div class="footer_block">
+                    <span id="showing"></span> {{shownPrev}} <span id="to"></span> {{shownNext}} <span id="of"></span> {{length}} <span id="rows"></span>
+                </div>
+                <div class="footer_block">
+                    <paper-icon-button id="slider_chevron_left" class="chevron-left" on-click="_onPrevClick" icon="chevron-left"></paper-icon-button>
+                    <paper-icon-button id="slider_chevron_right" class="chevron-right" on-click="_onNextClick" icon="chevron-right"></paper-icon-button>
+                </div>
+                <div class="footer_block">
+                    <paper-input id="filter" value={{filter}} no-label-float>
+                        <iron-icon class="search" icon="search" prefix></iron-icon>
+                        <paper-icon-button class="clear" suffix on-click="_clearInput" icon="clear"></paper-icon-button>
+                    </paper-input>
+                </div>
+            </div>
+
+        </paper-material>
+
+        <paper-dialog modal id="paper_dialog">
+            <data-table-controllet id="data_table_controllet" data='[{"ID":"1",  "VER":"5", "USER":"http://172.16.15.77/ow_userfiles/plugins/base/avatars/avatar_1_1457965950.jpg", "Name":"Bilancio Battipaglia", "Data":"07/06/2016", "METADATA":"Traffic, Cameras", "USED" : 10},
+                              {"ID":"1",  "VER":"4", "USER":"http://172.16.15.77/ow_userfiles/plugins/base/avatars/avatar_1_1457965950.jpg", "Name":"Bilancio Battipaglia", "Data":"07/06/2016", "METADATA":"Traffic, Cameras", "USED" : 10},
+                              {"ID":"1",  "VER":"3", "USER":"http://172.16.15.77/ow_userfiles/plugins/base/avatars/avatar_1_1457965950.jpg", "Name":"Bilancio Battipaglia", "Data":"07/06/2016", "METADATA":"Traffic, Cameras", "USED" : 10},
+                              {"ID":"1",  "VER":"2", "USER":"http://172.16.15.77/ow_userfiles/plugins/base/avatars/avatar_1_1457965950.jpg", "Name":"Bilancio Battipaglia", "Data":"07/06/2016", "METADATA":"Traffic, Cameras", "USED" : 10},
+                              {"ID":"1",  "VER":"1", "USER":"http://172.16.15.77/ow_userfiles/plugins/base/avatars/avatar_1_1457965950.jpg", "Name":"Bilancio Battipaglia", "Data":"07/06/2016", "METADATA":"Traffic, Cameras", "USED" : 10},
+                              {"ID":"16", "VER":"4", "USER":"https://www.google.it/images/branding/googleg/1x/googleg_standard_color_128dp.png", "Name":"Traffic Cameras", "Data":"07/06/2016", "METADATA":"Traffic, Cameras",  "USED" : 10},
+                              {"ID":"16", "VER":"3", "USER":"https://www.google.it/images/branding/googleg/1x/googleg_standard_color_128dp.png", "Name":"Traffic Cameras", "Data":"07/06/2016", "METADATA":"Traffic, Cameras",  "USED" : 10},
+                              {"ID":"16", "VER":"2", "USER":"https://www.google.it/images/branding/googleg/1x/googleg_standard_color_128dp.png", "Name":"Traffic Cameras", "Data":"07/06/2016", "METADATA":"Traffic, Cameras",  "USED" : 10},
+                              {"ID":"16", "VER":"1", "USER":"https://www.google.it/images/branding/googleg/1x/googleg_standard_color_128dp.png", "Name":"Traffic Cameras", "Data":"07/06/2016", "METADATA":"Traffic, Cameras",  "USED" : 10},
+                              {"ID":"1",  "VER":"4", "USER":"http://172.16.15.77/ow_userfiles/plugins/base/avatars/avatar_1_1457965950.jpg", "Name":"Bilancio Battipaglia", "Data":"07/06/2016", "METADATA":"Traffic, Cameras", "USED" : 10},
+                              {"ID":"1",  "VER":"3", "USER":"http://172.16.15.77/ow_userfiles/plugins/base/avatars/avatar_1_1457965950.jpg", "Name":"Bilancio Battipaglia", "Data":"07/06/2016", "METADATA":"Traffic, Cameras", "USED" : 10},
+                              {"ID":"1",  "VER":"2", "USER":"http://172.16.15.77/ow_userfiles/plugins/base/avatars/avatar_1_1457965950.jpg", "Name":"Bilancio Battipaglia", "Data":"07/06/2016", "METADATA":"Traffic, Cameras", "USED" : 10},
+                              {"ID":"1",  "VER":"1", "USER":"http://172.16.15.77/ow_userfiles/plugins/base/avatars/avatar_1_1457965950.jpg", "Name":"Bilancio Battipaglia", "Data":"07/06/2016", "METADATA":"Traffic, Cameras", "USED" : 10},
+                              {"ID":"16", "VER":"4", "USER":"https://www.google.it/images/branding/googleg/1x/googleg_standard_color_128dp.png", "Name":"Traffic Cameras", "Data":"07/06/2016", "METADATA":"Traffic, Cameras",  "USED" : 10},
+                              {"ID":"16", "VER":"3", "USER":"https://www.google.it/images/branding/googleg/1x/googleg_standard_color_128dp.png", "Name":"Traffic Cameras", "Data":"07/06/2016", "METADATA":"Traffic, Cameras",  "USED" : 10},
+                              {"ID":"16", "VER":"2", "USER":"https://www.google.it/images/branding/googleg/1x/googleg_standard_color_128dp.png", "Name":"Traffic Cameras", "Data":"07/06/2016", "METADATA":"Traffic, Cameras",  "USED" : 10},
+                              {"ID":"16", "VER":"1", "USER":"https://www.google.it/images/branding/googleg/1x/googleg_standard_color_128dp.png", "Name":"Traffic Cameras", "Data":"07/06/2016", "METADATA":"Traffic, Cameras",  "USED" : 10},
+                              {"ID":"1",  "VER":"4", "USER":"http://172.16.15.77/ow_userfiles/plugins/base/avatars/avatar_1_1457965950.jpg", "Name":"Bilancio Battipaglia", "Data":"07/06/2016", "METADATA":"Traffic, Cameras", "USED" : 10},
+                              {"ID":"1",  "VER":"3", "USER":"http://172.16.15.77/ow_userfiles/plugins/base/avatars/avatar_1_1457965950.jpg", "Name":"Bilancio Battipaglia", "Data":"07/06/2016", "METADATA":"Traffic, Cameras", "USED" : 10},
+                              {"ID":"1",  "VER":"2", "USER":"http://172.16.15.77/ow_userfiles/plugins/base/avatars/avatar_1_1457965950.jpg", "Name":"Bilancio Battipaglia", "Data":"07/06/2016", "METADATA":"Traffic, Cameras", "USED" : 10},
+                              {"ID":"1",  "VER":"1", "USER":"http://172.16.15.77/ow_userfiles/plugins/base/avatars/avatar_1_1457965950.jpg", "Name":"Bilancio Battipaglia", "Data":"07/06/2016", "METADATA":"Traffic, Cameras", "USED" : 10},
+                              {"ID":"16", "VER":"4", "USER":"https://www.google.it/images/branding/googleg/1x/googleg_standard_color_128dp.png", "Name":"Traffic Cameras", "Data":"07/06/2016", "METADATA":"Traffic, Cameras",  "USED" : 10},
+                              {"ID":"16", "VER":"3", "USER":"https://www.google.it/images/branding/googleg/1x/googleg_standard_color_128dp.png", "Name":"Traffic Cameras", "Data":"07/06/2016", "METADATA":"Traffic, Cameras",  "USED" : 10},
+                              {"ID":"16", "VER":"2", "USER":"https://www.google.it/images/branding/googleg/1x/googleg_standard_color_128dp.png", "Name":"Traffic Cameras", "Data":"07/06/2016", "METADATA":"Traffic, Cameras",  "USED" : 10},
+                              {"ID":"16", "VER":"1", "USER":"https://www.google.it/images/branding/googleg/1x/googleg_standard_color_128dp.png", "Name":"Traffic Cameras", "Data":"07/06/2016", "METADATA":"Traffic, Cameras",  "USED" : 10},
+                              {"ID":"1",  "VER":"4", "USER":"http://172.16.15.77/ow_userfiles/plugins/base/avatars/avatar_1_1457965950.jpg", "Name":"Bilancio Battipaglia", "Data":"07/06/2016", "METADATA":"Traffic, Cameras", "USED" : 10},
+                              {"ID":"1",  "VER":"3", "USER":"http://172.16.15.77/ow_userfiles/plugins/base/avatars/avatar_1_1457965950.jpg", "Name":"Bilancio Battipaglia", "Data":"07/06/2016", "METADATA":"Traffic, Cameras", "USED" : 10},
+                              {"ID":"1",  "VER":"2", "USER":"http://172.16.15.77/ow_userfiles/plugins/base/avatars/avatar_1_1457965950.jpg", "Name":"Bilancio Battipaglia", "Data":"07/06/2016", "METADATA":"Traffic, Cameras", "USED" : 10},
+                              {"ID":"1",  "VER":"1", "USER":"http://172.16.15.77/ow_userfiles/plugins/base/avatars/avatar_1_1457965950.jpg", "Name":"Bilancio Battipaglia", "Data":"07/06/2016", "METADATA":"Traffic, Cameras", "USED" : 10},
+                              {"ID":"16", "VER":"4", "USER":"https://www.google.it/images/branding/googleg/1x/googleg_standard_color_128dp.png", "Name":"Traffic Cameras", "Data":"07/06/2016", "METADATA":"Traffic, Cameras",  "USED" : 10},
+                              {"ID":"16", "VER":"3", "USER":"https://www.google.it/images/branding/googleg/1x/googleg_standard_color_128dp.png", "Name":"Traffic Cameras", "Data":"07/06/2016", "METADATA":"Traffic, Cameras",  "USED" : 10},
+                              {"ID":"16", "VER":"2", "USER":"https://www.google.it/images/branding/googleg/1x/googleg_standard_color_128dp.png", "Name":"Traffic Cameras", "Data":"07/06/2016", "METADATA":"Traffic, Cameras",  "USED" : 10},
+                              {"ID":"16", "VER":"1", "USER":"https://www.google.it/images/branding/googleg/1x/googleg_standard_color_128dp.png", "Name":"Traffic Cameras", "Data":"07/06/2016", "METADATA":"Traffic, Cameras",  "USED" : 10},
+                              {"ID":"1",  "VER":"4", "USER":"http://172.16.15.77/ow_userfiles/plugins/base/avatars/avatar_1_1457965950.jpg", "Name":"Bilancio Battipaglia", "Data":"07/06/2016", "METADATA":"Traffic, Cameras", "USED" : 10},
+                              {"ID":"1",  "VER":"3", "USER":"http://172.16.15.77/ow_userfiles/plugins/base/avatars/avatar_1_1457965950.jpg", "Name":"Bilancio Battipaglia", "Data":"07/06/2016", "METADATA":"Traffic, Cameras", "USED" : 10},
+                              {"ID":"1",  "VER":"2", "USER":"http://172.16.15.77/ow_userfiles/plugins/base/avatars/avatar_1_1457965950.jpg", "Name":"Bilancio Battipaglia", "Data":"07/06/2016", "METADATA":"Traffic, Cameras", "USED" : 10},
+                              {"ID":"1",  "VER":"1", "USER":"http://172.16.15.77/ow_userfiles/plugins/base/avatars/avatar_1_1457965950.jpg", "Name":"Bilancio Battipaglia", "Data":"07/06/2016", "METADATA":"Traffic, Cameras", "USED" : 10},
+                              {"ID":"16", "VER":"4", "USER":"https://www.google.it/images/branding/googleg/1x/googleg_standard_color_128dp.png", "Name":"Traffic Cameras", "Data":"07/06/2016", "METADATA":"Traffic, Cameras",  "USED" : 10},
+                              {"ID":"16", "VER":"3", "USER":"https://www.google.it/images/branding/googleg/1x/googleg_standard_color_128dp.png", "Name":"Traffic Cameras", "Data":"07/06/2016", "METADATA":"Traffic, Cameras",  "USED" : 10},
+                              {"ID":"16", "VER":"2", "USER":"https://www.google.it/images/branding/googleg/1x/googleg_standard_color_128dp.png", "Name":"Traffic Cameras", "Data":"07/06/2016", "METADATA":"Traffic, Cameras",  "USED" : 10},
+                              {"ID":"16", "VER":"1", "USER":"https://www.google.it/images/branding/googleg/1x/googleg_standard_color_128dp.png", "Name":"Traffic Cameras", "Data":"07/06/2016", "METADATA":"Traffic, Cameras",  "USED" : 10},
+                              {"ID":"1",  "VER":"4", "USER":"http://172.16.15.77/ow_userfiles/plugins/base/avatars/avatar_1_1457965950.jpg", "Name":"Bilancio Battipaglia", "Data":"07/06/2016", "METADATA":"Traffic, Cameras", "USED" : 10},
+                              {"ID":"1",  "VER":"3", "USER":"http://172.16.15.77/ow_userfiles/plugins/base/avatars/avatar_1_1457965950.jpg", "Name":"Bilancio Battipaglia", "Data":"07/06/2016", "METADATA":"Traffic, Cameras", "USED" : 10},
+                              {"ID":"1",  "VER":"2", "USER":"http://172.16.15.77/ow_userfiles/plugins/base/avatars/avatar_1_1457965950.jpg", "Name":"Bilancio Battipaglia", "Data":"07/06/2016", "METADATA":"Traffic, Cameras", "USED" : 10},
+                              {"ID":"1",  "VER":"1", "USER":"http://172.16.15.77/ow_userfiles/plugins/base/avatars/avatar_1_1457965950.jpg", "Name":"Bilancio Battipaglia", "Data":"07/06/2016", "METADATA":"Traffic, Cameras", "USED" : 10},
+                              {"ID":"16", "VER":"4", "USER":"https://www.google.it/images/branding/googleg/1x/googleg_standard_color_128dp.png", "Name":"Traffic Cameras", "Data":"07/06/2016", "METADATA":"Traffic, Cameras",  "USED" : 10},
+                              {"ID":"16", "VER":"3", "USER":"https://www.google.it/images/branding/googleg/1x/googleg_standard_color_128dp.png", "Name":"Traffic Cameras", "Data":"07/06/2016", "METADATA":"Traffic, Cameras",  "USED" : 10},
+                              {"ID":"16", "VER":"2", "USER":"https://www.google.it/images/branding/googleg/1x/googleg_standard_color_128dp.png", "Name":"Traffic Cameras", "Data":"07/06/2016", "METADATA":"Traffic, Cameras",  "USED" : 10},
+                              {"ID":"16", "VER":"1", "USER":"https://www.google.it/images/branding/googleg/1x/googleg_standard_color_128dp.png", "Name":"Traffic Cameras", "Data":"07/06/2016", "METADATA":"Traffic, Cameras",  "USED" : 10},
+                              {"ID":"1",  "VER":"4", "USER":"http://172.16.15.77/ow_userfiles/plugins/base/avatars/avatar_1_1457965950.jpg", "Name":"Bilancio Battipaglia", "Data":"07/06/2016", "METADATA":"Traffic, Cameras", "USED" : 10},
+                              {"ID":"1",  "VER":"3", "USER":"http://172.16.15.77/ow_userfiles/plugins/base/avatars/avatar_1_1457965950.jpg", "Name":"Bilancio Battipaglia", "Data":"07/06/2016", "METADATA":"Traffic, Cameras", "USED" : 10},
+                              {"ID":"1",  "VER":"2", "USER":"http://172.16.15.77/ow_userfiles/plugins/base/avatars/avatar_1_1457965950.jpg", "Name":"Bilancio Battipaglia", "Data":"07/06/2016", "METADATA":"Traffic, Cameras", "USED" : 10},
+                              {"ID":"1",  "VER":"1", "USER":"http://172.16.15.77/ow_userfiles/plugins/base/avatars/avatar_1_1457965950.jpg", "Name":"Bilancio Battipaglia", "Data":"07/06/2016", "METADATA":"Traffic, Cameras", "USED" : 10},
+                              {"ID":"16", "VER":"4", "USER":"https://www.google.it/images/branding/googleg/1x/googleg_standard_color_128dp.png", "Name":"Traffic Cameras", "Data":"07/06/2016", "METADATA":"Traffic, Cameras",  "USED" : 10},
+                              {"ID":"16", "VER":"3", "USER":"https://www.google.it/images/branding/googleg/1x/googleg_standard_color_128dp.png", "Name":"Traffic Cameras", "Data":"07/06/2016", "METADATA":"Traffic, Cameras",  "USED" : 10},
+                              {"ID":"16", "VER":"2", "USER":"https://www.google.it/images/branding/googleg/1x/googleg_standard_color_128dp.png", "Name":"Traffic Cameras", "Data":"07/06/2016", "METADATA":"Traffic, Cameras",  "USED" : 10},
+                              {"ID":"16", "VER":"1", "USER":"https://www.google.it/images/branding/googleg/1x/googleg_standard_color_128dp.png", "Name":"Traffic Cameras", "Data":"07/06/2016", "METADATA":"Traffic, Cameras",  "USED" : 10},
+                              {"ID":"1",  "VER":"4", "USER":"http://172.16.15.77/ow_userfiles/plugins/base/avatars/avatar_1_1457965950.jpg", "Name":"Bilancio Battipaglia", "Data":"07/06/2016", "METADATA":"Traffic, Cameras", "USED" : 10},
+                              {"ID":"1",  "VER":"3", "USER":"http://172.16.15.77/ow_userfiles/plugins/base/avatars/avatar_1_1457965950.jpg", "Name":"Bilancio Battipaglia", "Data":"07/06/2016", "METADATA":"Traffic, Cameras", "USED" : 10},
+                              {"ID":"1",  "VER":"2", "USER":"http://172.16.15.77/ow_userfiles/plugins/base/avatars/avatar_1_1457965950.jpg", "Name":"Bilancio Battipaglia", "Data":"07/06/2016", "METADATA":"Traffic, Cameras", "USED" : 10},
+                              {"ID":"1",  "VER":"1", "USER":"http://172.16.15.77/ow_userfiles/plugins/base/avatars/avatar_1_1457965950.jpg", "Name":"Bilancio Battipaglia", "Data":"07/06/2016", "METADATA":"Traffic, Cameras", "USED" : 10},
+                              {"ID":"16", "VER":"4", "USER":"https://www.google.it/images/branding/googleg/1x/googleg_standard_color_128dp.png", "Name":"Traffic Cameras", "Data":"07/06/2016", "METADATA":"Traffic, Cameras",  "USED" : 10},
+                              {"ID":"16", "VER":"3", "USER":"https://www.google.it/images/branding/googleg/1x/googleg_standard_color_128dp.png", "Name":"Traffic Cameras", "Data":"07/06/2016", "METADATA":"Traffic, Cameras",  "USED" : 10},
+                              {"ID":"16", "VER":"2", "USER":"https://www.google.it/images/branding/googleg/1x/googleg_standard_color_128dp.png", "Name":"Traffic Cameras", "Data":"07/06/2016", "METADATA":"Traffic, Cameras",  "USED" : 10},
+                              {"ID":"16", "VER":"1", "USER":"https://www.google.it/images/branding/googleg/1x/googleg_standard_color_128dp.png", "Name":"Traffic Cameras", "Data":"07/06/2016", "METADATA":"Traffic, Cameras",  "USED" : 10},
+                              {"ID":"1",  "VER":"4", "USER":"http://172.16.15.77/ow_userfiles/plugins/base/avatars/avatar_1_1457965950.jpg", "Name":"Bilancio Battipaglia", "Data":"07/06/2016", "METADATA":"Traffic, Cameras", "USED" : 10},
+                              {"ID":"1",  "VER":"3", "USER":"http://172.16.15.77/ow_userfiles/plugins/base/avatars/avatar_1_1457965950.jpg", "Name":"Bilancio Battipaglia", "Data":"07/06/2016", "METADATA":"Traffic, Cameras", "USED" : 10},
+                              {"ID":"1",  "VER":"2", "USER":"http://172.16.15.77/ow_userfiles/plugins/base/avatars/avatar_1_1457965950.jpg", "Name":"Bilancio Battipaglia", "Data":"07/06/2016", "METADATA":"Traffic, Cameras", "USED" : 10},
+                              {"ID":"1",  "VER":"1", "USER":"http://172.16.15.77/ow_userfiles/plugins/base/avatars/avatar_1_1457965950.jpg", "Name":"Bilancio Battipaglia", "Data":"07/06/2016", "METADATA":"Traffic, Cameras", "USED" : 10},
+                              {"ID":"16", "VER":"4", "USER":"https://www.google.it/images/branding/googleg/1x/googleg_standard_color_128dp.png", "Name":"Traffic Cameras", "Data":"07/06/2016", "METADATA":"Traffic, Cameras",  "USED" : 10},
+                              {"ID":"16", "VER":"3", "USER":"https://www.google.it/images/branding/googleg/1x/googleg_standard_color_128dp.png", "Name":"Traffic Cameras", "Data":"07/06/2016", "METADATA":"Traffic, Cameras",  "USED" : 10},
+                              {"ID":"16", "VER":"2", "USER":"https://www.google.it/images/branding/googleg/1x/googleg_standard_color_128dp.png", "Name":"Traffic Cameras", "Data":"07/06/2016", "METADATA":"Traffic, Cameras",  "USED" : 10},
+                              {"ID":"16", "VER":"1", "USER":"https://www.google.it/images/branding/googleg/1x/googleg_standard_color_128dp.png", "Name":"Traffic Cameras", "Data":"07/06/2016", "METADATA":"Traffic, Cameras",  "USED" : 10},
+                              {"ID":"1",  "VER":"4", "USER":"http://172.16.15.77/ow_userfiles/plugins/base/avatars/avatar_1_1457965950.jpg", "Name":"Bilancio Battipaglia", "Data":"07/06/2016", "METADATA":"Traffic, Cameras", "USED" : 10},
+                              {"ID":"1",  "VER":"3", "USER":"http://172.16.15.77/ow_userfiles/plugins/base/avatars/avatar_1_1457965950.jpg", "Name":"Bilancio Battipaglia", "Data":"07/06/2016", "METADATA":"Traffic, Cameras", "USED" : 10},
+                              {"ID":"1",  "VER":"2", "USER":"http://172.16.15.77/ow_userfiles/plugins/base/avatars/avatar_1_1457965950.jpg", "Name":"Bilancio Battipaglia", "Data":"07/06/2016", "METADATA":"Traffic, Cameras", "USED" : 10},
+                              {"ID":"1",  "VER":"1", "USER":"http://172.16.15.77/ow_userfiles/plugins/base/avatars/avatar_1_1457965950.jpg", "Name":"Bilancio Battipaglia", "Data":"07/06/2016", "METADATA":"Traffic, Cameras", "USED" : 10},
+                              {"ID":"16", "VER":"4", "USER":"https://www.google.it/images/branding/googleg/1x/googleg_standard_color_128dp.png", "Name":"Traffic Cameras", "Data":"07/06/2016", "METADATA":"Traffic, Cameras",  "USED" : 10},
+                              {"ID":"16", "VER":"3", "USER":"https://www.google.it/images/branding/googleg/1x/googleg_standard_color_128dp.png", "Name":"Traffic Cameras", "Data":"07/06/2016", "METADATA":"Traffic, Cameras",  "USED" : 10},
+                              {"ID":"16", "VER":"2", "USER":"https://www.google.it/images/branding/googleg/1x/googleg_standard_color_128dp.png", "Name":"Traffic Cameras", "Data":"07/06/2016", "METADATA":"Traffic, Cameras",  "USED" : 10},
+                              {"ID":"16", "VER":"1", "USER":"https://www.google.it/images/branding/googleg/1x/googleg_standard_color_128dp.png", "Name":"Traffic Cameras", "Data":"07/06/2016", "METADATA":"Traffic, Cameras",  "USED" : 10},
+                              {"ID":"17", "VER":"1", "USER":"https://www.google.it/images/branding/googleg/1x/googleg_standard_color_128dp.png", "Name":"Traffic Cameras", "Data":"07/06/2016", "METADATA":"Traffic, Cameras",  "USED" : 10}]'>
+
+            </data-table-controllet>
+            <div class="buttons buttons_position">
+                <paper-icon-button dialog-confirm icon="close" class="preview-close"></paper-icon-button>
+            </div>
+        </paper-dialog>
+
+    </template>
+
+    <script>
+
+        Polymer({
+
+            is : 'dataset-table-controllet',
+
+            properties : {
+
+                data : {
+                    type  : Array,
+                    value : []
+                },
+
+                filter : {
+                    type  : String,
+                    value : undefined,
+                    observer : '_filter'
+                }
+
+            },
+
+            ready : function() {
+                this.step = 10;
+            },
+
+            attached : function(){
+                $(this.$.tbody).perfectScrollbar();
+
+                this._resize();
+                var that = this;
+                window.addEventListener("resize", function() { that._resize(); });
+
+                this._translate();
+
+                if(this.data.length > 0)
+                    this.setData(this.data);
+            },
+
+            _translate : function(){
+                this.$.selected_data.innerHTML = ln["selectedData_" + ln["localization"]];
+
+                this.$.showing.innerHTML = ln["showing_" + ln["localization"]];
+                this.$.to.innerHTML = ln["to_" + ln["localization"]];
+                this.$.of.innerHTML = ln["of_" + ln["localization"]];
+                this.$.rows.innerHTML = ln["rows_" + ln["localization"]];
+
+                this.$.filter.setAttribute("label", ln["search_" + ln["localization"]]);
+            },
+
+            _type : function() {return ln["type_" + ln["localization"]];},
+            _warning : function() {return ln["warning_" + ln["localization"]];},
+
+            _onOpenDatasetClick : function() {
+                this.$.paper_dialog.open();
+                this.$.data_table_controllet._resize();
+            },
+
+            setData : function(data) {
+                var converter = new DataTypeConverter();
+                var result = converter.inferJsonDataType(data, ["*"]);
+                result = converter.cast(result);
+                delete result.types.ID;
+                this.fields = ArrayUtils.toFieldsArray(result.types);
+                this.originalData = result.dataset;
+                this.uniqueData = [];
+                var uniqueId = {};
+                var cssClass = ["even-row", "odd-row"];
+                var j = 0;
+
+                for(var i=0; i<result.dataset.length; i++) {
+                    if (!uniqueId[result.dataset[i].ID.toString()]) {
+                        uniqueId[result.dataset[i].ID.toString()] = result.dataset[i].ID.toString();
+                        result.dataset[i]["cssClass"] = cssClass[j%2];
+                        this.uniqueData.push(result.dataset[i]);
+                        j++;
+                    }
+                    result.dataset[i]["cssClass"] = cssClass[j%2];
+                }
+
+                this.data = this.uniqueData;
+                this.filter = "";
+                $(".order").attr("icon", "unfold-more");
+
+                this.prev = 1;
+                this.next = this.step;
+                this.length = this.data.length;
+
+                this.shownPrev = Math.min(this.prev, this.length);
+                this.shownNext = Math.min(this.next, this.length);
+                this.shownData = this.data.slice(this.prev-1, this.next);
+
+                this._resize();
+            },
+
+            reset : function(){
+                this.setData([]);
+                $(this.$.tbody).animate({ scrollTop: 0}, 0);
+//                this.filter = "";
+            },
+
+            showAll : function (e) {
+
+                if(!e.target.checked) {
+                    this.data = this.originalData;
+                }else{
+                    this.data = this.uniqueData;
+                }
+                this.length = this.data.length;
+                this.shownPrev = Math.min(this.prev, this.length);
+                this.shownNext = Math.min(this.next, this.length);
+                this.shownData = this.data.slice(this.prev-1, this.next);
+            },
+
+            _onPrevClick : function(){
+                if(this.prev != 1) {
+                    this.prev -= this.step;
+                    this.next -= this.step;
+
+                    this.shownPrev = Math.min(this.prev, this.length);
+                    this.shownNext = Math.min(this.next, this.length);
+                    this.shownData = this.data.slice(this.prev - 1, this.next);
+                }
+                $(this.$.tbody).animate({ scrollTop: 0}, 0);
+            },
+
+            _onNextClick : function(){
+                if(this.next < this.length) {
+                    this.prev += this.step;
+                    this.next += this.step;
+
+                    this.shownPrev = Math.min(this.prev, this.length);
+                    this.shownNext = Math.min(this.next, this.length);
+                    this.shownData = this.data.slice(this.prev - 1, this.next);
+                }
+                $(this.$.tbody).animate({ scrollTop: 0}, 0);
+            },
+
+            _filter : function(a, b) {
+                this.debounce('_filter', function () {
+                    if(this.data.length) {
+                        var filter = this.filter.toLowerCase();
+
+                        if(filter == "")
+                            this.shownData = this.data;
+                        else {
+                            var keys = Object.keys(this.data[0]);
+                            this.shownData = this.data.filter(function (el) {
+                                var values = keys.map(function (key) {
+                                    return el[key];
+                                });
+                                for (var i in values)
+                                    if (values[i] && String(values[i]).toLowerCase().indexOf(filter) > -1)
+                                        return true;
+                                return false;
+                            });
+                        }
+
+                        this.prev = 1;
+                        this.next = this.step;
+                        this.length = this.shownData.length;
+
+                        this.shownPrev = Math.min(this.prev, this.length);
+                        this.shownNext = Math.min(this.next, this.length);
+                        this.shownData = this.shownData.slice(this.prev - 1, this.next);
+
+                        $(this.$.tbody).animate({ scrollTop: 0}, 0);
+                    }
+                }, 300);
+            },
+
+            _clearInput : function() {
+                this.$.filter.value = "";
+            },
+
+            _order : function(e) {
+                t = $(e.target).parents("paper-icon-button")[0];
+
+                var icon = t.getAttribute("icon");
+                var id = t.getAttribute("id");
+                var field = this.fields[id];
+                var reverse = false;
+
+                if(icon.indexOf("unfold-more") > -1){
+                    t.setAttribute("icon", "arrow-drop-up");
+                }
+                else if(icon.indexOf("arrow-drop-up") > -1){
+                    t.setAttribute("icon", "arrow-drop-down");
+                    reverse = true;
+                }
+                else if(icon.indexOf("arrow-drop-down") > -1){
+                    t.setAttribute("icon", "arrow-drop-up");
+                }
+
+
+                if(field.type == "NUMBER")
+//                    this.data = this.data.sort(this._sort_by(field.name, reverse, parseInt));
+                    this.data = this.data.sort(this._sort_by(field.name, reverse, function(a){return (isNaN(a) ? -Number.MAX_VALUE : a)}));
+                else
+                    this.data = this.data.sort(this._sort_by(field.name, reverse, function(a){return (a ? a.toLowerCase() : "")}));
+                this._filter();
+            },
+
+            _sort_by : function(field, reverse, primer){
+
+                var key = primer ?
+                        function(x) {return primer(x[field])} :
+                        function(x) {return x[field]};
+
+                reverse = !reverse ? 1 : -1;
+
+                return function (a, b) {
+                    return a = key(a), b = key(b), reverse * ((a > b) - (b > a));
+                }
+            },
+
+            _toArray: function(obj) {
+                var regExp  = new RegExp(/(https?:\/\/[^\s]+)/g);
+                return Object.keys(obj).map(function(key) {
+                    if(key != "ID" && key != "cssClass") {
+                        var test = regExp.test(obj[key]);
+                        return {
+                            key: key,
+                            value: test ? obj[key].split(",") : obj[key],
+                            isLink: test
+                        }
+                    }
+                });
+            },
+
+            _fieldId: function(index) {
+                return "id_" + index;
+            },
+
+            _resize : function(){
+                this.async(function() {
+                    var h = $(this.$.data_table_container).height() - 96;
+                    var w = $(this.$.data_table_container).width();
+                    $(this.$.tbody).width(w).height(h);
+                    $(this.$.tbody).perfectScrollbar('update');
+                }, 1);
+            }
+
+        });
+
+    </script>
+
+</dom-module>
