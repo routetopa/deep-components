@@ -89,16 +89,28 @@ Example:
                 L.Icon.Default.imagePath = 'http://services.routetopa.eu/DEEalerProvider/COMPONENTS/datalets/leafletjs-datalet/leafletsjs/images';
 
                 var coordinates = [];
+                var coordinates_index  = 0;
                 var isArray = t.data[0].data[0].constructor === Array;
 
                 for(var i=0; i<t.data[0].data.length; i++)
                 {
                     if(isArray)
-                        coordinates.push([parseFloat(t.data[0].data[i][0]), parseFloat(t.data[0].data[i][1])]);
+                    {
+                        if(!isNaN(t.data[0].data[i][0]) && !isNaN(t.data[0].data[i][1]))
+                            coordinates.push([parseFloat(t.data[0].data[i][0]), parseFloat(t.data[0].data[i][1])]);
+                        else
+                            continue;
+                    }
                     else
-                        coordinates.push([parseFloat(t.data[0].data[i]), parseFloat(t.data[1].data[i])]);
+                    {
+                        if(!isNaN(t.data[0].data[i]) && !isNaN(t.data[1].data[i]))
+                            coordinates.push([parseFloat(t.data[0].data[i]), parseFloat(t.data[1].data[i])]);
+                        else
+                            continue;
+                    }
 
-                    var marker = L.marker([coordinates[i][0], coordinates[i][1]]).addTo(t._component.map);
+                    var marker = L.marker([coordinates[coordinates_index][0], coordinates[coordinates_index][1]]).addTo(t._component.map);
+                    coordinates_index++;
 
                     if(t.data.length > 2)
                     {
