@@ -130,7 +130,15 @@
             },
 
             getData : function() {
-                return this.data;
+                //return datatable.getData
+                //this.fields = "*"
+                var data = alasql_selectData(this.data, this.fields, this.filters);
+                var converter = new DataTypeConverter();
+                var result = converter.inferJsonDataType(data, ["*"]);
+                result = converter.cast(result);
+                data = result.dataset;
+
+                return data;
             },
 
             setSelectedFields : function(selectedFields) {

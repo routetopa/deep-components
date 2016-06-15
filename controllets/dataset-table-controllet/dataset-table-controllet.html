@@ -275,10 +275,10 @@
                             </template>
                         </template>
                         <td>
-                            <paper-icon-button room_id$="{{item.ID}}" version$="{{item.VER}}" class="tools" icon="open-in-new" on-click="_onOpenDatasetClick"></paper-icon-button>
-                            <paper-icon-button room_id$="{{item.ID}}" version$="{{item.VER}}" class="tools" icon="file-download" on-click="_onDownloadDatasetClick"></paper-icon-button>
-                            <paper-icon-button room_id$="{{item.ID}}" version$="{{item.VER}}" class="tools" icon="content-copy" on-click="_onCopyDatasetClick"></paper-icon-button>
-                            <paper-icon-button room_id$="{{item.ID}}" version$="{{item.VER}}" class="tools" icon="description" on-click="_onDownloadInfoClick"></paper-icon-button>
+                            <paper-icon-button title="Open"            room_id$="{{item.ID}}" version$="{{item.VER}}" class="tools" icon="open-in-new" on-click="_onOpenDatasetClick"></paper-icon-button>
+                            <paper-icon-button title="Download as CSV" room_id$="{{item.ID}}" version$="{{item.VER}}" class="tools" icon="file-download" on-click="_onDownloadDatasetClick"></paper-icon-button>
+                            <paper-icon-button title="Copy link"       room_id$="{{item.ID}}" version$="{{item.VER}}" class="tools" icon="content-copy" on-click="_onCopyDatasetClick"></paper-icon-button>
+                            <paper-icon-button title="Download docs"   room_id$="{{item.ID}}" version$="{{item.VER}}" class="tools" icon="description" on-click="_onDownloadInfoClick"></paper-icon-button>
                         </td>
                     </tr>
                 </template>
@@ -633,11 +633,11 @@
                 return Object.keys(obj).map(function(key) {
                     if(key != "ID" && key != "cssClass") {
                         //var test = regExp.test(obj[key]);
-                        var test = (obj[key].constructor === Array);
+                        var isLink = (obj[key].constructor === Array);
                         return {
                             key: key,
                             value: obj[key], //test ? obj[key].split(",") : obj[key],
-                            isLink: test
+                            isLink: isLink
                         }
                     }
                 });
