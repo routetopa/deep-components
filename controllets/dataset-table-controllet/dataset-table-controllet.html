@@ -266,8 +266,8 @@
                                 <td>
                                     <template is="dom-repeat" items="{{elem.value}}" as="user" >
                                         <div class="ow_avatar">
-                                            <a href="#">
-                                                <img alt="" src="{{user}}" style="max-width: 100%;">
+                                            <a href="{{user.href}}">
+                                                <img alt="" src="{{user.src}}" style="max-width: 100%;">
                                             </a>
                                         </div>
                                     </template>
@@ -629,13 +629,14 @@
             },
 
             _toArray: function(obj) {
-                var regExp  = new RegExp(/(https?:\/\/[^\s]+)/g);
+                //var regExp  = new RegExp(/(https?:\/\/[^\s]+)/g);
                 return Object.keys(obj).map(function(key) {
                     if(key != "ID" && key != "cssClass") {
-                        var test = regExp.test(obj[key]);
+                        //var test = regExp.test(obj[key]);
+                        var test = (obj[key].constructor === Array);
                         return {
                             key: key,
-                            value: test ? obj[key].split(",") : obj[key],
+                            value: obj[key], //test ? obj[key].split(",") : obj[key],
                             isLink: test
                         }
                     }
