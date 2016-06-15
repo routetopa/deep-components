@@ -140,15 +140,20 @@ Example :
 //            },
 
             transformData: function () {
+                var selectedFields = JSON.parse(this._component.getAttribute("selectedFields"));
+
                 if(this.data.length == 0)
                     return;
 
-                if(this.data.length == 2){
-                    this.properties.categories.value = this.data[0].data;
-                    this.properties.series.value = [this.data[1]];
-                }
+                categories = this.data[0].data;
+                series = [];
+                for(var i = 1; i < this.data.length; i++)
+                    series.push(this.data[i]);
 
-                if(this.data.length == 3){//multi series
+                this.properties.categories.value = categories;
+                this.properties.series.value = series;
+
+                if(this.data.length == 3 && !selectedFields){//split cat
                     var x = this.data[0]["data"];
                     var gb = this.data[1]["data"];
                     var y = this.data[2]["data"];
@@ -166,18 +171,20 @@ Example :
                         series.push({name: s[i], data: new Array(categories.length+1).join('0').split('').map(parseFloat)});
                     }
 
-                    for (var i = 0; i < y.length; i++){
+                    for(var i = 0; i < y.length; i++){
                         var index = categories.indexOf(x[i]);
                         var s = series.filter(function( obj ) {
                             return obj.name == gb[i];
                         });
-                       s[0]["data"][index] = y[i];
+                        s[0]["data"][index] = y[i];
                     }
 
                     this.properties.categories.value = categories;
                     this.properties.series.value = series;
                 }
+
             },
+
 
 //            setParameters: function(params)
 //            {

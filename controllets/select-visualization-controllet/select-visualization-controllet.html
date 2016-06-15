@@ -342,8 +342,12 @@
 
                 this.selectedFields = inputs.getSelectedFields();
 
+//                console.log(inputs.getFields());
+
                 this.params = {'data-url' : this.dataUrl};//??????????????????
 //                this.params = {};
+
+                this.params["selectedFields"] = JSON.stringify(inputs.getFields());
 
                 this.params["filters"] = JSON.stringify(this.filters);
                 this.params["aggregators"] = JSON.stringify(inputs.getAggregators());
@@ -356,7 +360,9 @@
 
                 var data = alasql_complexSelectData(this.data, this.selectedFields, this.filters, inputs.getAggregators(), inputs.getOrders());
                 data = transformData(data, this.selectedFields, true);
-                this.params["data"] = JSON.stringify(data).replace(/'/g, "&#39;");
+
+                //use cache
+//                this.params["data"] = JSON.stringify(data).replace(/'/g, "&#39;");
 
                 var dataletParams ={
                     component: this.selectedDatalet+"-datalet",

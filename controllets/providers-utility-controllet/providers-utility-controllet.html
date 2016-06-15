@@ -16,6 +16,8 @@
         }
     };
 
+    //utility non legato al provider, aggiungere copy e creare un altro js!!!
+
     //jsdatachecker
     utility_getFields = function(types) {
         return Object.keys(types).map(function(key) { return key; });
@@ -36,26 +38,7 @@
         return selectedIndices;
     };
 
-    //    utility_getResourceUrl = function(url) {
-    //        //CKAN
-    //        var strDatasetPos = url.indexOf('/dataset/');
-    //        var strResourcePos = url.indexOf('/resource/');
-    //        if (strDatasetPos >= 0 && strResourcePos > strDatasetPos) {
-    //            var urlSegment1 = url.substring(0, strDatasetPos);
-    //            var urlResourceEnd = url.indexOf('/', strResourcePos + 10);
-    //            var resourceId = url.substring(strResourcePos + 10, urlResourceEnd);
-    //            return urlSegment1 + "/api/action/datastore_search?resource_id=" + resourceId;
-    //        }
-    //        //OPENDATASOFT
-    //        var strExploreDatasetPos = url.indexOf('/explore/dataset/');
-    //        if (strExploreDatasetPos >= 0) {
-    //            var urlSegment1 = url.substring(0, strExploreDatasetPos);
-    //            var datasetEnd = url.indexOf(strExploreDatasetPos + 17, '/');
-    //            var datasetId = url.substring(strExploreDatasetPos + 17, datasetEnd >= 0 ? datasetEnd : url.length);
-    //            return urlSegment1 + '/api/records/1.0/search?dataset=' + datasetId;
-    //        }
-    //        return "";
-    //    };
+
 </script>
 
 <dom-module id="providers-utility-controllet">

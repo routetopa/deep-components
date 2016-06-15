@@ -137,11 +137,11 @@
 
             <template is="dom-repeat" items={{options}} index-as="index">
                 <div class="inputs">
-                    <template is="dom-if" if="{{_checkType(item.type, 'text')}}">
+                    <template is="dom-if" if="{{_checkType(item.type, 'TEXT')}}">
                         <paper-input label={{_getLabelName(item.name)}} on-change="_updateParams"></paper-input>
                     </template>
 
-                    <template is="dom-if" if="{{_checkType(item.type, 'list')}}">
+                    <template is="dom-if" if="{{_checkType(item.type, 'LIST')}}">
                         <paper-dropdown-menu label={{_getLabelName(item.name)}}>
                             <paper-menu class="dropdown-content" selected = 0>
                                 <!--<paper-item on-tap="_updateParams"></paper-item>-->
