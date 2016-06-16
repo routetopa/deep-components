@@ -1,5 +1,6 @@
 <link rel="import" href="../../bower_components/polymer/polymer.html"/>
 <link rel="import" href="../../bower_components/paper-card/paper-card.html"/>
+<link rel="import" href="../../bower_components/paper-fab/paper-fab.html">
 <link rel="import" href="../../bower_components/paper-icon-button/paper-icon-button.html"/>
 <link rel="import" href="../../bower_components/paper-button/paper-button.html"/>
 <link rel="import" href="../../bower_components/iron-icon/iron-icon.html"/>
@@ -67,6 +68,13 @@
                 min-width: 310px;
                 min-height: 188px;
             }
+            .badge{
+                position: absolute;
+                right: 5px;
+                bottom: 5px;
+                background: #2196F3;
+            }
+
         </style>
 
 
@@ -80,6 +88,12 @@
                         <span class="from">{{from}}</span>
                         <iron-icon class="icon-to" icon="alarm-off"></iron-icon>
                         <span class="to">{{to}}</span>
+                        <template is="dom-if" if="{{!checkRoomType(roomType)}}">
+                            <paper-fab mini icon="assessment" class="badge data"></paper-fab>
+                        </template>
+                        <template is="dom-if" if="{{checkRoomType(roomType)}}">
+                            <paper-fab mini icon="description" class="badge knowledge"></paper-fab>
+                        </template>
                     </div>
                 </div>
                 <div class="card-actions">
@@ -127,6 +141,10 @@
                 roomUrl: {
                     type: String,
                     value: undefined
+                },
+                roomType:{
+                    type: String,
+                    value: undefined
                 }
             },
 
@@ -142,8 +160,14 @@
 
             _onExplore: function(e){
                 window.location = this.roomUrl;
-            }
+            },
 
+            checkRoomType: function(type){
+               if(type == "knowledge")
+                   return true;
+               else
+                   return false;
+            }
         })
     </script>
 
