@@ -358,7 +358,7 @@
                 var params = this.$.options.getParams();
                 for (var key in params) { this.params[key] = params[key]; }
 
-                var data = alasql_complexSelectData(this.data, this.selectedFields, this.filters, inputs.getAggregators(), inputs.getOrders());
+                /*????? senza filtri"*/var data = alasql_complexSelectData(this.data, this.selectedFields, this.filters, inputs.getAggregators(), inputs.getOrders());
                 data = transformData(data, this.selectedFields, true);
 
                 //use cache

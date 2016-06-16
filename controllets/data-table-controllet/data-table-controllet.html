@@ -4,9 +4,10 @@
 <link rel="import" href="../../bower_components/paper-input/paper-input.html">
 <link rel="import" href="../../bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="../../bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="../../bower_components/iron-icons/maps-icons.html">
 <link rel="import" href="../../bower_components/paper-tooltip/paper-tooltip.html">
 
-<script type="text/javascript" src="../../bower_components/JSDataChecker/jsdatachecker.min.js"></script>
+<script type="text/javascript" src="../../bower_components/jsdatachecker/jsdatachecker.min.js"></script>
 
 <dom-module id="data-table-controllet">
 
@@ -50,6 +51,10 @@
 
             paper-tooltip {
                 --paper-tooltip-background: black;
+            }
+
+            iron-icon.icon {
+                color: #2196F3;
             }
 
             #data_table_container {
@@ -205,7 +210,17 @@
                     <template is="dom-repeat" items="{{shownData}}">
                         <tr>
                             <template is="dom-repeat" items="{{_toArray(item)}}">
-                                <td title="{{item.value}}">{{item.value}}</td>
+                                <template is="dom-if" if={{!_isObject(item)}}>
+                                    <td title="{{item.value}}">{{item.value}}</td>
+                                </template>
+                                <template is="dom-if" if={{_isObject(item)}}>
+                                    <template is="dom-if" if={{_isGEOJSON(item)}}>
+                                        <td title="GEOJSON"><iron-icon icon="maps:map" class="icon"></iron-icon></td>
+                                    </template>
+                                    <template is="dom-if" if={{!_isGEOJSON(item)}}>
+                                        <td title="OBJECT"><iron-icon icon=":help-outline" class="icon"></iron-icon></td>
+                                    </template>
+                                </template>
                             </template>
                         </tr>
                     </template>
@@ -442,6 +457,19 @@
 
             _fieldId: function(index) {
                 return "id_" + index;
+            },
+
+            _isObject: function(item) {
+                if(item.value instanceof Array)
+                    return false;
+                if(item.value instanceof Object)
+                    return true;
+                return false;
+            },
+
+            _isGEOJSON: function(item) {
+                var dt = new DataTypeConverter();
+                return (dt.inferDataSubTypeOfValue(item.value) && dt.inferDataSubTypeOfValue(item.value).name == DataTypeConverter.SUBTYPES.GEOJSON.name);
             },
 
             _resize : function(){

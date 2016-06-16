@@ -2,8 +2,11 @@ function openDataSoft_Provider () {}
 
 openDataSoft_Provider.prototype.selectData = function(data) {
     var selectedData = [];
-    for(var i=0; i<data.records.length; i++)
+    for(var i=0; i<data.records.length; i++) {
+        if(data.records[i].geometry)
+            data.records[i].fields["geometry"] = data.records[i].geometry;
         selectedData.push(data.records[i].fields);
+    }
     return selectedData;
 };
 
