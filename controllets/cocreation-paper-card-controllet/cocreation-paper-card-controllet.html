@@ -89,17 +89,16 @@
                         <iron-icon class="icon-to" icon="alarm-off"></iron-icon>
                         <span class="to">{{to}}</span>
                         <template is="dom-if" if="{{!checkRoomType(roomType)}}">
-                            <paper-fab mini icon="assessment" class="badge data"></paper-fab>
+                            <paper-fab mini disabled icon="assessment" class="badge data"></paper-fab>
                         </template>
                         <template is="dom-if" if="{{checkRoomType(roomType)}}">
-                            <paper-fab mini icon="description" class="badge knowledge"></paper-fab>
+                            <paper-fab mini disabled icon="description" class="badge knowledge"></paper-fab>
                         </template>
                     </div>
                 </div>
                 <div class="card-actions">
                     <paper-button on-click="_onExplore">Explore</paper-button>
-                    <paper-icon-button icon="expand-less" on-click="_toggle" style="float:right;">
-                    </paper-icon-button>
+                    <paper-icon-button icon="expand-less" on-click="_toggle" style="float:right;"></paper-icon-button>
                     <iron-collapse class="iron-collapse-over" id="more_info" no-animation>
                         <div class="collapse-content">
                             {{goal}}
