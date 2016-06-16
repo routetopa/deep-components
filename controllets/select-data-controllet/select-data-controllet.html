@@ -144,8 +144,6 @@
             setSelectedFields : function(selectedFields) {
                 this.async(function() {
                     var selectedIndices = utility_getSelectedIndices(this.fields, selectedFields);
-
-                    console.log(selectedIndices);
                     this.$.select_fields.setSelectFields(selectedIndices);
                 }, 0);
             },
