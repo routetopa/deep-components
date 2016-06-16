@@ -485,11 +485,11 @@
 //                    this.datasets = that.datasets["result"]["datasets"];
 
                     $.ajax({
-                        url: "http://172.16.15.77/cocreation/ajax/get-all-dataset",
+                        url: "/cocreation/ajax/get-all-dataset",
                         dataType: "json",
                         success: function(spodDatasets){
 
-                            that.providers = $.extend(that.datasets["result"]["providers"], {99: {api_url: "http://172.16.15.77/cocreation/ajax/get-all-dataset", id: "99", image_hash: "SPOD", title: "SPOD"}});
+                            that.providers = $.extend(that.datasets["result"]["providers"], {99: {api_url: "/cocreation/ajax/get-all-dataset", id: "99", image_hash: "SPOD", title: "SPOD"}});
                             that.datasets = $.merge(spodDatasets, that.datasets["result"]["datasets"]);
 
                             if(that.suggestedDatasets) {
