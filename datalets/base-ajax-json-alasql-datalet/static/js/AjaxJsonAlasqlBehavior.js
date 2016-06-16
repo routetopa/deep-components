@@ -124,7 +124,7 @@ var AjaxJsonAlasqlBehavior = {
         result = converter.cast(result);
         data = result.dataset;
 
-        data = alasql_complexSelectData(data, fields, filters, aggregators, orders);
+        data = alasql_complexSelectData(data, fields, [], aggregators, orders);
 
         this.data = transformData(data, fields, true);
 
