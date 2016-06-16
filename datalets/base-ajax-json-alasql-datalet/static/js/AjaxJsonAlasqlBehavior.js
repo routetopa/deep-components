@@ -85,11 +85,13 @@ var AjaxJsonAlasqlBehavior = {
     selectData : function() {
         var fields = this._component.fields = JSON.parse(this._component.fields);
 
+        //var selectedFields = JSON.parse(this._component.getAttribute("selectedFields"));
+
         var filters = JSON.parse(this._component.getAttribute("filters"));
         var aggregators = JSON.parse(this._component.getAttribute("aggregators"));
         var orders = JSON.parse(this._component.getAttribute("orders"));
 
-        //preview my space
+        //preview my space ?
         if(filters && filters[0] && filters[0].constructor == Array){
             filters = filters[0];
             aggregators = aggregators[0];
@@ -100,12 +102,28 @@ var AjaxJsonAlasqlBehavior = {
         var provider = f.getProvider(this._component.dataUrl);
         var data = provider.selectData(this.properties.json_results.value);
 
+        //if(selectedFields) {
+        //    fields = [];
+        //    var inputs = [];
+        //    for (var i=0; i < selectedFields.length; i++) {
+        //        if (selectedFields[i]) {
+        //            fields.push(selectedFields[i].field);
+        //            inputs.push(selectedFields[i].input);
+        //        }
+        //    }
+        //}
+
         var converter = new DataTypeConverter();
         var result = converter.inferJsonDataType(data, ["*"]);
         result = converter.cast(result);
         data = result.dataset;
 
-        //data = alasql_selectData(data, fields, filters);
+        data = alasql_selectData(data, fields, filters);//funziona senza?
+
+        result = converter.inferJsonDataType(data, ["*"]);
+        result = converter.cast(result);
+        data = result.dataset;
+
         data = alasql_complexSelectData(data, fields, filters, aggregators, orders);
 
         this.data = transformData(data, fields, true);

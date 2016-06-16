@@ -216,6 +216,9 @@
                 <paper-tooltip for="{{_fieldId(index)}}" offset="8">
                     <p>
                         <span class="type">{{_type()}}:</span> {{item.type}}
+                        <!--<template is="dom-if" if={{item.errorsDescription}}>-->
+                            <!--({{item.subType}})-->
+                        <!--</template>-->
                         <template is="dom-if" if={{item.errorsDescription.length}}>
                             <br/>
                             <span class="warning">{{_warning()}}:</span> {{item.errorsDescription}}
@@ -301,6 +304,7 @@
                 var result = converter.inferJsonDataType(data, ["*"]);
                 result = converter.cast(result);
                 this.fields = ArrayUtils.toFieldsArray(result.types);
+//                console.log(this.fields);
                 this.data = result.dataset;
 
                 this.filter = "";

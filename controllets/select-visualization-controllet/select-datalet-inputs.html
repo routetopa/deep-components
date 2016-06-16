@@ -303,9 +303,21 @@
 //                        temp.push({name: name + " " + (i-4), description: description, selection: selection});
 //                }
 
+                else if (inputs.length == 2 && inputs[1].selection == "*") {//
+                    name = inputs[1].name;
+                    description = inputs[1].description;
+                    selection = inputs[1].selection;
+                    temp = [inputs[0]];
+                    temp.push({name: name + " 1", description: description, selection: selection});
+                    for (var i = 3; i < this.fields.length; i++)
+                        temp.push({name: name + " " +(i-1), description: description, selection: selection});
+                }
+
                 this.inputs = this._copy(temp);
 
                 this.selectedFields = new Array(temp.length);
+
+                this.selectedFields2 = new Array(temp.length);
             },
 
             fireReady : function() {
@@ -381,14 +393,22 @@
                 this.expert = !this.expert;
             },
 
+            getFields : function () {
+                return this.selectedFields2;
+            },
+
             _addInput : function(e){
                 var selectedFields = this._copy(this.selectedFields);
 
                 var ddl_index = $(e.target).parents("paper-dropdown-menu")[0].id;
+
                 var index = e.target.id;
                 selectedFields[ddl_index] = this.fields[index];
 
                 this.selectedFields = this._copy(selectedFields);
+
+//                console.log(this.inputs[ddl_index].name);
+                this.selectedFields2[ddl_index] = {field: this.fields[index], input: this.inputs[ddl_index].name};
 
                 if(!this._isReady()) {
                     this.$.group_by.setAttribute("disabled", "");
@@ -518,6 +538,9 @@
 //                if(key.indexOf("BubbleContent") > -1) {
 //                    return ln["BubbleContent" + "_" +ln["localization"]] + key.slice(-2);
 //                }
+                if(key.indexOf("NumericYAxis") > -1) {
+                    return ln["NumericYAxis" + "_" +ln["localization"]] + key.slice(-2);
+                }
 
                 return ln[key + "_" +ln["localization"]];
             },
