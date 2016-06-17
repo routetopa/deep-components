@@ -335,13 +335,14 @@
 
                 this._resize();
 
-                this.$.tooltip_wornings.show();
+                this.async(function() {
+                    this.$.tooltip_wornings.show();
+                }, 100);
             },
 
             reset : function(){
                 this.setData([]);
                 $(this.$.tbody).animate({ scrollTop: 0}, 0);
-//                this.filter = "";
             },
 
             _onPrevClick : function(){
@@ -478,7 +479,7 @@
                     var w = $(this.$.data_table_container).width();
                     $(this.$.tbody).width(w).height(h);
                     $(this.$.tbody).perfectScrollbar('update');
-                }, 1);
+                }, 0);
             }
 
         });

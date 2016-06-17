@@ -1,0 +1,206 @@
+<!--
+@license
+    The MIT License (MIT)
+
+    Copyright (c) 2015 Dipartimento di Informatica - Università di Salerno - Italy
+
+    Permission is hereby granted, free of charge, to any person obtaining a copy
+    of this software and associated documentation files (the "Software"), to deal
+    in the Software without restriction, including without limitation the rights
+    to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+    copies of the Software, and to permit persons to whom the Software is
+    furnished to do so, subject to the following conditions:
+
+    The above copyright notice and this permission notice shall be included in
+    all copies or substantial portions of the Software.
+
+    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+    IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+    FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+    AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+    LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+    THE SOFTWARE.
+-->
+
+<!--
+* Developed by :
+* ROUTE-TO-PA Project - grant No 645860. - www.routetopa.eu
+*
+-->
+
+<link rel="import" href="../base-ajax-json-alasql-datalet/base-ajax-json-alasql-datalet.html">
+
+<!--
+
+`leafletjs-datalet` is a map datalet based on open source project leafletjs <http://leafletjs.com/>
+
+Example:
+
+    <leafletjs-datalet
+        data-url="http://ckan.routetopa.eu/api/action/datastore_search?resource_id=#"
+        fields='["field1","field2"]'>
+    </leafletjs-datalet>
+
+@element leafletjs-datalet
+@status v0.1
+@demo demo/index.html
+@group datalets
+-->
+
+<dom-module name="leafletjs-geojson-datalet">
+    <template>
+        <link rel="stylesheet" href="leafletsjs/leaflet.css" />
+        <style>
+            #leafletjs {height: 600px;}
+        </style>
+
+        <div id="leafletjs"></div>
+        <base-ajax-json-alasql-datalet data-url="{{dataUrl}}" fields="{{fields}}" data="{{data}}" title="{{title}}" description="{{description}}" export_menu="{{export_menu}}"></base-ajax-json-alasql-datalet>
+
+    </template>
+
+    <script src="leafletsjs/leaflet.js"></script>
+
+    <script>
+
+        var leafletjsBehavior = {
+
+            /**
+             * Read markers coordinates from the data object and add the marker to the map.
+             * Call a method for the map redraw and set the viewport in order to fit all the markers in the viewport..
+             *
+             * @method transformData
+             */
+            presentData: function(){
+
+                var t = this;
+                try{
+                    this._component.map = L.map(this._component.$.leafletjs).setView([0, 0], 13, {reset:true});
+                }catch(e){}
+
+
+                L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                    maxZoom: 18,
+                    attribution: 'Map data © <a href="http://openstreetmap.org">OpenStreetMap</a> contributors'
+                }).addTo(this._component.map);
+
+
+                L.Icon.Default.imagePath = 'http://services.routetopa.eu/DEEalerProvider/COMPONENTS/datalets/leafletjs-datalet/leafletsjs/images';
+
+                var coordinates = [];
+                var coordinates_index  = 0;
+                var isArray = t.data[0].data[0].constructor === Array;
+
+                for(var i=0; i<t.data[0].data.length; i++)
+                {
+                    if(isArray)
+                    {
+                        if(!isNaN(t.data[0].data[i][0]) && !isNaN(t.data[0].data[i][1]))
+                            coordinates.push([parseFloat(t.data[0].data[i][0]), parseFloat(t.data[0].data[i][1])]);
+                        else
+                            continue;
+                    }
+                    else
+                    {
+                        if(!isNaN(t.data[0].data[i]) && !isNaN(t.data[1].data[i]))
+                            coordinates.push([parseFloat(t.data[0].data[i]), parseFloat(t.data[1].data[i])]);
+                        else
+                            continue;
+                    }
+
+                    var marker = L.marker([coordinates[coordinates_index][0], coordinates[coordinates_index][1]]).addTo(t._component.map);
+                    coordinates_index++;
+
+                    if(t.data.length > 2)
+                    {
+                        var popupText = "";
+                        for(var j=2; j<t.data.length; j++)
+                        {
+                            if(typeof t.data[j] != 'undefined' && typeof t.data[j].data[i] != 'undefined')
+                            {
+                                if (t.data[j].data[i].toString().match(new RegExp("^(http[s]?:\\/\\/(www\\.)?|ftp:\\/\\/(www\\.)?|www\\.){1}([0-9A-Za-z-\\.@:%_\+~#=]+)+((\\.[a-zA-Z]{2,3})+)(/(.)*)?(\\?(.)*)?")))
+                                    popupText += '<image height="100" width="100" src="' + t.data[j].data[i] + '" /><br/>';
+                                else
+                                    popupText += '<span>' + t.data[j].name + ' : ' + t.data[j].data[i] + '</span><br/>'
+                            }
+                        }
+
+                        var popup = L.popup().setContent(popupText);
+                        marker.bindPopup(popup);
+                    }
+                }
+
+                t._component.map._onResize();
+                t._component.map.invalidateSize(false);
+                t._component.map.fitBounds(coordinates);
+
+            }
+        };
+
+
+        Polymer({
+
+            is : 'leafletjs-geojson-datalet',
+
+            properties : {
+                /**
+                 * Store a reference to the leafletjs map object created in 'ready' callback
+                 * @attribute map
+                 * @type Object
+                 */
+                map :
+                {
+                    type: Object,
+                    value:null
+                },
+                /**
+                 * An Array with all the markers extracted from the dataset
+                 * @attribute markers
+                 * @type Array
+                 */
+                markers :
+                {
+                    type : Array,
+                    value : []
+                },
+                /**
+                 * It's the component behavior
+                 *
+                 * @attribute behavior
+                 * @type Object
+                 * @default {}
+                 */
+                behavior : {
+                    type : Object,
+                    value : {}
+                },
+                /**
+                 * Control the export menu
+                 * xxxx BITMASK. FROM RIGHT : HTML, PNG, RTF, MY SPACE (eg. 1111 show all, 0000 hide all)
+                 *
+                 * @attribute export_menu
+                 * @type Number
+                 * @default 15
+                 */
+                export_menu : {
+                    type  : Number,
+                    value : 9 // xxxx BITMASK. FROM RIGHT : HTML, PNG, RTF, MY SPACE (eg. 1111 show all, 0000 hide all)
+                }
+            },
+
+            /**
+             * 'ready' callback create the map object, set the tileLayer to openstreetmap and the default icon image path.
+             * Moreover extend the leafletjsComponentBehavior with BaseDataletBehavior, WorkcycleBehavior and leafletjsBehavior
+             * and run the Datalet workcycle.
+             *
+             * @method ready
+             */
+            ready: function(){
+                this.behavior =  $.extend(true, {}, BaseDataletBehavior, WorkcycleBehavior, AjaxJsonAlasqlBehavior, leafletjsBehavior);
+                this.async(function(){this.behavior.init(this)},100);
+            }
+        });
+    </script>
+</dom-module>
+

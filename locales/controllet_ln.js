@@ -77,6 +77,7 @@ ln["scatterchart_en"] = "Scatter";
 ln["bubblechart_en"] = "Bubble";
 ln["treemap_en"] = "Tree Map";
 ln["leafletjs_en"] = "Map";
+ln["leafletjs-geojson_en"] = "Map Geojson";
 
 //inputs
 ln["expertGroupBy_en"] = "EXPERT : GROUP BY";
@@ -107,6 +108,7 @@ ln["SliceSizes_en"] = "SIZE [num]";
 ln["Latitude_en"] = "LATITUDE";
 ln["Longitude_en"] = "LONGITUDE";
 ln["BalloonContent_en"] = "BALLOON CONTENT";// [opt]
+ln["GEOJSON_en"] = "GEOJSON";
 ln["BubbleContent_en"] = "BUBBLE CONTENT";
 ln["BubbleSize_en"] = "BUBBLE SIZE [num]";
 ln["Categories_en"] = "CATEGORY [opt]";
@@ -201,6 +203,7 @@ ln["scatterchart_it"] = "Grafico a dispersione";
 ln["bubblechart_it"] = "Grafico a bolle";
 ln["treemap_it"] = "Grafico ad albero";
 ln["leafletjs_it"] = "Mappa";
+ln["leafletjs-geojson_it"] = "Mappa geojson";
 
 //inputs
 ln["expertGroupBy_it"] = "ESPERTO : RAGGRUPPA";
@@ -231,6 +234,7 @@ ln["SliceSizes_it"] = "DIMENSIONE [num]";
 ln["Latitude_it"] = "LATITUDINE";
 ln["Longitude_it"] = "LONGITUDINE";
 ln["BalloonContent_it"] = "CONTENUTO";
+ln["GEOJSON_it"] = "GEOJSON";
 ln["BubbleContent_it"] = "CONTENUTO BOLLA";
 ln["BubbleSize_it"] = "DIMENSIONE BOLLA [num]";
 ln["Categories_it"] = "CATEGORIA [opt]";
@@ -325,6 +329,7 @@ ln["scatterchart_fr"] = "Scatter";
 ln["bubblechart_fr"] = "Bubble";
 ln["treemap_fr"] = "Tree Map";
 ln["leafletjs_fr"] = "Map";
+ln["leafletjs-geojson_fr"] = "Map Geojson";
 
 //inputs
 ln["expertGroupBy_fr"] = "EXPERT : GROUP BY";
@@ -355,6 +360,7 @@ ln["SliceSizes_fr"] = "SIZE [num]";
 ln["Latitude_fr"] = "LATITUDE";
 ln["Longitude_fr"] = "LONGITUDE";
 ln["BalloonContent_fr"] = "BALLOON CONTENT";// [opt]
+ln["GEOJSON_fr"] = "GEOJSON";
 ln["BubbleContent_fr"] = "BUBBLE CONTENT";
 ln["BubbleSize_fr"] = "BUBBLE SIZE [num]";
 ln["Categories_fr"] = "CATEGORY [opt]";
@@ -449,6 +455,7 @@ ln["scatterchart_nl"] = "Scatter";
 ln["bubblechart_nl"] = "Bubble";
 ln["treemap_nl"] = "Tree Map";
 ln["leafletjs_nl"] = "Map";
+ln["leafletjs-geojson_nl"] = "Map Geojson";
 
 //inputs
 ln["expertGroupBy_nl"] = "EXPERT : GROUP BY";
@@ -479,6 +486,7 @@ ln["SliceSizes_nl"] = "SIZE [num]";
 ln["Latitude_nl"] = "LATITUDE";
 ln["Longitude_nl"] = "LONGITUDE";
 ln["BalloonContent_nl"] = "BALLOON CONTENT";// [opt]
+ln["GEOJSON_nl"] = "GEOJSON";
 ln["BubbleContent_nl"] = "BUBBLE CONTENT";
 ln["BubbleSize_nl"] = "BUBBLE SIZE [num]";
 ln["Categories_nl"] = "CATEGORY [opt]";
