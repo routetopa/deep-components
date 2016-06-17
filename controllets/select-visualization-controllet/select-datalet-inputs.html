@@ -276,7 +276,11 @@
 
             setInputs : function(inputs) {
                 var temp =  this._copy(inputs);
-                if (inputs.constructor != Array) {//table --> 1 input
+                if (inputs.constructor != Array && inputs.name == "GEOJSON") {
+                    temp = [];
+                    temp.push(inputs);
+                }
+                else if (inputs.constructor != Array) {//table --> 1 input
                     var name = inputs.name;
                     var description = inputs.description;
                     var selection = inputs.selection;
