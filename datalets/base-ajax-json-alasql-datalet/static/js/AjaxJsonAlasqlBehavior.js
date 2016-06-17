@@ -114,6 +114,7 @@ var AjaxJsonAlasqlBehavior = {
         //}
 
         var converter = new DataTypeConverter();
+
         var result = converter.inferJsonDataType(data, ["*"]);
         result = converter.cast(result);
         data = result.dataset;
@@ -125,6 +126,10 @@ var AjaxJsonAlasqlBehavior = {
         data = result.dataset;
 
         data = alasql_complexSelectData(data, fields, [], aggregators, orders);
+
+        result = converter.inferJsonDataType(data, ["*"]);
+        result = converter.cast(result);
+        data = result.dataset;
 
         this.data = transformData(data, fields, true);
 
