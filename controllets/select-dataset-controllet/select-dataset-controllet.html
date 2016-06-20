@@ -553,7 +553,7 @@
                     var data = JSON.stringify({result : {providers: this.providers, datasets: this.filteredDatasets}}).replace(/'/g, "");
 
                     if(this.filteredDatasets.length > 0)
-                        this.$.treemap_container.innerHTML = "<datasetexplorer-datalet data='"+data+"' width=\""+w+"\" height=\""+h+"\" fields='[\"result,datasets,provider_name\",\"result,datasets,organization_name\",\"result,datasets,package_name\",\"result,datasets,resource_name\",\"result,datasets,url\",\"result,datasets,w\",\"result,datasets,metas\"]'></datasetexplorer-datalet>";
+                        this.$.treemap_container.innerHTML = "<datasetexplorer-datalet data='"+data+"' width=\""+w+"\" height=\""+h+"\" fields='[\"provider_name\",\"organization_name\",\"package_name\",\"resource_name\",\"url\",\"w\",\"metas\"]'></datasetexplorer-datalet>";
                     else
                         this.$.treemap_container.innerHTML = "";
                 },

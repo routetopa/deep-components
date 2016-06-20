@@ -33,61 +33,30 @@ var BaseDataletBehavior ={
 
     properties: {
 
-        /**
-         * It represent the dataset api url
-         *
-         * @attribute dataUrl
-         * @type string
-         * @default 'null'
-         */
-        dataUrl: {
-            type: String,
-            value: ""
-        },
+        //dataUrl: {
+        //    type: String,
+        //    value: ""
+        //},
+        //
+        //data: {
+        //    type: Array,
+        //    value: []
+        //},
 
-        /**
-         * It represents one or multiple fields selected by user
-         *
-         * @attribute fields
-         * @type Array
-         * @default empty
-         */
-        fields: {
-            type: String,
-            value: ""
-        },
+        //fields: {
+        //    type: String,
+        //    value: ""
+        //},
+        //
+        //title: {
+        //    type: String,
+        //    value: ""
+        //},
+        //description: {
+        //    type: String,
+        //    value: ""
+        //}
 
-        /**
-         * The selected and transformed data you can use in presentation phase
-         *
-         * @attribute data
-         * @type Array
-         * @default empty
-         */
-        data: {
-            type: Array,
-            value: []
-        },
-        title: {
-            type: String,
-            value: ""
-        },
-        description: {
-            type: String,
-            value: ""
-        }
-
-    },
-
-    //factoryImpl: function(data_url, fields) {
-    //    this.dataUrl = data_url;
-    //    this.fields   = fields;
-    //},
-
-    //setParameters: function(params)
-    //{
-    //    this.title = params['title'];
-    //    this.description = params['description'];
-    //}
+    }
 
 };

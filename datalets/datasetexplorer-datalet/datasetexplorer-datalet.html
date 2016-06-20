@@ -29,7 +29,7 @@
 *
 -->
 
-<link rel="import" href="../base-ajax-json-jsonpath-datalet/base-ajax-json-jsonpath-datalet.html">
+<link rel="import" href="../base-ajax-json-alasql-datalet/base-ajax-json-alasql-datalet.html">
 <link rel="import" href="treemap_tooltip.html">
 
 <script src="../../locales/datasetexplorer_ln.js"></script>
@@ -126,7 +126,7 @@ Example:
         <div id="treemap_placeholder">
             <treemap-tooltip id="treemap_tooltip"></treemap-tooltip>
         </div>
-        <base-ajax-json-jsonpath-datalet data-url="{{dataUrl}}" fields="{{fields}}" data="{{data}}" export_menu="{{export_menu}}"></base-ajax-json-jsonpath-datalet>
+        <base-ajax-json-alasql-datalet data-url="{{dataUrl}}" fields="{{fields}}" data="{{data}}" export_menu="{{export_menu}}"></base-ajax-json-alasql-datalet>
         <!--<treemap-tooltip id="treemap_tooltip"></treemap-tooltip>-->
     </template>
 
@@ -141,7 +141,7 @@ Example:
                 children : []
             },
 
-            transformData: function(e)
+            transformData: function()
             {
                 var treemapData = [];
                 DatasetexplorerBehavior.map.name = this._component.title;
@@ -214,36 +214,70 @@ Example:
 
             filterData : function() {
 
-                var tmpData = [];
-
-                if(!this.properties.json_results.value.result)
-                    this.properties.json_results.value = this.data;
-
-                this.meta = this.properties.json_results.value.result.providers;
-
-                //Deal the fields with "'" char
-                //this._component.fields = this._component.fields.replace(/#/g,"'");
-
+                this.meta = this.data.result.providers;
                 this._component.fields = JSON.parse(this._component.fields);
+                this.data = this._transformData(this.data.result.datasets, this._component.fields, false);
+//                var tmpData = [];
+//
+//                if(!this.properties.json_results.value.result)
+//                    this.properties.json_results.value = this.data;
+//
+//                this.meta = this.properties.json_results.value.result.providers;
+//
+//                //Deal the fields with "'" char
+//                //this._component.fields = this._component.fields.replace(/#/g,"'");
+//
+//                this._component.fields = JSON.parse(this._component.fields);
+//
+//                for (var i = 0; i < this._component.fields.length; i++) {
+//                    var query = "$";
+//                    var query_elements = this._component.fields[i].split(',');
+//                    for (var j = 0; j < query_elements.length; j++) {
+//                        query += "['" + query_elements[j] + "']";
+//                        if (this.isFieldArray(query_elements.slice(0, j + 1))) {
+//                            query += "[*]";
+//                        }
+//                    }
+//
+//                    tmpData.push({
+//                        name: query_elements[query_elements.length - 1],
+//                        data: jsonPath(this.properties.json_results.value, query)
+//                    });
+//                }
+//                this.data = tmpData;
+//                this._deleteWaitImage();
+            },
 
-                for (var i = 0; i < this._component.fields.length; i++) {
-                    var query = "$";
-                    var query_elements = this._component.fields[i].split(',');
-                    for (var j = 0; j < query_elements.length; j++) {
-                        query += "['" + query_elements[j] + "']";
-                        if (this.isFieldArray(query_elements.slice(0, j + 1))) {
-                            query += "[*]";
-                        }
-                    }
+            _transformData : function(data, fields, truncate) {
+            if(!data || data.length == 0)
+                return [];
 
-                    tmpData.push({
-                        name: query_elements[query_elements.length - 1],
-                        data: jsonPath(this.properties.json_results.value, query)
-                    });
+            /*DEPRECATED*/for (var i=0; i < fields.length; i++)
+                fields[i] = fields[i].substring(fields[i].lastIndexOf(",") + 1, fields[i].length);
+
+            var tData = [];
+
+            for (var i in fields){
+
+                var field = fields[i];
+                var values = [];
+
+                for (var i in data) {
+                    var v = data[i][field];
+                    if(truncate)
+                        if(!isNaN(v) && v % 1 != 0)
+                            v = Math.floor(v * 100) / 100;
+                    values.push(v);
                 }
-                this.data = tmpData;
-                this._deleteWaitImage();
+
+                tData.push({
+                    name: field,
+                    data: values
+                });
             }
+
+            return tData;
+        }
 
         };
 
@@ -261,6 +295,11 @@ Example:
                 behavior : {
                     type : Object,
                     value : {}
+                },
+
+                data : {
+                    type : Array,
+                    value : undefined
                 },
 
                 name : {
@@ -294,7 +333,7 @@ Example:
             ready: function(){
                 $(this).find("base-datalet")[0].hideFooter();
 
-                this.behavior =  $.extend(true, {}, BaseDataletBehavior, WorkcycleBehavior, AjaxJsonJsonPathBehavior, DatasetexplorerBehavior);
+                this.behavior =  $.extend(true, {}, BaseDataletBehavior, WorkcycleBehavior, AjaxJsonAlasqlBehavior, DatasetexplorerBehavior);
                 this.async(function(){this.behavior.init(this)},0);
             },
 

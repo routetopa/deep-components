@@ -98,14 +98,16 @@ var WorkcycleBehavior = {
     init: function(component){
         this._component = component;
 
-        if(this._component.data === undefined || this._component.data == ""){
+        if(this._component.data == undefined){
             this.requestData();
         }else{
-            this._deleteWaitImage();
-            this.data = JSON.parse(this._component.data);
+            this.data = this._component.data;
+
             this.filterData();
             this.transformData();
             this.presentData();
+
+            this._deleteWaitImage();
         }
     }
 

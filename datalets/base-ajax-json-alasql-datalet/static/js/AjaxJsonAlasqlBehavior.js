@@ -77,7 +77,7 @@ var AjaxJsonAlasqlBehavior = {
     },
 
     /**
-     * selectData built a JSONPATH query based on the user selected fields then extract data from the JSON response.
+     * selectData built a ALASQL query based on the user selected fields then extract data from the JSON response.
      * This method built an objects <name, data> for every user selected field and push it into the data array.
      *
      * @method selectData

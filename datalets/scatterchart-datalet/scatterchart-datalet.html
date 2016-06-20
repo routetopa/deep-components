@@ -141,6 +141,10 @@ Example:
         ScatterchartDatalet = Polymer({
             is: 'scatterchart-datalet',
             properties: {
+                data: {
+                    type: Array,
+                    value: undefined
+                },
                 xAxisLabel: {
                     type: String,
                     value: ""
