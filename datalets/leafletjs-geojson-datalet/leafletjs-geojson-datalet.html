@@ -72,12 +72,13 @@ Example:
              *
              * @method transformData
              */
-            presentData: function(){
+            presentData: function() {
 
                 var t = this;
-                try{
-                    this._component.map = L.map(this._component.$.leafletjs).setView([0, 0], 13, {reset:true});
-                }catch(e){}
+                try {
+                    this._component.map = L.map(this._component.$.leafletjs).setView([0, 0], 13, {reset: true});
+                } catch (e) {
+                }
 
 
                 L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -88,11 +89,34 @@ Example:
 
                 L.Icon.Default.imagePath = 'http://services.routetopa.eu/DEEalerProvider/COMPONENTS/datalets/leafletjs-datalet/leafletsjs/images';
 
-                var geoJsonLayer = L.geoJson(t.data[0].data).addTo(t._component.map);
+                var bounding_box = L.geoJson(t.data[0].data);
+
+                for (var i = 0; i < t.data[0].data.length; i++)
+                {
+                    var geoJsonLayer = L.geoJson(t.data[0].data[i]).addTo(t._component.map);
+
+                    if(t.data.length > 1)
+                    {
+                        var popupText = "";
+                        for(var j=1; j<t.data.length; j++)
+                        {
+                            if(typeof t.data[j] != 'undefined' && typeof t.data[j].data[i] != 'undefined')
+                            {
+                                if (t.data[j].data[i].toString().match(new RegExp("^(http[s]?:\\/\\/(www\\.)?|ftp:\\/\\/(www\\.)?|www\\.){1}([0-9A-Za-z-\\.@:%_\+~#=]+)+((\\.[a-zA-Z]{2,3})+)(/(.)*)?(\\?(.)*)?")))
+                                    popupText += '<image height="100" width="100" src="' + t.data[j].data[i] + '" /><br/>';
+                                else
+                                    popupText += '<span>' + t.data[j].name + ' : ' + t.data[j].data[i] + '</span><br/>'
+                            }
+                        }
+
+                        var popup = L.popup().setContent(popupText);
+                        geoJsonLayer.bindPopup(popup);
+                    }
+                }
 
                 t._component.map._onResize();
                 t._component.map.invalidateSize(false);
-                t._component.map.fitBounds(geoJsonLayer);
+                t._component.map.fitBounds(bounding_box);
 
             }
         };
@@ -103,10 +127,6 @@ Example:
             is : 'leafletjs-geojson-datalet',
 
             properties : {
-                data: {
-                    type: Array,
-                    value: undefined
-                },
                 /**
                  * Store a reference to the leafletjs map object created in 'ready' callback
                  * @attribute map
