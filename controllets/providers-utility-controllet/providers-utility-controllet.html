@@ -9,7 +9,7 @@
         getProvider: function(dataUrl) {
             if (dataUrl.indexOf("datastore_search?resource_id") > -1)
                 return new ckan_Provider();
-            else if (dataUrl.indexOf("search?dataset") > -1)
+            else if (dataUrl.indexOf("search?dataset") > -1 || dataUrl.indexOf("search/?dataset") > -1)
                 return new openDataSoft_Provider();
             else
                 return new generic_Provider();
