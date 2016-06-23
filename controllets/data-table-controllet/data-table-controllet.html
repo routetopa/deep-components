@@ -43,7 +43,6 @@
                 height: 24px;
                 width: 24px;
                 cursor: pointer;
-                /*background: green;*/
             }
 
             paper-icon-button.warning {
@@ -51,7 +50,6 @@
                 width: 24px;
                 color: #FFEB3B;
                 cursor: help;
-                /*background: green;*/
             }
 
             paper-icon-button.order:hover {
@@ -108,7 +106,7 @@
                 height: 24px;
                 padding: 12px;
                 text-align: center;
-                max-width: 224px;
+                max-width: 256px;
                 min-width: 156px;
                 overflow: hidden;
                 white-space: nowrap;
@@ -121,30 +119,26 @@
                 color: #FFFFFF;
                 font-weight: 700;
                 cursor: help;
-                line-height: 0px;/*?? or49px su spod iron icon and paper icon icon problem*/
+            }
+
+            #data_table_container th,
+            #data_table_container th * {
+                line-height: 22px;/**/
             }
 
             #data_table_container th .th_label {
                 display: inline-block;
-                height: 24px;
                 max-width: calc(100% - 48px - 8px);
                 vertical-align: middle;
-                /*background: red;*/
                 overflow: hidden;
                 white-space: nowrap;
                 text-overflow: ellipsis;
+                line-height: 24px;/**/
             }
 
             #data_table_container td {
                 font-size: 14px;
                 padding: 4px;
-            }
-
-            #data_table_container tfoot td {
-                height: 48px;
-                padding: 0px;
-                font-size: 16px;
-                background: #B6B6B6;
             }
 
             #data_table_container #footer {

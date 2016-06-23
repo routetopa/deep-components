@@ -73,6 +73,7 @@
 
             paper-item {
                 min-width: 128px;
+                white-space: nowrap;
             }
 
             paper-item.iron-selected {
@@ -208,7 +209,7 @@
                     <template is="dom-if" if="{{index}}"><!--excludes logicalOperator-->
                         <div class="row2">
                             <div class="filter">
-                                {{item.field}}&nbsp;&nbsp;&nbsp;<span class="highlighted">{{item.operation}}</span>&nbsp;&nbsp;&nbsp;"{{item.value}}"&nbsp;&nbsp;&nbsp;<span class="highlighted">{{_getLogicalOperator(index)}}</span>
+                                {{item.field}}&nbsp;&nbsp;&nbsp;<span class="highlighted">{{_getOperationlName(item.operation)}}</span>&nbsp;&nbsp;&nbsp;"{{item.value}}"&nbsp;&nbsp;&nbsp;<span class="highlighted">{{_getLogicalOperator(index)}}</span>
                             </div>
                             <div class="remove_container">
                                 <paper-icon-button on-click="_deleteFilter" icon="cancel" class="cancel"></paper-icon-button>
@@ -238,7 +239,7 @@
 
                 operations : {
                     type : Array,
-                    value : ["=", "!=", ">", ">=", "<", "<=", "contains", "not contains", "start", "ends"]
+                    value : ["=", "!=", ">", ">=", "<", "<=", "contains", "notContains", "start", "ends"]
                 },
 
                 filters : {
@@ -364,15 +365,16 @@
             },
 
             _getOperationlName: function(operation) {
-                if(operation.indexOf("not") > -1)
-                    return ln["notContains_" + ln["localization"]];
-                if(operation.indexOf("contains") > -1)
-                    return ln["contains_" + ln["localization"]];
-                if(operation.indexOf("start") > -1)
-                    return ln["start_" + ln["localization"]];
-                if(operation.indexOf("ends") > -1)
-                    return ln["ends_" + ln["localization"]];
-                return operation;
+                return ln[operation + "_" + ln["localization"]];
+//                if(operation.indexOf("not") > -1)
+//                    return ln["notContains_" + ln["localization"]];
+//                if(operation.indexOf("contains") > -1)
+//                    return ln["contains_" + ln["localization"]];
+//                if(operation.indexOf("start") > -1)
+//                    return ln["start_" + ln["localization"]];
+//                if(operation.indexOf("ends") > -1)
+//                    return ln["ends_" + ln["localization"]];
+//                return operation;
             },
 
 //            _changeLogicalOperator : function() {

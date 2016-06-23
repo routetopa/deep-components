@@ -80,7 +80,7 @@ function _alasql_WHERE (filters) {
     for (var i=0; i < filters.length; i++) {
         if(filters[i]["operation"] == "contains")
             where += filters[i]["field"] + " like '%" + filters[i]["value"] + "%' " + logicalOperator + " ";
-        else if(filters[i]["operation"] == "not contains")
+        else if(filters[i]["operation"] == "notContains")
             where += filters[i]["field"] + " not like '%" + filters[i]["value"] + "%' " + logicalOperator + " ";
         else if(filters[i]["operation"] == "start")
             where += filters[i]["field"] + " like '" + filters[i]["value"] + "%' " + logicalOperator + " ";
