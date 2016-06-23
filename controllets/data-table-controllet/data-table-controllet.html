@@ -43,6 +43,15 @@
                 height: 24px;
                 width: 24px;
                 cursor: pointer;
+                /*background: green;*/
+            }
+
+            paper-icon-button.warning {
+                height: 24px;
+                width: 24px;
+                color: #FFEB3B;
+                cursor: help;
+                /*background: green;*/
             }
 
             paper-icon-button.order:hover {
@@ -100,6 +109,7 @@
                 padding: 12px;
                 text-align: center;
                 max-width: 224px;
+                min-width: 156px;
                 overflow: hidden;
                 white-space: nowrap;
                 text-overflow: ellipsis;
@@ -111,6 +121,18 @@
                 color: #FFFFFF;
                 font-weight: 700;
                 cursor: help;
+                line-height: 0px;/*?? or49px su spod iron icon and paper icon icon problem*/
+            }
+
+            #data_table_container th .th_label {
+                display: inline-block;
+                height: 24px;
+                max-width: calc(100% - 48px - 8px);
+                vertical-align: middle;
+                /*background: red;*/
+                overflow: hidden;
+                white-space: nowrap;
+                text-overflow: ellipsis;
             }
 
             #data_table_container td {
@@ -185,7 +207,12 @@
 
         <paper-material id="data_table_container" elevation="5">
 
-            <div id="header"><span id="selected_data"></span></div>
+            <div id="header">
+                <span id="selected_data"></span>
+                <template is="dom-if" if={{hasWarnings}}>
+                    <paper-icon-button class="warning" icon="warning"></paper-icon-button>
+                </template>
+            </div>
 
             <paper-tooltip id="tooltip_wornings" for="header" offset="56">
                 <template is="dom-repeat" items="{{fields}}">
@@ -202,7 +229,10 @@
                     <tr>
                         <template is="dom-repeat" items="{{fields}}">
                             <th id="id_{{index}}">
-                                {{item.name}}
+                                <div class="th_label">{{item.name}}</div>
+                                <template is="dom-if" if={{item.errorsDescription.length}}>
+                                    <paper-icon-button class="warning" icon="warning"></paper-icon-button>
+                                </template>
                                 <paper-icon-button id="{{index}}" class="order" on-click="_order" icon="unfold-more"></paper-icon-button>
                             </th>
                         </template>
@@ -319,7 +349,6 @@
                 var result = converter.inferJsonDataType(data, ["*"]);
                 result = converter.cast(result);
                 this.fields = ArrayUtils.toFieldsArray(result.types);
-//                console.log(this.fields);
                 this.data = result.dataset;
 
                 this.filter = "";
@@ -333,11 +362,16 @@
                 this.shownNext = Math.min(this.next, this.length);
                 this.shownData = this.data.slice(this.prev-1, this.next);
 
-                this._resize();
+                this.hasWarnings = this._hasWarnings();
 
                 this.async(function() {
-                    this.$.tooltip_wornings.show();
-                }, 100);
+                    if(this.hasWarnings)
+                        this.$.tooltip_wornings.show();
+                    else
+                        this.$.tooltip_wornings.hide();
+                }, 1);
+
+                this._resize();
             },
 
             reset : function(){
@@ -435,7 +469,6 @@
             },
 
             _sort_by : function(field, reverse, primer){
-
                 var key = primer ?
                         function(x) {return primer(x[field])} :
                         function(x) {return x[field]};
@@ -458,6 +491,13 @@
 
             _fieldId: function(index) {
                 return "id_" + index;
+            },
+
+            _hasWarnings: function() {
+                for (var i in this.fields)
+                    if (this.fields[i].errorsDescription.length)
+                        return true;
+                return false;
             },
 
             _isObject: function(item) {
