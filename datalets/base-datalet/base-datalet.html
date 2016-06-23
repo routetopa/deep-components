@@ -348,15 +348,74 @@ Example :
             },
 
             exportRTF: function () {
+
+                var t = this;
                 var parent = this.parentElement;
                 while(!parent.hasAttribute("data-url"))
                     parent = parent.parentElement;
 
+                var post_id = parent.parentElement.id.match(/\d+/); post_id = post_id ? post_id[0] : "";
+                var datalet_id = $(parent).parents().eq(3).attr("datalet-id") ? $(parent).parents().eq(3).attr("datalet-id") : "";
+                var isPublicRoom = (typeof SPODPUBLICROOM != 'undefined') ? true : false;
 
                 var svg = $(parent).find(".highcharts-container");
                 svg = $(svg[0]).html();
 
                 var xhr = new XMLHttpRequest();
+
+                $.ajax({
+                    url: ODE.get_datalet_info,
+                    data: {"post_id" : post_id, "datalet_id" : datalet_id, "is_public_room" : isPublicRoom},
+                    dataType: "json",
+                    success: function(e){
+                        xhr.open('POST', 'http://172.16.15.77/DEEalerProvider/DEEP/export/export-datalet-as-rtf', true);
+                        //xhr.open('POST', 'http://stage.routetopa.eu/deep/DEEP/export/export-datalet-as-rtf', true);
+                        //xhr.open('POST', 'http://deep.routetopa.eu/deep_1_5/DEEP/export/export-datalet-as-rtf', true);
+                        xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+
+                        var post = 'svg_data=' + window.encodeURIComponent(svg) + '&datalet=' + parent.is + '&dataset=' + t.$.base_datalet_link.getAttribute("href");
+                        post += '&user=' + e.user + '&timestamp=' + e.timestamp + '&comment=' + (e.comment ? e.comment : "");
+
+                        xhr.responseType = 'blob';
+
+                        //OpenDataSoft check
+                        if(t.dataUrl.indexOf("/records/") > -1)
+                        {
+                            var urlSource = t.dataUrl.split("/")[0] + "//" + t.dataUrl.split("/")[2];
+
+                            var i;
+                            if(t.dataUrl.indexOf("&") > -1)
+                                i = t.dataUrl.indexOf("&");
+                            else
+                                i = t.dataUrl.length;
+
+                            $.ajax({
+                                url: urlSource + "/api/dataset/1.0/" + t.dataUrl.substring(t.dataUrl.indexOf("=")+1, i),
+                                dataType: "json",
+                                success: function(e){
+                                    post += '&name=' + e.metas.title + '&description=' + e.metas.description + '&created=' + e.metas.data_processed  + '&lastModified=' + e.metas.modified;
+                                    xhr.send(post);
+                                }
+                            });
+                        }
+                        else if(t.dataUrl.indexOf("datastore_search?resource_id") > -1 )
+                        {
+                            $.ajax({
+                                url: t.dataUrl.replace("datastore_search?resource_id", "resource_show?id"),
+                                dataType: "json",
+                                success: function(e){
+                                    post += '&name=' + e.result.name + '&description=' + e.result.description + '&created=' + e.result.created + '&format=' + e.result.format + '&lastModified=' + e.result.last_modified;
+                                    xhr.send(post);
+                                }
+                            });
+                        }
+                        else
+                        {
+                            xhr.send(post);
+                        }
+
+                    }
+                });
 
                 xhr.onreadystatechange = function(){
                     if (this.readyState == 4 && this.status == 200){
@@ -370,51 +429,6 @@ Example :
                         //window.URL.revokeObjectURL(downloadUrl);
                     }
                 };
-
-                //xhr.open('POST', 'http://172.16.15.77/DEEalerProvider/DEEP/export/export-datalet-as-rtf', true);
-                //xhr.open('POST', 'http://stage.routetopa.eu/deep/DEEP/export/export-datalet-as-rtf', true);
-                xhr.open('POST', 'http://deep.routetopa.eu/deep_1_5/DEEP/export/export-datalet-as-rtf', true);
-                xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-
-                var post = 'svg_data=' + window.encodeURIComponent(svg) + '&datalet=' + parent.is + '&dataset=' + this.$.base_datalet_link.getAttribute("href");
-                xhr.responseType = 'blob';
-
-                //OpenDataSoft check
-                if(this.dataUrl.indexOf("/records/") > -1 )
-                {
-                    var urlSource = this.dataUrl.split("/")[0] + "//" + this.dataUrl.split("/")[2];
-
-                    var i;
-                    if(this.dataUrl.indexOf("&") > -1)
-                        i = this.dataUrl.indexOf("&");
-                    else
-                        i = this.dataUrl.length;
-
-                    $.ajax({
-                        url: urlSource + "/api/dataset/1.0/" + this.dataUrl.substring(this.dataUrl.indexOf("=")+1, i),
-                        dataType: "json",
-                        success: function(e){
-                            post += '&name=' + e.metas.title + '&description=' + e.metas.description + '&created=' + e.metas.data_processed  + '&lastModified=' + e.metas.modified;
-                            xhr.send(post);
-                        }
-                    });
-                }
-                else if(this.dataUrl.indexOf("datastore_search?resource_id") > -1 )
-                {
-                    $.ajax({
-                        url: this.dataUrl.replace("datastore_search?resource_id", "resource_show?id"),
-                        dataType: "json",
-                        success: function(e){
-                            post += '&name=' + e.result.name + '&description=' + e.result.description + '&created=' + e.result.created + '&format=' + e.result.format + '&lastModified=' + e.result.last_modified;
-                            xhr.send(post);
-                        }
-                    });
-                }
-                else
-                {
-                    xhr.send(post);
-                }
-
             },
 
             importToMySpace: function() {

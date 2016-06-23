@@ -239,7 +239,7 @@
             <div id="header">
                 <span id="selected_data"></span>
                 <div style="float: right; right: 10px">
-                    <paper-checkbox checked on-change="showAll"><span id="suggested_datasets">Last Version</span></paper-checkbox>
+                    <paper-checkbox checked on-change="showAll"><span id="suggested_datasets">{{_tr("last_version")}}</span></paper-checkbox>
                 </div>
             </div>
 
@@ -248,12 +248,12 @@
                 <tr>
                     <template is="dom-repeat" items="{{fields}}">
                         <th id="id_{{index}}">
-                            {{item.name}}
+                            {{_tr(item.name)}}
                             <paper-icon-button id="{{index}}" class="order" on-click="_order" icon="unfold-more"></paper-icon-button>
                         </th>
                     </template>
                     <th>
-                        TOOLS
+                        {{_tr("TOOLS")}}
                     </th>
                 </tr>
                 <template is="dom-repeat" items="{{shownData}}">
@@ -275,10 +275,10 @@
                             </template>
                         </template>
                         <td>
-                            <paper-icon-button title="Open"            room_id$="{{item.ID}}" version$="{{item.VER}}" class="tools" icon="open-in-new" on-click="_onOpenDatasetClick"></paper-icon-button>
-                            <paper-icon-button title="Download as CSV" room_id$="{{item.ID}}" version$="{{item.VER}}" class="tools" icon="file-download" on-click="_onDownloadDatasetClick"></paper-icon-button>
-                            <paper-icon-button title="Copy link"       room_id$="{{item.ID}}" version$="{{item.VER}}" class="tools" icon="content-copy" on-click="_onCopyDatasetClick"></paper-icon-button>
-                            <paper-icon-button title="Download docs"   room_id$="{{item.ID}}" version$="{{item.VER}}" class="tools" icon="description" on-click="_onDownloadInfoClick"></paper-icon-button>
+                            <paper-icon-button title='{{_tr("open")}}'          room_id$="{{item.ID}}" version$="{{item.VER}}" class="tools" icon="open-in-new" on-click="_onOpenDatasetClick"></paper-icon-button>
+                            <paper-icon-button title='{{_tr("download_csv")}}'  room_id$="{{item.ID}}" version$="{{item.VER}}" class="tools" icon="file-download" on-click="_onDownloadDatasetClick"></paper-icon-button>
+                            <paper-icon-button title='{{_tr("copy_link")}}'     room_id$="{{item.ID}}" version$="{{item.VER}}" class="tools" icon="content-copy" on-click="_onCopyDatasetClick"></paper-icon-button>
+                            <paper-icon-button title='{{_tr("download_docs")}}' room_id$="{{item.ID}}" version$="{{item.VER}}" class="tools" icon="description" on-click="_onDownloadInfoClick"></paper-icon-button>
                         </td>
                     </tr>
                 </template>
@@ -341,12 +341,18 @@
                     type  : String,
                     value : undefined,
                     observer : '_filter'
+                },
+
+                localization : {
+                    type : String,
+                    value : "en"
                 }
 
             },
 
             ready : function() {
                 this.step = 10;
+                ln["localization"] = this.attributes["localization"].value;
             },
 
             attached : function(){
@@ -371,6 +377,10 @@
                 this.$.rows.innerHTML = ln["rows_" + ln["localization"]];
 
                 this.$.filter.setAttribute("label", ln["search_" + ln["localization"]]);
+            },
+
+            _tr: function(key) {
+                return ln[key +"_"+ this.attributes["localization"].value];
             },
 
             _type : function() {return ln["type_" + ln["localization"]];},
