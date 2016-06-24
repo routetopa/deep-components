@@ -83,9 +83,19 @@ var AjaxJsonAlasqlBehavior = {
      * @method selectData
      */
     selectData : function() {
-        var fields = this._component.fields = JSON.parse(this._component.fields);
+        var f = Object.create(providerFactory);
+        var provider = f.getProvider(this._component.dataUrl);
+        var data = provider.selectData(this.properties.json_results.value);
 
-        //var selectedFields = JSON.parse(this._component.getAttribute("selectedFields"));
+        var converter = new DataTypeConverter();
+
+        var result = converter.inferJsonDataType(data, ["*"]);
+        result = converter.cast(result);
+        this.data = result.dataset;
+    },
+
+    filterData : function() {
+        var fields = this._component.fields = JSON.parse(this._component.fields);
 
         var filters = JSON.parse(this._component.getAttribute("filters"));
         var aggregators = JSON.parse(this._component.getAttribute("aggregators"));
@@ -98,49 +108,33 @@ var AjaxJsonAlasqlBehavior = {
             orders = orders[0];
         }
 
-        var f = Object.create(providerFactory);
-        var provider = f.getProvider(this._component.dataUrl);
-        var data = provider.selectData(this.properties.json_results.value);
-
-        //if(selectedFields) {
-        //    fields = [];
-        //    var inputs = [];
-        //    for (var i=0; i < selectedFields.length; i++) {
-        //        if (selectedFields[i]) {
-        //            fields.push(selectedFields[i].field);
-        //            inputs.push(selectedFields[i].input);
-        //        }
-        //    }
-        //}
-
         var converter = new DataTypeConverter();
 
+        var data = alasql_QUERY(this.data, fields, filters, null, orders);
         var result = converter.inferJsonDataType(data, ["*"]);
         result = converter.cast(result);
         data = result.dataset;
 
-        data = alasql_selectData(data, fields, filters);//funziona senza?
+        if(aggregators && aggregators.length) {
+            data = alasql_QUERY(data, fields, null, aggregators, orders);
+            result = converter.inferJsonDataType(data, ["*"]);
+            result = converter.cast(result);
+            data = result.dataset;
+        }
 
-        result = converter.inferJsonDataType(data, ["*"]);
-        result = converter.cast(result);
-        data = result.dataset;
-
-        data = alasql_complexSelectData(data, fields, [], aggregators, orders);
-
-        result = converter.inferJsonDataType(data, ["*"]);
-        result = converter.cast(result);
-        data = result.dataset;
-
-        this.data = transformData(data, fields, true);
-
-        this._deleteWaitImage();
-    },
-
-    /**
-     * Delete a image after loading a datalet
-     */
-    _deleteWaitImage : function() {
-        $("img[src$='spin.svg']").remove();
+        this.data = alasql_transformData(data, fields, true);
     }
+
+    //var selectedFields = JSON.parse(this._component.getAttribute("selectedFields"));
+    //if(selectedFields) {
+    //    fields = [];
+    //    var inputs = [];
+    //    for (var i=0; i < selectedFields.length; i++) {
+    //        if (selectedFields[i]) {
+    //            fields.push(selectedFields[i].field);
+    //            inputs.push(selectedFields[i].input);
+    //        }
+    //    }
+    //}
 
 };

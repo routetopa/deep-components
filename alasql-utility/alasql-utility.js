@@ -1,23 +1,4 @@
-function alasql_selectData (data, fields, filters) {
-    if(fields.length == 0)
-        return [];
-
-    var _fields = _addParenthesis(fields);
-
-    var select = _alasql_SELECT(_fields);
-
-    var where = "";
-    if(filters && filters.length) {
-        var _filters = _copy(filters);
-        where = _alasql_WHERE(_filters);
-    }
-
-    var query = select + " FROM ?" + where;
-
-    return alasql(query, [data]);
-}
-
-function alasql_complexSelectData (data, fields, filters, aggregators, orders) {
+function alasql_QUERY (data, fields, filters, aggregators, orders) {
     if(fields.length == 0)
         return [];
 
@@ -134,16 +115,12 @@ function _addParenthesis (fields) {
 }
 
 function _normalizeField (field) {
-    /*DEPRECATED*/return "[" +  field.substring(field.lastIndexOf(",") + 1, field.length) + "]";
-    //return "[" + field + "]";
+    return "[" + field + "]";
 }
 
-function transformData (data, fields, truncate) {
+function alasql_transformData (data, fields, truncate) {
     if(!data || data.length == 0)
         return [];
-
-    /*DEPRECATED*/for (var i=0; i < fields.length; i++)
-        fields[i] = fields[i].substring(fields[i].lastIndexOf(",") + 1, fields[i].length);
 
     var tData = [];
 

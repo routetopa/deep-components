@@ -61,7 +61,6 @@ Example :
     </template>
 
     <script src="static/js/highcharts.js"></script>
-    <!--<script src="static/js/exporting.js"></script>-->
     <script src="static/js/highcharts-more.js"></script>
     <script src="static/themes/themes.js"></script>
 
@@ -69,75 +68,15 @@ Example :
         var HighchartsBehavior = {
 
             properties: {
-
                 categories: {
                     type: Array,
                     value: []
                 },
-
                 series: {
                     type: Array,
                     value: []
-                },
-
-//                series_type:{
-//                    type: String,
-//                    value: "line"//spline,time
-//                }
-
+                }
             },
-            /**
-             * Normalizes a number in agreement with javascript's conventions. Delete all NaN characters. Exception: number representing lat & long remain unchanged.
-             */
-//            jNumConverter: function(num) {
-//                //lat-long
-//                if(num.charAt(num.length-7) == "." && (num.match(/[\.,]/g) || []).length == 1)
-//                    return num;
-//
-//                num = num.replace(/[^0-9\.]/, '');
-//
-//                var jNum = "";
-//                for (var i = 0; i < num.length; i++) {
-//                    if(num[i].match(/[\.,]/g))
-//                        if (i == num.length - 3)
-//                            jNum += ".";
-//                        else
-//                            ;
-//                    else if (!isNaN(num[i]))
-//                        jNum += num[i];
-//                }
-//
-//                return jNum;
-//            },
-            /**
-             * Populate the categories and the series array.
-             *
-             * @method transformData
-             *
-             * @param {Event} e
-             */
-//            transformData: function () {
-//
-//                if(this.data.length == 0) return;
-//
-//                this.properties.categories.value = this.data[0].data;
-//
-//                for (var i = 1; i < this.data.length; i++)
-//                {
-//                    this.data[i].data.every(function (element, index, array) {
-//                        try {
-//                            var e = HighchartsBehavior.jNumConverter(element);
-//                            (isNaN(element)) ? array[index] = parseFloat(HighchartsBehavior.jNumConverter(element)) :
-//                                    array[index] = parseFloat(element);
-//                        }catch(e){
-//                            //console.log("Parsing data error. Highchart-datalet.selectData");
-//                        }
-//                        return true;
-//                    });
-//
-//                    this.properties.series.value.push(this.data[i]);
-//                }
-//            },
 
             transformData: function () {
                 var selectedFields = JSON.parse(this._component.getAttribute("selectedFields"));
@@ -183,29 +122,7 @@ Example :
                     this.properties.series.value = series;
                 }
 
-            },
-
-
-//            setParameters: function(params)
-//            {
-//                this._component.title = params['title'];
-//                this._component.description = params['description'];
-//
-//                var chart = $(this._component.$.charts.$.container).highcharts();
-//
-//                chart.setTitle({text: params['title']});
-//                chart.xAxis[0].setTitle({text: params['x-axis-label']});
-//                chart.yAxis[0].setTitle({text: params['y-axis-label']});
-//
-//                chart.tooltip.options.formatter = function() {
-//                    return this.x + '<br/><br/><span style="fill:#7cb5ec" x="8" dy="15">●</span> ' + this.series.name + ': <b>' + this.y + ' ' + params['suffix'] + '</b>';
-//                }
-//
-//                //theme default
-//                Highcharts.setOptions(Highcharts[params['theme']]);
-//
-//                this._component.stack = params['stack'];
-//            }
+            }
 
         };
 

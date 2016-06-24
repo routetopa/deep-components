@@ -130,7 +130,7 @@
             getData : function() {
                 //return datatable.getData
                 //this.fields = "*"
-                var data = alasql_selectData(this.data, this.fields, this.filters);
+                var data = alasql_QUERY(this.data, this.fields, this.filters, null, null);
                 var converter = new DataTypeConverter();
                 var result = converter.inferJsonDataType(data, ["*"]);
                 result = converter.cast(result);
@@ -170,14 +170,14 @@
             _updateFields : function(e) {
                 this.selectedFields = e.detail.selectedFields;
                 var fields = utility_getSelectedFields(this.fields, this.selectedFields);
-                var data = alasql_selectData(this.data, fields, this.filters);
+                var data = alasql_QUERY(this.data, fields, this.filters, null, null);
                 this.$.data_table.setData(data);
             },
 
             _updateFilters : function(e) {
                 this.filters = e.detail.filters;
                 var fields = utility_getSelectedFields(this.fields, this.selectedFields);
-                var data = alasql_selectData(this.data, fields, this.filters);
+                var data = alasql_QUERY(this.data, fields, this.filters, null, null);
                 this.$.data_table.setData(data);
             },
 
@@ -201,7 +201,7 @@
                             result = converter.cast(result);
                             that.fields = utility_getFields(result.types);
                             data = result.dataset;
-                            that.data = alasql_selectData(data, that.fields);
+                            that.data = alasql_QUERY(data, that.fields, null, null, null);
 
                             that.$.select_fields.setFields(that.fields);
                             that.$.filters.setFields(that.fields);
@@ -222,7 +222,7 @@
                     result = converter.cast(result);
                     this.fields = utility_getFields(result.types);
                     data = result.dataset;
-                    this.data = alasql_selectData(data, this.fields);
+                    this.data = alasql_QUERY(data, this.fields, null, null, null);
 
                     this.$.select_fields.setFields(this.fields);
                     this.$.filters.setFields(this.fields);

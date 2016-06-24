@@ -87,7 +87,11 @@ var WorkcycleBehavior = {
         this.selectData();
         this.filterData();
         this.transformData();
-        this.presentData();
+        var that = this;
+        this._component.async(function () {
+            that.presentData();
+            $("img[src$='spin.svg']").remove();
+        }, 100);
     },
 
     /**
@@ -102,12 +106,12 @@ var WorkcycleBehavior = {
             this.requestData();
         }else{
             this.data = this._component.data;
-
-            this.filterData();
             this.transformData();
-            this.presentData();
-
-            this._deleteWaitImage();
+            var that = this;
+            this._component.async(function () {
+                that.presentData();
+                $("img[src$='spin.svg']").remove();
+            }, 100);
         }
     }
 

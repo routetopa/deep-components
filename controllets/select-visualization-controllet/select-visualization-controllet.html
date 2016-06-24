@@ -359,14 +359,14 @@
                 for (var key in params) { this.params[key] = params[key]; }
 
                 //use cache
-                var data = alasql_complexSelectData(this.data, this.selectedFields, [], inputs.getAggregators(), inputs.getOrders());
+                var data = alasql_QUERY(this.data, this.selectedFields, null, inputs.getAggregators(), inputs.getOrders());
 
                 var converter = new DataTypeConverter();
                 var result = converter.inferJsonDataType(data, ["*"]);
                 result = converter.cast(result);
                 data = result.dataset;
 
-                data = transformData(data, this.selectedFields, true);
+                data = alasql_transformData(data, this.selectedFields, true);
 
                 this.params["data"] = JSON.stringify(data).replace(/'/g, "&#39;");
                 //
