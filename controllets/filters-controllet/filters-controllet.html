@@ -270,9 +270,11 @@
             },
 
             setFilters : function(filters) {
-                this.filters = this._copy(filters);
-                this.logicalOperator = this.filters[0].logicalOperator;
-                this._fire();
+                if(filters && filters.length > 0) {
+                    this.filters = this._copy(filters);
+                    this.logicalOperator = this.filters[0].logicalOperator;
+                    this._fire();
+                }
             },
 
             getFilters : function() {
