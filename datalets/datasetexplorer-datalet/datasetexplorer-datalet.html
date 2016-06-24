@@ -143,6 +143,8 @@ Example:
 
             transformData: function()
             {
+                this._filterData();
+
                 var treemapData = [];
                 DatasetexplorerBehavior.map.name = this._component.title;
 
@@ -212,7 +214,7 @@ Example:
                 this._component.fire("datasetexplorer-datalet_data-url", { url: url });
             },
 
-            filterData : function() {
+            _filterData : function() {
 
                 this.meta = this.data.result.providers;
                 this._component.fields = JSON.parse(this._component.fields);
