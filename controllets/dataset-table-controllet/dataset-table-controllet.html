@@ -389,7 +389,7 @@
             _onDownloadInfoClick: function(e){
                 $.ajax({
                     url: ODE.ajax_coocreation_get_dataset_docs,
-                    data: {room_id : e.target.parentElement.room_id, version : e.target.parentElement.version},
+                    data: {room_id : e.target.parentElement.attributes["room_id"].value, version : e.target.parentElement.attributes["version"].value},
                     dataType: "text",
                     success: function(e){
                         var fileName = "dataset";
