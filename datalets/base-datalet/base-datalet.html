@@ -254,6 +254,10 @@ Example :
 //                this.$.domain.textContent = url;
 //            },
 
+            removeLoader: function() {
+                this.$.base_datalet_imgWaitDatalet.style.display = "none";
+            },
+
             hideFooter: function() {
                 this.$.base_datalet_container.innerHTML = "";
                 this.$.base_datalet_container.style.margin = 0;

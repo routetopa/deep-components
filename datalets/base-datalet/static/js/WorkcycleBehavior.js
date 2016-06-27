@@ -79,6 +79,15 @@ var WorkcycleBehavior = {
     },
 
     /**
+     * Build the object/s for presentation layer.
+     *
+     * @method presentData
+     */
+    redraw: function(){
+
+    },
+
+    /**
      * This method represents the entire datalet workcycle.
      *
      * @method runWorkcycle
@@ -87,10 +96,12 @@ var WorkcycleBehavior = {
         this.selectData();
         this.filterData();
         this.transformData();
+
         var that = this;
         this._component.async(function () {
             that.presentData();
-            $("img[src$='spin.svg']").remove();
+            $(that._component).find("base-datalet")[0].removeLoader();
+            that.redraw();
         }, 100);
     },
 
@@ -107,10 +118,12 @@ var WorkcycleBehavior = {
         }else{
             this.data = this._component.data;
             this.transformData();
+
             var that = this;
             this._component.async(function () {
                 that.presentData();
-                $("img[src$='spin.svg']").remove();
+                $(that._component).find("base-datalet")[0].removeLoader();
+                that.redraw();
             }, 100);
         }
     }

@@ -122,6 +122,10 @@ Example :
                     this.properties.series.value = series;
                 }
 
+            },
+
+            redraw: function () {
+                $(this._component.$.charts.$.container).highcharts().reflow();
             }
 
         };
