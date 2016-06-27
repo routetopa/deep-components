@@ -125,9 +125,7 @@ Example :
             },
 
             redraw: function () {
-                //$(this._component.$.charts.$.container).highcharts().reflow();
-                var a = $(this._component.$.charts.$.container);
-                $(a[0]).highcharts().reflow();
+                $(this._component.$.charts.$.container).highcharts().reflow();
             }
 
         };
