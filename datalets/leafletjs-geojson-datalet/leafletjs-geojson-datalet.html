@@ -93,6 +93,11 @@ Example:
 
                 for (var i = 0; i < t.data[0].data.length; i++)
                 {
+                    try{
+                        if(typeof t.data[0].data[i] != 'object')
+                            t.data[0].data[i] = JSON.parse(t.data[0].data[i]);
+                    }catch(e){}
+
                     var geoJsonLayer = L.geoJson(t.data[0].data[i]).addTo(t._component.map);
 
                     if(t.data.length > 1)
