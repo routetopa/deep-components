@@ -31,6 +31,9 @@
 
 <link rel="import" href="../../bower_components/polymer/polymer.html">
 
+<link rel="import" href="../../bower_components/paper-spinner/paper-spinner.html">
+<link rel="import" href="../../bower_components/paper-spinner/paper-spinner-lite.html">
+
 <!--
 The `base-datalet` is the base component that includes datalet footer (with information about dataset domain and ROUTE-TO-PA project).
 Base datalet includes polymer.html and the BaseDataletBehaviors javascript file that define the datalet workcycle and the datalet base properties : dataUrl, fields and data.
@@ -54,7 +57,20 @@ Example :
 
 <dom-module id="base-datalet">
     <template>
-        <style>
+
+        <style is="custom-style">
+            paper-spinner {
+                height: 64px;
+                width: 64px;
+
+                --paper-spinner-stroke-width: 8px;
+
+                --paper-spinner-layer-1-color: #2196F3;
+                --paper-spinner-layer-2-color: #F44336;;
+                --paper-spinner-layer-3-color: #FFEB3B;;
+                --paper-spinner-layer-4-color: #4CAF50;;
+            }
+
             a {
                 color: #00BCD4;
                 text-decoration: none;
@@ -83,10 +99,9 @@ Example :
                 height: 32px;
                 width: 32px;
             }
-            #base_datalet_spin {
-                height: 64px;
+            #base_datalet_spinner {
                 width: 100%;
-                margin-top: 64px;
+                padding: 168px calc(50% - 32px);
             }
 
             #base_datalet_source_link{
@@ -101,7 +116,8 @@ Example :
                 font-style: italic;
                 color: #727272;
             }
-/*EXPORT*/
+
+            /*EXPORT*/
             .export
             {
                 position: absolute;
@@ -127,31 +143,24 @@ Example :
                 display: none;
             }
 
-            .highcharts-contextmenu-container
-            {
-                /*background: rgb(255, 255, 255);*/
-                /*background-color: #E0E0E0;*/
-            }
-
             .highcharts-contextmenu-container div
             {
                 cursor: pointer;
                 padding: 0px 4px;
-                /*color: rgb(48, 48, 48);*/
                 font-size: 11px;
                 line-height: 15px;
-                /*background: none;*/
             }
 
             .highcharts-contextmenu-container div:hover
             {
                 background: #00BCD4;
             }
-/*EXPORT*/
+            /*EXPORT*/
+
         </style>
 
-        <div id="base_datalet_imgWaitDatalet">
-            <img id="base_datalet_spin" src="static/images/spin.svg">
+        <div id="base_datalet_spinner">
+            <paper-spinner id="datalet_spinner" active></paper-spinner>
         </div>
 
         <div id="base_datalet_container">
@@ -255,7 +264,8 @@ Example :
 //            },
 
             removeLoader: function() {
-                this.$.base_datalet_imgWaitDatalet.style.display = "none";
+                this.$.base_datalet_spinner.style.display = "none";
+                this.$.datalet_spinner.active = false;
             },
 
             hideFooter: function() {
