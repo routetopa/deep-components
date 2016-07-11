@@ -1,0 +1,167 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html"/>
+<link rel="import" href="../../bower_components/paper-material/paper-material.html"/>
+<link rel="import" href="../../bower_components/paper-fab/paper-fab.html"/>
+<link rel="import" href="../../bower_components/iron-icons/iron-icons.html"/>
+<link rel="import" href="../../bower_components/paper-dialog/paper-dialog.html"/>
+<link rel="import" href="../../bower_components/neon-animation/neon-animation.html"/>
+
+<script src="../../locales/paper_card_controllet_ln.js"></script>
+
+<dom-module id="select-marker-map-controllet">
+
+    <template>
+        <link href="http://cdn.jsdelivr.net/openlayers.geocoder/latest/ol3-geocoder.min.css" rel="stylesheet">
+
+        <div id="map" tabindex="0" style="height: 100%; width: 100%"></div>
+        <div id="popup" class="ol-popup">
+            <a href="#" id="popup-closer" class="ol-popup-closer"></a>
+            <div id="popup_content"></div>
+        </div>
+    </template>
+
+    <script src="http://openlayers.org/en/v3.17.1/build/ol.js"></script>
+    <script src="http://cdn.jsdelivr.net/openlayers.geocoder/latest/ol3-geocoder.js"></script>
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/proj4js/2.3.6/proj4.js"></script>
+
+    <script>
+
+        _this = null;
+        Polymer({
+            is: "select-marker-map-controllet",
+            properties: {
+                lang:{
+                    type: String,
+                    value: navigator.language
+                },
+                map:{
+                    type: Object
+                },
+
+                olview:{
+                    type: Object
+                },
+
+                geocoder:{
+                    type: Object
+                },
+
+                overlay:{
+                    type: Object
+                },
+
+                iconStyle:{
+                    type : Object
+                },
+
+                vectorSource:{
+                    type: Object
+                },
+
+                coordinate: {
+                    type: Array,
+                    value: []
+                }
+
+            },
+
+            ready : function(){
+                _this = this;
+
+                this.olview = new ol.View({
+                            center: [0, 0],
+                            zoom: 3,
+                            minZoom: 2,
+                            maxZoom: 20
+                        });
+
+                var baseLayer = new ol.layer.Tile({
+                    source: new ol.source.OSM()
+                });
+
+                this.iconStyle = new ol.style.Style({
+                    image: new ol.style.Icon(/** @type {olx.style.IconOptions} */ ({
+                        anchor: [0.5, 46],
+                        anchorXUnits: 'fraction',
+                        anchorYUnits: 'pixels',
+                        opacity: 0.75,
+                        src: 'http://services.routetopa.eu/DEEalerProvider/COMPONENTS/datalets/leafletjs-datalet/leafletsjs/images/marker-icon.png'
+                    }))
+                });
+
+                this.vectorSource = new ol.source.Vector({});
+
+                this.map = new ol.Map({
+                    target:'map',
+                    view: this.olview,
+                    controls: ol.control.defaults({
+                    attributionOptions: /** @type {olx.control.AttributionOptions} */ ({
+                        collapsible: false
+                    })}),
+                    loadTilesWhileAnimating: true,
+                    loadTilesWhileInteracting: true,
+                    layers: [baseLayer,
+                        new ol.layer.Vector({
+                            source: this.vectorSource
+                        })
+                    ]
+                });
+
+                //Instantiate with some options and add the Control
+                this.geocoder = new Geocoder('nominatim', {
+                    provider: 'photon',
+                    lang: 'en',
+                    placeholder: 'Search for ...',
+                    limit: 5,
+                    keepOpen: true,
+                    preventDefault : true
+                });
+
+                this.overlay = new ol.Overlay({
+                    element: document.getElementById('popup'),
+                    offset: [0, -40]
+                });
+
+                this.map.addControl(this.geocoder);
+
+                //Listen when an address is chosen
+                this.geocoder.on('addresschosen', function(evt){
+                    _this.setMarker(evt.coordinate);
+                    _this.olview.setCenter(evt.coordinate);
+                    _this.olview.setZoom(16);
+
+                    //_this.$.popup_content.innerHTML = '<p>'+ evt.address.formatted +'</p>';
+                    //_this.overlay.setPosition(coord);
+                });
+
+                this.map.on('click', function(evt) {
+                    _this.setMarker(evt.coordinate);
+                });
+            },
+
+            setMarker: function(coordinate){
+                var iconFeature = new ol.Feature({
+                    geometry: new ol.geom.Point(coordinate),
+                    name: 'Null Island',
+                    population: 4000,
+                    rainfall: 500
+                });
+
+                iconFeature.setStyle(_this.iconStyle);
+
+                this.vectorSource.clear(true);
+                this.vectorSource.addFeature( iconFeature );
+
+                this.coordinate =  ol.proj.transform([coordinate[1],coordinate[0]], "EPSG:900913", "EPSG:4326");
+            },
+
+            resize : function(h,w){
+                this.$.map.style.height = h + "px";
+                this.$.map.style.width  = w + "px";
+                this.map.updateSize();
+            },
+
+
+        })
+    </script>
+
+</dom-module>
