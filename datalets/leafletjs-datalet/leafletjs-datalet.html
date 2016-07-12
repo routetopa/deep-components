@@ -101,6 +101,14 @@ Example:
                         else
                             continue;
                     }
+                    else if(t.data[0].data[i][0].indexOf(","))
+                    {
+                        var coords = t.data[0].data[i][0].split(",");
+                        if(!isNaN(coords[0]) && !isNaN(coords[1]))
+                            coordinates.push([parseFloat(coords[0]), parseFloat(coords[1])]);
+                        else
+                            continue;
+                    }
                     else
                     {
                         if(!isNaN(t.data[0].data[i]) && !isNaN(t.data[1].data[i]))
