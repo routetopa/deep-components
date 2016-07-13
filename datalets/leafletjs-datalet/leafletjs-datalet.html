@@ -101,7 +101,7 @@ Example:
                         else
                              continue;
                     }
-                    else if(typeof t.data[0].data[i] != 'undefined' && t.data[0].data[i].indexOf(","))
+                    else if(typeof t.data[0].data[i] == 'string' && t.data[0].data[i].indexOf(","))
                     {
                         var coords = t.data[0].data[i].split(",");
                         if(!isNaN(coords[0]) && !isNaN(coords[1]))
@@ -213,4 +213,5 @@ Example:
                 this.async(function(){this.behavior.init(this)},100);
             }
         });
-    </scri
+    </script>
+</dom-module>
