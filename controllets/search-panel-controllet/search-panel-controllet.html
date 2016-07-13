@@ -36,6 +36,7 @@
 <link rel="import" href="../../bower_components/neon-animation/neon-animated-pages.html">
 <link rel="import" href="../../bower_components/neon-animation/neon-animatable.html">
 <link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout.html">
+<link rel="import" href="../../bower_components/paper-fab/paper-fab.html">
 
 <!--
 `text-element-controllet` is a text area with heading. It fires an event when the text value is modified. This event can be useful when you have to monitor many af this elements.
@@ -62,12 +63,17 @@ Example:
         <style is="custom-style">
 
             paper-input.search-text{
-                --paper-input-container-input-color: #ffffff;
-                --paper-input-container-focus-color: #ffffff;
-                --paper-input-container-color: #ffffff;
+                --paper-input-container-input-color: var(--search-box-container-color,#ffffff);
+                --paper-input-container-focus-color: var(--search-box-container-color,#ffffff);
+                --paper-input-container-color: var(--search-box-container-color,#ffffff);
                 position: absolute;
                 width: 340px;
                 margin-left: -5px;
+            }
+
+            paper-fab#search_button{
+                height: 40px;
+                width: 40px;
             }
 
             paper-icon-button
@@ -78,6 +84,10 @@ Example:
         <div class="horizontal layout">
             <template is="dom-if" if="{{leftDirection}}">
                 <paper-icon-button id="search_button" icon="search" class="dropdown-trigger" on-click="_toggleClick"></paper-icon-button>
+            </template>
+
+            <template is="dom-if" if="{{paperfab}}">
+                <paper-fab id="search_button" icon="search" class="dropdown-trigger" on-click="_toggleClick"></paper-fab>
             </template>
 
             <neon-animated-pages selected="[[selected]]" entry-animation="[[entryAnimation]]" exit-animation="[[exitAnimation]]">
@@ -91,6 +101,7 @@ Example:
             <template is="dom-if" if="{{rightDirection}}">
                 <paper-icon-button id="search_button" icon="search" class="dropdown-trigger" on-click="_toggleClick"></paper-icon-button>
             </template>
+
         </div>
 
     </template>
@@ -137,6 +148,10 @@ Example:
                 rightDirection: {
                     type: String,
                     value: undefined
+                },
+                paperfab: {
+                    type: Boolean,
+                    value: false
                 }
             },
 
@@ -146,7 +161,8 @@ Example:
                     this.$.search_text.style.left =  '5px';
                 }else if(this.rightDirection != undefined){
                     this.$.search_text.style.right =  '5px';
-                }
+                }else if(this.paperfab != undefined)
+                   this.$.search_text.style.right =  '45px';
 
             },
             _toggleClick: function(e){
@@ -170,7 +186,9 @@ Example:
             _valueChanged : function(oldvalue, newValue){
                 var t = this;
                 clearTimeout(this.timer);
-                this.timer = setTimeout(function(){t.fire('search-panel-controllet_content-changed', {searchKey: t.searchKey, id : t.id})}, 0);
+                this.timer = setTimeout(function(){
+                    t.fire('search-panel-controllet_content-changed', {searchKey: t.searchKey, id : t.id})
+                }, 0);
             },
             /**
              * It returns the value in text area

@@ -99,9 +99,9 @@ Example:
                         if(!isNaN(t.data[0].data[i][0]) && !isNaN(t.data[0].data[i][1]))
                             coordinates.push([parseFloat(t.data[0].data[i][0]), parseFloat(t.data[0].data[i][1])]);
                         else
-                            continue;
+                             continue;
                     }
-                    else if(t.data[0].data[i] && t.data[0].data[i].indexOf(","))
+                    else if(typeof t.data[0].data[i] != 'undefined' && t.data[0].data[i].indexOf(","))
                     {
                         var coords = t.data[0].data[i].split(",");
                         if(!isNaN(coords[0]) && !isNaN(coords[1]))
@@ -213,6 +213,4 @@ Example:
                 this.async(function(){this.behavior.init(this)},100);
             }
         });
-    </script>
-</dom-module>
-
+    </scri
