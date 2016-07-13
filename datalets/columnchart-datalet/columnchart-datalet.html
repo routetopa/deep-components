@@ -66,7 +66,7 @@ Example:
                 options = {
                     chart: {
                         type: 'column',
-                        zoomType: 'xy',
+                        zoomType: 'xy'
                     },
                     title: {
                         text: this._component.title
@@ -75,8 +75,7 @@ Example:
                         categories: this.properties.categories.value,
                         title: {
                             text: this._component.xAxisLabel
-                        },
-//                        crosshair: true
+                        }
                     },
                     yAxis: {
                         min: 0,
@@ -84,40 +83,18 @@ Example:
                             text: this._component.yAxisLabel,
                         }
                     },
-//                    tooltip: {
-//                        headerFormat: '<span style="font-size:16px; font-weight: bold">{point.key}</span><table  style="font-size:16px; white-space: nowrap ">',
-//                        pointFormat: '<tr style="color:{series.color}"><td>{series.name}: </td>' +
-//                        '<td>{point.y} ' + this._component.suffix + '</span></td></tr>',
-//                        footerFormat: '</table>',
-//                        shared: true,
-//                        useHTML: true
-//                    },
-//                    plotOptions: {
-//                        column: {
-//                            pointPadding: 0.2,
-//                            borderWidth: 0
-//                        }
-//                    },
                     tooltip: {
                         valueSuffix: ' ' + this._component.suffix
                     },
                     plotOptions: {
                         column: {
                             dataLabels: {
-                                enabled: true
+                                enabled: this._component.dataLabels
                             }
+                        },
+                        series: {
+                            stacking: this._component.stack
                         }
-                    },
-                    legend: {
-                        layout: 'vertical',
-                        align: 'right',
-                        verticalAlign: 'top',
-                        x: -40,
-                        y: 80,
-                        floating: true,
-                        borderWidth: 1,
-                        backgroundColor: ((Highcharts[this._component.theme] && Highcharts[this._component.theme].legendBackgroundColor) || '#FFFFFF'),
-                        shadow: true
                     },
                     credits: {
                         enabled: false
@@ -127,6 +104,27 @@ Example:
 
                 if(this._component.theme != "themeBase" && this._component.theme != "")
                     jQuery.extend(true, options, Highcharts[this._component.theme]);
+
+                if(this._component.legend == "topRight")
+                    options.legend = {
+                        layout: 'vertical',
+                        verticalAlign: 'top',
+                        align: 'right',
+                        x: -4,
+                        y: 4,
+                        floating: true,
+                        borderWidth: 1,
+                        backgroundColor: ((Highcharts[this._component.theme] && Highcharts[this._component.theme].legendBackgroundColor) || '#FFFFFF'),
+                        shadow: true
+                    };
+                else if(this._component.legend == "bottom")
+                    options.legend = {
+                        enabled: true
+                    };
+                else
+                    options.legend ={
+                        enabled: false
+                    };
 
                 $(this._component.$.charts.$.container).highcharts(options);
             }
@@ -140,51 +138,34 @@ Example:
                     type: Array,
                     value: undefined
                 },
-                /**
-                 * It's the label for X axis
-                 *
-                 * @attribute xAxisLabel
-                 * @type String
-                 * @default ''
-                 */
                 xAxisLabel: {
                     type: String,
                     value: ""
                 },
-                /**
-                 * It's the label for Y axis
-                 *
-                 * @attribute yAxisLabel
-                 * @type String
-                 * @default ''
-                 */
                 yAxisLabel: {
                     type: String,
                     value: ""
                 },
-                /**
-                 * It's the values suffix
-                 *
-                 * @attribute suffix
-                 * @type Strig
-                 * @default 'units'
-                 */
                 suffix : {
                     type : String,
                     value : ""
                 },
-
+                legend : {
+                    type : Object,
+                    value : "topRight"
+                },
+                dataLabels : {
+                    type : Object,
+                    value : true
+                },
+                stack : {
+                    type : Object,
+                    value : false
+                },
                 theme : {
                     type : String,
                     value : ""
                 },
-                /**
-                 * It's the component behavior
-                 *
-                 * @attribute behavior
-                 * @type Object
-                 * @default {}
-                 */
                 behavior : {
                     type : Object,
                     value : {}

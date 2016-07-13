@@ -85,7 +85,7 @@ Example:
                     }
 
                     this.properties.series = scatterSeries;
-                    this._component.legend = true;
+//                    this._component.legend = true;
                 }
                 else {// == 2
                     var scatterSeries = [];
@@ -100,7 +100,7 @@ Example:
                     scatterSeries.push({data: series});
 
                     this.properties.series = scatterSeries;
-                    this._component.legend = false;
+//                    this._component.legend = false;
                 }
 
                 options = {
@@ -121,8 +121,12 @@ Example:
                             text: this._component.yAxisLabel,
                         }
                     },
-                    legend: {
-                        enabled: this._component.legend,
+                    plotOptions: {
+                        scatter: {
+                            dataLabels: {
+                                enabled: this._component.dataLabels
+                            }
+                        },
                     },
                     credits: {
                         enabled: false
@@ -132,6 +136,27 @@ Example:
 
                 if(this._component.theme != "themeBase" && this._component.theme != "")
                     jQuery.extend(true, options, Highcharts[this._component.theme]);
+
+                if(this._component.legend == "topRight")
+                    options.legend = {
+                        layout: 'vertical',
+                        verticalAlign: 'top',
+                        align: 'right',
+                        x: -4,
+                        y: 4,
+                        floating: true,
+                        borderWidth: 1,
+                        backgroundColor: ((Highcharts[this._component.theme] && Highcharts[this._component.theme].legendBackgroundColor) || '#FFFFFF'),
+                        shadow: true
+                    };
+                else if(this._component.legend == "bottom")
+                    options.legend = {
+                        enabled: true
+                    };
+                else
+                    options.legend ={
+                        enabled: false
+                    };
 
                 $(this._component.$.charts.$.container).highcharts(options);
             }
@@ -153,13 +178,17 @@ Example:
                     type: String,
                     value: ""
                 },
-                suffix : {
-                    type : String,
-                    value : ""
-                },
                 theme : {
                     type : String,
                     value : ""
+                },
+                legend : {
+                    type : Object,
+                    value : "topRight"
+                },
+                dataLabels : {
+                    type : Object,
+                    value : true
                 },
                 behavior : {
                     type : Object,

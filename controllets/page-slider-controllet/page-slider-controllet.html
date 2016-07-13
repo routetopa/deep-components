@@ -8,6 +8,8 @@
 <link rel="import" href="../../bower_components/iron-icons/iron-icons.html">
 <link rel="import" href="../../bower_components/iron-icon/iron-icon.html">
 
+<link rel="import" href="../../bower_components/paper-tooltip/paper-tooltip.html">
+
 <dom-module id="page-slider-controllet">
 
     <template>
@@ -28,6 +30,19 @@
 
             paper-icon-button[disabled]{
                 color: #B6B6B6;
+            }
+
+            paper-tooltip {
+                --paper-tooltip-background: black;
+            }
+
+            paper-tooltip p {
+                font-family: 'Roboto', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+                font-size: 16px;
+                line-height: 24px;
+
+                margin: 0;
+                padding: 0;
             }
 
             .header{
@@ -96,6 +111,9 @@
             </div>
         </div>
 
+        <paper-tooltip for="slider_chevron_left" position="right" offset="0"><p><span id="back"></span></p></paper-tooltip>
+        <paper-tooltip for="slider_chevron_right" position="left" offset="-16"><p><span id="forward"></span></p></paper-tooltip>
+
         <neon-animated-pages on-neon-animation-finish="_onNeonAnimationFinish" selected="[[selected]]" entry-animation="[[entryAnimation]]" exit-animation="[[exitAnimation]]">
             <content></content>
         </neon-animated-pages>
@@ -160,8 +178,11 @@
             attached : function() {
                 this.fire('page-slider-controllet_selected', {selected : this.selected});
 
-                this.$.slider_chevron_left.setAttribute("title", ln["back_" + ln["localization"]]);
-                this.$.slider_chevron_right.setAttribute("title", ln["forward_" + ln["localization"]]);
+//                this.$.slider_chevron_left.setAttribute("title", ln["back_" + ln["localization"]]);
+//                this.$.slider_chevron_right.setAttribute("title", ln["forward_" + ln["localization"]]);
+
+                this.$.back.innerHTML = ln["back_" + ln["localization"]];
+                this.$.forward.innerHTML = ln["forward_" + ln["localization"]];
             },
 
             setTitle : function(title, subtitle) {

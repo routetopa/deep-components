@@ -1,0 +1,57 @@
+<html>
+
+<head>
+    <script src="../../shared_js/jquery-1.11.2.min.js"></script>
+
+    <script src="../../../bower_components/webcomponentsjs/webcomponents-lite.min.js"></script>
+
+    <link rel="import" href="../aggregators-controllet.html"/>
+
+    <script src="../../../locales/controllet_ln.js"></script>
+
+    <script src="../../shared_js/perfect-scrollbar/js/min/perfect-scrollbar.jquery.min.js"></script>
+    <link rel="stylesheet" href="../../shared_js/perfect-scrollbar/css/perfect-scrollbar.min.css">
+</head>
+
+<body>
+
+    <style>
+
+        .container {
+            height: 400px;
+            width: 1200px;
+            /*width: 400px;*/
+            position: relative;
+            top: 100px;
+            left:300px;
+        }
+
+    </style>
+
+    <div class="container">
+        <aggregators-controllet id="aggregators_controllet"></aggregators-controllet>
+    </div>
+
+    <script>
+        ln["localization"] = "en";
+
+        var fields = ["aaa","bbb", "ccc", "ddd", "eee", "fff"];
+        var selectedFields = ["ccc","aaa", "eee"];
+
+//        var aggregators_controllet = document.getElementById('aggregators_controllet');
+
+        aggregators_controllet.setFields(fields);
+        aggregators_controllet.setSelectedFields(selectedFields);
+
+//        aggregators_controllet.aggregators = [{logicalOperator: "OR"}, {field: "Lat", operation: "<=", value: "16"}, {field: "Long", operation: "!=", value: "32"}, {field: "Sbiricos", operation: "!=", value: "12AAA32+DAO"}];
+//        filters_controllet.logicalOperator = "or";
+
+//        var filters = filters_controllet.getFilters();
+//
+//        console.log(filters);
+
+    </script>
+
+</body>
+
+</html>

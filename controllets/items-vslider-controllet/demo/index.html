@@ -8,12 +8,19 @@
     <script src="../../shared_js/perfect-scrollbar/js/min/perfect-scrollbar.jquery.min.js"></script>
     <link rel="stylesheet" href="../../shared_js/perfect-scrollbar/css/perfect-scrollbar.min.css">
 
+    <script src="../../../locales/controllet_ln.js"></script>
+
     <link rel="import" href="../items-vslider-controllet.html" />
 </head>
 
 <body>
 
-<items-vslider-controllet datalets-list-url="http://172.16.15.89/DEEalerProvider/DEEP/datalets-list"></items-vslider-controllet>
+<items-vslider-controllet id="ivs" datalets-list-url="http://172.16.15.38/DEEalerProvider/DEEP/datalets-list"></items-vslider-controllet>
+
+<script>
+    var ivs = document.getElementById('ivs');
+    ivs.setEnabledDatalets(["TEXT", "TEXT"]);
+</script>
 
 </body>
 

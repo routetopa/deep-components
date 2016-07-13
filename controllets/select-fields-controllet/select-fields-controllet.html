@@ -28,6 +28,10 @@
             cursor: pointer;
         }
 
+        #select_fields_controllet_container #header:hover {
+            color: #2196F3;
+        }
+
         #select_fields_controllet_container #menu_container {
             position: relative;
             height: calc(100% - 48px);
@@ -42,6 +46,14 @@
             cursor: pointer;
             color: #000000;
             margin: 4px;
+            padding: 0px 12px;
+        }
+
+        paper-item span {
+            width: 100%;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
         }
 
         paper-item.iron-selected {
@@ -73,7 +85,7 @@
             <div id="menu_container">
                 <paper-menu id="menu" multi>
                     <template is="dom-repeat" items="{{fields}}">
-                        <paper-item>{{item}}</paper-item>
+                        <paper-item title="{{item}}"><span>{{item}}</span></paper-item>
                     </template>
                 </paper-menu>
             </div>
@@ -92,12 +104,8 @@
                 fields : {
                     type  : Array,
                     value : []
-                },
+                }
 
-//                preselectedFields : {
-//                    type : Array,
-//                    value : []
-//                }
             },
 
             listeners: {
@@ -110,13 +118,13 @@
 
             attached : function() {
                 this._translate();
-
-//                if (this.preselectedFields.length > 0)
-//                    this._preselectFields();
             },
 
             setFields : function(fields) {
-                this.fields = fields;
+                var index = fields.indexOf("_id");
+                if(index > -1)
+                    fields.splice(index, 1);//providers_utility _copy
+                this.fields = fields.sort();
             },
 
             setSelectFields : function(selectFields) {
@@ -133,12 +141,6 @@
             _translate : function() {
                 this.$.fields.innerHTML = ln["fields_" + ln["localization"]];
             },
-
-//            _preselectFields : function() {
-//                for(var i=0; i<this.preselectedFields.length; i++)
-//                    this.$.menu.select(this.preselectedFields[i]);
-//                this._fireSelectedFields();
-//            },
 
             _fireSelectedFields : function() {
                 this.debounce('_fireSelectedFields', function () {

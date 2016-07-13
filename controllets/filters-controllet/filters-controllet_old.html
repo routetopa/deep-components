@@ -1,5 +1,7 @@
 <link rel="import" href="../../bower_components/polymer/polymer.html" />
 
+<link rel="import" href="../../bower_components/paper-material/paper-material.html" />
+
 <link rel="import" href="../../bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
 <link rel="import" href="../../bower_components/paper-menu/paper-menu.html">
 <link rel="import" href="../../bower_components/paper-item/paper-item.html">
@@ -17,15 +19,45 @@
         <style is="custom-style">
 
             #filters_container {
-                height: 100%;
+                height: 48px;
                 width: 100%;
-                position: relative;
             }
 
             #filters_container * {
                 font-family: 'Roboto', 'Helvetica Neue', Helvetica, Arial, sans-serif;
                 font-size: 16px;
                 line-height: 24px;
+            }
+
+            #filters_container #header {
+                height: 32px;
+                padding-top: 16px;
+                text-align: center;
+                font-weight: 700;
+
+                background: #FFFFFF;
+                color: #00BCD4;
+                cursor: pointer;
+            }
+
+            #filters_container #header.hide{
+                color: #00BCD4;
+                background: #FFFFFF;
+            }
+
+            /*#filters_container #header.hide:hover{*/
+            /*}*/
+
+            #filters_container #header.show{
+                color: #000000;
+                background: #B6B6B6;
+            }
+
+            #filters_container #panel {
+                display: none;
+                position: relative;
+                height: calc(100% - 48px);
+                background: #FFFFFF;
             }
 
             paper-dropdown-menu {
@@ -55,34 +87,11 @@
             }
 
             paper-button {
-                margin: 0;
-                height: 48px;
-                padding: 12px;
+                margin: 0px;
+                height: 44px;
                 color: #FFFFFF;
                 background: #2196F3;
                 font-weight: 700;
-
-                min-width: 96px;
-            }
-
-            paper-button#disable_filters {
-                position: absolute;
-                bottom: 0;
-                right: 0;
-                margin: 0 8px 8px 0;
-
-                min-width: 192px;
-            }
-
-            paper-button#disable_filters.disabled {
-                background-color: #B6B6B6;
-            }
-
-            iron-icon[icon=filter-list] {
-                height: 32px;
-                width: 32px;
-                color: #FFFFFF;
-                margin-top: -4px;
             }
 
             paper-button:hover {
@@ -129,8 +138,7 @@
                 height: 44px;
                 width: calc(100% - 40px);
                 padding: 8px 0px;
-                /*text-align: right;*/
-                text-align: center;
+                text-align: right;
             }
 
             #filters_container .row2 {
@@ -139,7 +147,7 @@
                 width: 100%;
             }
 
-             .highlighted {
+            #filters_container .row2 .highlighted {
                 color: #2196F3;
                 font-weight: 700;
             }
@@ -154,11 +162,16 @@
                 height: 40px;
                 width: 40px;
                 padding: 4px 8px;
+
             }
 
     </style>
 
-        <div id="filters_container">
+        <paper-material id="filters_container" elevation="5">
+
+            <div id="header" class="hide" on-click="_showFiltersPanel"><span id="filters"><span id="addFilters"></span></span></div>
+
+            <div id="panel">
 
                 <div class="row">
                     <div class="ddl_container">
@@ -196,7 +209,7 @@
                     <template is="dom-if" if="{{index}}"><!--excludes logicalOperator-->
                         <div class="row2">
                             <div class="filter">
-                                {{item.field}} <span class="highlighted">{{_getOperationlName(item.operation)}}</span> "{{item.value}}" <span class="highlighted">{{_getLogicalOperator(index)}}</span>
+                                {{item.field}}&nbsp;&nbsp;&nbsp;<span class="highlighted">{{_getOperationlName(item.operation)}}</span>&nbsp;&nbsp;&nbsp;"{{item.value}}"&nbsp;&nbsp;&nbsp;<span class="highlighted">{{_getLogicalOperator(index)}}</span>
                             </div>
                             <div class="remove_container">
                                 <paper-icon-button on-click="_deleteFilter" icon="cancel" class="cancel"></paper-icon-button>
@@ -205,9 +218,9 @@
                     </template>
                 </template>
 
-            <paper-button id="disable_filters" raised on-click="_disableFilters"><iron-icon icon="filter-list"></iron-icon>&nbsp; <span id="disable_enable"></span></paper-button>
+            </div>
 
-        </div>
+        </paper-material>
 
     </template>
 
@@ -232,12 +245,18 @@
                 filters : {
                     type : Array,
                     value :  [{logicalOperator: "AND"}]
+                },
+
+                show : {
+                    type  : Boolean,
+                    value : false
                 }
 
             },
 
             ready : function() {
-                $(this.$.filters_container).perfectScrollbar();
+                $(this.$.panel).perfectScrollbar();
+//                this._showFiltersPanel();gi
                 this.logicalOperator = "AND";
             },
 
@@ -247,10 +266,7 @@
 
             setFields : function(fields) {
                 this.fields = this._copy(fields);
-            },
-
-            setSelectedFields : function(selectedFields) {
-                this.selectedFields = this._copy(selectedFields);
+                this.fields = fields;
             },
 
             setFilters : function(filters) {
@@ -267,26 +283,43 @@
 
             reset : function() {
                 this.fields = [];
-                this.selectedFields = [];
                 this.filters = [{logicalOperator: "AND"}];
             },
 
             _translate : function() {
+                this.$.addFilters.innerHTML = ln["expertAddFilters_" + ln["localization"]];
                 this.$.filter_field.setAttribute("label", ln["filterField_" + ln["localization"]]);
                 this.$.filter_operation.setAttribute("label", ln["filterOperation_" + ln["localization"]]);
                 this.$.filter_value.setAttribute("label", ln["filterValue_" + ln["localization"]]);
-
-                this.$.disable_enable.innerHTML = ln["disableFilters_" + ln["localization"]];
             },
 
             _fieldName : function(field) {
                 return field.substring(field.lastIndexOf(",")+1, field.length);
             },
 
-            _fire : function() {
-                this.$.disable_enable.innerHTML = ln["disableFilters_" + ln["localization"]];
-                this.$.disable_filters.className = this.$.disable_filters.className.replace(" disabled", "");
+            _showFiltersPanel : function() {
+//                ? filter class hiddend & hover:
 
+                if(!this.show) {
+                    this.$.filters_container.style.height = "100%";
+                    $(this.$.header).removeClass("hide");
+                    $(this.$.header).addClass("show");
+                    this.$.panel.style.display = "block";
+
+                }
+                else {
+                    this.$.filters_container.style.height = "48px";
+                    $(this.$.header).removeClass("show");
+                    $(this.$.header).addClass("hide");
+                    this.$.panel.style.display = "none";
+                }
+
+                this.fire('filters-controllet_show', {show: this.show});
+
+                this.show = !this.show;
+            },
+
+            _fire : function() {
                 if (this.filters.length > 1)
                     this.fire('filters-controllet_filters', {filters: this.filters});
                 else
@@ -298,7 +331,12 @@
                     var field = this.$.filter_field.value;
                     var id = this.$.filter_operation.selectedItem.id;
                     var operation = this.operations[id];
+//                    var operation = this.$.filter_operation.value;
                     var value = this.$.filter_value.value;
+
+//                    var filters = this.filters;
+//                    filters.push({"field": field, "operation": operation, "value": value});
+//                    this.filters = filters;
 
                     this.filters.push({"field": field, "operation": operation, "value": value});
 
@@ -315,6 +353,10 @@
             _deleteFilter : function(e) {
                 var index = e.model.index;
 
+//                var filters = this.filters;
+//                filters.splice(index, 1);
+//                this.filters = this._copy(filters);
+
                 this.filters.splice(index, 1);
 
                 this._fire();
@@ -324,7 +366,27 @@
 
             _getOperationlName: function(operation) {
                 return ln[operation + "_" + ln["localization"]];
+//                if(operation.indexOf("not") > -1)
+//                    return ln["notContains_" + ln["localization"]];
+//                if(operation.indexOf("contains") > -1)
+//                    return ln["contains_" + ln["localization"]];
+//                if(operation.indexOf("start") > -1)
+//                    return ln["start_" + ln["localization"]];
+//                if(operation.indexOf("ends") > -1)
+//                    return ln["ends_" + ln["localization"]];
+//                return operation;
             },
+
+//            _changeLogicalOperator : function() {
+//                if(this.logicalOperator == "AND")
+//                    this.logicalOperator = "OR";
+//                else
+//                    this.logicalOperator = "AND";
+//
+//                this._fire();
+//
+//                this._renderFilters();
+//            },
 
             _changeLogicalOperator : function() {
                 if(this.logicalOperator == "AND")
@@ -352,20 +414,6 @@
                     return "";
                 else
                     return this.filters[0].logicalOperator;
-            },
-
-            _disableFilters : function() {
-                var classes = this.$.disable_filters.className;
-                if (classes.indexOf("disabled") > -1) {
-//                    this.$.disable_enable.innerHTML = ln["disableFilters_" + ln["localization"]];
-//                    this.$.disable_filters.className = classes.replace(" disabled", "");
-                    this._fire();
-                }
-                else {
-                    this.$.disable_enable.innerHTML = ln["enableFilters_" + ln["localization"]];
-                    this.$.disable_filters.className = classes + " disabled";
-                    this.fire('filters-controllet_filters', {filters: []});
-                }
             },
 
             _copy : function(o) {

@@ -1,0 +1,46 @@
+<html>
+
+<head>
+    <script src="../../shared_js/jquery-1.11.2.min.js"></script>
+
+    <script src="../../../bower_components/webcomponentsjs/webcomponents-lite.min.js"></script>
+
+    <link rel="import" href="../expert-query-controllet.html"/>
+
+    <script src="../../../locales/controllet_ln.js"></script>
+
+    <script src="../../shared_js/perfect-scrollbar/js/min/perfect-scrollbar.jquery.min.js"></script>
+    <link rel="stylesheet" href="../../shared_js/perfect-scrollbar/css/perfect-scrollbar.min.css">
+</head>
+
+<body>
+
+    <style>
+
+        .container {
+            height: 400px;
+            width: 1200px;
+            position: relative;
+            top: 100px;
+            left:300px;
+        }
+
+    </style>
+
+    <div class="container">
+        <expert-query-controllet id="query"></expert-query-controllet>
+    </div>
+
+    <script>
+        ln["localization"] = "en";
+
+        var fields = ["aaa","bbb", "ccc", "ddd", "eee", "fff"];
+        var selectedFields = ["ccc","aaa", "eee"];
+
+//        query.setFields(fields);
+//        query.setSelectedFields(selectedFields);
+    </script>
+
+</body>
+
+</html>

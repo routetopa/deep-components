@@ -42,8 +42,7 @@ var BaseDataletBehavior ={
         //    type: Array,
         //    value: []
         //},
-
-        //fields: {
+        //fields: { //inputs filters aggregators orders
         //    type: String,
         //    value: ""
         //},

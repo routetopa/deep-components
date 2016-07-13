@@ -10,13 +10,15 @@
 
 <link rel="import" href="../../bower_components/paper-input/paper-input.html">
 
+<script type="text/javascript" src="../../bower_components/jsdatachecker/jsdatachecker.min.js"></script>
+
 <dom-module id="items-vslider-controllet">
 
     <template>
 
         <style is="custom-style">
             paper-icon-button{
-                color: #FFFFFF;
+                /*color: #FFFFFF;*/
                 height: 32px;/*48*/
                 width: 32px;/*48*/
                 padding: 0px;
@@ -58,6 +60,20 @@
                 background-color: #FFFFFF;
             }
 
+            .content-card-disabled{
+                position: relative;
+                float: left;/*firefox*/
+                margin : 16px 16px 0px 16px;
+                padding: 8px;
+                height: 124px;
+                width: 124px;
+                cursor: pointer;
+                background-color: #FFFFFF;
+
+                opacity: 0.5;
+                pointer-events:none;
+            }
+
             img{
                 width: 100%;
             }
@@ -70,7 +86,8 @@
                 width: 124px;
                 color: #000000;
                 background-color: rgba(158, 158, 158, 0.8);/*9E*/
-                /*background-color: rgba(182, 182, 182, 0.9);/!*B&*!/*/
+                /*background-color: #B6B6B6;*/
+                /*opacity: 0.9;*/
                 z-index: 1;
                 font-family: 'Roboto', 'Helvetica Neue', Helvetica, Arial, sans-serif;
                 font-size: 16px;
@@ -79,10 +96,12 @@
             }
 
             .legend.selected {
-                background-color: #2196F3;
-                /*background-color: rgba(33, 150, 243, 0.8);*/
                 color: #FFFFFF;
+                background-color: #2196F3;
+                opacity: 0.9;
 
+                /*background: black;*/
+                /*color: #2196F3;*/
             }
 
             #items_vslider_search{
@@ -94,7 +113,7 @@
             }
 
             .search{
-                color: #FFFFFF
+                /*color: #FFFFFF*/
             }
 
             .clear {
@@ -121,7 +140,7 @@
 
             <div id="div_datalets_container" class="flex">
                 <template is="dom-repeat" items="{{filteredDatalets}}">
-                    <paper-material id={{item.imageName}} elevation="1" class='content-card' on-click="_selectDatalet">
+                    <paper-material id={{item.imageName}} elevation="1" class$="{{item.class}}" on-click="_selectDatalet">
                         <div class="legend">{{_getChartName(item.imageName)}}</div>
                         <div><img src={{item.imageUrl}}></div>
                     </paper-material>
@@ -174,6 +193,7 @@
                     value : "",
                     observer : '_filterDatalets'
                 }
+
             },
 
             listeners: {
@@ -185,15 +205,34 @@
             },
 
             attached : function() {
-//                if(this.preselectedDatalet){
+//                if(this.preselectedDatalet)
 //                    this._preselectDatalet();
-//                    this.preselectedDatalet = undefined;
-//                }
 
                 this._translate();
             },
 
-            _reset : function() {
+//            _preselectDatalet : function(){
+//                this.async(function() {
+//                    var dataletCard = document.getElementById(this.preselectedDatalet);
+//                    dataletCard.elevation = "5";
+//                    dataletCard.getElementsByClassName("legend")[0].className = dataletCard.getElementsByClassName("legend")[0].className + " selected";
+//                    this.selectedDatalet = this.preselectedDatalet;
+//
+//                    this.fire('items-vslider-controllet_selected-datalet', {datalet: this.selectedDatalet});
+//                    this.preselectedDatalet = undefined;
+//                }, 300);
+//            },
+
+            preselectDatalet : function(preselectedDatalet){
+                    var dataletCard = document.getElementById(preselectedDatalet);
+                    dataletCard.elevation = "5";
+                    dataletCard.getElementsByClassName("legend")[0].className = dataletCard.getElementsByClassName("legend")[0].className + " selected";
+                    this.selectedDatalet = preselectedDatalet;
+
+                    this.fire('items-vslider-controllet_selected-datalet', {datalet: this.selectedDatalet});
+            },
+
+            reset : function() {
                 if(this.selectedDatalet != undefined && (document.getElementById(this.selectedDatalet) != null)){
                     var dataletCard = document.getElementById(this.selectedDatalet);
                     dataletCard.elevation = "1";
@@ -216,27 +255,85 @@
             _getDatalets : function(e){
                 var datalets = new Array();
                 for(var i=0; i < e.detail.response.length; i++){
-                    var datalet = { imageName : e.detail.response[i].name.replace("-datalet", ""), imageUrl : e.detail.response[i].url + e.detail.response[i].name + ".png" };
+                    var datalet = {
+                        imageName : e.detail.response[i].name.replace("-datalet", ""),
+                        imageUrl : e.detail.response[i].url + e.detail.response[i].name + ".png",
+                        inputTypes : this._getInputTypes(e.detail.response[i].idm.inputs.input),
+                        class : "content-card"
+                    };
+
                     if(e.detail.response[i].type != "hidden")
                         datalets.push(datalet);
                 }
 
                 this.datalets = datalets;
-                this.filteredDatalets = datalets;
+                /**/this.filteredDatalets = datalets;
             },
+
+            _getInputTypes : function(inputs){
+                var inputTypes = [];
+                for(var i=0; i < inputs.length; i++) {
+                    if(inputs[i].selection != "?" /*&& inputs[i].selection != "*"*/)
+                        inputTypes.push(inputs[i].type);
+                }
+                return inputTypes;
+            },
+
+            setEnabledDatalets : function(fields){
+                var dataTypes = [];
+                for(var i=0; i < fields.length; i++)
+                    dataTypes.push(fields[i].type);
+
+                this.async(function() {
+//                    console.log(DataTypeHierarchy.canConvert("TEXT", "NUMBER"));
+//                    console.log(DataTypeHierarchy.canConvert("NUMBER", "TEXT"));
+
+                    for(var i=0; i < this.datalets.length; i++) {
+                        if(!this._enebled(this.datalets[i].inputTypes, dataTypes))
+                            this.datalets[i]["class"] = "content-card-disabled";
+                        else
+                            this.datalets[i]["class"] = "content-card";
+                    }
+
+                    this._filterDatalets();
+                }, 1);//remove async
+            },
+
+            _enebled : function(inputTypes, dataTypes){
+                if((inputTypes.indexOf("NUMBER") > -1) && !(dataTypes.indexOf("NUMBER") > -1))
+                    return false;
+                return true;
+            },
+
+//            _enebled : function(dataTypes, inputTypes){
+//                var enabled = true;
+//                for(var i=0; i < inputTypes.length; i++) {
+//                    var canConvert = false;
+//                    for(var j=0; j < dataTypes.length; j++) {
+//                        if(DataTypeHierarchy.canConvert(dataTypes[j], inputTypes[i])) {
+//                            canConvert = true;
+//                            break;
+//                        }
+//                    }
+//                    if(!canConvert)
+//                        enabled = false;
+//                }
+//                return enabled;
+//            },
 
             _filterDatalets : function(){
                 var datalets = new Array();
                 for(var i=0; i < this.datalets.length; i++){
                     var datalet = this.datalets[i];
                     var imageName = this._getChartName(datalet.imageName).toLowerCase();
-//                    console.log(imageName);
-//                    console.log(this.filter);
                     if(imageName.indexOf(this.filter.toLowerCase()) > -1)
                         datalets.push(datalet);
                 }
 
-                this.filteredDatalets = datalets;
+                this.filteredDatalets = [];
+                this.async(function() {
+                    this.filteredDatalets = datalets;
+                }, 0);
 
                 $("#div_datalets_container").animate({ scrollTop: 0}, 0);
             },
@@ -278,32 +375,13 @@
                 this.fire('items-vslider-controllet_selected-datalet', {datalet: this.selectedDatalet});
             },
 
-            _preselectDatalet : function(){
-//                this.async(function() {
-                var dataletCard = document.getElementById(this.preselectedDatalet);
-//                console.log(dataletCard);
-//                console.log(this.preselectedDatalet);
-//                var id = "#"+this.preselectedDatalet;
-//                var dataletCard = $(id);
-//                var dataletCard = this.$$("#datatable");
-//                console.log(dataletCard);
 
-                dataletCard.elevation = "5";
-                dataletCard.getElementsByClassName("legend")[0].className = dataletCard.getElementsByClassName("legend")[0].className + " selected";
-
-//                dataletCard.find(".legend")[0].className += " selected";
-                this.selectedDatalet = this.preselectedDatalet;
-
-                this.fire('items-vslider-controllet_selected-datalet', {datalet: this.selectedDatalet});
-//                }, 500);
-            },
 
             _getImageUrl : function(index){
                 return this.datalets[index].imageUrl;
             },
 
             _onPrevClick : function() {
-
                 var container = $("#div_datalets_container");
                 var h = container.height();
                 var dataletPerPage = parseInt(h/156);

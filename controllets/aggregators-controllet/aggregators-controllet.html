@@ -1,0 +1,410 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html" />
+
+<link rel="import" href="../../bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
+<link rel="import" href="../../bower_components/paper-menu/paper-menu.html">
+<link rel="import" href="../../bower_components/paper-item/paper-item.html">
+
+<link rel="import" href="../../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../../bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="../../bower_components/iron-icon/iron-icon.html">
+
+<link rel="import" href="../../bower_components/paper-button/paper-button.html">
+
+<dom-module id="aggregators-controllet">
+
+    <template>
+
+        <style is="custom-style">
+
+            #aggregators_container {
+                height: 100%;
+                width: 100%;
+                position: relative;
+            }
+
+            #aggregators_container * {
+                font-family: 'Roboto', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+                font-size: 16px;
+                line-height: 24px;
+            }
+
+            paper-dropdown-menu {
+                width: 100%;
+                --paper-input-container-focus-color: #2196F3;
+            }
+
+            :host {
+            --paper-dropdown-menu-icon: {
+                 color: #2196F3;
+             };
+            }
+
+            paper-item {
+                min-width: 128px;
+                white-space: nowrap;
+            }
+
+            paper-item.iron-selected {
+                background-color: #2196F3;
+                color: #FFFFFF;
+            }
+
+            paper-input {
+                width: 100%;
+                --paper-input-container-focus-color: #2196F3;
+            }
+
+            paper-button {
+                position: absolute;
+                bottom: 0;
+                right: 0;
+                margin: 0 8px 8px 0;
+                height: 48px;
+                padding: 12px;
+                color: #FFFFFF;
+                background: #2196F3;
+                font-weight: 700;
+
+                min-width: 216px;
+            }
+
+            paper-button.disabled {
+                background-color: #B6B6B6;
+            }
+
+            iron-icon[icon=group-work] {
+                height: 32px;
+                width: 32px;
+                color: #FFFFFF;
+                margin-top: -4px;
+            }
+
+            paper-button:hover {
+                box-shadow: 0px 8px 12px #888;
+                -webkit-box-shadow: 0px 8px 12px #888;
+                -moz-box-shadow: 0px 8px 12px #888;
+            }
+
+            paper-icon-button {
+                padding: 4px;
+            }
+
+            paper-icon-button.add {
+                color: #2196F3;
+                --paper-icon-button-ink-color: #2196F3;
+            }
+
+            paper-icon-button.cancel {
+                color: #F44336;
+                --paper-icon-button-ink-color: #F44336;
+            }
+
+            #aggregators_container .row {
+                display: flex;
+                height: 60px;
+                width: 100%;
+            }
+
+            #aggregators_container .ddl_container {
+                display: flex;
+                height: 60px;
+                width: 25%;
+                padding: 0px 8px;
+            }
+
+            #aggregators_container .add_container {
+                height: 40px;
+                width: 40px;
+                padding: 10px 0px;
+            }
+
+            #aggregators_container .row2 {
+                display: flex;
+                height: 48px;
+                width: 100%;
+            }
+
+            #aggregators_container .row2 .highlighted {
+                color: #2196F3;
+                font-weight: 700;
+            }
+
+            #aggregators_container .aggregator {
+                height: 24px;
+                width: calc(75% - 16px);
+                padding: 12px 8px;
+            }
+
+            #aggregators_container .remove_container {
+                height: 40px;
+                width: 40px;
+                padding: 4px 8px;
+            }
+
+    </style>
+
+        <div id="aggregators_container">
+
+                <div class="row">
+                    <div class="ddl_container">
+                        <paper-dropdown-menu id="aggregator_groupby" label="GROUP BY">
+                            <paper-menu id="aggregator_groupby_menu" class="dropdown-content">
+                                <template is="dom-repeat" items={{selectedFields}}>
+                                    <paper-item id={{index}}>{{item}}</paper-item>
+                                </template>
+                            </paper-menu>
+                        </paper-dropdown-menu>
+                    </div>
+
+                    <div class="ddl_container"></div>
+                    <div class="ddl_container"></div>
+
+                    <div class="ddl_container">
+                        <div class="add_container">
+                            <paper-icon-button on-click="_addGroupBy" icon="add-circle" class="add"></paper-icon-button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="ddl_container">
+                        <paper-dropdown-menu id="aggregator_calculate" label="CALCULATE">
+                            <paper-menu id="aggregator_calculate_menu" class="dropdown-content">
+                                <template is="dom-repeat" items={{operations}}>
+                                    <paper-item id={{index}}>{{_getOperationlName(item)}}</paper-item>
+                                </template>
+                            </paper-menu>
+                        </paper-dropdown-menu>
+                    </div>
+                    <div class="ddl_container">
+                        <paper-dropdown-menu id="aggregator_field" label="Field">
+                            <paper-menu id="aggregator_field_menu" class="dropdown-content">
+                                <template is="dom-repeat" items={{selectedFields}}>
+                                    <paper-item id={{index}}>{{item}}</paper-item>
+                                </template>
+                            </paper-menu>
+                        </paper-dropdown-menu>
+                    </div>
+
+                    <div class="ddl_container"></div>
+
+                    <div class="ddl_container">
+                        <div class="add_container">
+                            <paper-icon-button on-click="_addCalculate" icon="add-circle" class="add"></paper-icon-button>
+                        </div>
+                    </div>
+                </div>
+
+                <template is="dom-repeat" items={{aggregators}}>
+                        <div class="row2">
+                            <div class="aggregator">
+                                <span class="highlighted">{{_calculate(item.operation)}} {{_getOperationlName(item.operation)}}</span> {{item.field}}
+                            </div>
+                            <div class="remove_container">
+                                <paper-icon-button on-click="_deleteAggregator" icon="cancel" class="cancel"></paper-icon-button>
+                            </div>
+                        </div>
+                </template>
+
+            <paper-button id="disable_aggregators" raised on-click="_disableAggregators"><iron-icon icon="group-work"></iron-icon>&nbsp; <span id="disable_enable"></span></paper-button>
+
+        </div>
+
+    </template>
+
+    <script>
+
+        Polymer({
+
+            is : 'aggregators-controllet',
+
+            properties : {
+
+                fields : {
+                    type : Array,
+                    value : []
+                },
+
+                selectedFields : {
+                    type : Array,
+                    value : []
+                },
+
+                operations : {
+                    type : Array,
+                    value : ["COUNT", "SUM", "MIN", "MAX", "AVG", "FIRST", "LAST"]
+                },
+
+                aggregators : {
+                    type : Array,
+                    value :  []
+                }
+
+            },
+
+            ready : function() {
+                $(this.$.aggregators_container).perfectScrollbar();
+            },
+
+            attached : function() {
+                this._translate();
+            },
+
+            setFields : function(fields) {
+                this.fields = this._copy(fields);
+            },
+
+            setSelectedFields : function(selectedFields) {
+                this.selectedFields = this._copy(selectedFields);
+            },
+
+            setAggregators : function(aggregators) {
+                if(aggregators && aggregators.length > 0) {
+                    this.aggregators = this._copy(aggregators);
+                    this._fire();
+                }
+            },
+
+            getAggregators : function() {
+                if(this.aggregators.length > 0 && this.aggregators[0].operation == "GROUP BY")
+                    return this.aggregators;
+                return [];
+            },
+
+            reset : function() {
+                this.fields = [];
+                this.selectedFields = [];
+                this.aggregators = [];
+            },
+
+            _translate : function() {
+                this.$.aggregator_groupby.setAttribute("label", ln["GROUP BY_" + ln["localization"]]);
+                this.$.aggregator_calculate.setAttribute("label", ln["CALCULATE_" + ln["localization"]]);
+                this.$.aggregator_field.setAttribute("label", ln["aggregatorField_" + ln["localization"]]);
+
+                this.$.disable_enable.innerHTML = ln["disableGroupBy_" + ln["localization"]];
+            },
+
+            _calculate: function(operation) {
+                if(operation.indexOf("GROUP BY") > -1)
+                    return "";
+                return ln["Calculate_" + ln["localization"]] + " ";
+            },
+
+            _getOperationlName: function(operation) {
+                return ln[operation + "_" + ln["localization"]];
+            },
+
+            _fire : function() {
+                this.$.disable_enable.innerHTML = ln["disableGroupBy_" + ln["localization"]];
+                this.$.disable_aggregators.className = this.$.disable_aggregators.className.replace(" disabled", "");
+
+                if(this.aggregators.length > 0 && this.aggregators[0].operation == "GROUP BY")
+                    this.fire('aggregators-controllet_aggregators', {aggregators: this.aggregators});
+                else
+                    this.fire('aggregators-controllet_aggregators', {aggregators: []});
+            },
+
+            _addGroupBy : function() {
+                if (this.$.aggregator_groupby_menu.selectedItem) {
+                    var field = this.$.aggregator_groupby.value;
+
+                    this.aggregators.unshift({"field": field, "operation": "GROUP BY"});//insert as last GB
+
+                    this.$.aggregator_groupby_menu.select(-1);
+
+                    this._fire();
+
+                    this._renderAggregators();
+                }
+            },
+
+            _addCalculate : function() {
+                if (this.$.aggregator_calculate_menu.selectedItem && this.$.aggregator_field.selectedItem) {
+                    var field = this.$.aggregator_field.value;
+                    var id = this.$.aggregator_calculate.selectedItem.id;
+                    var operation = this.operations[id];
+
+                    this.aggregators.push({"field": field, "operation": operation});
+
+                    this.$.aggregator_field_menu.select(-1);
+                    this.$.aggregator_calculate_menu.select(-1);
+
+                    this._fire();
+
+                    this._renderAggregators();
+                }
+            },
+
+            _deleteAggregator : function(e) {
+                var index = e.model.index;
+
+                this.aggregators.splice(index, 1);
+
+                this._fire();
+
+                this._renderAggregators();
+            },
+
+//            _addAggregator : function() {
+//                if (this.$.aggregator_operation_menu.selectedItem && this.$.aggregator_field.selectedItem) {
+//                    var field = this.$.aggregator_field.value;
+//                    var id = this.$.aggregator_operation.selectedItem.id;
+//                    var operation = this.operations[id];
+//
+//                    this.aggregators.push({"field": field, "operation": operation});
+//
+//                    this.$.aggregator_field_menu.select(-1);
+//                    this.$.aggregator_operation_menu.select(-1);
+//
+//                    this._fire();
+//
+//                    this._renderAggregators();
+//                }
+//            },
+//
+//            _deleteAggregator : function(e) {
+//                var index = e.model.index;
+//
+//                this.aggregators.splice(index, 1);
+//
+//                this._fire();
+//
+//                this._renderAggregators();
+//            },
+
+            _renderAggregators : function() {
+                var aggregators = this._copy(this.aggregators);
+                this.aggregators = [];
+                this.async(function() {
+                    this.aggregators = aggregators;
+                }, 0);
+            },
+
+            _disableAggregators : function() {
+                var classes = this.$.disable_aggregators.className;
+                if (classes.indexOf("disabled") > -1) {
+                    this._fire();
+                }
+                else {
+                    this.$.disable_enable.innerHTML = ln["enableGroupBy_" + ln["localization"]];
+                    this.$.disable_aggregators.className = classes + " disabled";
+                    this.fire('aggregators-controllet_aggregators', {aggregators: []});
+                }
+            },
+
+            _copy : function(o) {
+                var out, v, key;
+                out = Array.isArray(o) ? [] : {};
+                for (key in o) {
+                    v = o[key];
+                    out[key] = (typeof v === "object") ? this._copy(v) : v;
+                }
+                return out;
+            }
+
+        });
+
+    </script>
+
+</dom-module>

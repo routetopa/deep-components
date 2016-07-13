@@ -100,7 +100,7 @@ Example:
                             allowPointSelect: true,
                             cursor: 'pointer',
                             dataLabels: {
-                                enabled: true,
+                                enabled: this._component.dataLabels,
                                 format: '<b>{point.name}</b>: {point.percentage:.1f} %',
                                 style: {
                                     color: (Highcharts[this._component.theme] && Highcharts[this._component.theme].contrastTextColor) || 'black'
@@ -116,6 +116,31 @@ Example:
 
                 if(this._component.theme != "themeBase" && this._component.theme != "")
                     jQuery.extend(true, options, Highcharts[this._component.theme]);
+
+                if(this._component.legend == "topRight") {
+                    options.legend = {
+                        layout: 'vertical',
+                        verticalAlign: 'top',
+                        align: 'right',
+                        x: -4,
+                        y: 4,
+                        floating: true,
+                        borderWidth: 1,
+                        backgroundColor: ((Highcharts[this._component.theme] && Highcharts[this._component.theme].legendBackgroundColor) || '#FFFFFF'),
+                        shadow: true
+                    };
+                    options.plotOptions.pie.showInLegend = true;
+                }
+                else if(this._component.legend == "bottom") {
+                    options.legend = {
+                        enabled: true
+                    };
+                    options.plotOptions.pie.showInLegend = true;
+                }
+                else
+                    options.legend ={
+                        enabled: false
+                    };
 
                 $(this._component.$.charts.$.container).highcharts(options);
             }
@@ -134,13 +159,21 @@ Example:
                     type : String,
                     value : ""
                 },
-                theme : {
-                    type : String,
-                    value : ""
+                legend : {
+                    type : Object,
+                    value : "topRight"
+                },
+                dataLabels : {
+                    type : Object,
+                    value : true
                 },
                 donut : {
                     type : String,
                     value : "false"
+                },
+                theme : {
+                    type : String,
+                    value : ""
                 },
                 behavior : {
                     type : Object,

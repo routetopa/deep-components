@@ -1,10 +1,16 @@
 function alasql_QUERY (data, fields, filters, aggregators, orders) {
-    if(fields.length == 0)
+    if(fields && fields.length == 0)
         return [];
 
-    var _fields = _addParenthesis(fields);
+    return alasql(alasql_QUERY_string(fields, filters, aggregators, orders), [data]);
+}
 
-    var select = _alasql_SELECT(_fields);
+function alasql_QUERY_string (fields, filters, aggregators, orders) {
+
+    if(fields) {
+        var _fields = _addParenthesis(fields);
+        var select = _alasql_SELECT(_fields);
+    }
 
     var where = "";
     if(filters && filters.length) {
@@ -28,7 +34,7 @@ function alasql_QUERY (data, fields, filters, aggregators, orders) {
 
     var query = select + " FROM ?" + where + " " + groupBy + " " + orderBy;
 
-    return alasql(query, [data]);
+    return query;
 }
 
 function _alasql_SELECT (fields) {
@@ -44,16 +50,19 @@ function _alasql_SELECT (fields) {
 }
 
 function _alasql_WHERE (filters) {
-    var where = " WHERE ";
-    var logicalOperator;
+    //var logicalOperator;
+    //
+    ///*DEPRECATED*/if(filters[0].logicalOperator == undefined) {
+    //    logicalOperator = "AND"
+    //}
+    //else {
+    //    logicalOperator = filters[0].logicalOperator;
+    //    filters = filters.slice(1);
+    //}
 
-    /*DEPRECATED*/if(filters[0].logicalOperator == undefined) {
-        logicalOperator = "AND"
-    }
-    else {
-        logicalOperator = filters[0].logicalOperator;
-        filters = filters.slice(1);
-    }
+    var where = " WHERE ";
+    var logicalOperator = filters[0].logicalOperator;
+    filters = filters.slice(1);
 
     for (var i=0; i < filters.length; i++)
         filters[i]["field"] = _normalizeField(filters[i]["field"]);
@@ -87,7 +96,8 @@ function _alasql_GROUPBY (aggregators) {
             groupBy += aggregators[i]["field"] + ", ";
         }
         else
-            select += aggregators[i]["operation"] + "(" + aggregators[i]["field"] + ") as " + aggregators[i]["field"] + ", ";
+            //select += aggregators[i]["operation"] + "(" + aggregators[i]["field"] + ") as " + aggregators[i]["field"] + ", ";
+            select += aggregators[i]["operation"] + "(" + aggregators[i]["field"] + "), ";
     }
 
     return [select.slice(0, -2), groupBy.slice(0, -2)];
@@ -118,7 +128,7 @@ function _normalizeField (field) {
     return "[" + field + "]";
 }
 
-function alasql_transformData (data, fields, truncate) {
+function alasql_transformData (data, fields, round) {
     if(!data || data.length == 0)
         return [];
 
@@ -129,11 +139,11 @@ function alasql_transformData (data, fields, truncate) {
         var field = fields[i];
         var values = [];
 
-        for (var i in data) {
-            var v = data[i][field];
-            if(truncate)
+        for (var j in data) {
+            var v = data[j][field];
+            if(round)
                 if(!isNaN(v) && v % 1 != 0)
-                    v = Math.floor(v * 100) / 100;
+                    v = Math.round(v * 1000000) / 1000000;
             values.push(v);
         }
 

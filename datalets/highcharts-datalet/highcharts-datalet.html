@@ -79,31 +79,41 @@ Example :
             },
 
             transformData: function () {
-                var selectedFields = JSON.parse(this._component.getAttribute("selectedFields"));
-
                 if(this.data.length == 0)
                     return;
 
-                categories = this.data[0].data;
-                series = [];
-                for(var i = 1; i < this.data.length; i++)
-                    series.push(this.data[i]);
+                var selectedFields = JSON.parse(this._component.getAttribute("selectedfields"));
 
-                this.properties.categories.value = categories;
-                this.properties.series.value = series;
+                var inputs = [];
+                if(selectedFields) { /*if deprecated*/
+                    for (var i=0; i < selectedFields.length; i++)
+                        if (selectedFields[i])
+                            inputs.push(selectedFields[i].field);
+                }
 
-                if(this.data.length == 3 && !selectedFields){//split cat
+                var cat_index = inputs.indexOf("Categories");
+
+                if(cat_index == -1) {
+                    categories = this.data[0].data;
+                    series = [];
+                    for (var i = 1; i < this.data.length; i++)
+                        series.push(this.data[i]);
+
+                    this.properties.categories.value = categories;
+                    this.properties.series.value = series;
+                }
+                else {
                     var x = this.data[0]["data"];
-                    var gb = this.data[1]["data"];
-                    var y = this.data[2]["data"];
+                    var y = this.data[1]["data"];
+                    var cat = this.data[cat_index]["data"];
 
                     var categories = x.filter(function(item, pos) {
                         return x.indexOf(item) == pos;
-                    })
+                    });
 
-                    var s = gb.filter(function(item, pos) {
-                        return gb.indexOf(item) == pos;
-                    })
+                    var s = cat.filter(function(item, pos) {
+                        return cat.indexOf(item) == pos;
+                    });
 
                     var series = [];
                     for(var i = 0; i < s.length; i++) {
@@ -113,7 +123,7 @@ Example :
                     for(var i = 0; i < y.length; i++){
                         var index = categories.indexOf(x[i]);
                         var s = series.filter(function( obj ) {
-                            return obj.name == gb[i];
+                            return obj.name == cat[i];
                         });
                         s[0]["data"][index] = y[i];
                     }
@@ -121,7 +131,6 @@ Example :
                     this.properties.categories.value = categories;
                     this.properties.series.value = series;
                 }
-
             },
 
             redraw: function () {

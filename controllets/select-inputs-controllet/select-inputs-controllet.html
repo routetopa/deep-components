@@ -1,0 +1,616 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html" />
+
+<link rel="import" href="../../bower_components/paper-material/paper-material.html" />
+
+<link rel="import" href="../../bower_components/paper-tabs/paper-tabs.html">
+<link rel="import" href="../../bower_components/paper-tabs/paper-tab.html">
+
+<link rel="import" href="../../bower_components/neon-animation/neon-animation.html">
+<link rel="import" href="../../bower_components/neon-animation/neon-animatable.html">
+<link rel="import" href="../../bower_components/neon-animation/neon-animations.html">
+
+<link rel="import" href="../../bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
+<link rel="import" href="../../bower_components/paper-menu/paper-menu.html">
+<link rel="import" href="../../bower_components/paper-item/paper-item.html">
+
+<link rel="import" href="../../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../../bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="../../bower_components/iron-icon/iron-icon.html">
+
+<link rel="import" href="../../bower_components/paper-tooltip/paper-tooltip.html">
+
+<dom-module id="select-inputs-controllet">
+
+    <template>
+
+        <style is="custom-style">
+            :host {
+            --paper-dropdown-menu-icon: {
+                 color: #2196F3;
+             };
+            }
+
+            #inputs_container {
+                height: 100%;
+                width: 100%;
+            }
+
+            #inputs_container * {
+                font-family: 'Roboto', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+                font-size: 16px;
+                line-height: 24px;
+            }
+
+            #inputs_container #neon_container {
+                height: calc(100% - 48px - 120px - 48px);
+                width: 100%;
+            }
+
+            #inputs_container #inputs_list, #inputs_container #options_list {
+                position: relative;
+                height: 100%;
+                width: 100%;
+            }
+
+            #inputs_container .header {
+                height: 24px;
+                padding: 12px;
+                text-align: center;
+                font-weight: 700;
+                background-color: #B6B6B6;
+            }
+
+            #inputs_container .inputs{
+                display: flex;
+            }
+
+            #inputs_container br {
+                display: block;
+                margin-top: 8px;
+                content: " ";
+            }
+
+            #inputs_container p {
+                margin: 0;
+                padding: 0;
+            }
+
+            #inputs_container p .title{
+                font-weight: 700;
+                color: #2196F3;
+            }
+
+            #inputs_container p .description{
+            }
+
+            #inputs_container .info_button {
+                height: 40px;
+                width: 40px;
+                padding: 10px;
+            }
+
+            #inputs_container .order_button {
+                height: 40px;
+                width: 40px;
+                padding: 10px 0 10px 10px;
+            }
+
+            #inputs_container #base_description_info {
+                margin-top: -4px;
+            }
+
+            paper-tabs {
+                background: #B6B6B6;
+                --paper-tabs-selection-bar-color: #2196F3;
+            }
+
+            paper-tab {
+                --paper-tab-ink: #2196F3;
+            }
+
+            paper-tab.iron-selected {
+                font-weight: 700;
+            }
+
+            paper-tab:hover {
+                color: #2196F3;
+            }
+
+            paper-input {
+                width: calc(100% - 24px - 48px);
+                margin-left: 12px;
+                --paper-input-container-focus-color: #2196F3;
+            }
+
+            paper-input#description{
+                margin-top: -4px;
+            }
+
+            #inputs_list paper-dropdown-menu {
+                width: calc(100% - 24px - 48px - 50px);
+                margin-left: 12px;
+                --paper-input-container-focus-color: #2196F3;
+            }
+
+            #options_list paper-dropdown-menu {
+                width: calc(100% - 24px - 48px);
+                margin-left: 12px;
+                --paper-input-container-focus-color: #2196F3;
+            }
+
+            paper-item {
+                min-width: 128px;
+                white-space: nowrap;
+            }
+
+            paper-item.iron-selected {
+                background-color: #2196F3;
+                color: #FFFFFF;
+            }
+
+            paper-icon-button {
+                height: 40px;
+                width: 40px;
+                padding: 4px;
+                color: #2196F3;
+                --paper-icon-button-ink-color: #2196F3;
+            }
+
+            paper-icon-button[icon="info-outline"] {
+                cursor: help;
+            }
+
+            paper-tooltip {
+                min-width: 400px;
+                --paper-tooltip-background: black;
+            }
+
+        </style>
+
+        <paper-material id="inputs_container" elevation="5">
+
+            <div class="header"><span id="baseInfo"></span></div>
+
+            <div class="inputs">
+                <paper-input id="title" maxlength="32" on-change="_addOption"></paper-input>
+                <div class="info_button">
+                    <paper-icon-button id="base_title_info" icon="info-outline" noink></paper-icon-button>
+                </div>
+                <paper-tooltip for="base_title_info" position="right" offset="22">
+                    <p>
+                        <span class="title">{{_getInputName('TITLE')}}</span>
+                        <br>
+                        <span class="description">{{_getInputDescription('TITLE')}}</span>
+                    </p>
+                </paper-tooltip>
+            </div>
+
+            <div class="inputs">
+                <paper-input id="description" maxlength="128" on-change="_addOption"></paper-input>
+                <div class="info_button">
+                    <paper-icon-button id="base_description_info" icon="info-outline" noink></paper-icon-button>
+                </div>
+                <paper-tooltip for="base_description_info" position="right" offset="22">
+                    <p>
+                        <span class="title">{{_getInputName('DESCRIPTION')}}</span>
+                        <br>
+                        <span class="description">{{_getInputDescription('DESCRIPTION')}}</span>
+                    </p>
+                </paper-tooltip>
+            </div>
+
+            <paper-tabs selected="{{tabIndex}}">
+                <paper-tab><span id="inputsTab"></span></paper-tab>
+                <paper-tab><span id="optionsTab"></span></paper-tab>
+            </paper-tabs>
+
+            <neon-animated-pages id="neon_container" selected="{{_getNeonIndex(tabIndex)}}" entry-animation="fade-in-animation" exit-animation="fade-out-animation">
+
+                <neon-animatable>
+
+                    <div id="inputs_list">
+                        <template is="dom-repeat" items="{{inputs}}" index-as="input_index">
+                            <div class="inputs">
+                                <paper-dropdown-menu id="{{input_index}}" label="{{_getInputRichName(item)}}">
+                                    <paper-menu class="dropdown-content">
+                                        <paper-item on-tap="_removeInput"></paper-item>
+                                        <template is="dom-repeat" items={{_getFieldsByType(item.type)}}>
+                                            <paper-item id="{{index}}" on-tap="_addInput">{{item.name}}</paper-item>
+                                        </template>
+                                    </paper-menu>
+                                </paper-dropdown-menu>
+                                <div class="order_button">
+                                    <paper-icon-button id="{{input_index}}" icon="unfold-more" on-click="_addOrder" disabled></paper-icon-button>
+                                </div>
+                                <div class="info_button">
+                                    <paper-icon-button id="info_input_{{input_index}}" icon="info-outline" noink></paper-icon-button>
+                                </div>
+                            </div>
+                        </template>
+                    </div>
+
+                        <template is="dom-repeat" items="{{inputs}}">
+                            <paper-tooltip for="{{_getInputInfoId(index)}}" position="right" offset="22">
+                                <p>
+                                    <span class="title">{{_getInputRichName(item)}}</span>
+                                    <br>
+                                    <span class="description">{{_getInputDescription(item.name)}}</span>
+                                </p>
+                            </paper-tooltip>
+                        </template>
+
+                </neon-animatable>
+
+                <neon-animatable>
+
+                    <div id="options_list">
+                        <template is="dom-repeat" items={{options}} index-as="option_index">
+                            <div class="inputs">
+                                <template is="dom-if" if="{{_checkType(item.type, 'TEXT')}}">
+                                    <paper-input id="{{item.name}}" label={{_getInputName(item.name)}} on-change="_addOption"></paper-input>
+                                </template>
+
+                                <template is="dom-if" if="{{_checkType(item.type, 'LIST')}}">
+                                    <paper-dropdown-menu id="{{option_index}}" label={{_getInputName(item.name)}}>
+                                        <paper-menu class="dropdown-content" selected="0">
+                                            <template is="dom-repeat" items={{item.list.item}}>
+                                                <paper-item id="{{item}}" on-tap="_addOption">{{_getInputName(item)}}</paper-item>
+                                            </template>
+                                        </paper-menu>
+                                    </paper-dropdown-menu>
+                                </template>
+
+                                <div class="info_button">
+                                    <paper-icon-button id="info_option_{{option_index}}" icon="info-outline" noink></paper-icon-button>
+                                </div>
+                            </div>
+                        </template>
+                    </div>
+
+                        <template is="dom-repeat" items="{{options}}">
+                            <paper-tooltip for="{{_getOptionInfoId(index)}}" position="right" offset="22">
+                                <p>
+                                    <span class="title">{{_getInputName(item.name)}}</span>
+                                    <br>
+                                    <span class="description">{{_getInputDescription(item.name)}}</span>
+                                </p>
+                            </paper-tooltip>
+                        </template>
+
+                </neon-animatable>
+
+            </neon-animated-pages>
+
+        </paper-material>
+
+
+    </template>
+
+    <script>
+
+        Polymer({
+
+            is : 'select-inputs-controllet',
+
+            properties : {
+
+                tabIndex: {
+                    type: Number,
+                    value: 0
+                },
+
+                inputs : {
+                    type : Array,
+                    value : []
+                },
+
+                options : {
+                    type : Array,
+                    value : []
+                },
+
+                selectedInputs : {
+                    type : Array,
+                    value : []
+                },
+
+                selectedOptions : {
+                    type : Array,
+                    value : []
+                },
+
+                orders : {
+                    type : Array,
+                    value : []
+                },
+
+                fields : {
+                    type : Array,
+                    value : []
+                }
+
+            },
+
+            ready : function() {
+                $(this.$.inputs_list).perfectScrollbar();
+                $(this.$.options_list).perfectScrollbar();
+            },
+
+            attached : function() {
+                this._translate();
+            },
+
+            getSelectedInputs : function () {
+                return this.selectedInputs;
+            },
+
+            getSelectedOptions : function () {
+                return this.selectedOptions;
+            },
+
+            getOrders : function () {
+                return this.orders;
+            },
+
+            setFields : function(fields) {
+                this.fields = this._copy(fields);
+            },
+
+            setInputs : function(idm) {
+                var inputs = this._copy(idm.inputs.input);
+                var options = [];
+                if(idm.inputs.layouts)
+                    options = this._copy(idm.inputs.layouts.input);
+
+                if(!(inputs instanceof Array))
+                    inputs = [inputs];
+
+                if(!(options instanceof Array))
+                    options = [options];
+
+                var mandatory = 0;
+                var multi = -1;
+                var opt = 0;
+                for (var i = 0; i < inputs.length; i++){
+                    switch(inputs[i].selection) {
+                        case "*":
+                            multi = i;
+                            break;
+                        case "?":
+                            opt++;
+                            break;
+                        default:
+                            mandatory++;
+                    }
+                }
+                if(multi > -1) {
+                    var input = inputs[multi];
+                    for (var i = 0; i < this.fields.length - mandatory - 1; i++)
+                        inputs.splice(multi, 0, input);
+                }
+
+                this.tabIndex = -1;
+                this._reset();
+
+                this.async(function () {
+                    this.inputs = inputs;
+                    this.options = options;
+                }, 0);
+
+                this.selectedInputs = new Array(inputs.length).fill(null);
+                for (var i = 0; i < options.length; i++) {
+                    if(options[i].type != "LIST")
+                        this.selectedOptions[options[i].name] = "";
+                    else
+                        this.selectedOptions[options[i].name] = options[i].list.item[0];
+                }
+            },
+
+            _translate : function(){
+                this.$.baseInfo.innerHTML = ln["baseInfo_" + ln["localization"]];
+                this.$.inputsTab.innerHTML = ln["inputs_" + ln["localization"]];
+                this.$.optionsTab.innerHTML = ln["options_" + ln["localization"]];
+
+                this.$.title.label = ln["title_" + ln["localization"]];
+                this.$.description.label = ln["description_" + ln["localization"]];
+            },
+
+            _preselectInputs : function(dataletPreset) {
+                this.selectedInputs = JSON.parse(dataletPreset.selectedfields);
+                var ddls = this.$.inputs_list.querySelectorAll("paper-dropdown-menu");
+
+                for (var i = 0; i < ddls.length; i++)
+                    if(this.selectedInputs[i]) {
+                        $(ddls[i]).find("paper-menu")[0].select(this.selectedInputs[i].index);
+                        var icon = this.$.inputs_list.querySelectorAll("paper-icon-button")[ddls[i].id * 2];
+                        icon.setAttribute("icon", "unfold-more"); //wrong
+                        icon.removeAttribute("disabled");
+                    }
+
+                this.orders = JSON.parse(dataletPreset.orders);
+
+                var selectedOptions = [];
+                var inputs = this.$.options_list.querySelectorAll("paper-input");
+
+                for (var i = 0; i < inputs.length; i++) {
+                    if (dataletPreset[this.options[i].name]) {
+                        inputs[i].value = dataletPreset[this.options[i].name];
+                        selectedOptions[this.options[i].name] = dataletPreset[this.options[i].name];
+                    }
+                }
+                if(dataletPreset["title"]) {
+                    this.$.title.value = dataletPreset["title"];
+                    selectedOptions["title"] = dataletPreset["title"];
+                }
+                if(dataletPreset["description"]) {
+                    this.$.description.value = dataletPreset["description"];
+                    selectedOptions["description"] = dataletPreset["description"];
+                }
+
+                this.selectedOptions = this._copy(selectedOptions);
+
+                this._fire();
+            },
+
+            _reset : function() {
+                this.tabIndex = 0;
+                this.inputs = [];
+                this.options = [];
+                this.selectedInputs = [];
+                this.selectedOptions = [];
+                this.orders = [];
+            },
+
+            _addInput : function(e) {
+                var inputIndex = $(e.target).parents("paper-dropdown-menu")[0].id;
+                var fields = this._getFieldsByType(this.inputs[inputIndex].type);
+                var fieldIndex = e.target.id;
+                this.selectedInputs[inputIndex] = {field: this.inputs[inputIndex].name, value : fields[fieldIndex].name, index : parseInt(fieldIndex) + 1};
+
+                var icon = this.$.inputs_list.querySelectorAll("paper-icon-button")[inputIndex * 2];
+                //this.orders = this.orders.filter(function (el) { return el.field !== field???; });
+                icon.setAttribute("icon", "unfold-more");
+                icon.removeAttribute("disabled");
+
+                this._fire();
+            },
+
+            _removeInput : function(e) {
+                var inputIndex = $(e.target).parents("paper-dropdown-menu")[0].id;
+                this.selectedInputs[inputIndex] = null;
+
+                var icon = this.$.inputs_list.querySelectorAll("paper-icon-button")[inputIndex * 2];
+                //this.orders = this.orders.filter(function (el) { return el.field !== field???; });
+                icon.setAttribute("icon", "unfold-more");
+                icon.setAttribute("disabled", true);
+
+                this._fire();
+            },
+
+            _addOrder : function(e) {
+                var t = e.target;
+                if(t.tagName.indexOf("IRON-ICON") > -1)
+                    t = $(e.target).parents("paper-icon-button")[0];
+
+                var icon = t.getAttribute("icon");
+                var id = t.getAttribute("id");
+                var field = this.selectedInputs[id].value;
+
+                this.orders = this.orders.filter(function (el) { return el.field !== field; });
+
+                if(icon.indexOf("unfold-more") > -1){
+                    t.setAttribute("icon", "expand-less");
+                    this.orders.unshift({"field": field, "operation": "ASC"});
+                }
+                else if(icon.indexOf("expand-less") > -1){
+                    t.setAttribute("icon", "expand-more");
+                    this.orders.unshift({"field": field, "operation": "DESC"});
+                }
+                else if(icon.indexOf("expand-more") > -1){
+                    t.setAttribute("icon", "unfold-more");
+                }
+
+                this._fire();
+            },
+
+            _addOption : function(e) {
+                if(e.target.nodeName == "PAPER-ITEM") {
+                    var optionIndex = $(e.target).parents("paper-dropdown-menu")[0].id;
+                    this.selectedOptions[this.options[optionIndex].name] = e.target.id;
+                }
+                else if(e.target.nodeName == "INPUT") {
+                    var option = $(e.target).parents("paper-input")[0].id;
+                    this.selectedOptions[option] = e.target.value;
+                }
+                this._fire();
+            },
+
+            _fire : function() {
+                if(this._isReady())
+                    this.fire('select-inputs_isReady', {isReady: true});
+                else
+                    this.fire('select-inputs_isReady', {isReady: false});
+            },
+
+            _isReady : function() {
+                var fire = true;
+                for(var i = 0; i < this.inputs.length; i++) {
+                    if(this.inputs[i].selection != "*" && this.inputs[i].selection != "?" && !this.selectedInputs[i])
+                        return false;
+                    if(this.inputs[i].selection == "*")
+                        fire = false;
+                }
+
+                if(this.inputs[0].name == "Latitude" || this.inputs[0].name == "GEOJSON")//wrong
+                    return true;
+
+                if(!fire)
+                    for(var i = 0; i < this.inputs.length; i++)
+                        if(this.inputs[i].selection == "*" && this.selectedInputs[i])
+                            return true;
+
+                return fire;
+            },
+
+            _getFieldsByType: function(type) {
+                if(type == "NUMBER") {
+                    var fields = [];
+                    for(var i = 0; i < this.fields.length; i++)
+                        if(this.fields[i].type == type)
+                            fields.push(this.fields[i]);
+                    return fields;
+                }
+
+                return this.fields;
+            },
+
+            _getInputRichName : function(item) {
+                var name =  ln[item.name + "_" +ln["localization"]];
+                if(item.type != "TEXT")
+                    name += " [" + item.type + "]";
+                if(item.selection == "?")
+                    name += " [OPT]";
+                return name;
+            },
+
+            _getInputName : function(name) {
+                return ln[name + "_" +ln["localization"]];
+            },
+
+            _getInputDescription : function(name) {
+                return ln[name + "Description_" +ln["localization"]];
+            },
+
+            _getInputInfoId : function(index) {
+                return "info_input_" + index;
+            },
+
+            _getOptionInfoId : function(index) {
+                return "info_option_" + index;
+            },
+
+            _checkType : function(type, check){
+                return (type == check);
+            },
+
+            _getNeonIndex : function(tabIndex){
+                if(tabIndex == -1)
+                    return 0;
+                return tabIndex;
+            },
+
+            _copy : function(o) {
+                var out, v, key;
+                out = Array.isArray(o) ? new Array(o.length) : {};
+                for (key in o) {
+                    v = o[key];
+                    out[key] = (typeof v === "object") ? this._copy(v) : v;
+                }
+                return out;
+            }
+
+        });
+
+    </script>
+
+</dom-module>

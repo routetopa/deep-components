@@ -42,6 +42,7 @@
                 'page-slider-controllet_selected' : '_updateSlider',
                 'select-fields-controllet_selected-fields' : '_allowThirdStep',
                 'filters-controllet_filters': '_allowThirdStep',
+                'aggregators-controllet_aggregators': '_allowThirdStep',
                 'data-ready': '_preselect'
             },
 
@@ -96,6 +97,8 @@
             _preselect : function(){
                 this.$.select_data.setSelectedFields(this.selectedFields);
                 this.$.select_data.setFilters(JSON.parse(this.dataletPreset["filters"]));
+                this.$.select_data.setAggregators(JSON.parse(this.dataletPreset["aggregators"]));
+//                this.$.select_visualization.preselect();
             },
 
             _updateSlider : function(e){
@@ -114,23 +117,27 @@
 
                         this.$.slider.chevronLeft(true);
                         this.$.slider.chevronRight("invisible");
-
-                        /**/this.$.select_visualization.show();//resize
+                            
+                        this.$.select_visualization.preselect();
                 }
             },
 
             _allowThirdStep : function(){
-                this.$.slider.chevronRight(false);
-                var fields = this.$.select_data.getSelectedFields();
-                var filters = this.$.select_data.getFilters();
-                var data = this.$.select_data.getData();
-                if(fields.length > 0) {
-                    this.$.select_visualization.init();
-                    this.$.select_visualization.setFields(fields);
-                    this.$.select_visualization.setFilters(filters);
-                    this.$.select_visualization.setData(data);
-                    this.$.slider.chevronRight(true);
-                }
+//                this.debounce('_allowThirdStep', function () {   console.log("_allowThirdStep");
+                    this.$.slider.chevronRight(false);
+                    var selectedFields = this.$.select_data.getSelectedFields();
+                    var filters = this.$.select_data.getFilters();
+                    var aggregators = this.$.select_data.getAggregators();
+                    var data = this.$.select_data.getData();
+                    if(selectedFields.length > 0) {
+                        this.$.select_visualization.init();
+                        this.$.select_visualization.setSelectedFields(selectedFields);
+                        this.$.select_visualization.setFilters(filters);
+                        this.$.select_visualization.setAggregators(aggregators);
+                        this.$.select_visualization.setData(data);
+                        this.$.slider.chevronRight(true);
+                    }
+//                }, 300);
             }
 
         });

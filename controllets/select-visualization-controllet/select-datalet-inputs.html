@@ -317,6 +317,18 @@
                         temp.push({name: name + " " +(i-1), description: description, selection: selection});
                 }
 
+                else if (inputs.length == 3 && inputs[1].selection == "*") {//
+                    name = inputs[1].name;
+                    description = inputs[1].description;
+                    selection = inputs[1].selection;
+                    temp = [inputs[0]];
+                    temp.push({name: name + " 1", description: description, selection: selection});
+                    for (var i = 3; i < this.fields.length; i++)
+                        temp.push({name: name + " " +(i-1), description: description, selection: selection});
+
+                    temp.push(inputs[2]);
+                }
+
                 this.inputs = this._copy(temp);
 
                 this.selectedFields = new Array(temp.length);

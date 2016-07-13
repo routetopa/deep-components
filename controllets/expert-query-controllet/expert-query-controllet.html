@@ -1,0 +1,368 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html" />
+
+<link rel="import" href="../../bower_components/paper-material/paper-material.html" />
+
+<link rel="import" href="../../bower_components/paper-tabs/paper-tabs.html">
+<link rel="import" href="../../bower_components/paper-tabs/paper-tab.html">
+
+<link rel="import" href="../../bower_components/neon-animation/neon-animation.html">
+<link rel="import" href="../../bower_components/neon-animation/neon-animatable.html">
+<link rel="import" href="../../bower_components/neon-animation/neon-animations.html">
+
+<link rel="import" href="../../bower_components/paper-tooltip/paper-tooltip.html">
+
+<link rel="import" href="../filters-controllet/filters-controllet.html" />
+<link rel="import" href="../aggregators-controllet/aggregators-controllet.html" />
+
+<script type="text/javascript" src="../../alasql-utility/alasql.min.js"></script>
+<script type="text/javascript" src="../../alasql-utility/alasql-utility.js"></script>
+
+<dom-module id="expert-query-controllet">
+
+    <template>
+
+        <style is="custom-style">
+
+            #expert_container {
+                display: none;
+                height: 100%;
+                width: 100%;
+            }
+
+            #expert_container * {
+                font-family: 'Roboto', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+                font-size: 16px;
+                line-height: 24px;
+            }
+
+            #expert_container #neon_container {
+                height: calc(100% - 48px);
+                width: 100%;
+            }
+
+            #header_open {
+                display: flex;
+                /*background: #B6B6B6;*/
+                /*border: 1px solid #b6b6b6;*/
+                /*height: 46px;*/
+            }
+
+            #expert_container paper-tabs {
+                /*height: 46px;*/
+                width: calc(100% - 48px);
+            }
+
+            #expert_container #query_container {
+                padding: 28px 8px 0px 8px;
+            }
+
+            #expert_container_close {
+                height: 48px;
+                width: 100%;
+
+                display: flex;
+            }
+
+            #expert_container_close * {
+                font-family: 'Roboto', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+                font-size: 16px;
+                line-height: 24px;
+            }
+
+            #expert_container_close #header_close {
+                height: 24px;
+                width: calc(100% - 384px);
+                padding: 12px 0px;
+                text-align: center;
+                font-weight: 700;
+
+                color: #00BCD4;
+                background: #FFFFFF;
+                cursor: pointer;
+            }
+
+            #expert_container_close #space {
+                width: 192px;
+            }
+
+            paper-tooltip {
+                --paper-tooltip-background: black;
+            }
+
+            paper-tooltip p {
+                font-family: 'Roboto', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+                font-size: 16px;
+                line-height: 24px;
+
+                margin: 0;
+                padding: 0;
+            }
+
+            paper-icon-button {
+                height: 48px;
+                width: 48px;
+                padding: 8px;
+                color: #2196F3;
+                --paper-icon-button-ink-color: #2196F3;
+            }
+
+            paper-icon-button.disabled{
+                color: #B6B6B6;
+            }
+
+            paper-icon-button[icon=fullscreen],
+            paper-icon-button[icon=fullscreen-exit] {
+                height: 48px;
+                width: 48px;
+                padding: 8px;
+                color:  #00BCD4;
+                --paper-icon-button-ink-color: #00BCD4;
+            }
+
+            paper-icon-button[icon=fullscreen] {
+                margin-left: 48px;
+            }
+
+            paper-tabs {
+                background: #B6B6B6;
+                --paper-tabs-selection-bar-color: #2196F3;
+            }
+
+            paper-tab {
+                --paper-tab-ink: #2196F3;
+            }
+
+            paper-tab.iron-selected {
+                font-weight: 700;
+            }
+
+            /*paper-tab:not(.iron-selected):hover {*/
+                /*color: #2196F3;*/
+            /*}*/
+
+            paper-tab:hover {
+                color: #2196F3;
+            }
+
+        </style>
+
+        <paper-material id="expert_container_close" elevation="5">
+            <div id="space"></div>
+
+            <div id="header_close" on-click="_fullscreen"><span id="expert"></span></div>
+
+            <paper-icon-button id="disable_filters" class=" disabled" icon="filter-list" on-click="_disableFilters"></paper-icon-button>
+            <paper-icon-button id="disable_aggregators" class=" disabled" icon="group-work" on-click="_disableAggregators"></paper-icon-button>
+            <paper-icon-button icon="fullscreen" on-click="_fullscreen"></paper-icon-button>
+        </paper-material>
+
+        <paper-tooltip for="disable_filters" offset="12" position="top"><p><span id="tooltip_filters"></span></p></paper-tooltip>
+        <paper-tooltip for="disable_aggregators" offset="12" position="top"><p><span id="tooltip_aggregators"></span></p></paper-tooltip>
+
+        <paper-material id="expert_container" elevation="5">
+
+            <div id="header_open">
+                <paper-tabs selected="{{tabIndex}}">
+                    <paper-tab><span id="filtersTab"></span></paper-tab>
+                    <paper-tab><span id="groupByTab"></span></paper-tab>
+                    <paper-tab><span id="queryTab"></span></paper-tab>
+                </paper-tabs>
+
+                <paper-icon-button icon="fullscreen-exit" on-click="_fullscreenExit"></paper-icon-button>
+            </div>
+
+            <neon-animated-pages id="neon_container" selected="{{tabIndex}}" entry-animation="fade-in-animation" exit-animation="fade-out-animation">
+
+                <neon-animatable>
+                    <filters-controllet id="filters"></filters-controllet>
+                </neon-animatable>
+
+                <neon-animatable>
+                    <aggregators-controllet id="aggregators"></aggregators-controllet>
+                </neon-animatable>
+
+                <neon-animatable>
+                    <div id="query_container"></div>
+                </neon-animatable>
+
+            </neon-animated-pages>
+
+
+        </paper-material>
+
+    </template>
+
+    <script>
+
+        Polymer({
+
+            is : 'expert-query-controllet',
+
+            properties : {
+
+                tabIndex: {
+                    type: Number,
+                    value: -1
+                },
+
+                fields : {
+                    type : Array,
+                    value : []
+                },
+
+                selectedFields : {
+                    type : Array,
+                    value : []
+                },
+
+                filters : {
+                    type : Array,
+                    value : []
+                },
+
+                aggregators : {
+                    type : Array,
+                    value : []
+                }
+
+            },
+
+            listeners: {
+                'filters-controllet_filters': '_updateFilters',
+                'aggregators-controllet_aggregators': '_updateAggregators'
+            },
+
+            ready : function() {
+            },
+
+            attached : function() {
+                this._translate();
+            },
+
+            setFields : function(fields) {
+                this.fields = fields;
+
+                this.$.filters.setFields(fields);
+                this.$.aggregators.setFields(fields);
+            },
+
+            setSelectedFields : function(selectedFields) {
+                this.selectedFields = selectedFields;
+
+                this.$.filters.setSelectedFields(selectedFields);
+                this.$.aggregators.setSelectedFields(selectedFields);
+
+                this._updateQuery();
+            },
+
+            setFilters : function(filters) {
+                this.async(function() {
+                    this.$.filters.setFilters(filters);
+                }, 0);
+            },
+
+            setAggregators : function(aggregators) {
+                this.async(function() {
+                    this.$.aggregators.setAggregators(aggregators);
+                }, 0);
+            },
+
+            reset : function() {
+                this.$.filters.reset();
+                this.$.aggregators.reset();
+                this.fields = [];
+                this.selectedFields = [];
+                this.filters = [];
+                this.aggregators = [];
+//                this.query = "";
+            },
+
+            _translate : function() {
+                this.$.expert.innerHTML = ln["expert_" + ln["localization"]];
+                this.$.filtersTab.innerHTML = ln["filters_" + ln["localization"]];
+                this.$.groupByTab.innerHTML = ln["groupBy_" + ln["localization"]];
+                this.$.queryTab.innerHTML = ln["query_" + ln["localization"]];
+                this.$.tooltip_filters.innerHTML = ln["enableFilters_" + ln["localization"]];
+                this.$.tooltip_aggregators.innerHTML = ln["enableGroupBy_" + ln["localization"]];
+            },
+
+            _fullscreen : function() {
+                this.$.expert_container_close.style.display = "none";
+                this.$.expert_container.style.display = "block";
+
+                if(this.tabIndex == -1)
+                    this.tabIndex = 0;
+
+                this.fire('expert-controllet_show', {show: true});
+            },
+
+            _fullscreenExit : function() {
+                this.$.expert_container_close.style.display = "flex";
+                this.$.expert_container.style.display = "none";
+
+                this.fire('expert-controllet_show', {show: false});
+            },
+
+            _updateFilters : function(e) {
+                this.filters = e.detail.filters;
+                this._updateQuery();
+                this._disableFiltersIcon(e.detail.filters);
+            },
+
+            _disableFilters : function() {
+                this.$.filters._disableFilters();
+            },
+
+            _disableFiltersIcon : function(filters) {
+                var classes = this.$.disable_filters.className;
+                if (filters.length > 1) {
+                    this.$.disable_filters.className = classes.replace(" disabled", "");
+                    this.$.tooltip_filters.innerHTML = ln["disableFilters_" + ln["localization"]];
+                }
+                else if (classes.indexOf("disabled") == -1) {
+                    this.$.disable_filters.className = classes + " disabled";
+                    this.$.tooltip_filters.innerHTML = ln["enableFilters_" + ln["localization"]];
+                }
+            },
+
+            _updateAggregators : function(e) {
+                this.aggregators = e.detail.aggregators;
+                this._updateQuery();
+                this._disableAggregatorsIcon(e.detail.aggregators);
+            },
+
+            _disableAggregators : function() {
+                this.$.aggregators._disableAggregators();
+            },
+
+            _disableAggregatorsIcon : function(aggregators) {
+                var classes = this.$.disable_aggregators.className;
+                if (aggregators.length > 0) {
+                    this.$.disable_aggregators.className = classes.replace(" disabled", "");
+                    this.$.tooltip_aggregators.innerHTML = ln["disableGroupBy_" + ln["localization"]];
+                }
+                else if (classes.indexOf("disabled") == -1) {
+                    this.$.disable_aggregators.className = classes + " disabled";
+                    this.$.tooltip_aggregators.innerHTML = ln["enableGroupBy_" + ln["localization"]];
+                }
+            },
+
+            _updateQuery : function() {
+                if(this.selectedFields.length)
+                    this.$.query_container.innerHTML = alasql_QUERY_string(this.selectedFields, this.filters, this.aggregators, null)
+                            .replace('SELECT', '<span style="color:#2196F3; font-weight: 700;">SELECT</span>')
+//                            .replace('FROM ?', '<br><br><span style="color:#2196F3; font-weight: 700;">FROM</span> dataset')
+                            .replace('FROM ?', '')
+                            .replace('WHERE', '<br><br><span style="color:#2196F3; font-weight: 700;">WHERE</span>')
+                            .replace('GROUP BY', '<br><br><span style="color:#2196F3; font-weight: 700;">GROUP BY</span>')
+                            .replace(/\[/g, '')
+                            .replace(/\]/g, '');
+                else
+                    this.$.query_container.innerHTML = "";
+            }
+
+        });
+
+    </script>
+
+</dom-module>

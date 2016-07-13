@@ -93,7 +93,7 @@ Examples:
                     }
 
                     this.properties.series = bubbleSeries;
-                    this._component.legend = true;
+//                    this._component.legend = true;
                 }
                 else {// == 4
                     var bubbleSeries = [];
@@ -108,7 +108,7 @@ Examples:
                     bubbleSeries.push({data: series});
 
                     this.properties.series = bubbleSeries;
-                    this._component.legend = false;
+//                    this._component.legend = false;
                 }
 
                 options = {
@@ -120,9 +120,6 @@ Examples:
                     title: {
                         text: this._component.title
                     },
-//                    subtitle: {
-//                        text: this._component.description
-//                    },
                     xAxis: {
                         title: {
                             text: this._component.xAxisLabel
@@ -133,10 +130,12 @@ Examples:
                             text: this._component.yAxisLabel,
                         }
                     },
-                    legend: {
-                        enabled: this._component.legend,
-                    },
                     plotOptions: {
+                        bubble: {
+                            dataLabels: {
+                                enabled: this._component.dataLabels
+                            }
+                        },
                         series: {
                             dataLabels: {
                                 enabled: true,
@@ -152,6 +151,27 @@ Examples:
 
                 if(this._component.theme != "themeBase" && this._component.theme != "")
                     jQuery.extend(true, options, Highcharts[this._component.theme]);
+
+                if(this._component.legend == "topRight")
+                    options.legend = {
+                        layout: 'vertical',
+                        verticalAlign: 'top',
+                        align: 'right',
+                        x: -4,
+                        y: 4,
+                        floating: true,
+                        borderWidth: 1,
+                        backgroundColor: ((Highcharts[this._component.theme] && Highcharts[this._component.theme].legendBackgroundColor) || '#FFFFFF'),
+                        shadow: true
+                    };
+                else if(this._component.legend == "bottom")
+                    options.legend = {
+                        enabled: true
+                    };
+                else
+                    options.legend ={
+                        enabled: false
+                    };
 
                 $(this._component.$.charts.$.container).highcharts(options);
             }
@@ -177,6 +197,10 @@ Examples:
                 theme : {
                     type : String,
                     value : ""
+                },
+                legend : {
+                    type : Object,
+                    value : "topRight"
                 },
                 behavior : {
                     type : Object,

@@ -2,7 +2,7 @@
 
 <link rel="import" href="../select-fields-controllet/select-fields-controllet.html" />
 <link rel="import" href="../data-table-controllet/data-table-controllet.html" />
-<link rel="import" href="../expert-query-controllet/expert-query-controllet.html" />
+<link rel="import" href="../filters-controllet/filters-controllet.html" />
 
 <link rel="import" href="../providers-utility-controllet/providers-utility-controllet.html" />
 
@@ -44,7 +44,7 @@
             width: 100%;
         }
 
-        #select_data_controllet_container #expert_container {
+        #select_data_controllet_container #filters_container {
             height: 48px;
             width: 100%;
             margin-top: 24px;
@@ -64,8 +64,8 @@
                 <div id="table_container">
                     <data-table-controllet id="data_table"></data-table-controllet>
                 </div>
-                <div id="expert_container">
-                    <expert-query-controllet id="expert"></expert-query-controllet>
+                <div id="filters_container">
+                    <filters-controllet id="filters"></filters-controllet>
                 </div>
             </div>
         </div>
@@ -83,6 +83,7 @@
                 dataUrl : {
                     type  : String,
                     value : undefined
+//                    observer : '_init'
                 },
 
                 data : {
@@ -95,11 +96,6 @@
                     value : []
                 },
 
-                aggregators : {
-                    type  : Array,
-                    value : []
-                },
-
                 selectedFields : {
                     type : Array,
                     value : []
@@ -108,13 +104,13 @@
             },
 
             listeners: {
-                'expert-controllet_show': '_resizeExpertWindow',
+                'filters-controllet_show': '_resizeFilters',
                 'select-fields-controllet_selected-fields': '_updateFields',
-                'filters-controllet_filters': '_updateFilters',
-                'aggregators-controllet_aggregators': '_updateAggregators'
+                'filters-controllet_filters': '_updateFilters'
             },
 
             ready : function() {
+                this.showFilter = false;
             },
 
             attached : function(){
@@ -123,46 +119,22 @@
                 window.addEventListener("resize", function() { that._resize(); });
             },
 
-            getFields : function() {
-                if(this.aggregators && this.aggregators.length) {
-                    var selectedFields = [];
-                    for (var i = 0; i < this.aggregators.length; i++) {
-                        if(this.aggregators[i]["operation"] == "GROUP BY")
-                            selectedFields.push(this.aggregators[i]["field"]);
-                        else
-                            selectedFields.push(this.aggregators[i]["operation"] + "(" + this.aggregators[i]["field"] + ")");
-                    }
-                    return selectedFields;
-                }
-                return this.selectedFields;
-            },
-
             getSelectedFields : function() {
-                return this.selectedFields;
+                return utility_getSelectedFields(this.fields, this.selectedFields);;
             },
 
             getFilters : function() {
                 return this.filters;
             },
 
-            getAggregators : function() {
-                return this.aggregators;
-            },
-
             getData : function() {
+                //return datatable.getData
+                //this.fields = "*"
+                var data = alasql_QUERY(this.data, this.fields, this.filters, null, null);
                 var converter = new DataTypeConverter();
-
-                var data = alasql_QUERY(this.data, this.selectedFields, this.filters, null, null);
                 var result = converter.inferJsonDataType(data, ["*"]);
                 result = converter.cast(result);
                 data = result.dataset;
-
-                if(this.aggregators && this.aggregators.length) {
-                    data = alasql_QUERY(data, this.selectedFields, null, this.aggregators, null);
-                    result = converter.inferJsonDataType(data, ["*"]);
-                    result = converter.cast(result);
-                    data = result.dataset;
-                }
 
                 return data;
             },
@@ -175,42 +147,38 @@
             },
 
             setFilters : function(filters) {
-                this.$.expert.setFilters(filters);
+                this.async(function() {
+                    this.$.filters.setFilters(filters);
+                }, 0);
             },
 
-            setAggregators : function(aggregators) {
-                this.$.expert.setAggregators(aggregators);
-            },
-
-            _resizeExpertWindow : function(e) {
-                if(e.detail.show) {
+            _resizeFilters : function() {
+                if(!this.showFilter) {
                     this.$.table_container.style.height = "calc(50% - 12px)";
-                    this.$.expert_container.style.height = "calc(50% - 12px)";
+                    this.$.filters_container.style.height = "calc(50% - 12px)";
                 }
                 else {
                     this.$.table_container.style.height = "calc(100% - 72px)";
-                    this.$.expert_container.style.height = "48px";
+                    this.$.filters_container.style.height = "48px";
                 }
 
                 this.$.data_table._resize();
+
+                this.showFilter = !this.showFilter;
             },
 
             _updateFields : function(e) {
-                var selectedFields = e.detail.selectedFields;
-                this.selectedFields = utility_getSelectedFields(this.fields, selectedFields);
-                this.$.data_table.setData(this.getData());
-
-                this.$.expert.setSelectedFields(this.selectedFields);
+                this.selectedFields = e.detail.selectedFields;
+                var fields = utility_getSelectedFields(this.fields, this.selectedFields);
+                var data = alasql_QUERY(this.data, fields, this.filters, null, null);
+                this.$.data_table.setData(data);
             },
 
             _updateFilters : function(e) {
                 this.filters = e.detail.filters;
-                this.$.data_table.setData(this.getData());
-            },
-
-            _updateAggregators : function(e) {
-                this.aggregators = e.detail.aggregators;
-                this.$.data_table.setData(this.getData());
+                var fields = utility_getSelectedFields(this.fields, this.selectedFields);
+                var data = alasql_QUERY(this.data, fields, this.filters, null, null);
+                this.$.data_table.setData(data);
             },
 
             init : function() {
@@ -236,8 +204,7 @@
                             that.data = alasql_QUERY(data, that.fields, null, null, null);
 
                             that.$.select_fields.setFields(that.fields);
-                            that.$.expert.setFields(that.fields);
-//                            that.$.expert.setSelectedFields(that.selectedFields);
+                            that.$.filters.setFields(that.fields);
 
                             that.fire('data-ready', {ready : true});
                         },
@@ -258,18 +225,16 @@
                     this.data = alasql_QUERY(data, this.fields, null, null, null);
 
                     this.$.select_fields.setFields(this.fields);
-                    this.$.expert.setFields(this.fields);
-//                    this.$.expert.setSelectedFields(this.selectedFields);
+                    this.$.filters.setFields(this.fields);
                 }
             },
 
             reset : function() {
                 this.filters = [];
-                this.aggregators = [];
                 this.selectedFields = [];
                 this.$.select_fields.reset();
                 this.$.data_table.reset();
-                this.$.expert.reset();
+                this.$.filters.reset();
             },
 
             _resize : function(){

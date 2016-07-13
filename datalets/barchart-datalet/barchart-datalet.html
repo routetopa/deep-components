@@ -88,20 +88,12 @@ Example:
                     plotOptions: {
                         bar: {
                             dataLabels: {
-                                enabled: true
+                                enabled: this._component.dataLabels
                             }
+                        },
+                        series: {
+                            stacking: this._component.stack
                         }
-                    },
-                    legend: {
-                        layout: 'vertical',
-                        align: 'right',
-                        verticalAlign: 'top',
-                        x: -40,
-                        y: 80,
-                        floating: true,
-                        borderWidth: 1,
-                        backgroundColor: ((Highcharts[this._component.theme] && Highcharts[this._component.theme].legendBackgroundColor) || '#FFFFFF'),
-                        shadow: true
                     },
                     credits: {
                         enabled: false
@@ -111,6 +103,27 @@ Example:
 
                 if(this._component.theme != "themeBase" && this._component.theme != "")
                     jQuery.extend(true, options, Highcharts[this._component.theme]);
+
+                if(this._component.legend == "topRight")
+                    options.legend = {
+                        layout: 'vertical',
+                        verticalAlign: 'top',
+                        align: 'right',
+                        x: -4,
+                        y: 4,
+                        floating: true,
+                        borderWidth: 1,
+                        backgroundColor: ((Highcharts[this._component.theme] && Highcharts[this._component.theme].legendBackgroundColor) || '#FFFFFF'),
+                        shadow: true
+                    };
+                else if(this._component.legend == "bottom")
+                    options.legend = {
+                        enabled: true
+                    };
+                else
+                    options.legend ={
+                        enabled: false
+                    };
 
                 $(this._component.$.charts.$.container).highcharts(options);
             }
@@ -135,6 +148,18 @@ Example:
                 suffix : {
                     type : String,
                     value : ""
+                },
+                legend : {
+                    type : Object,
+                    value : "topRight"
+                },
+                dataLabels : {
+                    type : Object,
+                    value : true
+                },
+                stack : {
+                    type : Object,
+                    value : false
                 },
                 theme : {
                     type : String,

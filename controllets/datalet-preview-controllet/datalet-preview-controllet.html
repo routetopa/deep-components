@@ -1,0 +1,289 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html" />
+
+<link rel="import" href="../../bower_components/paper-material/paper-material.html" />
+
+<link rel="import" href="../../bower_components/paper-tabs/paper-tabs.html">
+<link rel="import" href="../../bower_components/paper-tabs/paper-tab.html">
+
+<link rel="import" href="../../bower_components/neon-animation/neon-animation.html">
+<link rel="import" href="../../bower_components/neon-animation/neon-animatable.html">
+<link rel="import" href="../../bower_components/neon-animation/neon-animations.html">
+
+<dom-module id="datalet-preview-controllet">
+
+    <template>
+
+        <style is="custom-style">
+            #preview_container {
+                height: 100%;
+                width: 100%;
+            }
+
+            #preview_container * {
+                font-family: 'Roboto', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+                font-size: 16px;
+                line-height: 24px;
+            }
+
+            #preview_container #neon_container {
+                height: calc(100% - 48px);
+                width: 100%;
+            }
+
+            #preview_container #preview, #preview_container #info {
+                position: relative;
+                height: calc(100% - 32px);
+                width: calc(100% - 32px);
+                padding: 16px;
+            }
+
+            #preview_container #info_container {
+                display: flex;
+                flex-direction: row;
+            }
+
+            #preview_container #datalet_img{
+                min-height: 124px;
+                width: 124px;
+                position:relative;
+            }
+
+            #preview_container img{
+                max-width: 124px;
+                position: absolute;
+                top: 0;
+                bottom: 0;
+                margin: auto;
+            }
+
+            #preview_container #datalet_base_info {
+                width: calc(100% - 124px - 16px);
+                margin-left: 16px;
+            }
+
+            #preview_container #datalet_name{
+                font-size: 32px;
+                line-height: 48px;
+                color: #2196F3;
+            }
+
+            #preview_container #datalet_description{
+            }
+
+            #preview_container #datalet_inputs{
+                margin-top: 16px;
+            }
+
+            #preview_container .input_label {
+                color: #2196F3;
+                font-weight: 700;
+            }
+
+            #preview_container ul {
+                list-style-type: disc;
+            }
+
+            #preview_container li {
+                font-weight: 700;
+            }
+
+            paper-tabs {
+                background: #B6B6B6;
+                --paper-tabs-selection-bar-color: #2196F3;
+            }
+
+            paper-tab {
+                --paper-tab-ink: #2196F3;
+            }
+
+            paper-tab.iron-selected {
+                font-weight: 700;
+            }
+
+            paper-tab:hover {
+                color: #2196F3;
+            }
+
+        </style>
+
+        <paper-material id="preview_container" elevation="5">
+
+            <paper-tabs selected="{{tabIndex}}">
+                <paper-tab><span id="previewTab"></span></paper-tab>
+                <paper-tab><span id="infoTab"></span></paper-tab>
+            </paper-tabs>
+
+            <neon-animated-pages id="neon_container" selected="{{_getNeonIndex(tabIndex)}}" entry-animation="fade-in-animation" exit-animation="fade-out-animation">
+
+                <neon-animatable>
+                    <div id="preview">
+
+                    </div>
+                </neon-animatable>
+
+                <neon-animatable>
+                    <div id="info">
+                        <div id="info_container">
+                            <div id="datalet_img">
+                                <img src="{{dataletImg}}">
+                            </div>
+                            <div id="datalet_base_info">
+                                <div id="datalet_name">
+                                    {{dataletName}}
+                                </div>
+                                <div id="datalet_description">
+                                    {{dataletDescription}}
+                                </div>
+                            </div>
+                        </div>
+                        <div id="datalet_inputs">
+                            <span id="inputs" class="input_label"></span>
+                            <ul>
+                                <template is="dom-repeat" items="{{inputs}}">
+                                    <li>{{_getInputName(item.name)}}</li>
+                                    {{_getInputDescription(item.name)}}
+                                </template>
+                            </ul>
+                            <span id="options" class="input_label"></span>
+                            <ul>
+                                <template is="dom-repeat" items="{{options}}">
+                                    <li>{{_getInputName(item.name)}}</li>
+                                    {{_getInputDescription(item.name)}}
+                                </template>
+                            </ul>
+                        </div>
+                    </div>
+                </neon-animatable>
+
+            </neon-animated-pages>
+
+        </paper-material>
+
+    </template>
+
+    <script>
+
+        Polymer({
+
+            is : 'datalet-preview-controllet',
+
+            properties : {
+
+                deepUrl : {
+                    type : String,
+                    value : undefined
+                },
+
+                tabIndex: {
+                    type: Number,
+                    value: 0
+                }
+
+            },
+
+            ready : function() {
+                $(this.$.preview).perfectScrollbar();
+                $(this.$.info).perfectScrollbar();
+            },
+
+            attached : function() {
+                this._translate();
+            },
+
+            _translate : function(){
+                this.$.previewTab.innerHTML = ln["previewTab_" + ln["localization"]];
+                this.$.infoTab.innerHTML = ln["infoTab_" + ln["localization"]];
+            },
+
+            loadDatalet : function(dataletParams){
+                this._setTabindex(0);
+
+                dataletParams.placeHolder = this.$.preview;
+
+                ComponentService.deep_url = this.deepUrl;
+                ComponentService.getComponent(dataletParams);
+            },
+
+            eraseDatalet : function(){
+                this.$.preview.innerHTML = "";
+            },
+
+            loadInfo : function(selectedDatalet){
+                this._setTabindex(1);
+
+                this.dataletImg = (selectedDatalet.bridge_link + selectedDatalet.component_link).replace("html", "png");
+                this.dataletName = this._getChartName(selectedDatalet.name.replace("-datalet", ""));
+                this.dataletDescription = this._getChartName(selectedDatalet.name.replace("-datalet", "Description"));
+
+                var inputs = selectedDatalet.idm.inputs.input;
+                var options = [];
+                if(selectedDatalet.idm.inputs.layouts)
+                    options = selectedDatalet.idm.inputs.layouts.input;
+
+                if(!(inputs instanceof Array))
+                    inputs = [inputs];
+
+                if(!(options instanceof Array))
+                    options = [options];
+
+                this.inputs = inputs;
+                this.options = options;
+
+                this.$.inputs.innerHTML = ln["inputs_" + ln["localization"]];
+                if(this.options.length > 0)
+                    this.$.options.innerHTML = ln["options_" + ln["localization"]];
+                else
+                    this.$.options.innerHTML = "";
+            },
+
+            eraseInfo : function(){
+                this.dataletImg = "";
+                this.dataletName = "";
+                this.dataletDescription = "";
+
+                this.inputs = [];
+                this.options = [];
+
+                this.$.inputs.innerHTML = "";
+                this.$.options.innerHTML = "";
+            },
+
+            _getChartName: function(key) {
+                return ln[key + "_" +ln["localization"]];
+            },
+
+//            _getInputRichName : function(item) {
+//                var name =  ln[item.name + "_" +ln["localization"]];
+//                if(item.type != "TEXT")
+//                    name += " [" + item.type + "]";
+//                if(item.selection == "?")
+//                    name += " [OPT]";
+//                return name;
+//            },
+
+            _getInputName : function(name) {
+                return ln[name + "_" +ln["localization"]];
+            },
+
+            _getInputDescription : function(name) {
+                return ln[name + "Description_" +ln["localization"]];
+            },
+
+            _setTabindex : function(tabIndex) {
+                this.debounce('_filter', function () {
+                    this.tabIndex = -1;
+                    this.tabIndex = tabIndex;
+                }, 0);
+            },
+
+            _getNeonIndex : function(tabIndex){
+                if(tabIndex == -1)
+                    return 0;
+                return tabIndex;
+            }
+
+        });
+
+    </script>
+
+</dom-module>

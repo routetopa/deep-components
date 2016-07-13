@@ -76,45 +76,33 @@ Example:
                 options = {
                     chart: {
                         type: 'heatmap',
-                        marginTop: 40,
+                        zoomType: 'xy',
+//                        marginTop: 40,
 //                        marginBottom: 80,
                         plotBorderWidth: 1
                     },
-
                     title: {
                         text: this._component.title
                     },
-
                     xAxis: {
                         categories: Xcategories,
                         title: {
                             text: this._component.xAxisLabel
                         }
                     },
-
                     yAxis: {
                         categories: Ycategories,
                         title: {
                             text: this._component.yAxisLabel
                         }
                     },
-
+                    tooltip: {
+                        valueSuffix: ' ' + this._component.suffix
+                    },
                     colorAxis: {
                         min: 0,
                         minColor: '#FFFFFF',
                         maxColor: Highcharts.getOptions().colors[0]
-                    },
-
-                    legend: {
-                        align: 'right',
-                        layout: 'vertical',
-                        margin: 0,
-                        verticalAlign: 'top',
-                        y: 25,
-                        symbolHeight: 280
-                    },
-                    tooltip: {
-                        valueSuffix: ' ' + this._component.suffix
                     },
 
                     credits: {
@@ -124,14 +112,35 @@ Example:
                         borderWidth: 1,
                         data: series,
                         dataLabels: {
-                            enabled: true,
+                            enabled:  this._component.dataLabels,
                             color: '#000000'
-                        }
+                        },
                     }]
                 };
 
                 if(this._component.theme != "themeBase" && this._component.theme != "")
                     jQuery.extend(true, options, Highcharts[this._component.theme]);
+
+                if(this._component.legend == "topRight")
+                    options.legend = {
+                        layout: 'vertical',
+                        verticalAlign: 'top',
+                        align: 'right',
+                        x: -4,
+                        y: 4,
+                        floating: true,
+                        borderWidth: 1,
+                        backgroundColor: ((Highcharts[this._component.theme] && Highcharts[this._component.theme].legendBackgroundColor) || '#FFFFFF'),
+                        shadow: true,
+                    };
+                else if(this._component.legend == "bottom")
+                    options.legend = {
+                        enabled: true
+                    };
+                else
+                    options.legend ={
+                        enabled: false
+                    };
 
                 $(this._component.$.charts.$.container).highcharts(options);
             }
@@ -146,50 +155,34 @@ Example:
                     type: Array,
                     value: undefined
                 },
-                /**
-                 * It's the label for X axis
-                 *
-                 * @attribute xAxisLabel
-                 * @type String
-                 * @default ''
-                 */
                 xAxisLabel: {
                     type: String,
                     value: ""
                 },
-                /**
-                 * It's the label for Y axis
-                 *
-                 * @attribute yAxisLabel
-                 * @type String
-                 * @default ''
-                 */
                 yAxisLabel: {
                     type: String,
                     value: ""
                 },
-                /**
-                 * It's the values suffix
-                 *
-                 * @attribute suffix
-                 * @type String
-                 * @default 'units'
-                 */
                 suffix : {
                     type : String,
                     value : ""
+                },
+                legend : {
+                    type : Object,
+                    value : "topRight"
+                },
+                dataLabels : {
+                    type : Object,
+                    value : true
+                },
+                stack : {
+                    type : Object,
+                    value : false
                 },
                 theme : {
                     type : String,
                     value : ""
                 },
-                /**
-                 * It's the component behavior
-                 *
-                 * @attribute behavior
-                 * @type Object
-                 * @default {}
-                 */
                 behavior : {
                     type : Object,
                     value : {}

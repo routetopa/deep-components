@@ -95,11 +95,20 @@ var AjaxJsonAlasqlBehavior = {
     },
 
     filterData : function() {
-        var fields = this._component.fields = JSON.parse(this._component.fields);
-
+        var selectedFields = JSON.parse(this._component.getAttribute("selectedfields"));
         var filters = JSON.parse(this._component.getAttribute("filters"));
         var aggregators = JSON.parse(this._component.getAttribute("aggregators"));
         var orders = JSON.parse(this._component.getAttribute("orders"));
+
+        this._component.fields = JSON.parse(this._component.fields); /*deprecated*/
+        if(selectedFields) { /*if deprecated*/
+            this._component.fields = []; /*deprecated*/
+            for (var i=0; i < selectedFields.length; i++)
+                if (selectedFields[i])
+                    this._component.fields.push(selectedFields[i].value);
+        }
+
+        var fields = this._component.fields;
 
         //preview my space ?
         if(filters && filters[0] && filters[0].constructor == Array){
@@ -109,14 +118,22 @@ var AjaxJsonAlasqlBehavior = {
         }
 
         var converter = new DataTypeConverter();
-
-        var data = alasql_QUERY(this.data, fields, filters, null, orders);
-        var result = converter.inferJsonDataType(data, ["*"]);
-        result = converter.cast(result);
-        data = result.dataset;
+        var data = [];
+        var result = [];
 
         if(aggregators && aggregators.length) {
-            data = alasql_QUERY(data, fields, null, aggregators, orders);
+            data = alasql_QUERY(this.data, "*", filters, null, orders);
+            result = converter.inferJsonDataType(data, ["*"]);
+            result = converter.cast(result);
+            data = result.dataset;
+
+            data = alasql_QUERY(data, null, null, aggregators, orders);
+            result = converter.inferJsonDataType(data, ["*"]);
+            result = converter.cast(result);
+            data = result.dataset;
+        }
+        else {
+            data = alasql_QUERY(this.data, fields, filters, null, orders);
             result = converter.inferJsonDataType(data, ["*"]);
             result = converter.cast(result);
             data = result.dataset;
@@ -124,17 +141,5 @@ var AjaxJsonAlasqlBehavior = {
 
         this.data = alasql_transformData(data, fields, true);
     }
-
-    //var selectedFields = JSON.parse(this._component.getAttribute("selectedFields"));
-    //if(selectedFields) {
-    //    fields = [];
-    //    var inputs = [];
-    //    for (var i=0; i < selectedFields.length; i++) {
-    //        if (selectedFields[i]) {
-    //            fields.push(selectedFields[i].field);
-    //            inputs.push(selectedFields[i].input);
-    //        }
-    //    }
-    //}
 
 };

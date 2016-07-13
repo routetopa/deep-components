@@ -5,9 +5,10 @@
 <link rel="import" href="../../bower_components/paper-button/paper-button.html">
 
 <link rel="import" href="../items-vslider-controllet/items-vslider-controllet.html" />
-<link rel="import" href="select-datalet-inputs_series.html" />
-<link rel="import" href="select-datalet-inputs.html" />
-<link rel="import" href="select-datalet-options.html" />
+<link rel="import" href="../select-inputs-controllet/select-inputs-controllet.html" />
+<link rel="import" href="../datalet-preview-controllet/datalet-preview-controllet.html" />
+
+<script type="text/javascript" src="../../bower_components/jsdatachecker/jsdatachecker.min.js"></script>
 
 <script src="../../../DEEPCLIENT/js/deepClient.js"></script>
 
@@ -18,63 +19,61 @@
         <style is="custom-style">
             #select_visualization_container {
                 display: flex;
-                font-family: 'Roboto', 'Helvetica Neue', Helvetica, Arial, sans-serif;
-                font-size: 16px;
                 margin-top: 8px;
             }
 
-            #items_vslider_controllet {
-                position: relative;
-                min-width: 172px;
+            #select_visualization_container * {
+                font-family: 'Roboto', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+                font-size: 16px;
+                line-height: 24px;
             }
 
-            #datalet_selection_inputs {
+            #items_vslider_container {
                 position: relative;
-                margin-left: 32px;
-                min-width: 258px;
+                width: 172px;
             }
 
-            #datalet_selection_options {
+            #select_inputs_container {
                 position: relative;
-                margin-left: 32px;
+                width: calc(50% - 12px - 172px - 24px);
                 min-width: 258px;
+                margin-left: 24px;
             }
 
             #datalet_preview_container {
                 position: relative;
-                width: 100%;
-                margin-left: 32px;
+                width: calc(50% - 12px);
+                margin-left: 24px;
             }
 
-            #datalet_selection_datalet {
-                position: relative;
-                height: 100vh;
-                width: 100%;
-            }
+            /*#datalet_placeholder {*/
+                /*width: calc(100% - 32px);*/
+                /*height: calc(100% - 48px - 32px);*/
+                /*padding: 16px;*/
+            /*}*/
 
-            #datalet_selection_datalet_placeholder {
-                padding: 16px;
-            }
-
-            .input_header {
-                height: 32px;
-                padding-top: 16px;
-                text-align: center;
-                font-weight: 700;
-                background-color: #B6B6B6;
-            }
+            /*.header {*/
+                /*height: 24px;*/
+                /*padding: 12px;*/
+                /*text-align: center;*/
+                /*font-weight: 700;*/
+                /*background-color: #B6B6B6;*/
+            /*}*/
 
             paper-button {
                 position: absolute;
-                bottom: 16px;
-                right: 11px;
-
                 height: 48px;
                 width: 172px;
-                background-color: #00BCD4;
-                color: white;
+                padding: 12px;
+                background: #00BCD4;
+                color: #FFFFFF;
                 font-weight: 700;
-                padding: 16px;
+
+                /*bottom: 16px;*/
+                /*right: 11px;*/
+                top: -56px;
+                right: 0;
+                margin: 0 16px;
             }
 
             paper-button:hover {
@@ -94,36 +93,26 @@
 
         <div id="select_visualization_container">
 
-            <div id="items_vslider_controllet">
-                <items-vslider-controllet id="vslider" datalets-list-url={{dataletsListUrl}} preselected-datalet={{preselectedDatalet}}></items-vslider-controllet>
+            <div id="items_vslider_container">
+                <items-vslider-controllet id="vslider" datalets-list-url="{{dataletsListUrl}}"></items-vslider-controllet>
             </div>
 
-            <div id="datalet_selection_inputs">
-                <template is="dom-if" if="{{_checkType(type, 'multiseries')}}">
-                    <select-datalet-inputs_series id="inputs_series"></select-datalet-inputs_series>
-                </template>
-                <template is="dom-if" if="{{_checkType(type, 'default')}}">
-                    <select-datalet-inputs id="inputs"></select-datalet-inputs>
-                </template>
-                <template is="dom-if" if="{{_checkType(type, '')}}">
-                    <select-datalet-inputs></select-datalet-inputs>
-                </template>
-            </div>
-
-            <div id="datalet_selection_options">
-                <select-datalet-options id="options"></select-datalet-options>
+            <div id="select_inputs_container">
+                <select-inputs-controllet id="inputs"></select-inputs-controllet>
             </div>
 
             <div id="datalet_preview_container">
-
-                <paper-material id="datalet_selection_datalet" elevation="5">
-                    <div class="input_header"><span id="dataletPreview"></span></div>
-                    <div id="datalet_selection_datalet_placeholder"></div>
-                </paper-material>
-
-                <paper-button id="add_button" disabled raised on-click="_addDatalet"></paper-button>
-
+                <datalet-preview-controllet id="preview" deep-url="{{deepUrl}}" datalets-list-url="{{dataletsListUrl}}"></datalet-preview-controllet>
             </div>
+
+            <paper-button id="add_button" disabled raised on-click="_addDatalet"></paper-button>
+
+            <!--<paper-material id="datalet_preview_container" elevation="5">-->
+                <!--<div class="header"><span id="dataletPreview"></span></div>-->
+
+                <!--<div id="datalet_placeholder"></div>-->
+
+            <!--</paper-material>-->
 
         </div>
 
@@ -147,8 +136,43 @@
                     value : undefined
                 },
 
+                dataUrl : {
+                    type  : String,
+                    value : undefined
+                },
+
+                data : {
+                    type  : Object,
+                    value : undefined
+                },
+
+                selectedFields : {
+                    type : Array,
+                    value : []
+                },
+
+                filters : {
+                    type : Array,
+                    value : []
+                },
+
+                aggregators : {
+                    type : Array,
+                    value : []
+                },
+
+//                orders : {
+//                    type : Array,
+//                    value : []
+//                },
+
                 selectedDatalet : {
                     type  : String,
+                    value : undefined
+                },
+
+                dataletType : {
+                    type : String,
                     value : undefined
                 },
 
@@ -157,62 +181,19 @@
                     value : undefined
                 },
 
-                type : {
-                    type : String,
-                    value : ""
-                },
-
-                filters : {
-                    type : Array,
-                    value : []
-                },
-
-                fields : {
-                    type : Array,
-                    value : []
-                },
-
-                selectedFields : {
-                    type : Array,
-                    value : []
-                },
-
                 dataletPreset : {
                     type  : Object,
                     value : []
-                },
-
-                dataUrl : {
-                    type  : String,
-                    value : undefined
-                },
-
-                params:{
-                    type: Object,
-                    value: undefined
-                },
-
-                data : {
-                    type  : Object,
-                    value : undefined
-                },
+                }
 
             },
 
             listeners: {
-//                'select-fields-controllet_selected-fields': '_updateFields',
-//                'filters-controllet_filters': '_updateFilters',
                 'items-vslider-controllet_selected-datalet': '_selectDatalet',
-                'select_visualization_inputs_ready': '_loadDatalet',
-                'select_visualization_options_changed': '_tryLoadDatalet'
+                'select-inputs_isReady': '_loadDatalet'
             },
 
             ready : function() {
-                this._resize();
-
-                $(this.$.datalet_selection_datalet).perfectScrollbar();
-
-//                this.params = {'data-url' : this.dataUrl};//not here
             },
 
             attached : function() {
@@ -227,34 +208,31 @@
                 this.filters = this._copy(filters);
             },
 
-            setFields : function(fields) {
-//                if (this.fields.length > 0 && JSON.stringify(this.fields) != JSON.stringify(fields))
-//                    this.init();
+            setAggregators : function(aggregators) {
+                this.aggregators = this._copy(aggregators);
+            },
 
-                this.fields = this._copy(fields);
+//            setOrders : function(orders) {
+//                this.orders = this._copy(orders);
+//            },
 
-                var inputs = this._getInputs();
-                if (inputs)
-                    inputs.setFields(this.fields);
+            setSelectedFields : function(selectedFields) {
+                this.selectedFields = this._copy(selectedFields);
             },
 
             setData : function(data) {
                 this.data = this._copy(data);
+
+                var converter = new DataTypeConverter();
+                var result = converter.inferJsonDataType(data, ["*"]);
+                result = converter.cast(result);
+                this.$.inputs.setFields(ArrayUtils.toFieldsArray(result.types));
+                this.$.vslider.setEnabledDatalets(ArrayUtils.toFieldsArray(result.types));
             },
 
             init : function() {
-                this.$.vslider._reset();
-            },
-
-            show : function() {//show --> preselect
-//                if(this.preselectedDatalet)
-                if(this.dataletPreset)
-                    this._preselectDatalet();
-                
-//                if (this.$.datalet_selection_datalet_placeholder.innerHTML == "") {
-//                    var inputs = this._getInputs();
-//                    inputs.fireReady();
-//                }
+                if(this.selectedDatalet !== undefined)
+                    this.$.vslider.reset();// fire _selectDatalet undefined
             },
 
             _translate : function(){
@@ -262,111 +240,82 @@
                     this.$.add_button.innerHTML = ln["modifyDatalet_" + ln["localization"]];
                 else
                     this.$.add_button.innerHTML = ln["addDatalet_" + ln["localization"]];
-
-                this.$.dataletPreview.innerHTML = ln["dataletPreview_" + ln["localization"]];
             },
 
             _selectDatalet : function(e){
-
-                this.$.add_button.setAttribute("disabled", "true");
-
                 this.selectedDatalet = e.detail.datalet;
 
-                this.$.datalet_selection_datalet_placeholder.innerHTML = "";
+                this.$.add_button.setAttribute("disabled", "true");
+                this.$.preview.eraseDatalet();
+                this.$.preview.eraseInfo();
 
-                if(!this.selectedDatalet){
-                    this.type = "";
-                    this.$.options.setOptions([]);
-                }
-                else{
+                if(this.selectedDatalet) {
                     this.$.selectedDatalet_request.url = this.deepUrl + e.detail.datalet + "-datalet";
                     this.$.selectedDatalet_request.generateRequest();
+                }
+                else {
+                    this.dataletType = undefined;
+                    this.$.inputs._reset();
                 }
             },
 
             _handleSelectedDatalet : function(e){
+                this.$.preview.loadInfo(e.detail.response);
 
-                if(this.type != e.detail.response.type) {
-
-                    this.type = e.detail.response.type;
-
-                    this.async(function () {
-                        var inputs = this._getInputs();
-                        inputs.setFields(this.fields);
-                        inputs.setInputs(e.detail.response.idm.inputs.input);// Cannot read property '0' of undefined
-                    }, 0);
-
-                    this.$.options.setOptions(e.detail.response.idm.inputs.layouts.input);
+                if(this.dataletType != e.detail.response.type) {
+                    this.dataletType = e.detail.response.type;
+                    this.$.inputs.setInputs(e.detail.response.idm);
                 }
                 else {
-                    this.$.options.checkOptions(e.detail.response.idm.inputs.layouts.input);
+                    this.$.inputs._fire();
                 }
-
-                this.async(function () {
-                    var inputs = this._getInputs();
-                    inputs.fireReady();
-                }, 0);
-
-//                this.async(function () {
-//                    if(this.preselectedDatalet)
-//                        this._preselectDatalet();
-//                }, 1);
             },
 
-            _preselectDatalet : function() {
-                this.$.vslider._preselectDatalet();
-
-                this.async(function () {
-                    this.$.options._preselectOptions(this.dataletPreset);
-                }, 100);
-
-                this.async(function () {
-                    var inputs = this._getInputs();
-                    inputs._preselectInputs(this.fields, this.dataletPreset["aggregators"], this.dataletPreset["orders"]);
-                    this.dataletPreset = undefined;
-                }, 200);
-            },
-
-            _tryLoadDatalet : function(){
-                var inputs = this._getInputs();
-                inputs.fireReady();
+            preselect : function() {
+                if(this.preselectedDatalet) {
+                    this.$.vslider.preselectDatalet(this.preselectedDatalet);
+                    this.async(function () {
+                        this.$.inputs._preselectInputs(this.dataletPreset);
+                        this.preselectedDatalet = undefined;
+                    }, 100);
+                }
             },
 
             _loadDatalet : function(e){
                 if(!e.detail.isReady) {
-                    this.$.datalet_selection_datalet_placeholder.innerHTML = "";
+                    this.$.preview.eraseDatalet();
                     return;
                 }
 
-                var inputs = this._getInputs();
+                this.params = {'data-url' : this.dataUrl};/*???*/
 
-                this.selectedFields = inputs.getSelectedFields();
+//                this.selectedFields = ["pippi", "baudo"];
 
-//                console.log(inputs.getFields());
-
-                this.params = {'data-url' : this.dataUrl};//??????????????????
-//                this.params = {};
-
-                this.params["selectedFields"] = JSON.stringify(inputs.getFields());
-
+                this.params["selectedfields"] = JSON.stringify(this.$.inputs.getSelectedInputs());
                 this.params["filters"] = JSON.stringify(this.filters);
-                this.params["aggregators"] = JSON.stringify(inputs.getAggregators());
-                this.params["orders"] = JSON.stringify(inputs.getOrders());
+                this.params["aggregators"] = JSON.stringify(this.aggregators);
+                this.params["orders"] = JSON.stringify(this.$.inputs.getOrders());
 
                 this.params["export_menu"] = "0";
 
-                var params = this.$.options.getParams();
+                var params = this.$.inputs.getSelectedOptions();
                 for (var key in params) { this.params[key] = params[key]; }
 
                 //use cache
-                var data = alasql_QUERY(this.data, this.selectedFields, null, inputs.getAggregators(), inputs.getOrders());
+                var selectedFields = this.$.inputs.getSelectedInputs();
+                var fields = [];
+                for (var i=0; i < selectedFields.length; i++)
+                    if (selectedFields[i])
+                        fields.push(selectedFields[i].value);
 
                 var converter = new DataTypeConverter();
+
+                var data = alasql_QUERY(this.data, fields, null, null, this.$.inputs.getOrders());
                 var result = converter.inferJsonDataType(data, ["*"]);
                 result = converter.cast(result);
                 data = result.dataset;
 
-                data = alasql_transformData(data, this.selectedFields, true);
+                data = alasql_transformData(data, fields, true);
 
                 this.params["data"] = JSON.stringify(data).replace(/'/g, "&#39;");
                 //
@@ -374,43 +323,33 @@
                 var dataletParams ={
                     component: this.selectedDatalet+"-datalet",
                     fields: this.selectedFields,
-                    params: this.params,
-                    placeHolder: this.$.datalet_selection_datalet_placeholder,
+                    params: this.params
+//                    placeHolder: this.$.datalet_placeholder
                 };
 
-                ComponentService.deep_url = this.deepUrl;
-                ComponentService.getComponent(dataletParams);
+//                ComponentService.deep_url = this.deepUrl;
+//                ComponentService.getComponent(dataletParams);
+
+                this.$.preview.loadDatalet(dataletParams);
 
                 this.$.add_button.removeAttribute("disabled");
             },
 
             _addDatalet : function(){
-                delete this.params["export_menu"];
+                var staticData = this.params["data"];
+
                 delete this.params["data"];
+                delete this.params["export_menu"];
 
                 var data = {
                     dataUrl: this.dataUrl,
                     datalet: this.selectedDatalet+"-datalet",
                     fields: this.selectedFields,
                     params: this.params,
-                    staticData: JSON.stringify(this.$.datalet_selection_datalet_placeholder.children[1].behavior.data)
+                    staticData: staticData
                 }
 
                 this.fire('data-sevc-controllet.dataletCreated', {data : data});
-            },
-
-            _checkType: function(type, check){
-                if (type == "multiseries" || type == "")
-                    return (type == check);
-                else if(check == "default")
-                    return true;
-                return false;
-            },
-
-            _getInputs  : function(){
-                if(this.type == "multiseries")
-                    return this.$$("#inputs_series")
-                return this.$$("#inputs");
             },
 
             _copy : function(o) {
@@ -427,11 +366,9 @@
                 var h = Math.max(document.documentElement.clientHeight, window.innerHeight || 0) - 16;
                 h = h - 64 - 8; //height with page scroller
 
-                $("#items_vslider_controllet").height(h);//vslider controllet
-                $("#datalet_selection_inputs").height(h);
-                $("#datalet_selection_options").height(h);
-
-                $("#datalet_selection_datalet").height(h);
+                $("#items_vslider_container").height(h);
+                $("#select_inputs_container").height(h);
+                $("#datalet_preview_container").height(h);
             }
 
         });
