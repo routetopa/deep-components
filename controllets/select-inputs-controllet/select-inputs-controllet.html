@@ -78,6 +78,7 @@
             #inputs_container p .title{
                 font-weight: 700;
                 color: #2196F3;
+                white-space: nowrap;
             }
 
             #inputs_container p .description{
@@ -97,23 +98,6 @@
 
             #inputs_container #base_description_info {
                 margin-top: -4px;
-            }
-
-            paper-tabs {
-                background: #B6B6B6;
-                --paper-tabs-selection-bar-color: #2196F3;
-            }
-
-            paper-tab {
-                --paper-tab-ink: #2196F3;
-            }
-
-            paper-tab.iron-selected {
-                font-weight: 700;
-            }
-
-            paper-tab:hover {
-                color: #2196F3;
             }
 
             paper-input {
@@ -165,6 +149,35 @@
                 --paper-tooltip-background: black;
             }
 
+            paper-tooltip.order {
+                min-width: 0;
+                white-space: nowrap;
+            }
+
+            paper-tabs {
+                background: #B6B6B6;
+                /*--paper-tabs-selection-bar-color: #00BCD4;*/
+            }
+
+            paper-tab {
+                font-weight: 700;
+                border-right: 2px solid #FFFFFF;
+                /*--paper-tab-ink: #2196F3;*/
+            }
+
+            paper-tab:nth-child(2) {
+                border-right: 0;
+            }
+
+            paper-tab.iron-selected {
+                color: #FFFFFF;
+                background: #2196F3;;
+            }
+
+            paper-tab:not(.iron-selected):hover {
+                color: #2196F3;
+            }
+
         </style>
 
         <paper-material id="inputs_container" elevation="5">
@@ -199,9 +212,9 @@
                 </paper-tooltip>
             </div>
 
-            <paper-tabs selected="{{tabIndex}}">
-                <paper-tab><span id="inputsTab"></span></paper-tab>
-                <paper-tab><span id="optionsTab"></span></paper-tab>
+            <paper-tabs selected="{{tabIndex}}" no-bar>
+                <paper-tab noink><span id="inputsTab"></span></paper-tab>
+                <paper-tab noink><span id="optionsTab"></span></paper-tab>
             </paper-tabs>
 
             <neon-animated-pages id="neon_container" selected="{{_getNeonIndex(tabIndex)}}" entry-animation="fade-in-animation" exit-animation="fade-out-animation">
@@ -220,7 +233,7 @@
                                     </paper-menu>
                                 </paper-dropdown-menu>
                                 <div class="order_button">
-                                    <paper-icon-button id="{{input_index}}" icon="unfold-more" on-click="_addOrder" disabled></paper-icon-button>
+                                    <paper-icon-button id="order_input_{{input_index}}" icon="unfold-more" on-click="_addOrder" disabled></paper-icon-button>
                                 </div>
                                 <div class="info_button">
                                     <paper-icon-button id="info_input_{{input_index}}" icon="info-outline" noink></paper-icon-button>
@@ -235,6 +248,12 @@
                                     <span class="title">{{_getInputRichName(item)}}</span>
                                     <br>
                                     <span class="description">{{_getInputDescription(item.name)}}</span>
+                                </p>
+                            </paper-tooltip>
+
+                            <paper-tooltip class="order" for="{{_getInputOrderId(index)}}" position="right" offset="22">
+                                <p>
+                                    <span id="order_{{index}}">{{_getInputOrder(index)}}</span>
                                 </p>
                             </paper-tooltip>
                         </template>
@@ -493,20 +512,24 @@
                     t = $(e.target).parents("paper-icon-button")[0];
 
                 var icon = t.getAttribute("icon");
-                var id = t.getAttribute("id");
+                var id = t.getAttribute("id").replace("order_input_", "");
                 var field = this.selectedInputs[id].value;
+                var tooltip = $("#order_"+id)[0];
 
                 this.orders = this.orders.filter(function (el) { return el.field !== field; });
 
                 if(icon.indexOf("unfold-more") > -1){
                     t.setAttribute("icon", "expand-less");
+                    tooltip.innerHTML = ln["sortAscending_" +ln["localization"]];
                     this.orders.unshift({"field": field, "operation": "ASC"});
                 }
                 else if(icon.indexOf("expand-less") > -1){
                     t.setAttribute("icon", "expand-more");
+                    tooltip.innerHTML = ln["sortDescending_" +ln["localization"]];
                     this.orders.unshift({"field": field, "operation": "DESC"});
                 }
                 else if(icon.indexOf("expand-more") > -1){
+                    tooltip.innerHTML = ln["unsort_" +ln["localization"]];
                     t.setAttribute("icon", "unfold-more");
                 }
 
@@ -583,6 +606,14 @@
 
             _getInputInfoId : function(index) {
                 return "info_input_" + index;
+            },
+
+            _getInputOrderId : function(index) {
+                return "order_input_" + index;
+            },
+
+            _getInputOrder : function(index) {
+                return ln["unsort_" +ln["localization"]];
             },
 
             _getOptionInfoId : function(index) {

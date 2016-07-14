@@ -36,9 +36,9 @@ ln["fields_en"] = "FIELDS";
 
 //data-table
 ln["selectedData_en"] = "SELECTED DATA";
-//ln["showing_en"] = "Showing";
-//ln["to_en"] = "to";
-//ln["of_en"] = "of";
+ln["showing_en"] = "Showing";
+ln["to_en"] = "to";
+ln["of_en"] = "of";
 ln["rows_en"] = "rows";
 ln["type_en"] = "TYPE";
 ln["warning_en"] = "WARNING";
@@ -49,11 +49,6 @@ ln["filters_en"] = "FILTERS";
 ln["groupBy_en"] = "GROUP BY";
 ln["query_en"] = "QUERY";
 
-//ln["disableFilters_en"] = "DISABLE FILTERS";
-//ln["enableFilters_en"] = "ENABLE FILTERS";
-//ln["disableGroupBy_en"] = "DISABLE GROUP BY";
-//ln["enableGroupBy_en"] = "ENABLE GROUP BY";
-
 //filters
 ln["filterField_en"] = "Field";
 ln["filterOperation_en"] = "Operation";
@@ -62,18 +57,12 @@ ln["filterValue_en"] = "Value";
 ln["disableFilters_en"] = "DISABLE FILTERS";
 ln["enableFilters_en"] = "ENABLE FILTERS";
 
-//ln["=_en"] = "is equal to";
-//ln["!=_en"] = "is not equal to";
-//ln[">_en"] = "is greater than";
-//ln[">=_en"] = "is greater than or equal to";
-//ln["<_en"] = "is less than";
-//ln["<=_en"] = "is less than or equal to";
-ln["=_en"] = "=";
-ln["!=_en"] = "not =";
-ln[">_en"] = ">";
-ln[">=_en"] = ">=";
-ln["<_en"] = "<";
-ln["<=_en"] = "<=";
+ln["=_en"] = "=";   //is equal to
+ln["!=_en"] = "not =";  //is not equal to
+ln[">_en"] = ">";   //is greater than
+ln[">=_en"] = ">="; //is greater than or equal to
+ln["<_en"] = "<";   //is less than
+ln["<=_en"] = "<="; //is less than or equal to
 ln["contains_en"] = "contains";
 ln["notContains_en"] = "not contains";
 ln["start_en"] = "start with";
@@ -126,34 +115,34 @@ ln["treemap_en"] = "Tree Map";
 ln["leafletjs_en"] = "Map";
 ln["leafletjs-geojson_en"] = "Geojson Map";
 
-ln["datatableDescription_en"] = "Table";
-ln["barchartDescription_en"] = "A bar chart is a chart that presents grouped data with rectangular bars with lengths proportional to the values that they represent.";
-ln["columnchartDescription_en"] = "Column Chart";
-ln["areachartDescription_en"] = "Area Chart";
-ln["linechartDescription_en"] = "Line Chart";
-ln["heatmapDescription_en"] = "Heat Map";
-ln["piechartDescription_en"] = "Pie Chart";
-ln["scatterchartDescription_en"] = "Scatter Chart";
-ln["bubblechartDescription_en"] = "Bubble Chart";
-ln["treemapDescription_en"] = "Tree Map";
-ln["leafletjsDescription_en"] = "Map";
-ln["leafletjs-geojsonDescription_en"] = "Geojson Map";
+ln["datatableDescription_en"] = "A table is a means of arranging data in rows and columns.";
+ln["barchartDescription_en"] = "A bar chart is a chart that presents grouped data with rectangular bars plotted horizontally with lengths proportional to the values that they represent.";
+ln["columnchartDescription_en"] = "A column chart is a chart that presents grouped data with rectangular bars plotted vertically with lengths proportional to the values that they represent.";
+ln["areachartDescription_en"] = "An area chart is a chart which displays graphically quantitive data. The area between axis and line are emphasized with colors and textures. Commonly one compares with the area chart two or more quantities.";
+ln["linechartDescription_en"] = "A line chart is chart which displays information as a series of data points called 'markers' connected by straight line segments. A line chart is often used to visualize a trend in data over intervals of time.";
+ln["heatmapDescription_en"] = "A heat map is a graphical representation of data where the individual values contained in a matrix are represented as colors.";
+ln["piechartDescription_en"] = "A pie chart is a circular statistical graphic, which is divided into slices to illustrate numerical proportion. In the pie chart, the arc length of each slice, and consequently its central angle and area, is proportional to the quantity it represents.";
+ln["scatterchartDescription_en"] = "A scatter chart is a type of plot or mathematical diagram using Cartesian coordinates to display values for typically two variables for a set of data. The data is displayed as a collection of points, each having the value of one variable determining the position on the horizontal axis and the value of the other variable determining the position on the vertical axis.";
+ln["bubblechartDescription_en"] = "A bubble chart is a type of chart that displays three dimensions of data. Each entity with its triplet (v1, v2, v3) of associated data is plotted as a disk that expresses two of the vi values through the disk's xy location and the third through its size.";
+ln["treemapDescription_en"] = "A tree map is a chart for displaying hierarchical data by using nested rectangles.";
+ln["leafletjsDescription_en"] = "";
+ln["leafletjs-geojsonDescription_en"] = "";
 
 //inputs
 ln["title_en"] = "Title"
 ln["description_en"] = "Description";
 
-//ln["sortAscending_en"] = "sorted ascending";
-//ln["sortDescending_en"] = "sorted descending";
-//ln["unsort_en"] = "unsorted";
+ln["sortAscending_en"] = "SORTED ASCENDING";
+ln["sortDescending_en"] = "SORTED DESCENDING";
+ln["unsort_en"] = "UNSORTED";
 
 //--> "_" not allowed!
 ln["TITLE_en"] = "TITLE";
 ln["DESCRIPTION_en"] = "DESCRIPTION";
-ln["XAxis_en"] = "X AXIS";
-ln["YAxis_en"] = "Y AXIS";
-ln["NumericXAxis_en"] = "X AXIS";
-ln["NumericYAxis_en"] = "Y AXIS";
+ln["XAxis_en"] = "X-AXIS";
+ln["YAxis_en"] = "Y-AXIS";
+ln["NumericXAxis_en"] = "X-AXIS";
+ln["NumericYAxis_en"] = "Y-AXIS";
 ln["Column_en"] = "COLUMN";
 ln["Level_en"] = "LEVEL";
 ln["SliceLabels_en"] = "LABEL";
@@ -162,27 +151,29 @@ ln["Latitude_en"] = "LATITUDE";
 ln["Longitude_en"] = "LONGITUDE";
 ln["BalloonContent_en"] = "BALLOON CONTENT";
 ln["GEOJSON_en"] = "GEOJSON";
+ln["GEOJSONContent_en"] = "GEOJSON CONTENT";
 ln["BubbleContent_en"] = "BUBBLE CONTENT";
 ln["BubbleSize_en"] = "BUBBLE SIZE";
 ln["Categories_en"] = "CATEGORY";
 
-ln["TITLEDescription_en"] = "TITLE.";
-ln["DESCRIPTIONDescription_en"] = "DESCRIPTION.";
-ln["XAxisDescription_en"] = "X AXIS.";
-ln["YAxisDescription_en"] = "Y AXIS.";
-ln["NumericXAxisDescription_en"] = "X AXIS.";
-ln["NumericYAxisDescription_en"] = "Y AXIS.";
-ln["ColumnDescription_en"] = "COLUMN.";
-ln["LevelDescription_en"] = "LEVEL.";
-ln["SliceLabelsDescription_en"] = "LABEL.";
-ln["SliceSizesDescription_en"] = "SIZE.";
-ln["LatitudeDescription_en"] = "LATITUDE.";
-ln["LongitudeDescription_en"] = "LONGITUDE.";
-ln["BalloonContentDescription_en"] = "BALLOON CONTENT.";
-ln["GEOJSONDescription_en"] = "GEOJSON.";
-ln["BubbleContentDescription_en"] = "BUBBLE CONTENT.";
-ln["BubbleSizeDescription_en"] = "BUBBLE SIZE.";
-ln["CategoriesDescription_en"] = "CATEGORY.";
+ln["TITLEDescription_en"] = "The datalet title.";
+ln["DESCRIPTIONDescription_en"] = "The datalet description.";
+ln["XAxisDescription_en"] = "The x-axis.";
+ln["YAxisDescription_en"] = "The y-axis.";
+ln["NumericXAxisDescription_en"] = "The x-axis.";
+ln["NumericYAxisDescription_en"] = "The y-axis.";
+ln["ColumnDescription_en"] = "The column of the table.";
+ln["LevelDescription_en"] = "The level of the tree map.";
+ln["SliceLabelsDescription_en"] = "The label of the slices.";
+ln["SliceSizesDescription_en"] = "The size of the slices.";
+ln["LatitudeDescription_en"] = "The latitude of locations.";
+ln["LongitudeDescription_en"] = "The longitude of locations.";
+ln["BalloonContentDescription_en"] = "The content of balloons.";
+ln["GEOJSONDescription_en"] = "The GeoJSON data.";
+ln["GEOJSONContentDescription_en"] = "The content of GeoJSON.";
+ln["BubbleContentDescription_en"] = "The content of bubbles.";
+ln["BubbleSizeDescription_en"] = "The size of bubbles.";
+ln["CategoriesDescription_en"] = "The category that splits the y-axis values. If selected only the first selected y-axis will be considered.";
 
 //options
 ln["x-axis-label_en"] = "X Axis Label";
@@ -206,410 +197,623 @@ ln["themeSandSignika_en"] = "Sand Signika";
 ln["themeGridLight_en"] = "Grid Light";
 ln["themeSpod_en"] = "Spod";
 
-ln["x-axis-labelDescription_en"] = "The label shown on the X axis.";
-ln["y-axis-labelDescription_en"] = "The label shown on the Y axis.";
-ln["suffixDescription_en"] = "The suffix added to values ($,%, Kg, ...).";
+ln["x-axis-labelDescription_en"] = "The x-axis label.";
+ln["y-axis-labelDescription_en"] = "The y-axis label.";
+ln["suffixDescription_en"] = "The suffix added to data labels in the tooltip.";
 ln["legendDescription_en"] = "The leged position.";
 ln["data-labelsDescription_en"] = "Show/hide data labels.";
 ln["themeDescription_en"] = "The theme affects the appearance and colors of the chart.";
-ln["stackDescription_en"] = "Stack type.";
-ln["donutDescription_en"] = "If 'true' Pie will become Donut! :).";
+ln["stackDescription_en"] = "The stack type.";
+ln["donutDescription_en"] = "Pie will become Donut! :) (or viceversa).";
 
-///******** IT ********/
-//
-////PAGE SLIDER
-//ln["slide1Title_it"] = "SELEZIONA IL DATASET";
-//ln["slide1Subtitle_it"] = "Seleziona il dataset dalla lista o copia e incolla la url del dataset.";
-//ln["slide2Title_it"] = "SELEZIONA I DATI";
-//ln["slide2Subtitle_it"] = "Seleziona i campi sulla sinistra. Nella tabella saranno mostrati i valori dei campi selezionati.";
-//ln["slide3Title_it"] = "SELEZIONA LA VISUALIZZAZIONE";
-//ln["slide3Subtitle_it"] = "Seleziona una visualizzazione, inserisci dati di input ed etichette (opzionale).";
-//ln["back_it"] = "Indietro";
-//ln["forward_it"] = "Avanti";
-//
-////SELECT DATASET
-//ln["listView_it"] = "ELENCO";
-//ln["treeMapView_it"] = "GRAFICO AD ALBERO";
-//ln["extendedSearch_it"] = "RICERCA ESTESA";
-//ln["provider_it"] = "Provider";
-//ln["showing_it"] = "Visualizzati";
-//ln["to_it"] = "a";
-//ln["of_it"] = "di";
-//ln["datasets_it"] = "datasets";
-////ln["availableDatasets_it"] = "Dataset disponibili";
-//ln["suggestedDatasets_it"] = "Dataset suggeriti";
-//ln["selectedUrl_it"] = "Url selezionata";
-//ln["wrongUrl_it"] = "Url invalido o data provider non ancora supportato.";
-//
-////SELECT DATA
-//ln["expertAddFilters_it"] = "ESPERTO : AGGIUNGI FILTRI";
-//
-////select-fields
-//ln["fields_it"] = "CAMPI";
-//
-////data-table
-//ln["selectedData_it"] = "DATI SELEZIONATI";
-//ln["rows_it"] = "righe";
-//ln["type_it"] = "TIPO";
-//ln["warning_it"] = "ATTENZIONE";
-//
-////filters
-//ln["filterField_it"] = "Campo";
-//ln["filterOperation_it"] = "Operazione";
-//ln["filterValue_it"] = "Valore";
-//
-//ln["=_it"] = "è uguale a";
-//ln["!=_it"] = "è diverso da";
-//ln[">_it"] = "è maggiore di";
-//ln[">=_it"] = "è maggiore uguale di";
-//ln["<_it"] = "è minore di";
-//ln["<=_it"] = "è minore uguale di";
-//ln["contains_it"] = "contiene";
-//ln["notContains_it"] = "non contiene";
-//ln["start_it"] = "inizia con";
-//ln["ends_it"] = "finisce con";
-//
-////SELECT VISUALIZATION
-//ln["inputs_it"] = "DATI DI INPUT";
-//ln["baseInfo_it"] = "INFORMAZIONI DI BASE";
-//ln["layouts_it"] = "ETICHETTE / OPZIONI";
-//ln["dataletPreview_it"] = "ANTEPRIMA DELLA DATALET";
-//ln["addDatalet_it"] = "AGGIUNGI";
-//ln["modifyDatalet_it"] = "MODIFICA";
-//
-////vslider
-//ln["search_it"] = "Cerca";
-//
-//ln["datatable_it"] = "Tabella";
-//ln["barchart_it"] = "Grafico a barre";
-//ln["columnchart_it"] = "Grafico a colonne";
-//ln["areachart_it"] = "Grafico ad area";
-//ln["linechart_it"] = "Grafico a linee";
-//ln["heatmap_it"] = "Mappa termica";
-//ln["barchart_stacked_it"] = "Grafico a barre  in pila";
-//ln["columnchart_stacked_it"] = "Grafico a colonne  in pila";
-//ln["areachart_stacked_it"] = "Grafico ad area in pila";
-//ln["piechart_it"] = "Grafico a torta";
-//ln["scatterchart_it"] = "Grafico a dispersione";
-//ln["bubblechart_it"] = "Grafico a bolle";
-//ln["treemap_it"] = "Grafico ad albero";
-//ln["leafletjs_it"] = "Mappa";
-//ln["leafletjs-geojson_it"] = "Mappa geojson";
-//
-////inputs
-//ln["expertGroupBy_it"] = "ESPERTO : RAGGRUPPA";
-//
-//ln["sortAscending_it"] = "ordinamento crescente";
-//ln["sortDescending_it"] = "ordinamento decrescente";
-//ln["unsort_it"] = "non ordinato";
-//
-//ln["groupBy_it"] = "RAGGRUPPA";
-//ln["calculate_it"] = "CALCOLA";
-//
-//ln["COUNT_it"] = "CONTEGGIO di";
-//ln["SUM_it"] = "SOMMA di";
-//ln["MIN_it"] = "MINIMO di";
-//ln["MAX_it"] = "MASSIMO di";
-//ln["AVG_it"] = "MEDIA di";
-//ln["FIRST_it"] = "PRIMO di";
-//ln["LAST_it"] = "ULTIMO di";
-//
-//ln["XAxis_it"] = "ASSE X";
-//ln["YAxis_it"] = "ASSE Y";
-//ln["NumericXAxis_it"] = "ASSE X [num]";
-//ln["NumericYAxis_it"] = "ASSE Y [num]";
-//ln["Column_it"] = "COLONNA";
-//ln["Level_it"] = "LIVELLO";
-//ln["SliceLabels_it"] = "ETICHETTA";
-//ln["SliceSizes_it"] = "DIMENSIONE [num]";
-//ln["Latitude_it"] = "LATITUDINE";
-//ln["Longitude_it"] = "LONGITUDINE";
-//ln["BalloonContent_it"] = "CONTENUTO";
-//ln["GEOJSON_it"] = "GEOJSON";
-//ln["BubbleContent_it"] = "CONTENUTO BOLLA";
-//ln["BubbleSize_it"] = "DIMENSIONE BOLLA [num]";
-//ln["Categories_it"] = "CATEGORIA [opt]";
-//
-////options
-//ln["title_it"] = "Titolo"
-//ln["description_it"] = "Descrizione";
-//
-//ln["x-axis-label_it"] = "Etichetta asse X";
-//ln["y-axis-label_it"] = "Etichetta asse Y";
-//ln["suffix_it"] = "Suffisso tooltip";
-//ln["theme_it"] = "Tema";
-//ln["stack_it"] = "Stack";
-//ln["donut_it"] = "Ciambella";
-//
-//ln["x-axis-label_description_it"] = "L'etichetta che verrà visualizzata sull'asse delle X";
-//ln["y-axis-label_description_it"] = "L'etichetta che verrà visualizzata sull'asse delle Y";
-//ln["suffix_description_it"] = "Il suffisso che verrà aggiunto ai valori ($, %, Kg, ...)";
-//ln["theme_description_it"] = "Il tema influenza l'estetica e i colori del grafico";
-//ln["stack_description_it"] = "Se 'percent' sarà applicata la normalizzazione a 100";
-//ln["donut_description_it"] = "Se 'true' il grafico a torta diventerà a ciambella! :)";
-//
-///******** FR ********/
-//
-////PAGE SLIDER
-//ln["slide1Title_fr"] = "SELECTIONNER UN JEU DE DONNEES";
-//ln["slide1Subtitle_fr"] = "Rechercher ou copier/coller l’url du jeu de données.";
-//ln["slide2Title_fr"] = "SELECTIONNER DONNEES";
-//ln["slide2Subtitle_fr"] = "Sélectionner les champs à partir de l’arborescence. Une fenêtre vous indiquera les valeurs relatives aux champs sélectionnés.";
-//ln["slide3Title_fr"] = "SELECTIONNER UN MODE DE VISUALISATION";
-//ln["slide3Subtitle_fr"] = "Sélectionner un mode de visualisation, remplir les entrées et les vignettes (optionnel).";
-//ln["back_fr"] = "RETOUR";
-//ln["forward_fr"] = "AVANT";
-//
-////SELECT DATASET
-//ln["listView_fr"] = "VUE EN LISTE";
-//ln["treeMapView_fr"] = "VUE EN ARBORESCENCE";
-//ln["extendedSearch_fr"] = "EXTENDED SEARCH";
-//ln["provider_fr"] = "Provider";
-//ln["showing_fr"] = "Showing";
-//ln["to_fr"] = "to";
-//ln["of_fr"] = "of";
-//ln["datasets_fr"] = "datasets";
-////ln["availableDatasets_fr"] = "Jeux de données disponibles";
-//ln["suggestedDatasets_fr"] = "Jeux de données suggérés";
-//ln["selectedUrl_fr"] = "Sélectionner URL";
-//ln["wrongUrl_fr"] = "Invalid url or data provider not supported yet.";
-//
-////SELECT DATA
-//ln["expertAddFilters_fr"] = "EXPERT : ADD FILTERS";
-//
-////select-fields
-//ln["fields_fr"] = "FIELDS";
-//
-////data-table
-//ln["selectedData_fr"] = "SELECTED DATA";
-//ln["rows_fr"] = "rows";
-//ln["type_fr"] = "TYPE";
-//ln["warning_fr"] = "WARNING";
-//
-////filters
-//ln["filterField_fr"] = "Field";
-//ln["filterOperation_fr"] = "Operation";
-//ln["filterValue_fr"] = "Value";
-//
-//ln["=_fr"] = "is equal to";
-//ln["!=_fr"] = "is different from";
-//ln[">_fr"] = "is greater than";
-//ln[">=_fr"] = "is greater than or equal to";
-//ln["<_fr"] = "is less than";
-//ln["<=_fr"] = "is less than or equal to";
-//ln["contains_fr"] = "contains";
-//ln["notContains_fr"] = "not contains";
-//ln["start_fr"] = "start with";
-//ln["ends_fr"] = "ends with";
-//
-////SELECT VISUALIZATION
-//ln["inputs_fr"] = "SORTIES";
-//ln["baseInfo_fr"] = "INFORMATION DE BASE";
-//ln["layouts_fr"] = "VIGNETTES/OPTIONSs";
-//ln["dataletPreview_fr"] = "PREVISUALISATION";
-//ln["addDatalet_fr"] = "AJOUTER";
-//ln["modifyDatalet_fr"] = "MODIFIER";
-//
-////vslider
-//ln["search_fr"] = "Search";
-//
-//ln["datatable_fr"] = "Table";
-//ln["barchart_fr"] = "Bar";
-//ln["columnchart_fr"] = "Column";
-//ln["areachart_fr"] = "Area";
-//ln["linechart_fr"] = "Line";
-//ln["heatmap_fr"] = "Heat Map";
-//ln["barchart_stacked_fr"] = "Stacked Bar";
-//ln["columnchart_stacked_fr"] = "Stacked Column";
-//ln["areachart_stacked_fr"] = "Stacked Area";
-//ln["piechart_fr"] = "Pie";
-//ln["scatterchart_fr"] = "Scatter";
-//ln["bubblechart_fr"] = "Bubble";
-//ln["treemap_fr"] = "Tree Map";
-//ln["leafletjs_fr"] = "Map";
-//ln["leafletjs-geojson_fr"] = "Map Geojson";
-//
-////inputs
-//ln["expertGroupBy_fr"] = "EXPERT : GROUP BY";
-//
-//ln["sortAscending_fr"] = "sorted ascending";
-//ln["sortDescending_fr"] = "sorted descending";
-//ln["unsort_fr"] = "unsorted";
-//
-//ln["groupBy_fr"] = "GROUP BY";
-//ln["calculate_fr"] = "CALCULATE";
-//
-//ln["COUNT_fr"] = "COUNT of";
-//ln["SUM_fr"] = "SUM of";
-//ln["MIN_fr"] = "MIN of";
-//ln["MAX_fr"] = "MAX of";
-//ln["AVG_fr"] = "AVG of";
-//ln["FIRST_fr"] = "FIRST of";
-//ln["LAST_fr"] = "LAST of";
-//
-//ln["XAxis_fr"] = "X AXIS";
-//ln["YAxis_fr"] = "Y AXIS";
-//ln["NumericXAxis_fr"] = "X AXIS [num]";
-//ln["NumericYAxis_fr"] = "Y AXIS [num]";
-//ln["Column_fr"] = "COLUMN";
-//ln["Level_fr"] = "LEVEL";
-//ln["SliceLabels_fr"] = "LABEL";
-//ln["SliceSizes_fr"] = "SIZE [num]";
-//ln["Latitude_fr"] = "LATITUDE";
-//ln["Longitude_fr"] = "LONGITUDE";
-//ln["BalloonContent_fr"] = "BALLOON CONTENT";// [opt]
-//ln["GEOJSON_fr"] = "GEOJSON";
-//ln["BubbleContent_fr"] = "BUBBLE CONTENT";
-//ln["BubbleSize_fr"] = "BUBBLE SIZE [num]";
-//ln["Categories_fr"] = "CATEGORY [opt]";
-//
-////options
-//ln["title_fr"] = "Title"
-//ln["description_fr"] = "Description";
-//
-//ln["x-axis-label_fr"] = "X Axis Label";
-//ln["y-axis-label_fr"] = "Y Axis Label";
-//ln["suffix_fr"] = "Tooltip Suffix";
-//ln["theme_fr"] = "Theme";
-//ln["stack_fr"] = "Stack";
-//ln["donut_fr"] = "Donut";
-//
-//ln["x-axis-label_description_fr"] = "Vignette pour l’axe X.";
-//ln["y-axis-label_description_fr"] = "Vignette pour l’axe Y.";
-//ln["suffix_description_fr"] = "Unités de mesures (ex:  dollars, euros.";
-//ln["theme_description_fr"] = "Theme";
-//ln["stack_description_fr"] = "Stack";
-//ln["donut_description_fr"] = "Donut";
-//
-///******** NL ********/
-//
-////PAGE SLIDER
-//ln["slide1Title_nl"] = "SELECTEER DATASET";
-//ln["slide1Subtitle_nl"] = "Zoek of kopieer en plak de url van de dataset.";
-//ln["slide2Title_nl"] = "SELECTEER DATA";
-//ln["slide2Subtitle_nl"] = "Selecteer de velden uit de boomstructuur. De multi-tabel laat de waarden zien van de geselecteerde velden.";
-//ln["slide3Title_nl"] = "SELECTEER VISUALISATIE";
-//ln["slide3Subtitle_nl"] = "Selecteer een visualisatie, vul de invoer en labels in.";
-//ln["back_nl"] = "TERUG";
-//ln["forward_nl"] = "VOOTUIT";
-//
-////SELECT DATASET
-//ln["listView_nl"] = "LIJSTWEERGAVE";
-//ln["treeMapView_nl"] = "BOOMSTRUCTUUR WEEERGAVE";
-//ln["extendedSearch_nl"] = "EXTENDED SEARCH";
-//ln["provider_nl"] = "Provider";
-//ln["showing_nl"] = "Showing";
-//ln["to_nl"] = "to";
-//ln["of_nl"] = "of";
-//ln["datasets_nl"] = "datasets";
-////ln["availableDatasets_nl"] = "Beschikbare datasets";
-//ln["suggestedDatasets_nl"] = "Voeg aanbevolen datasets";
-//ln["selectedUrl_nl"] = "Selecteer url";
-//ln["wrongUrl_nl"] = "Ongeldige url of data provider nog niet ondersteund.";
-//
-////SELECT DATA
-//ln["expertAddFilters_nl"] = "EXPERT : ADD FILTERS";
-//
-////select-fields
-//ln["fields_nl"] = "FIELDS";
-//
-////data-table
-//ln["selectedData_nl"] = "SELECTED DATA";
-//ln["rows_nl"] = "rows";
-//ln["type_nl"] = "TYPE";
-//ln["warning_nl"] = "WARNING";
-//
-////filters
-//ln["filterField_nl"] = "Field";
-//ln["filterOperation_nl"] = "Operation";
-//ln["filterValue_nl"] = "Value";
-//
-//ln["=_nl"] = "is equal to";
-//ln["!=_nl"] = "is different from";
-//ln[">_nl"] = "is greater than";
-//ln[">=_nl"] = "is greater than or equal to";
-//ln["<_nl"] = "is less than";
-//ln["<=_nl"] = "is less than or equal to";
-//ln["contains_nl"] = "contains";
-//ln["notContains_nl"] = "not contains";
-//ln["start_nl"] = "start with";
-//ln["ends_nl"] = "ends with";
-//
-////SELECT VISUALIZATION
-//ln["inputs_nl"] = "INPUTS";
-//ln["baseInfo_nl"] = "BASIS INFO";
-//ln["layouts_nl"] = "LABELS / OPTIES";
-//ln["dataletPreview_nl"] = "VOORBEELD";
-//ln["addDatalet_nl"] = "TOEVOEGEN";
-//ln["modifyDatalet_nl"] = "WIJZIGEN";
-//
-////vslider
-//ln["search_nl"] = "Search";
-//
-//ln["datatable_nl"] = "Tafel";
-//ln["barchart_nl"] = "Bar";
-//ln["columnchart_nl"] = "Column";
-//ln["areachart_nl"] = "Area";
-//ln["linechart_nl"] = "Line";
-//ln["heatmap_nl"] = "Heat Map";
-//ln["barchart_stacked_nl"] = "Stacked Bar";
-//ln["columnchart_stacked_nl"] = "Stacked Column";
-//ln["areachart_stacked_nl"] = "Stacked Area";
-//ln["piechart_nl"] = "Pie";
-//ln["scatterchart_nl"] = "Scatter";
-//ln["bubblechart_nl"] = "Bubble";
-//ln["treemap_nl"] = "Tree Map";
-//ln["leafletjs_nl"] = "Map";
-//ln["leafletjs-geojson_nl"] = "Map Geojson";
-//
-////inputs
-//ln["expertGroupBy_nl"] = "EXPERT : GROUP BY";
-//
-//ln["sortAscending_nl"] = "sorted ascending";
-//ln["sortDescending_nl"] = "sorted descending";
-//ln["unsort_nl"] = "unsorted";
-//
-//ln["groupBy_nl"] = "GROUP BY";
-//ln["calculate_nl"] = "CALCULATE";
-//
-//ln["COUNT_nl"] = "COUNT of";
-//ln["SUM_nl"] = "SUM of";
-//ln["MIN_nl"] = "MIN of";
-//ln["MAX_nl"] = "MAX of";
-//ln["AVG_nl"] = "AVG of";
-//ln["FIRST_nl"] = "FIRST of";
-//ln["LAST_nl"] = "LAST of";
-//
-//ln["XAxis_nl"] = "X AXIS";
-//ln["YAxis_nl"] = "Y AXIS";
-//ln["NumericXAxis_nl"] = "X AXIS [num]";
-//ln["NumericYAxis_nl"] = "Y AXIS [num]";
-//ln["Column_nl"] = "COLUMN";
-//ln["Level_nl"] = "LEVEL";
-//ln["SliceLabels_nl"] = "LABEL";
-//ln["SliceSizes_nl"] = "SIZE [num]";
-//ln["Latitude_nl"] = "LATITUDE";
-//ln["Longitude_nl"] = "LONGITUDE";
-//ln["BalloonContent_nl"] = "BALLOON CONTENT";// [opt]
-//ln["GEOJSON_nl"] = "GEOJSON";
-//ln["BubbleContent_nl"] = "BUBBLE CONTENT";
-//ln["BubbleSize_nl"] = "BUBBLE SIZE [num]";
-//ln["Categories_nl"] = "CATEGORY [opt]";
-//
-////options
-//ln["title_nl"] = "Title"
-//ln["description_nl"] = "Description";
-//
-//ln["x-axis-label_nl"] = "X Axis Label";
-//ln["y-axis-label_nl"] = "Y Axis Label";
-//ln["suffix_nl"] = "Tooltip Suffix";
-//ln["theme_nl"] = "Theme";
-//ln["stack_nl"] = "Stack";
-//ln["donut_nl"] = "Donut";
-//
-//ln["x-axis-label_description_nl"] = "X Axis Label";
-//ln["y-axis-label_description_nl"] = "Y Axis Label";
-//ln["suffix_description_nl"] = "Tooltip Suffix";
-//ln["theme_description_nl"] = "Theme";
-//ln["stack_description_nl"] = "Stack";
-//ln["donut_description_nl"] = "Donut";
+/******** IT ********/
+
+//PAGE SLIDER
+
+ln["slide1Title_it"] = "SELECT DATASET";
+ln["slide1Subtitle_it"] = "Select a dataset from the list or copy and paste the url of dataset.";
+ln["slide2Title_it"] = "SELECT DATA";
+ln["slide2Subtitle_it"] = "Select the fields on the left. The table will show the values related to the selected fields.";
+ln["slide3Title_it"] = "SELECT VISUALIZATION";
+ln["slide3Subtitle_it"] = "Select a visualization, fill out inputs and options.";
+ln["back_it"] = "BACK TO THE FUTURE";
+ln["forward_it"] = "FORWARD";
+
+//SELECT DATASET
+
+ln["listView_it"] = "LIST VIEW";
+ln["treeMapView_it"] = "TREE MAP VIEW";
+ln["extendedSearch_it"] = "EXTENDED SEARCH";
+ln["provider_it"] = "Provider";
+ln["showing_it"] = "Showing";
+ln["to_it"] = "to";
+ln["of_it"] = "of";
+ln["datasets_it"] = "datasets";
+ln["suggestedDatasets_it"] = "Suggested datasets";
+ln["selectedUrl_it"] = "Selected url";
+ln["wrongUrl_it"] = "Invalid url or data provider not supported yet.";
+
+//SELECT DATA
+
+//select-fields
+ln["fields_it"] = "FIELDS";
+
+//data-table
+ln["selectedData_it"] = "SELECTED DATA";
+ln["showing_it"] = "Showing";
+ln["to_it"] = "to";
+ln["of_it"] = "of";
+ln["rows_it"] = "rows";
+ln["type_it"] = "TYPE";
+ln["warning_it"] = "WARNING";
+
+//expert
+ln["expert_it"] = "EXPERT MODE";
+ln["filters_it"] = "FILTERS";
+ln["groupBy_it"] = "GROUP BY";
+ln["query_it"] = "QUERY";
+
+//filters
+ln["filterField_it"] = "Field";
+ln["filterOperation_it"] = "Operation";
+ln["filterValue_it"] = "Value";
+
+ln["disableFilters_it"] = "DISABLE FILTERS";
+ln["enableFilters_it"] = "ENABLE FILTERS";
+
+ln["=_it"] = "=";   //is equal to
+ln["!=_it"] = "not =";  //is not equal to
+ln[">_it"] = ">";   //is greater than
+ln[">=_it"] = ">="; //is greater than or equal to
+ln["<_it"] = "<";   //is less than
+ln["<=_it"] = "<="; //is less than or equal to
+ln["contains_it"] = "contains";
+ln["notContains_it"] = "not contains";
+ln["start_it"] = "start with";
+ln["ends_it"] = "ends with";
+
+//aggregators
+ln["GROUP BY_it"] = "GROUP BY";
+ln["CALCULATE_it"] = "CALCULATE";
+ln["Calculate_it"] = "Calculate";
+ln["aggregatorField_it"] = "Field";
+
+ln["disableGroupBy_it"] = "DISABLE GROUP BY";
+ln["enableGroupBy_it"] = "ENABLE GROUP BY";
+
+ln["COUNT_it"] = "COUNT of";
+ln["SUM_it"] = "SUM of";
+ln["MIN_it"] = "MIN of";
+ln["MAX_it"] = "MAX of";
+ln["AVG_it"] = "AVG of";
+ln["FIRST_it"] = "FIRST of";
+ln["LAST_it"] = "LAST of";
+
+//SELECT VISUALIZATION
+
+ln["addDatalet_it"] = "ADD";
+ln["modifyDatalet_it"] = "MODIFY";
+
+//datalet-preview
+ln["previewTab_it"] = "DATALET PREVIEW";
+ln["infoTab_it"] = "DATALET INFO";
+
+//select-inputs
+ln["baseInfo_it"] = "BASE INFO";
+ln["inputs_it"] = "INPUTS";
+ln["options_it"] = "OPTIONS";
+
+//vslider
+ln["search_it"] = "Search";
+
+ln["datatable_it"] = "Table";
+ln["barchart_it"] = "Bar Chart";
+ln["columnchart_it"] = "Column Chart";
+ln["areachart_it"] = "Area Chart";
+ln["linechart_it"] = "Line Chart";
+ln["heatmap_it"] = "Heat Map";
+ln["piechart_it"] = "Pie Chart";
+ln["scatterchart_it"] = "Scatter Chart";
+ln["bubblechart_it"] = "Bubble Chart";
+ln["treemap_it"] = "Tree Map";
+ln["leafletjs_it"] = "Map";
+ln["leafletjs-geojson_it"] = "Geojson Map";
+
+ln["datatableDescription_it"] = "A table is a means of arranging data in rows and columns.";
+ln["barchartDescription_it"] = "A bar chart is a chart that presents grouped data with rectangular bars plotted horizontally with lengths proportional to the values that they represent.";
+ln["columnchartDescription_it"] = "A column chart is a chart that presents grouped data with rectangular bars plotted vertically with lengths proportional to the values that they represent.";
+ln["areachartDescription_it"] = "An area chart is a chart which displays graphically quantitive data. The area between axis and line are emphasized with colors and textures. Commonly one compares with the area chart two or more quantities.";
+ln["linechartDescription_it"] = "A line chart is chart which displays information as a series of data points called 'markers' connected by straight line segments. A line chart is often used to visualize a trend in data over intervals of time.";
+ln["heatmapDescription_it"] = "A heat map is a graphical representation of data where the individual values contained in a matrix are represented as colors.";
+ln["piechartDescription_it"] = "A pie chart is a circular statistical graphic, which is divided into slices to illustrate numerical proportion. In the pie chart, the arc length of each slice, and consequently its central angle and area, is proportional to the quantity it represents.";
+ln["scatterchartDescription_it"] = "A scatter chart is a type of plot or mathematical diagram using Cartesian coordinates to display values for typically two variables for a set of data. The data is displayed as a collection of points, each having the value of one variable determining the position on the horizontal axis and the value of the other variable determining the position on the vertical axis.";
+ln["bubblechartDescription_it"] = "A bubble chart is a type of chart that displays three dimensions of data. Each entity with its triplet (v1, v2, v3) of associated data is plotted as a disk that expresses two of the vi values through the disk's xy location and the third through its size.";
+ln["treemapDescription_it"] = "A tree map is a chart for displaying hierarchical data by using nested rectangles.";
+ln["leafletjsDescription_it"] = "";
+ln["leafletjs-geojsonDescription_it"] = "";
+
+//inputs
+ln["title_it"] = "Title"
+ln["description_it"] = "Description";
+
+ln["sortAscending_it"] = "SORTED ASCENDING";
+ln["sortDescending_it"] = "SORTED DESCENDING";
+ln["unsort_it"] = "UNSORTED";
+
+//--> "_" not allowed!
+ln["TITLE_it"] = "TITLE";
+ln["DESCRIPTION_it"] = "DESCRIPTION";
+ln["XAxis_it"] = "X-AXIS";
+ln["YAxis_it"] = "Y-AXIS";
+ln["NumericXAxis_it"] = "X-AXIS";
+ln["NumericYAxis_it"] = "Y-AXIS";
+ln["Column_it"] = "COLUMN";
+ln["Level_it"] = "LEVEL";
+ln["SliceLabels_it"] = "LABEL";
+ln["SliceSizes_it"] = "SIZE";
+ln["Latitude_it"] = "LATITUDE";
+ln["Longitude_it"] = "LONGITUDE";
+ln["BalloonContent_it"] = "BALLOON CONTENT";
+ln["GEOJSON_it"] = "GEOJSON";
+ln["GEOJSONContent_it"] = "GEOJSON CONTENT";
+ln["BubbleContent_it"] = "BUBBLE CONTENT";
+ln["BubbleSize_it"] = "BUBBLE SIZE";
+ln["Categories_it"] = "CATEGORY";
+
+ln["TITLEDescription_it"] = "The datalet title.";
+ln["DESCRIPTIONDescription_it"] = "The datalet description.";
+ln["XAxisDescription_it"] = "The x-axis.";
+ln["YAxisDescription_it"] = "The y-axis.";
+ln["NumericXAxisDescription_it"] = "The x-axis.";
+ln["NumericYAxisDescription_it"] = "The y-axis.";
+ln["ColumnDescription_it"] = "The column of the table.";
+ln["LevelDescription_it"] = "The level of the tree map.";
+ln["SliceLabelsDescription_it"] = "The label of the slices.";
+ln["SliceSizesDescription_it"] = "The size of the slices.";
+ln["LatitudeDescription_it"] = "The latitude of locations.";
+ln["LongitudeDescription_it"] = "The longitude of locations.";
+ln["BalloonContentDescription_it"] = "The content of balloons.";
+ln["GEOJSONDescription_it"] = "The GeoJSON data.";
+ln["GEOJSONContentDescription_it"] = "The content of GeoJSON.";
+ln["BubbleContentDescription_it"] = "The content of bubbles.";
+ln["BubbleSizeDescription_it"] = "The size of bubbles.";
+ln["CategoriesDescription_it"] = "The category that splits the y-axis values. If selected only the first selected y-axis will be considered.";
+
+//options
+ln["x-axis-label_it"] = "X Axis Label";
+ln["y-axis-label_it"] = "Y Axis Label";
+ln["suffix_it"] = "Tooltip Suffix";
+ln["legend_it"] = "Leged";
+ln["data-labels_it"] = "Show Data Labels";
+ln["stack_it"] = "Stack";
+ln["theme_it"] = "Theme";
+ln["donut_it"] = "Donut";
+
+ln["true_it"] = "Yes";
+ln["false_it"] = "No";
+ln["bottom_it"] = "Yes: Bottom";
+ln["topRight_it"] = "Yes: Top Right";
+ln["normal_it"] = "Yes: Normal";
+ln["percent_it"] = "Yes: Percent";
+ln["themeBase_it"] = "Base";
+ln["themeDarkUnika_it"] = "Dark Unika";
+ln["themeSandSignika_it"] = "Sand Signika";
+ln["themeGridLight_it"] = "Grid Light";
+ln["themeSpod_it"] = "Spod";
+
+ln["x-axis-labelDescription_it"] = "The x-axis label.";
+ln["y-axis-labelDescription_it"] = "The y-axis label.";
+ln["suffixDescription_it"] = "The suffix added to data labels in the tooltip.";
+ln["legendDescription_it"] = "The leged position.";
+ln["data-labelsDescription_it"] = "Show/hide data labels.";
+ln["themeDescription_it"] = "The theme affects the appearance and colors of the chart.";
+ln["stackDescription_it"] = "The stack type.";
+ln["donutDescription_it"] = "Pie will become Donut! :) (or viceversa).";
+
+/******** FR ********/
+
+//PAGE SLIDER
+
+ln["slide1Title_fr"] = "SELECT DATASET";
+ln["slide1Subtitle_fr"] = "Select a dataset from the list or copy and paste the url of dataset.";
+ln["slide2Title_fr"] = "SELECT DATA";
+ln["slide2Subtitle_fr"] = "Select the fields on the left. The table will show the values related to the selected fields.";
+ln["slide3Title_fr"] = "SELECT VISUALIZATION";
+ln["slide3Subtitle_fr"] = "Select a visualization, fill out inputs and options.";
+ln["back_fr"] = "BACK TO THE FUTURE";
+ln["forward_fr"] = "FORWARD";
+
+//SELECT DATASET
+
+ln["listView_fr"] = "LIST VIEW";
+ln["treeMapView_fr"] = "TREE MAP VIEW";
+ln["extendedSearch_fr"] = "EXTENDED SEARCH";
+ln["provider_fr"] = "Provider";
+ln["showing_fr"] = "Showing";
+ln["to_fr"] = "to";
+ln["of_fr"] = "of";
+ln["datasets_fr"] = "datasets";
+ln["suggestedDatasets_fr"] = "Suggested datasets";
+ln["selectedUrl_fr"] = "Selected url";
+ln["wrongUrl_fr"] = "Invalid url or data provider not supported yet.";
+
+//SELECT DATA
+
+//select-fields
+ln["fields_fr"] = "FIELDS";
+
+//data-table
+ln["selectedData_fr"] = "SELECTED DATA";
+ln["showing_fr"] = "Showing";
+ln["to_fr"] = "to";
+ln["of_fr"] = "of";
+ln["rows_fr"] = "rows";
+ln["type_fr"] = "TYPE";
+ln["warning_fr"] = "WARNING";
+
+//expert
+ln["expert_fr"] = "EXPERT MODE";
+ln["filters_fr"] = "FILTERS";
+ln["groupBy_fr"] = "GROUP BY";
+ln["query_fr"] = "QUERY";
+
+//filters
+ln["filterField_fr"] = "Field";
+ln["filterOperation_fr"] = "Operation";
+ln["filterValue_fr"] = "Value";
+
+ln["disableFilters_fr"] = "DISABLE FILTERS";
+ln["enableFilters_fr"] = "ENABLE FILTERS";
+
+ln["=_fr"] = "=";   //is equal to
+ln["!=_fr"] = "not =";  //is not equal to
+ln[">_fr"] = ">";   //is greater than
+ln[">=_fr"] = ">="; //is greater than or equal to
+ln["<_fr"] = "<";   //is less than
+ln["<=_fr"] = "<="; //is less than or equal to
+ln["contains_fr"] = "contains";
+ln["notContains_fr"] = "not contains";
+ln["start_fr"] = "start with";
+ln["ends_fr"] = "ends with";
+
+//aggregators
+ln["GROUP BY_fr"] = "GROUP BY";
+ln["CALCULATE_fr"] = "CALCULATE";
+ln["Calculate_fr"] = "Calculate";
+ln["aggregatorField_fr"] = "Field";
+
+ln["disableGroupBy_fr"] = "DISABLE GROUP BY";
+ln["enableGroupBy_fr"] = "ENABLE GROUP BY";
+
+ln["COUNT_fr"] = "COUNT of";
+ln["SUM_fr"] = "SUM of";
+ln["MIN_fr"] = "MIN of";
+ln["MAX_fr"] = "MAX of";
+ln["AVG_fr"] = "AVG of";
+ln["FIRST_fr"] = "FIRST of";
+ln["LAST_fr"] = "LAST of";
+
+//SELECT VISUALIZATION
+
+ln["addDatalet_fr"] = "ADD";
+ln["modifyDatalet_fr"] = "MODIFY";
+
+//datalet-preview
+ln["previewTab_fr"] = "DATALET PREVIEW";
+ln["infoTab_fr"] = "DATALET INFO";
+
+//select-inputs
+ln["baseInfo_fr"] = "BASE INFO";
+ln["inputs_fr"] = "INPUTS";
+ln["options_fr"] = "OPTIONS";
+
+//vslider
+ln["search_fr"] = "Search";
+
+ln["datatable_fr"] = "Table";
+ln["barchart_fr"] = "Bar Chart";
+ln["columnchart_fr"] = "Column Chart";
+ln["areachart_fr"] = "Area Chart";
+ln["linechart_fr"] = "Line Chart";
+ln["heatmap_fr"] = "Heat Map";
+ln["piechart_fr"] = "Pie Chart";
+ln["scatterchart_fr"] = "Scatter Chart";
+ln["bubblechart_fr"] = "Bubble Chart";
+ln["treemap_fr"] = "Tree Map";
+ln["leafletjs_fr"] = "Map";
+ln["leafletjs-geojson_fr"] = "Geojson Map";
+
+ln["datatableDescription_fr"] = "A table is a means of arranging data in rows and columns.";
+ln["barchartDescription_fr"] = "A bar chart is a chart that presents grouped data with rectangular bars plotted horizontally with lengths proportional to the values that they represent.";
+ln["columnchartDescription_fr"] = "A column chart is a chart that presents grouped data with rectangular bars plotted vertically with lengths proportional to the values that they represent.";
+ln["areachartDescription_fr"] = "An area chart is a chart which displays graphically quantitive data. The area between axis and line are emphasized with colors and textures. Commonly one compares with the area chart two or more quantities.";
+ln["linechartDescription_fr"] = "A line chart is chart which displays information as a series of data points called 'markers' connected by straight line segments. A line chart is often used to visualize a trend in data over intervals of time.";
+ln["heatmapDescription_fr"] = "A heat map is a graphical representation of data where the individual values contained in a matrix are represented as colors.";
+ln["piechartDescription_fr"] = "A pie chart is a circular statistical graphic, which is divided into slices to illustrate numerical proportion. In the pie chart, the arc length of each slice, and consequently its central angle and area, is proportional to the quantity it represents.";
+ln["scatterchartDescription_fr"] = "A scatter chart is a type of plot or mathematical diagram using Cartesian coordinates to display values for typically two variables for a set of data. The data is displayed as a collection of points, each having the value of one variable determining the position on the horizontal axis and the value of the other variable determining the position on the vertical axis.";
+ln["bubblechartDescription_fr"] = "A bubble chart is a type of chart that displays three dimensions of data. Each entity with its triplet (v1, v2, v3) of associated data is plotted as a disk that expresses two of the vi values through the disk's xy location and the third through its size.";
+ln["treemapDescription_fr"] = "A tree map is a chart for displaying hierarchical data by using nested rectangles.";
+ln["leafletjsDescription_fr"] = "";
+ln["leafletjs-geojsonDescription_fr"] = "";
+
+//inputs
+ln["title_fr"] = "Title"
+ln["description_fr"] = "Description";
+
+ln["sortAscending_fr"] = "SORTED ASCENDING";
+ln["sortDescending_fr"] = "SORTED DESCENDING";
+ln["unsort_fr"] = "UNSORTED";
+
+//--> "_" not allowed!
+ln["TITLE_fr"] = "TITLE";
+ln["DESCRIPTION_fr"] = "DESCRIPTION";
+ln["XAxis_fr"] = "X-AXIS";
+ln["YAxis_fr"] = "Y-AXIS";
+ln["NumericXAxis_fr"] = "X-AXIS";
+ln["NumericYAxis_fr"] = "Y-AXIS";
+ln["Column_fr"] = "COLUMN";
+ln["Level_fr"] = "LEVEL";
+ln["SliceLabels_fr"] = "LABEL";
+ln["SliceSizes_fr"] = "SIZE";
+ln["Latitude_fr"] = "LATITUDE";
+ln["Longitude_fr"] = "LONGITUDE";
+ln["BalloonContent_fr"] = "BALLOON CONTENT";
+ln["GEOJSON_fr"] = "GEOJSON";
+ln["GEOJSONContent_fr"] = "GEOJSON CONTENT";
+ln["BubbleContent_fr"] = "BUBBLE CONTENT";
+ln["BubbleSize_fr"] = "BUBBLE SIZE";
+ln["Categories_fr"] = "CATEGORY";
+
+ln["TITLEDescription_fr"] = "The datalet title.";
+ln["DESCRIPTIONDescription_fr"] = "The datalet description.";
+ln["XAxisDescription_fr"] = "The x-axis.";
+ln["YAxisDescription_fr"] = "The y-axis.";
+ln["NumericXAxisDescription_fr"] = "The x-axis.";
+ln["NumericYAxisDescription_fr"] = "The y-axis.";
+ln["ColumnDescription_fr"] = "The column of the table.";
+ln["LevelDescription_fr"] = "The level of the tree map.";
+ln["SliceLabelsDescription_fr"] = "The label of the slices.";
+ln["SliceSizesDescription_fr"] = "The size of the slices.";
+ln["LatitudeDescription_fr"] = "The latitude of locations.";
+ln["LongitudeDescription_fr"] = "The longitude of locations.";
+ln["BalloonContentDescription_fr"] = "The content of balloons.";
+ln["GEOJSONDescription_fr"] = "The GeoJSON data.";
+ln["GEOJSONContentDescription_fr"] = "The content of GeoJSON.";
+ln["BubbleContentDescription_fr"] = "The content of bubbles.";
+ln["BubbleSizeDescription_fr"] = "The size of bubbles.";
+ln["CategoriesDescription_fr"] = "The category that splits the y-axis values. If selected only the first selected y-axis will be considered.";
+
+//options
+ln["x-axis-label_fr"] = "X Axis Label";
+ln["y-axis-label_fr"] = "Y Axis Label";
+ln["suffix_fr"] = "Tooltip Suffix";
+ln["legend_fr"] = "Leged";
+ln["data-labels_fr"] = "Show Data Labels";
+ln["stack_fr"] = "Stack";
+ln["theme_fr"] = "Theme";
+ln["donut_fr"] = "Donut";
+
+ln["true_fr"] = "Yes";
+ln["false_fr"] = "No";
+ln["bottom_fr"] = "Yes: Bottom";
+ln["topRight_fr"] = "Yes: Top Right";
+ln["normal_fr"] = "Yes: Normal";
+ln["percent_fr"] = "Yes: Percent";
+ln["themeBase_fr"] = "Base";
+ln["themeDarkUnika_fr"] = "Dark Unika";
+ln["themeSandSignika_fr"] = "Sand Signika";
+ln["themeGridLight_fr"] = "Grid Light";
+ln["themeSpod_fr"] = "Spod";
+
+ln["x-axis-labelDescription_fr"] = "The x-axis label.";
+ln["y-axis-labelDescription_fr"] = "The y-axis label.";
+ln["suffixDescription_fr"] = "The suffix added to data labels in the tooltip.";
+ln["legendDescription_fr"] = "The leged position.";
+ln["data-labelsDescription_fr"] = "Show/hide data labels.";
+ln["themeDescription_fr"] = "The theme affects the appearance and colors of the chart.";
+ln["stackDescription_fr"] = "The stack type.";
+ln["donutDescription_fr"] = "Pie will become Donut! :) (or viceversa).";
+
+/******** NL ********/
+
+//PAGE SLIDER
+
+ln["slide1Title_nl"] = "SELECT DATASET";
+ln["slide1Subtitle_nl"] = "Select a dataset from the list or copy and paste the url of dataset.";
+ln["slide2Title_nl"] = "SELECT DATA";
+ln["slide2Subtitle_nl"] = "Select the fields on the left. The table will show the values related to the selected fields.";
+ln["slide3Title_nl"] = "SELECT VISUALIZATION";
+ln["slide3Subtitle_nl"] = "Select a visualization, fill out inputs and options.";
+ln["back_nl"] = "BACK TO THE FUTURE";
+ln["forward_nl"] = "FORWARD";
+
+//SELECT DATASET
+
+ln["listView_nl"] = "LIST VIEW";
+ln["treeMapView_nl"] = "TREE MAP VIEW";
+ln["extendedSearch_nl"] = "EXTENDED SEARCH";
+ln["provider_nl"] = "Provider";
+ln["showing_nl"] = "Showing";
+ln["to_nl"] = "to";
+ln["of_nl"] = "of";
+ln["datasets_nl"] = "datasets";
+ln["suggestedDatasets_nl"] = "Suggested datasets";
+ln["selectedUrl_nl"] = "Selected url";
+ln["wrongUrl_nl"] = "Invalid url or data provider not supported yet.";
+
+//SELECT DATA
+
+//select-fields
+ln["fields_nl"] = "FIELDS";
+
+//data-table
+ln["selectedData_nl"] = "SELECTED DATA";
+ln["showing_nl"] = "Showing";
+ln["to_nl"] = "to";
+ln["of_nl"] = "of";
+ln["rows_nl"] = "rows";
+ln["type_nl"] = "TYPE";
+ln["warning_nl"] = "WARNING";
+
+//expert
+ln["expert_nl"] = "EXPERT MODE";
+ln["filters_nl"] = "FILTERS";
+ln["groupBy_nl"] = "GROUP BY";
+ln["query_nl"] = "QUERY";
+
+//filters
+ln["filterField_nl"] = "Field";
+ln["filterOperation_nl"] = "Operation";
+ln["filterValue_nl"] = "Value";
+
+ln["disableFilters_nl"] = "DISABLE FILTERS";
+ln["enableFilters_nl"] = "ENABLE FILTERS";
+
+ln["=_nl"] = "=";   //is equal to
+ln["!=_nl"] = "not =";  //is not equal to
+ln[">_nl"] = ">";   //is greater than
+ln[">=_nl"] = ">="; //is greater than or equal to
+ln["<_nl"] = "<";   //is less than
+ln["<=_nl"] = "<="; //is less than or equal to
+ln["contains_nl"] = "contains";
+ln["notContains_nl"] = "not contains";
+ln["start_nl"] = "start with";
+ln["ends_nl"] = "ends with";
+
+//aggregators
+ln["GROUP BY_nl"] = "GROUP BY";
+ln["CALCULATE_nl"] = "CALCULATE";
+ln["Calculate_nl"] = "Calculate";
+ln["aggregatorField_nl"] = "Field";
+
+ln["disableGroupBy_nl"] = "DISABLE GROUP BY";
+ln["enableGroupBy_nl"] = "ENABLE GROUP BY";
+
+ln["COUNT_nl"] = "COUNT of";
+ln["SUM_nl"] = "SUM of";
+ln["MIN_nl"] = "MIN of";
+ln["MAX_nl"] = "MAX of";
+ln["AVG_nl"] = "AVG of";
+ln["FIRST_nl"] = "FIRST of";
+ln["LAST_nl"] = "LAST of";
+
+//SELECT VISUALIZATION
+
+ln["addDatalet_nl"] = "ADD";
+ln["modifyDatalet_nl"] = "MODIFY";
+
+//datalet-preview
+ln["previewTab_nl"] = "DATALET PREVIEW";
+ln["infoTab_nl"] = "DATALET INFO";
+
+//select-inputs
+ln["baseInfo_nl"] = "BASE INFO";
+ln["inputs_nl"] = "INPUTS";
+ln["options_nl"] = "OPTIONS";
+
+//vslider
+ln["search_nl"] = "Search";
+
+ln["datatable_nl"] = "Table";
+ln["barchart_nl"] = "Bar Chart";
+ln["columnchart_nl"] = "Column Chart";
+ln["areachart_nl"] = "Area Chart";
+ln["linechart_nl"] = "Line Chart";
+ln["heatmap_nl"] = "Heat Map";
+ln["piechart_nl"] = "Pie Chart";
+ln["scatterchart_nl"] = "Scatter Chart";
+ln["bubblechart_nl"] = "Bubble Chart";
+ln["treemap_nl"] = "Tree Map";
+ln["leafletjs_nl"] = "Map";
+ln["leafletjs-geojson_nl"] = "Geojson Map";
+
+ln["datatableDescription_nl"] = "A table is a means of arranging data in rows and columns.";
+ln["barchartDescription_nl"] = "A bar chart is a chart that presents grouped data with rectangular bars plotted horizontally with lengths proportional to the values that they represent.";
+ln["columnchartDescription_nl"] = "A column chart is a chart that presents grouped data with rectangular bars plotted vertically with lengths proportional to the values that they represent.";
+ln["areachartDescription_nl"] = "An area chart is a chart which displays graphically quantitive data. The area between axis and line are emphasized with colors and textures. Commonly one compares with the area chart two or more quantities.";
+ln["linechartDescription_nl"] = "A line chart is chart which displays information as a series of data points called 'markers' connected by straight line segments. A line chart is often used to visualize a trend in data over intervals of time.";
+ln["heatmapDescription_nl"] = "A heat map is a graphical representation of data where the individual values contained in a matrix are represented as colors.";
+ln["piechartDescription_nl"] = "A pie chart is a circular statistical graphic, which is divided into slices to illustrate numerical proportion. In the pie chart, the arc length of each slice, and consequently its central angle and area, is proportional to the quantity it represents.";
+ln["scatterchartDescription_nl"] = "A scatter chart is a type of plot or mathematical diagram using Cartesian coordinates to display values for typically two variables for a set of data. The data is displayed as a collection of points, each having the value of one variable determining the position on the horizontal axis and the value of the other variable determining the position on the vertical axis.";
+ln["bubblechartDescription_nl"] = "A bubble chart is a type of chart that displays three dimensions of data. Each entity with its triplet (v1, v2, v3) of associated data is plotted as a disk that expresses two of the vi values through the disk's xy location and the third through its size.";
+ln["treemapDescription_nl"] = "A tree map is a chart for displaying hierarchical data by using nested rectangles.";
+ln["leafletjsDescription_nl"] = "";
+ln["leafletjs-geojsonDescription_nl"] = "";
+
+//inputs
+ln["title_nl"] = "Title"
+ln["description_nl"] = "Description";
+
+ln["sortAscending_nl"] = "SORTED ASCENDING";
+ln["sortDescending_nl"] = "SORTED DESCENDING";
+ln["unsort_nl"] = "UNSORTED";
+
+//--> "_" not allowed!
+ln["TITLE_nl"] = "TITLE";
+ln["DESCRIPTION_nl"] = "DESCRIPTION";
+ln["XAxis_nl"] = "X-AXIS";
+ln["YAxis_nl"] = "Y-AXIS";
+ln["NumericXAxis_nl"] = "X-AXIS";
+ln["NumericYAxis_nl"] = "Y-AXIS";
+ln["Column_nl"] = "COLUMN";
+ln["Level_nl"] = "LEVEL";
+ln["SliceLabels_nl"] = "LABEL";
+ln["SliceSizes_nl"] = "SIZE";
+ln["Latitude_nl"] = "LATITUDE";
+ln["Longitude_nl"] = "LONGITUDE";
+ln["BalloonContent_nl"] = "BALLOON CONTENT";
+ln["GEOJSON_nl"] = "GEOJSON";
+ln["GEOJSONContent_nl"] = "GEOJSON CONTENT";
+ln["BubbleContent_nl"] = "BUBBLE CONTENT";
+ln["BubbleSize_nl"] = "BUBBLE SIZE";
+ln["Categories_nl"] = "CATEGORY";
+
+ln["TITLEDescription_nl"] = "The datalet title.";
+ln["DESCRIPTIONDescription_nl"] = "The datalet description.";
+ln["XAxisDescription_nl"] = "The x-axis.";
+ln["YAxisDescription_nl"] = "The y-axis.";
+ln["NumericXAxisDescription_nl"] = "The x-axis.";
+ln["NumericYAxisDescription_nl"] = "The y-axis.";
+ln["ColumnDescription_nl"] = "The column of the table.";
+ln["LevelDescription_nl"] = "The level of the tree map.";
+ln["SliceLabelsDescription_nl"] = "The label of the slices.";
+ln["SliceSizesDescription_nl"] = "The size of the slices.";
+ln["LatitudeDescription_nl"] = "The latitude of locations.";
+ln["LongitudeDescription_nl"] = "The longitude of locations.";
+ln["BalloonContentDescription_nl"] = "The content of balloons.";
+ln["GEOJSONDescription_nl"] = "The GeoJSON data.";
+ln["GEOJSONContentDescription_nl"] = "The content of GeoJSON.";
+ln["BubbleContentDescription_nl"] = "The content of bubbles.";
+ln["BubbleSizeDescription_nl"] = "The size of bubbles.";
+ln["CategoriesDescription_nl"] = "The category that splits the y-axis values. If selected only the first selected y-axis will be considered.";
+
+//options
+ln["x-axis-label_nl"] = "X Axis Label";
+ln["y-axis-label_nl"] = "Y Axis Label";
+ln["suffix_nl"] = "Tooltip Suffix";
+ln["legend_nl"] = "Leged";
+ln["data-labels_nl"] = "Show Data Labels";
+ln["stack_nl"] = "Stack";
+ln["theme_nl"] = "Theme";
+ln["donut_nl"] = "Donut";
+
+ln["true_nl"] = "Yes";
+ln["false_nl"] = "No";
+ln["bottom_nl"] = "Yes: Bottom";
+ln["topRight_nl"] = "Yes: Top Right";
+ln["normal_nl"] = "Yes: Normal";
+ln["percent_nl"] = "Yes: Percent";
+ln["themeBase_nl"] = "Base";
+ln["themeDarkUnika_nl"] = "Dark Unika";
+ln["themeSandSignika_nl"] = "Sand Signika";
+ln["themeGridLight_nl"] = "Grid Light";
+ln["themeSpod_nl"] = "Spod";
+
+ln["x-axis-labelDescription_nl"] = "The x-axis label.";
+ln["y-axis-labelDescription_nl"] = "The y-axis label.";
+ln["suffixDescription_nl"] = "The suffix added to data labels in the tooltip.";
+ln["legendDescription_nl"] = "The leged position.";
+ln["data-labelsDescription_nl"] = "Show/hide data labels.";
+ln["themeDescription_nl"] = "The theme affects the appearance and colors of the chart.";
+ln["stackDescription_nl"] = "The stack type.";
+ln["donutDescription_nl"] = "Pie will become Donut! :) (or viceversa).";
