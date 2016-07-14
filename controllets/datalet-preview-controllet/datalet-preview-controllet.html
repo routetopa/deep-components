@@ -89,18 +89,25 @@
 
             paper-tabs {
                 background: #B6B6B6;
-                --paper-tabs-selection-bar-color: #2196F3;
+                /*--paper-tabs-selection-bar-color: #00BCD4;*/
             }
 
             paper-tab {
-                --paper-tab-ink: #2196F3;
+                font-weight: 700;
+                border-right: 2px solid #FFFFFF;
+                /*--paper-tab-ink: #2196F3;*/
+            }
+
+            paper-tab:nth-child(2) {
+                border-right: 0;
             }
 
             paper-tab.iron-selected {
-                font-weight: 700;
+                color: #FFFFFF;
+                background: #2196F3;;
             }
 
-            paper-tab:hover {
+            paper-tab:not(.iron-selected):hover {
                 color: #2196F3;
             }
 
@@ -108,9 +115,9 @@
 
         <paper-material id="preview_container" elevation="5">
 
-            <paper-tabs selected="{{tabIndex}}">
-                <paper-tab><span id="previewTab"></span></paper-tab>
-                <paper-tab><span id="infoTab"></span></paper-tab>
+            <paper-tabs selected="{{tabIndex}}" no-bar>
+                <paper-tab noink><span id="previewTab"></span></paper-tab>
+                <paper-tab noink><span id="infoTab"></span></paper-tab>
             </paper-tabs>
 
             <neon-animated-pages id="neon_container" selected="{{_getNeonIndex(tabIndex)}}" entry-animation="fade-in-animation" exit-animation="fade-out-animation">
