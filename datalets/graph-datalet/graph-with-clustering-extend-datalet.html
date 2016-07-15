@@ -493,9 +493,9 @@ Example:
                     });
 
                     _this.svgNodes.attr("cx", function (t) {
-                        return t.x = Math.max(25, Math.min(_this.width - 50, t.x))
+                        return t.x = Math.max(25, Math.min(_this.width, t.x))
                     }).attr("cy", function (t) {
-                        return t.y = Math.max(8, Math.min(600, t.y))
+                        return t.y = Math.max(8, Math.min(_this.height, t.y))
                     });
 
                     _this.svgLinks.attr("x1", function (t) {
