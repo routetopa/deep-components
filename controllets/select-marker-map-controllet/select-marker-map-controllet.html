@@ -1,6 +1,7 @@
 <link rel="import" href="../../bower_components/polymer/polymer.html"/>
 <link rel="import" href="../../bower_components/paper-material/paper-material.html"/>
 <link rel="import" href="../../bower_components/paper-fab/paper-fab.html"/>
+<link rel="import" href="../../bower_components/iron-icons/maps-icons.html">
 <link rel="import" href="../../bower_components/iron-icons/iron-icons.html"/>
 <link rel="import" href="../../bower_components/paper-dialog/paper-dialog.html"/>
 <link rel="import" href="../../bower_components/neon-animation/neon-animation.html"/>
@@ -48,6 +49,7 @@
             </paper-dropdown-menu>
 
             <!--<paper-input id="shape_label" label="Shape label" maxlenght="30" value="{{label}}"></paper-input>-->
+            <paper-fab id="map_layer" class="cocreation_view_modes_button" mini icon="maps:satellite" on-click="_handleMapLayerClick" style="background-color:#B6B6B6"></paper-fab>
 
         </div>
 
@@ -139,7 +141,24 @@
                 label: {
                     type: String,
                     value: ""
+                },
+
+                satLayer: {
+                    type: Object,
+                    value: new ol.layer.Tile({
+                              title: 'Global Imagery',
+                              source: new ol.source.BingMaps({
+                                key : "AiAjdlCagGtE5269Z4YP3e3VtMkzzAKvowq5cQadahNZjVxttUxdDS40u91Uv8qP",
+                                imagerySet: 'AerialWithLabels'
+                              })
+                          })
+                },
+
+                layers: {
+                    type : Array,
+                    value : []
                 }
+
             },
 
             ready : function(){
@@ -201,8 +220,9 @@
                     loadTilesWhileAnimating: true,
                     loadTilesWhileInteracting: true,
                     layers: [baseLayer,
+                             this.satLayer,
                              new ol.layer.Vector({
-                                 source: this.vectorSource
+                                source: this.vectorSource
                              }),
                              this.draw_layer
                     ]
@@ -324,6 +344,11 @@
 
             _changeInteraction: function(e){
                 this.addInteraction();
+            },
+
+            _handleMapLayerClick: function(e){
+                this.satLayer.setVisible(!this.satLayer.getVisible());
+
             },
 
             getTextStyle: function(offsetX) {
