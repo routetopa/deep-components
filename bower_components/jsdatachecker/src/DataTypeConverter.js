@@ -43,15 +43,10 @@ DataTypeConverter.TYPES = {
 
 DataTypeConverter.SUBTYPES = {
     GEOCOORDINATE   :   { value: 1000, name: "GEOCOORDINATE" },
-    GEOJSON         :   { value: 1001, name: "GEOJSON" },
-
-    PERCENTAGE      :   { value: 1100, name: "PERCENTAGE" },
-    LATITUDE        :   { value: 1101, name: "LATITUDE" },
-    LONGITUDE       :   { value: 1102, name: "LONGITUDE" }
+    PERCENTAGE      :   { value: 1000, name: "PERCENTAGE" },
+    LATITUDE        :   { value: 1001, name: "LATITUDE" },
+    LONGITUDE       :   { value: 1002, name: "LONGITUDE" }
 };
-
-DataTypeConverter.GEOJSONTYPES = [ "Point", "MultiPoint", "LineString",
-    "MultiLineString", "Polygon", "MultiPolygon", "GeometryCollection" ];
 
 DataTypeConverter.prototype = (function () {
 
@@ -227,20 +222,6 @@ DataTypeConverter.prototype = (function () {
     var _processInferSubType = function (value) {
         if (value === null || typeof value === 'undefined') return null;
 
-        //GEOCOORDINATE
-        if (Array.isArray(value) && value.length == 2) {//It recognises the LAT LNG as array of two values.
-            //Checks if the two array's values are numbers.
-            if ( DataTypesUtils.FilterFloat(value[0]) != NaN && DataTypesUtils.FilterFloat(value[1]) != NaN  )
-                if (DataTypesUtils.DecimalPlaces(value[0]) > 4 && DataTypesUtils.DecimalPlaces(value[1]) > 4 )
-                    return DataTypeConverter.SUBTYPES.GEOCOORDINATE;
-        }//EndIf.
-
-        if (typeof value === 'string') {
-            var split = value.split(",");
-            if (DataTypesUtils.IsLatLng(split[0]) && DataTypesUtils.IsLatLng(split[1]))
-                return DataTypeConverter.SUBTYPES.GEOCOORDINATE;
-        }
-
         //Try to parse the float.
         var isnumber = DataTypesUtils.FilterFloat(value);
         if (isNaN(isnumber) !== true) {//It is a number.
@@ -259,14 +240,6 @@ DataTypeConverter.prototype = (function () {
             return null;
         }
 
-        //Try to parse GEOJSON.
-        if (typeof value === 'object' && value.hasOwnProperty('type')) {
-            //Check the type variable.
-            var geotype = value.type;
-            var isincluded = DataTypeConverter.GEOJSONTYPES.includes(geotype);
-            if (isincluded) return DataTypeConverter.SUBTYPES.GEOJSON;
-        }
-
         return null;
     };//EndFunction.
 
@@ -275,9 +248,6 @@ DataTypeConverter.prototype = (function () {
             if (fieldType.typeConfidence >= threshold) return;
 
             var arrHierarchyTypes = DataTypeHierarchy.HIERARCHY[fieldType.type];
-            if (arrHierarchyTypes == null)
-                return metadata;
-
             var lastFieldType = { lastType: arrHierarchyTypes[0],
                 lastTypeCounter: fieldType._inferredTypes[arrHierarchyTypes[0]],
                 typeConfidence:  0 };
@@ -577,15 +547,6 @@ DataTypeConverter.prototype = (function () {
          */
         inferDataTypeOfValue: function (value) {
             return _processInferType(value);
-        },//EndFunction.
-
-        /**
-         * Given in input a value, the function infers the data type.
-         * @param value
-         * @returns {*}
-         */
-        inferDataSubTypeOfValue: function (value) {
-            return _processInferSubType(value);
         }//EndFunction.
 
     };

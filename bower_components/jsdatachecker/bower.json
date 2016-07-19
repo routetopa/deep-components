@@ -1,7 +1,7 @@
 {
-  "name": "jsdatachecker",
-  "version": "v0.1.1",
-  "homepage": "https://github.com/donpir/jsdatachecker",
+  "name": "JSDataChecker",
+  "version": "v0.0.9",
+  "homepage": "https://github.com/donpir/JSDataChecker",
   "authors": [
     "'Donato Pirozzi <'donatopirozzi@gmail.com'>"
   ],

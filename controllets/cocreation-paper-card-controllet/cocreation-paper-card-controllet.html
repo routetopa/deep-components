@@ -75,6 +75,17 @@
                 background: #2196F3;
             }
 
+            .delete{
+                position: absolute;
+                right: 14px;
+                top: 23px;
+                background: #2196F3;
+                --iron-icon-height: 18px;
+                --iron-icon-width: 18px;
+                width: 24px;
+                height: 24px;
+            }
+
         </style>
 
 
@@ -93,6 +104,9 @@
                         </template>
                         <template is="dom-if" if="{{checkRoomType(roomType)}}">
                             <paper-fab mini disabled icon="description" class="badge knowledge"></paper-fab>
+                        </template>
+                        <template is="dom-if" if="{{isOwner}}">
+                            <paper-fab class="delete" mini icon="delete" on-click="_handleDeleteClick" style="background-color: #b6b6b6;"></paper-fab>
                         </template>
                     </div>
                 </div>
@@ -144,6 +158,14 @@
                 roomType:{
                     type: String,
                     value: undefined
+                },
+                isOwner: {
+                    type: Boolean,
+                    value: false
+                },
+                roomId:{
+                    type: Number,
+                    value: undefined
                 }
             },
 
@@ -157,15 +179,16 @@
                 moreInfo.toggle();
             },
 
+            _handleDeleteClick: function(e){
+                this.fire("cocreation-paper-card-controllet_delete", {roomId: this.roomId});
+            },
+
             _onExplore: function(e){
                 window.location = this.roomUrl;
             },
 
             checkRoomType: function(type){
-               if(type == "knowledge")
-                   return true;
-               else
-                   return false;
+               return (type == "knowledge") ? true : false;
             }
         })
     </script>
