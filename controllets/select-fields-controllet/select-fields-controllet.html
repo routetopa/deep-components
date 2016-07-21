@@ -45,8 +45,14 @@
         paper-item {
             cursor: pointer;
             color: #000000;
+            background: #FFFFFF;
             margin: 4px;
-            padding: 0px 12px;
+            padding: 0 12px;
+            /*background: rgba(0, 0, 0, 0.12);*/
+            border-radius: 2px;
+            border: 1px solid #B6B6B6;
+
+            /*background: #E0E0E0;*/
         }
 
         paper-item span {
@@ -72,7 +78,11 @@
         }
 
         paper-item:hover:not(.iron-selected) {
-            background-color: rgba(0, 0, 0, 0.12);
+            background-color: #BBDEFB;
+        }
+
+        #menu, #menu_container {
+            background-color: #E0E0E0;
         }
 
     </style>

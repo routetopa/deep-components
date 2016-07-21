@@ -1,0 +1,76 @@
+<html>
+
+<head>
+    <script src="../../shared_js/jquery-1.11.2.min.js"></script>
+
+    <script src="../../../bower_components/webcomponentsjs/webcomponents-lite.min.js"></script>
+
+    <script src="../../shared_js/perfect-scrollbar/js/min/perfect-scrollbar.jquery.min.js"></script>
+    <link rel="stylesheet" href="../../shared_js/perfect-scrollbar/css/perfect-scrollbar.min.css">
+
+    <script src="../../../locales/controllet_ln.js"></script>
+    <script>
+        ln["localization"] = "en";
+    </script>
+
+    <link rel="import" href="../datasets-list-controllet.html" />
+</head>
+
+<body>
+
+<style>
+
+    .container {
+        width: 1200px;
+        height: 600px;
+        position: relative;
+        top: 96px;
+        left: calc((100% - 1200px) / 2);
+    }
+
+</style>
+
+<div class="container">
+    <datasets-list-controllet datasets='{"result":{"providers":{"1":{"title":"CKAN","api_url":"http:\/\/ckan.routetopa.eu","image_hash":"11","id":"1"}},"datasets":[{"w":1,"provider_name":"p:1","organization_name":"Dublin","package_name":"isislab DATA","resource_name":"Resource 1","url":"http:\/\/ckan.routetopa.eu\/dataset\/566c2867-ea89-45a2-bd7a-30ae82606007\/resource\/b3d3d9ff-291e-47ca-a0d2-a15deef81737\/download\/isislab2.csv","metas":"{\"organization\":\"Dublin\",\"description\":\"\",\"format\":\"\",\"last_modified\":\"\",\"name\":\"\",\"created\":\"\"}"}]}}'></datasets-list-controllet>
+
+    <!--<select-dataset-controllet id="ds" datasets="we"></select-dataset-controllet>-->
+
+    <!--<select-dataset-controllet id="ds" datasets='{"result":{"providers":{"1":{"title":"CKAN","api_url":"http:\/\/ckan.routetopa.eu","image_hash":"11","id":"1"}},"datasets":[{"w":1,"provider_name":"p:1","organization_name":"Dublin","package_name":"isislab DATA","resource_name":"Resource 1","url":"http:\/\/ckan.routetopa.eu\/dataset\/566c2867-ea89-45a2-bd7a-30ae82606007\/resource\/b3d3d9ff-291e-47ca-a0d2-a15deef81737\/download\/isislab2.csv","metas":"{\"organization\":\"Dublin\",\"description\":\"\",\"format\":\"\",\"last_modified\":\"\",\"name\":\"\",\"created\":\"\"}"},{"w":1,"provider_name":"p:1","organization_name":"Dublin","package_name":"isislab DATA","resource_name":"Resource 1","url":"http:\/\/ckan.routetopa.eu\/dataset\/566c2867-ea89-45a2-bd7a-30ae82606007\/resource\/b3d3d9ff-291e-47ca-a0d2-a15deef81737\/download\/isislab2.csv","metas":"{\"organization\":\"Dublin\",\"description\":\"\",\"format\":\"\",\"last_modified\":\"\",\"name\":\"\",\"created\":\"\"}"},{"w":1,"provider_name":"p:1","organization_name":"Dublin","package_name":"isislab DATA","resource_name":"Resource 1","url":"http:\/\/ckan.routetopa.eu\/dataset\/566c2867-ea89-45a2-bd7a-30ae82606007\/resource\/b3d3d9ff-291e-47ca-a0d2-a15deef81737\/download\/isislab2.csv","metas":"{\"organization\":\"Dublin\",\"description\":\"\",\"format\":\"\",\"last_modified\":\"\",\"name\":\"\",\"created\":\"\"}"},{"w":1,"provider_name":"p:1","organization_name":"Dublin","package_name":"isislab DATA","resource_name":"Resource 1","url":"http:\/\/ckan.routetopa.eu\/dataset\/566c2867-ea89-45a2-bd7a-30ae82606007\/resource\/b3d3d9ff-291e-47ca-a0d2-a15deef81737\/download\/isislab2.csv","metas":"{\"organization\":\"Dublin\",\"description\":\"\",\"format\":\"\",\"last_modified\":\"\",\"name\":\"\",\"created\":\"\"}"},{"w":1,"provider_name":"p:1","organization_name":"Dublin","package_name":"isislab DATA","resource_name":"Resource 1","url":"http:\/\/ckan.routetopa.eu\/dataset\/566c2867-ea89-45a2-bd7a-30ae82606007\/resource\/b3d3d9ff-291e-47ca-a0d2-a15deef81737\/download\/isislab2.csv","metas":"{\"organization\":\"Dublin\",\"description\":\"\",\"format\":\"\",\"last_modified\":\"\",\"name\":\"\",\"created\":\"\"}"},{"w":1,"provider_name":"p:1","organization_name":"Dublin","package_name":"isislab DATA","resource_name":"Resource 1","url":"http:\/\/ckan.routetopa.eu\/dataset\/566c2867-ea89-45a2-bd7a-30ae82606007\/resource\/b3d3d9ff-291e-47ca-a0d2-a15deef81737\/download\/isislab2.csv","metas":"{\"organization\":\"Dublin\",\"description\":\"\",\"format\":\"\",\"last_modified\":\"\",\"name\":\"\",\"created\":\"\"}"},{"w":1,"provider_name":"p:1","organization_name":"Dublin","package_name":"isislab DATA","resource_name":"Resource 1","url":"http:\/\/ckan.routetopa.eu\/dataset\/566c2867-ea89-45a2-bd7a-30ae82606007\/resource\/b3d3d9ff-291e-47ca-a0d2-a15deef81737\/download\/isislab2.csv","metas":"{\"organization\":\"Dublin\",\"description\":\"\",\"format\":\"\",\"last_modified\":\"\",\"name\":\"\",\"created\":\"\"}"},{"w":1,"provider_name":"p:1","organization_name":"Dublin","package_name":"isislab DATA","resource_name":"Resource 2","url":"http:\/\/ckan.routetopa.eu\/dataset\/566c2867-ea89-45a2-bd7a-30ae82606007\/resource\/b056c5e6-76af-4526-a35d-7dee664fb6ee\/download\/isislab.csv","metas":"{\"organization\":\"Dublin\",\"description\":\"\",\"format\":\"\",\"last_modified\":\"\",\"name\":\"\",\"created\":\"\"}"},{"w":1,"provider_name":"p:1","organization_name":"ROUTE-TO-PA","package_name":"Year 1 Dissemination of the ROUTE-TO-PA project (2015)","resource_name":"First year (2015) ROUTE-TO-PA Dissemination","url":"http:\/\/ckan.routetopa.eu\/dataset\/d81d451d-8b3d-47f4-b57f-e295e8f51da0\/resource\/818c2edb-0cb7-4288-b340-e4dd1933d817\/download\/ROUTE-TO-PA-Individual-Dissemination-Activity-Report-Form-Responses-New-&#45;&#45;Link-Upd.csv","metas":"{\"organization\":\"ROUTE-TO-PA\",\"description\":\"\",\"format\":\"\",\"last_modified\":\"\",\"name\":\"\",\"created\":\"\"}"},{"w":1,"provider_name":"p:1","organization_name":"ROUTE-TO-PA","package_name":"Year 1 Dissemination of the ROUTE-TO-PA project (2015)","resource_name":"First year (2015) ROUTE-TO-PA Dissemination - dl","url":"http:\/\/ckan.routetopa.eu\/dataset\/d81d451d-8b3d-47f4-b57f-e295e8f51da0\/resource\/fd8c4d6f-315d-4aa0-b7bd-4fdde7bf641b\/download\/ROUTE-TO-PA-Individual-Dissemination-Activity-Report-Form-Responses-New-&#45;&#45;Link-Upd.csv","metas":"{\"organization\":\"ROUTE-TO-PA\",\"description\":\"\",\"format\":\"\",\"last_modified\":\"\",\"name\":\"\",\"created\":\"\"}"},{"w":1,"provider_name":"p:1","organization_name":"ROUTE-TO-PA","package_name":"Year 1 Dissemination of the ROUTE-TO-PA project (2015)","resource_name":"First year (2015) dissemination of ROUTE-TO-PA project","url":"http:\/\/ckan.routetopa.eu\/dataset\/d81d451d-8b3d-47f4-b57f-e295e8f51da0\/resource\/b0ef6017-8c64-4e11-8046-7e51a8561856\/download\/ROUTE-TO-PA-Individual-Dissemination-Activity-Report-Form-Responses-New-&#45;&#45;Link-Upd.csv","metas":"{\"organization\":\"ROUTE-TO-PA\",\"description\":\"\",\"format\":\"\",\"last_modified\":\"\",\"name\":\"\",\"created\":\"\"}"},{"w":1,"provider_name":"p:1","organization_name":"ROUTE-TO-PA","package_name":"test dissemination with link","resource_name":"Year 1 Dissemination of the ROUTE-TO-PA project (2015)","url":"http:\/\/ckan.routetopa.eu\/dataset\/ba5054af-7561-4f99-9504-76ea004a1e85\/resource\/4cc2349d-bf7b-4bbe-a7ca-db5312bb6c94\/download\/ROUTE-TO-PA-Individual-Dissemination-Activity-Report-Form-Responses-New-&#45;&#45;Link.csv","metas":"{\"organization\":\"ROUTE-TO-PA\",\"description\":\"\",\"format\":\"\",\"last_modified\":\"\",\"name\":\"\",\"created\":\"\"}"},{"w":1,"provider_name":"p:1","organization_name":"ROUTE-TO-PA","package_name":"Dissemination activity of the first year","resource_name":"Dissemination activity of the first year (2015)","url":"http:\/\/ckan.routetopa.eu\/dataset\/61f07087-210a-4c35-9606-2aafe183633b\/resource\/5f9d8d8b-1c41-45f7-9dbb-61b9a7bcd076\/download\/ROUTE-TO-PA-Individual-Dissemination-Activity-Report-Form-Responses-New.csv","metas":"{\"organization\":\"ROUTE-TO-PA\",\"description\":\"\",\"format\":\"\",\"last_modified\":\"\",\"name\":\"\",\"created\":\"\"}"},{"w":1,"provider_name":"p:1","organization_name":"City of the Hague Municipality","package_name":"Test 3- Buurten","resource_name":"Test Buurten - 3","url":"http:\/\/ckan.routetopa.eu\/dataset\/1248d447-2901-4beb-91ae-c2f249fd8a99\/resource\/1fdbc765-8945-4271-8dce-9c7eba45a67d\/download\/Test-3-Compare.csv","metas":"{\"organization\":\"City of the Hague Municipality\",\"description\":\"\",\"format\":\"\",\"last_modified\":\"\",\"name\":\"\",\"created\":\"\"}"}]}}'-->
+                               <!--suggested-datasets='[{"resource_name":"SUGGESTED 1","url":"noUrl.csv","metas":"{\"description\":\"noDescriione\"}"},{"resource_name":"SUGGESTED 2","url":"noUrl.csv","metas":"{\"description\":\"noDescriione\"}"},{"resource_name":"SUGGESTED 3","url":"noUrl.csv","metas":"{\"description\":\"noDescriione\"}"}]'-->
+    <!--<select-dataset-controllet id="ds" datasets='{"result":{"providers":{"1":{"title":"CKAN","api_url":"http:\/\/ckan.routetopa.eu","image_hash":"11","id":"1"}},"datasets":[{"w":1,"provider_name":"p:1","organization_name":"Dublin","package_name":"isislab DATA","resource_name":"Resource 1","url":"http:\/\/ckan.routetopa.eu\/dataset\/566c2867-ea89-45a2-bd7a-30ae82606007\/resource\/b3d3d9ff-291e-47ca-a0d2-a15deef81737\/download\/isislab2.csv","metas":"{\"organization\":\"Dublin\",\"description\":\"\",\"format\":\"\",\"last_modified\":\"\",\"name\":\"\",\"created\":\"\"}"}]}}'></select-dataset-controllet>-->
+</div>
+
+<script>
+    var description = "aaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaa aaaaaaaaaaaa aaaaaaaaa aaaaaaaaaaaaaaaaaaaaaaaaaa "+
+            " aaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaa aaaaaaaaaaaa aaaaaaaaa aaaaaaaaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaa "+
+            " aaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaa aaaaaaaaaaaa aaaaaaaaa aaaaaaaaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaa "+
+            "aaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaa aaaaaaaaaaaa aaaaaaaaa aaaaaaaaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaa"+
+            "aaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaa aaaaaaaaaaaa aaaaaaaaa aaaaaaaaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaa"+
+            "aaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaa aaaaaaaaaaaa aaaaaaaaa aaaaaaaaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaa"+
+            "aaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaa aaaaaaaaaaaa aaaaaaaaa aaaaaaaaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaa"+
+            "aaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaa aaaaaaaaaaaa aaaaaaaaa aaaaaaaaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaa"+
+            "aaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaa aaaaaaaaaaaa aaaaaaaaa aaaaaaaaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaa"+
+            "aaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaa aaaaaaaaaaaa aaaaaaaaa aaaaaaaaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaa"+
+            "aaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaa aaaaaaaaaaaa aaaaaaaaa aaaaaaaaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaa"+
+            "aaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaa aaaaaaaaaaaa aaaaaaaaa aaaaaaaaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaa"+
+            "aaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaa aaaaaaaaaaaa aaaaaaaaa aaaaaaaaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaa"+
+            "aaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaa aaaaaaaaaaaa aaaaaaaaa aaaaaaaaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaa"+
+            "aaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaa aaaaaaaaaaaa aaaaaaaaa aaaaaaaaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaa"+
+            "aaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaa aaaaaaaaaaaa aaaaaaaaa aaaaaaaaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaa"+
+            "aaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaa aaaaaaaaaaaa aaaaaaaaa aaaaaaaaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaa";
+
+    var dataset1 = {description: description, name: "Data", url: "http://ckan.routetopa.eu/api/action/datastore_search?resource_id=c3b52992-ba61-4a73-a637-0f2e1ca26aab"};
+    var dataset2 = {description: "", name: "Klassen", url: "http://ckan.routetopa.eu/api/action/datastore_search?resource_id=dfd27de5-0790-466c-af59-6a82509e7fbb"};
+    var dataset3 = {description: "descrizione bellissima purissima levissima sbiricuda antani", name: "Derelict Sites", url: "http://ckan.routetopa.eu/api/action/datastore_search?resource_id=fcbee83e-3d3d-4303-a568-24dd33d02adc"};
+    var datasets = [dataset1, dataset2, dataset3];
+    var datasets = [dataset1, dataset2, dataset3, dataset1, dataset2, dataset3, dataset1, dataset2, dataset3, dataset1, dataset2, dataset3, dataset1, dataset2, dataset3];
+
+    //    var ds = document.getElementById('ds');
+    //    ds.setAttribute("items", JSON.stringify(datasets));
+    //    ds.setAttribute("items", a);
+
+</script>
+
+</body>
+
+</html>

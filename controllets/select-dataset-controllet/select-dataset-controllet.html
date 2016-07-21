@@ -1,167 +1,19 @@
 <link rel="import" href="../../bower_components/polymer/polymer.html">
 
+<link rel="import" href="../../bower_components/paper-material/paper-material.html" />
 <link rel="import" href="../../bower_components/paper-tabs/paper-tabs.html">
 <link rel="import" href="../../bower_components/paper-tabs/paper-tab.html">
-
-<link rel="import" href="../../bower_components/neon-animation/neon-animation.html">
-<link rel="import" href="../../bower_components/neon-animation/neon-animatable.html">
-<link rel="import" href="../../bower_components/neon-animation/neon-animations.html">
-
-<link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout.html">
-<!--<link rel="import" href="../../bower_components/app-layout/app-toolbar/app-toolbar.html">-->
-<link rel="import" href="../../bower_components/paper-icon-button/paper-icon-button.html">
-<link rel="import" href="../../bower_components/paper-styles/color.html">
-<link rel="import" href="../../bower_components/paper-styles/typography.html">
-<link rel="import" href="../../bower_components/iron-ajax/iron-ajax.html">
-<link rel="import" href="../../bower_components/iron-icons/iron-icons.html">
-<link rel="import" href="../../bower_components/iron-image/iron-image.html">
-<link rel="import" href="../../bower_components/iron-list/iron-list.html">
-
 <link rel="import" href="../../bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
 <link rel="import" href="../../bower_components/paper-menu/paper-menu.html">
 <link rel="import" href="../../bower_components/paper-item/paper-item.html">
+<link rel="import" href="../../bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="../../bower_components/paper-tooltip/paper-tooltip.html">
 
-<link rel="import" href="../../bower_components/paper-input/paper-input.html">
-
-<link rel="import" href="../../bower_components/paper-input/paper-textarea.html">
-
-<link rel="import" href="../../bower_components/paper-material/paper-material.html" />
-
-<link rel="import" href="../../bower_components/paper-icon-button/paper-icon-button.html">
-<link rel="import" href="../../bower_components/iron-icons/hardware-icons.html">
-<!--<link rel="import" href="../../bower_components/iron-icons/iron-icons.html">-->
-
-<link rel="import" href="../../bower_components/paper-checkbox/paper-checkbox.html">
-
-<link rel="import" href="../providers-utility-controllet/providers-utility-controllet.html">
-<link rel="import" href="ortelio-controllet.html">
-<link rel="import" href="../../datalets/datasetexplorer-datalet/datasetexplorer-datalet.html">
+<link rel="import" href="../datasets-list-controllet/datasets-list-controllet.html">
 
 <dom-module id="select-dataset-controllet">
     <template>
         <style>
-            :host {
-            --paper-dropdown-menu-icon: {
-                 color: #000000;
-             };
-            --paper-dropdown-menu-ripple: {
-                 color: #FFFFFF;
-             };
-            /*--paper-tab-ink: {*/
-                 /*color: #FFFFFF;*/
-             /*};*/
-            }
-
-            iron-list {
-            --iron-list-items-container: {
-                margin:16px 16px 8px 16px;
-             };
-            }
-
-            paper-textarea {
-                width: 100%;
-                --paper-input-container-focus-color: #2196F3;
-            }
-
-            paper-input {
-                --paper-input-container-focus-color: #2196F3;
-            }
-            paper-dropdown-menu {
-                width: 100%;
-                --paper-input-container-focus-color: #2196F3;
-            }
-
-            paper-item.iron-selected {
-                background-color: #2196F3;
-                color: #FFFFFF;
-            }
-
-            paper-checkbox {
-                height: 24px;
-                /*margin-top: 8px*/
-                --paper-checkbox-checked-color: #2196F3;
-                --paper-checkbox-checked-ink-color: #FFFFFF;
-                --paper-checkbox-unchecked-color: #000000;
-                --paper-checkbox-unchecked-ink-color: #FFFFFF;
-                --paper-checkbox-label-color: #000000;
-            }
-
-            paper-icon-button{
-                height: 48px;
-                width: 48px;
-                padding: 0px;
-                --paper-icon-button-ink-color: #FFFFFF;
-            }
-
-            paper-icon-button:hover{
-                color: #2196F3;
-            }
-
-            paper-icon-button[disabled]{
-                color: #B6B6B6;
-            }
-
-            paper-icon-button.clear {
-                width: 24px;
-                height: 24px;
-                padding: 0px 4px;
-                color: #F44336;
-                --paper-icon-button-ink-color: #FFFFFF;
-            }
-
-            paper-tabs {
-                font-weight: bold;
-            }
-
-            paper-tab {
-                transition: all 1.0s;
-            }
-
-            paper-tab.iron-selected {
-                background-color: #2196F3;
-                color: #FFFFFF;
-            }
-
-            paper-tab:not(.iron-selected):hover {
-                color: #2196F3;
-            }
-
-            .item {
-                /*@apply(--layout-horizontal);*/
-                display: flex;
-                padding: 11px;
-                border: 1px solid #B6B6B6;
-                border-radius: 4px;
-                cursor: pointer;
-                margin-bottom: 8px;
-                background-color: #E0E0E0;
-            }
-
-            .item.expanded {
-                /*border: 2px solid #2196F3;*/
-                border-color: #2196F3;
-            }
-
-            .pad {
-                @apply(--layout-flex);
-                /*@apply(--layout-vertical);*/
-            }
-
-            .primary {
-                font-weight: bold;
-            }
-
-            .item.expanded .primary {
-                color: #2196F3;
-            }
-
-            .longText {
-                display: none;
-            }
-
-            .item.expanded .longText {
-                display: block;
-            }
 
             #select_dataset_container {
                 margin-top: 8px;
@@ -173,241 +25,243 @@
                 line-height: 24px;
             }
 
-            #select_dataset_container #neon_container {
-                height: calc(100% - 172px);
-                width: calc(100% - 8px);
-            }
-
-            #select_dataset_container #list_info {
+            #select_dataset_container #options {
                 display: flex;
-                height: calc(100% - 48px);
-                width: calc(100% + 8px);/*bad*/
+                flex-direction: row;
+
+                height: 48px;
+                padding: 0;
+                font-weight: 700;
+                background: #B6B6B6;
+
+                margin-top: 2px;
+
+                overflow: hidden;
             }
 
-            #select_dataset_container #list_container {
-                position: relative;
-                height: 100%;
-                width: 50%;
-                border-left: 4px solid #B6B6B6;
+            #select_dataset_container #options_header {
+                width: calc(100% - 96px);
+                text-align: center;
+                padding: 12px 0 12px 48px;
             }
 
-            #select_dataset_container #info_container {
-                position: relative;
-                height: 100%;
-                width: 50%;
-                border-right: 4px solid #B6B6B6;
-            }
+            #select_dataset_container .header_block {
+                width: calc((100% - 48px) / 2);
+                max-width: 400px;
+                margin-left: 12px;
 
-            #select_dataset_container #info {
-                position: relative;
-                height: calc(100% - 56px);
-                width: calc(100% - 56px);
-                padding: 11px;
-                border: 1px solid #B6B6B6;
-                border-radius: 4px;
-                background-color: #E0E0E0;
-                margin: 16px;
-            }
+                line-height: 40px;
 
-            #select_dataset_container #treemap_container {
-                /*height: calc(100% - 244px);*/
-                /*width: calc(100% - 8px);*/
-                height: calc(100% - 48px);
-                width: 100%;
-                border: 4px solid #B6B6B6;
-                border-top: 0px;
-                border-bottom: 0px;
-                position: relative;
-            }
-
-            #select_dataset_container #header {
-                position: relative;
-                z-index: 1;
-                -webkit-box-shadow: 0 30px 24px -12px rgba(0, 0, 0, 0.14), 0 20px 30px -9px rgba(0, 0, 0, 0.12), 0 20px 10px -19px rgba(0, 0, 0, 0.4);
-                -moz-box-shadow: 0 30px 24px -12px rgba(0, 0, 0, 0.14), 0 20px 30px -9px rgba(0, 0, 0, 0.12), 0 20px 10px -19px rgba(0, 0, 0, 0.4);
-                box-shadow: 0 30px 24px -12px rgba(0, 0, 0, 0.14), 0 20px 30px -9px rgba(0, 0, 0, 0.12), 0 20px 10px -19px rgba(0, 0, 0, 0.4);
-
-                background-color: #B6B6B6;
-                display: flex;
-                padding: 0px 4px;
-            }
-
-            #select_dataset_container #footer_list {
-                position: relative;
-                z-index: 1;
-                -webkit-box-shadow: 0 -30px 24px -12px rgba(0, 0, 0, 0.14), 0 -20px 30px -9px rgba(0, 0, 0, 0.12), 0 -20px 10px -19px rgba(0, 0, 0, 0.4);
-                -moz-box-shadow: 0 -30px 24px -12px rgba(0, 0, 0, 0.14), 0 -20px 30px -9px rgba(0, 0, 0, 0.12), 0 -20px 10px -19px rgba(0, 0, 0, 0.4);
-                box-shadow: 0 -30px 24px -12px rgba(0, 0, 0, 0.14), 0 -20px 30px -9px rgba(0, 0, 0, 0.12), 0 -20px 10px -19px rgba(0, 0, 0, 0.4);
-            }
-
-            .noshadow {
-                -webkit-box-shadow: none !important;
-                -moz-box-shadow: none !important;
-                box-shadow: none !important;
-            }
-
-            #select_dataset_container #footer_list,
-            #select_dataset_container #footer_treemap {
-                width: 100%;
-                background-color: #B6B6B6;
-                display: flex;
-                padding: 0px 4px;
+                display: none;
             }
 
             #select_dataset_container #url {
-                height: 76px;/*100*/
-                border: 4px solid #B6B6B6;
-                border-top: 0px;
-                padding: 0px 16px;
-                margin-top: -4px;
+                padding: 0 12px 12px 12px;
+                height: 60px;
+
+                border: 2px solid #B6B6B6;
+                border-top: 0;
             }
 
-            #header .header_block {
-                width: 20%;
-                height: 40px;
-                padding: 4px 16px 4px 16px;
+            #select_dataset_container #datasets_list_container {
+                height: calc(100% - 96px - 2px - 74px);
+                width: 100%;
             }
 
-            /*.header_block:nth-child(2), .header_block:nth-child(3), .header_block:nth-child(3), .header_block:nth-child(4){*/
-                /*visibility: hidden;*/
-            /*}*/
-
-            #header .header_block:nth-child(4) {
-                text-align: center;
+            paper-tabs {
+                background: #B6B6B6;
             }
 
-            .footer_block {
-                width: calc((100% - 0px) / 3);
-                height: 24px;
-                padding: 12px 8px 12px 8px;
-                text-align: center;
+            paper-tab {
+                font-weight: 700;
+                border-right: 2px solid #FFFFFF;
             }
 
-            .footer_block:nth-child(2) {
+            paper-tab:nth-child(2) {
+                border-right: 0;
+            }
+
+            paper-tab.iron-selected {
+                color: #FFFFFF;
+                background: #2196F3;;
+            }
+
+            paper-tab:not(.iron-selected):hover {
+                color: #2196F3;
+            }
+
+            paper-input {
+                --paper-input-container-focus-color: #2196F3;
+            }
+
+            paper-icon-button {
                 height: 48px;
-                padding: 0px 8px;
+                width: 48px;
+                padding: 8px;
             }
 
-            #suggested_div {
-                visibility: hidden;
+            paper-icon-button[icon="settings"] {
+                cursor: pointer;
+                color: #00BCD4;
+                --paper-icon-button-ink-color: #00BCD4;
+
+                background: #E0E0E0;
+                float: right;
+                position: absolute;
+                right: 0;
             }
 
-            /*.info_resource_name {*/
-                /*color: #2196F3;*/
-                /*font-weight: bold;*/
-                /*line-height: 48px;*/
-            /*}*/
+            paper-icon-button[icon="info-outline"] {
+                cursor: help;
+            }
 
-            /*#ortelio {*/
-                /*/!*height: calc(100% - 172px);*!/*/
-                /*/!*width: calc(100% - 8px);*!/*/
-                /*height: 100%;*/
-                /*width: 100%;*/
-                /*background-color: red;*/
-            /*}*/
+            :host {
+            --paper-dropdown-menu-icon: {
+                 color: #000000;
+             };
+            --paper-dropdown-menu-ripple: {
+                 color: #FFFFFF;
+             };
+            }
+
+            paper-dropdown-menu {
+                width: 200px;
+                --paper-input-container-focus-color: #2196F3;
+            }
+
+            paper-item {
+                min-width: 128px;
+                white-space: nowrap;
+            }
+
+            paper-item.iron-selected {
+                background-color: #2196F3;
+                color: #FFFFFF;
+            }
+
+            paper-tooltip {
+                min-width: 400px;
+                --paper-tooltip-background: black;
+            }
+
+            #select_dataset_container br {
+                display: block;
+                margin-top: 8px;
+                content: " ";
+            }
+
+            #select_dataset_container p {
+                margin: 0;
+                padding: 0;
+            }
+
+            #select_dataset_container p .option {
+                color: #2196F3;;
+                font-weight: 700;
+            }
+
+            #select_dataset_container p .description {
+            }
+
         </style>
 
         <paper-material id="select_dataset_container" elevation="5">
-
-            <paper-tabs selected="{{selected}}" no-bar>
-                <paper-tab on-tap="_refreshList" noink><span id="listView"></span></paper-tab>
-                <paper-tab on-tap="_noShadow" noink><span id="treeMapView"></span></paper-tab>
-                <paper-tab on-tap="_hideSearch" noink><span id="extendedSearch"></span></paper-tab>
+            <paper-tabs selected={{tabIndex}} no-bar>
+                <paper-tab noink on-tap="_setProvidersDatasets"><span id="providers_datasets"></span></paper-tab>
+                <paper-tab noink on-tap="_setLocalDatasets"><span id="spod_users_datasets"></span></paper-tab>
             </paper-tabs>
 
-            <div id="header">
-                <div class="header_block">
+            <div id="options">
+
+                <div id="options_header"></div>
+
+                <div id="provider_option" class="header_block">
+                    {{_getLocalization('provider')}}:&nbsp;
                     <paper-dropdown-menu id="ddl_provider" label="" no-label-float>
-                        <paper-menu class="dropdown-content" selected="0">
-                            <paper-item id="0" on-tap="_filter"></paper-item>
-                            <template is="dom-repeat" items={{_toArray(providers)}} as="provider">
-                                <!--<paper-item id={{provider.value.id}} style$="background: {{_getProviderColor(provider.value.id)}};">{{provider.value.title}}</paper-item>-->
-                                <paper-item id={{provider.value.id}} on-tap="_filter">{{provider.value.title}}</paper-item>
+                        <paper-menu id="menu_provider" class="dropdown-content">
+                            <paper-item id="0" on-tap="_setProvidersDatasets"><span id="all"></span></paper-item>
+                            <template is="dom-repeat" items={{_toArray(providers)}}>
+                                <paper-item id={{item.value.id}} on-tap="_setProvidersDatasets">{{item.value.title}}</paper-item>
                             </template>
                         </paper-menu>
                     </paper-dropdown-menu>
+                    <paper-icon-button id="info_provider" icon="info-outline" noink></paper-icon-button>
+                    <paper-tooltip id="tooltip_provider" for="info_provider" offset="8">
+                        <p>
+                            <span class="option">{{_getLocalization('all')}}</span><br>
+                            <span class="description">{{_getLocalization('allDescription')}}</span><br>
+                            <span class="option">{{_getLocalization('providerName')}}</span><br>
+                            <span class="description">{{_getLocalization('providerNameDescription')}}</span><br>
+                        </p>
+                    </paper-tooltip>
                 </div>
-                <div class="header_block">
+
+                <!--<div id="view_option" class="header_block">-->
+                    <!--{{_getLocalization('view')}}:&nbsp;-->
+                    <!--<paper-dropdown-menu id="ddl_view" label="" no-label-float>-->
+                        <!--<paper-menu id="menu_view" class="dropdown-content">-->
+                            <!--<paper-item id="0" on-tap=""><span id="list"></span></paper-item>-->
+                            <!--<paper-item id="1" on-tap="" disabled><span id="tree"></span></paper-item>-->
+                        <!--</paper-menu>-->
+                    <!--</paper-dropdown-menu>-->
+                    <!--<paper-icon-button id="info_view" icon="info-outline" noink></paper-icon-button>-->
+                    <!--<paper-tooltip id="tooltip_view" for="info_view" offset="8">-->
+                        <!--<p>-->
+                            <!--<span class="option">{{_getLocalization('list')}}</span><br>-->
+                            <!--<span class="description">{{_getLocalization('listDescription')}}</span><br>-->
+                            <!--<span class="option">{{_getLocalization('tree')}}</span><br>-->
+                            <!--<span class="description">{{_getLocalization('treeDescription')}}</span><br>-->
+                        <!--</p>-->
+                    <!--</paper-tooltip>-->
+                <!--</div>-->
+
+                <div id="search_option" class="header_block">
+                    {{_getLocalization('search')}}:&nbsp;
+                    <paper-dropdown-menu id="ddl_search" label="" no-label-float>
+                        <paper-menu id="menu_search" class="dropdown-content">
+                            <paper-item><span id="standard"></span></paper-item>
+                            <paper-item disabled><span id="extended"></span></paper-item>
+                        </paper-menu>
+                    </paper-dropdown-menu>
+                    <paper-icon-button id="info_search" icon="info-outline" noink></paper-icon-button>
+                    <paper-tooltip id="tooltip_search" for="info_search" offset="8">
+                        <p>
+                            <span class="option">{{_getLocalization('standard')}}</span><br>
+                            <span class="description">{{_getLocalization('standardDescription')}}</span><br>
+                            <span class="option">{{_getLocalization('extended')}}</span><br>
+                            <span class="description">{{_getLocalization('extendedDescription')}}</span><br>
+                        </p>
+                    </paper-tooltip>
                 </div>
-                <div class="header_block">
+
+                <div id="version_option" class="header_block">
+                    {{_getLocalization('version')}}:&nbsp;
+                    <paper-dropdown-menu id="ddl_version" label="" no-label-float>
+                        <paper-menu id="menu_version" class="dropdown-content">
+                            <paper-item id="0" on-tap="_showLast"><span id="show_last"></span></paper-item>
+                            <paper-item id="1" on-tap="_showAll"><span id="show_all"></span></paper-item>
+                        </paper-menu>
+                    </paper-dropdown-menu>
+                    <paper-icon-button id="tooltip_version" icon="info-outline" noink></paper-icon-button>
+                    <paper-tooltip id="tooltip_version" for="tooltip_version" offset="8">
+                        <p>
+                            <span class="option">{{_getLocalization('showLast')}}</span><br>
+                            <span class="description">{{_getLocalization('showLastDescription')}}</span><br>
+                            <span class="option">{{_getLocalization('showAll')}}</span><br>
+                            <span class="description">{{_getLocalization('showAllDescription')}}</span><br>
+                        </p>
+                    </paper-tooltip>
                 </div>
-                <div class="header_block">
-                </div>
-                <div class="header_block">
-                    <paper-input id="datasets_filter" value={{filter}} no-label-float label="">
-                        <iron-icon class="search" icon="search" prefix></iron-icon>
-                        <paper-icon-button class="clear" suffix on-click="_clearInput" icon="clear" tabindex="0"></paper-icon-button>
-                    </paper-input>
-                </div>
+
+                <paper-icon-button icon="settings" on-click="_optionsMenu"></paper-icon-button>
+
             </div>
 
-            <neon-animated-pages id="neon_container" selected="{{selected}}" entry-animation="fade-in-animation" exit-animation="fade-out-animation">
-
-                <neon-animatable>
-                    <div id="list_info">
-                        <div id="list_container">
-                            <iron-list id="list" items="{{shownDatasets}}" selection-enabled>
-                                <template>
-                                    <div>
-                                        <div class$="{{getClassForItem(selected)}}" on-tap="_selectDataUrl" style$="background: {{_getColorForItem(item)}};">
-                                            <span style="display:none;">{{item.url}}</span>
-                                            <div class="pad">
-                                                <div class="primary">{{item.resource_name}}</div>
-                                                <!--<div class="longText">-->
-                                                    <!--<template is="dom-repeat" items="{{_stringToArray(item.metas)}}" as="mata">-->
-                                                        <!--<b>{{mata.name}}:</b>-->
-                                                        <!--<span inner-h-t-m-l="{{mata.value}}"></span> <br>-->
-                                                    <!--</template>-->
-                                                <!--</div>-->
-                                            </div>
-                                            <iron-icon icon$="{{_getIconForItem(item)}}" style$="color: {{_getColorForIcon(item)}};"></iron-icon>
-                                        </div>
-                                    </div>
-                                </template>
-                            </iron-list>
-                        </div>
-                        <div id="info_container">
-                            <div id="info">
-                            </div>
-                        </div>
-                    </div>
-
-                    <div id="footer_list">
-                        <div class="footer_block"><span id="showing"></span> {{shownPrev}} <span id="to"></span> {{shownNext}} <span id="of"></span> {{length}} <span id="datasets"></span></div>
-                        <div class="footer_block">
-                            <paper-icon-button id="slider_chevron_left" class="chevron-left" on-click="_onPrevClick" icon="chevron-left"></paper-icon-button>
-                            <paper-icon-button id="slider_chevron_right" class="chevron-right" on-click="_onNextClick" icon="chevron-right"></paper-icon-button>
-                        </div>
-                        <div id="suggested_div" class="footer_block">
-                            <!--<template is="dom-if" if={{suggestedDatasets}}>-->
-                                <paper-checkbox checked on-change="showSuggested"><span id="suggested_datasets"></span></paper-checkbox>
-                            <!--</template>-->
-                        </div>
-                    </div>
-                </neon-animatable>
-
-                <neon-animatable>
-                    <div id="treemap_container"></div>
-
-                    <div id="footer_treemap">
-                        <div class="footer_block"><span id="showing2"></span> {{tLength}} <span id="datasets2"></span></div>
-                        <div class="footer_block"></div>
-                        <div class="footer_block"></div>
-                    </div>
-                </neon-animatable>
-
-                <neon-animatable>
-                    <!--<div id="ortelio">-->
-                        <ortelio-controllet datasets={{datasets}}></ortelio-controllet>
-                    <!--</div>-->
-                </neon-animatable>
-
-            </neon-animated-pages>
-
-            <div id="url">
-                <paper-textarea id="selected_url" label="" value={{dataUrl}} error-message={{errorMessage}}></paper-textarea>
+            <div id="datasets_list_container">
+                <datasets-list-controllet id="datasets_list"></datasets-list-controllet>
             </div>
 
+            <div id="url"><paper-input id="selected_url" label="" value={{dataUrl}} error-message={{errorMessage}}></paper-input></div>
         </paper-material>
 
     </template>
@@ -416,211 +270,130 @@
         HTMLImports.whenReady(function() {
             Polymer({
                 is: 'select-dataset-controllet',
+
                 properties: {
+
+                    tabIndex: {
+                        type: Number,
+                        value: 0
+                    },
+
                     datasets: {
                         type: Object,
                         value: undefined
                     },
-                    filteredDatasets : {
-                        type : Array,
-                        value : undefined
-                    },
-                    shownDatasets : {
-                        type : Array,
-                        value : undefined
-                    },
+
                     suggestedDatasets : {
                         type : Array,
                         value : undefined
                     },
 
-                    providers : {
-                        type : Array,
-                        value : undefined
-                    },
                     dataUrl : {
                         type  : String,
                         value : undefined,
                         observer : '_fireDataUrl'
-                    },
-                    filter : {
-                        type  : String,
-                        value : "",
-                        observer : '_filter'
-                    },
-                    selected : {
-                        type  : Number,
-                        value : 0
-                    },
-                    prev : {type  : Number, value : undefined},
-                    next : {type  : Number, value : undefined},
-                    shownPrev : {type  : Number, value : undefined},
-                    shownNext : {type  : Number, value : undefined},
-                    length : {type  : Number, value : undefined},
-                    tLength : {type  : Number, computed : 'treemapLength(length)'},
-                    step : {type  : Number, value : 20},
-                    colors : {
-                        type : Array,
-                        value : ["#8dd3c7","#ffffb3","#bebada","#fb8072","#80b1d3","#fdb462","#b3de69","#fccde5","#d9d9d9","#bc80bd","#ccebc5","#ffed6f"]
                     }
+
                 },
 
                 listeners: {
-                    'datasetexplorer-datalet_data-url': '_selectDataUrl_treeMap'
+                    'datasets-list-controllet_dataset' : '_selectDataUrl'
                 },
 
                 ready : function() {
+                    this._translate();
+
                     $(this.$.list_container).perfectScrollbar();
                     $(this.$.info).perfectScrollbar();
 
-//                    this.$.selected_url.invalid = true;
+                    this.options = false;
                 },
 
-                attached: function() {
+                attached : function() {
+                    this._translate();
+
                     this._resize();
                     var that = this;
-                    window.addEventListener("resize", function() { that._resize(); that._loadTreeMap();});
+                    window.addEventListener("resize", function() { that._resize() });
 
-//                    this.providers = that.datasets["result"]["providers"];
-//                    this.datasets = that.datasets["result"]["datasets"];
+                    this.providers = this.datasets["result"]["providers"];
+                    this.providersDatasets = this.datasets["result"]["datasets"];
+
+                    if(this.suggestedDatasets)
+                        this.providersDatasets = this.suggestedDatasets.concat(this.providersDatasets);
 
                     $.ajax({
                         url: "/cocreation/ajax/get-all-dataset",
                         dataType: "json",
-                        success: function(spodDatasets){
-
-                            that.providers = $.extend(that.datasets["result"]["providers"], {99: {api_url: "/cocreation/ajax/get-all-dataset", id: "99", image_hash: "SPOD", title: "SPOD"}});
-                            that.datasets = $.merge(spodDatasets, that.datasets["result"]["datasets"]);
-
-                            if(that.suggestedDatasets) {
-                                that.tempDatasets = that.datasets;
-                                that.datasets = that.suggestedDatasets.concat(that.datasets);
-                                that.$.suggested_div.style.visibility = "visible";
-                            }
-
-                            that.filteredDatasets = that.datasets;
-
-                            that.prev = 1;
-                            that.next = that.step;
-                            that.length = that.filteredDatasets.length;
-
-                            that.shownPrev = Math.min(that.prev, that.length);
-                            that.shownNext = Math.min(that.next, that.length);
-                            that.shownDatasets = that.filteredDatasets.slice(that.prev-1, that.next);
-
-                            that.$.list.scrollTarget = that.ownerDocument.documentElement;
-
-                            that._translate();
-
-                            that._loadTreeMap();
+                        success: function(localDatasets){
+                            that.localDatasets = localDatasets;
+                            that.lastLocalDatasets = [];
+                            var resource_name = "";
+                            for(var i in localDatasets)
+                                if(localDatasets[i].resource_name != resource_name) {
+                                    that.lastLocalDatasets.push(localDatasets[i]);
+                                    resource_name = localDatasets[i].resource_name;
+                                }
+                        },
+                        error: function(){
+                            that.localDatasets = [];
+                            that.lastLocalDatasets = [];
                         }
                     });
+
+                    this._setProvidersDatasets();
+                },
+
+                showDatasetInfo : function() {
+                    this.$.datasets_list.showDatasetInfo();
                 },
 
                 _translate : function(){
-                    this.$.listView.innerHTML    = ln["listView_" + ln["localization"]];
-                    this.$.treeMapView.innerHTML = ln["treeMapView_" + ln["localization"]];
-                    this.$.extendedSearch.innerHTML = ln["extendedSearch_" + ln["localization"]];
-
-                    this.$.ddl_provider.setAttribute("label", ln["provider_" + ln["localization"]]);
-                    this.$.datasets_filter.setAttribute("label", ln["search_" + ln["localization"]]);
-
-                    this.$.suggested_datasets.innerHTML = ln["suggestedDatasets_" + ln["localization"]];
-
-                    this.$.showing.innerHTML = ln["showing_" + ln["localization"]];
-                    this.$.showing2.innerHTML = ln["showing_" + ln["localization"]];
-                    this.$.to.innerHTML = ln["to_" + ln["localization"]];
-                    this.$.of.innerHTML = ln["of_" + ln["localization"]];
-                    this.$.datasets.innerHTML = ln["datasets_" + ln["localization"]];
-                    this.$.datasets2.innerHTML = ln["datasets_" + ln["localization"]];
-
                     this.$.selected_url.setAttribute("label", ln["selectedUrl_" + ln["localization"]]);
                     this.errorMessage = ln["wrongUrl_" + ln["localization"]];
+
+                    this.$.providers_datasets.innerHTML = ln["providersDatasets_" + ln["localization"]];
+                    this.$.spod_users_datasets.innerHTML = ln["spodUsersDatasets_" + ln["localization"]];
+                    this.$.options_header.innerHTML = ln["datasets_" + ln["localization"]];
+
+                    this.$.all.innerHTML = ln["all_" + ln["localization"]];
+//                    this.$.list.innerHTML = ln["list_" + ln["localization"]];
+//                    this.$.tree.innerHTML = ln["tree_" + ln["localization"]];
+                    this.$.standard.innerHTML = ln["standard_" + ln["localization"]];
+                    this.$.extended.innerHTML = ln["extended_" + ln["localization"]];
+                    this.$.show_last.innerHTML = ln["showLast_" + ln["localization"]];
+                    this.$.show_all.innerHTML = ln["showAll_" + ln["localization"]];
+
+                    this.$.menu_provider.select(0);
+//                    this.$.menu_view.select(0);
+                    this.$.menu_search.select(0);
+                    this.$.menu_version.select(0);
                 },
 
-                showSuggested : function(e) {
-                    if(e.target.checked)
-                        this.datasets = this.suggestedDatasets.concat(this.tempDatasets);
+                _setLocalDatasets : function() {
+                    if(this.$.ddl_version.selectedItem.id == 0)
+                        this._showLast();
                     else
-                        this.datasets = this.tempDatasets;
-                    this._filter();
+                        this._showAll();
+                    this._showOptions()
                 },
 
-                _loadTreeMap : function(){
-                    var h = $("#neon_container").height() - 48;
-                    var w = $("#neon_container").width();
-
-                    var data = JSON.stringify({result : {providers: this.providers, datasets: this.filteredDatasets}}).replace(/'/g, "");
-
-                    if(this.filteredDatasets.length > 0)
-                        this.$.treemap_container.innerHTML = "<datasetexplorer-datalet data='"+data+"' width=\""+w+"\" height=\""+h+"\" fields='[\"provider_name\",\"organization_name\",\"package_name\",\"resource_name\",\"url\",\"w\",\"metas\"]'></datasetexplorer-datalet>";
-                    else
-                        this.$.treemap_container.innerHTML = "";
-                },
-
-                _filter : function() {
-                    if(this.filteredDatasets) {
-                        this.async(function () {
-                            var ddl_provider = $(this.$.ddl_provider).find("paper-menu")[0].selectedItem;
-                            var name = ddl_provider.innerHTML.trim();
-                            var id = this._getIdByProviderName(name);
-                            this.prev = 1;
-                            this.next = this.step;
-                            if (id) {
-                                //filtered by provider name
-                                this.filteredDatasets = this.datasets.filter(function (el) {
-                                    return el.provider_name == "p:" + id;
-                                });
-                            }
-                            else {
-                                this.filteredDatasets = this.datasets;
-                            }
-
-                            //filtered by filter
-                            var filter = this.filter;
-                            this.filteredDatasets = this.filteredDatasets.filter(function (el) {
-                                return el.resource_name.toLowerCase().indexOf(filter.toLowerCase()) > -1;
+                _setProvidersDatasets : function() {
+                    this.async(function () {
+                        var ddl_provider = $(this.$.ddl_provider).find("paper-menu")[0].selectedItem;
+                        var name = ddl_provider.innerHTML.trim();
+                        var id = this._getIdByProviderName(name);
+                        if (id) {
+                            var providerDatasets = this.providersDatasets.filter(function (el) {
+                                return el.provider_name == "p:" + id;
                             });
+                            this.$.datasets_list.setDatasets(providerDatasets);
+                        }
+                        else
+                            this.$.datasets_list.setDatasets(this.providersDatasets);
 
-                            this.length = this.filteredDatasets.length;
-
-                            this.shownPrev = Math.min(this.prev, this.length);
-                            this.shownNext = Math.min(this.next, this.length);
-                            this.shownDatasets = this.filteredDatasets.slice(this.prev - 1, this.next);
-
-                            $("#list_container").animate({scrollTop: 0}, 0);
-
-                            this._loadTreeMap();
-                        }, 0);
-                    }
-                },
-
-                _refreshList : function() {
-                    this.shownDatasets = this.filteredDatasets.slice(this.prev - 1, this.next);
-
-                    this.$.header.style.display = "flex";
-                    this.$.header.style.visibility = "visible";
-//                    this.$.url.style.marginTop = "-4px";
-
-                    this.$.header.className = this.$.header.className.replace(" noshadow", "");
-                },
-
-                _noShadow : function() {
-                    this.$.header.style.display = "flex";
-                    this.$.header.style.visibility = "visible";
-//                    this.$.url.style.marginTop = "-4px";
-
-                    this.$.header.className += " noshadow";
-                },
-
-                _hideSearch : function() {
-//                    this.$.header.style.display = "none";
-                    this.$.header.style.visibility = "hidden";
-//                    this.$.url.style.marginTop = "44px";
-                },
-
-                _clearInput : function() {
-                    this.$.datasets_filter.value = "";
+                        this._showOptions()
+                    }, 0);
                 },
 
                 _getIdByProviderName : function(name) {
@@ -630,104 +403,49 @@
                     }
                 },
 
-//                iconForItem: function(item) {
-//                    return item ? (item.integer < 50 ? 'star-border' : 'info-outline') : '';
-//                },
-
-                treemapLength : function(length) {
-                    var ddl_provider = $(this.$.ddl_provider).find("paper-menu")[0].selectedItem;
-                    var name = ddl_provider.innerHTML.trim();
-                    var id = this._getIdByProviderName(name);
-
-                    if(this.suggestedDatasets && !id)
-                        return Math.max(length - this.suggestedDatasets.length, 0);
-                    return length;
+                _optionsMenu : function() {
+                    this.options = !this.options;
+                    this._showOptions();
                 },
 
-                _getColorForIcon : function(item) {
-                    var ddl_provider = $(this.$.ddl_provider).find("paper-menu")[0].selectedItem;
-                    var name = ddl_provider.innerHTML.trim();
-                    var id = this._getIdByProviderName(name);
-                    if (id) {
-                        return this.colors[0];
-                    }
-                    if(!item.provider_name) {
-                        return "#00BCD4";
-                    }
-                    var id = item.provider_name.substring(2, item.provider_name.length);
-                    var i = this.getProviderById(id) % this.colors.length;
-                    return this.colors[i];
+                _showOptions : function() {
+                    this.async(function () {
+                        if(!this.options) {
+                            this.$.options_header.style.display = "block";
+                            this.$.provider_option.style.display = "none";
+//                            this.$.view_option.style.display = "none";
+                            this.$.search_option.style.display = "none";
+                            this.$.version_option.style.display = "none";
+                        }
+                        else if(this.tabIndex == 0) {
+                            this.$.options_header.style.display = "none";
+                            this.$.provider_option.style.display = "block";
+//                            this.$.view_option.style.display = "block";
+                            this.$.search_option.style.display = "block";
+                            this.$.version_option.style.display = "none";
+                        }
+                        else if(this.tabIndex == 1) {
+                            this.$.options_header.style.display = "none";
+                            this.$.provider_option.style.display = "none";
+//                            this.$.view_option.style.display = "none";
+                            this.$.search_option.style.display = "none";
+                            this.$.version_option.style.display = "block";
+                        }
+                    }, 0);
                 },
 
-                _getColorForItem : function(item) {
-//                    var ddl_provider = $(this.$.ddl_provider).find("paper-menu")[0].selectedItem;
-//                    var name = ddl_provider.innerHTML.trim();
-//                    var id = this._getIdByProviderName(name);
-//                    if (id) {
-//                        return this.colors[0];
-//                    }
-                    if(!item.provider_name) {
-                        return "#FFEB3B";
-                    }
-//                    var id = item.provider_name.substring(2, item.provider_name.length);
-//                    var i = this.getProviderById(id) % this.colors.length;
-//                    return this.colors[i];
+                _showAll : function() {
+                    this.$.datasets_list.showVersion(true);
+                    this.$.datasets_list.setDatasets(this.localDatasets);
                 },
 
-                _getIconForItem : function(item) {
-                    return item.provider_name ? 'bookmark' : 'star';
+                _showLast : function() {
+                    this.$.datasets_list.showVersion(false);
+                    this.$.datasets_list.setDatasets(this.lastLocalDatasets);
                 },
 
-//                _getProviderColor: function(id) {
-//                    var i = this.getProviderById(id) % this.colors.length;
-//                    return this.colors[i];
-//                },
-
-                getClassForItem: function(selected) {
-                    return selected ? 'item expanded' : 'item';
-                },
-
-                getProviderById: function(providerId) {
-                    var i = 0;
-                    for(var id in this.providers){
-                        if(this.providers[id].id == providerId)
-                            return i;
-                        i++;
-                    }
-                },
-
-                _onPrevClick : function(){
-                    if(this.prev != 1) {
-                        this.prev -= this.step;
-                        this.next -= this.step;
-
-                        this.shownPrev = Math.min(this.prev, this.length);
-                        this.shownNext = Math.min(this.next, this.length);
-                        this.shownDatasets = this.filteredDatasets.slice(this.prev - 1, this.next);
-                    }
-                    $("#list_container").animate({ scrollTop: 0}, 0);
-                },
-
-                _onNextClick : function(){
-                    if(this.next < this.length) {
-                        this.prev += this.step;
-                        this.next += this.step;
-
-                        this.shownPrev = Math.min(this.prev, this.length);
-                        this.shownNext = Math.min(this.next, this.length);
-                        this.shownDatasets = this.filteredDatasets.slice(this.prev - 1, this.next);
-                    }
-                    $("#list_container").animate({ scrollTop: 0}, 0);
-                },
-
-                _stringToArray: function(obj) {
-                    obj = JSON.parse(obj);
-                    return Object.keys(obj).map(function(key) {
-                        return {
-                            name: key,
-                            value: obj[key]
-                        };
-                    });
+                _getLocalization : function(text){
+                    return ln[text + "_" + ln["localization"]];
                 },
 
                 _toArray: function(obj) {
@@ -739,73 +457,15 @@
                     });
                 },
 
-                _selectDataUrl : function(){
+                _selectDataUrl : function(e){
                     this.async(function () {
-                        if(this.$.list.selectedItem) {
-
-                            var metas = JSON.parse(this.$.list.selectedItem.metas);
-                            var html = "<span style=\"color: #2196F3; font-weight: bold;\">" + this.$.list.selectedItem.resource_name + "</span><br><br>";
-                            /*font-weight: bold;*/
-                            /*line-height: 48px;*/
-                            for(var i in metas)
-                                html += "<b>" + i + ":</b> " + metas[i] + "<br>";
-                            this.$.info.innerHTML = html;
-
-                            this.dataUrl = this.$.list.selectedItem.url;
-//                            var url = this.$.list.selectedItem.url;
-
-//                            url = utility_getResourceUrl(url);
-
-//                            // Check if CKAN
-//                            var strDatasetPos = url.indexOf('/dataset/');
-//                            var strResourcePos = (strDatasetPos >= 0) ? url.indexOf('/resource/') : -1;
-//                            if (strDatasetPos >= 0 && strResourcePos > strDatasetPos) {
-//                                var urlSegment1 = url.substring(0, strDatasetPos);
-//                                var urlResourceEnd = url.indexOf('/', strResourcePos + 10);
-//                                var resourceId = url.substring(strResourcePos + 10, urlResourceEnd);
-//                                url = urlSegment1 + "/api/action/datastore_search?resource_id=" + resourceId;
-//                            }
-//
-//                            // Check if OPENDATASOFT
-//                            var strExploreDatasetPos = url.indexOf('/explore/dataset/');
-//                            if (strExploreDatasetPos >= 0) {
-//                                var urlSegment1 = url.substring(0, strExploreDatasetPos);
-//                                var datasetEnd = url.indexOf(strExploreDatasetPos + 17, '/');
-//                                var datasetId = url.substring(strExploreDatasetPos + 17, datasetEnd >= 0 ? datasetEnd : url.length);
-//                                url = urlSegment1 + '/api/records/1.0/search?dataset=' + datasetId;
-//                            }
-
-//                            this.dataUrl = this._addlimitUrl(url);
-//                            this.dataUrl = url;
-                        }
-                        else {
-                            this.dataUrl = "";
-                            this.$.info.innerHTML = "";
-                        }
+                        this.dataUrl = e.detail.dataset.url;
                     }, 0);
                 },
 
-                _selectDataUrl_treeMap : function(e) {
-//                    this.dataUrl = this._addlimitUrl(e.detail.url);
-                    this.dataUrl = e.detail.url;
-                },
-
                 _fireDataUrl : function(){
-                    this.fire('dataset-selection-controllet_data-url', {url: this.dataUrl});
+                    this.fire('select-dataset-controllet_data-url', {url: this.dataUrl});
                 },
-
-//                _addlimitUrl : function(url){
-//                    //CKAN --> action no limit
-//                    if((url.indexOf("api/action") > -1) && !(url.indexOf("limit") > -1))
-//                    {
-//                        url += "&limit=99999";
-//                    }
-//                    //OpenDataSoft --> action no limit
-//                    if((url.indexOf("api/records") > -1) && !(url.indexOf("rows") > -1)){
-//                        url += "&rows=10000";
-//                    }
-//                    return url;
-//                },
 
                 _resize : function(){
                     var h = Math.max(document.documentElement.clientHeight, window.innerHeight || 0) - 16;

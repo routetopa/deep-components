@@ -67,7 +67,8 @@ Example:
                 width: 100%;
                 height: 70%;
                 /*min-height: 500px;*/
-                background: #ffffff;
+                /*background: #ffffff;*/
+                background: transparent;
                 position: relative;
             }
 
@@ -113,6 +114,10 @@ Example:
 
             :host ::content .children:hover rect.child {
                 fill: #bbb;
+            }
+
+            :host ::content iframe.iframe {
+                border: 0 !important;
             }
 
             /*:host ::content .children svg.foreignObject {*/
@@ -206,7 +211,7 @@ Example:
                 var xyz = function(url) {
                     me.selectResource(url);
                 }
-                this.map.name = this._component.name;
+                this.map.name = datasetexplorer_ln["path_" + datasetexplorer_ln["ln"]];
                 build2(this.map, this.meta, this._component.$.treemap_placeholder, xyz, this._component.width, this._component.height);
             },
 

@@ -17,17 +17,43 @@ ln["forward_en"] = "FORWARD";
 
 //SELECT DATASET
 
-ln["listView_en"] = "LIST VIEW";
-ln["treeMapView_en"] = "TREE MAP VIEW";
-ln["extendedSearch_en"] = "EXTENDED SEARCH";
+ln["selectedUrl_en"] = "Selected url";
+ln["wrongUrl_en"] = "Invalid url or data provider not supported yet.";
+
+ln["providersDatasets_en"] = "PROVIDERS DATASETS";
+ln["spodUsersDatasets_en"] = "SPOD USERS DATASETS";
+ln["datasets_en"] = "DATASETS";
+
 ln["provider_en"] = "Provider";
+ln["all_en"] = "All";
+ln["allDescription_en"] = "Shows the datasets of all associated providers.";
+ln["providerName_en"] = "Provider";
+ln["providerNameDescription_en"] = "Shows only the datasets of the selected provider.";
+
+//ln["view_en"] = "View";
+//ln["list_en"] = "List";
+//ln["listDescription_en"] = "Shows the datasets with a classic list.";
+//ln["tree_en"] = "Tree";
+//ln["treeDescription_en"] = "Shows the datasets with a tree map.";
+
+ln["search_en"] = "Search";
+ln["standard_en"] = "Standard";
+ln["standardDescription_en"] = "The search function works only on datasets names.";
+ln["extended_en"] = "Extended [NOT AVAILABLE]";
+ln["extendedDescription_en"] = "The search function works the entire contents of the datasets.";
+
+ln["version_en"] = "Version";
+ln["showLast_en"] = "Show last";
+ln["showLastDescription_en"] = "Shows only the latest version of the datasets.";
+ln["showAll_en"] = "Show all";
+ln["showAllDescription_en"] = "Shows all versions of the datasets.";
+
+//select-dataset-controllet
+ln["datasetsInfo_en"] = "DATASET INFO";
 ln["showing_en"] = "Showing";
 ln["to_en"] = "to";
 ln["of_en"] = "of";
-ln["datasets_en"] = "datasets";
-ln["suggestedDatasets_en"] = "Suggested datasets";
-ln["selectedUrl_en"] = "Selected url";
-ln["wrongUrl_en"] = "Invalid url or data provider not supported yet.";
+ln["search_en"] = "Search";
 
 //SELECT DATA
 
