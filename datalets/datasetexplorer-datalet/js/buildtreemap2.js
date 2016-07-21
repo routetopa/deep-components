@@ -249,7 +249,7 @@ function build2(root, meta, place_holder, select_listener, width, height) {
                 .attr("width", root.dx)
                 .attr("height", root.dy - root.y)
                 .append("xhtml:body")
-                .html('<iframe src="'+pageurl+'" width="'+root.dx+'" height="'+root.dy+'"></iframe>');
+                .html('<iframe class="iframe" src="'+pageurl+'" width="'+root.dx+'" height="'+root.dy+'"></iframe>');
         }
 
         return g;

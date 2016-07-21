@@ -25,28 +25,39 @@ function DataTypeConverter() {
 };//EndConstructor.
 
 DataTypeConverter.TYPES = {
-    TEXT        : { value: 0, name: "TEXT" },
-    CODE        : { value: 1, name: "CODE"},
+    EMPTY       : { value: 0, name: "NULL"},
 
+    TEXT        : { value: 1, name: "TEXT" },
     NUMBER      : { value: 2, name: "NUMBER" },
     OBJECT      : { value: 3, name: "OBJECT" },
-
-
-    BOOL        : { value: 5, name: "BOOL"},
-    CONST       : { value: 6, name: "CONST" },
-    CATEGORY    : { value: 7, name: "CATEGORY" },
-
-    DATETIME    : { value: 8, name: "DATETIME" },
-
-    EMPTY       : { value: 101, name: "NULL" }
+    DATETIME    : { value: 4, name: "DATETIME" }
 };
 
 DataTypeConverter.SUBTYPES = {
     GEOCOORDINATE   :   { value: 1000, name: "GEOCOORDINATE" },
-    PERCENTAGE      :   { value: 1000, name: "PERCENTAGE" },
-    LATITUDE        :   { value: 1001, name: "LATITUDE" },
-    LONGITUDE       :   { value: 1002, name: "LONGITUDE" }
+    GEOJSON         :   { value: 1001, name: "GEOJSON" },
+    BOOL            :   { value: 1002, name: "BOOL"},
+    CONST           :   { value: 1003, name: "CONST" },
+    CATEGORY        :   { value: 1004, name: "CATEGORY" },
+
+    PERCENTAGE      :   { value: 1100, name: "PERCENTAGE" },
+    LATITUDE        :   { value: 1101, name: "LATITUDE" },
+    LONGITUDE       :   { value: 1102, name: "LONGITUDE" }
+
+    /*CODE        : { value: 2000, name: "CODE"},*/
 };
+
+DataTypeConverter.LANGS = {
+    EN   :   { value: 1000, name: "EN" },
+    IT   :   { value: 1001, name: "IT" },
+    FR   :   { value: 1100, name: "FR" },
+    NL   :   { value: 1101, name: "NL" }
+};
+
+
+DataTypeConverter.GEOJSONTYPES = [ "Point", "MultiPoint", "LineString",
+    "MultiLineString", "Polygon", "MultiPolygon", "GeometryCollection", "Feature",
+    "FeatureCollection" ];
 
 DataTypeConverter.prototype = (function () {
 
@@ -111,6 +122,10 @@ DataTypeConverter.prototype = (function () {
 
     var _analyseDataTypes = function(fields) {
         ArrayUtils.IteratorOverKeys(fields, function(field) {
+
+
+            /*
+            //TODO: removed CODE, I don't know whether it must be inserted
             if (field._inferredTypes[DataTypeConverter.TYPES.CODE.name]) {
                 var confidence = field._inferredTypes[DataTypeConverter.TYPES.CODE.name] / field.numOfItems;
                 var _numericalInferredType = field._inferredTypes[DataTypeConverter.TYPES.NUMBER.name];
@@ -119,7 +134,7 @@ DataTypeConverter.prototype = (function () {
                 field.type = DataTypeConverter.TYPES.CODE.name;
                 field.typeConfidence = confidence;
                 return;
-            }
+            }*/
 
             //Infers the field TYPE.
             var max = ArrayUtils.FindMinMax(field._inferredTypes, function (curval, lastval) {
@@ -189,11 +204,6 @@ DataTypeConverter.prototype = (function () {
         if (typeof value === 'object')
             return DataTypeConverter.TYPES.OBJECT;
 
-        //If the value starts with a zero and contains all numbers, it is
-        //inferred as textual content.
-        if (/^0[0-9]+$/.test(value))
-            return DataTypeConverter.TYPES.CODE;
-
         //Try to parse the float.
         var isnumber = DataTypesUtils.FilterFloat(value);
         if (isNaN(isnumber) !== true) {//It is a number.
@@ -222,6 +232,21 @@ DataTypeConverter.prototype = (function () {
     var _processInferSubType = function (value) {
         if (value === null || typeof value === 'undefined') return null;
 
+        //GEOCOORDINATE
+        if (Array.isArray(value) && value.length == 2) {//It recognises the LAT LNG as array of two values.
+            //Checks if the two array's values are numbers.
+            if ( DataTypesUtils.FilterFloat(value[0]) != NaN && DataTypesUtils.FilterFloat(value[1]) != NaN  )
+                if (DataTypesUtils.DecimalPlaces(value[0]) > 4 && DataTypesUtils.DecimalPlaces(value[1]) > 4 )
+                    return DataTypeConverter.SUBTYPES.GEOCOORDINATE;
+        }//EndIf.
+
+        if (typeof value === 'string') {
+            var split = value.split(",");
+            //if (split.length == 2)
+                if (DataTypesUtils.IsLatLng(split[0]) && DataTypesUtils.IsLatLng(split[1]))
+                    return DataTypeConverter.SUBTYPES.GEOCOORDINATE;
+        }
+
         //Try to parse the float.
         var isnumber = DataTypesUtils.FilterFloat(value);
         if (isNaN(isnumber) !== true) {//It is a number.
@@ -240,6 +265,19 @@ DataTypeConverter.prototype = (function () {
             return null;
         }
 
+        //Try to parse GEOJSON.
+        if (typeof value === 'object' && value.hasOwnProperty('type')) {
+            //Check the type variable.
+            var geotype = value.type;
+            var isincluded = DataTypeConverter.GEOJSONTYPES.includes(geotype);
+            if (isincluded) return DataTypeConverter.SUBTYPES.GEOJSON;
+        }
+
+        //If the value starts with a zero and contains all numbers, it is
+        //inferred as textual content.
+        /*if (/^0[0-9]+$/.test(value))
+         return DataTypeConverter.TYPES.CODE;*/
+
         return null;
     };//EndFunction.
 
@@ -248,6 +286,9 @@ DataTypeConverter.prototype = (function () {
             if (fieldType.typeConfidence >= threshold) return;
 
             var arrHierarchyTypes = DataTypeHierarchy.HIERARCHY[fieldType.type];
+            if (arrHierarchyTypes == null)
+                return metadata;
+
             var lastFieldType = { lastType: arrHierarchyTypes[0],
                 lastTypeCounter: fieldType._inferredTypes[arrHierarchyTypes[0]],
                 typeConfidence:  0 };
@@ -269,6 +310,15 @@ DataTypeConverter.prototype = (function () {
 
         return metadata;
     };//EndFunction.
+
+    var _capitalizeFirstLetter = function(string) {
+        return string.charAt(0).toUpperCase() + string.slice(1);
+    };//EndFunction.
+
+    var _replaceAll = function(search, replacement) {
+        var target = this;
+        return target.split(search).join(replacement);
+    };
 
     var jsonTraverse = function(json, fieldKeys, callback) {
         var stack = [];
@@ -396,8 +446,17 @@ DataTypeConverter.prototype = (function () {
          * @param options Infer Data Type options, in particular the threshold value for the confidence.
          */
         inferJsonDataType: function (json, fieldKeys, options) {
-            if (typeof options === 'undefined' || options == null)
-                options = { thresholdConfidence: 1 };
+
+            //Default options initialisation.
+            if (typeof options === 'undefined' || options == null) options = { };
+
+            if (options.hasOwnProperty("thresholdConfidence") == false)
+                options.thresholdConfidence = 1;
+
+            if (options.hasOwnProperty("language") == false)
+                options.language = DataTypeConverter.LANGS.EN.name;
+            else
+                options.language = options.language.toUpperCase();
 
             var stack = [];
             var fieldsType = {};
@@ -508,19 +567,43 @@ DataTypeConverter.prototype = (function () {
 
                     var incorrect = fieldType.numOfItems - fieldType.totalNullValues - fieldType._inferredTypes[fieldType.type];
                     if (incorrect > 0) {
-                        description += "The column <" + fieldType.name + "> has the type <" + fieldType.type + ">";
+                        var _descr1 = _capitalizeFirstLetter(JDC_LNG['key_declaretype'][options.language]) + ".";
+                        var _descr2 = _capitalizeFirstLetter(JDC_LNG['key_notoftype_singular'][options.language]) + ".";
+                        if (incorrect > 1)
+                            _descr2 = _capitalizeFirstLetter(JDC_LNG['key_notoftype_plural'][options.language]) + ".";
+
+                        var descr = _descr1 + " " + _descr2;
+                        descr = descr.replace(/%COL_NAME/g, fieldType.name);
+                        descr = descr.replace(/%COL_TYPE/g, fieldType.type);
+                        descr = descr.replace(/%COL_ERRORS/g, incorrect);
+
+                        description += descr;
+
+                        /*description += "The column <" + fieldType.name + "> has the type <" + fieldType.type + ">";
                         var verb = (incorrect == 1) ? " value is" : " values are";
-                        description += ", but " + incorrect + verb + " not a " + fieldType.type;
+                        description += ", but " + incorrect + verb + " not a " + fieldType.type;*/
                     }
                 }
 
-                if (fieldType.totalNullValues > 0) {
+                var descr = "";
+                if (fieldType.totalNullValues == 1)
+                    descr = _capitalizeFirstLetter(JDC_LNG['key_emptyvalue_singolar'][options.language]) + ".";
+                else if (fieldType.totalNullValues > 1 )
+                    descr = _capitalizeFirstLetter(JDC_LNG['key_emptyvalue_plural'][options.language]) + ".";
+
+                descr = descr.replace(/%COL_NAME/g, fieldType.name);
+                descr = descr.replace(/%COL_TYPE/g, fieldType.type);
+                descr = descr.replace(/%COL_NULLVALUES/g, fieldType.totalNullValues);
+
+                /*if (fieldType.totalNullValues > 0) {
+                    var descr = _capitalizeFirstLetter(JDC_LNG['key_declaretype'][options.language]) + ".";
+
                     description += "The column <" + fieldType.name + "> has " + fieldType.totalNullValues + " EMPTY value";
                     if (fieldType.totalNullValues > 1) description += "s";
                 }
 
                 if (description.length > 0)
-                    description += ".";
+                    description += ".";*/
 
                 fieldType.errorsDescription = description;
                 warningsTextual += description;
@@ -547,6 +630,15 @@ DataTypeConverter.prototype = (function () {
          */
         inferDataTypeOfValue: function (value) {
             return _processInferType(value);
+        },//EndFunction.
+
+        /**
+         * Given in input a value, the function infers the data type.
+         * @param value
+         * @returns {*}
+         */
+        inferDataSubTypeOfValue: function (value) {
+            return _processInferSubType(value);
         }//EndFunction.
 
     };

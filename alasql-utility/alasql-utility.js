@@ -125,7 +125,8 @@ function _addParenthesis (fields) {
 }
 
 function _normalizeField (field) {
-    return "[" + field + "]";
+    return "`" + field + "`";
+    //return "[" + field + "]";
 }
 
 function alasql_transformData (data, fields, round) {

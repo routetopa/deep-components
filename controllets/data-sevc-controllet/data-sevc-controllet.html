@@ -47,7 +47,7 @@
 
             listeners : {
                 'page-slider-controllet_selected' : '_updateSlider',
-                'dataset-selection-controllet_data-url' : '_allowSecondStep',
+                'select-dataset-controllet_data-url' : '_allowSecondStep',
                 'select-fields-controllet_selected-fields' : '_allowThirdStep',
                 'filters-controllet_filters': '_allowThirdStep',
                 'aggregators-controllet_aggregators': '_allowThirdStep',
@@ -117,7 +117,7 @@
 
             _allowSecondStep : function(e){
                 this.$.slider.chevronRight(false);
-//
+
                 var f = Object.create(providerFactory);
                 var provider = f.getProvider(e.detail.url);
                 var dataUrl = provider.addLimit(e.detail.url);
@@ -135,6 +135,8 @@
                 }
                 else
                     this.$.select_dataset.$.selected_url.invalid = true;
+
+                this.$.select_dataset.showDatasetInfo();
             },
 
             _allowThirdStep : function(){

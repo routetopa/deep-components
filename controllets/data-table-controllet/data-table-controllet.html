@@ -40,15 +40,20 @@
             }
 
             paper-icon-button.order {
-                height: 24px;
-                width: 24px;
+                height: 40px;
+                width: 40px;
+                padding: 4px;
+
                 cursor: pointer;
             }
 
             paper-icon-button.warning {
-                height: 24px;
-                width: 24px;
+                height: 40px;
+                width: 40px;
+                padding: 4px;
                 color: #FFEB3B;
+                --paper-icon-button-ink-color: #FFEB3B;
+
                 cursor: help;
             }
 
@@ -77,18 +82,22 @@
 
             #data_table_container #header {
                 background: #B6B6B6;
-                height: 24px;
-                padding: 12px;
+                height: 40px;
+                padding: 4px;
                 text-align: center;
                 font-weight: 700;
                 cursor: help;
+            }
+
+            #data_table_container #header * {
+                line-height: 40px !important;
             }
 
             #data_table_container table {
                 height: calc(100% - 96px);
                 width: 100%;
 
-                border-spacing: 0px;
+                border-spacing: 0;
             }
 
             #data_table_container tbody {
@@ -103,15 +112,21 @@
 
             #data_table_container th,
             #data_table_container td{
-                height: 24px;
-                padding: 12px;
+                height: 32px;
+                /*padding: 12px;*/
                 text-align: center;
-                max-width: 256px;
-                min-width: 156px;
+                /*max-width: 256px;*/
+                /*min-width: 156px;*/
                 overflow: hidden;
                 white-space: nowrap;
                 text-overflow: ellipsis;
                 width: 1%;
+            }
+
+            #data_table_container td {
+                font-size: 14px;
+                padding: 4px 12px;
+                max-width: calc(360px - 24px);
             }
 
             #data_table_container th {
@@ -119,6 +134,13 @@
                 color: #FFFFFF;
                 font-weight: 700;
                 cursor: help;
+                border-right: 2px solid #FFFFFF;
+                height: 40px;
+                padding: 4px 12px;
+            }
+
+            #data_table_container tr :nth-last-child(2) {
+                border-right: 0;
             }
 
             #data_table_container th,
@@ -128,17 +150,13 @@
 
             #data_table_container th .th_label {
                 display: inline-block;
-                max-width: calc(100% - 48px - 8px);
+                /*max-width: calc(100% - 48px - 8px);*/
                 vertical-align: middle;
                 overflow: hidden;
                 white-space: nowrap;
                 text-overflow: ellipsis;
                 line-height: 24px;/**/
-            }
-
-            #data_table_container td {
-                font-size: 14px;
-                padding: 4px;
+                max-width: calc(360px - 114px);
             }
 
             #data_table_container #footer {
@@ -202,10 +220,10 @@
         <paper-material id="data_table_container" elevation="5">
 
             <div id="header">
-                <span id="selected_data"></span>
                 <template is="dom-if" if={{hasWarnings}}>
                     <paper-icon-button class="warning" icon="warning"></paper-icon-button>
                 </template>
+                <span id="selected_data"></span>
             </div>
 
             <paper-tooltip id="tooltip_wornings" for="header" offset="56">
@@ -223,10 +241,11 @@
                     <tr>
                         <template is="dom-repeat" items="{{fields}}">
                             <th id="id_{{index}}">
-                                <div class="th_label">{{item.name}}</div>
+
                                 <template is="dom-if" if={{item.errorsDescription.length}}>
                                     <paper-icon-button class="warning" icon="warning"></paper-icon-button>
                                 </template>
+                                <div class="th_label">{{item.name}}</div>
                                 <paper-icon-button id="{{index}}" class="order" on-click="_order" icon="unfold-more"></paper-icon-button>
                             </th>
                         </template>
@@ -340,7 +359,7 @@
 
             setData : function(data) {
                 var converter = new DataTypeConverter();
-                var result = converter.inferJsonDataType(data, ["*"]);
+                var result = converter.inferJsonDataType(data, ["*"], { language: ln["localization"] } );
                 result = converter.cast(result);
                 this.fields = ArrayUtils.toFieldsArray(result.types);
                 this.data = result.dataset;
