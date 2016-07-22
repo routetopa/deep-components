@@ -278,7 +278,7 @@ ln["datasetsInfo_it"] = "INFORMAZIONI SUL DATASET";
 ln["showing_it"] = "Mostrati";
 ln["to_it"] = "a";
 ln["of_it"] = "di";
-ln["datasetsRows_en"] = "dataset";
+ln["datasetsRows_it"] = "dataset";
 ln["search_it"] = "Ricerca";
 
 //SELECT DATA
@@ -502,7 +502,7 @@ ln["datasetsInfo_fr"] = "INFORMATIONS SUR DATASET";
 ln["showing_fr"] = "Aperçu";
 ln["to_fr"] = "à";
 ln["of_fr"] = "de";
-ln["datasetsRows_en"] = "dataset";
+ln["datasetsRows_fr"] = "dataset";
 ln["search_fr"] = "Rechercher";
 
 //SELECT DATA
@@ -726,7 +726,7 @@ ln["datasetsInfo_nl"] = "DATASET INFO";
 ln["showing_nl"] = "Showing";
 ln["to_nl"] = "to";
 ln["of_nl"] = "of";
-ln["datasetsRows_en"] = "dataset";
+ln["datasetsRows_nl"] = "dataset";
 ln["search_nl"] = "Search";
 
 //SELECT DATA
