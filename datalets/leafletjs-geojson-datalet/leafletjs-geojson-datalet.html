@@ -89,16 +89,37 @@ Example:
 
                 L.Icon.Default.imagePath = 'http://services.routetopa.eu/DEEalerProvider/COMPONENTS/datalets/leafletjs-datalet/leafletsjs/images';
 
-                var bounding_box = L.geoJson(t.data[0].data);
+                var coordinates = [];
+                var coordinates_index  = 0;
+                var geo;
 
                 for (var i = 0; i < t.data[0].data.length; i++)
                 {
-                    try{
-                        if(typeof t.data[0].data[i] != 'object')
+                    if(typeof t.data[0].data[0] == 'Array')
+                    {
+                        if(!isNaN(t.data[0].data[i][0]) && !isNaN(t.data[0].data[i][1]))
+                            coordinates.push([parseFloat(t.data[0].data[i][0]), parseFloat(t.data[0].data[i][1])]);
+                        else
+                            continue;
+                    }
+                    else if(typeof t.data[0].data[i] == 'string' && t.data[0].data[i].startsWith('{"type":"'))
+                    {
+                        try
+                        {
                             t.data[0].data[i] = JSON.parse(t.data[0].data[i]);
-                    }catch(e){}
-
-                    var geoJsonLayer = L.geoJson(t.data[0].data[i]).addTo(t._component.map);
+                            geo = L.geoJson(t.data[0].data[i]).addTo(t._component.map);
+                        }catch(e) {continue;}
+                    }
+                    else if(typeof t.data[0].data[i] == 'string' && t.data[0].data[i].indexOf(","))
+                    {
+                        var coords = t.data[0].data[i].split(",");
+                        if(!isNaN(coords[0]) && !isNaN(coords[1])) {
+                            coordinates.push([parseFloat(coords[0]), parseFloat(coords[1])]);
+                            geo = L.marker([coordinates[coordinates_index][0], coordinates[coordinates_index][1]]).addTo(t._component.map);
+                            coordinates_index++;
+                        }else
+                            continue;
+                    }
 
                     if(t.data.length > 1)
                     {
@@ -115,13 +136,13 @@ Example:
                         }
 
                         var popup = L.popup().setContent(popupText);
-                        geoJsonLayer.bindPopup(popup);
+                        geo.bindPopup(popup);
                     }
                 }
 
                 t._component.map._onResize();
                 t._component.map.invalidateSize(false);
-                t._component.map.fitBounds(bounding_box);
+                t._component.map.fitBounds(coordinates);
 
             }
         };
