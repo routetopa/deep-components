@@ -100,22 +100,27 @@ var AjaxJsonAlasqlBehavior = {
         var aggregators = JSON.parse(this._component.getAttribute("aggregators"));
         var orders = JSON.parse(this._component.getAttribute("orders"));
 
-        this._component.fields = JSON.parse(this._component.fields); /*deprecated*/
-        if(selectedFields) { /*if deprecated*/
-            this._component.fields = []; /*deprecated*/
-            for (var i=0; i < selectedFields.length; i++)
-                if (selectedFields[i])
-                    this._component.fields.push(selectedFields[i].value);
-        }
+        //this._component.fields = JSON.parse(this._component.fields); /*deprecated*/
+        //if(selectedFields) { /*if deprecated*/
+        //    this._component.fields = []; /*deprecated*/
+        //    for (var i=0; i < selectedFields.length; i++)
+        //        if (selectedFields[i])
+        //            this._component.fields.push(selectedFields[i].value);
+        //}
+        //
+        //var fields = this._component.fields;
 
-        var fields = this._component.fields;
+        fields = [];
+        for (var i=0; i < selectedFields.length; i++)
+            if (selectedFields[i])
+                fields.push(selectedFields[i].value);
 
-        //preview my space ?
-        if(filters && filters[0] && filters[0].constructor == Array){
-            filters = filters[0];
-            aggregators = aggregators[0];
-            orders = orders[0];
-        }
+        ////preview my space ?
+        //if(filters && filters[0] && filters[0].constructor == Array){
+        //    filters = filters[0];
+        //    aggregators = aggregators[0];
+        //    orders = orders[0];
+        //}
 
         var converter = new DataTypeConverter();
         var data = [];

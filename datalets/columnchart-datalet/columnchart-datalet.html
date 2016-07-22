@@ -63,6 +63,13 @@ Example:
              * @method transformData
              */
             presentData: function(){
+                var min = 0;
+                for (var i in this.properties.series.value) {
+                    min = Math.min(Math.min.apply(Math, this.properties.series.value[i].data), min);
+                }
+                if(min < 0)
+                    min--;
+
                 options = {
                     chart: {
                         type: 'column',
@@ -78,7 +85,7 @@ Example:
                         }
                     },
                     yAxis: {
-                        min: 0,
+                        min: min,
                         title: {
                             text: this._component.yAxisLabel,
                         }
