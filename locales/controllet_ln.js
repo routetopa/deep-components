@@ -22,7 +22,7 @@ ln["wrongUrl_en"] = "Invalid url or data provider not supported yet.";
 
 ln["providersDatasets_en"] = "PROVIDERS DATASETS";
 ln["spodUsersDatasets_en"] = "SPOD USERS DATASETS";
-ln["datasets_en"] = "DATASETS";
+ln["datasets_en"] = "DATASETS LIST";
 
 ln["provider_en"] = "Provider";
 ln["all_en"] = "All";
