@@ -14,7 +14,7 @@ Highcharts.themeSpod = {
 
 // Load the fonts
 Highcharts.createElement('link', {
-    //href: '//fonts.googleapis.com/css?family=Unica+One',
+    href: '//fonts.googleapis.com/css?family=Unica+One',
     rel: 'stylesheet',
     type: 'text/css'
 }, null, document.getElementsByTagName('head')[0]);
@@ -225,7 +225,7 @@ Highcharts.themeDarkUnika = {
 
 // Load the fonts
 Highcharts.createElement('link', {
-    //href: '//fonts.googleapis.com/css?family=Signika:400,700',
+    href: '//fonts.googleapis.com/css?family=Signika:400,700',
     rel: 'stylesheet',
     type: 'text/css'
 }, null, document.getElementsByTagName('head')[0]);
@@ -326,7 +326,7 @@ Highcharts.themeSandSignika = {
 
 // Load the fonts
 Highcharts.createElement('link', {
-    //href: '//fonts.googleapis.com/css?family=Dosis:400,600',
+    href: '//fonts.googleapis.com/css?family=Dosis:400,600',
     rel: 'stylesheet',
     type: 'text/css'
 }, null, document.getElementsByTagName('head')[0]);
