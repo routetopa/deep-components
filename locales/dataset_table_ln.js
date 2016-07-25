@@ -50,25 +50,25 @@ ln["download_docs_it"] = "Download documento";
 /******** fr ********/
 
 //data-table
-ln["selectedData_fr"] = "DATASET";
-ln["rows_fr"] = "rows";
+ln["selectedData_fr"] = "JEU DE DONNÉES";
+ln["rows_fr"] = "rangées";
 ln["type_fr"] = "TYPE";
-ln["warning_fr"] = "WARNING";
-ln["showing_fr"] = "Showing";
-ln["to_fr"] = "to";
-ln["of_fr"] = "of";
-ln["search_fr"] = "Search";
+ln["warning_fr"] = "AVERTISSEMENT";
+ln["showing_fr"] = "Aperçu";
+ln["to_fr"] = "à";
+ln["of_fr"] = "de";
+ln["search_fr"] = "Rechercher";
 ln["VER_fr"] = "VER";
-ln["USER_fr"] = "USER";
-ln["NAME_fr"] = "NAME";
-ln["DATA_fr"] = "DATA";
+ln["USER_fr"] = "UTILISATEUR";
+ln["NAME_fr"] = "NOM";
+ln["DATA_fr"] = "DONNÉES";
 ln["DESCRIPTION_fr"] = "DESCRIPTION";
-ln["TOOLS_fr"] = "TOOLS";
-ln["last_version_fr"] = "Last version";
-ln["open_fr"] = "Open";
-ln["download_csv_fr"] = "Download as CSV";
-ln["copy_link_fr"] = "Copy link";
-ln["download_docs_fr"] = "Download docs";
+ln["TOOLS_fr"] = "OUTILS";
+ln["last_version_fr"] = "Dernière version";
+ln["open_fr"] = "Ouvrir";
+ln["download_csv_fr"] = "Télécharger en CSV";
+ln["copy_link_fr"] = "Copier le lien";
+ln["download_docs_fr"] = "Télécharger les documents";
 
 /******** nl ********/
 

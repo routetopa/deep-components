@@ -359,7 +359,8 @@
                             .replace('WHERE', '<br><br><span style="color:#2196F3; font-weight: 700;">WHERE</span>')
                             .replace('GROUP BY', '<br><br><span style="color:#2196F3; font-weight: 700;">GROUP BY</span>')
                             .replace(/\[/g, '')
-                            .replace(/\]/g, '');
+                            .replace(/\]/g, '')
+                            .replace(/`/g, '');
                 else
                     this.$.query_container.innerHTML = "";
             }

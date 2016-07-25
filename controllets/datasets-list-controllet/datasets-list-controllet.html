@@ -313,6 +313,12 @@
                     this.shownNext = Math.min(this.next, this.length);
                     this.shownDatasets = this.datasets.slice(this.prev-1, this.next);
 
+                    this.$.info_header.innerHTML = ln["datasetsInfo_" + ln["localization"]];
+                    this.$.info_body.innerHTML = "";
+                    this.$.spinner.active = false;
+                    this.selectedItemId = -1;
+                    this.fire("datasets-list-controllet_dataset", { dataset: {url:""} });
+
                     this._filter();
                 },
 

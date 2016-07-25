@@ -46,9 +46,10 @@
             }
 
             #select_dataset_container .header_block {
-                width: calc((100% - 48px) / 2);
-                max-width: 400px;
-                margin-left: 12px;
+                /*width: calc((100% - 48px) / 2);*/
+                /*max-width: 400px;*/
+                width: calc(50% - 24px);
+                padding:0 12px;
 
                 line-height: 40px;
 
@@ -77,7 +78,7 @@
                 border-right: 2px solid #FFFFFF;
             }
 
-            paper-tab:nth-child(2) {
+            paper-tab:nth-last-child(2) {
                 border-right: 0;
             }
 
@@ -125,7 +126,8 @@
             }
 
             paper-dropdown-menu {
-                width: 200px;
+                /*width: 200px;*/
+                width: 50%;
                 --paper-input-container-focus-color: #2196F3;
             }
 
@@ -169,6 +171,7 @@
             <paper-tabs selected={{tabIndex}} no-bar>
                 <paper-tab noink on-tap="_setProvidersDatasets"><span id="providers_datasets"></span></paper-tab>
                 <paper-tab noink on-tap="_setLocalDatasets"><span id="spod_users_datasets"></span></paper-tab>
+                <paper-tab noink on-tap="_setExtendedDatasets"><span id="extended_datasets"></span></paper-tab>
             </paper-tabs>
 
             <div id="options">
@@ -215,24 +218,24 @@
                     <!--</paper-tooltip>-->
                 <!--</div>-->
 
-                <div id="search_option" class="header_block">
-                    {{_getLocalization('search')}}:&nbsp;
-                    <paper-dropdown-menu id="ddl_search" label="" no-label-float>
-                        <paper-menu id="menu_search" class="dropdown-content">
-                            <paper-item><span id="standard"></span></paper-item>
-                            <paper-item disabled><span id="extended"></span></paper-item>
-                        </paper-menu>
-                    </paper-dropdown-menu>
-                    <paper-icon-button id="info_search" icon="info-outline" noink></paper-icon-button>
-                    <paper-tooltip id="tooltip_search" for="info_search" offset="8">
-                        <p>
-                            <span class="option">{{_getLocalization('standard')}}</span><br>
-                            <span class="description">{{_getLocalization('standardDescription')}}</span><br>
-                            <span class="option">{{_getLocalization('extended')}}</span><br>
-                            <span class="description">{{_getLocalization('extendedDescription')}}</span><br>
-                        </p>
-                    </paper-tooltip>
-                </div>
+                <!--<div id="search_option" class="header_block">-->
+                    <!--{{_getLocalization('search')}}:&nbsp;-->
+                    <!--<paper-dropdown-menu id="ddl_search" label="" no-label-float>-->
+                        <!--<paper-menu id="menu_search" class="dropdown-content">-->
+                            <!--<paper-item><span id="standard"></span></paper-item>-->
+                            <!--<paper-item disabled><span id="extended"></span></paper-item>-->
+                        <!--</paper-menu>-->
+                    <!--</paper-dropdown-menu>-->
+                    <!--<paper-icon-button id="info_search" icon="info-outline" noink></paper-icon-button>-->
+                    <!--<paper-tooltip id="tooltip_search" for="info_search" offset="8">-->
+                        <!--<p>-->
+                            <!--<span class="option">{{_getLocalization('standard')}}</span><br>-->
+                            <!--<span class="description">{{_getLocalization('standardDescription')}}</span><br>-->
+                            <!--<span class="option">{{_getLocalization('extended')}}</span><br>-->
+                            <!--<span class="description">{{_getLocalization('extendedDescription')}}</span><br>-->
+                        <!--</p>-->
+                    <!--</paper-tooltip>-->
+                <!--</div>-->
 
                 <div id="version_option" class="header_block">
                     {{_getLocalization('version')}}:&nbsp;
@@ -253,7 +256,7 @@
                     </paper-tooltip>
                 </div>
 
-                <paper-icon-button icon="settings" on-click="_optionsMenu"></paper-icon-button>
+                <!--<paper-icon-button icon="settings" on-click="_optionsMenu"></paper-icon-button>-->
 
             </div>
 
@@ -306,7 +309,7 @@
                     $(this.$.list_container).perfectScrollbar();
                     $(this.$.info).perfectScrollbar();
 
-                    this.options = false;
+                    this.options = true;
                 },
 
                 attached : function() {
@@ -354,28 +357,21 @@
 
                     this.$.providers_datasets.innerHTML = ln["providersDatasets_" + ln["localization"]];
                     this.$.spod_users_datasets.innerHTML = ln["spodUsersDatasets_" + ln["localization"]];
+                    this.$.extended_datasets.innerHTML = ln["extendedDatasets_" + ln["localization"]];
                     this.$.options_header.innerHTML = ln["datasets_" + ln["localization"]];
 
                     this.$.all.innerHTML = ln["all_" + ln["localization"]];
 //                    this.$.list.innerHTML = ln["list_" + ln["localization"]];
 //                    this.$.tree.innerHTML = ln["tree_" + ln["localization"]];
-                    this.$.standard.innerHTML = ln["standard_" + ln["localization"]];
-                    this.$.extended.innerHTML = ln["extended_" + ln["localization"]];
+//                    this.$.standard.innerHTML = ln["standard_" + ln["localization"]];
+//                    this.$.extended.innerHTML = ln["extended_" + ln["localization"]];
                     this.$.show_last.innerHTML = ln["showLast_" + ln["localization"]];
                     this.$.show_all.innerHTML = ln["showAll_" + ln["localization"]];
 
                     this.$.menu_provider.select(0);
 //                    this.$.menu_view.select(0);
-                    this.$.menu_search.select(0);
+//                    this.$.menu_search.select(0);
                     this.$.menu_version.select(0);
-                },
-
-                _setLocalDatasets : function() {
-                    if(this.$.ddl_version.selectedItem.id == 0)
-                        this._showLast();
-                    else
-                        this._showAll();
-                    this._showOptions()
                 },
 
                 _setProvidersDatasets : function() {
@@ -392,8 +388,21 @@
                         else
                             this.$.datasets_list.setDatasets(this.providersDatasets);
 
-                        this._showOptions()
+                        this._showOptions();
                     }, 0);
+                },
+
+                _setLocalDatasets : function() {
+                    if(this.$.ddl_version.selectedItem.id == 0)
+                        this._showLast();
+                    else
+                        this._showAll();
+                    this._showOptions();
+                },
+
+                _setExtendedDatasets : function() {
+                    this.$.datasets_list.setDatasets([]);//tutto molto bello, clap, clap, clapù
+                    this._showOptions()
                 },
 
                 _getIdByProviderName : function(name) {
@@ -414,22 +423,29 @@
                             this.$.options_header.style.display = "block";
                             this.$.provider_option.style.display = "none";
 //                            this.$.view_option.style.display = "none";
-                            this.$.search_option.style.display = "none";
+//                            this.$.search_option.style.display = "none";
                             this.$.version_option.style.display = "none";
                         }
                         else if(this.tabIndex == 0) {
                             this.$.options_header.style.display = "none";
                             this.$.provider_option.style.display = "block";
 //                            this.$.view_option.style.display = "block";
-                            this.$.search_option.style.display = "block";
+//                            this.$.search_option.style.display = "block";
                             this.$.version_option.style.display = "none";
                         }
                         else if(this.tabIndex == 1) {
                             this.$.options_header.style.display = "none";
                             this.$.provider_option.style.display = "none";
 //                            this.$.view_option.style.display = "none";
-                            this.$.search_option.style.display = "none";
+//                            this.$.search_option.style.display = "none";
                             this.$.version_option.style.display = "block";
+                        }
+                        else if(this.tabIndex == 2) {
+                            this.$.options_header.style.display = "none";
+                            this.$.provider_option.style.display = "none";
+//                            this.$.view_option.style.display = "none";
+//                            this.$.search_option.style.display = "none";
+                            this.$.version_option.style.display = "none";
                         }
                     }, 0);
                 },

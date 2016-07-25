@@ -26,15 +26,15 @@ room_ln["and_it"] = "e";
 
 /* FR */
 
-room_ln["thisRoom_fr"] = "This room";
-room_ln["createdBy_fr"] = "created by";
-room_ln["has_fr"] = "has";
-room_ln["many_fr"] = "many";
-room_ln["few_fr"] = "few";
-room_ln["views_fr"] = "views";
-room_ln["comments_fr"] = "comments";
-room_ln["datasets_fr"] = "datasets";
-room_ln["and_fr"] = "and";
+room_ln["thisRoom_fr"] = "Cet espace commun";
+room_ln["createdBy_fr"] = "créé par";
+room_ln["has_fr"] = "contient";
+room_ln["many_fr"] = "plusieurs";
+room_ln["few_fr"] = "peu";
+room_ln["views_fr"] = "visualisations";
+room_ln["comments_fr"] = "commentaires";
+room_ln["datasets_fr"] = "jeux de données";
+room_ln["and_fr"] = "et";
 
 /* NL */
 
