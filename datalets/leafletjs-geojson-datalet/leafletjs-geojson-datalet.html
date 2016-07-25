@@ -89,18 +89,25 @@ Example:
 
                 L.Icon.Default.imagePath = 'http://services.routetopa.eu/DEEalerProvider/COMPONENTS/datalets/leafletjs-datalet/leafletsjs/images';
 
-                var coordinates = [];
-                var coordinates_index  = 0;
+                //var coordinates = [];
+                //var coordinates_index  = 0;
+                var geo_layer = L.geoJson();
                 var geo;
 
                 for (var i = 0; i < t.data[0].data.length; i++)
                 {
-                    if(typeof t.data[0].data[0] == 'Array')
+                    if(Array.isArray(t.data[0].data[i]))
                     {
-                        if(!isNaN(t.data[0].data[i][0]) && !isNaN(t.data[0].data[i][1]))
-                            coordinates.push([parseFloat(t.data[0].data[i][0]), parseFloat(t.data[0].data[i][1])]);
-                        else
+                        if(!isNaN(t.data[0].data[i][0]) && !isNaN(t.data[0].data[i][1])) {
+                            //coordinates.push([parseFloat(t.data[0].data[i][0]), parseFloat(t.data[0].data[i][1])]);
+                            geo_layer.addData({"type": "Feature","geometry": {"type": "Point", "coordinates": [parseFloat(t.data[0].data[i][0]), parseFloat(t.data[0].data[i][1])]}});
+                        }else
                             continue;
+                    }
+                    else if(typeof t.data[0].data[i] == 'object')
+                    {
+                        geo = L.geoJson(t.data[0].data[i]).addTo(t._component.map);
+                        geo_layer.addData(t.data[0].data[i]);
                     }
                     else if(typeof t.data[0].data[i] == 'string' && t.data[0].data[i].startsWith('{"type":"'))
                     {
@@ -108,15 +115,17 @@ Example:
                         {
                             t.data[0].data[i] = JSON.parse(t.data[0].data[i]);
                             geo = L.geoJson(t.data[0].data[i]).addTo(t._component.map);
+                            geo_layer.addData(t.data[0].data[i]);
                         }catch(e) {continue;}
                     }
                     else if(typeof t.data[0].data[i] == 'string' && t.data[0].data[i].indexOf(","))
                     {
                         var coords = t.data[0].data[i].split(",");
                         if(!isNaN(coords[0]) && !isNaN(coords[1])) {
-                            coordinates.push([parseFloat(coords[0]), parseFloat(coords[1])]);
-                            geo = L.marker([coordinates[coordinates_index][0], coordinates[coordinates_index][1]]).addTo(t._component.map);
-                            coordinates_index++;
+                            //coordinates.push([parseFloat(coords[0]), parseFloat(coords[1])]);
+                            geo_layer.addData({"type": "Feature","geometry": {"type": "Point", "coordinates": [parseFloat(coords[0]), parseFloat(coords[1])]}});
+                            geo = L.marker([parseFloat(coords[0]), parseFloat(coords[1])]).addTo(t._component.map);
+                            //coordinates_index++;
                         }else
                             continue;
                     }
@@ -142,7 +151,7 @@ Example:
 
                 t._component.map._onResize();
                 t._component.map.invalidateSize(false);
-                t._component.map.fitBounds(coordinates);
+                t._component.map.fitBounds(geo_layer);
 
             }
         };
