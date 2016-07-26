@@ -135,7 +135,7 @@ Example:
                         var popupText = "";
                         for(var j=1; j<t.data.length; j++)
                         {
-                            if(typeof t.data[j] != 'undefined' && typeof t.data[j].data[i] != 'undefined')
+                            if(typeof t.data[j] != 'undefined' && t.data[j].data[i] && typeof t.data[j].data[i] != 'undefined')
                             {
                                 if (t.data[j].data[i].toString().match(new RegExp("^(http[s]?:\\/\\/(www\\.)?|ftp:\\/\\/(www\\.)?|www\\.){1}([0-9A-Za-z-\\.@:%_\+~#=]+)+((\\.[a-zA-Z]{2,3})+)(/(.)*)?(\\?(.)*)?")))
                                     popupText += '<image height="100" width="100" src="' + t.data[j].data[i] + '" /><br/>';
