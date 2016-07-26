@@ -4,122 +4,198 @@
 <link rel="import" href="../../bower_components/paper-icon-button/paper-icon-button.html"/>
 <link rel="import" href="../../bower_components/paper-button/paper-button.html"/>
 <link rel="import" href="../../bower_components/iron-icon/iron-icon.html"/>
-<link rel="import" href="../../bower_components/iron-collapse/iron-collapse.html"/>
+<link rel="import" href="../../bower_components/paper-tooltip/paper-tooltip.html">
 
+<script src="../../locales/cocreation_paper_card_ln.js"></script>
 
 <dom-module id="cocreation-paper-card-controllet">
 
     <template>
         <style>
 
-            iron-icon{
-                padding-left: 5px;
-                padding-right: 5px;
-                --iron-icon-height: 16px;
-                --iron-icon-width: 16px;
+            #card_container {
+                height: 200px;
+                width: 300px;
+                margin-top: 32px;
+                margin-left: 32px;
+                margin-right: -3.7px;
             }
 
-            iron-icon.icon-from{
-                --iron-icon-fill-color : #000000;
+            #card_container * {
+                font-family: 'Roboto', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+                font-size: 16px;
+                line-height: 24px;
             }
 
-            iron-icon.icon-to{
-                --iron-icon-fill-color : #ff0000;
+            .card-content {
+                padding: 12px;
+                height: 103px;
+                /*overflow: hidden;*/
+                background: #E0E0E0;
             }
 
-            paper-card.cocreation {
-                width: 310px;
+            .card-actions {
+                padding: 12px;
+                height: 48px;
+                /*overflow: hidden;*/
+                border-color: #2196F3;
             }
 
-            .from, .to {
-                font-size: 13px;
-                color: #CCCCCC;
+            paper-button {
+                height: 48px;
+                width: 136px;/*+2*/
+                padding: 12px;
+                margin: 0;
+                font-weight: 700;
+
+                background: #FFFFFF;
+                color: #000000;
+                --paper-button-ink-color: #2196F3;
             }
 
-            .rate-content {
-                @apply(--layout-flex);
-                float: left;
-                width: 100%;
+            paper-button.info {
+                cursor: help;
+                float: right;
             }
 
-            .rate-header { @apply(--paper-font-headline); }
-            .rate-name { color: var(--paper-grey-600); margin: 10px 0; }
-
-            paper-icon-button.rate-icon {
-                --iron-icon-fill-color: white;
-                --iron-icon-stroke-color: var(--paper-grey-600);
+            paper-button.info:hover {
+                color: #000000;
             }
 
-            .collapse-content {
-                width: 200px;
-                padding: 15px;
+            paper-button:hover {
+                color: #2196F3;
             }
 
-            iron-collapse.iron-collapse-over
-            {
+            paper-icon-button[icon="info-outline"] {
+                cursor: help;
+                float: right;
+
+                height: 48px;
+                width: 48px;
+                padding: 8px;
+                color: #000000;
+            }
+
+            paper-tooltip {
+                min-width: 400px;
+                --paper-tooltip-background: black;
+            }
+
+            paper-fab {
                 position: absolute;
-                left: -1px;
-                margin:0;
-                padding:0;
-                z-index:10;
-                background-color: #FFFFFF;
-                border: solid 1px #E6E6E6;
-                border-top: none !important;
-                min-width: 310px;
-                min-height: 188px;
-            }
-            .badge{
-                position: absolute;
-                right: 5px;
-                bottom: 5px;
-                background: #2196F3;
+                z-index: 10;
+                --paper-fab-background:#2196F3;
             }
 
-            .delete{
-                position: absolute;
-                right: 14px;
-                top: 23px;
-                background: #2196F3;
+            paper-fab.delete {
+                top: -12px;
+                right: -12px;
                 --iron-icon-height: 18px;
                 --iron-icon-width: 18px;
                 width: 24px;
                 height: 24px;
+                --paper-fab-background:#B6B6B6;
+            }
+
+            #card_container br {
+                display: block;
+                margin-top: 8px;
+                content: " ";
+            }
+
+            #card_container p {
+                margin: 0;
+                padding: 0;
+            }
+
+            #card_container p .title{
+                font-weight: 700;
+                color: #2196F3;
+                white-space: nowrap;
+            }
+
+            #card_container p .description{
+            }
+
+            #card_container .name{
+                font-size: 18px;
+                font-weight: 700;
+                color: #2196F3;
+                height: 32px;
+
+                overflow: hidden;
+                white-space: nowrap;
+                text-overflow: ellipsis;
+            }
+
+            #card_container .owner{
+                font-size: 14px;
+                height: 47px;
+
+                overflow: hidden;
+                white-space: nowrap;
+                text-overflow: ellipsis;
+            }
+
+            #card_container .time{
+                display: flex;
+                flex-direction: row;
+                height: 24px;
+            }
+
+            #card_container .from {
+                width: 50%;
+                font-size: 12px;
+            }
+
+            #card_container .to {
+                width: 50%;
+                font-size: 12px;
+            }
+
+            paper-fab.type {
+                bottom: -20px;
+                right: 12px;
+                cursor: auto;
             }
 
         </style>
 
-
-        <paper-card class="cocreation">
-            <div class="rate-content">
+        <paper-card id="card_container">
                 <div class="card-content">
-                    <div class="rate-header">{{name}}</div>
-                    <div class="rate-name">{{owner}}</div>
-                    <div>
-                        <iron-icon class="icon-from" icon="alarm"></iron-icon>
-                        <span class="from">{{from}}</span>
-                        <iron-icon class="icon-to" icon="alarm-off"></iron-icon>
-                        <span class="to">{{to}}</span>
-                        <template is="dom-if" if="{{!checkRoomType(roomType)}}">
-                            <paper-fab mini disabled icon="assessment" class="badge data"></paper-fab>
-                        </template>
-                        <template is="dom-if" if="{{checkRoomType(roomType)}}">
-                            <paper-fab mini disabled icon="description" class="badge knowledge"></paper-fab>
-                        </template>
-                        <template is="dom-if" if="{{isOwner}}">
-                            <paper-fab class="delete" mini icon="delete" on-click="_handleDeleteClick" style="background-color: #b6b6b6;"></paper-fab>
-                        </template>
+                    <template is="dom-if" if="{{isOwner}}">
+                        <paper-fab id="card_delete" class="delete" mini icon="delete" on-click="_handleDeleteClick"></paper-fab>
+                    </template>
+                    <div class="name">{{name}}</div>
+                    <div class="owner">{{owner}}</div>
+                    <div class="time">
+                        <div class="from">
+                            <iron-icon class="icon-from" icon="alarm"></iron-icon>&nbsp; {{from}}
+                        </div>
+                        <div class="to">
+                            <iron-icon class="icon-to" icon="alarm-off"></iron-icon>&nbsp; {{to}}
+                        </div>
                     </div>
+                    <template is="dom-if" if="{{!checkRoomType(roomType)}}">
+                        <paper-fab mini icon="assessment" class="type" noink></paper-fab>
+                    </template>
+                    <template is="dom-if" if="{{checkRoomType(roomType)}}">
+                        <paper-fab mini icon="description" class="type" noink></paper-fab>
+                    </template>
                 </div>
                 <div class="card-actions">
-                    <paper-button on-click="_onExplore">Explore</paper-button>
-                    <paper-icon-button icon="expand-less" on-click="_toggle" style="float:right;"></paper-icon-button>
-                    <iron-collapse class="iron-collapse-over" id="more_info" no-animation>
-                        <div class="collapse-content">
-                            {{goal}}
-                        </div>
-                    </iron-collapse>
+                    <paper-button on-click="_onExplore"><span id="explore"></span></paper-button>
+                    <paper-button id="goal_button" class="info"><span id="goal"></span></paper-button>
+                    <!--<paper-icon-button id="goal_button" icon="info-outline" noink></paper-icon-button>-->
+
+                    <paper-tooltip for="goal_button" position="bottom" offset="-8">
+                        <p>
+                            <span class="title" id="tooltip_goal"></span>
+                            <br>
+                            <span class="description">{{goal}}</span>
+                        </p>
+                    </paper-tooltip>
                 </div>
-            </div>
         </paper-card>
 
     </template>
@@ -133,23 +209,23 @@
             properties: {
                 name:{
                     type: String,
-                    value: "text"
+                    value: ""
                 },
                 owner:{
                     type: String,
-                    value: "text"
+                    value: ""
                 },
                 from:{
                     type: String,
-                    value: "text"
+                    value: ""
                 },
                 to:{
                     type: String,
-                    value: "text"
+                    value: ""
                 },
                 goal:{
                     type: String,
-                    value: "text"
+                    value: ""
                 },
                 roomUrl: {
                     type: String,
@@ -170,13 +246,11 @@
             },
 
             attached: function(){
-            },
+                cocreation_room_ln["ln"] = ODE.user_language;
 
-            _toggle: function(){
-                var moreInfo = this.$.more_info;
-                var iconButton = Polymer.dom(event).localTarget;
-                iconButton.icon = moreInfo.opened ? 'expand-less' : 'expand-more';
-                moreInfo.toggle();
+                this.$.goal.innerHTML = cocreation_room_ln["goal_" + cocreation_room_ln["ln"]];
+                this.$.tooltip_goal.innerHTML = cocreation_room_ln["goal_" + cocreation_room_ln["ln"]];
+                this.$.explore.innerHTML = cocreation_room_ln["explore_" + cocreation_room_ln["ln"]];
             },
 
             _handleDeleteClick: function(e){

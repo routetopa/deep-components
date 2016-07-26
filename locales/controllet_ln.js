@@ -252,8 +252,9 @@ ln["forward_it"] = "AVANTI";
 ln["selectedUrl_it"] = "Url selezionato";
 ln["wrongUrl_it"] = "Url non valido o provider dati non ancora supportato.";
 
-ln["providersDatasets_it"] = "DATASETS DEI PROVIDER";
+ln["providersDatasets_it"] = "DATASET DEI PROVIDER";
 ln["spodUsersDatasets_it"] = "DATASET COCREATI";
+ln["extendedDatasets_it"] = "RICERCA ESTESA";
 ln["datasets_it"] = "LISTA DEI DATASET";
 
 ln["provider_it"] = "Provider";
@@ -477,7 +478,8 @@ ln["selectedUrl_fr"] = "API URL sélectionné";
 ln["wrongUrl_fr"] = "URL invalide ou fournisseur de données pas encore supporté.";
 
 ln["providersDatasets_fr"] = "DATASET DE PROVIDER";
-ln["spodUsersDatasets_fr"] = "DATASET COCRÉÉ";
+ln["spodUsersDatasets_fr"] = "DATASET COCRÉE";
+ln["extendedDatasets_fr"] = "RECHERCHE AVANCÉE";
 ln["datasets_fr"] = "LISTE DE DATASET";
 
 ln["provider_fr"] = "Provider";
@@ -702,6 +704,7 @@ ln["wrongUrl_nl"] = "Invalid url or data provider not supported yet.";
 
 ln["providersDatasets_nl"] = "PROVIDERS DATASETS";
 ln["spodUsersDatasets_nl"] = "COCREATED DATASETS";
+ln["extendedDatasets_nl"] = "FROM EXTENDED SEARCH";
 ln["datasets_nl"] = "DATASETS LIST";
 
 ln["provider_nl"] = "Provider";

@@ -358,6 +358,7 @@
                     this.$.providers_datasets.innerHTML = ln["providersDatasets_" + ln["localization"]];
                     this.$.spod_users_datasets.innerHTML = ln["spodUsersDatasets_" + ln["localization"]];
                     this.$.extended_datasets.innerHTML = ln["extendedDatasets_" + ln["localization"]];
+
                     this.$.options_header.innerHTML = ln["datasets_" + ln["localization"]];
 
                     this.$.all.innerHTML = ln["all_" + ln["localization"]];
@@ -441,7 +442,7 @@
                             this.$.version_option.style.display = "block";
                         }
                         else if(this.tabIndex == 2) {
-                            this.$.options_header.style.display = "none";
+                            this.$.options_header.style.display = "block";
                             this.$.provider_option.style.display = "none";
 //                            this.$.view_option.style.display = "none";
 //                            this.$.search_option.style.display = "none";
