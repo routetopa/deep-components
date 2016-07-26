@@ -205,7 +205,8 @@ DataTypeConverter.prototype = (function () {
             return DataTypeConverter.TYPES.OBJECT;
 
         //Try to parse the float.
-        var isnumber = DataTypesUtils.FilterFloat(value);
+        //var isnumber = DataTypesUtils.FilterFloat(value);
+        var isnumber = DataTypesUtils.FilterNumber(value);
         if (isNaN(isnumber) !== true) {//It is a number.
             //If the number ranges from -90.0 to 90.0, the value is marked as Latitude.
             //if (-90.0 <= isnumber && isnumber <= 90.0 && _dataTypesUtils.decimalPlaces(isnumber) >= 5)
@@ -235,7 +236,8 @@ DataTypeConverter.prototype = (function () {
         //GEOCOORDINATE
         if (Array.isArray(value) && value.length == 2) {//It recognises the LAT LNG as array of two values.
             //Checks if the two array's values are numbers.
-            if ( DataTypesUtils.FilterFloat(value[0]) != NaN && DataTypesUtils.FilterFloat(value[1]) != NaN  )
+            //if ( DataTypesUtils.FilterFloat(value[0]) != NaN && DataTypesUtils.FilterFloat(value[1]) != NaN  )
+            if ( DataTypesUtils.FilterNumber(value[0]) != NaN && DataTypesUtils.FilterNumber(value[1]) != NaN  )
                 if (DataTypesUtils.DecimalPlaces(value[0]) > 4 && DataTypesUtils.DecimalPlaces(value[1]) > 4 )
                     return DataTypeConverter.SUBTYPES.GEOCOORDINATE;
         }//EndIf.
@@ -248,7 +250,8 @@ DataTypeConverter.prototype = (function () {
         }
 
         //Try to parse the float.
-        var isnumber = DataTypesUtils.FilterFloat(value);
+        //var isnumber = DataTypesUtils.FilterFloat(value);
+        var isnumber = DataTypesUtils.FilterNumber(value);
         if (isNaN(isnumber) !== true) {//It is a number.
             //If the number ranges from -90.0 to 90.0, the value is marked as Latitude.
             if (-90.0 <= isnumber && isnumber <= 90.0 && DataTypesUtils.DecimalPlaces(isnumber) >= 5)
@@ -369,15 +372,19 @@ DataTypeConverter.prototype = (function () {
     return {
         constructor: DataTypeConverter,
 
+
         /**
-         * It parses the json in input and converts the content
-         * in according to the inferred data types.
-         * @param json
-         * @param path Format: field1->field2->field3
+         *
+         * @param metadata Previous information on the inferred types.
+         * @param options Some options to cast the data.
+         *     - castThresholdConfidence: for which threshold the library must perform the cast (default 1)
+         *     - makeChangesToDataset: is a boolean value, to indicate whether the library can do improvement on the storage
+         *     values, for instance, numbers with the comma will be replaced with the dot.
+         * @returns {*}
          */
         cast: function(metadata, options) {
             if (typeof options === 'undefined' || options == null)
-                options = { castThresholdConfidence: 1, castIfNull: false };
+                options = { castThresholdConfidence: 1, castIfNull: false, makeChangesToDataset: false };
             return this.convert(metadata, options);
         },
 
@@ -400,7 +407,7 @@ DataTypeConverter.prototype = (function () {
             var datasetMissingValues = 0;
 
             if (typeof options === 'undefined' || options == null)
-                options = { castThresholdConfidence: 1, castIfNull: false };
+                options = { castThresholdConfidence: 1, castIfNull: false, makeChangesToDataset: false };
 
             jsonTraverse(metadata.dataset, metadata.fieldKeys, function(value, key, traversedKeys, rowIndex) {
                 var inferredType = metadata.types[traversedKeys];
@@ -419,6 +426,9 @@ DataTypeConverter.prototype = (function () {
                 //var isCast = !(options.castIfNull == false && inferredType.totalNullValues > 0);
                 var isCast = inferredType.typeConfidence >= options.castThresholdConfidence;
                 if (inferredType.type == DataTypeConverter.TYPES.NUMBER.name && isCast) {
+                    if (isNaN(DataTypesUtils.FilterNumber(value)) == false && typeof value === "string")
+                        value = value.replace(',', '.');
+
                     var number = parseFloat(value);
 
                     if (isNaN(number)) {
@@ -529,6 +539,25 @@ DataTypeConverter.prototype = (function () {
                 }
             }//EndWhile.
 
+
+            //Calculates the number of rows in the dataset.
+            var _numOfRows = 0;
+            ArrayUtils.IteratorOverKeys(fieldsType, function(fieldType) {
+                if (fieldType.numOfItems > _numOfRows)
+                    _numOfRows = fieldType.numOfItems;
+            });
+
+            //Computes the number of null values.
+            ArrayUtils.IteratorOverKeys(fieldsType, function(fieldType) {
+                if (!fieldType._inferredTypes.hasOwnProperty(DataTypeConverter.TYPES.EMPTY.name)) {
+                    //Initialises the field.
+                    fieldType._inferredTypes[DataTypeConverter.TYPES.EMPTY.name] = 0;
+                }
+
+                fieldType._inferredTypes[DataTypeConverter.TYPES.EMPTY.name] = fieldType._inferredTypes[DataTypeConverter.TYPES.EMPTY.name] +  (_numOfRows - fieldType.numOfItems);
+            });
+
+            //Infers the data type.
             _analyseDataTypes(fieldsType);
 
             //Data quality.
@@ -594,6 +623,7 @@ DataTypeConverter.prototype = (function () {
                 descr = descr.replace(/%COL_NAME/g, fieldType.name);
                 descr = descr.replace(/%COL_TYPE/g, fieldType.type);
                 descr = descr.replace(/%COL_NULLVALUES/g, fieldType.totalNullValues);
+                description = description + " " + descr;
 
                 /*if (fieldType.totalNullValues > 0) {
                     var descr = _capitalizeFirstLetter(JDC_LNG['key_declaretype'][options.language]) + ".";
@@ -605,8 +635,8 @@ DataTypeConverter.prototype = (function () {
                 if (description.length > 0)
                     description += ".";*/
 
-                fieldType.errorsDescription = description;
-                warningsTextual += description;
+                fieldType.errorsDescription = description.trim();
+                warningsTextual += description.trim();
             });
 
             var metadata = { dataset: json, fieldKeys: fieldKeys, types: fieldsType, qualityIndex: quality, warningsTextual: warningsTextual };

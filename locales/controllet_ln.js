@@ -269,7 +269,7 @@ ln["standardDescription_it"] = "La ricerca funziona solo sui nommi dei dataset."
 ln["extended_it"] = "Extended [NOT AVAILABLE]";
 ln["extendedDescription_it"] = "La ricerca funziona sull'intero contenuto dei dataset;.";
 
-ln["version_it"] = "Versionw";
+ln["version_it"] = "Version";
 ln["showLast_it"] = "Mostra l'ultima";
 ln["showLastDescription_it"] = "Mostra solo l'ultima versione dei dataset.";
 ln["showAll_it"] = "Mostra tutti";
@@ -469,7 +469,7 @@ ln["slide2Title_fr"] = "SÉLECTIONNER DONNÉES";
 ln["slide2Subtitle_fr"] = "Sélectionner les champs sur la gauche. Le tableau présentera les valeurs liées aux champs sélectionnés.";
 ln["slide3Title_fr"] = "SÉLECTIONNER UN MODE DE VISUALISATION";
 ln["slide3Subtitle_fr"] = "Sélectionner une visualisation, compléter les données et les options.";
-ln["back_fr"] = "RETOUR";
+ln["back_fr"] = "RETOUR VERS LE FUTUR";
 ln["forward_fr"] = "AVANT";
 
 //SELECT DATASET
@@ -694,7 +694,7 @@ ln["slide2Title_nl"] = "SELECT DATA";
 ln["slide2Subtitle_nl"] = "Select the fields on the left. The table will show the values related to the selected fields.";
 ln["slide3Title_nl"] = "SELECT VISUALIZATION";
 ln["slide3Subtitle_nl"] = "Select a visualization, fill out inputs and options.";
-ln["back_nl"] = "BACK TO THE FUTURE";
+ln["back_nl"] = "TERUG NAAR DE TOEKOMST";
 ln["forward_nl"] = "FORWARD";
 
 //SELECT DATASET

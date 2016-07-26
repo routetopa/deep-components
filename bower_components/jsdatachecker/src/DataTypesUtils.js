@@ -107,6 +107,71 @@ DataTypesUtils.FilterFloat = function (value) {
     return NaN;
 };//EndFunction.
 
+DataTypesUtils.FilterNumber = function (value) {
+    //Check immediatly if it is a classical number.
+    var valnum = DataTypesUtils.FilterFloat(value);
+    if (isNaN(valnum) == false) return valnum;
+
+    //Checks if the value is a string.
+    if (typeof value !== "string")
+        return NaN;
+
+    var parts = value.split(/(,|\.)/g);
+
+    //Find the smallest symbol.
+    var idxDot          = { idx: value.indexOf('.'), sym: '.' };
+    var idxComma        = { idx: value.lastIndexOf(','), sym: ',' };
+    var idxFirst = {};
+    if (idxDot.idx == -1) idxFirst = idxComma;
+    else if (idxComma.idx == -1) idxFirst = idxDot;
+    else if (idxDot.idx < idxComma.idx) idxFirst = idxDot;
+    else idxFirst = idxComma;
+
+    //Find the greatest symbol.
+    var idxLastDot      = { idx: value.lastIndexOf('.'), sym: '.' };
+    var idxLastComma    = { idx: value.lastIndexOf(','), sym: ',' };
+    var idxLast = {};
+    if (idxLastDot.idx == -1) idxLast = idxLastComma;
+    else if (idxLastComma.idx == -1) idxLast = idxLastDot;
+    else if (idxLastDot.idx > idxLastComma.idx) idxLast = idxLastDot;
+    else idxLast = idxLastComma;
+
+    //Splits over the dot and comma and check that are all numbers.
+    var splitted = value.split(/(\.|,|\-|\+)/g);
+    if (splitted.length == 0) return NaN;
+
+    var numOfDots = 0;
+    var numOfComma = 0;
+    var i=0;
+    if (splitted[0] == '-' || splitted[0] == '+') i=1;
+
+    for (var str; i<splitted.length, str=splitted[i]; i++) {
+        if (str == '.') numOfDots++;
+        else if (str == ',') numOfComma++;
+        else if (/^(0|([1-9][0-9]*))$/g.test(str) == false)
+            return NaN;
+    }//EndFor.
+
+    var lastValue = splitted[splitted.length-1];
+    if (lastValue == '.' || lastValue == ',' || lastValue.length == 0) return NaN;
+
+    //No dot/comma char found
+    if (idxFirst.idx == -1 && idxLast.idx == -1)
+        return DataTypesUtils.FilterFloat(value);
+
+    //Only one dot symbol found
+    if (idxFirst.idx == idxLast.idx && idxFirst.sym == '.')
+        return Number(value);
+
+    //Only one comma symbol found
+    if (idxFirst.idx == idxLast.idx && idxFirst.sym == ',') {
+        var nval = value.replace(',', '.');
+        return Number(nval);
+    }
+
+    return NaN;
+};//EndFunction.
+
 /**
  * Solution from here:
  * http://stackoverflow.com/questions/10454518/javascript-how-to-retrieve-the-number-of-decimals-of-a-string-number
