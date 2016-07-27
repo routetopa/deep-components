@@ -37,8 +37,8 @@
             .card-actions {
                 padding: 12px;
                 height: 48px;
-                /*overflow: hidden;*/
-                border-color: #2196F3;
+                /*border-color: #2196F3;*/
+                /*border-color: #4CAF50;*/
             }
 
             paper-button {
@@ -50,7 +50,7 @@
 
                 background: #FFFFFF;
                 color: #000000;
-                --paper-button-ink-color: #2196F3;
+                --paper-button-ink-color: #00BCD4;
             }
 
             paper-button.info {
@@ -63,7 +63,7 @@
             }
 
             paper-button:hover {
-                color: #2196F3;
+                color: #00BCD4;
             }
 
             paper-icon-button[icon="info-outline"] {
@@ -84,7 +84,6 @@
             paper-fab {
                 position: absolute;
                 z-index: 10;
-                --paper-fab-background:#2196F3;
             }
 
             paper-fab.delete {
@@ -110,7 +109,8 @@
 
             #card_container p .title{
                 font-weight: 700;
-                color: #2196F3;
+                /*color: #2196F3;*/
+                /*color: #4CAF50;*/
                 white-space: nowrap;
             }
 
@@ -120,7 +120,8 @@
             #card_container .name{
                 font-size: 18px;
                 font-weight: 700;
-                color: #2196F3;
+                /*color: #2196F3;*/
+                /*color: #4CAF50;*/
                 height: 32px;
 
                 overflow: hidden;
@@ -153,10 +154,19 @@
                 font-size: 12px;
             }
 
-            paper-fab.type {
+            paper-fab.assessment,
+            paper-fab.description {
                 bottom: -20px;
                 right: 12px;
                 cursor: auto;
+            }
+
+            paper-fab.description {
+                background: #2196F3;
+            }
+
+            paper-fab.assessment {
+                background: #4CAF50;
             }
 
         </style>
@@ -166,7 +176,7 @@
                     <template is="dom-if" if="{{isOwner}}">
                         <paper-fab id="card_delete" class="delete" mini icon="delete" on-click="_handleDeleteClick"></paper-fab>
                     </template>
-                    <div class="name">{{name}}</div>
+                    <div class="name" style$="color: {{color}};">{{name}}</div>
                     <div class="owner">{{owner}}</div>
                     <div class="time">
                         <div class="from">
@@ -177,20 +187,20 @@
                         </div>
                     </div>
                     <template is="dom-if" if="{{!checkRoomType(roomType)}}">
-                        <paper-fab mini icon="assessment" class="type" noink></paper-fab>
+                        <paper-fab mini icon="assessment" class="assessment" noink></paper-fab>
                     </template>
                     <template is="dom-if" if="{{checkRoomType(roomType)}}">
-                        <paper-fab mini icon="description" class="type" noink></paper-fab>
+                        <paper-fab mini icon="description" class="description" noink></paper-fab>
                     </template>
                 </div>
-                <div class="card-actions">
+                <div class="card-actions" style$="border-color: {{color}};">
                     <paper-button on-click="_onExplore"><span id="explore"></span></paper-button>
-                    <paper-button id="goal_button" class="info"><span id="goal"></span></paper-button>
+                    <paper-button id="goal_button" class="info" noink><span id="goal"></span></paper-button>
                     <!--<paper-icon-button id="goal_button" icon="info-outline" noink></paper-icon-button>-->
 
                     <paper-tooltip for="goal_button" position="bottom" offset="-8">
                         <p>
-                            <span class="title" id="tooltip_goal"></span>
+                            <span class="title" style$="color: {{color}};" id="tooltip_goal"></span>
                             <br>
                             <span class="description">{{goal}}</span>
                         </p>
@@ -242,7 +252,18 @@
                 roomId:{
                     type: Number,
                     value: undefined
+                },
+                color:{
+                    type: String,
+                    value: ""
                 }
+            },
+
+            ready: function() {
+                var color = "#4CAF50";
+                if(this.roomType == "knowledge")
+                    color = "#2196F3";
+                this.color = color;
             },
 
             attached: function(){
