@@ -186,10 +186,10 @@
                             <iron-icon class="icon-to" icon="alarm-off"></iron-icon>&nbsp; {{to}}
                         </div>
                     </div>
-                    <template is="dom-if" if="{{!checkRoomType(roomType)}}">
+                    <template is="dom-if" if="{{!_checkRoomType(roomType)}}">
                         <paper-fab mini icon="assessment" class="assessment" noink></paper-fab>
                     </template>
-                    <template is="dom-if" if="{{checkRoomType(roomType)}}">
+                    <template is="dom-if" if="{{_checkRoomType(roomType)}}">
                         <paper-fab mini icon="description" class="description" noink></paper-fab>
                     </template>
                 </div>
@@ -274,15 +274,15 @@
                 this.$.explore.innerHTML = cocreation_room_ln["explore_" + cocreation_room_ln["ln"]];
             },
 
-            _handleDeleteClick: function(e){
+            _handleDeleteClick: function(){
                 this.fire("cocreation-paper-card-controllet_delete", {roomId: this.roomId});
             },
 
-            _onExplore: function(e){
+            _onExplore: function(){
                 window.location = this.roomUrl;
             },
 
-            checkRoomType: function(type){
+            _checkRoomType: function(type){
                return (type == "knowledge") ? true : false;
             }
         })

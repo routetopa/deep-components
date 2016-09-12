@@ -1,0 +1,37 @@
+<script type="text/javascript" src="controllets/shared_js/jquery-1.11.2.min.js"></script>
+<script type="text/javascript" src="bower_components/webcomponentsjs/webcomponents-lite.min.js"></script>
+<link rel="import" href="controllets/data-sevc-controllet/demo-data-sevc-controllet.html" />
+
+<style>
+    #controllet paper-material {
+        overflow: hidden;
+    }
+</style>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        var datasets = {"result":{
+            "providers":{"1":{"title":"CKAN","api_url":"http://ckan.routetopa.eu","image_hash":"11","id":"1"}},
+            "datasets":[
+                {"w":1,"provider_name":"p:1","organization_name":"SPOD","package_name":"isislab","resource_name":"SPOD SUPER HEROES","url":"http:\/\/ckan.routetopa.eu\/\/api/action\/datastore_search?resource_id=642ceea8-711e-4124-b450-0d23010c44e6","metas":"{\"organization\":\"SPOD\",\"description\":\"This is a test datasets.\",\"format\":\"CSV\"}"},
+                {"w":1,"provider_name":"p:1","organization_name":"SPOD","package_name":"isislab","resource_name":"Wonders of the World","url":"http:\/\/ckan.routetopa.eu\/\/api\/action\/datastore_search?resource_id=1d9c8e62-47ab-40d5-8943-b4c3bca14b50","metas":"{\"organization\":\"SPOD\",\"description\":\"This is a test datasets.\",\"format\":\"CSV\"}"},
+                {"w":1,"provider_name":"p:1","organization_name":"SPOD","package_name":"isislab","resource_name":"Animal Sounds","url":"http:\/\/ckan.routetopa.eu\/\/api\/action\/datastore_search?resource_id=1d9c8e62-47ab-40d5-8943-b4c3bca14b50","metas":"{\"organization\":\"SPOD\",\"description\":\"This is a test datasets.\",\"format\":\"CSV\"}"}
+            ]}};
+
+        var controllet = document.getElementById("controllet");
+        controllet.setAttribute("datasets", JSON.stringify(datasets));
+
+        window.addEventListener("data-sevc-controllet.dataletCreated", function(e){parent.createHTML(e);});
+    });
+
+    //http://ckan.routetopa.eu/api/action/datastore_search?resource_id=1d9c8e62-47ab-40d5-8943-b4c3bca14b50
+
+</script>
+
+<demo-data-sevc-controllet id="controllet"
+                        deep-url="http://172.16.15.38/DEEalerProvider/DEEP/"
+                        datalets-list-url="http://172.16.15.38/DEEalerProvider/DEEP/datalets-list"
+                        >
+</demo-data-sevc-controllet>
+
+<!--datasets='{"result":{"providers":{"1":{"title":"CKAN","api_url":"http:\/\/ckan.routetopa.eu","image_hash":"11","id":"1"}},"datasets":[{"w":1,"provider_name":"p:1","organization_name":"SPOD","package_name":"isislab","resource_name":"EXAMPLE 1","url":"http:\/\/ckan.routetopa.eu\/\/api\/action\/datastore_search?resource_id=642ceea8-711e-4124-b450-0d23010c44e6","metas":"{\"organization\":\"SPOD\",\"description\":\"This is a test datasets.\",\"format\":\"CSV\"}"}, {"w":1,"provider_name":"p:1","organization_name":"SPOD","package_name":"isislab","resource_name":"EXAMPLE 2","url":"http:\/\/ckan2.routetopa.eu\/\/api\/action\/datastore_search?resource_id=642ceea8-711e-4124-b450-0d23010c44e6","metas":"{\"organization\":\"SPOD\",\"description\":\"This is a test datasets.\",\"format\":\"CSV\"}"}, {"w":1,"provider_name":"p:1","organization_name":"SPOD","package_name":"isislab","resource_name":"EXAMPLE 3","url":"http:\/\/ckan3.routetopa.eu\/\/api\/action\/datastore_search?resource_id=642ceea8-711e-4124-b450-0d23010c44e6","metas":"{\"organization\":\"SPOD\",\"description\":\"This is a test datasets.\",\"format\":\"CSV\"}"}]}}'-->
