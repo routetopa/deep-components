@@ -270,7 +270,7 @@ Example:
             },
 
             tick : function () {
-                if(_this.gnodes != undefined && _this.graph.nodes.length > 0)
+                if(_this.gnodes != undefined &&  _this.graph.nodes != undefined && _this.graph.nodes.length > 0)
                 {
                     d3.selectAll("g foreignObject").attr("x", function (t) {
                         return t.x + (t.r ? 0.8 * t.r : 15)
