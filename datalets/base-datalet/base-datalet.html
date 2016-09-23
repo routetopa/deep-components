@@ -183,10 +183,10 @@ Example :
                 <paper-icon-button class="export" on-click="showHideExportMenu" icon="more-horiz"></paper-icon-button>
                 <div class="highcharts-contextmenu" id="highcharts-contextmenu">
                     <div class="highcharts-contextmenu-container">
-                        <div id="export_html"     on-click="exportToHTML">Export to HTML</div>
-                        <div id="export_png"      on-click="exportToIMG">Export to PNG</div>
-                        <div id="export_rtf"      on-click="exportRTF">Export to RTF</div>
-                        <div id="export_my_space" on-click="importToMySpace">Import in My Space</div>
+                        <div id="export_html"     on-click="exportToHTML"><span id="export_to_html"></span></div>
+                        <div id="export_png"      on-click="exportToIMG"><span id="export_to_png"></span></div>
+                        <div id="export_rtf"      on-click="exportRTF"><span id="export_to_rtf"></span></div>
+                        <div id="export_my_space" on-click="importToMySpace"><span id="import_myspace"></span></div>
                     </div>
                 </div>
             </div>
@@ -197,6 +197,8 @@ Example :
 
     <script src="static/js/BaseDataletBehavior.js"></script>
     <script src="static/js/WorkcycleBehavior.js"></script>
+    <script src="../../locales/base_datalet_ln.js"></script>
+
 
     <script>
         BaseDatalet = Polymer({
@@ -267,6 +269,10 @@ Example :
 //                this.$.domain.textContent = url;
 //            },
 
+            attached: function(){
+              this.translate();
+            },
+
             removeLoader: function() {
                 this.$.base_datalet_spinner.style.display = "none";
                 this.$.datalet_spinner.active = false;
@@ -277,6 +283,21 @@ Example :
                 this.$.base_datalet_container.style.margin = 0;
                 this.$.base_datalet_container.style.border = 0;
                 this.removeLoader();
+            },
+
+            translate: function() {
+                var ln = "en";
+
+                if(ODE && ODE.user_language)
+                    ln = ODE.user_language;
+                else if(parent && parent.ODE && parent.ODE.user_language)
+                    ln = parent.ODE.user_language;
+
+                this.$.export_to_html.innerHTML = base_datalet_ln["export_HTML_" + ln];
+                this.$.export_to_png.innerHTML = base_datalet_ln["export_PNG_" + ln];
+                this.$.export_to_rtf.innerHTML = base_datalet_ln["export_RTF_" + ln];
+                this.$.import_myspace.innerHTML = base_datalet_ln["import_myspace_" + ln];
+
             },
 
             setExportMenu: function()
