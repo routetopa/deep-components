@@ -288,10 +288,12 @@ Example :
             translate: function() {
                 var ln = "en";
 
-                if(ODE && ODE.user_language)
-                    ln = ODE.user_language;
-                else if(parent && parent.ODE && parent.ODE.user_language)
-                    ln = parent.ODE.user_language;
+                try {
+                    if (ODE && ODE.user_language)
+                        ln = ODE.user_language;
+                    else if (parent && parent.ODE && parent.ODE.user_language)
+                        ln = parent.ODE.user_language;
+                }catch (e){}
 
                 this.$.export_to_html.innerHTML = base_datalet_ln["export_HTML_" + ln];
                 this.$.export_to_png.innerHTML = base_datalet_ln["export_PNG_" + ln];
