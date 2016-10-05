@@ -422,22 +422,26 @@
                         var CSV = "";
 
                         for (var index in arrData[0]) {
-                            row += index + ',';
+                            row += '"' + index.replace(/"/g, '""') + '",';
                         }
 
                         row = row.slice(0, -1);
 
                         //append Label row with line break
-                        CSV += row + '\r\n';
+                        CSV += row + '\n';
                         for (var i = 0; i < arrData.length; i++) {
                             var row = "";
 
                             //2nd loop will extract each column and convert it in string comma-seprated
                             for (var index in arrData[i]) {
-                                if(typeof arrData[i][index] == 'string')
-                                    row += '"' + arrData[i][index].replace('"', '""') + '",';
-                                else
+                                if(typeof arrData[i][index] == 'string') {
+                                    arrData[i][index] = arrData[i][index].replace(/"/g, '""');
+                                    arrData[i][index] = arrData[i][index].replace(/\n/g, '');
+                                    arrData[i][index] = arrData[i][index].replace(/\r/g, '');
+                                    row += '"' + arrData[i][index] + '",';
+                                }else {
                                     row += arrData[i][index] + ',';
+                                }
                             }
 
                             row.slice(0, row.length - 1);
