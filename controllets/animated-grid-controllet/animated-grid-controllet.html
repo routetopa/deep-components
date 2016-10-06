@@ -51,20 +51,23 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
         ::content .room-body
         {
-            height: calc(100% - 40px);/* 100% =*200/400 -4 border*/
+            height: calc(100% - 40px - 48px - 26px);
             width: calc(100% - 16px);
             color:#FFFFFF;
-            padding: 8px;
+            padding: 76px 8px 0px 8px;
+            /*white-space: nowrap;*/
             word-wrap: break-word;
             overflow: hidden;
             text-overflow: ellipsis;
+            line-height: 16px;
+            font-size: 14px;
         }
         ::content .room-subject
         {
             position: absolute;
             width: calc(100% - 16px);
             height: 32px;
-            bottom: 32px;
+            top: 16px;
             background-color: rgba(0,0,0,0.8);
             padding: 16px 0px 0px 16px;
             color: #FFFFFF;
@@ -84,6 +87,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             padding: 8px;
             font-size: small;
             line-height: 16px;
+            font-weight: 700;
         }
     </style>
 
