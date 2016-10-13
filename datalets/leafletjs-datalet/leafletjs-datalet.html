@@ -220,7 +220,7 @@ Example:
              */
             ready: function(){
                 this.behavior =  $.extend(true, {}, BaseDataletBehavior, WorkcycleBehavior, AjaxJsonAlasqlBehavior, leafletjsBehavior);
-                this.async(function(){this.behavior.init(this)},100);
+                this.async(function(){this.behavior.init(this)},500);
             }
         });
     </script>
