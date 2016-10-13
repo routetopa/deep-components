@@ -294,7 +294,7 @@
             },
 
             _addFilter : function() {
-                if (this.$.filter_field.selectedItem && this.$.filter_operation_menu.selectedItem && this.$.filter_value.value != "" && !this.$.filter_value.invalid) {
+                if (this.$.filter_field.selectedItem && this.$.filter_operation_menu.selectedItem && !this.$.filter_value.invalid) {
                     var field = this.$.filter_field.value;
                     var id = this.$.filter_operation.selectedItem.id;
                     var operation = this.operations[id];

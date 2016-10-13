@@ -64,8 +64,11 @@ function _alasql_WHERE (filters) {
     var logicalOperator = filters[0].logicalOperator;
     filters = filters.slice(1);
 
-    for (var i=0; i < filters.length; i++)
+    for (var i=0; i < filters.length; i++) {
         filters[i]["field"] = _normalizeField(filters[i]["field"]);
+        if(filters[i]["value"] == "")
+            filters[i]["value"] = "\"" + filters[i]["value"] + "\"";
+    }
 
     for (var i=0; i < filters.length; i++) {
         if(filters[i]["operation"] == "contains")
