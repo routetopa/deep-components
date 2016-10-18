@@ -98,7 +98,7 @@
                 /*--paper-tab-ink: #2196F3;*/
             }
 
-            paper-tab:nth-child(2) {
+            paper-tab:nth-child(1) {
                 border-right: 0;
             }
 
@@ -115,9 +115,9 @@
 
         <paper-material id="preview_container" elevation="5">
 
-            <paper-tabs selected="{{tabIndex}}" no-bar>
-                <paper-tab noink><span id="previewTab"></span></paper-tab>
-                <paper-tab noink><span id="infoTab"></span></paper-tab>
+            <paper-tabs selected="{{tabIndex}}" noink no-bar>
+                <paper-tab><span id="previewTab"></span></paper-tab>
+                <paper-tab><span id="infoTab"></span></paper-tab>
             </paper-tabs>
 
             <neon-animated-pages id="neon_container" selected="{{_getNeonIndex(tabIndex)}}" entry-animation="fade-in-animation" exit-animation="fade-out-animation">

@@ -78,7 +78,7 @@
                 border-right: 2px solid #FFFFFF;
             }
 
-            paper-tab:nth-last-child(2) {
+            paper-tab:nth-last-child(1) {
                 border-right: 0;
             }
 
@@ -89,6 +89,7 @@
 
             paper-tab:not(.iron-selected):hover {
                 color: #2196F3;
+                /*transition: 0.5s;*/
             }
 
             paper-input {
@@ -168,10 +169,10 @@
         </style>
 
         <paper-material id="select_dataset_container" elevation="5">
-            <paper-tabs selected={{tabIndex}} no-bar>
-                <paper-tab noink on-tap="_setProvidersDatasets"><span id="providers_datasets"></span></paper-tab>
-                <paper-tab noink on-tap="_setLocalDatasets"><span id="spod_users_datasets"></span></paper-tab>
-                <paper-tab noink on-tap="_setExtendedDatasets"><span id="extended_datasets"></span></paper-tab>
+            <paper-tabs selected={{tabIndex}} noink no-bar>
+                <paper-tab on-tap="_setProvidersDatasets"><span id="providers_datasets"></span></paper-tab>
+                <paper-tab on-tap="_setLocalDatasets"><span id="spod_users_datasets"></span></paper-tab>
+                <paper-tab on-tap="_setExtendedDatasets"><span id="extended_datasets"></span></paper-tab>
             </paper-tabs>
 
             <div id="options">
