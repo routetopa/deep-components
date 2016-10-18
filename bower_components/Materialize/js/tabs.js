@@ -1,7 +1,12 @@
 (function ($) {
 
   var methods = {
-    init : function() {
+    init : function(options) {
+      var defaults = {
+        onShow: null
+      };
+      options = $.extend(defaults, options);
+
       return this.each(function() {
 
       // For each set of tabs, we want to keep track of
@@ -12,7 +17,7 @@
       $this.width('100%');
       var $active, $content, $links = $this.find('li.tab a'),
           $tabs_width = $this.width(),
-          $tab_width = $this.find('li').first().outerWidth(),
+          $tab_width = Math.max($tabs_width, $this[0].scrollWidth) / $links.length,
           $index = 0;
 
       // If the location.hash matches one of the links, use that as the active tab.
@@ -20,7 +25,7 @@
 
       // If no match is found, use the first link or any with class 'active' as the initial active tab.
       if ($active.length === 0) {
-          $active = $(this).find('li.tab a.active').first();
+        $active = $(this).find('li.tab a.active').first();
       }
       if ($active.length === 0) {
         $active = $(this).find('li.tab a').first();
@@ -32,7 +37,9 @@
         $index = 0;
       }
 
-      $content = $($active[0].hash);
+      if ($active[0] !== undefined) {
+        $content = $($active[0].hash);
+      }
 
       // append indicator then set indicator width to tab width
       $this.append('<div class="indicator"></div>');
@@ -43,7 +50,7 @@
       }
       $(window).resize(function () {
         $tabs_width = $this.width();
-        $tab_width = $this.find('li').first().outerWidth();
+        $tab_width = Math.max($tabs_width, $this[0].scrollWidth) / $links.length;
         if ($index < 0) {
           $index = 0;
         }
@@ -60,18 +67,25 @@
 
 
       // Bind the click event handler
-      $this.on('click', 'a', function(e){
+      $this.on('click', 'a', function(e) {
         if ($(this).parent().hasClass('disabled')) {
           e.preventDefault();
           return;
         }
 
+        // Act as regular link if target attribute is specified.
+        if (!!$(this).attr("target")) {
+          return;
+        }
+
         $tabs_width = $this.width();
-        $tab_width = $this.find('li').first().outerWidth();
+        $tab_width = Math.max($tabs_width, $this[0].scrollWidth) / $links.length;
 
         // Make the old tab inactive.
         $active.removeClass('active');
-        $content.hide();
+        if ($content !== undefined) {
+          $content.hide();
+        }
 
         // Update the variables with the new link and content
         $active = $(this);
@@ -88,7 +102,12 @@
         // Change url to current tab
         // window.location.hash = $active.attr('href');
 
-        $content.show();
+        if ($content !== undefined) {
+          $content.show();
+          if (typeof(options.onShow) === "function") {
+            options.onShow.call(this, $content);
+          }
+        }
 
         // Update indicator
         if (($index - $prev_index) >= 0) {

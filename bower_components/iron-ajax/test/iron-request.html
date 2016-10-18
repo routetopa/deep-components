@@ -1,5 +1,6 @@
 <!doctype html>
 <!--
+@license
 Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
 This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
 The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
@@ -13,10 +14,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
   <script src="../../webcomponentsjs/webcomponents.js"></script>
   <script src="../../web-component-tester/browser.js"></script>
-  <script src="../../test-fixture/test-fixture-mocha.js"></script>
 
   <link rel="import" href="../../polymer/polymer.html">
-  <link rel="import" href="../../test-fixture/test-fixture.html">
   <link rel="import" href="../iron-request.html">
 </head>
 <body>
@@ -43,6 +42,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           '{"success":true}'
         ]);
 
+        server.respondWith('GET', '/responds_to_get_with_prefixed_json', [
+          200,
+          jsonResponseHeaders,
+          '])}while(1);</x>{"success":true}'
+        ]);
+
         server.respondWith('GET', '/responds_to_get_with_500', [
           500,
           {},
@@ -66,6 +71,18 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         successfulRequestOptions = {
           url: '/responds_to_get_with_json'
         };
+
+        synchronousSuccessfulRequestOptions = {
+          url: '/responds_to_get_with_json',
+          async: false,
+          timeout: 100
+        };
+
+        asynchronousSuccessfulRequestOptions = {
+          url: '/responds_to_get_with_json',
+          async: true,
+          timeout: 100
+        };
       });
 
       teardown(function () {
@@ -79,6 +96,20 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           server.respond();
 
           expect(request.response).to.be.ok;
+        });
+
+        test('timeout not set if synchronous', function () {
+          request.send(synchronousSuccessfulRequestOptions);
+
+          expect(request.xhr.async).to.be.eql(false);
+          expect(request.xhr.timeout).to.be.eql(undefined);
+        });
+
+        test('timeout set if asynchronous', function () {
+          request.send(asynchronousSuccessfulRequestOptions);
+
+          expect(request.xhr.async).to.be.eql(true);
+          expect(request.xhr.timeout).to.be.eql(100);
         });
 
         test('sets async to true by default', function () {
@@ -136,6 +167,24 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           });
         });
 
+        test('setting jsonPrefix correctly strips it from the response', function () {
+          var options = {
+            url: '/responds_to_get_with_prefixed_json',
+            handleAs: 'json',
+            jsonPrefix: '])}while(1);</x>'
+          };
+
+          request.send(options);
+          expect(server.requests.length).to.be.equal(1);
+          expect(server.requests[0].requestHeaders['accept']).to.be.equal(
+              'application/json');
+          server.respond();
+
+          return request.completes.then(function() {
+            expect(request.response).to.deep.eq({success: true});
+          });
+        });
+
         test('responseType cannot be configured via handleAs option, when async is false', function () {
           var options = Object.create(successfulRequestOptions);
           options.handleAs = 'json';
@@ -152,6 +201,38 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           });
         });
 
+        test('headers are sent up', function() {
+          var options = Object.create(successfulRequestOptions);
+          options.headers = {
+            'foo': 'bar',
+            'accept': 'this should override the default'
+          };
+          request.send(options);
+          expect(server.requests.length).to.be.equal(1);
+          var fakeXhr = server.requests[0]
+          expect(fakeXhr.requestHeaders['foo']).to.be.equal(
+              'bar');
+          expect(fakeXhr.requestHeaders['accept']).to.be.equal(
+              'this should override the default');
+        });
+
+        test('headers are deduped by lowercasing', function() {
+          var options = Object.create(successfulRequestOptions);
+          options.headers = {
+            'foo': 'bar',
+            'Foo': 'bar',
+            'fOo': 'bar',
+            'Accept': 'this should also override the default'
+          };
+          request.send(options);
+          expect(server.requests.length).to.be.equal(1);
+          var fakeXhr = server.requests[0]
+          expect(Object.keys(fakeXhr.requestHeaders).length).to.be.equal(2);
+          expect(fakeXhr.requestHeaders['foo']).to.be.equal(
+              'bar');
+          expect(fakeXhr.requestHeaders['accept']).to.be.equal(
+              'this should also override the default');
+        });
       });
 
       suite('special cases', function() {

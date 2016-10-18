@@ -16,8 +16,8 @@ information on the API.
       <google-map-directions map="{{map}}"
           start-address="San Francisco"
           end-address="Mountain View"
-          travel-mode="TRANSIT"
-          waypoints="[{location: 'Palo Alto'}, {location: 'San Mateo'}]"></google-map-directions>
+          travel-mode="BICYCLING"
+          waypoints='[{"location": "Palo Alto"}, {"location": "San Mateo"}]'></google-map-directions>
       <google-map map="{{map}}" latitude="37.779"
                   longitude="-122.3892"></google-map>
     </template>
@@ -34,7 +34,8 @@ information on the API.
     <google-maps-api
       api-key="[[apiKey]]"
       language="[[language]]"
-      on-api-load="_mapApiLoaded"></google-maps-api>
+      on-api-load="_mapApiLoaded"
+      maps-url="[[mapsUrl]]"></google-maps-api>
   </template>
 </dom-module>
 
@@ -47,13 +48,25 @@ information on the API.
 Fired whenever the directions service returns a result.
 
 @event google-map-response
-@param {{response: Object}}} detail
+@param {{response: Object}} detail
 */
+
+    /**
+     * Polymer properties for the google-map-directions custom element.
+     */
     properties: {
       /**
        * A Maps API key. To obtain an API key, see developers.google.com/maps/documentation/javascript/tutorial#api_key.
        */
       apiKey: String,
+
+      /**
+       * Overrides the origin the Maps API is loaded from. Defaults to `https://maps.googleapis.com`.
+       */
+      mapsUrl: {
+        type: String
+        // Initial value set in google-maps-api.
+      },
 
       /**
        * The Google map object.
@@ -100,7 +113,7 @@ Fired whenever the directions service returns a result.
        * plus the origin, and destination.
        * Waypoints are not supported for transit directions. Optional.
        *
-       * @type google.maps.DirectionsWaypoint
+       * @type Array<google.maps.DirectionsWaypoint>
        */
        waypoints: {
          type: Array,
@@ -139,7 +152,7 @@ Fired whenever the directions service returns a result.
     },
 
     observers: [
-      '_route(startAddress, endAddress, travelMode, waypoints)'
+      '_route(startAddress, endAddress, travelMode, waypoints.*)'
     ],
 
     _mapApiLoaded: function() {

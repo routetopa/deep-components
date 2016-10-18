@@ -2,23 +2,14 @@
   "name": "COMPONENT",
   "version": "1.0.0",
   "authors": [
-    "Luigi Serra"
+    "ROUTETOPA"
   ],
   "description": "Datalet and Controllet repository",
   "license": "MIT",
   "ignore": [
     "**/.*",
-    "node_modules",
-    "bower_components",
-    "test",
-    "tests"
+    "bower_components"
   ],
   "dependencies": {
-    "google-map": "GoogleWebComponents/google-map#^1.0.0",
-    "paper-fab-transitions": "~0.1.0",
-    "paper-scroll-header-panel": "PolymerElements/paper-scroll-header-panel#~1.0.14",
-    "iron-icon": "PolymerElements/iron-icon#~1.0.7",
-    "iron-icons": "PolymerElements/iron-icons#~1.1.2",
-    "paper-toast": "PolymerElements/paper-toast#~1.2.1"
   }
 }

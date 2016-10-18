@@ -17,7 +17,7 @@ Keeps `value` property in sync with localStorage.
 
 Value is saved as json by default.
 
-###Usage:
+### Usage:
 
 `ls-sample` will automatically save changes to its value.
 
@@ -51,10 +51,11 @@ Value is saved as json by default.
       });
     </script>
 
-###Tech notes:
+### Tech notes:
 
 * * `value.*` is observed, and saved on modifications. You must use
-property notification methods to modify value for changes to be observed.
+    path change notification methods such as `set()` to modify value
+    for changes to be observed.
 
 * * Set `auto-save-disabled` to prevent automatic saving.
 
@@ -178,7 +179,13 @@ is resolved. Local storage will be blown away.
      * @param {boolean=} externalChange true if loading changes from a different window
      */
     _load: function(externalChange) {
-      var v = window.localStorage.getItem(this.name);
+      try {
+        var v = window.localStorage.getItem(this.name);
+      } catch (ex) {
+        this.errorMessage = ex.message;
+
+        this._error("Could not save to localStorage.  Try enabling cookies for this page.", ex);
+      };
 
       if (v === null) {
         this._loaded = true;
@@ -192,7 +199,7 @@ is resolved. Local storage will be blown away.
             v = JSON.parse(v);
           } catch(x) {
             this.errorMessage = "Could not parse local storage value";
-            console.error("could not parse local storage value", v);
+            Polymer.Base._error("could not parse local storage value", v);
             v = null;
           }
         }
@@ -206,12 +213,12 @@ is resolved. Local storage will be blown away.
 
     /**
      * Saves the value to localStorage. Call to save if autoSaveDisabled is set.
-     * If `value` is null, deletes localStorage.
+     * If `value` is null or undefined, deletes localStorage.
      */
     save: function() {
       var v = this.useRaw ? this.value : JSON.stringify(this.value);
       try {
-        if (this.value === null) {
+        if (this.value === null || this.value === undefined) {
           window.localStorage.removeItem(this.name);
         } else {
           window.localStorage.setItem(this.name, /** @type {string} */ (v));
@@ -220,7 +227,7 @@ is resolved. Local storage will be blown away.
       catch(ex) {
         // Happens in Safari incognito mode,
         this.errorMessage = ex.message;
-        console.error("localStorage could not be saved. Safari incoginito mode?", ex);
+        Polymer.Base._error("Could not save to localStorage. Incognito mode may be blocking this action", ex);
       }
     }
 

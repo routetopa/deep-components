@@ -1,4 +1,5 @@
 <!--
+@license
 Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
 This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
 The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
@@ -15,10 +16,10 @@ iron-request can be used to perform XMLHttpRequests.
 
     <iron-request id="xhr"></iron-request>
     ...
-    this.$.xhr.send({url: url, params: params});
+    this.$.xhr.send({url: url, body: params});
 -->
 <script>
-  'use strict'
+  'use strict';
 
   Polymer({
     is: 'iron-request',
@@ -56,7 +57,7 @@ iron-request can be used to perform XMLHttpRequests.
         notify: true,
         readOnly: true,
         value: function() {
-         return null;
+          return null;
         }
       },
 
@@ -170,6 +171,9 @@ iron-request can be used to perform XMLHttpRequests.
     /**
      * Sends an HTTP request to the server and returns the XHR object.
      *
+     * The handling of the `body` parameter will vary based on the Content-Type
+     * header. See the docs for iron-ajax's `body` param for details.
+     *
      * @param {{
      *   url: string,
      *   method: (string|undefined),
@@ -177,13 +181,14 @@ iron-request can be used to perform XMLHttpRequests.
      *   body: (ArrayBuffer|ArrayBufferView|Blob|Document|FormData|null|string|undefined|Object),
      *   headers: (Object|undefined),
      *   handleAs: (string|undefined),
+     *   jsonPrefix: (string|undefined),
      *   withCredentials: (boolean|undefined)}} options -
      *     url The url to which the request is sent.
      *     method The HTTP method to use, default is GET.
      *     async By default, all requests are sent asynchronously. To send synchronous requests,
-     *         set to true.
+     *         set to false.
      *     body The content for the request body for POST method.
-     *     headers HTTP request headers. All keys must be lower case.
+     *     headers HTTP request headers.
      *     handleAs The response type. Default is 'text'.
      *     withCredentials Whether or not to send credentials on the request. Default is false.
      *   timeout: (Number|undefined)
@@ -224,13 +229,13 @@ iron-request can be used to perform XMLHttpRequests.
       // Called after all of the above.
       xhr.addEventListener('loadend', function () {
         this._updateStatus();
+        this._setResponse(this.parseResponse());
 
         if (!this.succeeded) {
           this.rejectCompletes(new Error('The request failed with status code: ' + this.xhr.status));
           return;
         }
 
-        this._setResponse(this.parseResponse());
         this.resolveCompletes(this);
       }.bind(this));
 
@@ -248,13 +253,19 @@ iron-request can be used to perform XMLHttpRequests.
         'xml': 'application/xml',
         'arraybuffer': 'application/octet-stream'
       }[options.handleAs];
-      var headers = options.headers || {};
+      var headers = options.headers || Object.create(null);
+      var newHeaders = Object.create(null);
+      for (var key in headers) {
+        newHeaders[key.toLowerCase()] = headers[key];
+      }
+      headers = newHeaders;
+
       if (acceptType && !headers['accept']) {
         headers['accept'] = acceptType;
       }
       Object.keys(headers).forEach(function (requestHeader) {
         if (/[A-Z]/.test(requestHeader)) {
-          console.error('Headers must be lower case, got', requestHeader);
+          Polymer.Base._error('Headers must be lower case, got', requestHeader);
         }
         xhr.setRequestHeader(
           requestHeader,
@@ -262,17 +273,33 @@ iron-request can be used to perform XMLHttpRequests.
         );
       }, this);
 
-      var body = this._encodeBodyObject(options.body, headers['content-type']);
-
-      // In IE, `xhr.responseType` is an empty string when the response
-      // returns. Hence, caching it as `xhr._responseType`.
       if (options.async !== false) {
-        xhr.responseType = xhr._responseType = (options.handleAs || 'text');
+        if (options.async) {
+          xhr.timeout = options.timeout;
+        }
+
+        var handleAs = options.handleAs;
+
+        // If a JSON prefix is present, the responseType must be 'text' or the
+        // browser won’t be able to parse the response.
+        if (!!options.jsonPrefix || !handleAs) {
+          handleAs = 'text';
+        }
+
+        // In IE, `xhr.responseType` is an empty string when the response
+        // returns. Hence, caching it as `xhr._responseType`.
+        xhr.responseType = xhr._responseType = handleAs;
+
+        // Cache the JSON prefix, if it exists.
+        if (!!options.jsonPrefix) {
+          xhr._jsonPrefix = options.jsonPrefix;
+        }
       }
+
       xhr.withCredentials = !!options.withCredentials;
-      xhr.timeout = options.timeout;
 
 
+      var body = this._encodeBodyObject(options.body, headers['content-type']);
 
       xhr.send(
         /** @type {ArrayBuffer|ArrayBufferView|Blob|Document|FormData|
@@ -294,6 +321,7 @@ iron-request can be used to perform XMLHttpRequests.
       var xhr = this.xhr;
       var responseType = xhr.responseType || xhr._responseType;
       var preferResponseText = !this.xhr.responseType;
+      var prefixLen = (xhr._jsonPrefix && xhr._jsonPrefix.length) || 0;
 
       try {
         switch (responseType) {
@@ -308,7 +336,7 @@ iron-request can be used to perform XMLHttpRequests.
               // That is to say, we try to parse as JSON, but if anything goes
               // wrong return null.
               try {
-                return JSON.parse(xhr.responseText);;
+                return JSON.parse(xhr.responseText);
               } catch (_) {
                 return null;
               }
@@ -322,8 +350,20 @@ iron-request can be used to perform XMLHttpRequests.
           case 'arraybuffer':
             return xhr.response;
           case 'text':
-          default:
+          default: {
+            // If `prefixLen` is set, it implies the response should be parsed
+            // as JSON once the prefix of length `prefixLen` is stripped from
+            // it. Emulate the behavior above where null is returned on failure
+            // to parse.
+            if (prefixLen) {
+              try {
+                return JSON.parse(xhr.responseText.substring(prefixLen));
+              } catch (_) {
+                return null;
+              }
+            }
             return xhr.responseText;
+          }
         }
       } catch (e) {
         this.rejectCompletes(new Error('Could not parse response. ' + e.message));
@@ -385,6 +425,9 @@ iron-request can be used to perform XMLHttpRequests.
     _wwwFormUrlEncodePiece: function(str) {
       // Spec says to normalize newlines to \r\n and replace %20 spaces with +.
       // jQuery does this as well, so this is likely to be widely compatible.
+      if (str === null) {
+        return '';
+      }
       return encodeURIComponent(str.toString().replace(/\r?\n/g, '\r\n'))
           .replace(/%20/g, '+');
     },
@@ -398,4 +441,3 @@ iron-request can be used to perform XMLHttpRequests.
     }
   });
 </script>
-
