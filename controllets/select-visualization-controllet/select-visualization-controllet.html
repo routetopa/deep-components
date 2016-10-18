@@ -283,6 +283,7 @@
 
             _loadDatalet : function(e){
                 if(!e.detail.isReady) {
+                    this.$.add_button.setAttribute("disabled", "true");
                     this.$.preview.eraseDatalet();
                     return;
                 }
