@@ -159,11 +159,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
         attached : function()
         {
+            var t = this;
             $(document).ready(function(){
-                $('.grid').masonry({
-                    itemSelector: '.grid-item',
-                    columnWidth: 20
-                });
+                t.async(function(){
+                    $('.grid').masonry({
+                        itemSelector: '.grid-item',
+                        columnWidth: 20
+                    });
+                },1);
             });
         },
 
