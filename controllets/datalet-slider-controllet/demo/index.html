@@ -1,0 +1,53 @@
+<!doctype html>
+
+<html>
+<head>
+    <script src="../../../bower_components/webcomponentsjs/webcomponents-lite.min.js"></script>
+
+    <link rel="import" href="../page-slider-controllet.html" />
+</head>
+<body>
+
+<style>
+    .page {
+        height: 100vw;
+        text-align: center;
+        padding-top: 100px;
+        font-weight: bold;
+    }
+</style>
+
+<page-slider-controllet id="slider">
+    <neon-animatable>
+        <div class="page"><p>Pagina uno</p><p>Page one</p><p>Primera p&aacute;gina</p></div>
+    </neon-animatable>
+    <neon-animatable>
+        <div class="page" style="background-color: #BBDEFB;"><p>Pagina due</p><p>Page two</p><p>P&aacute;gina dos</p></div>
+    </neon-animatable>
+    <neon-animatable>
+        <div class="page"><p>Pagina tre</p><p>Page three</p><p>P&aacute;gina tres</p></div>
+    </neon-animatable>
+</page-slider-controllet>
+
+<script>
+    var slider = document.getElementById('slider');
+
+    slider.addEventListener("page-slider-controllet_selected", function (e) {
+        switch (e.detail.selected) {
+            case 0:
+                slider.setTitle("DATASET SOURCE", "Copy and paste/drag and drop in the textarea the url of datasource");
+                slider.chevronLeft("invisible");
+                break;
+            case 1:
+                slider.setTitle("Title", "Subtitle");
+                slider.setAvatar("B");
+                break;
+            case 2:
+                slider.setTitle("DATA MAPPING", "Select the visualization from the slider, drag and drop the selected fields in visualization parameter area, customize the visualization if you need");
+                slider.chevronRight(false);
+        }
+    });
+</script>
+
+</body>
+</html>

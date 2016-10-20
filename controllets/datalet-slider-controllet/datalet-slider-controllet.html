@@ -1,0 +1,278 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html" />
+
+<link rel="import" href="../../bower_components/neon-animation/neon-animation.html">
+<link rel="import" href="../../bower_components/neon-animation/neon-animatable.html">
+<link rel="import" href="../../bower_components/neon-animation/neon-animations.html">
+
+<link rel="import" href="../../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../../bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="../../bower_components/iron-icon/iron-icon.html">
+
+<link rel="import" href="../../bower_components/paper-tooltip/paper-tooltip.html">
+
+<dom-module id="page-slider-controllet">
+
+    <template>
+
+        <style is="custom-style">
+            paper-icon-button{
+                color: #00BCD4;
+                height: 64px;
+                width: 64px;
+                padding: 0px;
+                margin: 0px;
+                --paper-icon-button-ink-color: #00BCD4;
+            }
+
+            paper-icon-button:hover{
+                color: #00AABF;
+            }
+
+            paper-icon-button[disabled]{
+                color: #B6B6B6;
+            }
+
+            paper-tooltip {
+                --paper-tooltip-background: black;
+            }
+
+            paper-tooltip p {
+                font-family: 'Roboto', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+                font-size: 16px;
+                line-height: 24px;
+
+                margin: 0;
+                padding: 0;
+            }
+
+            :host > ::content neon-animatable.iron-selected:not(.neon-animating) {
+                position: static;
+            }
+
+            .header{
+                font-family: 'Roboto', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+                width: 100%;
+                line-height: normal;
+                /*padding-bottom: 8px;*/
+                /*border-bottom: 2px solid #B6B6B6;*/
+            }
+
+            .chevron-left{
+                float: left;
+                /*margin-top: 8px;*/
+            }
+
+            .chevron-right{
+                float: right;
+                /*margin-top: 8px;*/
+            }
+
+            .box{
+                overflow: auto;
+            }
+
+            .avatar {
+                display: inline-block;
+                height: 64px;
+                width: 64px;
+                border-radius: 50%;
+                background: #2196F3;
+                color: #FFFFFF;
+                line-height: 64px;
+                font-size: 32px;
+                vertical-align: middle;
+                text-align: center;
+            }
+
+            .text {
+                display: inline-block;
+                height: 64px;
+                vertical-align: middle;
+                padding-left: 20px;
+            }
+
+            .title {
+                font-size: 32px;
+                color: #2196F3;
+            }
+
+            .subtitle {
+                font-size: 16px;
+                color: #727272;/*#00BCD4*/
+            }
+        </style>
+
+        <div class="header">
+            <paper-icon-button id="slider_chevron_left" class="chevron-left" on-click="_onPrevClick" icon="arrow-back"></paper-icon-button>
+            <paper-icon-button id="slider_chevron_right" class="chevron-right" on-click="_onNextClick" icon="arrow-forward"></paper-icon-button>
+
+            <div class="box">
+                <div class="avatar">[[avatar]]</div>
+                <div class="text">
+                    <div class="title">[[title]]</div>
+                    <div class="subtitle">[[subtitle]]</div>
+                </div>
+            </div>
+        </div>
+
+        <paper-tooltip for="slider_chevron_left" position="right" offset="0"><p><span id="back"></span></p></paper-tooltip>
+        <paper-tooltip for="slider_chevron_right" position="left" offset="-16"><p><span id="forward"></span></p></paper-tooltip>
+
+        <neon-animated-pages on-neon-animation-finish="_onNeonAnimationFinish" selected="[[selected]]" entry-animation="[[entryAnimation]]" exit-animation="[[exitAnimation]]">
+            <content></content>
+        </neon-animated-pages>
+
+    </template>
+
+    <script>
+
+        Polymer({
+
+            is : 'page-slider-controllet',
+
+            properties : {
+
+                entryAnimation : {
+                    type  : String,
+                    value : ""
+                },
+
+                exitAnimation  : {
+                    type  : String,
+                    value : ""
+                },
+
+                prevEntryAnimation : {type  : String, value : 'slide-from-left-animation'},
+                prevExitAnimation : {type  : String, value : 'slide-right-animation'},
+                nextEntryAnimation : {type  : String, value : 'slide-from-right-animation'},
+                nextExitAnimation : {type  : String, value : 'slide-left-animation'},
+
+                selected : {
+                    type  : Number,
+                    value : 0
+                },
+
+                prevSelected : {
+                    type  : Number,
+                    value : 0
+                },
+
+                pages : {
+                    type  : Number,
+                    value : document.querySelectorAll('neon-animatable').length
+                },
+
+                title : {
+                    type  : String,
+                    value : ""
+                },
+
+                subtitle : {
+                    type  : String,
+                    value : ""
+                },
+
+                avatar : {
+                    type  : String,
+                    value : "1"
+                }
+
+            },
+
+            attached : function() {
+                this.fire('page-slider-controllet_selected', {selected : this.selected});
+
+//                this.$.slider_chevron_left.setAttribute("title", ln["back_" + ln["localization"]]);
+//                this.$.slider_chevron_right.setAttribute("title", ln["forward_" + ln["localization"]]);
+
+                this.$.back.innerHTML = ln["back_" + ln["localization"]];
+                this.$.forward.innerHTML = ln["forward_" + ln["localization"]];
+            },
+
+            setTitle : function(title, subtitle) {
+                this.title = title;
+                this.subtitle = subtitle;
+            },
+
+            setAvatar : function(innerText) {
+                this.avatar = innerText;
+            },
+
+            chevronLeft : function(flag) {
+                if(flag == "invisible") {
+                    this.$.slider_chevron_left.style.visibility = "hidden";
+                    return;
+                }
+                else
+                    this.$.slider_chevron_left.style.visibility = "visible";
+
+                if(flag)
+                    this.$.slider_chevron_left.removeAttribute("disabled");
+                else
+                    this.$.slider_chevron_left.setAttribute("disabled", "true");
+            },
+
+            chevronRight : function(flag) {
+                if(flag == "invisible") {
+                    this.$.slider_chevron_right.style.visibility = "hidden";
+                    return;
+                }
+                else
+                    this.$.slider_chevron_right.style.visibility = "visible";
+
+                if(flag)
+                    this.$.slider_chevron_right.removeAttribute("disabled");
+                else
+                    this.$.slider_chevron_right.setAttribute("disabled", "true");
+            },
+
+            getPrevSelected : function() {
+                return this.prevSelected;
+            },
+
+            setPrevAnimation  : function(entryAnimation, exitAnimation) {
+                this.prevEntryAnimation = entryAnimation;
+                this.prevExitAnimation  = exitAnimation;
+            },
+
+            setNextAnimation  : function(entryAnimation, exitAnimation) {
+                this.nextEntryAnimation = entryAnimation;
+                this.nextExitAnimation  = exitAnimation;
+            },
+
+            _onPrevClick : function() {
+                this.$.slider_chevron_left.setAttribute("disabled", "true");
+                this.$.slider_chevron_right.setAttribute("disabled", "true");
+
+                this.entryAnimation = this.prevEntryAnimation;
+                this.exitAnimation  = this.prevExitAnimation;
+
+                this.prevSelected = this.selected;
+                this.selected = this.selected === 0 ? (this.pages-1) : (this.selected - 1);
+            },
+
+            _onNextClick : function() {
+                this.$.slider_chevron_left.setAttribute("disabled", "true");
+                this.$.slider_chevron_right.setAttribute("disabled", "true");
+
+                this.entryAnimation = this.nextEntryAnimation;
+                this.exitAnimation  = this.nextExitAnimation;
+
+                this.prevSelected = this.selected;
+                this.selected = this.selected === (this.pages-1) ? 0 : (this.selected + 1);
+            },
+
+            _onNeonAnimationFinish: function() {
+                this.$.slider_chevron_left.removeAttribute("disabled");
+                this.$.slider_chevron_right.removeAttribute("disabled");
+
+                this.avatar = this.selected+1;
+
+                this.fire('page-slider-controllet_selected', {selected : this.selected});
+            }
+
+        });
+
+    </script>
+
+</dom-module>
