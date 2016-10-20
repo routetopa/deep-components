@@ -165,7 +165,7 @@
                 /*--paper-tab-ink: #2196F3;*/
             }
 
-            paper-tab:nth-child(2) {
+            paper-tab:nth-last-child(1) {
                 border-right: 0;
             }
 
@@ -176,6 +176,10 @@
 
             paper-tab:not(.iron-selected):hover {
                 color: #2196F3;
+            }
+
+            neon-animatable {
+                height: 100%;
             }
 
         </style>
@@ -212,9 +216,9 @@
                 </paper-tooltip>
             </div>
 
-            <paper-tabs selected="{{tabIndex}}" no-bar>
-                <paper-tab noink><span id="inputsTab"></span></paper-tab>
-                <paper-tab noink><span id="optionsTab"></span></paper-tab>
+            <paper-tabs selected="{{tabIndex}}" noink no-bar>
+                <paper-tab><span id="inputsTab"></span></paper-tab>
+                <paper-tab><span id="optionsTab"></span></paper-tab>
             </paper-tabs>
 
             <neon-animated-pages id="neon_container" selected="{{_getNeonIndex(tabIndex)}}" entry-animation="fade-in-animation" exit-animation="fade-out-animation">
@@ -224,7 +228,7 @@
                     <div id="inputs_list">
                         <template is="dom-repeat" items="{{inputs}}" index-as="input_index">
                             <div class="inputs">
-                                <paper-dropdown-menu id="{{input_index}}" label="{{_getInputRichName(item)}}">
+                                <paper-dropdown-menu id="{{input_index}}" label="{{_getInputRichName(item)}}" vertical-align="bottom">
                                     <paper-menu class="dropdown-content">
                                         <paper-item on-tap="_removeInput"></paper-item>
                                         <template is="dom-repeat" items={{_getFieldsByType(item.type)}}>
@@ -270,7 +274,7 @@
                                 </template>
 
                                 <template is="dom-if" if="{{_checkType(item.type, 'LIST')}}">
-                                    <paper-dropdown-menu id="{{option_index}}" label={{_getInputName(item.name)}}>
+                                    <paper-dropdown-menu id="{{option_index}}" label={{_getInputName(item.name)}} vertical-align="bottom">
                                         <paper-menu class="dropdown-content" selected="0">
                                             <template is="dom-repeat" items={{item.list.item}}>
                                                 <paper-item id="{{item}}" on-tap="_addOption">{{_getInputName(item)}}</paper-item>

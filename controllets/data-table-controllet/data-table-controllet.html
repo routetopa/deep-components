@@ -477,7 +477,7 @@
 //                    this.data = this.data.sort(this._sort_by(field.name, reverse, parseInt));
                     this.data = this.data.sort(this._sort_by(field.name, reverse, function(a){return (isNaN(a) ? -Number.MAX_VALUE : a)}));
                 else
-                    this.data = this.data.sort(this._sort_by(field.name, reverse, function(a){return (a ? a.toLowerCase() : "")}));
+                    this.data = this.data.sort(this._sort_by(field.name, reverse, function(a){a = a.toString(); return (a ? a.toLowerCase() : "")}));
                 this._filter();
             },
 

@@ -134,7 +134,7 @@
                 /*--paper-tab-ink: #2196F3;*/
             }
 
-            paper-tab:nth-child(3) {
+            paper-tab:nth-child(1) {
                 border-right: 0;
             }
 
@@ -145,6 +145,10 @@
 
             paper-tab:not(.iron-selected):hover {
                 color: #2196F3;
+            }
+
+            neon-animatable {
+                height: 100%;
             }
 
         </style>
@@ -165,10 +169,10 @@
         <paper-material id="expert_container" elevation="5">
 
             <div id="header_open">
-                <paper-tabs selected="{{tabIndex}}" no-bar>
-                    <paper-tab noink><span id="filtersTab"></span></paper-tab>
-                    <paper-tab noink><span id="groupByTab"></span></paper-tab>
-                    <paper-tab noink><span id="queryTab"></span></paper-tab>
+                <paper-tabs selected="{{tabIndex}}" noink no-bar>
+                    <paper-tab><span id="filtersTab"></span></paper-tab>
+                    <paper-tab><span id="groupByTab"></span></paper-tab>
+                    <paper-tab><span id="queryTab"></span></paper-tab>
                 </paper-tabs>
 
                 <paper-icon-button icon="fullscreen-exit" on-click="_fullscreenExit"></paper-icon-button>
