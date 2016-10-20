@@ -10,15 +10,81 @@
 
 <link rel="import" href="../../bower_components/paper-tooltip/paper-tooltip.html">
 
-<dom-module id="page-slider-controllet">
+<dom-module id="datalet-slider-controllet">
 
     <template>
 
         <style is="custom-style">
-            paper-icon-button{
-                color: #00BCD4;
+            #slider_container {
+                height: 100%;
+                width: 100%;
+            }
+
+            #slider_container * {
+                font-family: 'Roboto', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+                font-size: 16px;
+                line-height: 24px;
+            }
+
+            .header{
+                width: 100%;
+                background: #B6B6B6;
+                height: 48px;
+            }
+
+            .chevron-left{
+                float: left;
+            }
+
+            .chevron-right{
+                float: right;
+            }
+
+            .box{
+                /*overflow: auto;*/
+                height: 48px;
+            }
+
+            #slider_container #avatar {
+                /*display: inline-block;*/
+                left: 50px;
+                height: 40px;
+                width: 40px;
+                border-radius: 50%;
+                background: #FFFFFF;
+                color: #2196F3;
+                line-height: 40px;
+                font-size: 32px;
+                vertical-align: middle;
+                text-align: center;
+                margin: 4px 0;
+            }
+
+            .text {
+                display: inline-block;
                 height: 64px;
-                width: 64px;
+                vertical-align: middle;
+                padding-left: 20px;
+            }
+
+            .title {
+                font-size: 32px;
+                color: #2196F3;
+            }
+
+            .subtitle {
+                font-size: 16px;
+                color: #727272;/*#00BCD4*/
+            }
+
+            :host > ::content neon-animatable.iron-selected:not(.neon-animating) {
+                position: static;
+            }
+
+            paper-icon-button{
+                color: #000000;
+                height: 48px;
+                width: 48px;
                 padding: 0px;
                 margin: 0px;
                 --paper-icon-button-ink-color: #00BCD4;
@@ -44,83 +110,31 @@
                 margin: 0;
                 padding: 0;
             }
-
-            :host > ::content neon-animatable.iron-selected:not(.neon-animating) {
-                position: static;
-            }
-
-            .header{
-                font-family: 'Roboto', 'Helvetica Neue', Helvetica, Arial, sans-serif;
-                width: 100%;
-                line-height: normal;
-                /*padding-bottom: 8px;*/
-                /*border-bottom: 2px solid #B6B6B6;*/
-            }
-
-            .chevron-left{
-                float: left;
-                /*margin-top: 8px;*/
-            }
-
-            .chevron-right{
-                float: right;
-                /*margin-top: 8px;*/
-            }
-
-            .box{
-                overflow: auto;
-            }
-
-            .avatar {
-                display: inline-block;
-                height: 64px;
-                width: 64px;
-                border-radius: 50%;
-                background: #2196F3;
-                color: #FFFFFF;
-                line-height: 64px;
-                font-size: 32px;
-                vertical-align: middle;
-                text-align: center;
-            }
-
-            .text {
-                display: inline-block;
-                height: 64px;
-                vertical-align: middle;
-                padding-left: 20px;
-            }
-
-            .title {
-                font-size: 32px;
-                color: #2196F3;
-            }
-
-            .subtitle {
-                font-size: 16px;
-                color: #727272;/*#00BCD4*/
-            }
         </style>
 
-        <div class="header">
-            <paper-icon-button id="slider_chevron_left" class="chevron-left" on-click="_onPrevClick" icon="arrow-back"></paper-icon-button>
-            <paper-icon-button id="slider_chevron_right" class="chevron-right" on-click="_onNextClick" icon="arrow-forward"></paper-icon-button>
+        <div id="slider_container">
 
-            <div class="box">
-                <div class="avatar">[[avatar]]</div>
-                <div class="text">
-                    <div class="title">[[title]]</div>
-                    <div class="subtitle">[[subtitle]]</div>
+            <div class="header">
+                <paper-icon-button id="slider_chevron_left" class="chevron-left" on-click="_onPrevClick" icon="arrow-back"></paper-icon-button>
+                <paper-icon-button id="slider_chevron_right" class="chevron-right" on-click="_onNextClick" icon="arrow-forward"></paper-icon-button>
+
+                <div class="box">
+                    <div id="avatar">[[avatar]]</div>
+                    <div class="text">
+                        <div class="title">[[title]]</div>
+                        <div class="subtitle">[[subtitle]]</div>
+                    </div>
                 </div>
             </div>
+
+            <paper-tooltip for="slider_chevron_left" position="right" offset="0"><p><span id="back"></span></p></paper-tooltip>
+            <paper-tooltip for="slider_chevron_right" position="left" offset="-16"><p><span id="forward"></span></p></paper-tooltip>
+
+            <neon-animated-pages on-neon-animation-finish="_onNeonAnimationFinish" selected="[[selected]]" entry-animation="[[entryAnimation]]" exit-animation="[[exitAnimation]]">
+                <content></content>
+            </neon-animated-pages>
+
         </div>
-
-        <paper-tooltip for="slider_chevron_left" position="right" offset="0"><p><span id="back"></span></p></paper-tooltip>
-        <paper-tooltip for="slider_chevron_right" position="left" offset="-16"><p><span id="forward"></span></p></paper-tooltip>
-
-        <neon-animated-pages on-neon-animation-finish="_onNeonAnimationFinish" selected="[[selected]]" entry-animation="[[entryAnimation]]" exit-animation="[[exitAnimation]]">
-            <content></content>
-        </neon-animated-pages>
 
     </template>
 
@@ -128,7 +142,7 @@
 
         Polymer({
 
-            is : 'page-slider-controllet',
+            is : 'datalet-slider-controllet',
 
             properties : {
 
@@ -180,7 +194,7 @@
             },
 
             attached : function() {
-                this.fire('page-slider-controllet_selected', {selected : this.selected});
+                this.fire('datalet-slider-controllet_selected', {selected : this.selected});
 
 //                this.$.slider_chevron_left.setAttribute("title", ln["back_" + ln["localization"]]);
 //                this.$.slider_chevron_right.setAttribute("title", ln["forward_" + ln["localization"]]);
@@ -268,7 +282,7 @@
 
                 this.avatar = this.selected+1;
 
-                this.fire('page-slider-controllet_selected', {selected : this.selected});
+                this.fire('datalet-slider-controllet_selected', {selected : this.selected});
             }
 
         });
