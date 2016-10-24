@@ -122,7 +122,7 @@ Example:
                     }
                     else
                     {
-                        if(!isNaN(t.data[0].data[i]) && !isNaN(t.data[1].data[i])) {
+                        if( (!isNaN(t.data[0].data[i]) && !isNaN(t.data[1].data[i])) && (t.data[0].data[i] && t.data[1].data[i]) ) {
                             coordinates.push([parseFloat(t.data[0].data[i]), parseFloat(t.data[1].data[i])]);
                             geo = L.marker([coordinates[coordinates_index][0], coordinates[coordinates_index][1]]).addTo(t._component.map);
                             coordinates_index++;
