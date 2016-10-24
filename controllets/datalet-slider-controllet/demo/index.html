@@ -2,65 +2,69 @@
 
 <html>
 <head>
+    <script src="../../shared_js/jquery-1.11.2.min.js"></script>
+
     <script src="../../../bower_components/webcomponentsjs/webcomponents-lite.min.js"></script>
 
     <link rel="import" href="../datalet-slider-controllet.html" />
 
     <link rel="import" href="../../../bower_components/paper-material/paper-material.html" />
+
+    <link rel="import" href="../../../datalets/columnchart-datalet/columnchart-datalet.html" />
+    <link rel="import" href="../../../datalets/leafletjs-datalet/leafletjs-datalet.html" />
+    <link rel="import" href="../../../datalets/datatable-datalet/datatable-datalet.html" />
 </head>
 <body>
 
 <style>
-    .page {
-        height: 100%;
-        width: 100%;
-        text-align: center;
-        /*padding-top: 100px;*/
-        font-weight: bold;
-    }
 
     #container {
-        top: 200px;
-        left :200px;
-        height: 400px;
-        width: calc(100% - 400px);
+        top: 48px;
+        left :400px;
+        height: 80vh;
+        width: calc(100% - 800px);
     }
+
 </style>
 
 <paper-material id="container" elevation="5">
 
     <datalet-slider-controllet id="slider">
-        <neon-animatable>
-            <div class="page"><p>Pagina uno</p><p>Page one</p><p>Primera p&aacute;gina</p></div>
-        </neon-animatable>
-        <neon-animatable>
-            <div class="page" style="background-color: #BBDEFB;"><p>Pagina due</p><p>Page two</p><p>P&aacute;gina dos</p></div>
-        </neon-animatable>
-        <neon-animatable>
-            <div class="page"><p>Pagina tre</p><p>Page three</p><p>P&aacute;gina tres</p></div>
-        </neon-animatable>
+
     </datalet-slider-controllet>
 
 </paper-material>
 
 <script>
+    var datalets = [];
+
+    datalet1 = '<columnchart-datalet datalet-id="1_2" data-url=\'http://ckan.routetopa.eu//api/action/datastore_search?resource_id=642ceea8-711e-4124-b450-0d23010c44e6&limit=99999\' selectedfields=\'[{"field":"XAxis","value":"Name","index":4},{"field":"NumericYAxis","value":"Strength","index":5},{"field":"NumericYAxis","value":"Speed","index":4},{"field":"NumericYAxis","value":"Intelligence","index":1},null,null,null,null,null]\' filters=\'[]\' aggregators=\'[]\' orders=\'[]\' x-axis-label=\'\' y-axis-label=\'\' suffix=\'\' legend=\'topRight\' data-labels=\'true\' stack=\'false\' theme=\'themeBase\' title=\'Super Fingers a confronto!\' fields=\'["Intelligence","Lat","Lon","Name","Photo","Similarity","Speed","Strength"]\'></columnchart-datalet>'
+    datalet2 = '<columnchart-datalet datalet-id="2_2" data-url=\'http://ckan.routetopa.eu//api/action/datastore_search?resource_id=642ceea8-711e-4124-b450-0d23010c44e6&limit=99999\' selectedfields=\'[{"field":"XAxis","value":"Name","index":4},{"field":"NumericYAxis","value":"Strength","index":5},{"field":"NumericYAxis","value":"Speed","index":4},{"field":"NumericYAxis","value":"Intelligence","index":1},null,null,null,null,null]\' filters=\'[]\' aggregators=\'[]\' orders=\'[]\' x-axis-label=\'\' y-axis-label=\'\' suffix=\'\' legend=\'topRight\' data-labels=\'true\' stack=\'false\' theme=\'themeBase\' title=\'Super Fingers a confronto!\' fields=\'["Intelligence","Lat","Lon","Name","Photo","Similarity","Speed","Strength"]\'></columnchart-datalet>'
+    datalet3 = '<columnchart-datalet datalet-id="3_2" data-url=\'http://ckan.routetopa.eu//api/action/datastore_search?resource_id=642ceea8-711e-4124-b450-0d23010c44e6&limit=99999\' selectedfields=\'[{"field":"XAxis","value":"Name","index":4},{"field":"NumericYAxis","value":"Strength","index":5},{"field":"NumericYAxis","value":"Speed","index":4},{"field":"NumericYAxis","value":"Intelligence","index":1},null,null,null,null,null]\' filters=\'[]\' aggregators=\'[]\' orders=\'[]\' x-axis-label=\'\' y-axis-label=\'\' suffix=\'\' legend=\'topRight\' data-labels=\'true\' stack=\'false\' theme=\'themeBase\' title=\'Super Fingers a confronto!\' fields=\'["Intelligence","Lat","Lon","Name","Photo","Similarity","Speed","Strength"]\'></columnchart-datalet>'
+    datalet4 = '<leafletjs-datalet datalet-id="4_2" data-url=\'http://ckan.routetopa.eu//api/action/datastore_search?resource_id=1d9c8e62-47ab-40d5-8943-b4c3bca14b50&limit=99999\' selectedfields=\'[{"field":"Latitude","value":"Lat","index":2},{"field":"Longitude","value":"Long","index":4},{"field":"BalloonContent","value":"Wonder","index":6},{"field":"BalloonContent","value":"Location","index":3},{"field":"BalloonContent","value":"Year","index":7},{"field":"BalloonContent","value":"Status","index":5},{"field":"BalloonContent","value":"Image","index":1}]\' fields=\'["Image","Lat","Location","Long","Status","Wonder","Year"]\'></leafletjs-datalet>'
+    datalet5 = '<datatable-datalet datalet-id="5_2" data-url=\'http://ckan.routetopa.eu//api/action/datastore_search?resource_id=0937845d-c398-4416-a229-993f64e1d71d&limit=99999\' selectedfields=\'[{"field":"Column","value":"Animal","index":1},{"field":"Column","value":"Sound","index":3},{"field":"Column","value":"Italian Sound","index":2}]\' fields=\'["Animal","Italian Sound","Sound"]\'></datatable-datalet>'
+    
+    datalets[0] = datalet1;
+    datalets[1] = datalet2;
+    datalets[2] = datalet3;
+    datalets[3] = datalet4;
+    datalets[4] = datalet5;
+
     var slider = document.getElementById('slider');
 
-    slider.addEventListener("datalet-slider-controllet_selected", function (e) {
-        switch (e.detail.selected) {
-            case 0:
-//                slider.setTitle("DATASET SOURCE", "Copy and paste/drag and drop in the textarea the url of datasource");
-//                slider.chevronLeft("invisible");
-                break;
-            case 1:
-//                slider.setTitle("Title", "Subtitle");
-//                slider.setAvatar("B");
-                break;
-            case 2:
-//                slider.setTitle("DATA MAPPING", "Select the visualization from the slider, drag and drop the selected fields in visualization parameter area, customize the visualization if you need");
-//                slider.chevronRight(false);
-        }
+    $('document').ready(function(){
+        slider.setDatalets(datalets);
+        slider.setSelected(3);
     });
+
+    slider.addEventListener("datalet-slider-controllet_add", function (e) {
+        console.log(e.detail);
+    });
+
+    slider.addEventListener("datalet-slider-controllet_delete", function (e) {
+        console.log(e.detail);
+    });
+
 </script>
 
 </body>
