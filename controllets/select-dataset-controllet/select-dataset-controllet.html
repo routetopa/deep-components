@@ -345,7 +345,9 @@
                         }
                     });
 
-                    this._setProvidersDatasets();
+                    //this._setProvidersDatasets();
+                    this.$.datasets_list.setDatasets(this.providersDatasets);
+                    this._showOptions();
                 },
 
                 showDatasetInfo : function() {
@@ -376,7 +378,7 @@
                     this.$.menu_version.select(0);
                 },
 
-                _setProvidersDatasets : function() {
+                _setProvidersDatasets : function(e) {
                     this.async(function () {
                         var ddl_provider = $(this.$.ddl_provider).find("paper-menu")[0].selectedItem;
                         var name = ddl_provider.innerHTML.trim();
