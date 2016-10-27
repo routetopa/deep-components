@@ -261,8 +261,7 @@
                     this.async(function() {
                         this.currentDatalets = $("[datalet-id]");
                         this._showCurrentDatalet();
-                    }, 100);
-
+                    }, 1);
             },
 
             _showEmpty : function() {
@@ -274,15 +273,17 @@
 
             _showCurrentDatalet : function() {
                 this.title = this.currentDatalets[this.selected].title;
-                this.chevronLeft(true);
-                this.chevronRight(true);
+                if(this.pages == 1) {
+                    this.chevronLeft("invisible");
+                    this.chevronRight("invisible");
+                }
 
                 this.fire('datalet-slider-controllet_selected', {selected : this.selected});
             },
 
             setSelected : function(selected) {
-                this.selected = selected - 1;//% pages
-                this.avatar = selected;
+                this.selected = (selected - 1) % this.pages;
+                this.avatar = this.selected + 1;
             },
 
             setTitle : function(title) {
