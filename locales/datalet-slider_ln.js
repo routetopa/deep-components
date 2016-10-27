@@ -8,9 +8,9 @@ dataletslider_ln["back_en"] = "BACK";
 dataletslider_ln["forward_en"] = "FORWARD";
 
 /*IT*/
-dataletslider_ln["noDatalet_it"] = "There are no datalets to show";
-dataletslider_ln["back_it"] = "BACK";
-dataletslider_ln["forward_it"] = "FORWARD";
+dataletslider_ln["noDatalet_it"] = "Non ci sono datalets da mostrare";
+dataletslider_ln["back_it"] = "INDIETRO";
+dataletslider_ln["forward_it"] = "AVANTI";
 
 /*FR*/
 dataletslider_ln["noDatalet_fr"] = "There are no datalets to show";

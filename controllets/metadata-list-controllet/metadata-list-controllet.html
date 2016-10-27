@@ -1,0 +1,267 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html" />
+
+<link rel="import" href="../../bower_components/iron-autogrow-textarea/iron-autogrow-textarea.html">
+
+<script src="../../locales/metadata_list_ln.js"></script>
+
+
+<dom-module id="metadata-list-controllet">
+
+    <template>
+
+        <style is="custom-style">
+            #metadata_container {
+                height: 100%;
+                width: 100%;
+                overflow: hidden;
+            }
+
+            #metadata_container * {
+                font-family: 'Roboto', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+                font-size: 16px;
+                line-height: 24px;
+            }
+
+            #metadata_container .header{
+                height: 24px;
+                padding: 12px;
+                text-align: center;
+                font-weight: 700;
+                background-color: #FF5722;
+            }
+
+            #metadata_container #metadata_list{
+                position: relative;
+                height: calc(100% - 48px - 32px);
+                width: calc(100% - 32px);
+                padding: 16px;
+            }
+
+            #metadata_container .title_container {
+                margin-top: 32px;
+                height: 40px;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+            }
+
+            #metadata_container .title_container:first-child {
+                margin-top: 16px;
+            }
+
+            #metadata_container .title {
+                font-size: 24px;
+            }
+
+            #metadata_container .box{
+                margin: 16px 0 8px 0;
+                display: flex;
+                flex-direction: row;
+            }
+
+            #metadata_container .avatar {
+                height: 40px;
+                width: 40px;
+                min-width: 40px;
+                border-radius: 50%;
+                background: #FF5722;
+                color: #FFFFFF;
+                line-height: 40px;
+                font-size: 32px;
+                vertical-align: middle;
+                text-align: center;
+                margin: 4px 0;
+            }
+
+            #metadata_container .text {
+                height: 64px;
+                width: calc(100% - 56px);
+                padding-left: 16px;
+                /*background: blue;*/
+            }
+
+            #metadata_container .name {
+                color: #FF5722;
+                font-weight: 700;
+            }
+
+            #metadata_container .description {
+                height: 40px;
+                width: 100%;
+                color: #616161;
+
+                font-size: 14px;
+                line-height: 20px;
+
+                display: -webkit-box;
+                -webkit-line-clamp: 2;
+                -webkit-box-orient: vertical;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+
+            iron-autogrow-textarea {
+                width: calc(100% - 6px - 56px);
+                margin-left: 56px;
+                max-height: 96px;
+            }
+
+        </style>
+
+        <div id="metadata_container">
+            <div class="header">METADATA</div>
+            <div id="metadata_list">
+
+                <!--CC_RF-->
+                <div class="title_container"><span class="title" id="CC_RF"></span></div>
+
+                <template is="dom-repeat" items={{_toArray(CC_RF)}}>
+
+                    <div class="box">
+                        <div class="avatar">{{item.index}}</div>
+                        <div class="text">
+                            <div class="name" title="{{_getName(item.name)}}">{{_getName(item.name)}}</div>
+                            <div class="description" title="{{_getDescription(item.name)}}">{{_getDescription(item.name)}}</div>
+                        </div>
+                    </div>
+
+                    <iron-autogrow-textarea id="CC_RF+{{item.name}}" value="{{item.value}}" on-change="_updateMetadata"></iron-autogrow-textarea>
+
+                </template>
+
+                <!--CC_RF-->
+                <div class="title_container"><span class="title" id="CC_RAF"></span></div>
+
+                <template is="dom-repeat" items={{_toArray(CC_RAF)}}>
+
+                    <div class="box">
+                        <div class="avatar">{{item.index}}</div>
+                        <div class="text">
+                            <div class="name" title="{{_getName(item.name)}}">{{_getName(item.name)}}</div>
+                            <div class="description" title="{{_getDescription(item.name)}}">{{_getDescription(item.name)}}</div>
+                        </div>
+                    </div>
+
+                    <iron-autogrow-textarea id="CC_RAF+{{item.name}}" value="{{item.value}}" on-change="_updateMetadata"></iron-autogrow-textarea>
+
+                </template>
+
+                <!--EF-->
+                <div class="title_container"><span class="title" id="EF"></span></div>
+
+                <template is="dom-repeat" items={{_toArray(EF)}}>
+
+                    <div class="box">
+                        <div class="avatar">{{item.index}}</div>
+                        <div class="text">
+                            <div class="name" title="{{_getName(item.name)}}">{{_getName(item.name)}}</div>
+                            <div class="description" title="{{_getDescription(item.name)}}">{{_getDescription(item.name)}}</div>
+                        </div>
+                    </div>
+
+                    <iron-autogrow-textarea id="EF+{{item.name}}" value="{{item.value}}" on-change="_updateMetadata"></iron-autogrow-textarea>
+
+                </template>
+
+
+            </div>
+        </div>
+
+    </template>
+
+    <script>
+
+        Polymer({
+
+            is : 'metadata-list-controllet',
+
+            properties : {
+
+                metadata : {
+                    type  : Object,
+                    value : undefined
+                }
+
+            },
+
+            ready : function() {
+                try
+                {
+                    dataletslider_ln["ln"] = ODE.user_language;
+                }
+                catch(ex){
+                    console.log(ex);
+                }
+//                metadata_ln["ln"] = "it";
+
+                $(this.$.metadata_list).perfectScrollbar();
+            },
+
+            attached : function() {
+                 this._translate();
+            },
+
+            _translate : function() {
+                this.$.CC_RF.innerHTML = metadata_ln["CC_RF_" + metadata_ln["ln"]];
+                this.$.CC_RAF.innerHTML = metadata_ln["CC_RAF_" + metadata_ln["ln"]];
+                this.$.EF.innerHTML = metadata_ln["EF_" + metadata_ln["ln"]];
+            },
+
+            _getName : function(name) {
+                return metadata_ln[name + "_" + metadata_ln["ln"]];
+            },
+
+            _getDescription : function(name) {
+                return metadata_ln[name + "_description_" + metadata_ln["ln"]];
+            },
+
+
+            setMetadata : function(metadata) {
+                this.metadata = JSON.parse(metadata);
+                this.CC_RF = this.metadata["CC_RF"];
+                this.CC_RAF = this.metadata["CC_RAF"];
+                this.EF = this.metadata["EF"];
+            },
+
+            getmetadata : function() {
+                return JSON.stringify(this.metadata);
+            },
+
+            _updateMetadata : function(e) {
+                var splitted = ($(e.target).parents("iron-autogrow-textarea")[0].id).split("+");
+                var category = splitted[0];
+                var name = splitted[1];
+                var value = e.target.value;
+
+                switch (category) {
+                    case "CC_RF":
+                        this.CC_RF[name] = value;
+                        break;
+                    case "CC_RAF":
+                        this.CC_RAF[name] = value;
+                        break;
+                    case "EF":
+                        this.EF[name] = value;
+                }
+
+                var metadata = {"CC_RF":this.CC_RF, "CC_RAF":this.CC_RAF, "EF":this.EF};
+                this.metadata = JSON.stringify(metadata);
+                this.fire('metadata-list-controllet_update-metadata', {metadata : this.metadata});
+            },
+
+            _toArray: function(obj) {
+                var index = 0;
+                return Object.keys(obj).map(function(key) {
+                    return {
+                        index: ++index,
+                        name: key,
+                        value: obj[key]
+                    };
+                });
+            },
+
+        });
+
+    </script>
+
+</dom-module>

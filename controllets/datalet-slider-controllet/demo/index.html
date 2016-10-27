@@ -23,15 +23,25 @@
         left :400px;
         height: 80vh;
         width: calc(100% - 800px);
+        /*background: red;*/
+    }
+
+    iframe {
+        height: 100%;
+        width: 100%;
+        border-width: 0;
+    }
+
+    #ethersheet{
+        height:100% !important;
     }
 
 </style>
 
 <paper-material id="container" elevation="5">
 
-    <datalet-slider-controllet id="slider">
-
-    </datalet-slider-controllet>
+    <datalet-slider-controllet id="slider"></datalet-slider-controllet>
+    <!--<iframe id="resource" class="style-scope spreadsheet-card-controllet" src="http://172.16.15.38:8001/s/dataset_room_14_B26A5"></iframe>-->
 
 </paper-material>
 

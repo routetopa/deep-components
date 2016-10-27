@@ -233,34 +233,57 @@
             },
 
             attached : function() {
-                dataletslider_ln["ln"] = ODE.user_language;
-
-                this.pages = this.datalets.length;
-
-                this.currentDatalets = $("[datalet-id]");
-                if(this.currentDatalets.length == 0) {
-                    this.setTitle(dataletslider_ln["noDatalet_" + dataletslider_ln["ln"]]);
-                    this.setAvatar("!");
-                    this.chevronLeft("invisible");
-                    this.chevronRight("invisible");
+                try
+                {
+                    dataletslider_ln["ln"] = ODE.user_language;
                 }
-                else {
-                    this.title = this.currentDatalets[this.selected].title;
+                catch(ex){
+                    console.log(ex);
                 }
 
-                this.fire('datalet-slider-controllet_selected', {selected : this.selected});
+                this._translate();
 
+                this.setDatalets(this.datalets);
+            },
+
+            _translate : function() {
                 this.$.back.innerHTML = dataletslider_ln["back_" + dataletslider_ln["ln"]];
                 this.$.forward.innerHTML = dataletslider_ln["forward_" + dataletslider_ln["ln"]];
             },
 
             setDatalets : function(datalets) {
-                this.datalets = datalets;
+                    this.datalets = datalets;
+
+                    this.async(function() {
+                        this.currentDatalets = $("[datalet-id]");
+                        this.pages = this.currentDatalets.length;
+
+                        if(this.currentDatalets.length == 0)
+                            this._showEmpty();
+                        else
+                            this._showCurrentDatalet();
+                    }, 1);
+            },
+
+            _showEmpty : function() {
+                this.setTitle(dataletslider_ln["noDatalet_" + dataletslider_ln["ln"]]);
+                this.setAvatar("!");
+                this.chevronLeft("invisible");
+                this.chevronRight("invisible");
+            },
+
+            _showCurrentDatalet : function() {
+                this.title = this.currentDatalets[this.selected].title;
+                this.avatar = this.selected + 1;
+                this.chevronLeft(true);
+                this.chevronRight(true);
+
+                this.fire('datalet-slider-controllet_selected', {selected : this.selected});
             },
 
             setSelected : function(selected) {
-                this.selected = selected;
-                this.avatar = selected + 1;
+                this.selected = selected - 1;
+                this.avatar = selected;
             },
 
             setTitle : function(title) {
