@@ -145,6 +145,8 @@
                 width: calc(100% - 32px);
                 padding: 16px;
                 position: relative;
+                overflow-y: scroll;
+                overflow-x: hidden;
             }
 
         </style>
@@ -246,13 +248,14 @@
                     console.log(ex);
                 }
 //                metadata_ln["ln"] = "it";
+
+//                $("[scrollable]").perfectScrollbar();
             },
 
             attached : function() {
                 this._translate();
 
                 $("[scrollable]").perfectScrollbar();
-
 //                this.setDatalets(this.datalets);
             },
 
