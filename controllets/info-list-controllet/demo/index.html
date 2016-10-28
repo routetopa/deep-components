@@ -1,0 +1,73 @@
+<!doctype html>
+
+<html>
+<head>
+    <script src="../../shared_js/jquery-1.11.2.min.js"></script>
+
+    <script src="../../shared_js/perfect-scrollbar/js/min/perfect-scrollbar.jquery.min.js"></script>
+    <link rel="stylesheet" href="../../shared_js/perfect-scrollbar/css/perfect-scrollbar.min.css">
+
+    <script src="../../../bower_components/webcomponentsjs/webcomponents-lite.min.js"></script>
+
+    <link rel="import" href="../info-list-controllet.html" />
+
+    <link rel="import" href="../../../bower_components/paper-material/paper-material.html" />
+</head>
+<body>
+
+<style>
+
+    #container {
+        top: 48px;
+        left :400px;
+        height: 80vh;
+        width: calc(100% - 800px);
+        /*background: red;*/
+    }
+
+</style>
+
+<paper-material id="container" elevation="5">
+
+    <info-list-controllet id="info_list_controllet"></info-list-controllet>
+
+</paper-material>
+
+<script>
+    var owner = {href:"http://spod.databenc.it/user/vitsca", src:"http://spod.databenc.it/ow_userfiles/plugins/base/avatars/avatar_5_1443201146.jpg", user:"Vittorio Scarano"};
+
+    var user1 = {href:"http://spod.databenc.it/user/vitsca", src:"http://spod.databenc.it/ow_userfiles/plugins/base/avatars/avatar_5_1443201146.jpg", user:"Vittorio Scarano", joined: true};
+    var user2 = {href:"http://spod.databenc.it/user/vitsca", src:"http://spod.databenc.it/ow_userfiles/plugins/base/avatars/avatar_5_1443201146.jpg", user:"Vittorio Scarano", joined: true};
+    var user3 = {href:"http://spod.databenc.it/user/vitsca", src:"http://spod.databenc.it/ow_userfiles/plugins/base/avatars/avatar_5_1443201146.jpg", user:"Vittorio Scarano", joined: false};
+
+    var members = [user1, user2, user3];
+
+    var info = {
+        name: "name",
+        subject: "subject",
+        description: "description",
+        from: "10/16/2016",
+        to: "10/16/2016",
+        goal: "goal",
+        invitationText: "invitationText",
+        owner: owner,
+        members: members
+    };
+
+    info = JSON.stringify(info);
+
+    var info_list_controllet = document.getElementById('info_list_controllet');
+
+    $('document').ready(function(){
+        info_list_controllet.setInfo(info);
+    });
+
+//    info_list_controllet.addEventListener("info_list_controllet-info", function (e) {
+//        console.log(e.detail.metadata);
+//        console.log(JSON.parse(e.detail.metadata));
+//    });
+
+</script>
+
+</body>
+</html>

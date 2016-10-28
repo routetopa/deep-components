@@ -110,7 +110,7 @@
         </style>
 
         <div id="metadata_container">
-            <div class="header">METADATA</div>
+            <div class="header"><span id="metadata"></span></div>
             <div id="metadata_list">
 
                 <!--CC_RF-->
@@ -188,7 +188,7 @@
             ready : function() {
                 try
                 {
-                    dataletslider_ln["ln"] = ODE.user_language;
+                    metadata_ln["ln"] = ODE.user_language;
                 }
                 catch(ex){
                     console.log(ex);
@@ -203,6 +203,8 @@
             },
 
             _translate : function() {
+                this.$.metadata.innerHTML = metadata_ln["metadata_" + metadata_ln["ln"]];
+
                 this.$.CC_RF.innerHTML = metadata_ln["CC_RF_" + metadata_ln["ln"]];
                 this.$.CC_RAF.innerHTML = metadata_ln["CC_RAF_" + metadata_ln["ln"]];
                 this.$.EF.innerHTML = metadata_ln["EF_" + metadata_ln["ln"]];
@@ -224,7 +226,7 @@
                 this.EF = this.metadata["EF"];
             },
 
-            getmetadata : function() {
+            getMetadata : function() {
                 return JSON.stringify(this.metadata);
             },
 

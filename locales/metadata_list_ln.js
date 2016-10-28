@@ -4,6 +4,8 @@ metadata_ln["ln"] = "en";
 
 /******** EN ********/
 
+metadata_ln["metadata_en"] = "METADATA";
+
 metadata_ln["CC_RF_en"] = "\"Common Core\" Required Fields";
 metadata_ln["CC_RAF_en"] = "\"Common Core\" Required if Applicable Fields";
 metadata_ln["EF_en"] = "Expanded Fields";
@@ -102,6 +104,8 @@ metadata_ln["system_of_records_en"] = "System of Records";
 metadata_ln["system_of_records_description_en"] = "If the systems is designated as a system of records under the Privacy Act of 1974, provide the URL to the System of Records Notice related to this dataset.";
 
 /******** IT ********/
+
+metadata_ln["metadata_it"] = "METADATA";
 
 metadata_ln["CC_RF_it"] = "\"Common Core\" campi richiesti";
 metadata_ln["CC_RAF_it"] = "\"Common Core\" campi richiesti se applicabili";
@@ -202,6 +206,8 @@ metadata_ln["system_of_records_description_it"] = "Se il sistema è strutturato 
 
 /******** FR ********/
 
+metadata_ln["metadata_fr"] = "METADATA";
+
 metadata_ln["CC_RF_fr"] = "\"Common Core\" Required Fields";
 metadata_ln["CC_RAF_fr"] = "\"Common Core\" Required if Applicable Fields";
 metadata_ln["EF_fr"] = "Expanded Fields";
@@ -300,6 +306,8 @@ metadata_ln["system_of_records_fr"] = "system_of_records";
 metadata_ln["system_of_records_description_fr"] = "system_of_records";
 
 /******** NL ********/
+
+metadata_ln["metadata_nl"] = "METADATA";
 
 metadata_ln["CC_RF_nl"] = "\"Common Core\" Required Fields";
 metadata_ln["CC_RAF_nl"] = "\"Common Core\" Required if Applicable Fields";

@@ -90,16 +90,19 @@
                 /*position: static;*/
             /*}*/
 
-            :host > ::content neon-animatable {
-                height: calc(100% - 16px);
-                width: calc(100% - 16px);;
-                padding: 8px;
-                overflow-y: auto;
-                overflow-x: hidden;
-            }
-
             neon-animated-pages {
                 height: calc(100% - 96px);
+            }
+
+            :host > ::content neon-animatable {
+                height: 100%;
+                width: 100%;
+
+                /*height: calc(100% - 16px);*/
+                /*width: calc(100% - 16px);;*/
+                /*padding: 8px;*/
+                /*overflow-y: auto;*/
+                /*overflow-x: hidden;*/
             }
 
             #slider_container paper-icon-button{
@@ -138,8 +141,10 @@
             }
 
             #slider_container .datalet_container {
-                height: 100%;
-                width: 100%;
+                height: calc(100% - 32px);
+                width: calc(100% - 32px);
+                padding: 16px;
+                position: relative;
             }
 
         </style>
@@ -163,7 +168,7 @@
             <neon-animated-pages id="animated_pages" on-neon-animation-finish="_onNeonAnimationFinish" selected="[[selected]]" entry-animation="[[entryAnimation]]" exit-animation="[[exitAnimation]]">
                 <template is="dom-repeat" items="{{datalets}}">
                     <neon-animatable>
-                        <div class="datalet_container" inner-h-t-m-l="[[item]]"></div>
+                        <div scrollable="true" class="datalet_container" inner-h-t-m-l="[[item]]"></div>
                     </neon-animatable>
                 </template>
             </neon-animated-pages>
@@ -232,7 +237,7 @@
 
             },
 
-            attached : function() {
+            ready : function() {
                 try
                 {
                     dataletslider_ln["ln"] = ODE.user_language;
@@ -240,8 +245,13 @@
                 catch(ex){
                     console.log(ex);
                 }
+//                metadata_ln["ln"] = "it";
+            },
 
+            attached : function() {
                 this._translate();
+
+                $("[scrollable]").perfectScrollbar();
 
 //                this.setDatalets(this.datalets);
             },
@@ -277,6 +287,10 @@
                     this.chevronLeft("invisible");
                     this.chevronRight("invisible");
                 }
+                else {
+                    this.chevronLeft("true");
+                    this.chevronRight("true");
+                }
 
                 this.fire('datalet-slider-controllet_selected', {selected : this.selected});
             },
@@ -284,6 +298,8 @@
             setSelected : function(selected) {
                 this.selected = (selected - 1) % this.pages;
                 this.avatar = this.selected + 1;
+
+                this._refresh();
             },
 
             setTitle : function(title) {

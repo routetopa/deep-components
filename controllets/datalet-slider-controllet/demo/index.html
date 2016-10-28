@@ -6,6 +6,9 @@
 
     <script src="../../../bower_components/webcomponentsjs/webcomponents-lite.min.js"></script>
 
+    <script src="../../shared_js/perfect-scrollbar/js/min/perfect-scrollbar.jquery.min.js"></script>
+    <link rel="stylesheet" href="../../shared_js/perfect-scrollbar/css/perfect-scrollbar.min.css">
+
     <link rel="import" href="../datalet-slider-controllet.html" />
 
     <link rel="import" href="../../../bower_components/paper-material/paper-material.html" />
@@ -64,7 +67,10 @@
 
     $('document').ready(function(){
         slider.setDatalets(datalets);
-        slider.setSelected(3);
+        setTimeout(function(){
+//            slider.setSelected(4);
+        }, 2000);
+//        slider.setSelected(3);
     });
 
     slider.addEventListener("datalet-slider-controllet_add", function (e) {

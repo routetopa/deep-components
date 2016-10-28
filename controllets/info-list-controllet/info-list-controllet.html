@@ -1,0 +1,175 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html" />
+
+<script src="../../locales/info_list_ln.js"></script>
+
+<dom-module id="info-list-controllet">
+
+    <template>
+
+        <style is="custom-style">
+            #info_container {
+                height: 100%;
+                width: 100%;
+                overflow: hidden;
+            }
+
+            #info_container * {
+                font-family: 'Roboto', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+                font-size: 16px;
+                line-height: 24px;
+            }
+
+            #info_container .header{
+                height: 24px;
+                padding: 12px;
+                text-align: center;
+                font-weight: 700;
+                background-color: #B6B6B6;
+            }
+
+            #info_container #info_list{
+                position: relative;
+                height: calc(100% - 48px - 32px);
+                width: calc(100% - 32px);
+                padding: 16px;
+                overflow-y: scroll;
+            }
+
+            #info_container .item_container{
+                display: flex;
+                flex-direction: row;
+            }
+
+            #info_container .info_name{
+                height: 24px;
+                padding: 12px;
+                font-size: 24px;
+                color: #2196F3;
+                min-width: 192px;
+            }
+
+            #info_container .info_value{
+                height: 24px;
+                padding: 12px;
+            }
+
+        </style>
+
+        <div id="info_container">
+            <div class="header">INFO</div>
+            <div id="info_list">
+
+                <div class="title_container"><span class="title" id="CC_RF"></span></div>
+
+                <template is="dom-repeat" items={{_toArray(info)}}>
+
+                    <div class="item_container">
+                        <div class="info_name">{{item.name}}</div>
+                        <div class="info_value">{{item.value}}</div>
+                    </div>
+
+                </template>
+
+                <b>members:</b>
+                <div class="user_icons" style="display: flex; flex-direction: row;">
+                <template is="dom-repeat" items={{members}}>
+
+                    <a href="{{item.href}}" target="_blank">
+                        <div class="user_icon" style="background-image: url({{item.src}}); background-size: 40px 40px; height:40px; width:40px; border-radius: 50%; cursor: pointer; margin-right: 12px;" title="{{item.user}}">
+                        </div>
+                    </a>
+
+                    {{item.joined}}
+
+                </template>
+
+                </div>
+
+            </div>
+        </div>
+
+    </template>
+
+    <script>
+
+        Polymer({
+
+            is : 'info-list-controllet',
+
+            properties : {
+
+                info : {
+                    type  : Object,
+                    value : undefined
+                }
+
+            },
+
+            ready : function() {
+                try
+                {
+                    info_ln["ln"] = ODE.user_language;
+                }
+                catch(ex){
+                    console.log(ex);
+                }
+//                info_ln["ln"] = "it";
+
+                $(this.$.info_list).perfectScrollbar();
+            },
+
+            attached : function() {
+                 this._translate();
+            },
+
+            _translate : function() {
+            },
+
+//            _getName : function(name) {
+//                return info_ln[name + "_" + info_ln["ln"]];
+//            },
+//
+//            _getDescription : function(name) {
+//                return info_ln[name + "_description_" + info_ln["ln"]];
+//            },
+
+
+            setInfo : function(info) {
+                this.info = JSON.parse(info);
+
+                this.members = this.info.members;
+                delete myObject.keyname;
+
+                this.members.removeChild()
+                console.log(this.info);
+
+//                var html = '<b>members:</b><div class="user_icons" style="display: flex; flex-direction: row;">';
+//                for(var j in users) {
+//                    html += '<a href="' + users[j].href + '">';
+//                    html += '<div class="user_icon" style="background-image: url(' + users[j].src + '); background-size: 40px 40px; height:40px; width:40px; border-radius: 50%; cursor: pointer; margin-right: 12px;" title="' + users[j].user + '"></div>';
+//                    html += '</a>';
+//
+//                }
+//                html += '</div>';
+
+//                console.log(html);
+            },
+
+            getInfo : function() {
+                return this.info;
+            },
+
+            _toArray: function(obj) {
+                return Object.keys(obj).map(function(key) {
+                    return {
+                        name: key,
+                        value: obj[key]
+                    };
+                });
+            },
+
+        });
+
+    </script>
+
+</dom-module>
