@@ -1,10 +1,71 @@
-<!DOCTYPE html>
-<html lang="en">
+<!doctype html>
+
+<html>
 <head>
-    <meta charset="UTF-8">
-    <title></title>
+    <script src="../../shared_js/jquery-1.11.2.min.js"></script>
+
+    <script src="../../shared_js/perfect-scrollbar/js/min/perfect-scrollbar.jquery.min.js"></script>
+    <link rel="stylesheet" href="../../shared_js/perfect-scrollbar/css/perfect-scrollbar.min.css">
+
+    <script src="../../../bower_components/webcomponentsjs/webcomponents-lite.min.js"></script>
+
+    <link rel="import" href="../split-screen-controllet.html" />
+
+    <link rel="import" href="../../../bower_components/paper-material/paper-material.html" />
 </head>
 <body>
+
+<style>
+
+    body {
+        background: #2196F3;
+    }
+
+    #container {
+        position: relative;
+        top: 40px;
+        left :48px;
+        height: calc(100vh - 96px);
+        width: calc(100% - 96px);
+        background: white;
+    }
+
+    .page {
+        height: 100%;
+        width: 100%;
+        text-align: center;
+    }
+
+</style>
+
+<div id="container">
+
+    <split-screen-controllet id="split">
+        <neon-animatable>
+            <!--<div class="page">1</div>-->
+            <paper-material style="background: red" id="left_screen" class="left_screen" elevation="5">1</paper-material>
+        </neon-animatable>
+        <neon-animatable>
+            <div class="page">2</div>
+        </neon-animatable>
+        <neon-animatable>
+            <div class="page">3</div>
+        </neon-animatable>
+    </split-screen-controllet>
+
+</div>
+
+<script>
+
+    var split = document.getElementById('split');
+
+    $('document').ready(function(){
+    });
+
+    split.addEventListener("event", function (e) {
+    });
+
+</script>
 
 </body>
 </html>
