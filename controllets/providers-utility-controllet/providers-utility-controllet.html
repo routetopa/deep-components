@@ -11,10 +11,10 @@
         getProvider: function(dataUrl) {
             if (dataUrl.indexOf("datastore_search?resource_id") > -1)
                 return new ckan_Provider();
-            else if (dataUrl.indexOf("datastore/search.json?resource_id") > -1)
-                return new ckan_Provider();//dkan
-            else if (dataUrl.indexOf("mysir") > -1)
-                return new ckan_Provider();//mysir
+//            else if (dataUrl.indexOf("datastore/search.json?resource_id") > -1)
+//                return new ckan_Provider();//dkan
+//            else if (dataUrl.indexOf("mysir") > -1)
+//                return new ckan_Provider();//mysir
             else if (dataUrl.indexOf("search?dataset") > -1 || dataUrl.indexOf("search/?dataset") > -1)
                 return new openDataSoft_Provider();
             else

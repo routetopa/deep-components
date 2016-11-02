@@ -1,6 +1,8 @@
 function generic_Provider () {}
 
 generic_Provider.prototype.selectData = function(data) {
+    if(data.result && data.result.records)//ckan like
+        return data.result.records;
 
     if(data instanceof Array)
         return data;
