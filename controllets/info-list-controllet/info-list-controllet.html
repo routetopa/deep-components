@@ -11,6 +11,8 @@
                 height: 100%;
                 width: 100%;
                 overflow: hidden;
+
+                min-width: 512px;
             }
 
             #info_container * {
@@ -33,6 +35,7 @@
                 width: calc(100% - 32px);
                 padding: 16px;
                 overflow-y: scroll;
+
             }
 
             #info_container .item_container{
@@ -41,48 +44,125 @@
             }
 
             #info_container .info_name{
-                height: 24px;
+                min-height: 24px;
                 padding: 12px;
                 font-size: 24px;
                 color: #2196F3;
-                min-width: 192px;
+                font-weight: 700;
+
+                width: 232px;
+
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
             }
 
             #info_container .info_value{
-                height: 24px;
+                min-height: 24px;
+                margin: 8px;
+                padding: 4px;
+                max-width: calc(100% - 256px - 24px);
+                max-height: 108px;
+
+                border-radius: 4px;
+
+                line-height: 24px;
+                display: -webkit-box;
+                -webkit-line-clamp: 4;
+                -webkit-box-orient: vertical;
+                overflow-y: auto;
+                text-overflow: ellipsis;
+                background: #E3F2FD;
+            }
+
+            #info_container .members_list {
+                padding: 12px 12px 0 12px ;
+            }
+
+            #info_container .member {
+                display: flex;
+                flex-direction: row;
+                height: 48px;
+                margin: 0 0 12px 0;
+            }
+
+            #info_container .user_icon {
+                background-size: 40px 40px;
+                height:40px;
+                width:40px;
+                border-radius: 50%;
+                cursor: pointer;
+                margin: 4px 12px 4px 0;
+            }
+
+            #info_container .user_name {
                 padding: 12px;
+                font-weight: 700;
+            }
+
+            #info_container .user_status {
+                padding: 12px;
+                font-weight: 700;
+            }
+
+            #info_container .user_status.owner{
+                color: #00BCD4;
+            }
+
+            #info_container .user_status.joined{
+                color: #4CAF50;
+            }
+
+            #info_container .user_status.pendeing{
+                color: #F44336;
             }
 
         </style>
 
         <div id="info_container">
-            <div class="header">INFO</div>
+            <div class="header"><span class="title" id="info_title"></span></div>
             <div id="info_list">
-
-                <div class="title_container"><span class="title" id="CC_RF"></span></div>
 
                 <template is="dom-repeat" items={{_toArray(info)}}>
 
                     <div class="item_container">
-                        <div class="info_name">{{item.name}}</div>
-                        <div class="info_value">{{item.value}}</div>
+                        <div class="info_name" title="{{_getName(item.name)}}">{{_getName(item.name)}}</div>
+                        <div class="info_value" title="{{item.value}}">{{item.value}}</div>
                     </div>
 
                 </template>
 
-                <b>members:</b>
-                <div class="user_icons" style="display: flex; flex-direction: row;">
-                <template is="dom-repeat" items={{members}}>
+                <div class="item_container">
+                        <div class="info_name" title="{{_getName('members')}}">{{_getName('members')}}</div>
 
-                    <a href="{{item.href}}" target="_blank">
-                        <div class="user_icon" style="background-image: url({{item.src}}); background-size: 40px 40px; height:40px; width:40px; border-radius: 50%; cursor: pointer; margin-right: 12px;" title="{{item.user}}">
-                        </div>
-                    </a>
+                    <div class="members_list">
+                        <template is="dom-repeat" items={{members}}>
 
-                    {{item.joined}}
+                            <div class="member">
 
-                </template>
+                            <a href="{{item.href}}" target="_blank">
+                                <div class="user_icon" style="background-image: url({{item.src}}); " title="{{item.user}}"></div>
+                            </a>
 
+                            <div class="user_name">{{item.user}}</div>
+
+                                <template is="dom-if" if={{item.joined}}>
+                                    <div class="user_status joined">{{_getName('joined')}}</div>
+                                </template>
+
+                                <template is="dom-if" if={{!item.joined}}>
+                                    <div class="user_status pendeing">{{_getName('pending')}}</div>
+                                </template>
+
+                                <template is="dom-if" if={{item.owner}}>
+                                    <div class="user_status owner">{{_getName('owner')}}</div>
+                                </template>
+
+                            </div>
+
+                        </template>
+
+                    </div>
                 </div>
 
             </div>
@@ -123,40 +203,35 @@
             },
 
             _translate : function() {
+                this.$.info_title.innerHTML = info_ln["info_title_" + info_ln["ln"]];
             },
 
-//            _getName : function(name) {
-//                return info_ln[name + "_" + info_ln["ln"]];
-//            },
-//
-//            _getDescription : function(name) {
-//                return info_ln[name + "_description_" + info_ln["ln"]];
-//            },
-
+            _getName : function(name) {
+                return info_ln[name + "_" + info_ln["ln"]];
+            },
 
             setInfo : function(info) {
-                this.info = JSON.parse(info);
+                info = JSON.parse(info);
 
-                this.members = this.info.members;
-                delete myObject.keyname;
+                var owner = info.owner;
+                owner["owner"] = true;
+                owner["joined"] = true;
+                delete info.owner;
 
-                this.members.removeChild()
-                console.log(this.info);
+                var members = info.members;
+                members.unshift(owner);
+                delete info.members;
+                this.members = members;
 
-//                var html = '<b>members:</b><div class="user_icons" style="display: flex; flex-direction: row;">';
-//                for(var j in users) {
-//                    html += '<a href="' + users[j].href + '">';
-//                    html += '<div class="user_icon" style="background-image: url(' + users[j].src + '); background-size: 40px 40px; height:40px; width:40px; border-radius: 50%; cursor: pointer; margin-right: 12px;" title="' + users[j].user + '"></div>';
-//                    html += '</a>';
-//
-//                }
-//                html += '</div>';
+                info["period"] = info.from + " - " + info.to;
+                delete info.from;
+                delete info.to;
 
-//                console.log(html);
+                this.info = info;
             },
 
             getInfo : function() {
-                return this.info;
+                return JSON.stringify(this.info);
             },
 
             _toArray: function(obj) {
