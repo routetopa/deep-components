@@ -140,11 +140,11 @@
 
                             <div class="member">
 
-                            <a href="{{item.href}}" target="_blank">
-                                <div class="user_icon" style="background-image: url({{item.src}}); " title="{{item.user}}"></div>
+                            <a href="{{item.url}}" target="_blank">
+                                <div class="user_icon" style="background-image: url({{item.src}}); " title="{{item.title}}"></div>
                             </a>
 
-                            <div class="user_name">{{item.user}}</div>
+                            <div class="user_name">{{item.title}}</div>
 
                                 <template is="dom-if" if={{item.joined}}>
                                     <div class="user_status joined">{{_getName('joined')}}</div>
