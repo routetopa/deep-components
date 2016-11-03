@@ -1,0 +1,128 @@
+<!--
+@license
+    The MIT License (MIT)
+
+    Copyright (c) 2015 Dipartimento di Informatica - Universit� di Salerno - Italy
+
+    Permission is hereby granted, free of charge, to any person obtaining a copy
+    of this software and associated documentation files (the "Software"), to deal
+    in the Software without restriction, including without limitation the rights
+    to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+    copies of the Software, and to permit persons to whom the Software is
+    furnished to do so, subject to the following conditions:
+
+    The above copyright notice and this permission notice shall be included in
+    all copies or substantial portions of the Software.
+
+    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+    IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+    FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+    AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+    LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+    THE SOFTWARE.
+-->
+
+<!--
+* Developed by :
+* ROUTE-TO-PA Project - grant No 645860. - www.routetopa.eu
+*
+-->
+
+<link rel="import" href="../base-datalet/base-datalet.html">
+
+<link rel="stylesheet" type="text/css" href="static/js/silver-decisions.min.css">
+
+<script type="text/javascript" src="static/js/silver-decisions.min.js"></script>
+<script type="text/javascript" src="static/js/silver-decisions.min.js.map"></script>
+
+
+
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+<!--
+
+`columnchart-datalet` is a columnchart datalet based on highcharts project <http://www.highcharts.com/>
+
+Example:
+
+    <columnchart-datalet
+            data-url="http://ckan.routetopa.eu/api/action/datastore_search?resource_id=#"
+            fields='["field1","field2"]'>
+    </columnchart-datalet>
+
+@element columnchart-datalet
+@status v0.1
+@demo demo/index.html
+@group datalets
+-->
+
+<dom-module id="decision-tree-datalet">
+    <template>
+        <style>
+            #app_container {
+                height: 500px;
+                width: 100%;
+            }
+        </style>
+
+        <div id="app_container"></div>
+        ciao
+        <base-datalet export_menu="{{export_menu}}"></base-datalet>
+    </template>
+    <script>
+
+        var DecisionTreeBehavior = {
+
+            requestData: function(){
+                this.presentData();
+            },
+
+            presentData: function(){
+                var config = {readOnly: this._component.readOnly};
+
+                var app = new SilverDecisions('app_container', config, this._component.jsonTree);
+            }
+        };
+
+        DecisionTreeDatalet = Polymer({
+            is: 'decision-tree-datalet',
+
+            properties: {
+                jsonTree: {
+                    type: Object,
+                    value: undefined
+                },
+
+                readOnly: {
+                    type: Boolean,
+                    value: false
+                },
+
+                /**
+                 * Control the export menu
+                 * xxxx BITMASK. FROM RIGHT : HTML, PNG, RTF, MY SPACE (eg. 1111 show all, 0000 hide all)
+                 *
+                 * @attribute export_menu
+                 * @type Number
+                 * @default 15
+                 */
+                export_menu : {
+                    type  : Number,
+                    value : 15 // xxxx BITMASK. FROM RIGHT : HTML, PNG, RTF, MY SPACE (eg. 1111 show all, 0000 hide all)
+                }
+            },
+
+            /**
+             * 'ready' callback extend the ColumnchartComponentBehavior with HighchartsComponentBehavior and ColumnchartBehavior
+             * and run the Datalet workcycle.
+             *
+             * @method ready
+             */
+            ready: function(){
+                this.behavior = $.extend(true, {}, BaseDataletBehavior, WorkcycleBehavior, DecisionTreeBehavior);
+                this.async(function(){this.behavior.init(this)},100);
+            }
+        });
+    </script>
+</dom-module>
