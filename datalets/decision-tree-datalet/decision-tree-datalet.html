@@ -34,7 +34,7 @@
 <link rel="stylesheet" type="text/css" href="static/js/silver-decisions.min.css">
 
 <script type="text/javascript" src="static/js/silver-decisions.min.js"></script>
-<script type="text/javascript" src="static/js/silver-decisions.min.js.map"></script>
+<!--<script type="text/javascript" src="static/js/silver-decisions.min.js.map"></script>-->
 
 
 
@@ -61,14 +61,13 @@ Example:
     <template>
         <style>
             #app_container {
-                height: 500px;
+                height: 100%;
                 width: 100%;
             }
         </style>
 
         <div id="app_container"></div>
-        ciao
-        <base-datalet export_menu="{{export_menu}}"></base-datalet>
+        <base-datalet data-url="{{dataUrl}}" title="{{title}}" description="{{description}}" export_menu="{{export_menu}}"></base-datalet>
     </template>
     <script>
 
@@ -79,9 +78,9 @@ Example:
             },
 
             presentData: function(){
-                var config = {readOnly: this._component.readOnly};
+//                var config = {readOnly: this._component.readOnly};
 
-                var app = new SilverDecisions('app_container', config, this._component.jsonTree);
+                var app = new SilverDecisions('app_container', this._component.config, this._component.jsonTree);
             }
         };
 
@@ -94,9 +93,34 @@ Example:
                     value: undefined
                 },
 
-                readOnly: {
-                    type: Boolean,
-                    value: false
+                config: {
+                    type: Object,
+                    value: {
+                        readOnly: true,
+//                        buttons: {
+//                            new: true,
+//                            save: true,
+//                            open: false,
+//                            exportToPng: false,
+//                            exportToSvg: false,
+//                        },
+//                        jsonFileDownload: false
+                    }
+                },
+
+                title: {
+                    type: String,
+                    value: "title"
+                },
+
+                description: {
+                    type: String,
+                    value: "- description"
+                },
+
+                dataUrl: {
+                    type: String,
+                    value: "false"
                 },
 
                 /**

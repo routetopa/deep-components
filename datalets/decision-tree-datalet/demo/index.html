@@ -266,6 +266,10 @@
     $('document').ready(function(){
         tree.setAttribute("json-tree", JSON.stringify(json));
     });
+
+    document.addEventListener("SilverDecisionsSaveEvent", function (e) {
+        console.log(e.detail);
+    });
 </script>
 
 </body>
