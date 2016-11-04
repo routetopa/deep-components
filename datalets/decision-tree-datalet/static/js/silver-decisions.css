@@ -398,7 +398,8 @@
     font-size: 12px;
     position: absolute; }
     #silver-decisions svg.tree-designer .sd-title {
-      text-anchor: middle; }
+      text-anchor: middle;
+      font-size: 16px; }
     #silver-decisions svg.tree-designer .node {
       cursor: move; }
       #silver-decisions svg.tree-designer .node .payoff {
