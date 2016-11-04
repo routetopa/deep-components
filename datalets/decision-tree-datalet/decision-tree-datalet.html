@@ -78,7 +78,10 @@ Example:
             },
 
             presentData: function(){
-//                var config = {readOnly: this._component.readOnly};
+                if(this._component.jsonTree.title)
+                    this._component.title = this._component.jsonTree.title;
+                if(this._component.jsonTree.description)
+                    this._component.description = this._component.jsonTree.description;
 
                 var app = new SilverDecisions('app_container', this._component.config, this._component.jsonTree);
             }
@@ -110,12 +113,12 @@ Example:
 
                 title: {
                     type: String,
-                    value: "title"
+                    value: ""
                 },
 
                 description: {
                     type: String,
-                    value: "- description"
+                    value: ""
                 },
 
                 dataUrl: {
