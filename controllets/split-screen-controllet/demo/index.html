@@ -18,7 +18,7 @@
 <style>
 
     body {
-        background: #2196F3;
+        /*background: #2196F3;*/
     }
 
     #container {
@@ -41,16 +41,47 @@
 <div id="container">
 
     <split-screen-controllet id="split">
-        <neon-animatable>
-            <!--<div class="page">1</div>-->
-            <paper-material style="background: red" id="left_screen" class="left_screen" elevation="5">1</paper-material>
-        </neon-animatable>
-        <neon-animatable>
-            <div class="page">2</div>
-        </neon-animatable>
-        <neon-animatable>
-            <div class="page">3</div>
-        </neon-animatable>
+        <paper-material class="left_screen" elevation="5">
+            <div class="content">
+                <div style="height: 48px; background: #4CAF50;"></div>
+                <p>0 0 0 Bla bla bla</p>
+            </div>
+        </paper-material>
+
+        <paper-material class="right_screen" elevation="5">
+            <div class="content">
+                <div style="height: 48px; background: #2196F3;"></div>
+                <p>1 1 1 Bla bla bla</p>
+            </div>
+        </paper-material>
+
+        <paper-material class="hidden" elevation="5">
+            <div class="content">
+                <div style="height: 48px; background: mediumvioletred;"></div>
+                <p>2 2 2 Bla bla bla</p>
+            </div>
+        </paper-material>
+
+        <paper-material class="hidden" elevation="5">
+            <div class="content">
+                <div style="height: 48px; background: yellowgreen;"></div>
+                <p>3 3 3 Bla bla bla</p>
+            </div>
+        </paper-material>
+
+        <paper-material class="hidden" elevation="5">
+            <div class="content">
+                <div style="height: 48px; background: darkslateblue;"></div>
+                <p>4 4 4 Bla bla bla</p>
+            </div>
+        </paper-material>
+
+        <paper-material class="hidden" elevation="5">
+            <div class="content">
+                <div style="height: 48px; background: darkslategray;"></div>
+                <p>5 5 5 Bla bla bla</p>
+            </div>
+        </paper-material>
     </split-screen-controllet>
 
 </div>

@@ -7,10 +7,6 @@
 <link rel="import" href="../../bower_components/iron-icons/iron-icons.html">
 <link rel="import" href="../../bower_components/iron-icon/iron-icon.html">
 
-<link rel="import" href="../../bower_components/neon-animation/neon-animation.html">
-<link rel="import" href="../../bower_components/neon-animation/neon-animatable.html">
-<link rel="import" href="../../bower_components/neon-animation/neon-animations.html">
-
 <dom-module id="split-screen-controllet">
 
     <template>
@@ -29,28 +25,10 @@
                 line-height: 24px;
             }
 
-            #split_screen_container .full_screen {
-                height: 100%;
-                width: 100%;
-                background: white;
-            }
-
-            #split_screen_container .left_screen {
-                height: 100%;
-                width: calc(50% - 48px);
-                left: 0;
-                background: blue;
-            }
-
-            #split_screen_container .right_screen {
-                height: 100%;
-                width: calc(50% - 48px);
-                right: 0;
-                background: red;
-            }
-
-            #split_screen_container .button {
-                top: 8px;
+            #split_screen_container .switch_button {
+                position: absolute;
+                top: calc(50% - 24px);
+                left: calc(50% - 48px);
                 height: 48px;
                 width: 80px;
                 min-width: 80px;
@@ -59,6 +37,8 @@
                 background: #00BCD4;/*9E*/
                 color: #FFFFFF;
                 --paper-button-ink-color: #FFFFFF;
+
+                /*visibility: hidden;*/
             }
 
             #split_screen_container iron-icon[icon="compare-arrows"] {
@@ -68,23 +48,53 @@
                 width: 40px;
             }
 
-            /*paper-button {*/
-                /*width: 48px;*/
-            /*}*/
+            ::content * {
+                font-family: 'Roboto', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+                font-size: 16px;
+                line-height: 24px;
+            }
+
+            ::content .left_screen {
+                position: absolute;
+                top: 0;
+                left: 0;
+                height: 100%;
+                width: calc(50% - 48px);
+
+                /*width: 100%;*/
+            }
+
+            ::content .right_screen {
+                position: absolute;
+                top: 0;
+                right: 0;
+                height: 100%;
+                width: calc(50% - 48px);
+
+                /*width: 0;*/
+                /*visibility: hidden;*/
+            }
+
+            ::content .hidden {
+                display: none;
+            }
+
+            ::content .content {
+                height: 100%;
+                width: 100%;
+            }
 
         </style>
 
         <div id="split_screen_container">
-            <!--<paper-material id="full_screen" class="full_screen" elevation="5">we</paper-material>-->
 
-            <paper-material id="left_screen" class="left_screen" elevation="5">1</paper-material>
-            <paper-button class="button" raised on-click="_cose"><iron-icon icon="compare-arrows"></iron-icon></paper-button>
-            <paper-material id="right_screen" class="right_screen" elevation="5">2</paper-material>
+            <paper-button id="button_switch" class="switch_button" raised on-click="_switch"><iron-icon icon="compare-arrows"></iron-icon></paper-button>
+            <paper-button id="split" class="" style="position: absolute; top: -40px; left: 8px; max-height: 32px;" raised on-click="_splitscreen">split</paper-button>
+            <paper-button id="full" class="" style="position: absolute; top: -40px; left: 108px; max-height: 32px;" raised on-click="_fullscreen">full</paper-button>
+            <paper-button id="full" class="" style="position: absolute; top: -40px; left: 208px; max-height: 32px;" raised on-click="_show">L 1</paper-button>
 
-            <!--<neon-animated-pages id="animated_pages" on-neon-animation-finish="_onNeonAnimationFinish" selected="0" entry-animation="slide-from-left-animation" exit-animation="slide-from-left-animation">-->
-                <!--<content>-->
-                <!--</content>-->
-            <!--</neon-animated-pages>-->
+            <content></content>
+
         </div>
 
     </template>
@@ -100,24 +110,86 @@
             },
 
             ready : function() {
-                this.switch = true;
             },
 
             attached : function() {
             },
 
-            _cose : function() {
-                if(this.switch) {
-                    $(this.$.left_screen).removeClass("left_screen").addClass("right_screen");
-                    $(this.$.right_screen).removeClass("right_screen").addClass("left_screen");
-                }
-                else {
-                    $(this.$.right_screen).removeClass("left_screen").addClass("right_screen");
-                    $(this.$.left_screen).removeClass("right_screen").addClass("left_screen");
-                    $(this.$.right_screen).fadeIn(100);
-                }
+            _show : function(float, index) {
+                //float --> left / right
+                //position --> 0 - (N-1)
+                float = "left";
+                index = 5;
 
-                this.switch = !this.switch;
+                var left = $(".left_screen")[0];
+                var right = $(".right_screen")[0];
+
+                var leftDiv = $(".left_screen div:first-child")[0];
+                var rightDiv = $(".right_screen div:first-child")[0];
+
+                var toShow = $("paper-material")[index];
+
+                var divToShow = $(".content")[index];
+
+                if(float == "left") {
+                    $(leftDiv).fadeOut(400);
+//                    $(divToShow).delay(400).fadeIn(400);
+
+                    this.async(function () {
+                        $(left).removeClass("left_screen").addClass("hidden");
+                        $(toShow).removeClass("hidden").addClass("left_screen");
+                    }, 400);
+
+                } else if(float == "right") {
+                    $(right).removeClass("right_screen").addClass("hidden");
+                    $(toShow).removeClass("hidden").addClass("right_screen");
+                }
+            },
+
+            _splitscreen : function() {
+                var left = $(".left_screen")[0];
+                var right = $(".right_screen")[0];
+
+                right.style.visibility = "visible";
+
+                var w = $(this.$.split_screen_container).width() / 2 - 48;
+
+                $(left).animate({ width: w }, 400 );
+                $(right).animate({ width: w }, 400 );
+
+                this.async(function () {
+                    this.$.button_switch.style.visibility = "visible";
+                }, 400);
+            },
+
+            _fullscreen : function() {
+                this.$.button_switch.style.visibility = "hidden";
+
+                var left = $(".left_screen")[0];
+                var right = $(".right_screen")[0];
+
+                $(left).animate({width: "100%"}, 400);
+                $(right).animate({width: "0"}, 400);
+
+                this.async(function () {
+                    right.style.visibility = "hidden";
+                }, 400);
+            },
+
+            _switch : function() {
+                var left = $(".left_screen")[0];
+                var right = $(".right_screen")[0];
+
+                var leftDiv = $(".left_screen div:first-child")[0];
+                var rightDiv = $(".right_screen div:first-child")[0];
+
+                $(leftDiv).fadeOut(400).fadeIn(400);
+                $(rightDiv).fadeOut(400).fadeIn(400);
+
+                this.async(function () {
+                    $(left).removeClass("left_screen").addClass("right_screen");
+                    $(right).removeClass("right_screen").addClass("left_screen");
+                }, 400);
             }
 
         });

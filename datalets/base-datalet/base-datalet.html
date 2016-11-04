@@ -254,6 +254,11 @@ Example :
                     {
                         this.$.base_datalet_link_span.style.display = 'none';
                     }
+
+                    if(this.dataUrl=="false") {//decision-tree & ...
+                        this.$.base_datalet_source_link.style.display = 'none';
+                        this.removeLoader();
+                    }
                 }
 
                 else {
