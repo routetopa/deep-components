@@ -5,6 +5,8 @@
 <script src="ckan.js"></script>
 <script src="openDataSoft.js"></script>
 <script src="generic.js"></script>
+<script src="../shared_js/json-stat.js"></script>
+<script src="eurostat.js"></script>
 
 <script>
     var providerFactory = {
@@ -17,6 +19,8 @@
 //                return new ckan_Provider();//mysir
             else if (dataUrl.indexOf("search?dataset") > -1 || dataUrl.indexOf("search/?dataset") > -1)
                 return new openDataSoft_Provider();
+            else if (dataUrl.indexOf("eurostat") > -1 )
+                return new eurostat_Provider();
             else
                 return new generic_Provider();
         }
