@@ -28,10 +28,10 @@
             #split_screen_container .switch_button {
                 position: absolute;
                 top: calc(50% - 24px);
-                left: calc(50% - 48px);
+                left: calc(50% - 32px);
                 height: 48px;
-                width: 80px;
-                min-width: 80px;
+                width: 48px;
+                min-width: 48px;
                 margin: 0 8px;
                 padding: 0;
                 background: #00BCD4;/*9E*/
@@ -69,7 +69,7 @@
             }
 
             ::content .split {
-                width: calc(50% - 48px);
+                width: calc(50% - 32px);
             }
 
             ::content .full_left {
@@ -208,7 +208,7 @@
 
                 right.style.visibility = "visible";
 
-                var w = $(this.$.split_screen_container).width() / 2 - 48;
+                var w = $(this.$.split_screen_container).width() / 2 - 32;
 
                 $(left).animate({ width: w }, 400 );
                 $(right).animate({ width: w }, 400 );
