@@ -38,7 +38,7 @@
                 color: #FFFFFF;
                 --paper-button-ink-color: #FFFFFF;
 
-                /*visibility: hidden;*/
+                visibility: hidden;
             }
 
             #split_screen_container iron-icon[icon="compare-arrows"] {
@@ -59,9 +59,6 @@
                 top: 0;
                 left: 0;
                 height: 100%;
-                width: calc(50% - 48px);
-
-                /*width: 100%;*/
             }
 
             ::content .right_screen {
@@ -69,10 +66,14 @@
                 top: 0;
                 right: 0;
                 height: 100%;
-                width: calc(50% - 48px);
+            }
 
-                /*width: 0;*/
-                /*visibility: hidden;*/
+            ::content .split {
+                width: calc(50% - 48px);
+            }
+
+            ::content .full_left {
+                width: calc(100%);
             }
 
             ::content .hidden {
@@ -88,12 +89,9 @@
 
         <div id="split_screen_container">
 
-            <paper-button id="button_switch" class="switch_button" raised on-click="_switch"><iron-icon icon="compare-arrows"></iron-icon></paper-button>
-            <paper-button id="split" class="" style="position: absolute; top: -40px; left: 8px; max-height: 32px;" raised on-click="_splitscreen">split</paper-button>
-            <paper-button id="full" class="" style="position: absolute; top: -40px; left: 108px; max-height: 32px;" raised on-click="_fullscreen">full</paper-button>
-            <paper-button id="full" class="" style="position: absolute; top: -40px; left: 208px; max-height: 32px;" raised on-click="_show">L 1</paper-button>
+            <paper-button id="button_switch" class="switch_button" raised on-click="switch"><iron-icon icon="compare-arrows"></iron-icon></paper-button>
 
-            <content></content>
+            <content id="splt_screen_pages"></content>
 
         </div>
 
@@ -106,49 +104,106 @@
             is : 'split-screen-controllet',
 
             properties : {
-
+                left: {
+                    type: Number,
+                    value: 0
+                },
+                right: {
+                    type: Number,
+                    value: 1
+                },
+                split: {
+                    type: Boolean,
+                    value: false
+                }
             },
 
             ready : function() {
+                this.pages = $("#split_screen_container").children(("paper-material"));
+                this.pages.addClass("hidden");
+
+                var left = this.pages[this.left];
+                var right = this.pages[this.right];
+
+                $(left).addClass("left_screen");
+                $(right).addClass("right_screen");
+
+
+                if(this.split) {
+                    $(this.pages).addClass("split");
+
+                    $(left).removeClass("hidden");
+                    $(right).removeClass("hidden");
+                    this.$.button_switch.style.visibility = "visible";
+                }
+                else {
+                    $(this.pages).addClass("full_left");
+
+                    $(left).removeClass("hidden");
+                }
             },
 
-            attached : function() {
-            },
+            show : function(float, index) {//float --> left / right, index --> 0 - (N-1)
+                if(!this.split)
+                    float = "left";
 
-            _show : function(float, index) {
-                //float --> left / right
-                //position --> 0 - (N-1)
-                float = "left";
-                index = 5;
+                var left = this.pages[this.left];
+                var right = this.pages[this.right];
+                var toShow = this.pages[index];
 
-                var left = $(".left_screen")[0];
-                var right = $(".right_screen")[0];
+                var leftDiv = $(left).children("div")[0];
+                var rightDiv = $(right).children("div")[0];
+                var toShowDiv = $(toShow).children("div")[0];
 
-                var leftDiv = $(".left_screen div:first-child")[0];
-                var rightDiv = $(".right_screen div:first-child")[0];
+                if(float == "left" && index != this.left) {
 
-                var toShow = $("paper-material")[index];
+                    if(index == this.right) {
+                        this.switch();
+                        return;
+                    }
 
-                var divToShow = $(".content")[index];
+                    this.left = index;
 
-                if(float == "left") {
                     $(leftDiv).fadeOut(400);
-//                    $(divToShow).delay(400).fadeIn(400);
 
                     this.async(function () {
                         $(left).removeClass("left_screen").addClass("hidden");
                         $(toShow).removeClass("hidden").addClass("left_screen");
+
+                        toShowDiv.style.display = "none";
+                        $(toShowDiv).fadeIn(400);
                     }, 400);
 
-                } else if(float == "right") {
-                    $(right).removeClass("right_screen").addClass("hidden");
-                    $(toShow).removeClass("hidden").addClass("right_screen");
+                } else if(float == "right" && index != this.right) {
+
+                    if(index == this.left) {
+                        this.switch();
+                        return;
+                    }
+
+                    this.right = index;
+
+                    $(rightDiv).fadeOut(400);
+
+                    this.async(function () {
+                        $(right).removeClass("right_screen").addClass("hidden");
+                        $(toShow).removeClass("hidden").addClass("right_screen");
+
+                        toShowDiv.style.display = "none";
+                        $(toShowDiv).fadeIn(400);
+                    }, 400);
                 }
+
             },
 
-            _splitscreen : function() {
-                var left = $(".left_screen")[0];
-                var right = $(".right_screen")[0];
+            splitscreen : function() {
+                if(this.split)
+                    return;
+
+                this.split = true;
+
+                var left =  this.pages[this.left];
+                var right = this.pages[this.right];
 
                 right.style.visibility = "visible";
 
@@ -159,34 +214,54 @@
 
                 this.async(function () {
                     this.$.button_switch.style.visibility = "visible";
+                    $(this.pages).removeAttr("style");
+                    $(this.pages).removeClass("full_left").addClass("split");
                 }, 400);
             },
 
-            _fullscreen : function() {
+            fullscreen : function() {
+                if(!this.split)
+                    return;
+
+                this.split = false;
+
                 this.$.button_switch.style.visibility = "hidden";
 
-                var left = $(".left_screen")[0];
-                var right = $(".right_screen")[0];
+                var left =  this.pages[this.left];
+                var right = this.pages[this.right];
 
                 $(left).animate({width: "100%"}, 400);
                 $(right).animate({width: "0"}, 400);
 
                 this.async(function () {
+                    $(this.pages).removeAttr("style");
                     right.style.visibility = "hidden";
+                    $(this.pages).removeClass("split").addClass("full_left");
                 }, 400);
             },
 
-            _switch : function() {
-                var left = $(".left_screen")[0];
-                var right = $(".right_screen")[0];
+            switch : function() {
+                var left = this.pages[this.left];
+                var right = this.pages[this.right];
 
-                var leftDiv = $(".left_screen div:first-child")[0];
-                var rightDiv = $(".right_screen div:first-child")[0];
+                var leftDiv = $(left).children("div")[0];
+                var rightDiv = $(right).children("div")[0];
+
+                var temp = this.left;
+                this.left = this.right;
+                this.right = temp;
 
                 $(leftDiv).fadeOut(400).fadeIn(400);
                 $(rightDiv).fadeOut(400).fadeIn(400);
 
                 this.async(function () {
+                    if(!this.split) {
+                        right.style.visibility = "visible";
+                        right.style.width = "100%";
+                        left.style.width = "0";
+                        left.style.visibility = "hidden";
+                    }
+
                     $(left).removeClass("left_screen").addClass("right_screen");
                     $(right).removeClass("right_screen").addClass("left_screen");
                 }, 400);

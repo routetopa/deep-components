@@ -9,6 +9,11 @@
 
     <script src="../../../bower_components/webcomponentsjs/webcomponents-lite.min.js"></script>
 
+    <link rel="import" href="../../../bower_components/paper-icon-button/paper-icon-button.html">
+    <link rel="import" href="../../../bower_components/paper-button/paper-button.html">
+    <link rel="import" href="../../../bower_components/iron-icons/iron-icons.html">
+    <link rel="import" href="../../../bower_components/iron-icon/iron-icon.html">
+
     <link rel="import" href="../split-screen-controllet.html" />
 
     <link rel="import" href="../../../bower_components/paper-material/paper-material.html" />
@@ -17,8 +22,10 @@
 
 <style>
 
-    body {
-        /*background: #2196F3;*/
+    * {
+        font-family: 'Roboto', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+        font-size: 16px;
+        line-height: 24px;
     }
 
     #container {
@@ -30,53 +37,58 @@
         background: white;
     }
 
-    .page {
-        height: 100%;
-        width: 100%;
-        text-align: center;
+    .btn {
+        position: absolute;
+        top: 8px;
+        left: 56px;
+        max-height: 32px;
     }
 
 </style>
+<paper-button class="btn"  raised onClick="_splitscreen()">split</paper-button>
+<paper-button class="btn" style="left: 160px;" raised onClick="_fullscreen()">full</paper-button>
+<paper-button class="btn" style="left: 264px;" raised onClick="_showL()">L (0-5)</paper-button>
+<paper-button class="btn" style="left: 368px;" raised onClick="_showR()">R (0-5)</paper-button>
 
 <div id="container">
 
-    <split-screen-controllet id="split">
-        <paper-material class="left_screen" elevation="5">
+    <split-screen-controllet id="splitter" split left="3" right="0">
+        <paper-material elevation="5">
             <div class="content">
                 <div style="height: 48px; background: #4CAF50;"></div>
                 <p>0 0 0 Bla bla bla</p>
             </div>
         </paper-material>
 
-        <paper-material class="right_screen" elevation="5">
+        <paper-material elevation="5">
             <div class="content">
                 <div style="height: 48px; background: #2196F3;"></div>
                 <p>1 1 1 Bla bla bla</p>
             </div>
         </paper-material>
 
-        <paper-material class="hidden" elevation="5">
+        <paper-material elevation="5">
             <div class="content">
                 <div style="height: 48px; background: mediumvioletred;"></div>
                 <p>2 2 2 Bla bla bla</p>
             </div>
         </paper-material>
 
-        <paper-material class="hidden" elevation="5">
+        <paper-material elevation="5">
             <div class="content">
                 <div style="height: 48px; background: yellowgreen;"></div>
                 <p>3 3 3 Bla bla bla</p>
             </div>
         </paper-material>
 
-        <paper-material class="hidden" elevation="5">
+        <paper-material elevation="5">
             <div class="content">
                 <div style="height: 48px; background: darkslateblue;"></div>
                 <p>4 4 4 Bla bla bla</p>
             </div>
         </paper-material>
 
-        <paper-material class="hidden" elevation="5">
+        <paper-material elevation="5">
             <div class="content">
                 <div style="height: 48px; background: darkslategray;"></div>
                 <p>5 5 5 Bla bla bla</p>
@@ -88,13 +100,27 @@
 
 <script>
 
-    var split = document.getElementById('split');
+    var splitter = document.getElementById('splitter');
 
-    $('document').ready(function(){
-    });
+    function _splitscreen() {
+        splitter.splitscreen();
+    }
 
-    split.addEventListener("event", function (e) {
-    });
+    function _fullscreen() {
+        splitter.fullscreen();
+    }
+
+    function _showL() {
+        var index =Math.floor((Math.random() * 6));
+        splitter.show("left", index);
+        console.log("left " + index);
+    }
+
+    function _showR() {
+        var index =Math.floor((Math.random() * 6));
+        splitter.show("right", index);
+        console.log("right " + index);
+    }
 
 </script>
 
