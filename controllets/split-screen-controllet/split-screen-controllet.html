@@ -128,18 +128,19 @@
                 $(left).addClass("left_screen");
                 $(right).addClass("right_screen");
 
+                $(left).removeClass("hidden");
+                $(right).removeClass("hidden");
 
                 if(this.split) {
                     $(this.pages).addClass("split");
 
-                    $(left).removeClass("hidden");
-                    $(right).removeClass("hidden");
                     this.$.button_switch.style.visibility = "visible";
                 }
                 else {
                     $(this.pages).addClass("full_left");
 
-                    $(left).removeClass("hidden");
+                    right.style.width = "0";
+                    right.style.visibility = "hidden";
                 }
             },
 
