@@ -56,7 +56,7 @@ Example:
         </style>
 
         <div id="leafletjs"></div>
-        <base-ajax-json-alasql-datalet data-url="{{dataUrl}}" fields="{{fields}}" data="{{data}}" title="{{title}}" description="{{description}}" export_menu="{{export_menu}}"></base-ajax-json-alasql-datalet>
+        <base-ajax-json-alasql-datalet data-url="{{dataUrl}}" fields="{{fields}}" data="{{data}}" title="{{title}}" description="{{description}}" export_menu="{{export_menu}}" disable_my_space="{{disable_my_space}}"></base-ajax-json-alasql-datalet>
 
     </template>
 
@@ -204,6 +204,11 @@ Example:
                 export_menu : {
                     type  : Number,
                     value : 9 // xxxx BITMASK. FROM RIGHT : HTML, PNG, RTF, MY SPACE (eg. 1111 show all, 0000 hide all)
+                },
+
+                disable_my_space : {
+                    type  : Boolean,
+                    value : false // BITMASK -8
                 },
 
                 data : {

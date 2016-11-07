@@ -311,6 +311,10 @@ Example :
             {
                 // xxxx BITMASK. FROM RIGHT : HTML, PNG, RTF, MY SPACE (eg. 1111 show all, 0000 hide all)
                 var bitmask = this.export_menu;
+
+                if(this.disable_my_space)
+                    bitmask -= 8;
+
                 var menu = ["export_html", "export_png", "export_rtf", "export_my_space"];
 
                 if(bitmask == 15) return;
