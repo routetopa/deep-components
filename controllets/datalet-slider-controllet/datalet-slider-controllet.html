@@ -387,7 +387,7 @@
 
                 this.avatar = this.selected + 1;
 
-                this.fire('datalet-slider-controllet_selected', {selected : this.selected});
+                this.fire('datalet-slider-controllet_selected', {selected : this.selected, dataletId : this.currentDatalets[this.selected].getAttribute( "datalet-id" )});
             },
 
             _add : function() {
