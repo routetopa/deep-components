@@ -244,7 +244,7 @@
             <div class="transparent"></div>
 
             <paper-fab class="close" mini icon="close" on-click="_onCloseClick"></paper-fab>
-            <paper-fab id="addPostit" icon="add" title='Add new postit' class="dropdown-trigger" on-click="_onAddPostitClick"></paper-fab>
+            <paper-fab id="addPostit" mini icon="add" title='Add new postit' class="dropdown-trigger" on-click="_onAddPostitClick"></paper-fab>
             <div id="container_content">
                 <content>
                     <ul id="postit_container">
@@ -263,7 +263,7 @@
                         <h3 id="newTitle" contentEditable="true" onkeypress="return (this.innerText.length <= 13)" placeholder="Title"></h3>
                         <p id="newContent" contentEditable="true" onkeypress="return (this.innerText.length <= 199)" placeholder="Content"></p>
                         <paper-fab class="close" mini icon="close" on-click="_onCloseCreatePostitFormClick"></paper-fab>
-                        <paper-fab id="addPostit" icon="save" title='Add new postit' class="dropdown-trigger" on-click="_onAddNewPostitFormClick" ></paper-fab>
+                        <paper-fab id="addPostit" mini icon="save" title='Add new postit' class="dropdown-trigger" on-click="_onAddNewPostitFormClick" ></paper-fab>
                     </div>
 
                 </content>

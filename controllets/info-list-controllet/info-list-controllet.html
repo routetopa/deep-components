@@ -35,12 +35,24 @@
                 width: calc(100% - 32px);
                 padding: 16px;
                 overflow-y: scroll;
-
             }
 
             #info_container .item_container{
                 display: flex;
                 flex-direction: row;
+
+                margin: 16px 0 0 0;
+                border-radius: 8px;
+                /*background: #E3F2FD;*/
+                border: 2px solid #B6B6B6;
+            }
+
+            #info_container .item_container:first-child {
+                margin-top: 0;
+            }
+
+            #info_container .item_container:last-child {
+                margin-bottom: 0;
             }
 
             #info_container .info_name{
@@ -72,7 +84,7 @@
                 -webkit-box-orient: vertical;
                 overflow-y: auto;
                 text-overflow: ellipsis;
-                background: #E3F2FD;
+                /*background: #E3F2FD;*/
             }
 
             #info_container .members_list {
