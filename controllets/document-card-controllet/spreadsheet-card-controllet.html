@@ -81,10 +81,6 @@
                 margin: 0px;
             }
 
-            #resource{
-                height: 100%;
-                width: 100%;
-            }
 
             :host #docs-header{
                 display : none;
@@ -120,6 +116,12 @@
 
             button#rename-sheet{
                 display: none;
+            }
+
+            #resource{
+                height: 100%;
+                width: 100%;
+                border-width: 0;
             }
 
         </style>
@@ -217,8 +219,8 @@
                 this.style.height = this.height +  "vh";
                 //this.$.content.width = this.width  - 4 + "vh";
                 this.$.paper_card_container.style.height = this.height + "vh";
-                this.$.content.style.height = this.height - 1 + "vh";
-                $(this.$.content).perfectScrollbar();
+                this.$.content.style.height = this.height + "vh";
+                //$(this.$.content).perfectScrollbar();
             },
 
             _handleOpenClick: function(){
