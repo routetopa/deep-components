@@ -42,24 +42,26 @@
                 flex-direction: row;
 
                 margin: 16px 0 0 0;
-                border-radius: 8px;
+                /*border-radius: 8px;*/
                 /*background: #E3F2FD;*/
-                border: 2px solid #B6B6B6;
+                /*border: 2px solid #B6B6B6;*/
+
+                border-bottom: 1px solid #B6B6B6;
             }
 
             #info_container .item_container:first-child {
                 margin-top: 0;
             }
 
-            #info_container .item_container:last-child {
-                margin-bottom: 0;
+            #info_container .item_container.last {
+                border-bottom: 0;
             }
 
             #info_container .info_name{
                 min-height: 24px;
                 padding: 12px;
                 font-size: 24px;
-                color: #2196F3;
+                /*color: #2196F3;*/
                 font-weight: 700;
 
                 width: 232px;
@@ -96,6 +98,8 @@
                 flex-direction: row;
                 height: 48px;
                 margin: 0 0 12px 0;
+
+                border-bottom: 1px solid #B6B6B6;
             }
 
             #info_container .user_icon {
@@ -144,7 +148,7 @@
 
                 </template>
 
-                <div class="item_container">
+                <div class="item_container last">
                         <div class="info_name" title="{{_getName('members')}}">{{_getName('members')}}</div>
 
                     <div class="members_list">
@@ -233,6 +237,8 @@
                 var members = info.members;
                 members.unshift(owner);
                 delete info.members;
+                for(var i in members)
+                    (members[i].isJoined == "0") ? members[i].isJoined = false : true;
                 this.members = members;
 
                 info["period"] = info.from + " - " + info.to;
