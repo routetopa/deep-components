@@ -278,7 +278,7 @@
                     this._showEmpty();
                 else
                     this.async(function() {
-                        this.currentDatalets = $("[datalet-id]");
+                        this.currentDatalets = $("datalet-slider-controllet [datalet-id]");
                         this._showCurrentDatalet();
                     }, 1);
             },
