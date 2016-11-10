@@ -82,6 +82,7 @@
             #data_table_container {
                 height: 100%;
                 width: 100%;
+                background: #FFFFFF;
             }
 
             #data_table_container * {
@@ -112,19 +113,23 @@
             }
 
             #data_table_container .even-row{
-
+                background: #E0E0E0;
             }
 
             #data_table_container .odd-row{
-                background: #E0E0E0;
+                /*background: #E0E0E0;*/
             }
 
             /*#data_table_container tr:nth-child(odd) {
                 background: #E0E0E0;
             }*/
 
+            #data_table_container tr {
+                height: 48px;
+            }
+
             #data_table_container th,
-            #data_table_container td{
+            #data_table_container td {
                 height: 24px;
                 padding: 12px;
                 text-align: center;
@@ -140,7 +145,16 @@
                 background: #2196F3;
                 color: #FFFFFF;
                 font-weight: 700;
+                border-left: 2px solid #FFFFFF;
                 /*cursor: help;*/
+
+                height: 24px;
+                padding: 12px 0 10px 0;
+                border-bottom: 2px solid #2196F3;
+            }
+
+            #data_table_container th:first-child {
+                border-left: 0;
             }
 
             #data_table_container td {
@@ -186,9 +200,13 @@
 
             #data_table_container .footer_block:nth-child(3) {
                 width: 30%;
-                height: 40px;
-                padding: 4px 8px;
-                text-align: left;
+                /*height: 40px;*/
+                /*padding: 4px 8px;*/
+                /*text-align: left;*/
+
+                text-align: center;
+                height: 24px;
+                padding: 12px;
             }
 
             #data_table_container br {
@@ -232,14 +250,34 @@
                 right: 10px;
             }
 
+            .search_container {
+                width: 288px;
+                height: 40px;
+                padding: 4px 12px;
+                /*background: red;*/
+                /*float: right;*/
+
+                position: absolute;
+                top: 0;
+                right: 0;
+
+                text-align: right;
+            }
+
         </style>
 
         <paper-material id="data_table_container" elevation="5">
 
             <div id="header">
                 <span id="selected_data"></span>
-                <div style="float: right; right: 10px">
-                    <paper-checkbox checked on-change="showAll"><span id="suggested_datasets">{{_tr("last_version")}}</span></paper-checkbox>
+                <!--<div style="float: right; right: 10px">-->
+                    <!--<paper-checkbox checked on-change="showAll"><span id="suggested_datasets">{{_tr("last_version")}}</span></paper-checkbox>-->
+                <!--</div>-->
+                <div class="search_container">
+                    <paper-input id="filter" value={{filter}} no-label-float>
+                        <iron-icon class="search" icon="search" prefix></iron-icon>
+                        <paper-icon-button class="clear" suffix on-click="_clearInput" icon="clear"></paper-icon-button>
+                    </paper-input>
                 </div>
             </div>
 
@@ -306,10 +344,14 @@
                     <paper-icon-button id="slider_chevron_right" class="chevron-right" on-click="_onNextClick" icon="chevron-right"></paper-icon-button>
                 </div>
                 <div class="footer_block">
-                    <paper-input id="filter" value={{filter}} no-label-float>
-                        <iron-icon class="search" icon="search" prefix></iron-icon>
-                        <paper-icon-button class="clear" suffix on-click="_clearInput" icon="clear"></paper-icon-button>
-                    </paper-input>
+                    <!--<div style="float: right; right: 10px">-->
+                    <paper-checkbox checked on-change="showAll"><span id="suggested_datasets">{{_tr("last_version")}}</span></paper-checkbox>
+                    <!--</div>-->
+
+                    <!--<paper-input id="filter" value={{filter}} no-label-float>-->
+                        <!--<iron-icon class="search" icon="search" prefix></iron-icon>-->
+                        <!--<paper-icon-button class="clear" suffix on-click="_clearInput" icon="clear"></paper-icon-button>-->
+                    <!--</paper-input>-->
                 </div>
             </div>
 
