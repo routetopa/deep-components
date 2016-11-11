@@ -78,8 +78,18 @@
 
     var metadata_list = document.getElementById('metadata_list');
 
-    $('document').ready(function(){
+//    $('document').ready(function(){
+//        metadata_list.setMetadata(metadata);
+//    });
+//
+//    setTimeout(function(){
+//        metadata_list.setMetadata(metadata);
+//    }, 1000);
+
+
+    metadata_list.addEventListener("metadata-list-controllet_attached", function (e) {
         metadata_list.setMetadata(metadata);
+        console.log("we");
     });
 
     metadata_list.addEventListener("metadata-list-controllet_update-metadata", function (e) {

@@ -12,7 +12,7 @@ ln["slide2Title_en"] = "SELECT DATA";
 ln["slide2Subtitle_en"] = "Select the fields on the left. The table will show the values related to the selected fields.";
 ln["slide3Title_en"] = "SELECT VISUALIZATION";
 ln["slide3Subtitle_en"] = "Select a visualization, fill out inputs and options.";
-ln["back_en"] = "BACK TO THE FUTURE";
+ln["back_en"] = "BACK";
 ln["forward_en"] = "FORWARD";
 
 //SELECT DATASET
@@ -244,7 +244,7 @@ ln["slide2Title_it"] = "SELEZIONA I DATI";
 ln["slide2Subtitle_it"] = "Seleziona i campi sulla sinistra. La tabella mostrerà i valori relativi ai campi selezionati";
 ln["slide3Title_it"] = "SELEZIONA LA VISUALIZZAZIONE";
 ln["slide3Subtitle_it"] = "Seleziona una visualizzazione, compila i campi e le opzioni.";
-ln["back_it"] = "RITORNO AL FUTURO";
+ln["back_it"] = "INDIETRO";
 ln["forward_it"] = "AVANTI";
 
 //SELECT DATASET
@@ -432,7 +432,7 @@ ln["CategoriesDescription_it"] = "Categoria che separa l'asse y. Se selezionata,
 ln["x-axis-label_it"] = "Etichetta asse X";
 ln["y-axis-label_it"] = "Etichetta asse Y";
 ln["suffix_it"] = "Suffisso Tooltip";
-ln["legend_it"] = "Leggenda";
+ln["legend_it"] = "Legenda";
 ln["data-labels_it"] = "Mostra etichette dati";
 ln["stack_it"] = "Pila";
 ln["theme_it"] = "Tema";
@@ -453,7 +453,7 @@ ln["themeSpod_it"] = "Spod";
 ln["x-axis-labelDescription_it"] = "Etichetta asse X";
 ln["y-axis-labelDescription_it"] = "Etichetta asse Y";
 ln["suffixDescription_it"] = " Suffisso aggiunto all'etichette dati nel tooltip.";
-ln["legendDescription_it"] = "Posizione leggenda";
+ln["legendDescription_it"] = "Posizione legenda";
 ln["data-labelsDescription_it"] = "Mostra/Nascondi etichette dati";
 ln["themeDescription_it"] = "Il tema influenza l'aspetto e i colori del grafico.";
 ln["stackDescription_it"] = "Tipologia di pila";
@@ -469,7 +469,7 @@ ln["slide2Title_fr"] = "SÉLECTIONNER DONNÉES";
 ln["slide2Subtitle_fr"] = "Sélectionner les champs sur la gauche. Le tableau présentera les valeurs liées aux champs sélectionnés.";
 ln["slide3Title_fr"] = "SÉLECTIONNER UN MODE DE VISUALISATION";
 ln["slide3Subtitle_fr"] = "Sélectionner une visualisation, compléter les données et les options.";
-ln["back_fr"] = "RETOUR VERS LE FUTUR";
+ln["back_fr"] = "BACK";
 ln["forward_fr"] = "AVANT";
 
 //SELECT DATASET
@@ -694,7 +694,7 @@ ln["slide2Title_nl"] = "SELECT DATA";
 ln["slide2Subtitle_nl"] = "Select the fields on the left. The table will show the values related to the selected fields.";
 ln["slide3Title_nl"] = "SELECT VISUALIZATION";
 ln["slide3Subtitle_nl"] = "Select a visualization, fill out inputs and options.";
-ln["back_nl"] = "TERUG NAAR DE TOEKOMST";
+ln["back_nl"] = "BACK";
 ln["forward_nl"] = "FORWARD";
 
 //SELECT DATASET

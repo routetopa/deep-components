@@ -163,10 +163,10 @@ metadata_ln["format_description_it"] = "Il formato del file o dell'API del datas
 metadata_ln["license_it"] = "Licenza";
 metadata_ln["license_description_it"] = "La licenza con la quale viene rilasciato il dataset. Fare riferimento a Open License per ulteriori informazioni.";
 //8
-metadata_ln["spatial_it"] = "Informazioni spazioali";
+metadata_ln["spatial_it"] = "Informazioni spaziali";
 metadata_ln["spatial_description_it"] = "La regione interessata dal dataset. Indicare la regione geografica di interesse.";
 //9
-metadata_ln["temporal_it"] = "Informazioni tempiorali";
+metadata_ln["temporal_it"] = "Informazioni temporali";
 metadata_ln["temporal_description_it"] = "L'intervallo temporale di validità del dataset (data di inizio e fine, se applicabile).";
 
 //EF

@@ -216,6 +216,8 @@
 
             attached : function() {
                  this._translate();
+
+                this.fire("info-list-controllet_attached");
             },
 
             _translate : function() {

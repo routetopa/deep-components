@@ -61,8 +61,12 @@
 
     var info_list_controllet = document.getElementById('info_list_controllet');
 
-    $('document').ready(function(){
-        info_list_controllet.setInfo(info);
+//    $('document').ready(function(){
+//        info_list_controllet.setInfo(info);
+//    });
+    
+    info_list_controllet.addEventListener("info-list-controllet_attached", function () {
+        info_list_controllet.setInfo(info);console.log("scia");
     });
 
 //    info_list_controllet.addEventListener("info_list_controllet-info", function (e) {

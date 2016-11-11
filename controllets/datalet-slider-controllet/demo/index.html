@@ -65,12 +65,20 @@
 
     var slider = document.getElementById('slider');
 
-    $('document').ready(function(){
+//    $('document').ready(function(){
+//        slider.setDatalets(datalets);
+//        setTimeout(function(){
+////            slider.setSelected(4);
+//        }, 2000);
+////        slider.setSelected(3);
+//    });
+
+    slider.addEventListener("datalet-slider-controllet_attached", function () {
         slider.setDatalets(datalets);
         setTimeout(function(){
-//            slider.setSelected(4);
+            slider.setSelected(4);
         }, 2000);
-//        slider.setSelected(3);
+        slider.setSelected(3);
     });
 
     slider.addEventListener("datalet-slider-controllet_add", function (e) {

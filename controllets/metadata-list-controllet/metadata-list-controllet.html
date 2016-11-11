@@ -201,6 +201,8 @@
 
             attached : function() {
                  this._translate();
+
+                this.fire("metadata-list-controllet_attached");
             },
 
             _translate : function() {
