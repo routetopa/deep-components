@@ -32,17 +32,18 @@
                 --paper-input-container-focus-color: #2196F3;
             }
 
-            paper-icon-button.preview-close
-            {
-                height: 28px;
-                width: 28px;
-            }
-
             paper-icon-button{
                 height: 48px;
                 width: 48px;
                 padding: 0px;
                 --paper-icon-button-ink-color: #FFFFFF;
+            }
+
+            paper-icon-button.preview-close
+            {
+                height: 28px;
+                width: 28px;
+                color: #000000;
             }
 
             paper-icon-button.tools
@@ -521,9 +522,11 @@
                     data: {room_id : e.target.parentElement.attributes["room_id"].value, version : e.target.parentElement.attributes["version"].value},
                     dataType: "json",
                     success: function(e){
-                        t.$.data_table_controllet.setData(e);
                         t.$.paper_dialog.open();
-                        t.$.data_table_controllet._resize();
+
+                        t.async(function() {
+                            t.$.data_table_controllet.setData(e);
+                        }, 100);
                     }
                 });
             },
