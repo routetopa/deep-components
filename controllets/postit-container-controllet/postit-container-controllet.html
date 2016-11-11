@@ -307,6 +307,10 @@
                 if(this.open == true) $(this.$.window).show();
             },
 
+            attached : function() {
+                this.fire("postit-container-controllet_attached");
+            },
+
             setPostits: function(postits, dataletId){
                this.postits   = JSON.parse(postits);
                this.dataletId = dataletId;
