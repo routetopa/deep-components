@@ -7,6 +7,9 @@
 <link rel="import" href="../../bower_components/iron-icons/iron-icons.html">
 <link rel="import" href="../../bower_components/iron-icon/iron-icon.html">
 
+<link rel="import" href="../../bower_components/paper-spinner/paper-spinner.html">
+<link rel="import" href="../../bower_components/paper-spinner/paper-spinner-lite.html">
+
 <dom-module id="split-screen-controllet">
 
     <template>
@@ -46,6 +49,50 @@
                 margin: 0;
                 height: 40px;
                 width: 40px;
+            }
+
+            .spinner_container {
+                position: absolute;
+                height: 100%;
+                width: calc(50% - 32px);
+                background: #FFFFFF;
+
+                /*display: none;*/
+            }
+
+            .spinner_container.hidden {
+                display: none;
+            }
+
+            #spinner_container_left {
+                left: 0;
+            }
+
+            #spinner_container_left.full {
+                width: 100%;
+            }
+
+            #spinner_container_right {
+                right: 0;
+            }
+
+            .spinner_container.hidden {
+                display: none;
+            }
+
+            #split_screen_container paper-spinner {
+                top: calc(50% - 32px);
+                left: calc(50% - 32px);
+
+                height: 64px;
+                width: 64px;
+
+                --paper-spinner-stroke-width: 8px;
+
+                --paper-spinner-layer-1-color: #2196F3;
+                --paper-spinner-layer-2-color: #F44336;;
+                --paper-spinner-layer-3-color: #FFEB3B;;
+                --paper-spinner-layer-4-color: #4CAF50;;
             }
 
             ::content * {
@@ -92,6 +139,14 @@
             <paper-button id="button_switch" class="switch_button" raised on-click="switch"><iron-icon icon="compare-arrows"></iron-icon></paper-button>
 
             <content id="splt_screen_pages"></content>
+
+            <div id="spinner_container_left" class="spinner_container hidden">
+                <paper-spinner id="spinner_left"></paper-spinner>
+            </div>
+
+            <div id="spinner_container_right" class="spinner_container hidden">
+                <paper-spinner id="spinner_right"></paper-spinner>
+            </div>
 
         </div>
 
@@ -142,6 +197,66 @@
                     right.style.width = "0";
                     right.style.visibility = "hidden";
                 }
+            },
+
+            startLoader : function(float, time) {
+                var spinner_container, spinner;
+
+                if(float == "left") {
+                    spinner_container = this.$.spinner_container_left;
+                    spinner = this.$.spinner_left;
+                    float = this.pages[this.left];
+
+                    if(this.split)
+                        $(spinner_container).removeClass("full");
+                    else
+                        $(spinner_container).addClass("full");
+                }
+                else if(float == "right"  && this.split) {
+                    spinner_container = this.$.spinner_container_right;
+                    spinner = this.$.spinner_right;
+                    float = this.pages[this.right];
+                }
+                else
+                    return;
+
+                $(spinner_container).removeClass("hidden");
+                spinner.setAttribute("active", true);
+
+                if(time != 0) {
+                    var floatDiv = $(float).children("div")[0];
+
+                    this.async(function () {
+                        spinner.removeAttribute("active");
+                        $(spinner_container).addClass("hidden");
+                    }, time);
+
+                    $(floatDiv).fadeOut(time).fadeIn(400);
+                }
+            },
+
+            stopLoader : function(float) {
+                var spinner_container, spinner;
+
+                if(float == "left") {
+                    spinner_container = this.$.spinner_container_left;
+                    spinner = this.$.spinner_left;
+                    float = this.pages[this.left];
+                }
+                else if(float == "right") {
+                    spinner_container = this.$.spinner_container_right;
+                    spinner = this.$.spinner_right;
+                    float = this.pages[this.right];
+                }
+                else
+                    return;
+
+                var floatDiv = $(float).children("div")[0];
+
+                spinner.removeAttribute("active");
+                $(spinner_container).addClass("hidden");
+
+                $(floatDiv).fadeOut(0).fadeIn(400);
             },
 
             show : function(float, index) {//float --> left / right, index --> 0 - (N-1)

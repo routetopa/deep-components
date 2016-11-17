@@ -49,6 +49,9 @@
 <paper-button class="btn" style="left: 160px;" raised onClick="_fullscreen()">full</paper-button>
 <paper-button class="btn" style="left: 264px;" raised onClick="_showL()">L (0-5)</paper-button>
 <paper-button class="btn" style="left: 368px;" raised onClick="_showR()">R (0-5)</paper-button>
+<paper-button class="btn" style="left: 472px;" raised onClick="_loadL()">L (t=0)</paper-button>
+<paper-button class="btn" style="left: 576px;" raised onClick="_loadR()">R (t=1s)</paper-button>
+<paper-button class="btn" style="left: 680px;" raised onClick="_stop()">stop</paper-button>
 
 <div id="container">
 
@@ -112,15 +115,27 @@
     }
 
     function _showL() {
-        var index =Math.floor((Math.random() * 6));
+        var index = Math.floor((Math.random() * 6));
         splitter.show("left", index);
         console.log("left " + index);
     }
 
     function _showR() {
-        var index =Math.floor((Math.random() * 6));
+        var index = Math.floor((Math.random() * 6));
         splitter.show("right", index);
         console.log("right " + index);
+    }
+
+    function _loadL() {
+        splitter.startLoader("left", 0);
+    }
+
+    function _loadR() {
+        splitter.startLoader("right", 1000);
+    }
+
+    function _stop() {
+        splitter.stopLoader("left");
     }
 
 </script>
