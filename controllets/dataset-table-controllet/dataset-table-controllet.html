@@ -265,6 +265,17 @@
                 text-align: right;
             }
 
+            #tbody div.owner_badge {
+                font-family: 'Roboto', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+                font-size: 13px;
+                color: white;
+                background-color: rgba(255, 0, 0, 0.5);
+                position: absolute;
+                height: 20px;
+                top: 28px;
+                left: 5px;
+            }
+
         </style>
 
         <paper-material id="data_table_container" elevation="5">
@@ -305,6 +316,9 @@
                                 <td>
                                     <template is="dom-repeat" items="{{elem.value}}" as="user" >
                                         <div class="ow_avatar">
+                                            <template is="dom-if" if="{{user.isOwner}}">
+                                                <div class="owner_badge">OWNER</div>
+                                            </template>
                                             <a href="{{user.href}}">
                                                 <img alt="" src="{{user.src}}" style="max-width: 100%;">
                                             </a>

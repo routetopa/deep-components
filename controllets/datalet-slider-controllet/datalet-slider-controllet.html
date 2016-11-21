@@ -408,8 +408,11 @@
 
             _refresh : function() {
                 this.async(function () {
-                    this.currentDatalets[this.selected].behavior.presentData();
-                    this.title = this.currentDatalets[this.selected].title;
+                    if(this.currentDatalets)
+                    {
+                        this.currentDatalets[this.selected].behavior.presentData();
+                        this.title = this.currentDatalets[this.selected].title;
+                    }
                 }, 0);
             }
 
