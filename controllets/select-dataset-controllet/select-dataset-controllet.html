@@ -51,7 +51,7 @@
                 width: calc(50% - 24px);
                 padding:0 12px;
 
-                line-height: 40px;
+                line-height: 48px;
 
                 display: none;
             }
@@ -128,8 +128,14 @@
 
             paper-dropdown-menu {
                 /*width: 200px;*/
-                width: 50%;
+                /*width: 50%;*/
                 --paper-input-container-focus-color: #2196F3;
+            }
+
+            #options paper-dropdown-menu { /*#ddl_provider, #ddl_version*/
+                padding: 4px 0;
+                margin-left: 8px;
+                width: 512px;
             }
 
             paper-item {
@@ -172,7 +178,7 @@
             <paper-tabs selected={{tabIndex}} noink no-bar>
                 <paper-tab on-tap="_setProvidersDatasets"><span id="providers_datasets"></span></paper-tab>
                 <paper-tab on-tap="_setLocalDatasets"><span id="spod_users_datasets"></span></paper-tab>
-                <paper-tab on-tap="_setExtendedDatasets"><span id="extended_datasets"></span></paper-tab>
+                <paper-tab disabled on-tap="_setExtendedDatasets"><span id="extended_datasets"></span></paper-tab>
             </paper-tabs>
 
             <div id="options">
@@ -180,12 +186,12 @@
                 <div id="options_header"></div>
 
                 <div id="provider_option" class="header_block">
-                    {{_getLocalization('provider')}}:&nbsp;
+                    {{_getLocalization('provider')}}:
                     <paper-dropdown-menu id="ddl_provider" label="" no-label-float>
                         <paper-menu id="menu_provider" class="dropdown-content">
                             <paper-item id="0" on-tap="_setProvidersDatasets"><span id="all"></span></paper-item>
-                            <template is="dom-repeat" items={{_toArray(providers)}}>
-                                <paper-item id={{item.value.id}} on-tap="_setProvidersDatasets">{{item.value.title}}</paper-item>
+                            <template is="dom-repeat" items="{{providers}}">
+                                <paper-item id={{item.id}} on-tap="_setProvidersDatasets">{{item.name}}</paper-item>
                             </template>
                         </paper-menu>
                     </paper-dropdown-menu>
@@ -320,23 +326,32 @@
                     var that = this;
                     window.addEventListener("resize", function() { that._resize() });
 
-                    this.providers = this.datasets["result"]["providers"];
-                    this.providersDatasets = this.datasets["result"]["datasets"];
+//                    this.providersDatasets = [];
+                    this.allDatasets = [];
+                    var providers = [];
+
+                    for(var p in this.datasets) {
+                        this.allDatasets.push.apply(this.allDatasets, this.datasets[p]['p_datasets']);
+                        providers.push({id: p, name: this.datasets[p]["p_name"], url: this.datasets[p]["p_url"]});
+                    }
+
+                    this.providersDatasets = this.allDatasets;
+                    this.providers = providers;
 
                     if(this.suggestedDatasets)
                         this.providersDatasets = this.suggestedDatasets.concat(this.providersDatasets);
-
+//
                     $.ajax({
                         url: "/cocreation/ajax/get-all-dataset",
                         dataType: "json",
                         success: function(localDatasets){
                             that.localDatasets = localDatasets;
                             that.lastLocalDatasets = [];
-                            var resource_name = "";
+                            var name = "";
                             for(var i in localDatasets)
-                                if(localDatasets[i].resource_name != resource_name) {
+                                if(localDatasets[i].name != name) {
                                     that.lastLocalDatasets.push(localDatasets[i]);
-                                    resource_name = localDatasets[i].resource_name;
+                                    name = localDatasets[i].name;
                                 }
                         },
                         error: function(){
@@ -347,6 +362,7 @@
 
                     //this._setProvidersDatasets();
                     this.$.datasets_list.setDatasets(this.providersDatasets);
+                    this.$.datasets_list.setProviders(this.providers);
                     this._showOptions();
                 },
 
@@ -378,19 +394,19 @@
                     this.$.menu_version.select(0);
                 },
 
-                _setProvidersDatasets : function(e) {
+                _setProvidersDatasets : function() {
+                    this.$.datasets_list.setDatasets([]);
                     this.async(function () {
                         var ddl_provider = $(this.$.ddl_provider).find("paper-menu")[0].selectedItem;
-                        var name = ddl_provider.innerHTML.trim();
-                        var id = this._getIdByProviderName(name);
-                        if (id) {
-                            var providerDatasets = this.providersDatasets.filter(function (el) {
-                                return el.provider_name == "p:" + id;
-                            });
+//                        var name = ddl_provider.innerHTML.trim();
+//                        var id = this._getIdByProviderName(name);
+                        var id = ddl_provider.id;
+                        if (id == 0) {
+                            this.$.datasets_list.setDatasets(this.allDatasets);
+                        } else {
+                            var providerDatasets = this.datasets[id]['p_datasets'];
                             this.$.datasets_list.setDatasets(providerDatasets);
                         }
-                        else
-                            this.$.datasets_list.setDatasets(this.providersDatasets);
 
                         this._showOptions();
                     }, 0);
@@ -405,16 +421,16 @@
                 },
 
                 _setExtendedDatasets : function() {
-                    this.$.datasets_list.setDatasets([]);//tutto molto bello, clap, clap, clapù
+                    this.$.datasets_list.setDatasets([]);//tutto molto bello, clap, clap, clap
                     this._showOptions()
                 },
 
-                _getIdByProviderName : function(name) {
-                    for(var id in this.providers) {
-                        if (this.providers[id].title == name)
-                            return this.providers[id].id;
-                    }
-                },
+//                _getIdByProviderName : function(name) {
+//                    for(var id in this.providers) {
+//                        if (this.providers[id].title == name)
+//                            return this.providers[id].id;
+//                    }
+//                },
 
                 _optionsMenu : function() {
                     this.options = !this.options;
@@ -424,7 +440,7 @@
                 _showOptions : function() {
                     this.async(function () {
                         if(!this.options) {
-                            this.$.options_header.style.display = "block";
+                            this.$.options_header.style.display = "flex";
                             this.$.provider_option.style.display = "none";
 //                            this.$.view_option.style.display = "none";
 //                            this.$.search_option.style.display = "none";
@@ -432,7 +448,7 @@
                         }
                         else if(this.tabIndex == 0) {
                             this.$.options_header.style.display = "none";
-                            this.$.provider_option.style.display = "block";
+                            this.$.provider_option.style.display = "flex";
 //                            this.$.view_option.style.display = "block";
 //                            this.$.search_option.style.display = "block";
                             this.$.version_option.style.display = "none";
@@ -442,10 +458,10 @@
                             this.$.provider_option.style.display = "none";
 //                            this.$.view_option.style.display = "none";
 //                            this.$.search_option.style.display = "none";
-                            this.$.version_option.style.display = "block";
+                            this.$.version_option.style.display = "flex";
                         }
                         else if(this.tabIndex == 2) {
-                            this.$.options_header.style.display = "block";
+                            this.$.options_header.style.display = "flex";
                             this.$.provider_option.style.display = "none";
 //                            this.$.view_option.style.display = "none";
 //                            this.$.search_option.style.display = "none";
@@ -468,14 +484,14 @@
                     return ln[text + "_" + ln["localization"]];
                 },
 
-                _toArray: function(obj) {
-                    return Object.keys(obj).map(function(key) {
-                        return {
-                            name: key,
-                            value: obj[key]
-                        };
-                    });
-                },
+//                _toArray: function(obj) {
+//                    return Object.keys(obj).map(function(key) {
+//                        return {
+//                            name: key,
+//                            value: obj[key]
+//                        };
+//                    });
+//                },
 
                 _selectDataUrl : function(e){
                     this.async(function () {

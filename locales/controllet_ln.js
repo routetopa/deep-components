@@ -331,11 +331,11 @@ ln["aggregatorField_it"] = "Campo";
 ln["disableGroupBy_it"] = "DISABILITA RAGGRUPPAMENTO ";
 ln["enableGroupBy_it"] = "ABILITA RAGGRUPPAMENTO";
 
-ln["COUNT_it"] = "TOTALE di";
+ln["COUNT_it"] = "CONTA";
 ln["SUM_it"] = "SOMMA di";
 ln["MIN_it"] = "MINORE di";
 ln["MAX_it"] = "MASSIMO di";
-ln["AVG_it"] = "AVG di";
+ln["AVG_it"] = "MEDIA di";
 ln["FIRST_it"] = "PRIMO di";
 ln["LAST_it"] = "ULTIMO di";
 

@@ -3,8 +3,15 @@
 <link rel="import" href="../../bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="../../bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
 <link rel="import" href="../../bower_components/paper-menu/paper-menu.html">
+<link rel="import" href="../../bower_components/paper-menu/paper-submenu.html">
 <link rel="import" href="../../bower_components/paper-item/paper-item.html">
+<link rel="import" href="../../bower_components/iron-icon/iron-icon.html">
+<link rel="import" href="../../bower_components/iron-icons/iron-icons.html">
 <link rel="import" href="../../bower_components/paper-spinner/paper-spinner.html">
+
+<link rel="import" href="../providers-utility-controllet/providers-utility-controllet.html">
+
+<script src="../shared_js/jquery.highlight-5.js"></script>
 
 <dom-module id="datasets-list-controllet">
     <template>
@@ -111,6 +118,9 @@
             }
 
             #datasets_list_container #info_body {
+                position: relative;
+                height: calc(100% - 24px - 48px);
+                width: calc(100% - 24px);
                 padding: 12px;
             }
 
@@ -127,6 +137,12 @@
 
             paper-menu {
                 padding: 0;
+            }
+
+            .menu-content {
+                padding: 0;
+                margin-left: 64px;
+                background: transparent;
             }
 
             paper-item {
@@ -165,6 +181,12 @@
 
             paper-item:hover:not(.iron-selected) {
                 background: #BBDEFB !important;
+            }
+
+            paper-item.menu-trigger.iron-selected {
+                background: #FFFFFF !important;
+                color: #000000;
+                font-weight: 700;
             }
 
             paper-icon-button{
@@ -206,6 +228,11 @@
                 --paper-spinner-layer-4-color: #4CAF50;
             }
 
+            .highlight {
+                background-color: #FFEB3B;/*#00BCD4;*/
+                color: #000000;
+            }
+
         </style>
 
         <div id="datasets_list_container">
@@ -213,8 +240,29 @@
                 <div id="list_container">
                     <div id="menu_container">
                         <paper-menu id="menu">
-                            <template is="dom-repeat" items="{{shownDatasets}}">
-                                <paper-item id={{index}} title="{{item.resource_name}}" on-click="_selectDataset" style$="background: {{_getColorForItem(item)}};"><span>{{_getVersionedResourceName(item)}}</span></paper-item>
+                            <template is="dom-repeat" items="{{shownDatasets}}" as="dataset">
+
+                                <template is="dom-if" if={{!dataset.resources.length}}>
+                                <!--<template is="dom-if" if={{!_hasResources(dataset)}}>-->
+                                    <paper-item id={{index}} title="{{dataset.name}}" on-click="_selectDataset" style$="background: {{_getColorForItem(dataset)}};"><span>{{_getVersionedResourceName(dataset)}}</span></paper-item>
+                                </template>
+
+                                <template is="dom-if" if={{dataset.resources.length}}>
+                                <!--<template is="dom-if" if={{_hasResources(dataset)}}>-->
+
+                                    <paper-submenu id={{index}}>
+                                        <paper-item class="menu-trigger" id={{index}} title="{{dataset.name}}" on-click="_selectDataset" style$="background: {{_getColorForItem(dataset)}};">
+                                            <span>{{_getVersionedResourceName(dataset)}}</span>
+                                            <iron-icon icon="expand-more"></iron-icon>
+                                        </paper-item>
+                                        <paper-menu id="submenu_{{index}}" class="menu-content" selected="0">
+                                            <template is="dom-repeat" items="{{dataset.resources}}" as="resource" index-as="resource_index">
+                                                <paper-item id="resource_{{resource_index}}" title="{{resource}}" on-click="_selectDataset"><span>{{resource}}</span></paper-item>
+                                            </template>
+                                        </paper-menu>
+                                    </paper-submenu>
+                                </template>
+
                             </template>
                         </paper-menu>
                     </div>
@@ -274,49 +322,39 @@
 
                 },
 
-//                _loadTreeMap : function(){
-//                    this.async(function () {
-//                        var h = $("#list_info").height();
-//                        var w = $("#list_info").width();
-//
-//                        var data = JSON.stringify({result : {providers: this.providers, datasets: this.datasets}}).replace(/'/g, "");
-//
-//                        this.$.list_info.innerHTML = "<datasetexplorer-datalet data='"+data+"' width=\""+w+"\" height=\""+h+"\" fields='[\"provider_name\",\"organization_name\",\"package_name\",\"resource_name\",\"url\",\"w\",\"metas\"]'></datasetexplorer-datalet>";
-//                    }, 100);
-//                },
-//
-//                setProviders : function(providers) {
-//                    this.providers = this._copy(providers);
-//                },
-
                 ready : function() {
                     $(this.$.list_container).perfectScrollbar();
-                    $(this.$.info).perfectScrollbar();
+                    $(this.$.info_body).perfectScrollbar();
 
                     this.step = 20;
                     this.version = true;
-                    this.selectedItemId = -1;
+                    this.datasetIndex = -1;
                 },
 
                 attached: function() {
                     this._translate();
                 },
 
+                setProviders : function(providers) {
+                    this.providers = this._copy(providers);
+                },
+
                 setDatasets : function(datasets) {
                     this.datasets = this._copy(datasets);
+                    this.filteredDatasets = this._copy(datasets);
 
                     this.prev = 1;
                     this.next = this.step;
-                    this.length = this.datasets.length;
+                    this.length = this.filteredDatasets.length;
 
                     this.shownPrev = Math.min(this.prev, this.length);
                     this.shownNext = Math.min(this.next, this.length);
-                    this.shownDatasets = this.datasets.slice(this.prev-1, this.next);
+                    this.shownDatasets = this.filteredDatasets.slice(this.prev-1, this.next);
 
                     this.$.info_header.innerHTML = ln["datasetsInfo_" + ln["localization"]];
                     this.$.info_body.innerHTML = "";
                     this.$.spinner.active = false;
-                    this.selectedItemId = -1;
+                    this.datasetIndex = -1;
                     this.fire("datasets-list-controllet_dataset", { dataset: {url:""} });
 
                     this._filter();
@@ -346,10 +384,16 @@
 
                         this.shownPrev = Math.min(this.prev, this.length);
                         this.shownNext = Math.min(this.next, this.length);
-                        this.shownDatasets = this.datasets.slice(this.prev - 1, this.next);
+
+                        this._showDatasets();
+
+//                        this.shownDatasets = [];
+//                        this.async(function () {
+//                            this.shownDatasets = this.filteredDatasets.slice(this.prev - 1, this.next);
+//                        }, 0);
                     }
-                    $(this.$.list_container).animate({ scrollTop: 0}, 0);
-                    this.$.menu.selected = -1;
+//                    $(this.$.list_container).animate({ scrollTop: 0}, 0);
+//                    this.$.menu.selected = -1;
                 },
 
                 _onNextClick : function(){
@@ -359,10 +403,16 @@
 
                         this.shownPrev = Math.min(this.prev, this.length);
                         this.shownNext = Math.min(this.next, this.length);
-                        this.shownDatasets = this.datasets.slice(this.prev - 1, this.next);
+
+                        this._showDatasets();
+
+//                        this.shownDatasets = [];
+//                        this.async(function () {
+//                            this.shownDatasets = this.filteredDatasets.slice(this.prev - 1, this.next);
+//                        }, 0);
                     }
-                    $(this.$.list_container).animate({ scrollTop: 0}, 0);
-                    this.$.menu.selected = -1;
+//                    $(this.$.list_container).animate({ scrollTop: 0}, 0);
+//                    this.$.menu.selected = -1;
                 },
 
                 _filter : function() {
@@ -371,24 +421,60 @@
                             var filter = this.filter.toLowerCase();
 
                             if(filter == "")
-                                this.shownDatasets = this.datasets;
+                                this.filteredDatasets = this.datasets;
                             else
-                                this.shownDatasets = this.datasets.filter(function (el) {
-                                    return (el.resource_name.toLowerCase().indexOf(filter) > -1);
+                                this.filteredDatasets = this.datasets.filter(function (el) {
+                                    if (el.name.toLowerCase().indexOf(filter) > -1)
+                                        return true;
+                                    else if (el.resources != undefined) {
+                                        for(var i in el.resources)
+                                            if(el.resources[i].toLowerCase().indexOf(filter) > -1)
+                                                return true;
+                                    }
+                                    else
+                                        return false;
+
+//                                    return (el.name.toLowerCase().indexOf(filter) > -1);
                                 });
 
                             this.prev = 1;
                             this.next = this.step;
-                            this.length = this.shownDatasets.length;
+                            this.length = this.filteredDatasets.length;
 
                             this.shownPrev = Math.min(this.prev, this.length);
                             this.shownNext = Math.min(this.next, this.length);
-                            this.shownDatasets = this.shownDatasets.slice(this.prev - 1, this.next);
 
-                            $(this.$.list_container).animate({ scrollTop: 0}, 0);
-                            this.$.menu.selected = -1;
+                            this._showDatasets();
+
+//                            this.shownDatasets = [];
+//                            this.async(function () {
+//                                this.shownDatasets = this.filteredDatasets.slice(this.prev - 1, this.next);
+//                            }, 0);
+//
+//                            $(this.$.list_container).animate({ scrollTop: 0}, 0);
+//                            this.$.menu.selected = -1;
+//
+//                            this.async(function () {
+//                                $(this.$.menu).removeHighlight();
+//                                $(this.$.menu).highlight(this.filter);
+//                            }, 100);
                         }
                     }, 0);
+                },
+
+                _showDatasets : function() {
+                    this.shownDatasets = [];
+                    this.async(function () {
+                        this.shownDatasets = this.filteredDatasets.slice(this.prev - 1, this.next);
+                    }, 0);
+
+                    $(this.$.list_container).animate({ scrollTop: 0}, 0);
+                    this.$.menu.selected = -1;
+
+                    this.async(function () {
+                        $(this.$.menu).removeHighlight();
+                        $(this.$.menu).highlight(this.filter);
+                    }, 100);
                 },
 
                 _clearInput : function() {
@@ -406,55 +492,92 @@
                     this.$.filter.setAttribute("label", ln["search_" + ln["localization"]]);
                 },
 
-                _selectDataset : function(){
+                _selectDataset : function(e){
                     var id = this.$.menu.selectedItem.id;
-                    if(id == this.selectedItemId)
+
+                    var resourceIndex = 0;
+                    if (e.target.id.indexOf('resource') > -1)
+                        resourceIndex = e.target.id.split('_')[1];
+                    else if($("#submenu_" + id)[0] != undefined)
+                        resourceIndex =  $("#submenu_" + id)[0].selected;
+
+                    if(id == this.datasetIndex && resourceIndex == this.resourceIndex)
                         return;
 
-                    this.selectedItemId = id;
+                    this.datasetIndex = id;
+                    this.resourceIndex = resourceIndex;
 
                     this._loadDatasetInfo();
 
-                    var dataset = this.shownDatasets[id];
-
-                    var html = '';
-
-                    var users = dataset.users;
-                    var metas = JSON.parse(dataset.metas);
-
-                    if(users) {
-                        html += '<b>users:</b><div class="user_icons" style="display: flex; flex-direction: row;">';
-                            for(var j in users) {
-                                html += '<a href="' + users[j].href + '">';
-                                html += '<div class="user_icon" style="background-image: url(' + users[j].src + '); background-size: 40px 40px; height:40px; width:40px; border-radius: 50%; cursor: pointer; margin-right: 12px;" title="' + users[j].user + '"></div>';
-                                html += '</a>';
-
-                            }
-                        html += '</div>';
-                        html += '<b> version:</b> ' + dataset.version + '<br>';
+                    //suggested
+                    if(this.shownDatasets[id].p == 'suggested') {
+                        this.fire("datasets-list-controllet_dataset", {dataset: {url: this.shownDatasets[id].url}});
+                        return;
                     }
 
-                    for(var i in metas)
-                        html += '<b>' + i + ':</b> ' + metas[i] + '<br>';
+                    var p_type = this.shownDatasets[id].p.split("_")[0];
+                    var p_id = this.shownDatasets[id].p.split("_")[1];
 
+
+                    var p = this.providers.filter(function(a) { return a.id == p_id; })[0];
+                    if(p == undefined)
+                        p = {url: 'localhost'};//cocreated datasets
+
+                    var f = Object.create(providerFactory);
+                    var provider = f.getProviderByType(p_type);
+
+                    var datasetId = this.shownDatasets[id].id;
+                    var datasetUrl = provider.getDatasetUrl(p.url, datasetId);
+
+                    var that = this;
+                    $.ajax({
+                        url: datasetUrl,
+                        dataType: "json",
+                        success: function(dataset){
+
+                            var resourceUrl;
+                            if (dataset.resourceUrl) {
+                                resourceUrl = dataset.resourceUrl;
+                            }
+                            else {
+                                var resourceId = (dataset.result) ? dataset.result.resources[resourceIndex].id : datasetId;
+                                resourceUrl = provider.getResourceUrl(p.url, resourceId);
+                            }
+
+                            that.fire("datasets-list-controllet_dataset", { dataset: { url: resourceUrl } });
+
+                            var html = provider.getHTMLFormattedMetadata(dataset, resourceIndex);
+                            that._show_info(html);
+                        },
+                        error: function(e){
+                            console.log("datasets-list-controllet: " + e.responseJSON);
+                        }
+                    });
+                },
+
+                _show_info : function(html){
 //                    this.$.info_header.innerHTML = this._getVersionedResourceName(dataset);
-                    this.$.info_header.innerHTML = dataset.resource_name;
+//                    this.$.info_header.innerHTML = dataset.name;
                     this.$.info_body.innerHTML = html;
-
-                    this.fire("datasets-list-controllet_dataset", { dataset: dataset });
                 },
 
                 _getVersionedResourceName : function(dataset){
                     if(this.version && dataset.version)
-//                        return dataset.resource_name + ' [' + ln["Version_" + ln["localization"]] + ' ' + dataset.version + ']';
-                        return dataset.resource_name + ' [VER ' + dataset.version + ']';
-                    return dataset.resource_name;
+//                        return dataset.name + ' [' + ln["Version_" + ln["localization"]] + ' ' + dataset.version + ']';
+                        return dataset.name + ' [VER ' + dataset.version + ']';
+                    return dataset.name;
                 },
 
                 _getColorForItem : function(item) {
-                    if(!item.provider_name && !item.version)
+                    if(item.p == 'suggested')
                         return "#FFEB3B";
                 },
+
+//                _hasResources : function(dataset) {
+//                    if(dataset.resources != undefined && dataset.resources.length > 0)
+//                        return true;
+//                    return false;
+//                },
 
                 _copy : function(o) {
                     var out, v, key;

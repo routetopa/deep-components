@@ -8,16 +8,13 @@
 <script src="../shared_js/json-stat.js"></script>
 <script src="eurostat.js"></script>
 <script src="istat.js"></script>
+<script src="spod.js"></script>
 
 <script>
     var providerFactory = {
         getProvider: function(dataUrl) {
             if (dataUrl.indexOf("datastore_search?resource_id") > -1)
                 return new ckan_Provider();
-//            else if (dataUrl.indexOf("datastore/search.json?resource_id") > -1)
-//                return new ckan_Provider();//dkan
-//            else if (dataUrl.indexOf("mysir") > -1)
-//                return new ckan_Provider();//mysir
             else if (dataUrl.indexOf("search?dataset") > -1 || dataUrl.indexOf("search/?dataset") > -1)
                 return new openDataSoft_Provider();
             else if (dataUrl.indexOf("eurostat") > -1 )
@@ -25,7 +22,17 @@
             else if (dataUrl.indexOf("datiopen.istat.it") > -1 )
                 return new istat_Provider();
             else
-                return new generic_Provider();
+                return new generic_Provider();//dkan and mysir --> ckan like
+        },
+        getProviderByType: function(provider_type) {
+            if (provider_type == "CKAN")
+                return new ckan_Provider();
+            else if (provider_type == "ODS")
+                return new openDataSoft_Provider();
+            else if (provider_type == "SPOD")
+                return new SPOD_Provider();
+            else
+                return null;
         }
     };
 
@@ -51,7 +58,6 @@
         return selectedIndices;
     };
 
-
 </script>
 
 <dom-module id="providers-utility-controllet">
@@ -60,7 +66,7 @@
 
     <script>
         Polymer({
-            is : 'providers-utility-controllet',
+            is : 'providers-utility-controllet'
         });
     </script>
 
