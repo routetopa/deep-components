@@ -348,10 +348,16 @@
                             that.localDatasets = localDatasets;
                             that.lastLocalDatasets = [];
                             var name = "";
-                            for(var i in localDatasets)
-                                if(localDatasets[i].name != name) {
-                                    that.lastLocalDatasets.push(localDatasets[i]);
-                                    name = localDatasets[i].name;
+//                            for(var i in localDatasets)
+//                                if(localDatasets[i].name != name) {
+//                                    that.lastLocalDatasets.push(localDatasets[i]);
+//                                    name = localDatasets[i].name;
+//                                }
+                            var version = '';
+                            for(var d of localDatasets)
+                                if(d.version != version) {
+                                    that.lastLocalDatasets.push(d);
+                                    version = d.version;
                                 }
                         },
                         error: function(){
