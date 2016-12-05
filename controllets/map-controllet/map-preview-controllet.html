@@ -1,0 +1,162 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html"/>
+
+<link rel="import" href="../../bower_components/paper-material/paper-material.html"/>
+<link rel="import" href="../../bower_components/paper-menu/paper-menu.html">
+<link rel="import" href="../../bower_components/paper-item/paper-item.html">
+
+<link rel="import" href="../../datalets/openlayers-datalet/openlayers-datalet.html">
+
+<dom-module id="map-preview-controllet">
+
+    <style>
+        :host {
+            background: #FFF;
+        }
+
+        #header {
+            background: #B6B6B6;
+            height: 24px;
+            padding: 12px;
+            text-align: center;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        #datalet_placeholder {
+            position: relative;
+            height: calc(100% - 48px);
+            width: 100%;
+        }
+
+        paper-button {
+            position: absolute;
+            bottom: 16px;
+            right: 11px;
+
+            height: 48px;
+            width: 172px;
+            background-color: #00BCD4;
+            color: white;
+            font-weight: 700;
+            padding: 16px;
+        }
+
+        paper-button:hover {
+            background-color: #00AABF;
+
+            box-shadow: 0px 8px 12px #888;
+            -webkit-box-shadow: 0px 8px 12px #888;
+            -moz-box-shadow: 0px 8px 12px #888;
+        }
+
+        paper-button[disabled] {
+            background-color: #B6B6B6;
+        }
+    </style>
+
+    <template>
+
+        <paper-material elevation="5">
+            <div id="header">[[_translate('title')]]</div>
+            <div id="datalet_placeholder">
+                <!-- "proxyUrl":"http://172.18.13.3/miniProxy.php/"-->
+                <openlayers-datalet id="mapPreview"
+                                    params={"layerSwitcher":true,"zoomOnLayerAdd":false}></openlayers-datalet>
+                <paper-button id="add_button" disabled={{addButtonState.disabled}} hidden={{addButtonState.hidden}}
+                              raised on-click="_addDatalet">{{_translate('add-datalet')}}
+                </paper-button>
+            </div>
+        </paper-material>
+
+        <paper-dialog id="modaldialog" modal>
+            <p class="message" style="overflow: auto;"></p>
+            <div class="buttons">
+                <paper-button dialog-confirm autofocus>close</paper-button>
+            </div>
+        </paper-dialog>
+
+    </template>
+
+    <script>
+        Polymer({
+
+            is: 'map-preview-controllet',
+
+            properties: {
+                addButtonState: {type: Object, value: {disabled: false, hidden: true}}
+            },
+
+            listeners: {},
+
+            ready: function () {
+                $(this.$.menu_container).perfectScrollbar();
+            },
+
+            _translate: function (key) {
+                return getTranslatedText([this.localName, key]);
+            },
+
+            _addDatalet: function () {
+                var dataletParams = this.$.mapPreview.behavior.getParams();
+                this.$.modaldialog.querySelector('.message').innerHTML = JSON.stringify(dataletParams);
+                this.$.modaldialog.open();
+
+                console.log(dataletParams);
+
+                var data = {datalet:"openlayers-datalet", staticData:"", fields:[], params:{params:JSON.stringify(dataletParams)}};
+                console.log(data);
+                this.fire('data-sevc-controllet.dataletCreated', {data : data});
+            },
+
+            getLayers: function () {
+                var layers = [];
+                var olLayers = this.$.mapPreview.behavior.getLayers();
+                for (l = 0; l < olLayers.length; l++) {
+                    layers.push({
+                        title: olLayers[l].title,
+                        url: olLayers[l].url,
+                        element: olLayers[l]
+                    });
+                }
+                return layers;
+            },
+            addLayer: function (params) {
+                params = $.extend(true, params, {group: 'User layers'});
+                if ($.inArray(params.format, ['GeoJSON', 'KML']) != -1) {
+                    params = $.extend(true, {
+                        stroke: {'width': 1, 'color': [51, 153, 204, 1], 'linedash': []},
+                        fill: {'color': [255, 255, 255, 0.4]},
+                        icon: {'color': [51, 153, 204, 1]},
+                        text: {
+                            'field': '',
+                            'align': 'center',    // center , end, left, right, start
+                            'baseline': 'bottom',    // alphabetic , bottom, hanging, ideographic, middle, top
+                            'weight': 'Normal',    // Bold , Normal
+                            'size': 12,
+                            'font': 'Arial', // Arial, Courier New, Verdana, ...
+                            'outline-width': 3,
+                            'outline-color': [255, 255, 255, 1],
+                            'fill-color': [51, 153, 204, 1]
+                        }
+                    }, params)
+                }
+                if ($.inArray(params.format, ['WMS']) != -1) {
+                    params = $.extend(true, params, {requireCapabilities: true});
+                }
+                this.$.mapPreview.behavior.addLayer(params)
+            },
+            removeLayer: function (layer) {
+                this.$.mapPreview.behavior.removeLayer(layer);
+            },
+            zoomToLayer: function (layer) {
+                this.$.mapPreview.behavior.zoomToLayer(layer);
+            },
+            zoomToLayers: function () {
+                this.$.mapPreview.behavior.zoomToLayers();
+            }
+
+        });
+
+    </script>
+
+</dom-module>

@@ -1,0 +1,10 @@
+.ol-mouse-position {
+    background: rgba(0, 60, 136, .5);
+    border-radius: 4px;
+    color: #FFF;
+    font-size: 10px;
+    text-align: center;
+}
+.ol-mouse-position DIV{
+    padding: 3px 6px;
+}
