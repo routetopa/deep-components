@@ -34,7 +34,6 @@
 <link rel="stylesheet" type="text/css" href="static/js/silver-decisions.min.css">
 
 <script type="text/javascript" src="static/js/silver-decisions.min.js"></script>
-<!--<script type="text/javascript" src="static/js/silver-decisions.min.js.map"></script>-->
 
 
 
@@ -83,7 +82,7 @@ Example:
                 if(this._component.jsonTree.description)
                     this._component.description = this._component.jsonTree.description;
 
-                var app = new SilverDecisions('app_container', this._component.config, this._component.jsonTree);
+                var app = new SilverDecisions(this._component.$.app_container, this._component.config, this._component.jsonTree);
             }
         };
 
@@ -100,6 +99,11 @@ Example:
                     type: Object,
                     value: {
                         readOnly: true,
+                        treeDesigner:{
+                            description:{
+                                show: false
+                            }
+                        }
 //                        buttons: {
 //                            new: true,
 //                            save: true,
