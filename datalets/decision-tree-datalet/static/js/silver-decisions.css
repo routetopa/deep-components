@@ -235,7 +235,9 @@
   #silver-decisions #main-region {
     display: flex;
     flex: 1;
-    overflow: hidden; }
+    overflow: hidden;
+    min-height: 60vh;
+  }
     #silver-decisions #main-region #sidebar {
       font-family: Roboto, Helvetica, Arial, sans-serif;
       min-width: 200px;
