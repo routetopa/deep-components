@@ -1,0 +1,293 @@
+<link rel="stylesheet" href="ol-v3.17.1/ol-popup.css"/>
+<dom-module name="openlayers-popup-overlay">
+    <template>
+        <div id="popup" class="ol-popup">
+            <a href="#" id="popup-closer" class="ol-popup-closer"></a>
+            <div id="popup-coords" class="ol-popup-coords"></div>
+            <div id="popup-content" class="ol-popup-content"></div>
+        </div>
+    </template>
+
+    <script>
+
+        Polymer({
+
+            is: 'openlayers-popup-overlay',
+
+            properties: {
+                isOverlay: {type: Boolean, value: true},
+                map: {
+                    type: Object,
+                    observer: '_mapChanged'
+                },
+                overlay: {
+                    type: Object,
+                    value: null
+                }
+            },
+
+            created: function () {
+//                console.log(this.localName + '#' + this.id + ' created ', arguments);
+            },
+            ready: function () {
+//                console.log(this.localName + '#' + this.id + ' ready ', arguments);
+            },
+            attached: function () {
+//                console.log(this.localName + '#' + this.id + ' attached ', arguments);
+            },
+            detached: function () {
+//                console.log(this.localName + '#' + this.id + ' detached ', arguments);
+            },
+            attributeChanged: function () {
+//                console.log(this.localName + '#' + this.id + ' attributeChanged ', arguments);
+            },
+
+            _mapChanged: function () {
+                var self = this;
+                var map = self.map;
+                if (map) {
+
+                    var overlay = this.overlay = new ol.Overlay({element: this.$.popup});
+                    map.addOverlay(overlay);
+
+                    self._popup.init(self);
+
+//                    map.on('pointermove', this._onMapInfo(250));
+                    map.on('click', this._onMapInfo(0));
+
+//                    map.on('pointermove', function(evt) {
+//                        if (evt.dragging) {return;}
+//                        var pixel = map.getEventPixel(evt.originalEvent);
+//                        var hit = map.forEachLayerAtPixel(pixel, function() {
+//                            return true;
+//                        }, null, function(layer) {
+//                            return layer.get('type') != 'base';
+//                        });
+//                        map.getTargetElement().style.cursor = hit ? 'pointer' : '';
+//                    });
+
+                }
+            },
+            detached: function () {
+                if (this.map && this.overlay) {
+                    this.map.removeOverlay(this.overlay);
+                }
+            },
+            _popup: function () {
+                var component, popup, content, closer, coords, self;
+                var _close = function () {
+                    var a = content;
+                    self.hide();
+                    this.blur();
+                    return false;
+                }
+                return {
+                    init: function (c) {
+                        self = this;
+                        component = c;
+                        popup = component.$.popup
+                        coords = popup.querySelector('#popup-coords');
+                        content = popup.querySelector('#popup-content');
+                        closer = popup.querySelector('#popup-closer');
+                        closer.onclick = _close;
+                        $(component.overlay.getElement()).parent().addClass('ol-overlay-popup');
+                    },
+                    hide: function () {
+                        popup.style.display = 'none';
+                        content.innerHTML = '<div class="loading"></div>';
+                    },
+                    show: function () {
+                        var coordinate = component.overlay.getPosition();
+                        var hdms = ol.coordinate.toStringHDMS(
+                                ol.proj.transform(coordinate, component.map.getView().getProjection(), 'EPSG:4326')
+                        );
+                        coords.innerHTML = hdms;
+                        popup.style.display = 'block';
+                    },
+                    setContent: function (html) {
+                        var content = popup.querySelector('#popup-content');
+                        content.innerHTML = html;
+                    }
+                }
+            }(),
+
+            _onMapInfo: function (delay) {
+                var _id = undefined;
+                var evt;
+                var component = this;
+
+                var _requestQueue = function () {
+                    var count = 0
+                    var requests = [];
+                    return {
+                        Insert: function (req) {
+                            count++;
+                            req && requests.push(req);
+                        },
+                        Remove: function () {
+                            count--;
+                            return count == 0 && this.Reset();
+                        },
+                        Reset: function () {
+                            for (r = 0; r < requests.length; r++) {
+                                requests[r].abort();
+                            }
+                            requests = [];
+                            count = 0;
+                            return true;
+                        }
+                    }
+                }()
+
+
+                var _getLayers = function (lyr) {
+                    var layers = [];
+                    lyr.getLayers().forEach(function (lyr) {
+                        if (lyr.getLayers) layers = layers.concat(_getLayers(lyr));
+                        else layers.push(lyr)
+                    });
+                    return layers;
+                }
+
+                var _process = function () {
+                    _id = undefined;
+                    _requestQueue.Reset();
+                    var result = [], handle = _handleResponse();
+                    var layers = new ol.Collection(_getLayers(evt.map).filter(function(l){
+                        return l.get('popup')
+                    }));
+                    if (layers.getLength()) {
+                        component.overlay.setPosition(evt.coordinate);
+                        component._popup.show();
+                        layers.forEach(function (layer) {
+                            if (layer.get('type') == 'base' || !layer.getVisible() || !layer.get('popup')) return;
+                            if (layer instanceof ol.layer.Tile) {
+                                _requestQueue.Insert(
+                                        component._wmsFeaturesInfo.call(component, layer, evt.coordinate, 3, handle)
+                                )
+                            } else if (layer instanceof ol.layer.Vector) {
+                                _requestQueue.Insert();
+                                setTimeout(function () {
+                                    component._featuresAtPixel.call(component, layer, evt.pixel, 3, handle);
+                                }, 0);
+                            }
+
+                        });
+                    }
+
+                }
+
+                var _handleResponse = function () {
+                    var _results = [];
+                    var _isNotEmpty = false;
+                    var _overlay = component.overlay;
+
+                    var _view = function () {
+                        var html = ['<ul>'];
+                        for (r = 0; r < _results.length; r++) {
+                            var result = _results[r];
+                            var layer = result.layer;
+                            var field = layer.get('popup').field;
+                            html.push('<li>', layer.get('title'), '<ul>');
+                            for (f = 0; f < result.features.length; f++) {
+                                var feature = result.features[f];
+                                var props = feature.getProperties();
+                                html.push('<li>', props[field], '</li>');
+                            }
+                            html.push('</ul>', '</li>');
+                        }
+                        html.push('</ul>');
+                        component._popup.setContent(html.join(''));
+                    }
+
+                    return function (result) {
+                        if (result.features.length) {
+//                            component._popup.show();
+                            _isNotEmpty = true;
+                            _results.push(result);
+                        }
+                        if (_requestQueue.Remove()) {
+                            if (_isNotEmpty)
+                                _view();
+                            else
+                                component._popup.setContent('<div class="no_results">nessun risultato</div>');
+                        }
+
+                    }
+                }
+
+                return function (e) {
+                    evt = e;
+                    if (_id) _id = clearTimeout(_id);
+                    component._popup.hide();
+                    if (e.dragging) return;
+                    _id = setTimeout(_process, delay);
+                }
+
+            },
+
+            _wmsFeaturesInfo: function (layer, coordinate, tolerance, callback) {
+//                var layer = layer;
+                var component = this;
+                var map = component.map;
+                var proxy = map.get('proxy') || '';
+                var url = layer.getSource()
+                        .getGetFeatureInfoUrl(
+                                coordinate,
+                                map.getView().getResolution(),
+                                map.getView().getProjection(), {
+                                    'INFO_FORMAT': 'application/json'
+                                });
+
+                var parser = new ol.format.GeoJSON();
+                return $.ajax({
+                    url: proxy + url,
+                    dataType: 'json',
+                    timeout: 15000,
+                    success: function (response) {
+                        var result = parser.readFeatures(response);
+                        callback.call(component, {layer: layer, features: result});
+                    }
+                });
+
+            },
+
+            _featuresAtPixel: function (layer, pixel, tolerance, callback) {
+                var component = this;
+                var map = component.map;
+                var coordinate = map.getCoordinateFromPixel(pixel);
+                var currentExtent = map.getView().calculateExtent(map.getSize());
+//                var searchExtent = map.getCoordinateFromPixel([pixel[0] - tolerance, pixel[1] - tolerance]).concat(
+//                        map.getCoordinateFromPixel([pixel[0] + tolerance, pixel[1] + tolerance]));
+//                console.log('_featuresAtPixel: ', ol.extent.getWidth(searchExtent), layer.get('title'));
+//                console.log('_featuresAtPixel: ', ol.extent.getWidth(currentExtent), layer.get('title'));
+                var features = [];
+
+                function pixelsBetween(p1, p2) {
+                    return Math.sqrt(Math.pow(p1[0] - p2[0], 2) + Math.pow(p1[1] - p2[1], 2));
+                }
+
+//                var f = layer.getSource().getFeaturesAtCoordinate(coordinate);
+
+                layer.getSource().forEachFeatureIntersectingExtent(currentExtent, function (feature) {
+                    var insert = false;
+                    if (!(insert = feature.getGeometry().intersectsExtent(coordinate))) {
+                        var closest = feature.getGeometry().getClosestPoint(coordinate);
+                        var closePixel = map.getPixelFromCoordinate(closest);
+                        var distance = pixelsBetween(pixel, closePixel);
+                    }
+                    if (insert || distance < tolerance) {
+//                        console.log('--> ', feature.id_, distance);
+                        features.push(feature);
+                    }
+                });
+                callback({layer: layer, features: features})
+//                return {layer: layer, features: features};
+            }
+
+        });
+
+    </script>
+
+
+</dom-module>

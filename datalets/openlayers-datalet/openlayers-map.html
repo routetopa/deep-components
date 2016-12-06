@@ -1,0 +1,244 @@
+<dom-module name="openlayers-map">
+    <template>
+        <link rel="stylesheet" href="ol-v3.17.1/ol.css"/>
+        <link rel="stylesheet" href="ol-v3.17.1/ol-custom.css"/>
+        <link rel="stylesheet" href="ol-v3.17.1/ol3-layerswitcher.css"/>
+
+        <style>
+            #mapContainer{height: 100%}
+        </style>
+
+        <div id="mapContainer"></div>
+        <content select="*"></content>
+    </template>
+
+    <script src="ol-v3.17.1/ol-debug.js"></script>
+    <!--<script src="ol-v3.17.1/ol.js"></script>-->
+    <script src="ol-v3.17.1/ol-extend.js"></script>
+    <script src="ol-v3.17.1/ol3-layerswitcher.js"></script>
+
+    <script>
+
+        Polymer({
+
+            is: 'openlayers-map',
+
+            properties: {
+                map: {
+                    type: Object,
+                    value: undefined,
+                },
+                latitude: {
+                    type: Number,
+                    value: 0,
+                    reflectToAttribute: true,
+                    notify: true,
+                    observer: '_viewChanged'
+                },
+                longitude: {
+                    type: Number,
+                    value: 0,
+                    reflectToAttribute: true,
+                    notify: true,
+                    observer: '_viewChanged'
+                },
+                zoom: {
+                    type: Number,
+                    value: 0,
+                    reflectToAttribute: true,
+                    notify: true,
+                    observer: '_viewChanged'
+                },
+                layerSwitcher: {
+                    type: Boolean,
+                    value: true
+                },
+                zoomOnLayerAdd: {
+                    type: Boolean,
+                    value: true
+                },
+                proxy: {
+                    type: String,
+                    value: ''
+                },
+            },
+
+            listeners: {
+                'LayerAdded': '_onLayerAdded',
+                'LayerLoadStart': '_onLayerEvents',
+                'LayerLoadEnd': '_onLayerEvents',
+                'LayerLoadError': '_onLayerEvents'
+            },
+
+            ready: function () {
+                var me = this;
+                this.async(function () {
+                    me.domReady()
+                }, 250);
+            },
+            detached: function () {
+                this._mutationObserver.disconnect();
+            },
+            domReady: function () {
+                var LayerSwitcher = new ol.control.LayerSwitcher();
+
+                var map = this.map = new ol.Map({
+                    projection: ol.proj.get('EPSG:3857'),
+                    layers: [
+                        new ol.layer.Group({
+                            'title': 'Base map',
+                            layers: [
+                                new ol.layer.Tile({
+                                    title: 'OSM Humanitarian', type: 'base', visible: false,
+                                    source: new ol.source.OSM({url: 'https://tile-{a-c}.openstreetmap.fr/hot/{z}/{x}/{y}.png'})
+                                }),
+                                new ol.layer.Tile({
+                                    title: 'OSM Landscape', type: 'base', visible: false,
+                                    source: new ol.source.OSM({url: 'https://{a-c}.tile.thunderforest.com/landscape/{z}/{x}/{y}.png'})
+                                }),
+                                new ol.layer.Tile({
+                                    title: 'OSM Transport', type: 'base', visible: false,
+                                    source: new ol.source.OSM({url: 'https://{a-c}.tile.thunderforest.com/transport/{z}/{x}/{y}.png'})
+                                }),
+                                new ol.layer.Tile({
+                                    title: 'OSM Cycle', type: 'base', visible: false,
+                                    source: new ol.source.OSM({url: 'https://{a-c}.tile.thunderforest.com/cycle/{z}/{x}/{y}.png'})
+                                }),
+                                new ol.layer.Tile({
+                                    title: 'OSM Standard', type: 'base', visible: true,
+                                    source: new ol.source.OSM({url: 'https://{a-c}.tile.openstreetmap.org/{z}/{x}/{y}.png'})
+                                })
+                            ]
+                        })//, overlayGroup
+                    ],
+                    target: this.$.mapContainer,
+                    controls: [
+                        new ol.control.Zoom(),
+                        new ol.control.Attribution({
+                            collapsible: false
+                        }),
+//                        ol.control.defaults({
+//                            attributionOptions: ({
+//                                collapsible: true
+//                            })
+//                        }),
+                        new ol.control.ScaleLine({
+                            minWidth: 100
+                        }),
+                        new ol.control.MousePosition({
+                            projection: 'EPSG:4326',
+                            coordinateFormat: function (coord) {
+                                return '<div>' + ol.coordinate.toStringHDMS(coord) + '</div>';
+                            }
+
+                        })
+                    ],
+                    view: new ol.View({
+                        center: ol.proj.transform([this.longitude, this.latitude], 'EPSG:4326', 'EPSG:3857'),
+                        zoom: this.zoom
+                    }),
+                });
+
+                this.proxy && this.map.set('proxy', this.proxy);
+                this.layerSwitcher && map.addControl(LayerSwitcher);
+
+                this.fire('map-ready');
+
+                map.on('moveend', function (e) {
+                    this._ignoreViewChange = true;
+                    var view = map.getView();
+                    var coordinate = ol.proj.transform(view.getCenter(), 'EPSG:3857', 'EPSG:4326')
+                    this.longitude = coordinate[0];
+                    this.latitude = coordinate[1];
+                    this.zoom = view.getZoom();
+                    this._ignoreViewChange = false;
+                }, this);
+
+                /*
+                 map.on(['change:layer_loadstart', 'change:layer_loadend', 'change:layer_loaderror'], function (evt) {
+                 // evt.key , evt.target.get(evt.key)
+                 console.info('loadstart');
+                 });
+                 map.on(['change:layer_added'], function (evt) {
+                 // evt.key , evt.target.get(evt.key)
+                 console.info('loadstart');
+                 });
+                 */
+
+                this._registerMapOnChildren();
+                this._mutationObserver = new MutationObserver(this._registerMapOnChildren.bind(this));
+                this._mutationObserver.observe(this, {childList: true});
+            },
+            zoomToLayer: function (layer) {
+                var layers = new ol.Collection(this._getLayers(this.map));
+                layers.forEach(function (l) {
+                    if (l === layer.layer) {
+                        var extent = l.getExtent() ? l.getExtent() : l.getSource().getExtent();
+//                        this.map.getView().fit(extent, this.map.getSize());
+                        this._zoomToExtent(extent, true);
+                    }
+                }.bind(this));
+            },
+
+            zoomToLayers: function () {
+                var layers = new ol.Collection(this._getLayers(this.map).filter(function (l) {
+                    return l.get('type') != 'base' && l.getVisible();
+                }));
+                var layers_extent = ol.extent.createEmpty();
+                layers.forEach(function (layer) {
+                    this._layers_extent = ol.extent.extend(layers_extent,
+                            layer.getExtent() ? layer.getExtent() : layer.getSource().getExtent()
+                    );
+                }.bind(this));
+//                layers.getLength() && this.map.getView().fit(layers_extent, this.map.getSize());
+                layers.getLength() && this._zoomToExtent(layers_extent, true);
+
+            },
+
+            _zoomToExtent(extent, animated){
+                if (animated) {
+                    var pan = ol.animation.pan({duration: 500, source: this.map.getView().getCenter()})
+                    var zoom = ol.animation.zoom({duration: 500, resolution: this.map.getView().getResolution()})
+                    this.map.beforeRender(pan, zoom)
+                }
+                var size = ol.extent.getSize(extent);
+                var buffer = Math.max(size[0], size[1]) / 10 || 100;
+                this.map.getView().fit(ol.extent.buffer(extent, buffer), this.map.getSize());
+            },
+
+            _getLayers: function (lyr) {
+                var layers = [];
+                lyr.getLayers().forEach(function (lyr) {
+                    if (lyr.getLayers) layers = layers.concat(this._getLayers(lyr));
+                    else layers.push(lyr)
+                }.bind(this));
+                return layers;
+            },
+
+            _viewChanged: function (newValue, oldValue) {
+                if (this.map && !this._ignoreViewChange) {
+                    setTimeout(function () {
+                        this.map.getView().setCenter(ol.proj.transform([this.longitude, this.latitude], 'EPSG:4326', 'EPSG:3857'));
+                        this.map.getView().setZoom(this.zoom);
+                    }.bind(this), 1);
+                }
+            }
+            ,
+            _registerMapOnChildren: function () {
+                for (var i = 0; i < this.children.length; i++) {
+                    this.children[i].map = this.map;
+                }
+            }
+            ,
+            _onLayerAdded: function (evt) {
+                this.zoomOnLayerAdd && this.zoomToLayers();
+            },
+            _onLayerEvents: function (evt, params) {
+//                this.fire('layer-events', $.extend({type: evt.type}, params));
+            }
+
+        });
+
+    </script>
+
+</dom-module>

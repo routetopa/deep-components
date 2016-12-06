@@ -1,0 +1,123 @@
+<dom-module name="openlayers-vector-layer">
+    <style>
+        :host {
+            display: none;
+        }
+    </style>
+    <template>
+        <content select="*"></content>
+    </template>
+
+    <script>
+
+        Polymer({
+
+            is: 'openlayers-vector-layer',
+            behaviors: [openlayersMap.layer],
+            properties: {
+                featuresCount: {type: Number, value: null},
+                geometryType: {type: String, value: null},  // Point LineString LinearRing Polygon MultiPoint
+                                                            // MultiLineString MultiPolygon GeometryCollection Circle
+                geometryName: {type: String, value: null},
+                propertiesName: {type: Array, value: []}
+            },
+
+            _mapChanged: function () {
+                var self = this;
+                var layerGroup = self.layerGroup;
+                var map = self.map;
+                if (map) {
+                    var proxy = map.get('proxy') || '';
+                    self.fire('LayerLoadStart', {title: self.title, url: self.url});
+
+                    $.ajax({
+                        url: proxy + this.url,
+                        timeout: 30000,
+                        xhr: function () {
+                            var xhr = $.ajaxSettings.xhr();
+                            xhr.upload.onprogress = function (evt) {
+                            };
+                            xhr.upload.onload = function () {
+                            };
+                            xhr.onprogress = function (evt) {
+//                                self.fire('LayerLoadProgress', {
+//                                    title: self.title,
+//                                    url: self.url,
+//                                    perc: (evt.total ? evt.loaded / evt.total : 1) * 100
+//                                });
+//                                console.log('download progress', (evt.total ? evt.loaded / evt.total : 1) * 100, self.title)
+                            };
+                            return xhr;
+                        },
+                        success: function (data, textStatus, jqXHR) {
+                            self.fire('LayerLoadEnd', {title: self.title, url: self.url, data: data});
+                            try {
+                                var reader = new ol.format[self.format]({extractStyles: false});
+                                var features = reader.readFeatures(data, {
+                                    dataProjection: reader.readProjection(data),
+                                    featureProjection: map.getView().getProjection()
+                                });
+
+                                if (features.length) {
+                                    self.featuresCount = features.length;
+                                    self.geometryType = features[0].getGeometry().getType();
+                                    self.geometryName = features[0].getGeometryName();
+                                    self.propertiesName = features[0].getKeys();
+
+                                    var vectorSource = new ol.source.Vector({features: features});
+                                    var vectorLayer = self.layer = new ol.layer.Vector({
+                                        title: self.title,
+                                        source: vectorSource,
+                                        popup: self.popup,
+                                        visible: self.visible,
+                                        opacity: self.opacity
+                                    });
+
+                                    self._addListeners();
+                                    self._registerLayerOnChildren.call(self);
+
+                                    if (layerGroup)
+                                        layerGroup.getLayers().push(vectorLayer);
+                                    else
+                                        map.addLayer(vectorLayer);
+
+                                    self.fire('LayerAdded', {title: self.title, url: self.url, layer: vectorLayer});
+
+                                } else {
+                                    self.fire('LayerLoadError', {
+                                        title: self.title,
+                                        url: self.url,
+                                        error: 'No features loaded'
+                                    });
+                                }
+
+                            } catch (ex) {
+                                var msg = 'Invalid ' + self.format + ' data.';
+                                self.fire('LayerLoadError', {title: self.title, url: self.url, error: msg});
+                            }
+                        },
+                        error: function (jqXHR, textStatus, errorThrown) {
+                            self.fire('LayerLoadError', {title: self.title, url: self.url, error: errorThrown});
+                        }
+                    });
+                }
+            },
+
+            getInfo: function (callback) {
+                if (this.layer) {
+                    callback({
+                        featuresCount: this.featuresCount,
+                        geometryType: this.geometryType,
+                        geometryName: this.geometryName,
+                        propertiesName: this.propertiesName
+                    });
+                    return true;
+                }
+                return false;
+            }
+        });
+
+    </script>
+
+
+</dom-module>

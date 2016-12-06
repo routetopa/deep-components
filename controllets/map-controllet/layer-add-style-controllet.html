@@ -1,0 +1,404 @@
+<dom-module id="layer-add-style-controllet">
+
+    <style>
+        :host {
+            --paper-dropdown-menu-icon: {
+                color: #000000;
+            };
+            --paper-dropdown-menu-ripple: {
+                color: #FFFFFF;
+            };
+            --paper-item-focused-before: {
+                background: none;
+            };
+            --paper-menu-focused-item-after: {
+                background: none;
+            };
+        }
+
+        paper-dropdown-menu {
+            --paper-input-container-focus-color: #2196F3;
+            width: 20%;
+            margin-left: 15px;
+        }
+
+        paper-dropdown-menu paper-item {
+            padding: 0px 10px;
+            font-size: 14px;
+            min-height: 24px;
+        }
+
+        paper-dropdown-menu paper-item.iron-selected {
+        }
+
+        paper-dropdown-menu paper-menu {
+            padding: 0px;
+        }
+
+        paper-slider {
+            width: 24%;
+            margin-top: 12px;
+            height: 30px;
+            position: relative;
+            top: 12px;
+        }
+
+        paper-slider.red {
+            --paper-slider-knob-color: var(--paper-red-500);
+            --paper-slider-active-color: var(--paper-red-500);
+        }
+
+        paper-slider.green {
+            --paper-slider-knob-color: var(--paper-green-500);
+            --paper-slider-active-color: var(--paper-green-500);
+        }
+
+        paper-slider.blue {
+            --paper-slider-knob-color: var(--paper-light-blue-500);
+            --paper-slider-active-color: var(--paper-light-blue-500);
+        }
+
+        paper-slider.alpha {
+            --paper-slider-knob-color: #BBB;
+            --paper-slider-active-color: #BBB;
+        }
+        #Styles paper-menu {
+            padding: 0px;
+            cursor: pointer;
+        }
+        #Styles paper-item {
+            padding: 2px 0px;
+            border-bottom: 1px #eee solid;
+        }
+        #Styles paper-item:hover {
+            font-style: italic;
+            border-bottom: 2px #eee solid;
+            background-color: #f7f7f7;
+        }
+        .row {
+            height: 60px;
+        }
+
+        .row-group {
+            margin: 3px 0px 0px 5px;
+            border-bottom: 1px #EEE solid;
+        }
+
+        .group-header {
+            margin-bottom: 2px;
+            line-height: 20px;
+        }
+
+        .row LABEL {
+            color: #757575;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            font-family: 'Roboto', 'Noto', sans-serif;
+            -webkit-font-smoothing: antialiased;
+            font-size: 12px;
+            font-weight: 400;
+            line-height: 24px;
+            position: absolute;
+            margin-left: 15px;
+            margin-top: 10px;
+        }
+
+    </style>
+
+    <template>
+        <div id="Stroke" class="row-group" hidden="true">
+            <div class="group-header">{{_translate('stroke-style')}}</div>
+
+            <div id="StrokeWidth" class="row">
+                <label>{{_translate('stroke-width')}}</label>
+                <paper-slider value={{stroke_width}} max="10" pin></paper-slider>
+            </div>
+
+            <div id="StrokeColor" class="row">
+                <label>{{_translate('stroke-color-red')}}</label>
+                <paper-slider class="red" value={{stroke_color.red}} max="255" pin></paper-slider>
+                <label>{{_translate('stroke-color-green')}}</label>
+                <paper-slider class="green" value={{stroke_color.green}} max="255" pin></paper-slider>
+                <label>{{_translate('stroke-color-blue')}}</label>
+                <paper-slider class="blue" value={{stroke_color.blue}} max="255" pin></paper-slider>
+                <label>{{_translate('stroke-color-alpha')}}</label>
+                <paper-slider class="alpha" value={{stroke_color.alpha}} max="1" step="0.1" pin></paper-slider>
+            </div>
+        </div>
+
+        <div id="Fill" class="row-group" hidden="true">
+            <div class="group-header">{{_translate('fill-style')}}</div>
+
+            <div id="FillColor" class="row">
+                <label>{{_translate('fill-color-red')}}</label>
+                <paper-slider class="red" value={{fill_color.red}} max="255" pin></paper-slider>
+                <label>{{_translate('fill-color-green')}}</label>
+                <paper-slider class="green" value={{fill_color.green}} max="255" pin></paper-slider>
+                <label>{{_translate('fill-color-blue')}}</label>
+                <paper-slider class="blue" value={{fill_color.blue}} max="255" pin></paper-slider>
+                <label>{{_translate('fill-color-alpha')}}</label>
+                <paper-slider class="alpha" value={{fill_color.alpha}} max="1" step="0.1" pin></paper-slider>
+            </div>
+        </div>
+
+        <div id="Icon" class="row-group" hidden="true">
+            <div class="group-header">{{_translate('point-style')}}</div>
+
+            <div id="IconColor" class="row">
+                <label>{{_translate('icon-color-red')}}</label>
+                <paper-slider class="red" value={{icon_color.red}} max="255" pin></paper-slider>
+                <label>{{_translate('icon-color-green')}}</label>
+                <paper-slider class="green" value={{icon_color.green}} max="255" pin></paper-slider>
+                <label>{{_translate('icon-color-blue')}}</label>
+                <paper-slider class="blue" value={{icon_color.blue}} max="255" pin></paper-slider>
+                <label>{{_translate('icon-color-alpha')}}</label>
+                <paper-slider class="alpha" value={{icon_color.alpha}} max="1" step="0.1" pin></paper-slider>
+            </div>
+        </div>
+
+        <div id="Text" class="row-group" hidden="true">
+            <div class="group-header">
+                <paper-checkbox id="TextStyleCheck" on-change="_onTextStyleChecked">{{_translate('label-style')}}
+                </paper-checkbox>
+            </div>
+
+            <div class="row">
+                <paper-dropdown-menu label="{{_translate('property-name')}}" required>
+                    <paper-menu class="dropdown-content" selected="{{text_field.Selected}}">
+                        <template is="dom-repeat" items={{text_field.Accepted}}>
+                            <paper-item>{{item}}</paper-item>
+                        </template>
+                    </paper-menu>
+                </paper-dropdown-menu>
+                <paper-dropdown-menu label="{{_translate('font-name')}}">
+                    <paper-menu class="dropdown-content" selected="{{text_font.Selected}}">
+                        <template is="dom-repeat" items={{text_font.Accepted}}>
+                            <paper-item>{{item}}</paper-item>
+                        </template>
+                    </paper-menu>
+                </paper-dropdown-menu>
+
+                <label>{{_translate('font-size')}}</label>
+                <paper-slider value={{text_size}} min="8" max="20" pin></paper-slider>
+            </div>
+            <div class="row">
+                <label>{{_translate('text-color-red')}}</label>
+                <paper-slider class="red" value={{text_fill_color.red}} max="255" pin></paper-slider>
+                <label>{{_translate('text-color-green')}}</label>
+                <paper-slider class="green" value={{text_fill_color.green}} max="255" pin></paper-slider>
+                <label>{{_translate('text-color-blue')}}</label>
+                <paper-slider class="blue" value={{text_fill_color.blue}} max="255" pin></paper-slider>
+                <label>{{_translate('text-color-alpha')}}</label>
+                <paper-slider class="alpha" value={{text_fill_color.alpha}} max="1" step="0.1" pin></paper-slider>
+            </div>
+
+        </div>
+
+        <div id="Styles" class="row-group" hidden="false">
+            <paper-menu class="dropdown-content" selected="{{styles.Selected}}">
+                <template is="dom-repeat" items={{styles.List}} as="style">
+                    <paper-item><img src="{{style.LegendUrl}}">{{style.Title}}
+                    </paper-item>
+                </template>
+            </paper-menu>
+        </div>
+
+    </template>
+
+    <script>
+        Polymer({
+
+            is: 'layer-add-style-controllet',
+
+            properties: {
+                layer: {
+                    type: Object,
+                    value: undefined,
+                    observer: '_onLayerChange'
+                },
+                stroke_width: {type: Number, value: 1},
+                stroke_color: {type: Object, value: {"red": 0, "green": 0, "blue": 0, "alpha": 1}},
+                fill_color: {type: Object, value: {"red": 0, "green": 0, "blue": 0, "alpha": 1}},
+                icon_color: {type: Object, value: {"red": 0, "green": 0, "blue": 0, "alpha": 1}},
+                text_field: {type: Object, value: {Selected: undefined, Accepted: []}},
+                text_font: {type: Object, value: {Selected: undefined, Accepted: ['Arial', 'Courier New', 'Verdana']}},
+                text_size: {type: Number, value: 1},
+                text_weight: {type: Object, value: {Selected: undefined, Accepted: ['Bold', 'Normal']}},
+                text_align: {
+                    type: Object,
+                    value: {
+                        Selected: undefined,
+                        Accepted: ['center', 'end', 'left', 'right', 'start']
+                    }
+                },
+                text_baseline: {
+                    type: Object,
+                    value: {
+                        Selected: undefined,
+                        Accepted: ['alphabetic', 'bottom', 'hanging', 'ideographic', 'middle', 'top']
+                    }
+                },
+                text_outline_width: {type: Number, value: 2},
+                text_outline_color: {type: Object, value: {"red": 0, "green": 0, "blue": 0, "alpha": 1}},
+                text_fill_color: {type: Object, value: {"red": 0, "green": 0, "blue": 0, "alpha": 1}},
+
+                edit: {type: Boolean, value: false},
+
+                styles: {
+                    type: Object,
+                    value: {
+                        Selected: '-1',
+                        List: []
+                    }
+                }
+            },
+            observers: [
+                '_onStrokeWidthChange(stroke_width)',
+                '_onStrokeColorChange(stroke_color.red,stroke_color.green,stroke_color.blue,stroke_color.alpha)',
+                '_onFillColorChange(fill_color.red,fill_color.green,fill_color.blue,fill_color.alpha)',
+                '_onIconColorChange(icon_color.red,icon_color.green,icon_color.blue,icon_color.alpha)',
+                '_onTextFieldChange(text_field.Selected)',
+                '_onTextFontChange(text_font.Selected)',
+                '_onTextSizeChange(text_size)',
+                '_onTextFillColorChange(text_fill_color.red,text_fill_color.green,text_fill_color.blue,text_fill_color.alpha)',
+                '_onStylesChange(styles.Selected)'
+            ],
+
+            attached: function () {
+                $('paper-material.dropdown-content,paper-material.dropdown-content').perfectScrollbar();
+            },
+            isValid: function (callback) {
+                callback({valid: true});
+            },
+            _translate: function (key) {
+                return getTranslatedText([this.localName, key]);
+            },
+
+            _onStrokeWidthChange: function (width) {
+                if (this.layer)
+                    this.layer.querySelector('openlayers-style-stroke').width = width;
+            },
+            _onStrokeColorChange: function (r, g, b, a) {
+                if (this.layer)
+                    this.layer.querySelector('openlayers-style-stroke').color = [r, g, b, a];
+            },
+            _onFillColorChange: function (r, g, b, a) {
+                if (this.layer)
+                    this.layer.querySelector('openlayers-style-fill').color = [r, g, b, a];
+            },
+            _onIconColorChange: function (r, g, b, a) {
+                if (this.layer)
+                    this.layer.querySelector('openlayers-style-icon').color = [r, g, b, a];
+            },
+            _onTextStyleChecked: function () {
+                var rows = this.$.Text.querySelectorAll('.row');
+                for (r = 0; r < rows.length; r++) {
+                    rows[r].hidden = !this.$.TextStyleCheck.checked;
+                }
+                if (!this.$.TextStyleCheck.checked) {
+                    this.text_field = {Selected: -1, Accepted: this.text_field.Accepted};
+                    this.layer.querySelector('openlayers-style-text').field = '';
+                }
+            },
+            _onTextFieldChange: function (field) {
+                if (this.layer && field)
+                    this.layer.querySelector('openlayers-style-text').field = this.text_field.Accepted[field];
+            },
+            _onTextFontChange: function (font) {
+                if (this.layer && font)
+                    this.layer.querySelector('openlayers-style-text').font = this.text_font.Accepted[font];
+            },
+            _onTextSizeChange: function (size) {
+                if (this.layer && size)
+                    this.layer.querySelector('openlayers-style-text').size = size;
+            },
+            _onTextFillColorChange: function (r, g, b, a) {
+                if (this.layer)
+                    this.layer.querySelector('openlayers-style-text').set('fill-color', [r, g, b, a]);
+            },
+            _onStylesChange: function (selectedindex) {
+                if (this.layer && selectedindex != -1) {
+                    this.layer.set('layer-style', this.styles.List[selectedindex].Name);
+                }
+            },
+            _onLayerChange: function (layer) {
+                if (layer) {
+                    var gn = layer.geometryType;
+                    var pn = layer.propertiesName;
+
+                    var stroke = layer.querySelector('openlayers-style-stroke');
+                    if (stroke && $.inArray(gn, ['LineString', 'LinearRing', 'Polygon', 'MultiLineString', 'MultiPolygon']) != -1) {
+                        this.$.Stroke.hidden = false;
+                        this.stroke_width = stroke.width;
+                        this.stroke_color = {
+                            red: stroke.color[0],
+                            green: stroke.color[1],
+                            blue: stroke.color[2],
+                            alpha: stroke.color[3],
+                        };
+                    } else this.$.Stroke.hidden = true;
+
+                    var fill = layer.querySelector('openlayers-style-fill');
+                    if (fill && $.inArray(gn, ['Polygon', 'MultiPolygon']) != -1) {
+                        this.$.Fill.hidden = false;
+                        this.fill_color = {
+                            red: fill.color[0],
+                            green: fill.color[1],
+                            blue: fill.color[2],
+                            alpha: fill.color[3],
+                        };
+                    } else this.$.Fill.hidden = true;
+
+                    var icon = layer.querySelector('openlayers-style-icon');
+                    if (icon && $.inArray(gn, ['Point', 'MultiPoint']) != -1) {
+                        this.$.Icon.hidden = false;
+                        this.icon_color = {
+                            red: icon.color[0],
+                            green: icon.color[1],
+                            blue: icon.color[2],
+                            alpha: icon.color[3],
+                        };
+                    } else this.$.Icon.hidden = true;
+
+                    var text = layer.querySelector('openlayers-style-text');
+                    if (text) {
+                        this.$.Text.hidden = false;
+                        this.text_field = {
+                            Selected: $.inArray(text.field, pn),
+                            Accepted: pn
+                        };
+                        this.$.TextStyleCheck.checked = text.field ? 'true' : false;
+                        this._onTextStyleChecked()
+                        this.text_font = {
+                            Selected: $.inArray(text.font, this.text_font.Accepted),
+                            Accepted: this.text_font.Accepted
+                        };
+                        this.text_size = text.size;
+                        this.text_fill_color = {
+                            red: text.get('fill-color')[0],
+                            green: text.get('fill-color')[1],
+                            blue: text.get('fill-color')[2],
+                            alpha: text.get('fill-color')[3],
+                        };
+
+                    } else this.$.Text.hidden = true;
+
+                    if (layer.getStyles) {
+                        this.$.Styles.hidden = false;
+                        this.styles = layer.getStyles();
+                    } else this.$.Styles.hidden = true;
+                }
+            },
+
+            _translate: function (key) {
+                return getTranslatedText([this.localName, key]);
+            },
+            _reset: function () {
+            },
+
+        });
+
+    </script>
+
+</dom-module>

@@ -1,0 +1,195 @@
+<script src="../shared_js/perfect-scrollbar/js/min/perfect-scrollbar.jquery.min.js"></script>
+<link rel="stylesheet" href="../shared_js/perfect-scrollbar/css/perfect-scrollbar.min.css">
+
+<script src="controllet_ln.js"></script>
+
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+
+<link rel="import" href="../../bower_components/neon-animation/neon-animation.html">
+<link rel="import" href="../../bower_components/neon-animation/neon-animatable.html">
+<link rel="import" href="../../bower_components/neon-animation/neon-animations.html">
+<link rel="import" href="../../bower_components/paper-material/paper-material.html"/>
+<link rel="import" href="../../bower_components/paper-menu/paper-menu.html">
+<link rel="import" href="../../bower_components/paper-item/paper-item.html">
+<link rel="import" href="../../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../../bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
+<link rel="import" href="../../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../../bower_components/paper-input/paper-textarea.html">
+<link rel="import" href="../../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../../bower_components/paper-dialog/paper-dialog.html">
+<link rel="import" href="../../bower_components/paper-slider/paper-slider.html">
+<link rel="import" href="../../bower_components/paper-color-picker/paper-color-input.html">
+<link rel="import" href="../../bower_components/paper-spinner/paper-spinner.html">
+<link rel="import" href="../../bower_components/paper-checkbox/paper-checkbox.html">
+<link rel="import" href="../../bower_components/iron-icons/iron-icons.html">
+
+<link rel="import" href="layers-list-controllet.html"/>
+<link rel="import" href="layers-add-controllet.html"/>
+<link rel="import" href="map-preview-controllet.html"/>
+
+<script>
+    getTranslatedText = function (key) {
+        var path = ['mc'].concat(key,ln["localization"]).join('.');
+        return ln[path] || path.toString();
+    }
+</script>
+
+<dom-module id="map-controllet">
+    <style>
+        :host {
+            font-family: 'Roboto', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            font-size: 16px;
+            /*line-height: 24px;*/
+        }
+
+        DIV#spinner_container {
+            position: absolute;
+            /* border: 1px solid red; */
+            width: 100%;
+            height: 100%;
+            background: #000;
+            z-index: 1;
+            opacity: 0.3;
+        }
+
+        paper-spinner {
+            height: 64px;
+            width: 64px;
+            --paper-spinner-stroke-width: 8px;
+            --paper-spinner-layer-1-color: #2196F3;
+            --paper-spinner-layer-2-color: #F44336;
+            --paper-spinner-layer-3-color: #FFEB3B;
+            --paper-spinner-layer-4-color: #4CAF50;
+            left: calc(50% - 32px);
+            top: calc(50% - 32px);
+        }
+
+        #container {
+            height: 100%;
+            width: 100%;
+            position: absolute;
+        }
+
+        #container .left {
+            float: left;
+            height: 100%;
+            width: 60%;
+            min-width: 192px;
+            overflow: hidden;
+        }
+
+        #container .right {
+            float: left;
+            height: 100%;
+            width: calc(40% - 24px);
+            margin-left: 24px;
+        }
+
+        neon-animated-pages {
+            height: 100%;
+        }
+
+        ::content paper-material{
+            height: 100%;
+        }
+
+    </style>
+    <template>
+        <div id="container">
+
+            <div class="left">
+                <neon-animated-pages id="pages" selected="[[selected]]" entry-animation="[[entryAnimation]]"
+                                     exit-animation="[[exitAnimation]]">
+                    <neon-animatable>
+                        <layers-list-controllet></layers-list-controllet>
+                    </neon-animatable>
+                    <neon-animatable>
+                        <div id="spinner_container" hidden>
+                            <paper-spinner id="layer_add_url_spinner"></paper-spinner>
+                        </div>
+                        <layers-add-controllet></layers-add-controllet>
+                    </neon-animatable>
+                </neon-animated-pages>
+            </div>
+            <div class="right">
+                <map-preview-controllet></map-preview-controllet>
+            </div>
+        </div>
+
+    </template>
+
+    <script>
+
+        Polymer({
+
+            is: 'map-controllet',
+
+            listeners: {
+                'layers-load-start': '_onLayerLoad',
+                'layers-load-end': '_onLayerLoad'
+            },
+
+            properties: {
+                deepUrl: {
+                    type: String,
+                    value: undefined
+                },
+
+                localization: {
+                    type: String,
+                    value: "en"
+                },
+
+                selected: {type: Number, value: 0},
+                entryAnimation: {type: String, value: ''},
+                exitAnimation: {type: String, value: ''},
+
+            },
+
+            ready: function () {
+                ln["localization"] = this.localization;
+            },
+            _onLayerLoad: function (e) {
+                var state = (e.type === 'layers-load-start') ? true : false;
+                this.$.spinner_container.hidden = !state;
+                this.$.layer_add_url_spinner.active = state;
+            },
+            updateLayerList: function () {
+                var layers = this.querySelector('map-preview-controllet').getLayers();
+                this.querySelector('layers-list-controllet').layers = layers;
+                this.updateAddButtonState();
+            },
+            updateAddButtonState: function () {
+                this.querySelector('map-preview-controllet').addButtonState = {
+                    hidden: (this.selected != 0),
+                    disabled: (this.querySelector('layers-list-controllet').layers.length == 0)
+                }
+            },
+            slideToAddLayer: function (layer) {
+                var current_page = this.selected;
+                var total_pages = this.$.pages.children.length - 1;
+                this.entryAnimation = 'slide-from-right-animation';
+                this.exitAnimation = 'slide-left-animation';
+                this.querySelector('layers-add-controllet').set('edit',layer ? true: false);
+                layer && this.querySelector('layers-add-controllet').set('layer',layer);
+                layer && this.querySelector('map-preview-controllet').zoomToLayer(layer);
+                this.selected = current_page === (pages.length - 1) ? current_page : (current_page + 1);
+                this.updateAddButtonState();
+            },
+            slideToLayerList: function () {
+                this.updateLayerList();
+                var current_page = this.selected;
+                var total_pages = this.$.pages.children.length - 1;
+                this.entryAnimation = 'slide-from-left-animation';
+                this.exitAnimation = 'slide-right-animation';
+                this.selected = current_page === 0 ? 0 : (current_page - 1);
+                this.querySelector('map-preview-controllet').zoomToLayers();
+                this.updateAddButtonState();
+            }
+
+
+        });
+
+    </script>
+
+</dom-module>

@@ -72,6 +72,9 @@ Example:
 
         var DecisionTreeBehavior = {
 
+            redraw: function(){
+            },
+
             requestData: function(){
                 this.presentData();
             },
@@ -82,6 +85,7 @@ Example:
                 if(this._component.jsonTree.description)
                     this._component.description = this._component.jsonTree.description;
 
+                //var app = new SilverDecisions('app_container', this._component.config, this._component.jsonTree);
                 var app = new SilverDecisions(this._component.$.app_container, this._component.config, this._component.jsonTree);
             }
         };
@@ -130,6 +134,11 @@ Example:
                     value: "false"
                 },
 
+                data: {
+                    type: String,
+                    value: ""
+                },
+
                 /**
                  * Control the export menu
                  * xxxx BITMASK. FROM RIGHT : HTML, PNG, RTF, MY SPACE (eg. 1111 show all, 0000 hide all)
@@ -140,7 +149,7 @@ Example:
                  */
                 export_menu : {
                     type  : Number,
-                    value : 15 // xxxx BITMASK. FROM RIGHT : HTML, PNG, RTF, MY SPACE (eg. 1111 show all, 0000 hide all)
+                    value : 0 // xxxx BITMASK. FROM RIGHT : HTML, PNG, RTF, MY SPACE (eg. 1111 show all, 0000 hide all)
                 }
             },
 
