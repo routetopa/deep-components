@@ -28,7 +28,7 @@
 
                 component.$.olMap.proxy = params.proxyUrl || '';
                 component.$.olMap.layerSwitcher = params.layerSwitcher != undefined ? params.layerSwitcher : true;
-                component.$.olMap.zoomOnLayerAdd = params.zoomOnLayerAdd != undefined ? params.zoomOnLayerAdd : true;
+                component.$.olMap.zoomOnLayerAdd = /*params.zoomOnLayerAdd*/ component.zoomOnLayerAdd != undefined ? /*params.zoomOnLayerAdd*/ component.zoomOnLayerAdd : true;
 
                 var layers = params.layers || [];
                 for (var l = layers.length - 1; l >= 0; l--) {
@@ -215,6 +215,12 @@
                     type: Object,
                     value: {}
                 },
+
+                zoomOnLayerAdd: {
+                    type: Boolean,
+                    value: true
+                },
+
                 /**
                  * Control the export menu
                  * xxxx BITMASK. FROM RIGHT : HTML, PNG, RTF, MY SPACE (eg. 1111 show all, 0000 hide all)

@@ -103,8 +103,7 @@
 
                 console.log(dataletParams);
 
-                var data = {datalet:"openlayers-datalet", staticData:"", fields:[], params:{params:JSON.stringify(dataletParams)}};
-                console.log(data);
+                var data = {datalet:"openlayers-datalet", staticData:"", fields:[], params:{params:JSON.stringify(dataletParams), "zoom-on-layer-add":true}};
                 this.fire('data-sevc-controllet.dataletCreated', {data : data});
             },
 
