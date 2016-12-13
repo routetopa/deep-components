@@ -1,0 +1,344 @@
+<script>
+    var openlayersMap = openlayersMap || {};
+    window.openlayersMap.layersStyle = {
+        properties: {
+            layer: {
+                type: Object,
+                observer: '_layerChanged'
+            },
+        },
+        _styleFunction: function (feature, resolution) {
+            var t = (typeof this.layer._text == 'function') ? this.layer._text.apply(this.layer._textElement, arguments) : null;
+            var styles = {
+                'Point': new ol.style.Style({
+                    image: this.layer._image,
+                    text: t
+                }),
+                'LineString': new ol.style.Style({
+                    stroke: this.layer._stroke,
+                    text: t
+                }),
+                'MultiLineString': new ol.style.Style({
+                    stroke: this.layer._stroke,
+                    text: t
+                }),
+                'MultiPoint': new ol.style.Style({
+                    image: this.layer._image,
+                    text: t
+                }),
+                'MultiPolygon': new ol.style.Style({
+                    stroke: this.layer._stroke,
+                    fill: this.layer._fill,
+                    text: t
+                }),
+                'Polygon': new ol.style.Style({
+                    stroke: this.layer._stroke,
+                    fill: this.layer._fill,
+                    text: t
+                }),
+                'GeometryCollection': new ol.style.Style({
+                    stroke: this.layer._stroke,
+                    fill: this.layer._fill,
+                    image: this.layer._image,
+                    text: t
+                })
+            };
+            return styles[feature.getGeometry().getType()];
+
+        },
+
+        _setStyle: function () {
+            if (this.layer) {
+                this.layer.setStyle(function (func, scope) {
+                    return function () {
+                        return func.apply(scope, arguments);
+                    }
+                }(this._styleFunction, this))
+            }
+        },
+
+        _rgba2hex(color) {
+            var r = color[0], g = color[1], b = color[2];
+            return "#" + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1);
+        },
+
+        _rgba2alpha(color) {
+            return color[3];
+        },
+
+        _getParams: function () {
+            var params = {};
+            for (a = 0; a < this.attributes.length; a++) {
+                var attr = this.attributes[a];
+                params[attr.name] = this.get([attr.name]);
+            }
+            return params;
+        }
+    };
+
+</script>
+
+
+<dom-module name="openlayers-style-stroke">
+    <style>:host {
+        display: none;
+    }</style>
+    <template></template>
+    <script>
+        Polymer({
+            is: 'openlayers-style-stroke',
+            behaviors: [openlayersMap.layersStyle],
+            properties: {
+                width: {
+                    type: Number,
+                    value: 1,
+                    reflectToAttribute: true,
+                    notify: true,
+                    observer: '_styleChanged'
+                },
+                color: {
+                    type: Array,
+                    value: [0, 255, 0, 1],
+                    reflectToAttribute: true,
+                    notify: true,
+                    observer: '_styleChanged'
+                },
+                linedash: {
+                    type: Array,
+                    value: [],
+                    reflectToAttribute: true,
+                    notify: true,
+                    observer: '_styleChanged'
+                },
+
+            },
+            _layerChanged: function () {
+                this._styleChanged();
+            },
+            _styleChanged: function () {
+                if (this.layer) {
+                    this.layer._stroke = new ol.style.Stroke({
+                        color: this.color,
+                        lineDash: this.linedash,
+                        width: this.width
+                    });
+                    this._setStyle();
+                    this.fire('StyleStrokeChanged', this._getParams());
+                }
+            }
+        });
+
+    </script>
+</dom-module>
+
+
+<dom-module name="openlayers-style-fill">
+    <style>:host {
+        display: none;
+    }</style>
+    <template></template>
+    <script>
+        Polymer({
+            is: 'openlayers-style-fill',
+            behaviors: [openlayersMap.layersStyle],
+            properties: {
+                color: {
+                    type: Array,
+                    value: [0, 255, 0, 1],
+                    reflectToAttribute: true,
+                    notify: true,
+                    observer: '_styleChanged'
+                },
+
+            },
+            _layerChanged: function () {
+                this._styleChanged();
+            },
+            _styleChanged: function () {
+                if (this.layer) {
+                    this.layer._fill = new ol.style.Fill({
+                        color: this.color
+                    })
+                    this._setStyle();
+                    this.fire('StyleFillChanged', this._getParams());
+                }
+            }
+        });
+
+    </script>
+</dom-module>
+
+
+<dom-module name="openlayers-style-icon">
+    <style>:host {
+        display: none;
+    }</style>
+    <template></template>
+    <script>
+        Polymer({
+            is: 'openlayers-style-icon',
+            behaviors: [openlayersMap.layersStyle],
+            properties: {
+                color: {
+                    type: Array,
+                    value: [0, 255, 0, 1],
+                    reflectToAttribute: true,
+                    notify: true,
+                    observer: '_styleChanged'
+                },
+
+            },
+            _layerChanged: function () {
+                this._styleChanged();
+            },
+            _styleChanged: function () {
+                if (this.layer) {
+
+                    var svg = '<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="30px" height="30px" viewBox="0 0 30 30" enable-background="new 0 0 30 30" xml:space="preserve">' +
+                            '<path fill="' + this._rgba2hex(this.color) + '" d="M22.906,10.438c0,4.367-6.281,14.312-7.906,17.031c-1.719-2.75-7.906-12.665-7.906-17.031S10.634,2.531,15,2.531S22.906,6.071,22.906,10.438z"/>' +
+                            '<circle fill="#FFFFFF" cx="15" cy="10.677" r="3.291"/></svg>';
+                    var mysvg = new Image();
+                    mysvg.src = 'data:image/svg+xml,' + escape(svg);
+
+                    this.layer._image = new ol.style.Icon({
+                        img: mysvg,
+                        imgSize: [30, 30],
+                        anchor: [0.5, 1],
+                        opacity: this._rgba2alpha(this.color)
+                    })
+                    this._setStyle();
+                    this.fire('StyleIconChanged', this._getParams());
+                }
+            }
+        });
+
+    </script>
+</dom-module>
+
+
+<dom-module name="openlayers-style-text">
+    <style>:host {
+        display: none;
+    }</style>
+    <template></template>
+    <script>
+        Polymer({
+            is: 'openlayers-style-text',
+            behaviors: [openlayersMap.layersStyle],
+            properties: {
+                field: {
+                    type: String,
+                    value: null,
+                    reflectToAttribute: true,
+                    notify: true,
+                    observer: '_styleChanged'
+                },
+                align: {
+                    type: String,
+                    value: 'center',    // center , end, left, right, start
+                    reflectToAttribute: true,
+                    notify: true,
+                    observer: '_styleChanged'
+                },
+                baseline: {
+                    type: String,
+                    value: 'bottom',    // alphabetic , bottom, hanging, ideographic, middle, top
+                    reflectToAttribute: true,
+                    notify: true,
+                    observer: '_styleChanged'
+                },
+                weight: {
+                    type: String,
+                    value: 'Normal',    // Bold , Normal
+                    reflectToAttribute: true,
+                    notify: true,
+                    observer: '_styleChanged'
+                },
+                size: {
+                    type: Number,
+                    value: 12,
+                    reflectToAttribute: true,
+                    notify: true,
+                    observer: '_styleChanged'
+                },
+                font: {
+                    type: String,
+                    value: 'Arial', // Arial, Courier New, Verdana, ...
+                    reflectToAttribute: true,
+                    notify: true,
+                    observer: '_styleChanged'
+                },
+                'outline-width': {
+                    type: Number,
+                    value: 3,
+                    reflectToAttribute: true,
+                    notify: true,
+                    observer: '_styleChanged'
+                },
+                'outline-color': {
+                    type: Array,
+                    value: [255, 255, 255, 1],
+                    reflectToAttribute: true,
+                    notify: true,
+                    observer: '_styleChanged'
+                },
+                'fill-color': {
+                    type: Array,
+                    value: [125, 125, 0, 1],
+                    reflectToAttribute: true,
+                    notify: true,
+                    observer: '_styleChanged'
+                },
+
+            },
+            _layerChanged: function () {
+                this._styleChanged();
+                this.layer._textElement = this;
+            },
+            _styleChanged: function () {
+                if (this.layer) {
+                    this.layer._text = function (feature, resolution) {
+                        if (!this.field) return null;
+                        var fieldName = this.field;
+                        var font = this.weight + ' ' + this.size + 'px ' + this.font;
+
+                        function stringDivider(str, width, spaceReplacer) {
+                            str = str.toString();
+                            if (str.length > width) {
+                                var p = width;
+                                while (p > 0 && (str[p] != ' ' && str[p] != '-')) {
+                                    p--;
+                                }
+                                if (p > 0) {
+                                    var left;
+                                    if (str.substring(p, p + 1) == '-') {
+                                        left = str.substring(0, p + 1);
+                                    } else {
+                                        left = str.substring(0, p);
+                                    }
+                                    var right = str.substring(p + 1);
+                                    return left + spaceReplacer + stringDivider(right, width, spaceReplacer);
+                                }
+                            }
+                            return str;
+                        };
+                        return new ol.style.Text({
+                            textAlign: this.align,
+                            textBaseline: this.baseline,
+                            font: font,
+                            text: function (feature, resolution) {
+                                var text = feature.get(fieldName);
+                                return stringDivider(text, 32, '\n');
+                            }(feature, resolution),
+                            fill: new ol.style.Fill({color: this['fill-color']}),
+                            stroke: new ol.style.Stroke({color: this['outline-color'], width: this['outline-width']})
+                        });
+                    }
+                    this._setStyle();
+                    this.fire('StyleTextChanged', this._getParams());
+                }
+            }
+        });
+
+    </script>
+</dom-module>

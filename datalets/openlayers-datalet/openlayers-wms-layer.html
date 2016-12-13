@@ -1,0 +1,302 @@
+<dom-module name="openlayers-wms-layer">
+    <style>
+        :host {
+            display: none;
+        }
+    </style>
+    <template>
+        <content select="*"></content>
+    </template>
+
+    <script>
+
+        Polymer({
+
+            is: 'openlayers-wms-layer',
+            behaviors: [openlayersMap.layer],
+            properties: {
+                urlCapabilities: {
+                    type: String,
+                    value: ''
+                },
+                layerCapabilities: {
+                    type: Object,
+                    value: undefined
+                },
+                'layer-style': {
+                    type: String,
+                    value: '',
+                    reflectToAttribute: true,
+                    notify: true,
+                    observer: '_styleChanged'
+                },
+                requireCapabilities: {
+                    type: Boolean,
+                    value: false
+                },
+            },
+            observers: [
+                '_urlChanged(url)'
+            ],
+
+            _mapChanged: function () {
+                var self = this;
+                var map = self.map;
+                if (map) {
+
+                    self.fire('LayerLoadStart', {title: self.title, url: self.url});
+
+                    var srcUrl = this._parseQueryStringParameters(self.url);
+
+                    if (srcUrl.params.SERVICE && srcUrl.params.VERSION && srcUrl.params.LAYERS && srcUrl.params.SRS
+                            && srcUrl.params.STYLES && srcUrl.params.BBOX && srcUrl.params.FORMAT) {
+
+                        var baseUrl = goog.uri.utils.removeParam(self.url, 'SERVICE');
+                        baseUrl = goog.uri.utils.removeParam(baseUrl, 'VERSION');
+                        baseUrl = goog.uri.utils.removeParam(baseUrl, 'REQUEST');
+                        baseUrl = goog.uri.utils.removeParam(baseUrl, 'LAYERS');
+                        baseUrl = goog.uri.utils.removeParam(baseUrl, 'SRS');
+                        baseUrl = goog.uri.utils.removeParam(baseUrl, 'STYLES');
+                        baseUrl = goog.uri.utils.removeParam(baseUrl, 'BBOX');
+                        baseUrl = goog.uri.utils.removeParam(baseUrl, 'FORMAT');
+                        baseUrl = goog.uri.utils.removeParam(baseUrl, 'TRANSPARENT');
+                        self.urlCapabilities = baseUrl;
+
+                        if (this.requireCapabilities) {
+                            this._getCapabilities(srcUrl, function (textStatus, capabilities, errorThrown) {
+                                if (textStatus == 'success') {
+                                    var test = [].pop();
+                                    self.layerCapabilities = this._getLayers(capabilities).filter(function (l, i) {
+                                        return l.Name == srcUrl.params.LAYERS
+                                    }).pop();
+                                    self._createLayer(srcUrl);
+                                } else {
+                                    self.fire('LayerLoadError', {title: self.title, url: self.url, error: errorThrown});
+                                }
+                            }.bind(this));
+                        } else {
+                            self._createLayer(srcUrl);
+                        }
+
+                    } else {
+
+                        this._getCapabilities(srcUrl, function (textStatus, capabilities, errorThrown) {
+                            if (textStatus == 'success') {
+                                self.fire('LayerLoadError', {
+                                    title: self.title, url: self.url,
+                                    error: 'Too few parameters', wms: this._getLayers(capabilities)
+                                });
+                            } else {
+                                self.fire('LayerLoadError', {title: self.title, url: self.url, error: errorThrown});
+                            }
+                        }.bind(this));
+                    }
+
+                }
+            },
+
+            _createLayer: function (srcUrl) {
+                try {
+
+                    var wmsSource = new ol.source.TileWMS({
+                        url: srcUrl.url,
+                        params: {
+                            'LAYERS': srcUrl.params.LAYERS,
+                            'STYLES': srcUrl.params.STYLES,
+                            'TILED': true
+                        },
+                        projection: srcUrl.params.SRS
+//                        crossOrigin: 'anonymous'
+                    });
+
+                    var extent = srcUrl.params.BBOX.split(',')
+                    for (var i = 0; i < extent.length; i++) {
+                        extent[i] = parseFloat(extent[i], 10);
+                    }
+                    extent = ol.proj.transformExtent(extent, srcUrl.params.SRS, this.map.getView().getProjection());
+
+                    var wmsLayer = this.layer = new ol.layer.Tile({
+                        title: this.title,
+                        source: wmsSource,
+                        extent: ol.extent.buffer(extent, 100),
+                        popup: this.popup,
+                        visible: this.visible,
+                        opacity: this.opacity
+                    });
+
+                    this._addListeners();
+//                    this._registerLayerOnChildren.call(this);
+
+                    if (this.layerGroup)
+                        this.layerGroup.getLayers().push(wmsLayer);
+                    else
+                        this.map.addLayer(wmsLayer);
+
+                    this.fire('LayerAdded', {title: this.title, url: this.url, layer: wmsLayer});
+                } catch (ex) {
+                    this.fire('LayerLoadError', {title: self.title, url: self.url, error: ex.message});
+                }
+            },
+
+            _urlChanged: function (url) {
+                if (url) {
+                    url = url.replace(/[?&]\w+=/g, function (match) {
+                        return match.toUpperCase();
+                    });
+                    this.set('layer-style', goog.uri.utils.getParamValue(url, 'STYLES'))
+//                    url = goog.uri.utils.removeParam(url, 'STYLES');
+                }
+            },
+            _styleChanged: function (style) {
+                if (style && this.layer) {
+                    this.layer.getSource().updateParams({'STYLES': style});
+                    var url = goog.uri.utils.removeParam(this.url, 'STYLES');
+                    this.url = goog.uri.utils.appendParam(url, 'STYLES', style);
+                }
+            },
+            _parseQueryStringParameters: function (srcUrl) {
+                var url = '', params = {};
+                srcUrl.match(/([^?=&]+)(=([^&]*))?/g).forEach(function (value) {
+                    value = value.split('=');
+                    if (value.length == 1) url = value[0];
+                    else params[value[0].toUpperCase()] = decodeURIComponent(value[1]);
+                });
+                return {url: url, params: params};
+            },
+
+            _getOnlineResource: function (capabilities) {
+                var DCPType = capabilities.Capability.Request.GetMap.DCPType;
+                for (i = 0; i < DCPType.length; i++) {
+                    var protocol = DCPType[i];
+                    if (protocol.HTTP && protocol.HTTP.Get) {
+                        var or = protocol.HTTP.Get.OnlineResource.replace(/[?&]\w+=/g, function (match) {
+                            return match.toLowerCase();
+                        });
+                        or = goog.uri.utils.removeParam(or, 'service');
+                        or = goog.uri.utils.removeParam(or, 'version');
+                        return or
+                    }
+                }
+            },
+            _getLayers: function (capabilities, layername) {
+                var mapEpsgCode = this.map.getView().getProjection().getCode();
+                var mapOnlineResource = this._getOnlineResource(capabilities);
+
+                var _getProjection = function (lyr) {
+                    if ($.inArray(mapEpsgCode, lyr.SRS || lyr.CRS) != -1) {
+                        return mapEpsgCode;
+                    }
+                    return 'EPSG:4326';
+                }
+                var _getBoundingBox = function (lyr) {
+                    return ol.proj.transformExtent(
+                            lyr.LatLonBoundingBox || lyr.EX_GeographicBoundingBox,
+                            'EPSG:4326', _getProjection(lyr));
+                }
+                var _getStyles = function (lyr) {
+                    var styles = [];
+                    lyr.Style.forEach(function (s) {
+                        styles.push({
+                            Name: s.Name,
+                            Title: s.Title,
+                            LegendUrl: s.LegendURL.length ? s.LegendURL[0].OnlineResource : ''
+                        });
+                    });
+                    return styles;
+                }
+                var _get_recursive_layers = function (lyrs) {
+                    var layers = [];
+                    for (l = 0; l < lyrs.length; l++) {
+                        var lyr = lyrs[l];
+                        if (lyr.layer) {
+                            layers = layers.concat(_get_recursive_layers(lyr.layer));
+                        } else {
+                            layers.push({
+                                Name: lyr.Name,
+                                Title: lyr.Title,
+                                Projection: _getProjection(lyr),
+                                BoundingBox: _getBoundingBox(lyr),
+                                Styles: _getStyles(lyr),
+                                Url: _getUrl(lyr)
+                            });
+                        }
+                    }
+                    return layers;
+                }
+                var _getUrl = function (lyr) {
+                    return ol.uri.appendParams(mapOnlineResource, {
+                        SERVICE: 'wms',
+                        VERSION: capabilities.version,
+                        LAYERS: lyr.Name,
+                        STYLES: _getStyles(lyr)[0].Name,
+                        SRS: _getProjection(lyr),
+                        BBOX: _getBoundingBox(lyr).join(','),
+                        FORMAT: 'image/png',
+                        TRANSPARENT: true
+                    });
+                }
+
+                return _get_recursive_layers(capabilities.Capability.Layer.Layer);
+            },
+            _getCapabilities: function (src, callback) {
+                var parser = new ol.format.WMSCapabilities();
+
+                var params = {
+                    SERVICE: src.params.SERVICE || 'WMS',
+                    VERSION: src.params.VERSION || '1.3.0',
+                    REQUEST: 'getCapabilities'
+                };
+                var url = ol.uri.appendParams(src.url, params)
+                var proxy = this.map.get('proxy') || '';
+                $.ajax({
+                    url: proxy + url,
+                    timeout: 30000,
+                    xhr: function () {
+                        var xhr = $.ajaxSettings.xhr();
+                        xhr.upload.onprogress = function (evt) {
+                        };
+                        xhr.upload.onload = function () {
+                        };
+                        xhr.onprogress = function (evt) {
+//                            self.fire('LayerLoadProgress', {
+//                                title: self.title,
+//                                url: self.url,
+//                                perc: (evt.total ? evt.loaded / evt.total : 1) * 100
+//                            });
+//                                console.log('download progress', (evt.total ? evt.loaded / evt.total : 1) * 100, self.title)
+                        };
+                        return xhr;
+                    },
+                    success: function (data, textStatus, jqXHR) {
+                        try {
+                            callback(textStatus, parser.read(data))
+                        } catch (ex) {
+                            callback('error', undefined, 'Error parsing wms capabilities')
+                        }
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        callback(textStatus, undefined, errorThrown)
+                    }
+                });
+
+
+            },
+            getStyles: function () {
+                var layerName = goog.uri.utils.getParamValue(this.url, 'LAYERS');
+                var styleName = this.get('layer-style') || goog.uri.utils.getParamValue(this.url, 'STYLES');
+                var style;
+                if (this.layerCapabilities && layerName && styleName) {
+                    var selected = -1;
+                    style = this.layerCapabilities.Styles.filter(function (s, i) {
+                        return (s.Name == styleName) && (selected = i) >= 0;
+                    }).pop();
+                }
+                return style ? {Selected: selected, List: this.layerCapabilities.Styles} : {};
+            }
+
+        });
+
+    </script>
+
+
+</dom-module>

@@ -31,9 +31,10 @@
 
 <link rel="import" href="../base-datalet/base-datalet.html">
 
-<link rel="stylesheet" type="text/css" href="static/js/silver-decisions.min.css">
+<link rel="stylesheet" type="text/css" href="static/js/silver-decisions.css">
+<!--<link rel="stylesheet" type="text/css" href="static/js/silver-decisions.min.css">-->
 
-<script type="text/javascript" src="static/js/silver-decisions.min.js"></script>
+<script type="text/javascript" src="static/js/silver-decisions.js"></script>
 <!--<script type="text/javascript" src="static/js/silver-decisions.min.js.map"></script>-->
 
 
@@ -73,6 +74,9 @@ Example:
 
         var DecisionTreeBehavior = {
 
+            redraw: function(){
+            },
+
             requestData: function(){
                 this.presentData();
             },
@@ -83,7 +87,8 @@ Example:
                 if(this._component.jsonTree.description)
                     this._component.description = this._component.jsonTree.description;
 
-                var app = new SilverDecisions('app_container', this._component.config, this._component.jsonTree);
+                //var app = new SilverDecisions('app_container', this._component.config, this._component.jsonTree);
+                var app = new SilverDecisions(this._component.$.app_container, this._component.config, this._component.jsonTree);
             }
         };
 
@@ -126,6 +131,11 @@ Example:
                     value: "false"
                 },
 
+                data: {
+                    type: String,
+                    value: ""
+                },
+
                 /**
                  * Control the export menu
                  * xxxx BITMASK. FROM RIGHT : HTML, PNG, RTF, MY SPACE (eg. 1111 show all, 0000 hide all)
@@ -136,7 +146,7 @@ Example:
                  */
                 export_menu : {
                     type  : Number,
-                    value : 15 // xxxx BITMASK. FROM RIGHT : HTML, PNG, RTF, MY SPACE (eg. 1111 show all, 0000 hide all)
+                    value : 0 // xxxx BITMASK. FROM RIGHT : HTML, PNG, RTF, MY SPACE (eg. 1111 show all, 0000 hide all)
                 }
             },
 

@@ -1,0 +1,260 @@
+<link rel="import" href="../base-ajax-json-alasql-datalet/base-ajax-json-alasql-datalet.html">
+
+<script src="openlayers-layer.js"></script>
+
+<link rel="import" href="openlayers-map.html">
+<link rel="import" href="openlayers-layer-group.html">
+<link rel="import" href="openlayers-vector-layer.html">
+<link rel="import" href="openlayers-wms-layer.html">
+<link rel="import" href="openlayers-layer-style.html">
+<link rel="import" href="openlayers-popup-overlay.html">
+<dom-module name="openlayers-datalet">
+    <template>
+        <openlayers-map id="olMap" longitude="13" latitude="42" zoom="7"></openlayers-map>
+    </template>
+    <script>
+        var openlayersBehavior = {
+            init: function (component) {
+                this._component = component;
+
+//                component.addEventListener('LayerAdded',function(e,p){});
+//                component.addEventListener('LayerLoadStart',function(e,p){});
+//                component.addEventListener('LayerLoadEnd',function(e,p){});
+//                component.addEventListener('LayerLoadError',function(e,p){});
+
+                if (!component.params) return;
+                console.log(component.params)
+                var params = component.params;
+
+                component.$.olMap.proxy = params.proxyUrl || '';
+                component.$.olMap.layerSwitcher = params.layerSwitcher != undefined ? params.layerSwitcher : true;
+                component.$.olMap.zoomOnLayerAdd = /*params.zoomOnLayerAdd*/ component.zoomOnLayerAdd != undefined ? /*params.zoomOnLayerAdd*/ component.zoomOnLayerAdd : true;
+
+                var layers = params.layers || [];
+                for (var l = layers.length - 1; l >= 0; l--) {
+                    var layer = layers[l];
+                    this.addLayer.call(this, layer);
+                }
+
+                var popupOverlay = document.createElement("openlayers-popup-overlay");
+                Polymer.dom(component.$.olMap).appendChild(popupOverlay);
+            },
+            getLayers: function () {
+                return this._component.$.olMap.querySelectorAll('openlayers-vector-layer,openlayers-wms-layer');
+            },
+            addLayer: function (params) {
+                var container = Polymer.dom(this._component.$.olMap);
+
+                if (params.group) {
+                    container = Polymer.dom(this._addGroupLayer.call(this, container, params.group))
+                }
+
+                var newLayer;
+                switch (params.format) {
+                    case 'GeoJSON':
+                    case 'KML':
+                        newLayer = this._addVectorLayer(container, params);
+                        break;
+
+                    case 'WMS':
+                        newLayer = this._addWmsLayer(container, params);
+                        break;
+                }
+
+                newLayer && params.callback && newLayer.addEventListener('LayerAdded', params.callback);
+                newLayer && params.callback && newLayer.addEventListener('LayerLoadError', params.callback);
+
+                newLayer && params.popup && newLayer.setAttribute('popup', JSON.stringify(params.popup));
+
+            },
+            removeLayer: function (layer) {
+                var container = layer.parentNode;
+                container.removeChild(layer);
+                layer = null;
+            },
+            zoomToLayer: function (layer) {
+                this._component.$.olMap.zoomToLayer(layer);
+            },
+            zoomToLayers: function () {
+                this._component.$.olMap.zoomToLayers();
+            },
+            getParams: function () {
+                var p = [];
+                this._component.querySelectorAll("openlayers-vector-layer,openlayers-wms-layer").forEach(function (l, i) {
+                    var layerParams = {
+                        title: l.title,
+                        format: l.format,
+                        url: l.url,
+                        group: l.parentElement.isLayerGroup ? l.parentElement.title : ''
+                    }
+                    l.querySelectorAll("*").forEach(function (s, i) {
+                        var layerStyle;
+                        switch (s.localName) {
+                            case 'openlayers-style-stroke':
+                                layerStyle = layerParams.stroke = {};
+                                break;
+                            case 'openlayers-style-fill':
+                                layerStyle = layerParams.fill = {};
+                                break;
+                            case 'openlayers-style-icon':
+                                layerStyle = layerParams.icon = {};
+                                break;
+                            case 'openlayers-style-text':
+                                layerStyle = layerParams.text = {};
+                                break;
+                        }
+                        for (a = 0; a < s.attributes.length; a++) {
+                            var attr = s.attributes[a];
+                            layerStyle[attr.name] = s.get([attr.name]);
+                        }
+
+                    });
+                    p.push(layerParams);
+
+                }.bind(this));
+//                this._component.set('params', $.extend(true, this._component.params, {layers: p}));
+                return $.extend(true, this._component.params, {layers: p})
+            },
+
+            _addGroupLayer: function (container, groupName) {
+                var groupLayer = this._component.$$("openlayers-layer-group[title='" + groupName + "']");
+                if (!groupLayer) {
+                    groupLayer = document.createElement("openlayers-layer-group");
+                    groupLayer.setAttribute('title', groupName);
+                    container.appendChild(groupLayer);
+                }
+                return groupLayer;
+            },
+
+            _addVectorLayer: function (container, params) {
+                var vectorLayer = document.createElement("openlayers-vector-layer");
+                vectorLayer.setAttribute('title', params.title);
+                vectorLayer.setAttribute('url', params.url);
+                vectorLayer.setAttribute('format', params.format);
+
+                this._addLayerStyle(vectorLayer, params);
+
+                return container.appendChild(vectorLayer);
+            },
+
+            _addWmsLayer: function (container, params) {
+                var wmsLayer = document.createElement("openlayers-wms-layer");
+                wmsLayer.setAttribute('title', params.title);
+                wmsLayer.setAttribute('url', params.url);
+                wmsLayer.setAttribute('format', params.format);
+
+                params.requireCapabilities && wmsLayer.set('requireCapabilities', true);
+
+                return container.appendChild(wmsLayer);
+            },
+
+            _addLayerStyle: function (layer, params) {
+                if (params.stroke) {
+                    var stroke = document.createElement("openlayers-style-stroke");
+                    params.stroke.width && stroke.setAttribute('width', params.stroke.width);
+                    params.stroke.color && stroke.setAttribute('color', JSON.stringify(params.stroke.color));
+                    params.stroke.linedash && stroke.setAttribute('linedash', JSON.stringify(params.stroke.linedash));
+                    layer.appendChild(stroke);
+                }
+                if (params.fill) {
+                    var fill = document.createElement("openlayers-style-fill");
+                    params.fill.color && fill.setAttribute('color', JSON.stringify(params.fill.color));
+                    layer.appendChild(fill);
+                }
+                if (params.icon) {
+                    var icon = document.createElement("openlayers-style-icon");
+                    params.icon.color && icon.setAttribute('color', JSON.stringify(params.icon.color));
+                    layer.appendChild(icon);
+                }
+                if (params.text) {
+                    var text = document.createElement("openlayers-style-text");
+                    //text.setAttribute('color', JSON.stringify(params.text.color));
+                    text.setAttribute('field', params.text.field);
+                    params.text.font && text.setAttribute('font', params.text.font);
+                    params.text.size && text.setAttribute('size', params.text.size);
+                    params.text.align && text.setAttribute('align', params.text.align);
+                    params.text.baseline && text.setAttribute('baseline', params.text.baseline);
+                    params.text['fill-color'] && text.setAttribute('fill-color', JSON.stringify(params.text['fill-color']));
+                    params.text['outline-color'] && text.setAttribute('outline-color', JSON.stringify(params.text['outline-color']));
+                    params.text['outline-width'] && text.setAttribute('outline-width', params.text['outline-width']);
+                    params.text.weight && text.setAttribute('weight', params.text.weight);
+                    layer.appendChild(text);
+                }
+
+            }
+        };
+
+
+        Polymer({
+
+            is: 'openlayers-datalet',
+
+            properties: {
+                data: {
+                    type: Array,
+                    value: undefined
+                },
+                /**
+                 * Store a reference to the openlayers map object created in 'ready' callback
+                 * @attribute map
+                 * @type Object
+                 */
+                params: {
+                    type: Object,
+                    value: {}, // { proxy_url: 'http://172.18.13.3/miniProxy.php/',layers: [] }
+                    observer: '_onParamsChange'
+                },
+                /**
+                 * It's the component behavior
+                 *
+                 * @attribute behavior
+                 * @type Object
+                 * @default {}
+                 */
+                behavior: {
+                    type: Object,
+                    value: {}
+                },
+
+                zoomOnLayerAdd: {
+                    type: Boolean,
+                    value: true
+                },
+
+                /**
+                 * Control the export menu
+                 * xxxx BITMASK. FROM RIGHT : HTML, PNG, RTF, MY SPACE (eg. 1111 show all, 0000 hide all)
+                 *
+                 * @attribute export_menu
+                 * @type Number
+                 * @default 15
+                 */
+                export_menu: {
+                    type: Number,
+                    value: 9 // xxxx BITMASK. FROM RIGHT : HTML, PNG, RTF, MY SPACE (eg. 1111 show all, 0000 hide all)
+                }
+            },
+            _onParamsChange: function () {
+
+            },
+
+            /**
+             * 'ready' callback create the map object, set the tileLayer to openstreetmap and the default icon image path.
+             * Moreover extend the openlayersComponentBehavior with BaseDataletBehavior, WorkcycleBehavior and openlayersBehavior
+             * and run the Datalet workcycle.
+             *
+             * @method ready
+             */
+            ready: function () {
+                this.behavior = $.extend(true, {}, BaseDataletBehavior, WorkcycleBehavior, AjaxJsonAlasqlBehavior, openlayersBehavior);
+                this.async(function () {
+                    this.behavior.init(this)
+                }, 100);
+            }
+
+        })
+        ;
+
+    </script>
+</dom-module>
+

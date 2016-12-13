@@ -1,0 +1,77 @@
+<dom-module name="openlayers-layer-group">
+    <template>
+        <content select="*"></content>
+    </template>
+
+    <script>
+
+        Polymer({
+            is: 'openlayers-layer-group',
+            properties: {
+                isLayerGroup: {type: Boolean, value: true},
+                map: {
+                    type: Object,
+                    observer: '_mapChanged'
+                },
+                title: {
+                    type: String,
+                    value: ""
+                },
+                layerGroup: {
+                    type: Object
+                }
+            },
+            created: function () {
+//                console.log(this.localName + '#' + this.id + ' created ', arguments);
+            },
+            ready: function () {
+//                console.log(this.localName + '#' + this.id + ' ready ', arguments);
+                var me = this;
+                this.async(function () {
+                    me.domReady()
+                }, 1);
+            },
+            attached: function () {
+//                console.log(this.localName + '#' + this.id + ' attached ', arguments);
+            },
+            detached: function () {
+//                console.log(this.localName + '#' + this.id + ' detached ', arguments);
+                this._mutationObserver.disconnect();
+            },
+            attributeChanged: function () {
+//                console.log(this.localName + '#' + this.id + ' attributeChanged ', arguments);
+            },
+
+            domReady: function () {
+                this._mutationObserver = new MutationObserver(this.registerContainerOnChildren.bind(this));
+                this._mutationObserver.observe(this, {childList: true});
+            },
+
+            _mapChanged: function () {
+                if (this.map) {
+                    var layerGroup = this.layerGroup = new ol.layer.Group({
+                        'title': this.title,
+                        'map': this.map
+                    });
+                    this.map.addLayer(layerGroup);
+                    this.registerContainerOnChildren();
+                }
+            },
+            registerContainerOnChildren: function () {
+                for (var i = 0; i < this.children.length; i++) {
+                    this.children[i].layerGroup = this.layerGroup;
+                }
+            },
+
+            detached: function () {
+                if (this.map && this.map) {
+                    this.map.removeLayer(this.map);
+                }
+                this._mutationObserver.disconnect();
+            }
+        });
+
+    </script>
+
+
+</dom-module>

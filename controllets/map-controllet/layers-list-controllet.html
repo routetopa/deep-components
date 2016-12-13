@@ -1,0 +1,157 @@
+<dom-module id="layers-list-controllet">
+
+    <style>
+        :host {
+            background: #FFF;
+            --paper-item-focused-before: {
+                background: none;
+            };
+            --paper-menu-focused-item-after: {
+                background: none;
+            };
+        }
+
+        #header {
+            background: #B6B6B6;
+            height: 24px;
+            padding: 12px;
+            text-align: center;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        #container {
+            position: relative;
+            height: calc(100% - 48px);
+            width: 100%;
+        }
+
+        DIV.item {
+            border-bottom: 1px #eee solid;
+            padding: 6px 5px;
+        }
+
+        paper-icon-button {
+            z-index: 10;
+            padding: 0px;
+            width: 30px;
+            height: 30px;
+        }
+
+        paper-button#add_layer_button {
+            position: absolute;
+            bottom: 16px;
+            right: 11px;
+            height: 48px;
+            width: 172px;
+        }
+
+        paper-button {
+            background-color: #00BCD4;
+            color: white;
+            font-weight: 700;
+            padding: 16px;
+        }
+
+        paper-button {
+            background-color: #00AABF;
+            box-shadow: 0px 8px 12px #888;
+            -webkit-box-shadow: 0px 8px 12px #888;
+            -moz-box-shadow: 0px 8px 12px #888;
+        }
+
+        paper-button[disabled] {
+            background-color: #B6B6B6;
+        }
+
+    </style>
+
+    <template>
+
+        <paper-material elevation="5">
+            <div id="header">
+                <paper-icon-button icon="search" on-tap="_onZoomLayersClick"></paper-icon-button>
+                <span id="layers">[[_translate('title')]]</span>
+            </div>
+            <div id="container">
+
+                <!--
+                                <paper-menu id="menu">
+                                    <paper-menu id="menu">
+                                        <template is="dom-repeat" items="{{layers}}">
+                                            <paper-item on-tap="_onLayerSelected">
+                                                <paper-icon-button icon="create" on-tap="_onEditLayerClick"></paper-icon-button>
+                                                <paper-icon-button icon="delete" on-tap="_onDeleteLayerClick"></paper-icon-button>
+                                                {{item.title}}
+                                            </paper-item>
+                                        </template>
+                                    </paper-menu>
+                                </paper-menu>
+                -->
+
+                <template is="dom-repeat" items="{{layers}}">
+                    <div class="item">
+                        <paper-icon-button icon="create" on-tap="_onEditLayerClick"></paper-icon-button>
+                        <paper-icon-button icon="search" on-tap="_onZoomLayerClick"></paper-icon-button>
+                        <paper-icon-button icon="delete" on-tap="_onDeleteLayerClick"></paper-icon-button>
+                        {{item.title}}
+                    </div>
+                </template>
+
+
+            </div>
+            <paper-button id="add_layer_button" raised on-click="_onAddLayerClick">[[_translate('add-layer')]]
+            </paper-button>
+        </paper-material>
+
+    </template>
+
+    <script>
+        Polymer({
+
+            is: 'layers-list-controllet',
+
+            properties: {
+                layers: {
+                    type: Array,
+                    value: []
+                }
+            },
+
+            listeners: {},
+
+            ready: function () {
+                $(this.$.container).perfectScrollbar();
+            },
+
+            _translate: function (key) {
+                return getTranslatedText([this.localName, key]);
+            },
+//            _onLayerSelected: function (e) {
+//
+//            },
+            _onZoomLayersClick: function (e) {
+                this.domHost.querySelector('map-preview-controllet').zoomToLayers();
+            },
+            _onAddLayerClick: function (e) {
+                this.domHost.slideToAddLayer();
+            },
+            _onEditLayerClick: function (e) {
+                var layer = e.model.get('item');
+                this.domHost.slideToAddLayer(layer.element);
+            },
+            _onZoomLayerClick: function (e) {
+                var layer = e.model.get('item');
+                this.domHost.querySelector('map-preview-controllet').zoomToLayer(layer.element);
+            },
+            _onDeleteLayerClick: function (e) {
+                var layer = e.model.get('item');
+                this.domHost.querySelector('map-preview-controllet').removeLayer(layer.element);
+                this.domHost.updateLayerList();
+            }
+
+        });
+
+    </script>
+
+</dom-module>
