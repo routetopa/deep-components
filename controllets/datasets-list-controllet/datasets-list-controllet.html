@@ -255,9 +255,10 @@
                                             <span>{{_getVersionedResourceName(dataset)}}</span>
                                             <iron-icon icon="expand-more"></iron-icon>
                                         </paper-item>
-                                        <paper-menu id="submenu_{{index}}" class="menu-content" selected="0">
+                                        <!--<paper-menu id="submenu_{{index}}" class="menu-content" selected="0">-->
+                                        <paper-menu id="submenu_{{index}}" class="menu-content">
                                             <template is="dom-repeat" items="{{dataset.resources}}" as="resource" index-as="resource_index">
-                                                <paper-item id="resource_{{resource_index}}" title="{{resource}}" on-click="_selectDataset"><span>{{resource}}</span></paper-item>
+                                                <paper-item id="resource_{{resource_index}}" title="{{resource}}" on-click="_selectDataset" disabled="{{_disabled(resource)}}"><span>{{_getResourceName(resource)}}</span></paper-item>
                                             </template>
                                         </paper-menu>
                                     </paper-submenu>
@@ -493,6 +494,8 @@
                 },
 
                 _selectDataset : function(e){
+                    //se non ci sono tutti le risorse resourceIndex è sbagliato
+
                     var id = this.$.menu.selectedItem.id;
 
                     var resourceIndex = 0;
@@ -500,6 +503,9 @@
                         resourceIndex = e.target.id.split('_')[1];
                     else if($("#submenu_" + id)[0] != undefined)
                         resourceIndex =  $("#submenu_" + id)[0].selected;
+
+                    if(resourceIndex == undefined)
+                        return
 
                     if(id == this.datasetIndex && resourceIndex == this.resourceIndex)
                         return;
@@ -559,6 +565,18 @@
 //                    this.$.info_header.innerHTML = this._getVersionedResourceName(dataset);
 //                    this.$.info_header.innerHTML = dataset.name;
                     this.$.info_body.innerHTML = html;
+                },
+
+                _getResourceName : function(rerource){
+                    if(rerource.constructor == Array)
+                        return rerource[0];
+                    else
+                        return rerource;
+                },
+
+                _disabled : function(rerource){
+                    if(rerource.constructor == Array)
+                        return true;
                 },
 
                 _getVersionedResourceName : function(dataset){

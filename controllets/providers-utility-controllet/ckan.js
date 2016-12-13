@@ -21,6 +21,7 @@ ckan_Provider.prototype.getHTMLFormattedMetadata = function(dataset, resourceInd
 
     html += '<b>Organization:</b> ' + ((dataset.organization) ? dataset.organization.name : "") + '<br>';
     html += '<b>Dataset Name:</b> ' + dataset.name + '<br>';
+    html += '<b>Dataset Title:</b> ' + dataset.title + '<br>';
     html += '<b>Resource Name:</b> <b style="color: #2196F3;">' + dataset.resources[resourceIndex].name + '</b><br>';
     html += '<b>Resource Description:</b> ' + dataset.resources[resourceIndex].description + '</b><div style="height: 1px; background: #2196F3; margin: 12px 0;"></div>';
 
