@@ -428,9 +428,15 @@
                                     if (el.name.toLowerCase().indexOf(filter) > -1)
                                         return true;
                                     else if (el.resources != undefined) {
-                                        for(var i in el.resources)
-                                            if(el.resources[i].toLowerCase().indexOf(filter) > -1)
+//                                        for(var i in el.resources)
+//                                            if(el.resources[i].toLowerCase().indexOf(filter) > -1)
+//                                                return true;
+                                        for(var r of el.resources) {
+                                            if (r.constructor == Array)
+                                                r = r[0];
+                                            if (r.toLowerCase().indexOf(filter) > -1)
                                                 return true;
+                                        }
                                     }
                                     else
                                         return false;
@@ -567,15 +573,15 @@
                     this.$.info_body.innerHTML = html;
                 },
 
-                _getResourceName : function(rerource){
-                    if(rerource.constructor == Array)
-                        return rerource[0];
+                _getResourceName : function(resource){
+                    if(resource.constructor == Array)
+                        return resource[0];
                     else
-                        return rerource;
+                        return resource;
                 },
 
-                _disabled : function(rerource){
-                    if(rerource.constructor == Array)
+                _disabled : function(resource){
+                    if(resource.constructor == Array)
                         return true;
                 },
 
