@@ -353,12 +353,12 @@
 //                                    that.lastLocalDatasets.push(localDatasets[i]);
 //                                    name = localDatasets[i].name;
 //                                }
-                            var version = '';
-                            for(var d of localDatasets)
-                                if(d.version != version) {
+                            var version = 0;
+                            for(var d of localDatasets) {
+                                if (parseInt(d.version) < version)
                                     that.lastLocalDatasets.push(d);
-                                    version = d.version;
-                                }
+                                version = d.version;
+                            }
                         },
                         error: function(){
                             that.localDatasets = [];
