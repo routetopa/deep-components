@@ -355,9 +355,9 @@
 //                                }
                             var version = 0;
                             for(var d of localDatasets) {
-                                if (parseInt(d.version) < version)
+                                if (parseInt(d.version) >= version)
                                     that.lastLocalDatasets.push(d);
-                                version = d.version;
+                                version = parseInt(d.version);
                             }
                         },
                         error: function(){
