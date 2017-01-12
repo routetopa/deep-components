@@ -19,13 +19,16 @@ ckan_Provider.prototype.getHTMLFormattedMetadata = function(dataset, resourceInd
 
     var html = '';
 
-    html += '<b>Organization:</b> ' + ((dataset.organization) ? dataset.organization.name : "") + '<br>';
-    html += '<b>Dataset Name:</b> ' + dataset.name + '<br>';
-    html += '<b>Dataset Title:</b> ' + dataset.title + '<br>';
     html += '<b>Resource Name:</b> <b style="color: #2196F3;">' + dataset.resources[resourceIndex].name + '</b><br>';
     html += '<b>Resource Description:</b> ' + dataset.resources[resourceIndex].description + '</b><div style="height: 1px; background: #2196F3; margin: 12px 0;"></div>';
 
-    filters = ["id", "creator_user_id", "license_id", "owner_org", "revision_id", "name"];
+    html += '<b>Organization:</b> ' + ((dataset.organization) ? dataset.organization.name : "") + '<br>';
+    html += '<b>Dataset Name:</b> ' + dataset.name + '<br>';
+    html += '<b>Dataset Title:</b> ' + dataset.title + '<div style="height: 1px; background: #2196F3; margin: 12px 0;"></div>';
+    // html += '<b>Resource Name:</b> <b style="color: #F44336;">' + dataset.resources[resourceIndex].name + '</b><div style="height: 1px; background: #F44336; margin: 12px 0;"></div>';
+    // html += '<b>Resource Description:</b> ' + dataset.resources[resourceIndex].description + '</b><div style="height: 1px; background: #F44336; margin: 12px 0;"></div>';
+
+    filters = ["id", "creator_user_id", "license_id", "owner_org", "revision_id", "name", "title", "notes", "num_resources", "num_tags", "state", "type"];
 
     var orderedKeys = Object.keys(dataset).sort()
 
@@ -44,7 +47,7 @@ ckan_Provider.prototype.getDatasetUrl = function(providerUrl, datasetId) {
 };
 
 ckan_Provider.prototype.getResourceUrl = function(providerUrl, resourceId) {
-   return providerUrl + '/api/3/action/datastore_search?resource_id=' + resourceId;
+    return providerUrl + '/api/3/action/datastore_search?resource_id=' + resourceId;
 };
 
 //    var fields = [];

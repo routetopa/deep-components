@@ -21,11 +21,11 @@ openDataSoft_Provider.prototype.getHTMLFormattedMetadata = function(dataset, res
 
     var html = '';
 
-    html += '<b>Producteur:</b> ' + dataset.publisher + '<br>';
+    // html += '<b>Producteur:</b> ' + dataset.publisher + '<br>';
     html += '<b>Resource Name:</b> <b style="color: #2196F3;">' + dataset.title + '</b><br>';
     html += '<b>Resource Description:</b> ' + dataset.description + '</b><div style="height: 1px; background: #2196F3; margin: 12px 0;"></div>';
 
-    filters = ["publisher", "title", "description"];
+    filters = ["_publisher", "title", "description"];
 
     var orderedKeys = Object.keys(dataset).sort()
 
