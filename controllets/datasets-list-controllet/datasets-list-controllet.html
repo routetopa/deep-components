@@ -319,6 +319,11 @@
                         type  : String,
                         value : "",
                         observer : '_filter'
+                    },
+
+                    pezz8 : {
+                        type  : Boolean,
+                        value : false,
                     }
 
                 },
@@ -417,11 +422,29 @@
                 },
 
                 _filter : function() {
+                    var t = 0;
+                    if(this.pezz8) {
+                        t = 2000;
+
+                        this.filteredDatasets = [];
+
+                        this.prev = 1;
+                        this.next = this.step;
+                        this.length = 0;
+
+                        this.shownPrev = Math.min(this.prev, this.length);
+                        this.shownNext = Math.min(this.next, this.length);
+
+                        this._showDatasets();
+                    }
+
                     this.debounce('_filter', function () {
                         if(this.datasets && this.datasets.length) {
                             var filter = this.filter.toLowerCase();
 
-                            if(filter == "")
+                            if(filter == "" && this.pezz8)
+                                this.filteredDatasets = [];
+                            else if(filter == "")
                                 this.filteredDatasets = this.datasets;
                             else
                                 this.filteredDatasets = this.datasets.filter(function (el) {
@@ -466,7 +489,7 @@
 //                                $(this.$.menu).highlight(this.filter);
 //                            }, 100);
                         }
-                    }, 0);
+                    }, t);
                 },
 
                 _showDatasets : function() {
