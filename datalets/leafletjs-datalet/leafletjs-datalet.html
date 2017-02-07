@@ -91,7 +91,7 @@ Example:
 
                 L.Icon.Default.imagePath = 'http://services.routetopa.eu/DEEalerProvider/COMPONENTS/datalets/leafletjs-datalet/leafletsjs/images';
 
-                var coordinates = [];
+                t._component.coordinates = [];
                 var coordinates_index  = 0;
                 var isArray = t.data[0].data[0].constructor === Array;
                 var geo;
@@ -101,7 +101,7 @@ Example:
                     if(isArray)
                     {
                         if(!isNaN(t.data[0].data[i][0]) && !isNaN(t.data[0].data[i][1]))
-                            coordinates.push([parseFloat(t.data[0].data[i][0]), parseFloat(t.data[0].data[i][1])]);
+                            t._component.coordinates.push([parseFloat(t.data[0].data[i][0]), parseFloat(t.data[0].data[i][1])]);
                         else
                              continue;
                     }
@@ -117,8 +117,8 @@ Example:
                     {
                         var coords = t.data[0].data[i].split(",");
                         if(!isNaN(coords[0]) && !isNaN(coords[1])) {
-                            coordinates.push([parseFloat(coords[0]), parseFloat(coords[1])]);
-                            geo = L.marker([coordinates[coordinates_index][0], coordinates[coordinates_index][1]]).addTo(t._component.map);
+                            t._component.coordinates.push([parseFloat(coords[0]), parseFloat(coords[1])]);
+                            geo = L.marker([t._component.coordinates[coordinates_index][0], t._component.coordinates[coordinates_index][1]]).addTo(t._component.map);
                             coordinates_index++;
                         }else
                             continue;
@@ -126,8 +126,8 @@ Example:
                     else
                     {
                         if( (!isNaN(t.data[0].data[i]) && !isNaN(t.data[1].data[i])) && (t.data[0].data[i] && t.data[1].data[i]) ) {
-                            coordinates.push([parseFloat(t.data[0].data[i]), parseFloat(t.data[1].data[i])]);
-                            geo = L.marker([coordinates[coordinates_index][0], coordinates[coordinates_index][1]]).addTo(t._component.map);
+                            t._component.coordinates.push([parseFloat(t.data[0].data[i]), parseFloat(t.data[1].data[i])]);
+                            geo = L.marker([t._component.coordinates[coordinates_index][0], t._component.coordinates[coordinates_index][1]]).addTo(t._component.map);
                             coordinates_index++;
                         }else
                             continue;
@@ -154,8 +154,15 @@ Example:
 
                 t._component.map._onResize();
                 t._component.map.invalidateSize(false);
-                t._component.map.fitBounds(coordinates);
+                t._component.map.fitBounds(t._component.coordinates);
 
+            },
+
+            redraw: function () {
+                var t = this;
+                t._component.map._onResize();
+                t._component.map.invalidateSize(false);
+                t._component.map.fitBounds(t._component.coordinates);
             }
         };
 
@@ -199,6 +206,17 @@ Example:
                 behavior : {
                     type : Object,
                     value : {}
+                },
+                /**
+                 * It's the component coordinates
+                 *
+                 * @attribute coordinates
+                 * @type Object
+                 * @default {}
+                 */
+                coordinates : {
+                    type : Array,
+                    value : []
                 },
                 /**
                  * Control the export menu
