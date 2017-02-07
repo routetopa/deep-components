@@ -51,8 +51,15 @@ Example:
 <dom-module name="leafletjs-geojson-datalet">
     <template>
         <link rel="stylesheet" href="leafletsjs/leaflet.css" />
+        <!--<style>-->
+            <!--#leafletjs {height: 600px;}-->
+            <!---->
+        <!--</style>-->
         <style>
-            #leafletjs {height: 600px;}
+            #leafletjs {
+                height: calc(100% - 78px);
+                min-height: 600px;
+            }
         </style>
 
         <div id="leafletjs"></div>
