@@ -79,26 +79,67 @@ Example :
                 color: #2db395;
                 text-decoration: underline;
             }
+
             #base_datalet_container {
                 position: relative;
-                font-family: 'Roboto', 'Helvetica Neue', Helvetica, Arial, sans-serif;
-                padding-top: 2px;
-                border-top: 2px solid #B6B6B6;
+
+                height: 72px;
+                /*background-color: red;*/
                 margin-top: 8px;
+                /*padding-top: 2px;*/
+                border-top: 2px solid #B6B6B6;
             }
+            #base_datalet_container > * {
+                font-family: 'Roboto', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+                font-size: 14px;
+                line-height: 24px;
+
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+
+            #base_datalet_title_description {
+            }
+
+            #span_title{
+                font-weight: 700;
+            }
+
+            #span_description{
+                font-style: italic;
+                color: #424242;
+            }
+
+            /*#span_description:not(:empty):before {
+                /*content: " - ";*/
+            /*}*/
+
+            #base_datalet_source_link {
+            }
+
+            #base_datalet_rtp {
+            }
+
             #base_datalet_rtp {
                 display: flex;
-                padding-top: 4px;
             }
+
             #rtp {
-                padding-top: 8px;
+                font-size: 14px;
+                line-height: 24px;
                 padding-right: 8px;
-                font-size: 12px;
+
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
             }
+
             #rtpalogo {
-                height: 32px;
-                width: 32px;
+                height: 24px;
+                width: 24px;
             }
+
             #base_datalet_spinner {
                 /*width: 100%;*/
                 padding: 168px calc(50% - 32px);
@@ -108,31 +149,22 @@ Example :
                 left: 0;
             }
 
-            #base_datalet_source_link{
-                padding-top: 12px;
-            }
-
-            #span_title{
-                font-size: small;
-            }
-
-            #span_description{
-                font-style: italic;
-                color: #727272;
-            }
-
             /*EXPORT*/
             .export
             {
                 position: absolute;
-                right: 0px;
-                top: 0px;
-                --paper-icon-button-ink-color: #2196F3;
-                padding: 4px;
+                right: 0;
+                top: 0;
+                height: 24px;
+                width: 24px;
+                cursor: pointer;
+
+                background: url("static/images/more.svg") no-repeat 0 0;
             }
 
             .export:hover {
                 color: #2196F3;
+                background: url("static/images/more_blue.svg") no-repeat 0 0;
             }
 
             .highcharts-contextmenu
@@ -140,7 +172,6 @@ Example :
                 position: absolute;
                 top: 4px;
                 right: 40px;
-                font-size: small;
                 font-size: small;
                 border: solid 1px #000000;
 
@@ -207,7 +238,7 @@ Example :
         <div id="base_datalet_container">
 
             <div id="base_datalet_title_description">
-                <span id="span_title"><b>{{title}}</b> <span id="span_description">{{description}}</span></span>
+                <span id="span_title">{{title}}</span> <span id="span_description">{{description}}</span>
             </div>
 
             <div id="base_datalet_source_link">
