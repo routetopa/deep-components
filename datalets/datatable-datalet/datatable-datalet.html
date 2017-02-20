@@ -54,6 +54,11 @@ Example:
 
         <table id="datatable" class="stripe row-border" cellspacing="0" style="height: auto; width: auto;">
         </table>
+        <style>
+            #datatable {
+                min-height: 446px;
+            }
+        </style>
         <base-ajax-json-alasql-datalet data-url="{{dataUrl}}" fields="{{fields}}" data="{{data}}" title="{{title}}" description="{{description}}" export_menu="{{export_menu}}" disable_my_space="{{disable_my_space}}"></base-ajax-json-alasql-datalet>
     </template>
 

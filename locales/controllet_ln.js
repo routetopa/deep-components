@@ -477,12 +477,12 @@ ln["forward_fr"] = "AVANT";
 ln["selectedUrl_fr"] = "API URL sélectionné";
 ln["wrongUrl_fr"] = "URL invalide ou fournisseur de données pas encore supporté.";
 
-ln["providersDatasets_fr"] = "DATASET DE PROVIDER";
-ln["spodUsersDatasets_fr"] = "DATASET COCRÉE";
+ln["providersDatasets_fr"] = "JEU DE DONNÉES";
+ln["spodUsersDatasets_fr"] = "JEU DE DONNÉES CO-CRÉE";
 ln["extendedDatasets_fr"] = "RECHERCHE AVANCÉE";
 ln["datasets_fr"] = "LISTE DE DATASET";
 
-ln["provider_fr"] = "Provider";
+ln["provider_fr"] = "Fournisseur";
 ln["all_fr"] = "Tout";
 ln["allDescription_fr"] = "Hows les ensembles de données de tous les fournisseurs associés.";
 ln["providerName_fr"] = "Provider";
@@ -501,7 +501,7 @@ ln["showAll_fr"] = "Montre tout";
 ln["showAllDescription_fr"] = "Montre toutes les versions des ensembles de données.";
 
 //select-dataset-controllet
-ln["datasetsInfo_fr"] = "INFORMATIONS SUR DATASET";
+ln["datasetsInfo_fr"] = "INFORMATIONS SUR LE JEU DE DONNÉES";
 ln["showing_fr"] = "Aperçu";
 ln["to_fr"] = "à";
 ln["of_fr"] = "de";
