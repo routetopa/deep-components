@@ -45,7 +45,7 @@ SPOD_Provider.prototype.getDatasetUrl = function(providerUrl, datasetId) {
 };
 
 SPOD_Provider.prototype.getResourceUrl = function(providerUrl, resourceId) {
-    "http://172.16.15.128/cocreation/ajax/get-dataset-by-room-id-and-version/?room_id=7&version=3"
+    // "http://172.16.15.128/cocreation/ajax/get-dataset-by-room-id-and-version/?room_id=7&version=3"
    // return '/cocreation/ajax/get-dataset-by-room-id-and-version/?room_id=' + roomId + '&version=' + version;
-    return
+    return;
 };
