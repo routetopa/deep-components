@@ -149,10 +149,10 @@
                 </template>
 
                 <div class="item_container last">
+                    <template is="dom-repeat" items={{members}}>
                         <div class="info_name" title="{{_getName('members')}}">{{_getName('members')}}</div>
 
-                    <div class="members_list">
-                        <template is="dom-repeat" items={{members}}>
+                        <div class="members_list">
 
                             <div class="member">
 
@@ -175,10 +175,8 @@
                                 </template>
 
                             </div>
-
-                        </template>
-
-                    </div>
+                        </div>
+                    </template>
                 </div>
 
             </div>

@@ -22,8 +22,8 @@ openDataSoft_Provider.prototype.getHTMLFormattedMetadata = function(dataset, res
     var html = '';
 
     // html += '<b>Producteur:</b> ' + dataset.publisher + '<br>';
-    html += '<b>Resource Name:</b> <b style="color: #2196F3;">' + dataset.title + '</b><br>';
-    html += '<b>Resource Description:</b> ' + dataset.description + '</b><div style="height: 1px; background: #2196F3; margin: 12px 0;"></div>';
+    html += '<b>' + ln["resourceName_" + ln["localization"]] + ':</b> <b style="color: #2196F3;">' + dataset.title + '</b><br>';
+    html += '<b>' + ln["resourceDescription_" + ln["localization"]] + ':</b>' + dataset.description + '</b><div style="height: 1px; background: #2196F3; margin: 12px 0;"></div>';
 
     filters = ["_publisher", "title", "description"];
 

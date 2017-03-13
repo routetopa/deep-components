@@ -13,7 +13,7 @@ dataletslider_ln["back_it"] = "INDIETRO";
 dataletslider_ln["forward_it"] = "AVANTI";
 
 /*FR*/
-dataletslider_ln["noDatalet_fr"] = "There are no datalets to show";
+dataletslider_ln["noDatalet_fr"] = "Il n’y a pas de datalet";
 dataletslider_ln["back_fr"] = "BACK";
 dataletslider_ln["forward_fr"] = "FORWARD";
 

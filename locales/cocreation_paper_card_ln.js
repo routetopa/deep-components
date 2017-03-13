@@ -9,8 +9,8 @@ cocreation_room_ln["explore_it"] = "ENTRA";
 cocreation_room_ln["goal_it"] = "SCOPO";
 
 /*FR*/
-cocreation_room_ln["explore_fr"] = "EXPLORE";
-cocreation_room_ln["goal_fr"] = "GOAL";
+cocreation_room_ln["explore_fr"] = "EXPLORER";
+cocreation_room_ln["goal_fr"] = "OBJECTIF";
 
 /*NL*/
 cocreation_room_ln["explore_nl"] = "EXPLORE";
