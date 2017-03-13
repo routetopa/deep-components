@@ -193,13 +193,15 @@
                 <div class="info_button">
                     <paper-icon-button id="base_title_info" icon="info-outline" noink></paper-icon-button>
                 </div>
-                <paper-tooltip for="base_title_info" position="right" offset="22">
-                    <p>
-                        <span class="title">{{_getInputName('TITLE')}}</span>
-                        <br>
-                        <span class="description">{{_getInputDescription('TITLE')}}</span>
-                    </p>
-                </paper-tooltip>
+                <template is="dom-repeat" items="{{inputs}}">
+                    <paper-tooltip for="base_title_info" position="right" offset="22">
+                        <p>
+                            <span class="title">{{_getInputName('TITLE')}}</span>
+                            <br>
+                            <span class="description">{{_getInputDescription('TITLE')}}</span>
+                        </p>
+                    </paper-tooltip>
+                </template>
             </div>
 
             <div class="inputs">
@@ -207,13 +209,15 @@
                 <div class="info_button">
                     <paper-icon-button id="base_description_info" icon="info-outline" noink></paper-icon-button>
                 </div>
-                <paper-tooltip for="base_description_info" position="right" offset="22">
-                    <p>
-                        <span class="title">{{_getInputName('DESCRIPTION')}}</span>
-                        <br>
-                        <span class="description">{{_getInputDescription('DESCRIPTION')}}</span>
-                    </p>
-                </paper-tooltip>
+                <template is="dom-repeat" items="{{inputs}}">
+                    <paper-tooltip for="base_description_info" position="right" offset="22">
+                        <p>
+                            <span class="title">{{_getInputName('DESCRIPTION')}}</span>
+                            <br>
+                            <span class="description">{{_getInputDescription('DESCRIPTION')}}</span>
+                        </p>
+                    </paper-tooltip>
+                </template>
             </div>
 
             <paper-tabs selected="{{tabIndex}}" noink no-bar>
@@ -601,10 +605,12 @@
             },
 
             _getInputName : function(name) {
+                console.log('Test tooltip=' + name);
                 return ln[name + "_" +ln["localization"]];
             },
 
             _getInputDescription : function(name) {
+                console.log('Descriptione -tooltip=' + name + ' ' + ln["localization"]);
                 return ln[name + "Description_" +ln["localization"]];
             },
 
