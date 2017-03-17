@@ -62,6 +62,10 @@ var AjaxJsonAlasqlBehavior = {
             dataType: "json",
             success: function(e){
                 comp.handleResponse(e);
+            },
+            error: function(e) {
+                $(comp._component).find("base-datalet")[0].removeLoader();
+                $($(comp._component).find("#ajax_error")[0]).append(' ' + e.statusText + ' ' + e.status);
             }
         });
     },
