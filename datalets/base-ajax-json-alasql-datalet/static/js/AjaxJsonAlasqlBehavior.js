@@ -61,11 +61,19 @@ var AjaxJsonAlasqlBehavior = {
             url: this._component.dataUrl,
             dataType: "json",
             success: function(e){
-                comp.handleResponse(e);
+                try{
+                    comp.handleResponse(e);
+                }
+                catch (ex){
+                    $(comp._component).find("base-datalet")[0].removeLoader();
+                    $($(comp._component).find("#ajax_error")[0]).append(' error: javascript ');
+                    console.log(ex);
+                }
             },
             error: function(e) {
                 $(comp._component).find("base-datalet")[0].removeLoader();
-                $($(comp._component).find("#ajax_error")[0]).append(' ' + e.statusText + ' ' + e.status);
+                $($(comp._component).find("#ajax_error")[0]).append(' ' + e.statusText + ': ' + e.status);
+                console.log(e);
             }
         });
     },
