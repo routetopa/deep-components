@@ -1,4 +1,5 @@
 <link rel="import" href="../../bower_components/polymer/polymer.html" />
+<link rel="import" href="../../bower_components/paper-fab/paper-fab.html" />
 
 <script src="../../locales/info_list_ln.js"></script>
 
@@ -133,6 +134,17 @@
                 color: #F44336;
             }
 
+            paper-fab.delete {
+                --iron-icon-height: 18px;
+                --iron-icon-width: 18px;
+                width: 24px;
+                height: 24px;
+                --paper-fab-background:#B6B6B6;
+                padding: 0px;
+                position: relative;
+                top: 10px;
+            }
+
         </style>
 
         <div id="info_container">
@@ -173,6 +185,10 @@
                                 <template is="dom-if" if={{item.owner}}>
                                     <div class="user_status owner">{{_getName('owner')}}</div>
                                 </template>
+
+                                <!--<template is="dom-if" if={{!item.owner}}>
+                                    <paper-fab id="{{item.userId}}" class="delete" mini icon="delete" on-click="_handleDeleteClick"></paper-fab>
+                                </template>-->
 
                             </div>
 
@@ -262,6 +278,13 @@
                     };
                 });
             },
+
+            _handleDeleteClick: function(e){
+                var c = confirm("Do you want to delete this user from this room?");
+                if(c){
+                    this.fire('info-list-controllet_delete_user', {userId : e.currentTarget.id});
+                }
+            }
 
         });
 
