@@ -118,6 +118,15 @@ Example :
             #base_datalet_source_link {
             }
 
+            span#ajax_error {
+                position: absolute;
+                top: -34px;
+                right: 0;
+
+                color: #F44336;
+                background-color: #E0E0E0;
+            }
+
             #base_datalet_rtp {
             }
 
@@ -171,11 +180,13 @@ Example :
             {
                 position: absolute;
                 top: 4px;
-                right: 40px;
+                right: 24px;
                 font-size: small;
                 border: solid 1px #000000;
 
                 display: none;
+
+                background-color: #FFFFFF;
             }
 
             .highcharts-contextmenu-container div
@@ -242,7 +253,7 @@ Example :
             </div>
 
             <div id="base_datalet_source_link">
-                <b>Source:</b> <a id="base_datalet_source" target="_blank"></a> <span id="base_datalet_link_span">(<a id="base_datalet_link" target="_blank">dataset</a>)</span>
+                <b>Source:</b> <a id="base_datalet_source" target="_blank"></a> <span id="base_datalet_link_span">(<a id="base_datalet_link" target="_blank">dataset</a>)</span> <span id="ajax_error"></span>
             </div>
 
             <div id="base_datalet_rtp">

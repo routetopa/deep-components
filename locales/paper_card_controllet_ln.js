@@ -8,8 +8,8 @@ paper_ln["modify_en"] = "Modify card";
 paper_ln["delete_en"] = "Delete card";
 paper_ln["open_en"]   = "Open preview";
 
-paper_ln["modify_fr"] = "Modifier la card";
-paper_ln["delete_fr"] = "Supprimer la card";
+paper_ln["modify_fr"] = "Modifier";
+paper_ln["delete_fr"] = "Supprimer";
 paper_ln["open_fr"]   = "Ouvrir aperçu";
 
 paper_ln["modify_nl"] = "Wijzigen card";

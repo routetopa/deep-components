@@ -27,8 +27,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
         .card {
             position: relative;
-            margin: 6px;
-            height: 98%;
+            /*margin: 6px;*/
+            height: 100%;
+            height: 100%;
         }
 
     </style>
@@ -37,8 +38,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
         <div id="fixed" class="fixed" style$="background-color:{{color}}"></div>
         <div id="card" class="card" style$="background-color:{{color}}">
-            <template is="dom-if" if="{{_checkUndefined(publicRoom)}}">
-                <iframe id="public_room_iframe" src="/public-room/{{publicRoom}}" width="100%" height="100%"></iframe>
+            <template is="dom-if" if="{{_checkUndefined(agora_url)}}">
+                <iframe id="agora_room_iframe" src="{{agora_url}}" width="100%" height="100%"></iframe>
             </template>
         </div>
 
@@ -58,7 +59,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
         properties: {
 
-            publicRoom : {
+            agora_url : {
               type: String
             },
 

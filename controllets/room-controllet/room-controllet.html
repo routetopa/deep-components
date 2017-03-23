@@ -65,9 +65,9 @@
         </style>
 
         <div id={{roomId}} class$="grid-item {{roomHeight}} {{roomWidth}}" on-mouseover="_showTooltip" on-mouseout="_hideTooltip" style$="background-color: {{roomColor}};">
-            <div class="room-body">{{body}}</div>
-            <div class="room-subject"><span>{{subject}}</span></div>
-            <div class="room-timestamp">{{timestamp}}</div>
+            <div class="room-body" style="color: #000000">{{body}}</div>
+            <div class="room-subject" ><span>{{subject}}</span></div>
+            <div class="room-timestamp" style="color: #000000">{{timestamp}}</div>
 
             <paper-dialog id="room_info" class="room-tooltip">
                 <iron-icon icon="communication:call-made" class="this" style="color: #2196F3;"></iron-icon>

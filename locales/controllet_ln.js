@@ -57,6 +57,12 @@ ln["of_en"] = "of";
 ln["datasetsRows_en"] = "datasets";
 ln["search_en"] = "Search";
 
+//metadata
+ln["room_en"] = "Room";
+ln["resourceName_en"] = "Resource Name";
+ln["resourceDescription_en"] = "Resource Description";
+ln["users_en"] = "Users";
+
 //SELECT DATA
 
 //select-fields
@@ -283,6 +289,12 @@ ln["of_it"] = "di";
 ln["datasetsRows_it"] = "dataset";
 ln["search_it"] = "Ricerca";
 
+//metadata
+ln["room_it"] = "Stanza";
+ln["resourceName_it"] = "Nome Risorsa";
+ln["resourceDescription_it"] = "Descrizione Risorsa";
+ln["users_it"] = "Utenti";
+
 //SELECT DATA
 
 //select-fields
@@ -294,7 +306,7 @@ ln["showing_it"] = "Mostrati";
 ln["to_it"] = "a";
 ln["of_it"] = "di";
 ln["rows_it"] = "file";
-ln["type_it"] = "SCRIVERE";
+ln["type_it"] = "TIPO";
 ln["warning_it"] = "ATTENZIONE";
 
 //expert
@@ -383,7 +395,7 @@ ln["leafletjsDescription_it"] = "";
 ln["leafletjs-geojsonDescription_it"] = "";
 
 //inputs
-ln["title_it"] = "Titolo"
+ln["title_it"] = "Titolo";
 ln["description_it"] = "Descrizione";
 
 ln["sortAscending_it"] = "ORDINE CRESCENTE";
@@ -409,7 +421,7 @@ ln["BubbleContent_it"] = "CONTENUTO DELLA BOLLA";
 ln["BubbleSize_it"] = "DIMENSIONE DELLA BOLLA";
 ln["Categories_it"] = "CATEGORIA";
 
-ln["TITLEDescription_it"] = "Titolo del datalet";
+ln["TITLEDescription_it"] = "Titolo  datalet";
 ln["DESCRIPTIONDescription_it"] = "Descrizione datalet";
 ln["XAxisDescription_it"] = "Asse x";
 ln["YAxisDescription_it"] = "Asse y";
@@ -483,10 +495,10 @@ ln["extendedDatasets_fr"] = "RECHERCHE AVANCÉE";
 ln["datasets_fr"] = "LISTE DE DATASET";
 
 ln["provider_fr"] = "Fournisseur";
-ln["all_fr"] = "Tout";
-ln["allDescription_fr"] = "Hows les ensembles de données de tous les fournisseurs associés.";
-ln["providerName_fr"] = "Provider";
-ln["providerNameDescription_fr"] = "Affiche uniquement les ensembles de données du fournisseur sélectionné.";
+ln["all_fr"] = "Montre tout";
+ln["allDescription_fr"] = "Présentation de toutes les versions du jeu de données.";
+ln["providerName_fr"] = "Montre la dernière ";
+ln["providerNameDescription_fr"] = "Dernière version du jeu de données.";
 
 ln["search_fr"] = "Rechercher";
 ln["standard_fr"] = "Standard";
@@ -507,6 +519,12 @@ ln["to_fr"] = "à";
 ln["of_fr"] = "de";
 ln["datasetsRows_fr"] = "dataset";
 ln["search_fr"] = "Rechercher";
+
+//metadata
+ln["room_fr"] = "Salle";
+ln["resourceName_fr"] = "Nom du jeu de données";
+ln["resourceDescription_fr"] = "Description du jeu de données";
+ln["users_fr"] = "Utilisateurs";
 
 //SELECT DATA
 
@@ -634,8 +652,8 @@ ln["BubbleContent_fr"] = "CONTENU DE LA BULLE";
 ln["BubbleSize_fr"] = "TAILLE DE LA BULLE";
 ln["Categories_fr"] = "CATÉGORIE";
 
-ln["TITLEDescription_fr"] = "Le titre du datalet.";
-ln["DESCRIPTIONDescription_fr"] = "La description du datalet.";
+ln["TITLEDescription_fr"] = "Titre du datalet.";
+ln["DESCRIPTIONDescription_fr"] = "Description du datalet.";
 ln["XAxisDescription_fr"] = "L'axe des x.";
 ln["YAxisDescription_fr"] = "L'axe des y.";
 ln["NumericXAxisDescription_fr"] = "L'axe des x.";
@@ -732,6 +750,12 @@ ln["to_nl"] = "to";
 ln["of_nl"] = "of";
 ln["datasetsRows_nl"] = "dataset";
 ln["search_nl"] = "Search";
+
+//metadata
+ln["room_nl"] = "Room";
+ln["resourceName_nl"] = "Resource Name";
+ln["resourceDescription_nl"] = "Resource Description";
+ln["users_nl"] = "Users";
 
 //SELECT DATA
 

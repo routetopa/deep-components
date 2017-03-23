@@ -10,7 +10,7 @@
 <dom-module id="paper-card-controllet">
 
     <template>
-        <link rel="stylesheet" href="../shared_js/perfect-scrollbar/css/perfect-scrollbar.min.css">
+        <!--<link rel="stylesheet" href="../shared_js/perfect-scrollbar/css/perfect-scrollbar.min.css">-->
         <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
         <style>
 
@@ -111,6 +111,8 @@
                 z-index: 1100;
                 padding: 8px;
                 background-color: white;
+
+                overflow: auto;
             }
 
             #fullscreen_content {
@@ -158,7 +160,7 @@
 
     </template>
 
-    <script src="../shared_js/perfect-scrollbar/js/min/perfect-scrollbar.jquery.min.js"></script>
+    <!--<script src="../shared_js/perfect-scrollbar/js/min/perfect-scrollbar.jquery.min.js"></script>-->
 
     <script>
         Polymer({
@@ -200,7 +202,7 @@
                 if(this.cardType == "text")
                     this.$.content.className += this.$.content.className ? ' text' : 'text';
 
-                $(this.$.fullscreen_container).perfectScrollbar();
+//                $(this.$.fullscreen_container).perfectScrollbar();
 
                 this._resize();
                 this._translate();

@@ -23,7 +23,7 @@ info_ln["info_title_it"] = "INFO";
 info_ln["name_it"] = "Nome";
 info_ln["subject_it"] = "Soggetto";
 info_ln["description_it"] = "Descrizione";
-info_ln["goal_it"] = "Gol";
+info_ln["goal_it"] = "Obiettivo";
 info_ln["invitationText_it"] = "Testo di invito";
 info_ln["period_it"] = "Periodo";
 info_ln["members_it"] = "Membri";
@@ -35,13 +35,13 @@ info_ln["owner_it"] = "OWNER";
 /*FR*/
 info_ln["info_title_fr"] = "INFO";
 
-info_ln["name_fr"] = "Name";
-info_ln["subject_fr"] = "Subject";
+info_ln["name_fr"] = "Nom";
+info_ln["subject_fr"] = "Titre";
 info_ln["description_fr"] = "Description";
-info_ln["goal_fr"] = "Goal";
-info_ln["invitationText_fr"] = "Invitation Text";
-info_ln["period_fr"] = "Period";
-info_ln["members_fr"] = "Members";
+info_ln["goal_fr"] = "Objectif";
+info_ln["invitationText_fr"] = "Texte d'invitation";
+info_ln["period_fr"] = "Periode";
+info_ln["members_fr"] = "Membres";
 
 info_ln["joined_fr"] = "JOINED";
 info_ln["pending_fr"] = "PENDING";

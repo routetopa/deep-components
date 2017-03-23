@@ -206,104 +206,109 @@ metadata_ln["system_of_records_description_it"] = "Se il sistema è strutturato 
 
 /******** FR ********/
 
-metadata_ln["metadata_fr"] = "METADATA";
+metadata_ln["room_fr"] = "Salle";
+metadata_ln["resource_name_fr"] = "Nom du jeu de données";
+metadata_ln["resource_description_fr"] = "Description du jeu de données";
+metadata_ln["users_fr"] = "Utilisateurs";
 
-metadata_ln["CC_RF_fr"] = "\"Common Core\" Required Fields";
-metadata_ln["CC_RAF_fr"] = "\"Common Core\" Required if Applicable Fields";
-metadata_ln["EF_fr"] = "Expanded Fields";
+metadata_ln["metadata_fr"] = "MÉTADONNÉES";
+
+metadata_ln["CC_RF_fr"] = "\"Common Core\" Champs requis";
+metadata_ln["CC_RAF_fr"] = "\"Common Core\" Champs facultatifs";
+metadata_ln["EF_fr"] = "Champs extra";
 
 //CC_RF
 //1
-metadata_ln["title_fr"] = "Title";
-metadata_ln["title_description_fr"] = "Human-readable name of the asset. Should be in plain English and include sufficient detail to facilitate search and discovery.";
+metadata_ln["title_fr"] = "Titre";
+metadata_ln["title_description_fr"] = "Utilisez un nom complet et compréhensible, qui puisse être facilement trouvé dans le cas d’une recherche";
 //2
 metadata_ln["description_fr"] = "Description";
-metadata_ln["description_description_fr"] = "Human-readable description (e.g., an abstract) with sufficient detail to enable a user to quickly understand whether the asset is of interest.";
+metadata_ln["description_description_fr"] = "Utilisez une description complète et compréhensible, qui puisse rendre facile une recherche.";
 //3
-metadata_ln["tags_fr"] = "tags";
+metadata_ln["tags_fr"] = "Tags";
 metadata_ln["tags_description_fr"] = "tags";
 //4
-metadata_ln["last_update_fr"] = "last_update";
-metadata_ln["last_update_description_fr"] = "last_update";
+metadata_ln["last_update_fr"] = "Dernière mise à jour";
+metadata_ln["last_update_description_fr"] = "Dernière mise à jour";
 //5
-metadata_ln["publisher_fr"] = "publisher";
-metadata_ln["publisher_description_fr"] = "publisher";
+metadata_ln["publisher_fr"] = "Publier par";
+metadata_ln["publisher_description_fr"] = "publier par";
 //6
-metadata_ln["contact_name_fr"] = "contact_name";
-metadata_ln["contact_name_description_fr"] = "contact_name";
+metadata_ln["contact_name_fr"] = "Personne de contact";
+metadata_ln["contact_name_description_fr"] = "personne de contact";
 //7
-metadata_ln["contact_email_fr"] = "contact_email";
-metadata_ln["contact_email_description_fr"] = "contact_email";
+metadata_ln["contact_email_fr"] = "E-mail du contact";
+metadata_ln["contact_email_description_fr"] = "e-mail du contact";
 //8
-metadata_ln["unique_identifier_fr"] = "unique_identifier";
-metadata_ln["unique_identifier_description_fr"] = "unique_identifier";
+metadata_ln["unique_identifier_fr"] = "Identifiant";
+metadata_ln["unique_identifier_description_fr"] = "Indiquer un identifiant pour le jeu de données";
 //9
-metadata_ln["public_access_level_fr"] = "public_access_level";
-metadata_ln["public_access_level_description_fr"] = "public_access_level";
+metadata_ln["public_access_level_fr"] = "Niveau d’accés";
+metadata_ln["public_access_level_description_fr"] = "Indiquez le niveau d’accès (public, privé)";
 
 //CC_RAF
 //1
-metadata_ln["bureau_code_fr"] = "bureau_code";
-metadata_ln["bureau_code_description_fr"] = "bureau_code";
+metadata_ln["bureau_code_fr"] = "Identifiant bureau";
+metadata_ln["bureau_code_description_fr"] = "identifiant bureau";
 //2
-metadata_ln["program_code_fr"] = "program_code";
-metadata_ln["program_code_description_fr"] = "program_code";
+metadata_ln["program_code_fr"] = "Identifiant programme";
+metadata_ln["program_code_description_fr"] = "identifiant programme";
 //3
-metadata_ln["access_level_comment_fr"] = "access_level_comment";
-metadata_ln["access_level_comment_description_fr"] = "access_level_comment";
+metadata_ln["access_level_comment_fr"] = "Commentaire sur le niveau d’accès";
+metadata_ln["access_level_comment_description_fr"] = "commentaire sur le niveau d’accès";
 //4
-metadata_ln["download_url_fr"] = "download_url";
-metadata_ln["download_url_description_fr"] = "download_url";
+metadata_ln["download_url_fr"] = "URL de téléchargement";
+metadata_ln["download_url_description_fr"] = "URL de téléchargement";
 //5
-metadata_ln["endpoint_fr"] = "endpoint";
-metadata_ln["endpoint_description_fr"] = "endpoint";
+metadata_ln["endpoint_fr"] = "Point d’accés";
+metadata_ln["endpoint_description_fr"] = "point d’accés";
 //6
-metadata_ln["format_fr"] = "format";
+metadata_ln["format_fr"] = "Format";
 metadata_ln["format_description_fr"] = "format";
 //7
-metadata_ln["license_fr"] = "license";
-metadata_ln["license_description_fr"] = "license";
+metadata_ln["license_fr"] = "Licence";
+metadata_ln["license_description_fr"] = "licence";
 //8
-metadata_ln["spatial_fr"] = "spatial";
+metadata_ln["spatial_fr"] = "Spatial";
 metadata_ln["spatial_description_fr"] = "spatial";
 //9
-metadata_ln["temporal_fr"] = "temporal";
+metadata_ln["temporal_fr"] = "Temporal";
 metadata_ln["temporal_description_fr"] = "temporal";
 
 //EF
 //1
-metadata_ln["category_fr"] = "category";
-metadata_ln["category_description_fr"] = "category";
+metadata_ln["category_fr"] = "Catégorie";
+metadata_ln["category_description_fr"] = "catégorie";
 //2
-metadata_ln["data_dictionary_fr"] = "data_dictionary";
-metadata_ln["data_dictionary_description_fr"] = "data_dictionary";
+metadata_ln["data_dictionary_fr"] = "Dictionnaire des données";
+metadata_ln["data_dictionary_description_fr"] = "dictionnaire des données";
 //3
-metadata_ln["data_quality_fr"] = "data_quality";
-metadata_ln["data_quality_description_fr"] = "data_quality";
+metadata_ln["data_quality_fr"] = "Qualité des données";
+metadata_ln["data_quality_description_fr"] = "qualité des données";
 //4
-metadata_ln["distribution_fr"] = "distribution";
+metadata_ln["distribution_fr"] = "Distribution";
 metadata_ln["distribution_description_fr"] = "distribution";
 //5
-metadata_ln["frequency_fr"] = "frequency";
-metadata_ln["frequency_description_fr"] = "frequency";
+metadata_ln["frequency_fr"] = "Fréquence";
+metadata_ln["frequency_description_fr"] = "fréquence";
 //6
-metadata_ln["homepage_url_fr"] = "homepage_url";
-metadata_ln["homepage_url_description_fr"] = "homepage_url";
+metadata_ln["homepage_url_fr"] = "URL";
+metadata_ln["homepage_url_description_fr"] = "URL";
 //7
-metadata_ln["language_fr"] = "language";
-metadata_ln["language_description_fr"] = "language";
+metadata_ln["language_fr"] = "Langue";
+metadata_ln["language_description_fr"] = "langue";
 //8
-metadata_ln["primary_IT_investment_UII_fr"] = "primary_IT_investment_UII";
-metadata_ln["primary_IT_investment_UII_description_fr"] = "primary_IT_investment_UII";
+metadata_ln["primary_IT_investment_UII_fr"] = "Investissement prioritaire pour le UII";
+metadata_ln["primary_IT_investment_UII_description_fr"] = "investissement prioritaire pour le UII";
 //9
-metadata_ln["related_documents_fr"] = "related_documents";
-metadata_ln["related_documents_description_fr"] = "related_documents";
+metadata_ln["related_documents_fr"] = "Documents associés";
+metadata_ln["related_documents_description_fr"] = "documents associés";
 //10
-metadata_ln["release_date_fr"] = "release_date";
-metadata_ln["release_date_description_fr"] = "release_date";
+metadata_ln["release_date_fr"] = "Date de publication";
+metadata_ln["release_date_description_fr"] = "date de publication";
 //11
-metadata_ln["system_of_records_fr"] = "system_of_records";
-metadata_ln["system_of_records_description_fr"] = "system_of_records";
+metadata_ln["system_of_records_fr"] = "Référetiel des données";
+metadata_ln["system_of_records_description_fr"] = "référetiel des données";
 
 /******** NL ********/
 

@@ -30,29 +30,6 @@
 -->
 
 <link rel="import" href="../../bower_components/polymer/polymer.html">
-<link rel="import" href="../../bower_components/paper-styles/color.html">
-
-<link rel="import" href="../../bower_components/paper-material">
-<link rel="import" href="../../bower_components/paper-icon-button/paper-icon-button.html">
-<link rel="import" href="../../bower_components/iron-icons/iron-icons.html">
-<link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout.html">
-
-<!--
- `items-slider-controllet` is a carousel of cards with a title and an image. Pass to it an array of objects with name and image fields and
- a responsive slider will be created. Every time the user click on a card an event will be generate in order to get the card clicked information to
- the component that use the slider.
-
-Example:
-
-    <items-slider-controllet items='[{name : "myObject1", image : "pathToMyImage1"},...,{name : "myObjectN", image : "pathToMyImageN"}]' \>
-    </items-slider-controllet>
-
-
-@element items-slider-controllet
-@status beta
-@homepage index.html
-@group controllets
--->
 
 <dom-module id="generic-cards-container-controllet">
     <template>
@@ -62,7 +39,12 @@ Example:
             .card_grid
             {
                 width: 100%;
-                z-index: 0;
+                height: 100%;
+                display: flex;
+                flex-direction: row;
+                flex-wrap: wrap;
+                position: relative;
+                overflow: hidden;
             }
 
             .card_grid:after {
@@ -93,13 +75,17 @@ Example:
                 display: none;
             }
 
+            ::content paper-card-controllet
+            {
+                margin: 20px;
+            }
+
         </style>
 
-        <!--<div id="container">-->
-            <div class="card_grid">
-                <content></content>
-            </div>
-        <!--</div>-->
+        <div class="card_grid">
+            <content></content>
+        </div>
+
     </template>
 
     <script>
@@ -108,32 +94,12 @@ Example:
 
             is : 'generic-cards-container-controllet',
 
-            /**
-             * Fired when the user selects a card from slider by clicking on it.
-             *
-             * @event generic-cards-container-controllet_card-selected
-             */
             properties : {
-                prevSelectedCard : {
-                    type: Object,
-                    value : null
-                },
-                /**
-                 * Presected card. You can pass the card title to preselect it.
-                 */
-                selectedCard:{
-                    type: String,
-                    value: undefined
-                }
             },
 
             attached : function(){
                 var _this = this;
                 var cards = document.querySelectorAll('paper-card-controllet');
-
-//                if(cards.length == 0){
-//                   this.$.card_grid.innerHTML += "<div class='empty'>There is nothing to show.</div>";
-//                }
 
                 for(var i = 0; i < cards.length; i++){
                     cards[i].addEventListener('click', function(e){
@@ -143,35 +109,11 @@ Example:
             },
 
             _cardClick : function(e){
-
-                if(this.prevSelectedCard != null){
-                    this.prevSelectedCard.elevation = "1";
-
-                }
-                e.currentTarget.elevation = "5";
-                this.prevSelectedCard = e.currentTarget;
-
                 this.fire('generic-cards-container-controllet_card-selected', {selectedElement: e.currentTarget});
                 this.fire('animated-button-container-controllet_close', {});
 
-            },
-
-            _handleSearch: function(e){
-                if(e.detail.id == "search_from_animated_button_container") {
-                    var cards = document.querySelectorAll('.card');
-                    for (var i = 0; i < cards.length; i++) {
-                        var title = cards[i].cardTitle ? cards[i].cardTitle : "";
-                        var comment = cards[i].comment ? cards[i].comment : "";
-                        var searchFlag = title.indexOf(e.detail.searchKey) == -1 && comment.indexOf(e.detail.searchKey) == -1;
-
-                        if (!searchFlag || e.detail.searchKey == "") {
-                            cards[i].style.display = "inline-block";
-                        } else {
-                            cards[i].style.display = "none";
-                        }
-                    }
-                }
             }
+
         });
 
     </script>

@@ -1507,6 +1507,10 @@ table.dataTable td {
   clear: both;
   *zoom: 1;
   zoom: 1;
+	background-color: #FFFFFF;
+
+	height: calc(100% - 82px);
+	min-height: 480px;
   /*border-bottom: 2px solid #B6B6B6;*/
   /*margin-bottom: 8px;*/
 }
@@ -1721,7 +1725,7 @@ table.dataTable tfoot th.ui-state-default:last-child {
   color: #000000 !important;
   border: 1px solid transparent;
   background-color: #ffffff;
-  height: 36px;
+  height: 32px;
 }
 .dataTables_wrapper .dataTables_paginate .fg-button:active {
   outline: none;
@@ -1738,10 +1742,28 @@ table.dataTable tfoot th.ui-state-default:last-child {
   font-weight: normal;
 }
 .dataTables_wrapper .ui-toolbar {
-  padding: 8px;/*16*/
+  padding: 4px;/*16*/
+	background-color: #E0E0E0;
+	height: 32px;
+	line-height: 32px;
+	border-radius: 0;
 }
 .dataTables_wrapper.no-footer .dataTables_scrollBody {
   border-bottom: none;
 }
 
+.dataTables_wrapper .dataTables_length, .dataTables_wrapper .dataTables_filter, .dataTables_wrapper .dataTables_info
+{
+	height: 32px;
+	line-height: 32px;
+	padding: 0 8px;
+}
+
+.dataTables_wrapper {
+	overflow: auto;
+}
+
+.dataTables_wrapper > *, .DataTables_sort_wrapper {
+	line-height: 18px !important;
+}
 

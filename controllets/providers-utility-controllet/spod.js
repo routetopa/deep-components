@@ -1,17 +1,20 @@
 function SPOD_Provider () {
 }
 
+
 SPOD_Provider.prototype.getHTMLFormattedMetadata = function(dataset, resourceIndex) {
     var html = '';
+    var userLang = navigator.language || navigator.userLanguage;
 
     var users = dataset.users;
     var metas = JSON.parse(dataset.metas);
 
-    html += '<b>Room:</b> ' + dataset.roomName + '<br>';
-    html += '<b>Resource Name:</b> <b style="color: #2196F3;">' + ((metas.title) ? metas.title : "") + '</b><br>';
-    html += '<b>Resource Description:</b> ' + ((metas.description) ? metas.description : "") + '</b><br>';
 
-    html += '<b>Users:</b><div class="user_icons" style="display: flex; flex-direction: row;">';
+    html += '<b>' + ln["room_" + ln["localization"]] + ':</b>' + dataset.roomName + '<br>';
+    html += '<b>' + ln["resourceName_" + ln["localization"]] + ':</b> <b style="color: #2196F3;">' + ((metas.title) ? metas.title : "") + '</b><br>';
+    html += '<b>' + ln["resourceDescription_" + ln["localization"]] + ':</b>' + ((metas.description) ? metas.description : "") + '</b><br>';
+
+    html += '<b>' + ln["users_" + ln["localization"]] + ':</b> <div class="user_icons" style="display: flex; flex-direction: row;">';
 
     for(var j in users) {
         html += '<a href="' + users[j].href + '">';
@@ -45,7 +48,7 @@ SPOD_Provider.prototype.getDatasetUrl = function(providerUrl, datasetId) {
 };
 
 SPOD_Provider.prototype.getResourceUrl = function(providerUrl, resourceId) {
-    "http://172.16.15.128/cocreation/ajax/get-dataset-by-room-id-and-version/?room_id=7&version=3"
+    // "http://172.16.15.128/cocreation/ajax/get-dataset-by-room-id-and-version/?room_id=7&version=3"
    // return '/cocreation/ajax/get-dataset-by-room-id-and-version/?room_id=' + roomId + '&version=' + version;
-    return
+    return;
 };
