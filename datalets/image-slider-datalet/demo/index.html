@@ -1,0 +1,62 @@
+<!doctype html>
+
+<html>
+<head>
+    <script src="../../shared_js/jquery-1.11.2.min.js"></script>
+
+    <script src="../../../bower_components/webcomponentsjs/webcomponents-lite.min.js"></script>
+
+    <script src="../../shared_js/perfect-scrollbar/js/min/perfect-scrollbar.jquery.min.js"></script>
+    <link rel="stylesheet" href="../../shared_js/perfect-scrollbar/css/perfect-scrollbar.min.css">
+
+    <link rel="import" href="../image-slider-datalet.html" />
+
+    <link rel="import" href="../../../bower_components/paper-material/paper-material.html" />
+</head>
+<body>
+
+<style>
+
+    #container {
+        top: 48px;
+        /*left :400px;*/
+        margin-left: 40px;
+        margin-right: 40px;
+        height: 80vh;
+        width: calc(100% - 100px);
+    }
+
+
+</style>
+
+<paper-material id="container" elevation="5">
+
+    <image-slider-datalet id="slider"></image-slider-datalet>
+
+</paper-material>
+
+<script>
+    var images = ["http://192.168.164.128:8001/images/993e7cde-93fb-4615-819b-cc3a8e17521a/Cattura.PNG",
+        "http://192.168.164.128:8001/images/993e7cde-93fb-4615-819b-cc3a8e17521a/DSC_0053.JPG",
+        "http://192.168.164.128:8001/images/993e7cde-93fb-4615-819b-cc3a8e17521a/Immagine1.png",
+        "http://192.168.164.128:8001/images/993e7cde-93fb-4615-819b-cc3a8e17521a/avatar4.jpg",
+        "http://192.168.164.128:8001/images/993e7cde-93fb-4615-819b-cc3a8e17521a/battipaglia.jpg",
+        "http://192.168.164.128:8001/images/993e7cde-93fb-4615-819b-cc3a8e17521a/coollogo_com-44924144.png",
+        "http://192.168.164.128:8001/images/993e7cde-93fb-4615-819b-cc3a8e17521a/fiscianosk8.jpg",
+        "http://192.168.164.128:8001/images/993e7cde-93fb-4615-819b-cc3a8e17521a/salerno.jpg",
+        "http://192.168.164.128:8001/images/993e7cde-93fb-4615-819b-cc3a8e17521a/sc.png",
+        "http://192.168.164.128:8001/images/993e7cde-93fb-4615-819b-cc3a8e17521a/wifi_prato.PNG"];
+
+
+    var slider = document.getElementById('slider');
+
+
+    slider.addEventListener("image-slider-datalet_attached", function () {
+        slider.setImages(images);
+    });
+
+
+</script>
+
+</body>
+</html>

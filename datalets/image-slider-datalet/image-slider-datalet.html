@@ -1,0 +1,408 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html" />
+
+<link rel="import" href="../../bower_components/neon-animation/neon-animation.html">
+<link rel="import" href="../../bower_components/neon-animation/neon-animatable.html">
+<link rel="import" href="../../bower_components/neon-animation/neon-animations.html">
+
+<link rel="import" href="../../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../../bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="../../bower_components/iron-icon/iron-icon.html">
+
+<link rel="import" href="../../bower_components/paper-fab/paper-fab.html">
+
+<link rel="import" href="../../bower_components/paper-tooltip/paper-tooltip.html">
+
+<!--<script src="../../locales/datalet-slider_ln.js"></script>-->
+
+
+<dom-module id="image-slider-datalet">
+
+    <template>
+
+        <style is="custom-style">
+            #slider_container {
+                height: 100%;
+                width: 100%;
+                overflow: hidden;
+            }
+
+            #slider_container * {
+                font-family: 'Roboto', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+                font-size: 16px;
+                line-height: 24px;
+            }
+
+            #slider_container .header{
+                height: 48px;
+                width: 100%;
+                background: #B6B6B6;
+                display: flex;
+                flex-direction: row;
+            }
+
+            #slider_container .footer{
+                height: 48px;
+                width: 100%;
+                background: #B6B6B6;
+                display: flex;
+                flex-direction: row-reverse;
+            }
+
+            /*#slider_container .chevron-left{*/
+                /*/!*float: left;*!/*/
+            /*}*/
+
+            /*#slider_container .chevron-right{*/
+                /*/!*float: right;*!/*/
+            /*}*/
+
+            #slider_container .box{
+                height: 48px;
+                width: calc(100% - 96px);
+                display: flex;
+                flex-direction: row;
+            }
+
+            #slider_container #avatar {
+                height: 40px;
+                width: 40px;
+                min-width: 40px;
+                border-radius: 50%;
+                background: #FFFFFF;
+                color: #2196F3;
+                line-height: 40px;
+                font-size: 32px;
+                vertical-align: middle;
+                text-align: center;
+                margin: 4px 0 4px 8px;
+            }
+
+            #slider_container .text {
+                height: 24px;
+                width: 100%;
+                padding: 12px 48px 12px 0;
+                font-weight: 700;
+                text-transform: uppercase;
+                text-align: center;
+                /*padding-left: 16px;*/
+                /*line-height: 48px;*/
+                /*font-size: 32px;*/
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+
+            /*:host > ::content neon-animatable.iron-selected:not(.neon-animating) {*/
+                /*position: static;*/
+            /*}*/
+
+            neon-animated-pages {
+                height: calc(100% - 96px);
+            }
+
+            :host > ::content neon-animatable {
+                height: 100%;
+                width: 100%;
+
+                /*height: calc(100% - 16px);*/
+                /*width: calc(100% - 16px);;*/
+                /*padding: 8px;*/
+                /*overflow-y: auto;*/
+                /*overflow-x: hidden;*/
+            }
+
+            #slider_container paper-icon-button{
+                color: #000000;
+                height: 48px;
+                width: 48px;
+                padding: 0px;
+                margin: 0px;
+                --paper-icon-button-ink-color: #ffffff;
+            }
+
+            #slider_container paper-icon-button:hover{
+                color: #00AABF;
+            }
+
+            /*#slider_container paper-icon-button[disabled]{*/
+            /*}*/
+
+            #slider_container paper-tooltip {
+                --paper-tooltip-background: black;
+            }
+
+            #slider_container paper-tooltip p {
+                margin: 0;
+                padding: 0;
+            }
+
+            #slider_container paper-fab {
+                --paper-fab-background : #00BCD4;
+                --paper-fab: {
+                     height: 40px;
+                     width: 40px;
+                     padding: 0;
+                     margin: 4px 8px 4px 8px;
+                 };
+            }
+
+            #slider_container .image_container {
+                height: calc(100% - 32px);
+                width: calc(100% - 32px);
+                padding: 16px;
+                position: relative;
+                overflow-y: scroll;
+                overflow-x: hidden;
+            }
+
+            img.image{
+                height: 100%;
+                width: 100%;
+                object-fit: contain;
+                /*box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);*/
+            }
+
+        </style>
+
+        <div id="slider_container">
+
+            <div class="header">
+                <paper-icon-button id="slider_chevron_left" class="chevron-left" on-click="_onPrevClick" icon="arrow-back"></paper-icon-button>
+
+                <div class="box">
+                    <div id="avatar">[[avatar]]</div>
+                    <div class="text" title="[[title]]">[[title]]</div>
+                </div>
+
+                <paper-icon-button id="slider_chevron_right" class="chevron-right" on-click="_onNextClick" icon="arrow-forward"></paper-icon-button>
+            </div>
+
+            <paper-tooltip for="slider_chevron_left" position="right" offset="0"><p><span id="back"></span></p></paper-tooltip>
+            <paper-tooltip for="slider_chevron_right" position="left" offset="0"><p><span id="forward"></span></p></paper-tooltip>
+
+            <neon-animated-pages id="animated_pages" on-neon-animation-finish="_onNeonAnimationFinish" selected="[[selected]]" entry-animation="[[entryAnimation]]" exit-animation="[[exitAnimation]]">
+                <template is="dom-repeat" items="{{images}}">
+                    <neon-animatable>
+                        <img class="image" src="[[item]]" />
+                    </neon-animatable>
+                </template>
+            </neon-animated-pages>
+        </div>
+
+    </template>
+
+    <script>
+
+        Polymer({
+
+            is : 'image-slider-datalet',
+
+            properties :
+            {
+                images : {
+                    type  : Array,
+                    value : []
+                },
+
+                entryAnimation : {
+                    type  : String,
+                    value : ""
+                },
+
+                exitAnimation  : {
+                    type  : String,
+                    value : ""
+                },
+
+                prevEntryAnimation : {type  : String, value : 'slide-from-left-animation'},
+                prevExitAnimation : {type  : String, value : 'slide-right-animation'},
+                nextEntryAnimation : {type  : String, value : 'slide-from-right-animation'},
+                nextExitAnimation : {type  : String, value : 'slide-left-animation'},
+
+                selected : {
+                    type  : Number,
+                    value : 0
+                },
+
+                prevSelected : {
+                    type  : Number,
+                    value : 0
+                },
+
+                pages : {
+                    type  : Number,
+                    value : 0
+                },
+
+                title : {
+                    type  : String,
+                    value : ""
+                },
+
+                avatar : {
+                    type  : String,
+                    value : "1"
+                }
+
+            },
+
+            ready : function() {
+                /*try
+                {
+                    dataletslider_ln["ln"] = ODE.user_language;
+                }
+                catch(ex){
+                    console.log(ex);
+                }*/
+//                metadata_ln["ln"] = "it";
+
+//                $("[scrollable]").perfectScrollbar();
+            },
+
+            attached : function() {
+                this._translate();
+
+                $("[scrollable]").perfectScrollbar();
+//                this.setDatalets(this.datalets);
+
+                this.fire("image-slider-datalet_attached");
+            },
+
+            _translate : function() {
+                /*this.$.back.innerHTML = dataletslider_ln["back_" + dataletslider_ln["ln"]];
+                this.$.forward.innerHTML = dataletslider_ln["forward_" + dataletslider_ln["ln"]];*/
+            },
+
+            setImages : function(images) {
+                this.images = images;
+                this.pages = this.images.length;
+
+                if(this.pages == 0)
+                    this._showEmpty();
+                else
+                    this.async(function() {
+                        this._showCurrentImage();
+                    }, 1);
+            },
+
+            _showEmpty : function() {
+                //this.setTitle(dataletslider_ln["noDatalet_" + dataletslider_ln["ln"]]);
+                this.setAvatar("!");
+                this.chevronLeft("invisible");
+                this.chevronRight("invisible");
+            },
+
+            _showCurrentImage : function() {
+                if(this.pages == 1) {
+                    this.chevronLeft("invisible");
+                    this.chevronRight("invisible");
+                }
+                else {
+                    this.chevronLeft("true");
+                    this.chevronRight("true");
+                }
+                this._refresh();
+
+                this.fire('image-slider-datalet_selected', {selected : this.selected});
+            },
+
+            setSelected : function(selected) {
+                this.selected = (selected - 1) % this.pages;
+                this.avatar = this.selected + 1;
+
+                this._refresh();
+            },
+
+            setTitle : function(title) {
+                this.title = title;
+            },
+
+            setAvatar : function(innerText) {
+                this.avatar = innerText;
+            },
+
+            chevronLeft : function(flag) {
+                if(flag == "invisible") {
+                    this.$.slider_chevron_left.style.visibility = "hidden";
+                    return;
+                }
+                else
+                    this.$.slider_chevron_left.style.visibility = "inherit";
+
+                if(flag)
+                    this.$.slider_chevron_left.removeAttribute("disabled");
+                else
+                    this.$.slider_chevron_left.setAttribute("disabled", "true");
+            },
+
+            chevronRight : function(flag) {
+                if(flag == "invisible") {
+                    this.$.slider_chevron_right.style.visibility = "hidden";
+                    return;
+                }
+                else
+                    this.$.slider_chevron_right.style.visibility = "inherit";
+
+                if(flag)
+                    this.$.slider_chevron_right.removeAttribute("disabled");
+                else
+                    this.$.slider_chevron_right.setAttribute("disabled", "true");
+            },
+
+            getPrevSelected : function() {
+                return this.prevSelected;
+            },
+
+            setPrevAnimation  : function(entryAnimation, exitAnimation) {
+                this.prevEntryAnimation = entryAnimation;
+                this.prevExitAnimation  = exitAnimation;
+            },
+
+            setNextAnimation  : function(entryAnimation, exitAnimation) {
+                this.nextEntryAnimation = entryAnimation;
+                this.nextExitAnimation  = exitAnimation;
+            },
+
+            _onPrevClick : function() {
+                this.$.slider_chevron_left.setAttribute("disabled", "true");
+                this.$.slider_chevron_right.setAttribute("disabled", "true");
+
+                this.entryAnimation = this.prevEntryAnimation;
+                this.exitAnimation  = this.prevExitAnimation;
+
+                this.prevSelected = this.selected;
+                this.selected = this.selected === 0 ? (this.pages-1) : (this.selected - 1);
+
+                this._refresh();
+            },
+
+            _onNextClick : function() {
+                this.$.slider_chevron_left.setAttribute("disabled", "true");
+                this.$.slider_chevron_right.setAttribute("disabled", "true");
+
+                this.entryAnimation = this.nextEntryAnimation;
+                this.exitAnimation  = this.nextExitAnimation;
+
+                this.prevSelected = this.selected;
+                this.selected = this.selected === (this.pages-1) ? 0 : (this.selected + 1);
+
+                this._refresh();
+            },
+
+            _onNeonAnimationFinish : function() {
+                this.$.slider_chevron_left.removeAttribute("disabled");
+                this.$.slider_chevron_right.removeAttribute("disabled");
+
+                this.avatar = this.selected + 1;
+            },
+
+            _refresh: function(){
+                var img_url = this.images[this.selected].split("/");
+                this.title = img_url[img_url.length -1];
+            }
+
+        });
+
+    </script>
+
+</dom-module>
