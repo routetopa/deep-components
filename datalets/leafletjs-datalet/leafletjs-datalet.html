@@ -100,8 +100,11 @@ Example:
                 {
                     if(isArray)
                     {
-                        if(!isNaN(t.data[0].data[i][0]) && !isNaN(t.data[0].data[i][1]))
+                        if(!isNaN(t.data[0].data[i][0]) && !isNaN(t.data[0].data[i][1])) {
                             t._component.coordinates.push([parseFloat(t.data[0].data[i][0]), parseFloat(t.data[0].data[i][1])]);
+                            geo = L.marker([t._component.coordinates[coordinates_index][0], t._component.coordinates[coordinates_index][1]]).addTo(t._component.map);
+                            coordinates_index++;
+                        }
                         else
                              continue;
                     }
