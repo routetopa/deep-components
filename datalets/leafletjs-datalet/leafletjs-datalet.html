@@ -55,6 +55,7 @@ Example:
             #leafletjs {
                 height: calc(100% - 82px);
                 min-height: 400px;
+                z-index: 0;
             }
         </style>
 
@@ -64,6 +65,10 @@ Example:
     </template>
 
     <script src="leafletsjs/leaflet.js"></script>
+
+    <link rel="stylesheet" href="leafletsjs/marker_cluster/dist/MarkerCluster.css" />
+    <link rel="stylesheet" href="leafletsjs/marker_cluster/dist/MarkerCluster.Default.css" />
+    <script src="leafletsjs/marker_cluster/dist/leaflet.markercluster.js"></script>
 
     <script>
 
@@ -89,12 +94,13 @@ Example:
                 }).addTo(this._component.map);
 
 
-                L.Icon.Default.imagePath = 'http://services.routetopa.eu/DEEalerProvider/COMPONENTS/datalets/leafletjs-datalet/leafletsjs/images';
+                L.Icon.Default.imagePath = 'http://services.routetopa.eu/DEEalerProvider/COMPONENTS/datalets/leafletjs-datalet/leafletsjs/images/';
 
                 t._component.coordinates = [];
                 var coordinates_index  = 0;
                 var isArray = t.data[0].data[0].constructor === Array;
                 var geo;
+                var markers_cluster = L.markerClusterGroup();
 
                 for(var i=0; i<t.data[0].data.length; i++)
                 {
@@ -102,7 +108,8 @@ Example:
                     {
                         if(!isNaN(t.data[0].data[i][0]) && !isNaN(t.data[0].data[i][1])) {
                             t._component.coordinates.push([parseFloat(t.data[0].data[i][0]), parseFloat(t.data[0].data[i][1])]);
-                            geo = L.marker([t._component.coordinates[coordinates_index][0], t._component.coordinates[coordinates_index][1]]).addTo(t._component.map);
+                            geo = L.marker([t._component.coordinates[coordinates_index][0], t._component.coordinates[coordinates_index][1]]);//.addTo(t._component.map);
+                            markers_cluster.addLayer(geo);
                             coordinates_index++;
                         }
                         else
@@ -121,7 +128,8 @@ Example:
                         var coords = t.data[0].data[i].split(",");
                         if(!isNaN(coords[0]) && !isNaN(coords[1])) {
                             t._component.coordinates.push([parseFloat(coords[0]), parseFloat(coords[1])]);
-                            geo = L.marker([t._component.coordinates[coordinates_index][0], t._component.coordinates[coordinates_index][1]]).addTo(t._component.map);
+                            geo = L.marker([t._component.coordinates[coordinates_index][0], t._component.coordinates[coordinates_index][1]]);//.addTo(t._component.map);
+                            markers_cluster.addLayer(geo);
                             coordinates_index++;
                         }else
                             continue;
@@ -130,7 +138,8 @@ Example:
                     {
                         if( (!isNaN(t.data[0].data[i]) && !isNaN(t.data[1].data[i])) && (t.data[0].data[i] && t.data[1].data[i]) ) {
                             t._component.coordinates.push([parseFloat(t.data[0].data[i]), parseFloat(t.data[1].data[i])]);
-                            geo = L.marker([t._component.coordinates[coordinates_index][0], t._component.coordinates[coordinates_index][1]]).addTo(t._component.map);
+                            geo = L.marker([t._component.coordinates[coordinates_index][0], t._component.coordinates[coordinates_index][1]]);//.addTo(t._component.map);
+                            markers_cluster.addLayer(geo);
                             coordinates_index++;
                         }else
                             continue;
@@ -158,6 +167,8 @@ Example:
                 t._component.map._onResize();
                 t._component.map.invalidateSize(false);
                 t._component.map.fitBounds(t._component.coordinates);
+                t._component.map.addLayer(markers_cluster);
+
 
             },
 
