@@ -125,7 +125,7 @@ var WorkcycleBehavior = {
                 that.presentData();
                 $(that._component).find("base-datalet")[0].removeLoader();
                 that.redraw();
-            }, 100);
+            }, 600);
         }
     }
 
