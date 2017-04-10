@@ -114,6 +114,7 @@ var WorkcycleBehavior = {
         this._component = component;
 
         if(this._component.data == undefined){
+            $(this._component).find("base-datalet")[0].removeRefresh();
             this.requestData();
         }else{
             this.data = this._component.data;

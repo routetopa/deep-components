@@ -116,6 +116,16 @@ Example :
             /*}*/
 
             #base_datalet_source_link {
+                height: 24px;
+            }
+
+            img#refresh {
+                visibility: hidden;/*remove*/
+                position: relative;
+                top: -1px;
+                height: 24px;
+                width: 24px;
+                cursor: pointer;
             }
 
             span#ajax_error {
@@ -253,12 +263,12 @@ Example :
             </div>
 
             <div id="base_datalet_source_link">
-                <b>Source:</b> <a id="base_datalet_source" target="_blank"></a> <span id="base_datalet_link_span">(<a id="base_datalet_link" target="_blank">dataset</a>)</span> <span id="ajax_error"></span>
+                <b>Source:</b> <a id="base_datalet_source" target="_blank"></a> <span id="base_datalet_link_span">(<a id="base_datalet_link" target="_blank">dataset</a>)</span> <img id="refresh" src="static/images/refresh.svg"> <span id="ajax_error"></span>
             </div>
 
             <div id="base_datalet_rtp">
                 <div id="rtp">Powered by ROUTE-TO-PA</div>
-                <div><a href="http://www.routetopa.eu/" target="_blank"><img id="rtpalogo" src="static/images/rtpalogo.png" ></a></div>
+                <div><a href="http://www.routetopa.eu/" target="_blank"><img id="rtpalogo" src="static/images/rtpalogo.png"></a></div>
             </div>
 
             <div id="export">
@@ -359,6 +369,10 @@ Example :
 
             attached: function(){
               this.translate();
+            },
+
+            removeRefresh: function() {
+                this.$.refresh.style.display = "none";
             },
 
             removeLoader: function() {
@@ -576,22 +590,24 @@ Example :
                     parent = parent.parentElement;
 
                 var params = {};
-                var fields;
+//                var fields;
                 var component = parent.is;
 
                 for(var i=0; i<parent.attributes.length; i++)
                     params[parent.attributes[i].name] = parent.attributes[i].value;
 
                 delete params["fields"];
+                var data = params["data"]
                 delete params["data"];
 
-                fields = parent.attributes["fields"].value.replace(/\[|\]/g, "");
+//                fields = parent.attributes["fields"].value.replace(/\[|\]/g, "");
                 params = JSON.stringify(params);
 
                 $.ajax({
                     type: 'post',
                     url: ODE.ajax_private_room_datalet,
-                    data: {"component":component, "fields":fields, "params":params, "data":""},
+//                    data: {"component":component, "fields":fields, "params":params, "data":""},
+                    data: {"component":component, "params":params, "data": data},
                     dataType: 'JSON',
                     success: function(data){
                         if(data.status == "ok")
