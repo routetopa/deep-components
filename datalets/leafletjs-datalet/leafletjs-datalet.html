@@ -164,10 +164,13 @@ Example:
                     }
                 }
 
-                t._component.map._onResize();
-                t._component.map.invalidateSize(false);
-                t._component.map.fitBounds(t._component.coordinates);
-                t._component.map.addLayer(markers_cluster);
+                try
+                {
+                    t._component.map._onResize();
+                    t._component.map.invalidateSize(false);
+                    t._component.map.fitBounds(t._component.coordinates);
+                    t._component.map.addLayer(markers_cluster);
+                }catch (e){}
 
 
             },
