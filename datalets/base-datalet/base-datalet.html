@@ -100,6 +100,7 @@ Example :
             }
 
             #base_datalet_title_description {
+                max-height: 24px;
             }
 
             #span_title{
@@ -116,16 +117,19 @@ Example :
             /*}*/
 
             #base_datalet_source_link {
+                display: flex;
                 height: 24px;
             }
 
             img#refresh {
-                visibility: hidden;/*remove*/
                 position: relative;
                 top: -1px;
                 height: 24px;
                 width: 24px;
                 cursor: pointer;
+                margin-left: 4px;
+
+                transition-duration: 4s;
             }
 
             span#ajax_error {
@@ -138,10 +142,8 @@ Example :
             }
 
             #base_datalet_rtp {
-            }
-
-            #base_datalet_rtp {
                 display: flex;
+                height: 24px;
             }
 
             #rtp {
@@ -166,6 +168,10 @@ Example :
                 position: absolute;
                 top: 0;
                 left: 0;
+            }
+
+            #base_datalet_link {
+                cursor: pointer;
             }
 
             /*EXPORT*/
@@ -263,7 +269,7 @@ Example :
             </div>
 
             <div id="base_datalet_source_link">
-                <b>Source:</b> <a id="base_datalet_source" target="_blank"></a> <span id="base_datalet_link_span">(<a id="base_datalet_link" target="_blank">dataset</a>)</span> <img id="refresh" src="static/images/refresh.svg"> <span id="ajax_error"></span>
+                <b>Source:&nbsp</b> <a id="base_datalet_source" target="_blank"></a> <span id="base_datalet_link_span">&nbsp(<a id="base_datalet_link" target="_blank">dataset</a>)</span> <img id="refresh" src="static/images/refresh.svg"> <span id="ajax_error"></span>
             </div>
 
             <div id="base_datalet_rtp">
@@ -313,14 +319,17 @@ Example :
 
                 this.setExportMenu();
 
+                var that = this;
+                $(this.$.base_datalet_link).click(function() {
+                    that.goToDataset();
+                });
+
                 if(this.dataUrl != undefined) {
 
                     var urlSource = this.dataUrl.split("/")[0] + "//" + this.dataUrl.split("/")[2];
                     this.$.base_datalet_source.innerHTML = urlSource;
                     this.$.base_datalet_source.setAttribute("href", urlSource);
 
-
-                    //OpenDataSoft check
                     if(this.dataUrl.indexOf("/records/") > -1 )
                     {
                         var i;
@@ -334,14 +343,14 @@ Example :
                     // CKAN
                     else if(this.dataUrl.indexOf("datastore_search?resource_id") > -1 )
                     {
-                        var comp = this;
-                        $.ajax({
-                            url: this.dataUrl.replace("datastore_search?resource_id", "resource_show?id"),
-                            dataType: "json",
-                            success: function(e){
-                                comp.$.base_datalet_link.setAttribute("href", urlSource + "/dataset/" + e.result.package_id + "/resource/" + e.result.id);
-                            }
-                        });
+//                        var comp = this;
+//                        $.ajax({
+//                            url: this.dataUrl.replace("datastore_search?resource_id", "resource_show?id"),
+//                            dataType: "json",
+//                            success: function(e){
+//                                comp.$.base_datalet_link.setAttribute("href", urlSource + "/dataset/" + e.result.package_id + "/resource/" + e.result.id);
+//                            }
+//                        });
                     }
                     else
                     {
@@ -356,7 +365,6 @@ Example :
 
                 else {
                     this.hideFooter();
-//                    this.$.base_datalet_spin.remove();
                 }
             },
 
@@ -371,8 +379,29 @@ Example :
               this.translate();
             },
 
+            goToDataset: function() {
+                if(this.dataUrl != undefined) {
+
+                    if(this.dataUrl.indexOf("datastore_search?resource_id") > -1 )
+                    {
+                        var urlSource = this.dataUrl.split("/")[0] + "//" + this.dataUrl.split("/")[2];
+
+                        var comp = this;
+                        $.ajax({
+                            url: this.dataUrl.replace("datastore_search?resource_id", "resource_show?id"),
+                            dataType: "json",
+                            success: function(e){
+                                comp.$.base_datalet_link.setAttribute("href", urlSource + "/dataset/" + e.result.package_id + "/resource/" + e.result.id);
+                                window.open(urlSource + "/dataset/" + e.result.package_id + "/resource/" + e.result.id, '_blank');
+                            }
+                        });
+                    }
+                }
+            },
+
             removeRefresh: function() {
-                this.$.refresh.style.display = "none";
+                $(this.$.refresh).css({'transform': 'rotate(' + (720) + 'deg)'});
+                $(this.$.refresh).css({'opacity': 0});
             },
 
             removeLoader: function() {

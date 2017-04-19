@@ -134,9 +134,6 @@ Example:
                     series: this.properties.series
                 };
 
-                if(this._component.theme != "themeBase" && this._component.theme != "")
-                    jQuery.extend(true, options, Highcharts[this._component.theme]);
-
                 if(this._component.legend == "topRight")
                     options.legend = {
                         layout: 'vertical',
@@ -157,6 +154,9 @@ Example:
                     options.legend ={
                         enabled: false
                     };
+
+                if(this._component.theme != "themeBase" && this._component.theme != "")
+                    jQuery.extend(true, options, Highcharts[this._component.theme]);
 
                 $(this._component.$.charts.$.container).highcharts(options);
             }

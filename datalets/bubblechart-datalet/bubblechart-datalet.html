@@ -30,7 +30,7 @@
 -->
 
 <link rel="import" href="../highcharts-datalet/highcharts-datalet.html">
-<!--<script src="http://code.highcharts.com/highcharts-more.js"></script>-->
+<script src="../highcharts-datalet/static/js/Highstock-5.0.10/code/highcharts-more.js"></script>
 
 <!--
 `bubblechart` is a bubbles chart datalet based on highcharts project <http://www.highcharts.com/>
@@ -149,9 +149,6 @@ Examples:
                     series: this.properties.series
                 };
 
-                if(this._component.theme != "themeBase" && this._component.theme != "")
-                    jQuery.extend(true, options, Highcharts[this._component.theme]);
-
                 if(this._component.legend == "topRight")
                     options.legend = {
                         layout: 'vertical',
@@ -172,6 +169,9 @@ Examples:
                     options.legend ={
                         enabled: false
                     };
+
+                if(this._component.theme != "themeBase" && this._component.theme != "")
+                    jQuery.extend(true, options, Highcharts[this._component.theme]);
 
                 $(this._component.$.charts.$.container).highcharts(options);
             }

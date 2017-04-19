@@ -69,9 +69,57 @@ Example:
                 if(min < 0)
                     min--;
 
+                var stockLimit = 20;
+                var C = this.properties.categories.value;
+                var l = this.properties.series.value[0].data.length;
+
                 options = {
                     chart: {
                         zoomType: 'xy'
+                    },
+                    rangeSelector: {
+                        selected: 0,
+                        inputEnabled:false,
+
+                        buttons: [
+                            {
+                                type: 'millisecond',
+                                count: parseInt(l/100),
+                                text: '1%'
+                            }, {
+                                type: 'millisecond',
+                                count: parseInt(l/10),
+                                text: '10%'
+                            }, {
+                                type: 'millisecond',
+                                count: parseInt(l/4),
+                                text: '25%'
+                            }, {
+                                type: 'millisecond',
+                                count: parseInt(l/2),
+                                text: '50%'
+                            }, {
+                                type: 'all',
+                                text: '100%'
+                            }],
+
+                        buttonTheme: {
+                            width: 60
+                        }
+
+                    },
+
+                    navigator: {
+                        series: {
+                            enabled: false,
+                            dataLabels: {
+                                enabled:false
+                            }
+                        }
+                    },
+
+                    exporting: {
+                        enabled: false
                     },
                     title: {
                         text: this._component.title
@@ -80,6 +128,14 @@ Example:
                         categories: this.properties.categories.value,
                         title: {
                             text: this._component.xAxisLabel
+                        },
+                        labels: {
+                            formatter: function () {
+                                if(l > stockLimit)
+                                    return C[this.value];
+                                else
+                                    return this.value;
+                            }
                         }
                     },
                     yAxis: {
@@ -89,7 +145,19 @@ Example:
                         }
                     },
                     tooltip: {
-                        valueSuffix: ' ' + this._component.suffix
+                        valueSuffix: ' ' + this._component.suffix,
+                        formatter: function() {
+                            if(l > stockLimit)
+                                var s = '<b>' + C[this.x] + '</b>';
+                            else
+                                var s = '<b>' + this.x + '</b>';
+
+                            $.each(this.points, function(i, point) {
+                                s += '<br/><span style="color: ' + point.color + ';">\u25CF</span> ' + point.series.name + ': <b>' + point.y + '</b>';
+                            });
+                            return s;
+                        },
+                        shared: true
                     },
                     plotOptions: {
                         line: {
@@ -98,7 +166,8 @@ Example:
                             }
                         },
                         series: {
-                            stacking: this._component.stack
+                            stacking: this._component.stack,
+                            showInNavigator: true
                         }
                     },
                     credits: {
@@ -106,9 +175,6 @@ Example:
                     },
                     series: this.properties.series.value
                 };
-
-                if(this._component.theme != "themeBase" && this._component.theme != "")
-                    jQuery.extend(true, options, Highcharts[this._component.theme]);
 
                 if(this._component.legend == "topRight")
                     options.legend = {
@@ -131,7 +197,18 @@ Example:
                         enabled: false
                     };
 
-                $(this._component.$.charts.$.container).highcharts(options);
+                // THEME
+                if(this._component.theme != "themeBase" && this._component.theme != "")
+                    jQuery.extend(true, options, Highcharts[this._component.theme]);
+
+
+                // use stock?
+                if(l > stockLimit) {
+                    Highcharts.stockChart(this._component.$.charts.$.container, options);
+                    $(".highcharts-axis-labels.highcharts-xaxis-labels.highcharts-navigator-xaxis").hide();
+                }
+                else
+                    $(this._component.$.charts.$.container).highcharts(options);
             }
         };
 

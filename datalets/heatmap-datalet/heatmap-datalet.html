@@ -30,7 +30,7 @@
 -->
 
 <link rel="import" href="../highcharts-datalet/highcharts-datalet.html">
-<script src="js/heatmap.js"></script>
+<script src="../highcharts-datalet/static/js/Highstock-5.0.10/code/modules/heatmap.js"></script>
 
 <!--
 
@@ -81,6 +81,7 @@ Example:
 //                        marginBottom: 80,
                         plotBorderWidth: 1
                     },
+
                     title: {
                         text: this._component.title
                     },
@@ -100,38 +101,46 @@ Example:
                         valueSuffix: ' ' + this._component.suffix
                     },
                     colorAxis: {
-                        min: 0,
+//                        min: 0, ???
                         minColor: '#FFFFFF',
                         maxColor: Highcharts.getOptions().colors[0]
+                    },
+                    plotOptions: {
+                        series: {
+                            turboThreshold:0
+                        }
+                    },
+
+                    boost: {
+                        useGPUTranslations: true
                     },
 
                     credits: {
                         enabled: false
                     },
                     series: [{
+//                        boostThreshold: 500,
+//                        colsize: 500,
                         borderWidth: 1,
                         data: series,
                         dataLabels: {
                             enabled:  this._component.dataLabels,
-                            color: '#000000'
+//                            color: '#000000'
                         },
                     }]
                 };
-
-                if(this._component.theme != "themeBase" && this._component.theme != "")
-                    jQuery.extend(true, options, Highcharts[this._component.theme]);
 
                 if(this._component.legend == "topRight")
                     options.legend = {
                         layout: 'vertical',
                         verticalAlign: 'top',
                         align: 'right',
-                        x: -4,
-                        y: 4,
-                        floating: true,
+                        margin: 8,
+                        y: -1,
+                        symbolHeight: 338,
+
                         borderWidth: 1,
                         backgroundColor: ((Highcharts[this._component.theme] && Highcharts[this._component.theme].legendBackgroundColor) || '#FFFFFF'),
-                        shadow: true,
                     };
                 else if(this._component.legend == "bottom")
                     options.legend = {
@@ -141,6 +150,9 @@ Example:
                     options.legend ={
                         enabled: false
                     };
+
+                if(this._component.theme != "themeBase" && this._component.theme != "")
+                    jQuery.extend(true, options, Highcharts[this._component.theme]);
 
                 $(this._component.$.charts.$.container).highcharts(options);
             }

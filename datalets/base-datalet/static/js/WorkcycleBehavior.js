@@ -27,7 +27,7 @@
  * Developed by :
  * ROUTE-TO-PA Project - grant No 645860. - www.routetopa.eu
  *
-*/
+ */
 var WorkcycleBehavior = {
     /**
      * A reference to Polymer object
@@ -121,11 +121,15 @@ var WorkcycleBehavior = {
             this.transformData();
 
             var that = this;
+            $($(this._component).find("#refresh")).click(function() {
+                that._component.data = undefined;
+                that.init(component);
+            });
             this._component.async(function () {
                 that.presentData();
                 $(that._component).find("base-datalet")[0].removeLoader();
                 that.redraw();
-            }, 600);
+            }, 200);
         }
     }
 
