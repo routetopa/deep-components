@@ -577,6 +577,42 @@ DataTypeConverter.prototype = (function () {
             var totFullValues = quality.totalValues - quality.totalNullValues;
             quality.completeness = Math.round(totFullValues / quality.totalValues * 100) / 100;
 
+            //TRANSLATIONS.
+            ArrayUtils.IteratorOverKeys(fieldsType, function(fieldType) {
+                //Translates the type.
+                var _type = fieldType.type;
+                fieldType.typeLabel = _type; //Default value.
+                var _lngkey = ('key_type' + _type).toLowerCase();
+                if (JDC_LNG.hasOwnProperty(_lngkey)) {
+                    var _entry = JDC_LNG[_lngkey];
+                    if (_entry.hasOwnProperty(options.language)) {
+                        fieldType.typeLabel = _entry[options.language];
+                    } else {
+                        console.warn("JSDatachecker translation not found. Language " + options.language + ". Type " + _type);
+                    }
+                } else {
+                    console.warn("JSDatachecker translation not found. Language " + options.language + ". Type " + _type);
+                }
+
+                //Translates the subtype.
+                var _subtype = fieldType.subtype;
+                fieldType.subtypeLabel = _subtype;
+                if (_subtype != null) {
+                    var _lngkey = ('key_subtype' + _subtype).toLowerCase();
+                    if (JDC_LNG.hasOwnProperty(_lngkey)) {
+                        var _entry = JDC_LNG[_lngkey];
+                        if (_entry.hasOwnProperty(options.language)) {
+                            fieldType.subtypeLabel = _entry[options.language];
+                        } else {
+                            console.warn("JSDatachecker translation not found. Language " + options.language + ". Subtype " + _subtype);
+                        }
+                    } else {
+                        console.warn("JSDatachecker translation not found. Language " + options.language + ". Subtype " + _subtype);
+                    }
+                }
+
+            });
+
             //Converts confidence to description.
             var warningsTextual = "";
             ArrayUtils.IteratorOverKeys(fieldsType, function(fieldType) {
