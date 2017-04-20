@@ -73,61 +73,88 @@ Example:
                     }
                 }
 
+                var min = 0, max = 0;
+                for (var i in this.properties.series.value) {
+                    min = Math.min(Math.min.apply(Math, this.properties.series.value[i].data), min);
+                    max = Math.max(Math.max.apply(Math, this.properties.series.value[i].data), max);
+                }
+
+                var stops = false;
+                if (min < 0)
+                    var stops = [[0, '#F44336'], [1, '#2196F3']];
+                else
+                    var stops = [[0, '#FFFFFF'], [1, Highcharts.getOptions().colors[0]]];
+
+                var stockLimit = 20;
+                var l = this.properties.series.value[0].data.length;
+                var borderWidth = 1;
+                if (l > 20) {
+                    this._component.dataLabels = false;
+                    borderWidth = 0;
+                }
+
+                var suffix = this._component.suffix;
+
                 options = {
                     chart: {
                         type: 'heatmap',
-                        zoomType: 'xy',
-//                        marginTop: 40,
-//                        marginBottom: 80,
-                        plotBorderWidth: 1
-                    },
-
-                    title: {
-                        text: this._component.title
-                    },
-                    xAxis: {
-                        categories: Xcategories,
-                        title: {
-                            text: this._component.xAxisLabel
-                        }
-                    },
-                    yAxis: {
-                        categories: Ycategories,
-                        title: {
-                            text: this._component.yAxisLabel
-                        }
-                    },
-                    tooltip: {
-                        valueSuffix: ' ' + this._component.suffix
-                    },
-                    colorAxis: {
-//                        min: 0, ???
-                        minColor: '#FFFFFF',
-                        maxColor: Highcharts.getOptions().colors[0]
-                    },
-                    plotOptions: {
-                        series: {
-                            turboThreshold:0
-                        }
+                        zoomType: 'xy'
                     },
 
                     boost: {
                         useGPUTranslations: true
                     },
 
-                    credits: {
-                        enabled: false
+                    title: {
+                        text: this._component.title
                     },
+
+                    xAxis: {
+                        categories: Xcategories,
+                        title: {
+                            text: this._component.xAxisLabel
+                        }
+                    },
+
+                    yAxis: {
+                        categories: Ycategories,
+                        title: {
+                            text: this._component.yAxisLabel
+                        }
+                    },
+
+                    colorAxis: {
+                        stops: stops,
+                        min: min,
+                        max: max,
+                    },
+
+                    tooltip: {
+                        formatter: function() {
+                            var s = '<span  style="color: #7cb5ec;">\u25CF</span> (' + this.series.yAxis.categories[this.point.y] + ', ' + this.series.xAxis.categories[this.point.x] + '): <b>' +  this.point.value + ' ' + suffix + '</b>';
+                            return s;
+                        },
+                        shared: true
+                    },
+
                     series: [{
-//                        boostThreshold: 500,
-//                        colsize: 500,
-                        borderWidth: 1,
                         data: series,
+                        boostThreshold: 100,
+                        borderWidth: borderWidth,
+                        nullColor: '#EFEFEF',
+//                        colsize: 100, // one day
                         dataLabels: {
                             enabled:  this._component.dataLabels,
-//                            color: '#000000'
+                            formatter: function() {
+                                return this.point.value + ' ' + suffix;
+                            }
                         },
-                    }]
+                        turboThreshold: Number.MAX_VALUE // #3404, remove after 4.0.5 release
+                    }],
+
+                    credits: {
+                        enabled: false
+                    }
                 };
 
                 if(this._component.legend == "topRight")
@@ -136,11 +163,22 @@ Example:
                         verticalAlign: 'top',
                         align: 'right',
                         margin: 8,
-                        y: -1,
-                        symbolHeight: 338,
+                        y: 28,
+                        symbolHeight: 280,
 
-                        borderWidth: 1,
-                        backgroundColor: ((Highcharts[this._component.theme] && Highcharts[this._component.theme].legendBackgroundColor) || '#FFFFFF'),
+//                        layout: 'vertical',
+//                        verticalAlign: 'top',
+//                        align: 'right',
+//                        x: -4,
+//                        y: 4,
+//                        floating: true,
+//                        borderWidth: 1,
+//                        backgroundColor: ((Highcharts[this._component.theme] && Highcharts[this._component.theme].legendBackgroundColor) || '#FFFFFF'),
+//                        shadow: true,
+//
+//                        margin: 80,
+//                        symbolHeight: 280,
+//                        verticalAlign: 'top',
                     };
                 else if(this._component.legend == "bottom")
                     options.legend = {

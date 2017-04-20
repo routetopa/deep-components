@@ -66,12 +66,12 @@ Example:
                 for (var i in this.properties.series.value) {
                     min = Math.min(Math.min.apply(Math, this.properties.series.value[i].data), min);
                 }
-                if(min < 0)
-                    min--;
 
                 var stockLimit = 20;
                 var C = this.properties.categories.value;
                 var l = this.properties.series.value[0].data.length;
+
+                var suffix = this._component.suffix;
 
                 options = {
                     chart: {
@@ -132,10 +132,16 @@ Example:
                         },
                         labels: {
                             formatter: function () {
+                                var value;
                                 if(l > stockLimit)
-                                    return C[this.value];
+                                    value = C[this.value];
                                 else
-                                    return this.value;
+                                    value = this.value;
+
+                                if (value && value.length > 10)
+                                    value = value.substring(0, 10) + '...';
+
+                                return value;
                             }
                         }
                     },
@@ -146,7 +152,6 @@ Example:
                         }
                     },
                     tooltip: {
-                        valueSuffix: ' ' + this._component.suffix,
                         formatter: function() {
                             if(l > stockLimit)
                                 var s = '<b>' + C[this.x] + '</b>';
@@ -154,7 +159,7 @@ Example:
                                 var s = '<b>' + this.x + '</b>';
 
                             $.each(this.points, function(i, point) {
-                                s += '<br/><span style="color: ' + point.color + ';">\u25CF</span> ' + point.series.name + ': <b>' + point.y + '</b>';
+                                s += '<br/><span style="color: ' + point.color + ';">\u25CF</span> ' + point.series.name + ': <b>' + point.y + ' ' + suffix + '</b> ';
                             });
                             return s;
                         },
@@ -163,6 +168,9 @@ Example:
                     plotOptions: {
                         bar: {
                             dataLabels: {
+                                formatter: function() {
+                                    return this.y + ' ' + suffix;
+                                },
                                 enabled: this._component.dataLabels
                             }
                         },

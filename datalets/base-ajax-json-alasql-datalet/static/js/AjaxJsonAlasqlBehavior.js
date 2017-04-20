@@ -112,45 +112,30 @@ var AjaxJsonAlasqlBehavior = {
         var aggregators = JSON.parse(this._component.getAttribute("aggregators"));
         var orders = JSON.parse(this._component.getAttribute("orders"));
 
-        //this._component.fields = JSON.parse(this._component.fields); /*deprecated*/
-        //if(selectedFields) { /*if deprecated*/
-        //    this._component.fields = []; /*deprecated*/
-        //    for (var i=0; i < selectedFields.length; i++)
-        //        if (selectedFields[i])
-        //            this._component.fields.push(selectedFields[i].value);
-        //}
-        //
-        //var fields = this._component.fields;
-
         fields = [];
         for (var i=0; i < selectedFields.length; i++)
             if (selectedFields[i])
                 fields.push(selectedFields[i].value);
 
-        ////preview my space ?
-        //if(filters && filters[0] && filters[0].constructor == Array){
-        //    filters = filters[0];
-        //    aggregators = aggregators[0];
-        //    orders = orders[0];
-        //}
-
         var converter = new DataTypeConverter();
-        var data = [];
+        var data = this.data;
         var result = [];
 
-        if(aggregators && aggregators.length) {
-            data = alasql_QUERY(this.data, "*", filters, null, orders);
+        if(filters && filters.length) {
+            data = alasql_QUERY(data, "*", filters, null, null);
             result = converter.inferJsonDataType(data, ["*"]);
             result = converter.cast(result);
             data = result.dataset;
+        }
 
+        if(aggregators && aggregators.length) {
             data = alasql_QUERY(data, null, null, aggregators, orders);
             result = converter.inferJsonDataType(data, ["*"]);
             result = converter.cast(result);
             data = result.dataset;
         }
         else {
-            data = alasql_QUERY(this.data, fields, filters, null, orders);
+            data = alasql_QUERY(data, fields, null, null, orders);
             result = converter.inferJsonDataType(data, ["*"]);
             result = converter.cast(result);
             data = result.dataset;
