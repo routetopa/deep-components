@@ -390,6 +390,7 @@ Example :
                         $.ajax({
                             url: this.dataUrl.replace("datastore_search?resource_id", "resource_show?id"),
                             dataType: "json",
+                            async: false,
                             success: function(e){
                                 comp.$.base_datalet_link.setAttribute("href", urlSource + "/dataset/" + e.result.package_id + "/resource/" + e.result.id);
                                 window.open(urlSource + "/dataset/" + e.result.package_id + "/resource/" + e.result.id, '_blank');
