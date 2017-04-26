@@ -15,49 +15,110 @@
         <style>
 
             #paper_card_container {
+                background-color: #FFFFFF;
+            }
+
+            #paper_card_container > * {
                 font-family: 'Roboto', 'Helvetica Neue', Helvetica, Arial, sans-serif;
-                font-size: 16px;
-                line-height: 16px;
             }
 
-            #content {
+            #paper_card_container .paper_card_container_cover {
+                position: absolute;
+                top: 0;
+                right: 0;
                 width: 100%;
-                height: calc(100% - 64px);
+                height: 100%;
+
+                z-index: 1;
+                background-color: transparent;
+            }
+
+            #paper_card_container .content {
+                width: 100%;
+                height: calc(100% - 50px);
                 overflow: hidden;
             }
 
-            #content.text {
+            #paper_card_container .content g.highcharts-legend {
+                display: none !important;
+            }
+
+            #paper_card_container .content.text {
                 background-color: #FFFFCC;
-                padding: 4px;
-                width: calc(100% - 8px);
-                height: calc(100% - 72px);
-            }
+                padding: 8px;
+                /*margin: 0;*/
+                width: calc(100% - 16px);
+                height: calc(100% - 50px - 16px);
+                line-height: 18px;
+                font-size: 14px;
 
-            #paper_card_container .legend {
-                position: relative;
-                bottom: 48px;
-                height: 16px;
-                padding: 16px 8px;
-                background-color: rgba(0, 0, 0, 0.8);
-                color: white;
-                font-weight: 700;
-                /*word-wrap: break-word;*/
-                overflow: hidden;
-                white-space: nowrap;
-                text-overflow: ellipsis;
+                overflow-y: auto;
             }
 
             #paper_card_container .footer {
-                height: 64px;
-                width: 100%;
-                position: relative;
-                bottom: 48px;
-                padding: 4px;
-                font-size: 12px;
-                /*word-wrap: break-word;*/
+                width: calc(100% - 16px);
+                height: 32px;
+                padding: 8px;
+                font-size: 14px;
+                line-height: 32px;
+                font-weight: 700;
+                color: #424242;
+
+                border-top: 2px solid #FF9800;
+
                 overflow: hidden;
                 white-space: nowrap;
                 text-overflow: ellipsis;
+
+                /*background-color: #E0F7FA;*/
+                /*overflow: hidden;*/
+                /*overflow-wrap: break-word;*/
+                /*word-wrap: break-word;*/
+
+                /*background-color: #e8e8e8;*/
+            }
+
+            /*#paper_card_container .legend {*/
+                /*width: calc(100% - 16px);*/
+                /*height: 16px;*/
+                /*position: absolute;*/
+                /*bottom: 64px;*/
+                /*padding: 16px 8px;*/
+                /*background-color: rgba(0, 0, 0, 0.8);*/
+                /*color: white;*/
+                /*font-weight: 700;*/
+                /*!*word-wrap: break-word;*!*/
+                /*overflow: hidden;*/
+                /*white-space: nowrap;*/
+                /*text-overflow: ellipsis;*/
+            /*}*/
+
+
+
+            #fullscreen_container {
+                /*width: calc(800px + 16px + 144px);*/
+                width: 60%;
+                /*height: calc(482px + 16px + 72px);*/
+                height: 60%;
+                top: 128px;
+
+                padding: 8px;
+                /*display: inline;*/
+                /*margin-right: auto;*/
+                /*margin-left: auto;*/
+                /*z-index: 1100;*/
+                /*background-color: white;*/
+
+                overflow: auto;
+            }
+
+
+            #fullscreen_content {
+                width: 100%;
+                height: 100%;
+
+                padding: 0;
+                margin: 0;
             }
 
             paper-fab {
@@ -67,88 +128,76 @@
             }
 
             paper-fab.open {
-                bottom: 40px;
+                bottom: 30px;
                 right: 8px;
+
+                /*opacity: 0.8;*/
+            }
+
+            paper-fab.mini {
+                --iron-icon-height: 18px;
+                --iron-icon-width: 18px;
+                width: 24px;
+                height: 24px;
+                /*--paper-fab-background:#B6B6B6;*/
+                --paper-fab-background:#00BCD4;
+                padding: 0;
             }
 
             paper-fab.modify {
                 top: -12px;
                 right: 20px;
-                --iron-icon-height: 18px;
-                --iron-icon-width: 18px;
-                width: 24px;
-                height: 24px;
-                --paper-fab-background:#B6B6B6;
-                padding: 0px;
             }
 
             paper-fab.delete {
                 top: -12px;
                 right: -12px;
-                --iron-icon-height: 18px;
-                --iron-icon-width: 18px;
-                width: 24px;
-                height: 24px;
-                --paper-fab-background:#B6B6B6;
-                padding: 0px;
             }
 
             paper-dialog {
-                margin: 0px;
-                padding: 0px;
+                margin: 0;
+                padding: 0;
             }
 
-            #fullscreen_container {
-                display: inline;
-                position: fixed;
-                width: 80%;
-                height: 70vh;
-                right: 0;
-                left: 0;
-                top: 64px;
-                margin-right: auto;
-                margin-left: auto;
-                z-index: 1100;
-                padding: 8px;
-                background-color: white;
-
-                overflow: auto;
+            :host > ::content g.highcharts-legend {
+                display: none;
             }
 
-            #fullscreen_content {
-                margin: 0px;
+            :host > ::content #container.highcharts-datalet {
+                min-height: 200px !important;
             }
+
         </style>
 
 
         <paper-material id="paper_card_container" elevation="3">
 
-            <paper-fab id="card_modify" class="modify" mini icon="create" on-click="_handleModifyClick"></paper-fab>
 
-            <paper-fab id="card_delete" class="delete" mini icon="delete" on-click="_handleDeleteClick"></paper-fab>
 
-            <div id="content">
-                <content></content>
-            </div>
-
-            <div class="legend" title="{{cardTitle}}">
-                {{cardTitle}}
-            </div>
+            <paper-fab id="card_modify" class="mini modify" icon="create" on-click="_handleModifyClick"></paper-fab>
+            <paper-fab id="card_delete" class="mini delete" icon="delete" on-click="_handleDeleteClick"></paper-fab>
 
             <template is="dom-if" if="{{checkType(cardType, 'link')}}">
                 <paper-fab id="card_open_link" class="open" mini icon="link" on-click="_handleOpenClick"></paper-fab>
             </template>
-
             <template is="dom-if" if="{{checkType(cardType, 'text')}}">
                 <paper-fab id="card_open_text" class="open" mini icon="text-format" on-click="_handleOpenClick"></paper-fab>
             </template>
-
             <template is="dom-if" if="{{checkType(cardType, 'datalet')}}">
+                <div class="paper_card_container_cover"></div>
                 <paper-fab id="card_open_datalet" class="open" mini icon="assessment" on-click="_handleOpenClick"></paper-fab>
             </template>
 
-            <div class="footer" title="{{comment}}">
-                {{comment}}
+            <div class="content" id="content">
+                <content></content>
+            </div>
+
+            <!--<div class="legend" title="{{cardTitle}}">-->
+                <!--{{cardTitle}}-->
+            <!--</div>-->
+
+            <div class="footer" title="{{cardTitle}}">
+                {{cardTitle}}
             </div>
 
             <paper-dialog id="fullscreen_container" entry-animation="scale-up-animation" exit-animation="fade-out-animation">

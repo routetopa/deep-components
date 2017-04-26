@@ -41,6 +41,7 @@
             }
 
             #slider_container .footer{
+                position: relative;
                 height: 48px;
                 width: 100%;
                 background: #B6B6B6;
@@ -75,6 +76,18 @@
                 vertical-align: middle;
                 text-align: center;
                 margin: 4px 0 4px 8px;
+            }
+
+            #slider_container #avatarF {
+                height: 40px;
+                line-height: 40px;
+                font-size: 24px;
+                vertical-align: middle;
+                text-align: center;
+
+                position: absolute;
+                top: 4px;
+                left: 8px;
             }
 
             #slider_container .text {
@@ -182,6 +195,7 @@
             </neon-animated-pages>
 
             <div class="footer">
+                <div id="avatarF">[[avatar]] / [[pages]]</div>
                 <paper-fab icon="add" on-click="_add"></paper-fab>
                 <paper-fab icon="delete"on-click="_delete"></paper-fab>
             </div>

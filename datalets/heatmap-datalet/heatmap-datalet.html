@@ -80,8 +80,11 @@ Example:
                 }
 
                 var stops = false;
-                if (min < 0)
+                if (min < 0) {
                     var stops = [[0, '#F44336'], [1, '#2196F3']];
+                    min = -Math.max(Math.abs(min), Math.abs(max));
+                    max = Math.max(Math.abs(min), Math.abs(max));
+                }
                 else
                     var stops = [[0, '#FFFFFF'], [1, Highcharts.getOptions().colors[0]]];
 
@@ -106,7 +109,8 @@ Example:
                     },
 
                     title: {
-                        text: this._component.title
+//                        text: this._component.title
+                        text: ''
                     },
 
                     xAxis: {
