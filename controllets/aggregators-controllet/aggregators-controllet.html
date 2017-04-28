@@ -299,7 +299,8 @@
                 this.$.disable_enable.innerHTML = ln["disableGroupBy_" + ln["localization"]];
                 this.$.disable_aggregators.className = this.$.disable_aggregators.className.replace(" disabled", "");
 
-                if(this.aggregators.length > 0 && this.aggregators[0].operation == "GROUP BY")
+//                if(this.aggregators.length > 0 && this.aggregators[0].operation == "GROUP BY")
+                if(this.aggregators.length > 0)
                     this.fire('aggregators-controllet_aggregators', {aggregators: this.aggregators});
                 else
                     this.fire('aggregators-controllet_aggregators', {aggregators: []});

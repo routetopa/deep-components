@@ -103,7 +103,10 @@ function _alasql_GROUPBY (aggregators) {
             select += aggregators[i]["operation"] + "(" + aggregators[i]["field"] + "), ";
     }
 
-    return [select.slice(0, -2), groupBy.slice(0, -2)];
+    select = select.slice(0, -2);
+    groupBy = (groupBy == "GROUP BY ") ? "" : groupBy.slice(0, -2);
+
+    return [select, groupBy];
 }
 
 function _alasql_ORDERBY (orders) {
