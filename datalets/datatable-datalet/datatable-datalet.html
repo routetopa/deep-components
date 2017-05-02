@@ -52,11 +52,22 @@ Example:
     <template>
         <link rel="stylesheet" type="text/css" href="js/DataTables/datatables.css"/>
 
-        <table id="datatable" class="stripe row-border" cellspacing="0" style="height: auto; width: auto;">
-        </table>
+        <div id="container">
+            <table id="datatable" class="stripe row-border" cellspacing="0" style="height: auto; width: auto;"></table>
+        </div>
+
         <style>
             #datatable {
-                min-height: 400px;/*stretch rows*/
+                /*height: calc(100% - 82px);*/
+                /*min-height: 280px;!*stretch rows*!*/
+
+                height: 100%;
+            }
+
+            #container {
+                width: 100%;
+                min-height: 400px;
+                height: calc(100% - 82px);
             }
         </style>
         <base-ajax-json-alasql-datalet data-url="{{dataUrl}}" fields="{{fields}}" data="{{data}}" title="{{title}}" description="{{description}}" export_menu="{{export_menu}}" disable_my_space="{{disable_my_space}}"></base-ajax-json-alasql-datalet>
@@ -68,7 +79,7 @@ Example:
         var DatatableBehavior = {
 
             presentData: function(){
-                var html = "";
+                var html = '<table id="datatable" class="stripe row-border" cellspacing="0" style="height: auto; width: auto;">';
 
                 if(!this.data || this.data[0] == undefined) return;
                 html += '<thead>'+
@@ -88,8 +99,28 @@ Example:
                 }
                 html += '</tbody>';
 
-                $(this._component.$.datatable).html(html);
-                $(this._component.$.datatable).DataTable({"order": [], destroy: true});
+                html += '</table>';
+
+                $(this._component.$.container).html(html);
+
+//                var h = $(this._component.$$("#datatable")).height();
+                var h = $(this._component.$.container).height() - 120;
+                console.log("hhhhhhhhhhhh " + h)
+                h = Math.max(h, 280)
+
+
+
+                //if <10 or seleziono un numero di righe tale che non c'è scrolling elimino paginazione
+
+                $(this._component.$$("#datatable")).DataTable({
+                    "order": [],
+                    "scrollY": h,
+                    "scrollX": true,
+                    "scrollCollapse": true,
+//                    "paging": false,
+//                    "info": false,
+//                    "searching": false
+                });
             }
         };
 
