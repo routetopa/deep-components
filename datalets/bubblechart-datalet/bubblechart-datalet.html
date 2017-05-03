@@ -59,7 +59,7 @@ Examples:
 
 <dom-module id="bubblechart-datalet">
     <template>
-        <highcharts-datalet id="charts" data-url="{{dataUrl}}" fields="{{fields}}" title="{{title}}" description="{{description}}" export_menu="{{export_menu}}"></highcharts-datalet>
+        <highcharts-datalet id="charts" data-url="{{dataUrl}}" fields="{{fields}}" title="{{title}}" description="{{description}}" export_menu="{{export_menu}}" disable_my_space="{{disable_my_space}}"></highcharts-datalet>
     </template>
     <script>
         var BubblechartBehavior = {
@@ -218,6 +218,10 @@ Examples:
                 export_menu : {
                     type  : Number,
                     value : 15 // xxxx BITMASK. FROM RIGHT : HTML, PNG, RTF, MY SPACE (eg. 1111 show all, 0000 hide all)
+                },
+                disable_my_space : {
+                    type  : Boolean,
+                    value : false // BITMASK -8
                 }
             },
             /**
