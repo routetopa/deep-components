@@ -50,11 +50,12 @@
         return selectedFileds;
     };
 
-    utility_getSelectedIndices = function(fields, selectedFileds) {
+    utility_getSelectedIndices = function(fields, selectedFields) {
+        selectedFields = JSON.parse(selectedFields);
         var selectedIndices = [];
-        for (var i = 0; i < selectedFileds.length; i++)
-            if($.inArray(selectedFileds[i], fields) > -1)
-                selectedIndices.push(fields.indexOf(selectedFileds[i]));
+        for (var i = 0; i < selectedFields.length; i++)
+            if(selectedFields[i] && $.inArray(selectedFields[i].value, fields) > -1)
+                selectedIndices.push(fields.indexOf(selectedFields[i].value));
         return selectedIndices;
     };
 
