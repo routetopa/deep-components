@@ -95,7 +95,7 @@
             },
 
             _preselect : function(){
-                this.$.select_data.setSelectedFields(this.selectedFields);
+                this.$.select_data.setSelectedFields(this.dataletPreset["selectedfields"]);
                 this.$.select_data.setFilters(JSON.parse(this.dataletPreset["filters"]));
                 this.$.select_data.setAggregators(JSON.parse(this.dataletPreset["aggregators"]));
 //                this.$.select_visualization.preselect();
