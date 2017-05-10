@@ -1,0 +1,164 @@
+<!--
+@license
+    The MIT License (MIT)
+
+    Copyright (c) 2015 Dipartimento di Informatica - Universit� di Salerno - Italy
+
+    Permission is hereby granted, free of charge, to any person obtaining a copy
+    of this software and associated documentation files (the "Software"), to deal
+    in the Software without restriction, including without limitation the rights
+    to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+    copies of the Software, and to permit persons to whom the Software is
+    furnished to do so, subject to the following conditions:
+
+    The above copyright notice and this permission notice shall be included in
+    all copies or substantial portions of the Software.
+
+    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+    IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+    FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+    AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+    LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+    THE SOFTWARE.
+-->
+
+<!--
+* Developed by :
+* ROUTE-TO-PA Project - grant No 645860. - www.routetopa.eu
+*
+-->
+
+<link rel="import" href="../base-ajax-json-alasql-datalet/base-ajax-json-alasql-datalet.html">
+
+<dom-module name="mediaslider-datalet">
+    <template>
+
+        <link title="timeline-styles" rel="stylesheet" href="js/camera.css">
+        <script src="js/camera.min.js"></script>
+        <script src="js/jquery.easing.1.3.js"></script>
+        <script src="js/jquery.easing.compatibility.js"></script>
+
+        <style>
+            #mediaslider_container {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+
+                width: 100%;
+                min-height: 400px;
+                height: calc(100% - 82px);
+                overflow-y: auto;
+            }
+
+            #camera_wrap {
+                float: right;
+                width: 458px;/*option*/
+            }
+        </style>
+
+        <div id="mediaslider_container">
+            <div id='camera_wrap'>
+                <!--<div data-src="http://www.kontrokultura.it/wp-content/uploads/2015/01/Mago-Merlino.jpg">-->
+                    <!--<div class="camera_caption fadeFromBottom">-->
+                        <!--The <b style="color: red;">text</b> of your caption<br>-->
+                        <!--cos-->
+                    <!--</div>-->
+                <!--</div>-->
+                <!--<div data-src="http://www.cinezapping.com/wp-content/uploads/2015/11/Mago-MErlino.jpg"></div>-->
+                <!--<div data-src="http://blog.crescebene.com/files/2012/08/maga-mag%C3%B2.jpg"></div>-->
+                <!--<div data-src="https://i.ytimg.com/vi/GArX1mUVP9E/hqdefault.jpg"></div>-->
+
+                <!--<div data-src="https://creativeprojectformedarte.files.wordpress.com/2013/01/bianco-e-nero.jpg"></div>-->
+                <!--<div data-src="https://creativeprojectformedarte.files.wordpress.com/2013/01/bianco-e-nero.jpg"></div>-->
+                <!--<div data-src="https://creativeprojectformedarte.files.wordpress.com/2013/01/bianco-e-nero.jpg"></div>-->
+                <!--<div data-src="https://creativeprojectformedarte.files.wordpress.com/2013/01/bianco-e-nero.jpg"></div>-->
+                <!--<div data-src="https://creativeprojectformedarte.files.wordpress.com/2013/01/bianco-e-nero.jpg"></div>-->
+                <!--<div data-src="https://creativeprojectformedarte.files.wordpress.com/2013/01/bianco-e-nero.jpg"></div>-->
+                <!--<div data-src="https://creativeprojectformedarte.files.wordpress.com/2013/01/bianco-e-nero.jpg"></div>-->
+                <!--<div data-src="https://creativeprojectformedarte.files.wordpress.com/2013/01/bianco-e-nero.jpg"></div>-->
+                <!--<div data-src="https://creativeprojectformedarte.files.wordpress.com/2013/01/bianco-e-nero.jpg"></div>-->
+                <!--<div data-src="https://creativeprojectformedarte.files.wordpress.com/2013/01/bianco-e-nero.jpg"></div>-->
+                <!--<div data-src="https://creativeprojectformedarte.files.wordpress.com/2013/01/bianco-e-nero.jpg"></div>-->
+                <!--<div data-src="https://creativeprojectformedarte.files.wordpress.com/2013/01/bianco-e-nero.jpg"></div>-->
+
+            </div>
+        </div>
+
+        <base-ajax-json-alasql-datalet data-url="{{dataUrl}}" data="{{data}}" title="{{title}}" description="{{description}}" export_menu="{{export_menu}}" disable_my_space="{{disable_my_space}}"></base-ajax-json-alasql-datalet>
+    </template>
+    <script>
+
+        var MediasliderBehavior = {
+
+            presentData: function() {
+                if(!this.data || this.data[0] == undefined) return;
+
+                var pagination = true;
+                if(this.data[0].data.length > 16)
+                    pagination = false;
+
+                var html = '';
+
+                for(var i = 0; i < this.data[0].data.length; i++) {
+                    html += '<div data-src="' + this.data[0].data[i] + '">';
+
+                    if(this.data[1] && this.data[1].data[i] && this.data[1].data[i] != "") {
+                        html += '<div class="camera_caption fadeFromBottom media_title">';
+                        html += '<span style="font-weight: 700; color: #2196F3;">' + this.data[1].data[i] + '</span>';
+                        if (this.data[2] && this.data[2].data[i] && this.data[2].data[i] != "")
+                            html += '</br><span style="font-style: italic">' + this.data[2].data[i] + '</span>';
+                        html += '</div>';
+                    } else if (this.data[2] && this.data[2].data[i] && this.data[2].data[i] != "") {
+                        html += '<div class="camera_caption fadeFromBottom media_title">';
+                        html += '<span style="font-style: italic">' + this.data[2].data[i] + '</span>';
+                        html += '</div>';
+                    }
+
+                    html += '</div>';
+                }
+
+                    //random name?
+                $(this._component.$.camera_wrap).html(html);
+
+                $(this._component.$.camera_wrap).camera({
+//                    autoAdvance: false,
+                    height: '75%',
+                    loader: 'none',
+                    playPause: false,
+                    pagination: pagination
+                });
+            }
+
+        };
+
+        TimelineDatalet = Polymer({
+            is: 'mediaslider-datalet',
+
+            properties: {
+                data: {
+                    type: Array,
+                    value: undefined
+                },
+                behavior : {
+                    type : Object,
+                    value : {}
+                },
+
+                export_menu : {
+                    type  : Number,
+                    value : 9
+                },
+                disable_my_space : {
+                    type  : Boolean,
+                    value : false
+                }
+            },
+
+            ready: function(){
+                this.behavior = $.extend(true, {}, BaseDataletBehavior, WorkcycleBehavior, AjaxJsonAlasqlBehavior, MediasliderBehavior);
+                this.async(function(){this.behavior.init(this)},0);
+            }
+        });
+    </script>
+</dom-module>

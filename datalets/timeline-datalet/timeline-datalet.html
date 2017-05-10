@@ -1,0 +1,254 @@
+<!--
+@license
+    The MIT License (MIT)
+
+    Copyright (c) 2015 Dipartimento di Informatica - Universit� di Salerno - Italy
+
+    Permission is hereby granted, free of charge, to any person obtaining a copy
+    of this software and associated documentation files (the "Software"), to deal
+    in the Software without restriction, including without limitation the rights
+    to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+    copies of the Software, and to permit persons to whom the Software is
+    furnished to do so, subject to the following conditions:
+
+    The above copyright notice and this permission notice shall be included in
+    all copies or substantial portions of the Software.
+
+    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+    IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+    FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+    AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+    LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+    THE SOFTWARE.
+-->
+
+<!--
+* Developed by :
+* ROUTE-TO-PA Project - grant No 645860. - www.routetopa.eu
+*
+-->
+
+<link rel="import" href="../base-ajax-json-alasql-datalet/base-ajax-json-alasql-datalet.html">
+
+<dom-module name="timeline-datalet">
+    <template>
+
+        <link title="timeline-styles" rel="stylesheet" href="js/timeline.css">
+        <script src="js/timeline-min.js"></script>
+
+        <div id='timeline_embed'></div>
+
+        <base-ajax-json-alasql-datalet data-url="{{dataUrl}}" data="{{data}}" title="{{title}}" description="{{description}}" export_menu="{{export_menu}}" disable_my_space="{{disable_my_space}}"></base-ajax-json-alasql-datalet>
+    </template>
+    <script>
+
+        var TimelineBehavior = {
+
+            presentData: function() {
+//                https://github.com/NUKnightLab/TimelineJS3
+                //https://timeline.knightlab.com/docs/json-format.html
+                //eras --> like categories
+                //img + ln
+                //options+fonts
+
+                var events = [];
+
+                if(!this.data || this.data[0] == undefined) return;
+
+                for(var i = 0; i < this.data[0].data.length; i++){
+                    var date = this._toDate(this.data[0].data[i], this.data[1].data[i]);
+                    var start_date = date[0];
+                    var end_date = date[1];
+                    var headline = this.data[2] ? this.data[2].data[i] : '';
+                    var text = this.data[3] ? this.data[3].data[i] : '';
+                    var url = this.data[4] ? this.data[4].data[i] : '';
+                    var background = this.data[5] ? this.data[5].data[i] : '';
+
+                    if(start_date)
+                        events.push({
+                            "start_date": start_date,
+                            "end_date": end_date,
+                            "text": {
+                                "headline": ''+headline,
+                                "text": ''+text
+                            },
+                            "media": {
+                                "url": url
+                            },
+                            "background": {
+                                "opacity": "50",
+                                "url": background,
+                                "color": background
+                            },
+                        })
+                }
+
+                var _json = {
+                    "title": {
+                        "text": {
+                            "headline": this._component.title,
+                            "text": this._component.description,
+                        }
+                    },
+                    "events": events
+                }
+
+                var options = {
+                }
+
+                timeline = new TL.Timeline(this._component.$.timeline_embed, _json, options);
+            },
+
+            _toDate: function(startDateString, endDateString){
+                var s = this._format(startDateString);
+                var string_1 = s[0];
+                var sign_1 = s[1];
+
+                s = this._format(endDateString);
+                var string_2 = s[0];
+                var sign_2 = s[1];
+
+                var startDate = this. _dateStringToObject(string_1);
+                var endDate = this. _dateStringToObject(string_2);
+
+                if(startDate && this._isRoman(string_1)) {
+
+                    if(sign_1 == 1)
+                        startDate = {
+                            "year": (startDate.year - 1) * 100,
+                        }
+                    else
+                        startDate = {
+                            "year": startDate.year * 100 * sign_1 + 1,
+                        }
+                }
+
+                if(endDate && this._isRoman(string_2)) {
+                    if(sign_2 == 1)
+                        endDate = {
+                            "year": endDate.year * 100 - 1,
+                        }
+                    else
+                        endDate = {
+                            "year": (endDate.year - 1) * 100 * sign_2,
+                        }
+                }
+
+                if(startDate && !endDate){
+                    endDate = startDate;
+
+                    if(this._isRoman(string_1))
+                        endDate = {
+                            "year": startDate.year + 99,
+                        }
+                }
+
+                startDate.display_date = startDateString;
+                endDate.display_date = endDateString;
+
+                return [startDate, endDate];
+            },
+
+            _dateStringToObject : function(dateString) {
+                if(dateString == "")
+                    return null;
+
+                var date = null;
+
+                if(this._isInt(dateString)) {
+                    date = {
+                        "year": dateString,
+                    }
+                }
+                else if(this._isRoman(dateString)) {
+                    date = {
+                        "year": (this._fromRoman(dateString)),
+                    }
+                }
+                else {
+                    try {
+                        date = new Date(dateString); //https://www.w3schools.com/js/js_date_formats.asp
+                        if(isNaN(date.getFullYear()))
+                            return null;
+                        date = {
+                            "year": date.getFullYear(),
+                            "month": date.getUTCMonth() + 1,
+                            "day": date.getUTCDate(),
+                            "hour": date.getHours(),
+                            "minute": date.getUTCMinutes(),
+                            "second": date.getUTCSeconds(),
+                            "millisecond": date.getUTCMilliseconds(),
+                        }
+                    }
+                    catch(e) {
+                        date = null
+                    }
+                }
+
+                return date;
+            },
+
+            _isInt: function(value) {
+                return !isNaN(value) && parseInt(Number(value)) == value && !isNaN(parseInt(value, 10));
+            },
+
+            _format: function(str) {
+                str = (''+str).trim().toUpperCase();
+                var sign = 1;
+                if(str.indexOf('BCE') > -1 || str.indexOf('B.C.E.') > -1 || str.indexOf('BC') > -1 || str.indexOf('B.C.') > -1) {
+                    str = str.replace('BCE', '').replace('B.C.E.', '').replace('BC', '').replace('B.C.', '').trim();
+                    sign = -1;
+                }
+                return [str, sign];
+            },
+
+            _isRoman: function(value) {
+                return /^M{0,4}(CM|CD|D?C{0,3})(XC|XL|L?X{0,3})(IX|IV|V?I{0,3})$/.test(value);
+            },
+
+            _fromRoman: function(str) {
+                var result = 0;
+                // the result is now a number, not a string
+                var decimal = [1000, 900, 500, 400, 100, 90, 50, 40, 10, 9, 5, 4, 1];
+                var roman = ["M", "CM","D","CD","C", "XC", "L", "XL", "X","IX","V","IV","I"];
+                for (var i = 0;i<=decimal.length;i++) {
+                    while (str.indexOf(roman[i]) === 0){
+                        result += decimal[i];
+                        str = str.replace(roman[i],'');
+                    }
+                }
+                return result;
+            }
+        };
+
+        TimelineDatalet = Polymer({
+            is: 'timeline-datalet',
+
+            properties: {
+                data: {
+                    type: Array,
+                    value: undefined
+                },
+                behavior : {
+                    type : Object,
+                    value : {}
+                },
+
+                export_menu : {
+                    type  : Number,
+                    value : 9
+                },
+                disable_my_space : {
+                    type  : Boolean,
+                    value : false
+                }
+            },
+
+            ready: function(){
+                this.behavior = $.extend(true, {}, BaseDataletBehavior, WorkcycleBehavior, AjaxJsonAlasqlBehavior, TimelineBehavior);
+                this.async(function(){this.behavior.init(this)},0);
+            }
+        });
+    </script>
+</dom-module>

@@ -93,16 +93,24 @@ var WorkcycleBehavior = {
      * @method runWorkcycle
      */
     runWorkcycle: function() {
-        this.selectData();
-        this.filterData();
-        this.transformData();
+        // try catch in requestData selectData filterData transformData presentData redraw
+        try {
+            this.selectData();
+            this.filterData();
+            this.transformData();
 
-        var that = this;
-        this._component.async(function () {
-            that.presentData();
-            $(that._component).find("base-datalet")[0].removeLoader();
-            that.redraw();
-        }, 600);
+            var that = this;
+            this._component.async(function () {
+                that.presentData();
+                $(that._component).find("base-datalet")[0].removeLoader();
+                that.redraw();
+            }, 600);
+        }
+        catch (ex){
+            $(this._component).find("base-datalet")[0].removeLoader();
+            $($(this._component).find("#ajax_error")[0]).append(' error: runWorkcycle ');
+            console.log(ex);
+        }
     },
 
     /**
@@ -113,23 +121,30 @@ var WorkcycleBehavior = {
     init: function(component){
         this._component = component;
 
-        if(this._component.data == undefined){
+        if (this._component.data == undefined) {
             $(this._component).find("base-datalet")[0].removeRefresh();
             this.requestData();
-        }else{
-            this.data = this._component.data;
-            this.transformData();
+        } else {
+            try {
+                this.data = this._component.data;
+                this.transformData();
 
-            var that = this;
-            $($(this._component).find("#refresh")).click(function() {
-                that._component.data = undefined;
-                that.init(component);
-            });
-            this._component.async(function () {
-                that.presentData();
-                $(that._component).find("base-datalet")[0].removeLoader();
-                that.redraw();
-            }, 600);
+                var that = this;
+                $($(this._component).find("#refresh")).click(function () {
+                    that._component.data = undefined;
+                    that.init(component);
+                });
+                this._component.async(function () {
+                    that.presentData();
+                    $(that._component).find("base-datalet")[0].removeLoader();
+                    that.redraw();
+                }, 600);
+            }
+            catch (ex){
+                $(this._component).find("base-datalet")[0].removeLoader();
+                $($(this._component).find("#ajax_error")[0]).append(' error: init ');
+                console.log(ex);
+            }
         }
     }
 
