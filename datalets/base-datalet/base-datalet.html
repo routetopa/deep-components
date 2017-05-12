@@ -124,17 +124,6 @@ Example :
                 height: 24px;
             }
 
-            img#refresh {
-                position: relative;
-                top: -1px;
-                height: 24px;
-                width: 24px;
-                cursor: pointer;
-                margin-left: 4px;
-
-                transition-duration: 4s;
-            }
-
             span#ajax_error {
                 position: absolute;
                 top: -34px;
@@ -260,6 +249,27 @@ Example :
             }
             /* EXPORT TO HTML */
 
+            #refresh
+            {
+                position: absolute;
+                right: 48px;
+                top: 0;
+                height: 24px;
+                width: 24px;
+                cursor: pointer;
+            }
+
+            #img_refresh {
+                /*position: relative;*/
+                /*top: -1px;*/
+                height: 24px;
+                width: 24px;
+                /*cursor: pointer;*/
+                /*margin-left: 4px;*/
+
+                transition-duration: 4s;
+            }
+
             #fullscreen
             {
                 position: absolute;
@@ -363,13 +373,15 @@ Example :
             </div>
 
             <div id="base_datalet_source_link">
-                <b>Source:&nbsp</b> <a id="base_datalet_source" target="_blank"></a> <span id="base_datalet_link_span">&nbsp(<a id="base_datalet_link" target="_blank">dataset</a>)</span> <img id="refresh" src="static/images/refresh.svg"> <span id="ajax_error"></span>
+                <b>Source:&nbsp</b> <a id="base_datalet_source" target="_blank"></a> <span id="base_datalet_link_span">&nbsp(<a id="base_datalet_link" target="_blank">dataset</a>)</span> <span id="ajax_error"></span>
             </div>
 
             <div id="base_datalet_rtp">
                 <div id="rtp">Powered by ROUTE-TO-PA</div>
                 <div><a href="http://www.routetopa.eu/" target="_blank"><img id="rtpalogo" src="static/images/rtpalogo.png"></a></div>
             </div>
+
+            <div id="refresh"><img id="img_refresh" src="static/images/refresh.svg"></div>
 
             <div id="fullscreen"></div>
 
