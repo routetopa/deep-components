@@ -76,7 +76,7 @@ Example :
                 text-decoration: none;
             }
             a:hover {
-                color: #2db395;
+                color: #00ACC1;
                 text-decoration: underline;
             }
 
@@ -94,13 +94,16 @@ Example :
                 font-size: 14px;
                 line-height: 24px;
 
+                color: #212121;
+
                 white-space: nowrap;
                 overflow: hidden;
                 text-overflow: ellipsis;
             }
 
             #base_datalet_title_description {
-                max-height: 24px;
+                /*max-height: 24px;*/
+                height: 24px;
             }
 
             #span_title{
@@ -108,7 +111,7 @@ Example :
             }
 
             #span_description{
-                font-style: italic;
+                /*font-style: italic;*/
                 color: #424242;
             }
 
@@ -162,12 +165,13 @@ Example :
             }
 
             #base_datalet_spinner {
-                /*width: 100%;*/
-                padding: 168px calc(50% - 32px);
+                display: flex;
+                align-items: center;
+                justify-content: center;
 
-                position: absolute;
-                top: 0;
-                left: 0;
+                width: 100%;
+                height: 100%;
+                min-height: 400px;
             }
 
             #base_datalet_link {
@@ -178,7 +182,7 @@ Example :
             .export
             {
                 position: absolute;
-                right: 0;
+                right: 24px;
                 top: 0;
                 height: 24px;
                 width: 24px;
@@ -188,15 +192,15 @@ Example :
             }
 
             .export:hover {
-                color: #2196F3;
+                /*color: #2196F3;*/
                 background: url("static/images/more_blue.svg") no-repeat 0 0;
             }
 
             .highcharts-contextmenu
             {
                 position: absolute;
-                top: 4px;
-                right: 24px;
+                bottom: 52px;
+                right: 48px;
                 font-size: small;
                 border: solid 1px #000000;
 
@@ -256,16 +260,106 @@ Example :
             }
             /* EXPORT TO HTML */
 
+            #fullscreen
+            {
+                position: absolute;
+                right: 0px;
+                top: 0;
+                height: 24px;
+                width: 24px;
+                cursor: pointer;
+
+                background: url("static/images/fullscreen.svg") no-repeat 0 0;
+            }
+
+            #fullscreen:hover {
+                /*color: #2196F3;*/
+                background: url("static/images/fullscreen_blue.svg") no-repeat 0 0;
+            }
+
+            #fullscreen_cover{
+                display: none;
+
+                position: fixed;
+                top: 0;
+                left: 0;
+                height: 100%;
+                width: 100%;
+
+                background-color: rgba(0, 0, 0, 0.5);
+                z-index: 9000;
+            }
+
+            #fullscreen_close {
+                display: none;
+
+                position: fixed;
+                top: 30px;
+                right: 30px;
+                height: 40px;
+                width: 40px;
+                background: url("static/images/close.svg") no-repeat 0 0;
+
+                background-color: #00BCD4;
+                box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+                transition: all 0.3s cubic-bezier(.25,.8,.25,1);
+
+                border-radius: 50%;
+
+                line-height: 56px;
+                font-size: 32px;
+                color: #212121;
+                text-align: center;
+                cursor: pointer;
+
+                z-index: 9002;
+            }
+
+            #fullscreen_close:hover {
+                background-color: #00ACC1;
+            }
+
+            #fullscreen_container {
+                display: none;
+
+                position: fixed;
+                top: 48px;
+                left: 48px;
+                height: calc(100% - 96px);
+                width: calc(100% - 96px);
+
+                background-color: white;
+                z-index: 9001;
+            }
+
+            #datalet_container {
+                width: 100%;
+                min-height: 400px;
+                height: calc(100% - 82px);
+
+                z-index: 0;
+
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+
         </style>
 
-        <div id="base_datalet_spinner">
-            <paper-spinner id="datalet_spinner" active></paper-spinner>
+        <div id="fullscreen_cover"></div>
+        <div id="fullscreen_close"></div>
+        <iframe frameborder="0" id="fullscreen_container"></iframe>
+
+        <div id="datalet_container">
+            <div id="base_datalet_spinner">
+                <paper-spinner id="datalet_spinner" active></paper-spinner>
+            </div>
         </div>
 
         <div id="base_datalet_container">
 
             <div id="base_datalet_title_description">
-                <span id="span_title">{{title}}</span> <span id="span_description">{{description}}</span>
+                <span id="span_title">{{datalettitle}}</span> <span id="span_description">{{description}}</span>
             </div>
 
             <div id="base_datalet_source_link">
@@ -276,6 +370,8 @@ Example :
                 <div id="rtp">Powered by ROUTE-TO-PA</div>
                 <div><a href="http://www.routetopa.eu/" target="_blank"><img id="rtpalogo" src="static/images/rtpalogo.png"></a></div>
             </div>
+
+            <div id="fullscreen"></div>
 
             <div id="export">
                 <!--<div class="export" on-click="showHideExportMenu"></div>-->
@@ -316,10 +412,36 @@ Example :
              * @method ready
              */
             ready: function(){
-
                 this.setExportMenu();
 
                 var that = this;
+
+                /*fullscreen*/
+
+                $(this.$.fullscreen).click(function(){
+                    var datalet =that.getHTML()
+
+                    $(that.$.fullscreen_cover).show();
+                    $(that.$.fullscreen_container).show();
+                    $(that.$.fullscreen_close).show();
+
+                    $(that.$.fullscreen_container).attr('srcdoc', ''+datalet[0]+datalet[1]+datalet[2]);
+                });
+
+                $(this.$.fullscreen_cover).click(function(){
+                    $(that.$.fullscreen_close).hide();
+                    $(that.$.fullscreen_container).hide();
+                    $(that.$.fullscreen_cover).hide();
+                });
+
+                $(this.$.fullscreen_close).click(function(){
+                    $(that.$.fullscreen_close).hide();
+                    $(that.$.fullscreen_container).hide();
+                    $(that.$.fullscreen_cover).hide();
+                });
+
+                /*fullscreen*/
+
                 $(this.$.base_datalet_link).click(function() {
                     that.goToDataset();
                 });
@@ -478,7 +600,7 @@ Example :
 
                 html += '<'+parent.is;
                 for(var i=0; i<parent.attributes.length; i++)
-                    html += ' '+parent.attributes[i].name+'=\''+parent.attributes[i].value+'\'';
+                    html += ' '+parent.attributes[i].name+'=\''+parent.attributes[i].value.replace(/\'/g, "&#39;")+'\'';
                 html += '></'+parent.is+'>';
 
                 var dataletImport = '\<script type="text/javascript" src="https://cdn.jsdelivr.net/webcomponentsjs/0.7.16/webcomponents-lite.min.js"\>\<\/script\>\n' +
@@ -575,7 +697,7 @@ Example :
                                 url: urlSource + "/api/dataset/1.0/" + t.dataUrl.substring(t.dataUrl.indexOf("=")+1, i),
                                 dataType: "json",
                                 success: function(e){
-                                    post += '&name=' + e.metas.title + '&description=' + e.metas.description + '&created=' + e.metas.data_processed  + '&lastModified=' + e.metas.modified;
+                                    post += '&name=' + e.metas.datalettitle + '&description=' + e.metas.description + '&created=' + e.metas.data_processed  + '&lastModified=' + e.metas.modified;
                                     xhr.send(post);
                                 }
                             });
@@ -654,6 +776,36 @@ Example :
                     },
                     complete: function(){}
                 });
+            },
+
+            getHTML: function () {
+                debugger
+                var parent = this.parentElement;
+                var html = '';
+                while(!parent.hasAttribute("data-url"))
+                    parent = parent.parentElement;
+
+                html += '<'+parent.is;
+                for(var i=0; i<parent.attributes.length; i++)
+                    html += ' '+parent.attributes[i].name+'=\''+parent.attributes[i].value.replace(/\'/g, "&#39;")+'\'';
+                html += '></'+parent.is+'>';
+
+                var dataletImport = '\<script type="text/javascript" src="https://cdn.jsdelivr.net/webcomponentsjs/0.7.16/webcomponents-lite.min.js"\>\<\/script\>\n' +
+                        '\<script type="text/javascript" src="https://code.jquery.com/jquery-2.1.4.min.js"\>\<\/script\>\n' +
+                        '<!-- REMOVE THE PREVIOUS SCRIPT TAGS IF YOUR PAGE ALREADY USES JQUERY AND POLYFILL LIBRARIES  -->\n';
+
+                console.log('ricordati di me');
+                var dataletLink = '<link rel="import" href="http://172.16.15.128/Datalet-Ecosystem-Provider/COMPONENTS/datalets/'+parent.is+'/'+parent.is+'.html" /> \n';
+
+                var div = document.createElement('div');
+                div.innerHTML = '<div class="overlay" id="overlay">' +
+                        '<div class="modal-content"><span class="button-close" onclick="document.getElementById(\'overlay\').remove(this)"></span>' +
+                        '<span>Copy to clipboard: Ctrl+C, Enter</span>' +
+                        '<textarea class="export_html_textarea">'+dataletImport+dataletLink+html+'</textarea></div></div>';
+
+                html = '<style>html{height: 100%} body{height: calc(100% - 16px); margin: 8px}</style>' + html;
+
+                return [dataletImport, dataletLink, html];
             }
 
          });

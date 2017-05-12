@@ -39,53 +39,52 @@
         <script src="js/jquery.easing.1.3.js"></script>
         <script src="js/jquery.easing.compatibility.js"></script>
 
-        <style>
-            #mediaslider_container {
-                display: flex;
-                align-items: center;
-                justify-content: center;
+        <!--<style>-->
+            <!--#mediaslider_container {-->
+                <!--display: flex;-->
+                <!--align-items: center;-->
+                <!--justify-content: center;-->
 
-                width: 100%;
-                min-height: 400px;
-                height: calc(100% - 82px);
-                overflow-y: auto;
-            }
+                <!--width: 100%;-->
+                <!--min-height: 400px;-->
+                <!--height: calc(100% - 82px);-->
+                <!--overflow-y: auto;-->
+            <!--}-->
 
-            #camera_wrap {
-                float: right;
-                width: 458px;/*option*/
-            }
-        </style>
+            <!--#camera_wrap {-->
+                <!--float: right;-->
+                <!--width: 458px;/*option*/-->
+            <!--}-->
+        <!--</style>-->
 
-        <div id="mediaslider_container">
-            <div id='camera_wrap'>
-                <!--<div data-src="http://www.kontrokultura.it/wp-content/uploads/2015/01/Mago-Merlino.jpg">-->
-                    <!--<div class="camera_caption fadeFromBottom">-->
-                        <!--The <b style="color: red;">text</b> of your caption<br>-->
-                        <!--cos-->
-                    <!--</div>-->
-                <!--</div>-->
-                <!--<div data-src="http://www.cinezapping.com/wp-content/uploads/2015/11/Mago-MErlino.jpg"></div>-->
-                <!--<div data-src="http://blog.crescebene.com/files/2012/08/maga-mag%C3%B2.jpg"></div>-->
-                <!--<div data-src="https://i.ytimg.com/vi/GArX1mUVP9E/hqdefault.jpg"></div>-->
+        <!--<div id="mediaslider_container">-->
+            <!--<div id='camera_wrap'>-->
+                <!--&lt;!&ndash;<div data-src="http://www.kontrokultura.it/wp-content/uploads/2015/01/Mago-Merlino.jpg">&ndash;&gt;-->
+                    <!--&lt;!&ndash;<div class="camera_caption fadeFromBottom">&ndash;&gt;-->
+                        <!--&lt;!&ndash;The <b style="color: red;">text</b> of your caption<br>&ndash;&gt;-->
+                        <!--&lt;!&ndash;cos&ndash;&gt;-->
+                    <!--&lt;!&ndash;</div>&ndash;&gt;-->
+                <!--&lt;!&ndash;</div>&ndash;&gt;-->
+                <!--&lt;!&ndash;<div data-src="http://www.cinezapping.com/wp-content/uploads/2015/11/Mago-MErlino.jpg"></div>&ndash;&gt;-->
+                <!--&lt;!&ndash;<div data-src="http://blog.crescebene.com/files/2012/08/maga-mag%C3%B2.jpg"></div>&ndash;&gt;-->
+                <!--&lt;!&ndash;<div data-src="https://i.ytimg.com/vi/GArX1mUVP9E/hqdefault.jpg"></div>&ndash;&gt;-->
 
-                <!--<div data-src="https://creativeprojectformedarte.files.wordpress.com/2013/01/bianco-e-nero.jpg"></div>-->
-                <!--<div data-src="https://creativeprojectformedarte.files.wordpress.com/2013/01/bianco-e-nero.jpg"></div>-->
-                <!--<div data-src="https://creativeprojectformedarte.files.wordpress.com/2013/01/bianco-e-nero.jpg"></div>-->
-                <!--<div data-src="https://creativeprojectformedarte.files.wordpress.com/2013/01/bianco-e-nero.jpg"></div>-->
-                <!--<div data-src="https://creativeprojectformedarte.files.wordpress.com/2013/01/bianco-e-nero.jpg"></div>-->
-                <!--<div data-src="https://creativeprojectformedarte.files.wordpress.com/2013/01/bianco-e-nero.jpg"></div>-->
-                <!--<div data-src="https://creativeprojectformedarte.files.wordpress.com/2013/01/bianco-e-nero.jpg"></div>-->
-                <!--<div data-src="https://creativeprojectformedarte.files.wordpress.com/2013/01/bianco-e-nero.jpg"></div>-->
-                <!--<div data-src="https://creativeprojectformedarte.files.wordpress.com/2013/01/bianco-e-nero.jpg"></div>-->
-                <!--<div data-src="https://creativeprojectformedarte.files.wordpress.com/2013/01/bianco-e-nero.jpg"></div>-->
-                <!--<div data-src="https://creativeprojectformedarte.files.wordpress.com/2013/01/bianco-e-nero.jpg"></div>-->
-                <!--<div data-src="https://creativeprojectformedarte.files.wordpress.com/2013/01/bianco-e-nero.jpg"></div>-->
+                <!--&lt;!&ndash;<div data-src="https://creativeprojectformedarte.files.wordpress.com/2013/01/bianco-e-nero.jpg"></div>&ndash;&gt;-->
+                <!--&lt;!&ndash;<div data-src="https://creativeprojectformedarte.files.wordpress.com/2013/01/bianco-e-nero.jpg"></div>&ndash;&gt;-->
+                <!--&lt;!&ndash;<div data-src="https://creativeprojectformedarte.files.wordpress.com/2013/01/bianco-e-nero.jpg"></div>&ndash;&gt;-->
+                <!--&lt;!&ndash;<div data-src="https://creativeprojectformedarte.files.wordpress.com/2013/01/bianco-e-nero.jpg"></div>&ndash;&gt;-->
+                <!--&lt;!&ndash;<div data-src="https://creativeprojectformedarte.files.wordpress.com/2013/01/bianco-e-nero.jpg"></div>&ndash;&gt;-->
+                <!--&lt;!&ndash;<div data-src="https://creativeprojectformedarte.files.wordpress.com/2013/01/bianco-e-nero.jpg"></div>&ndash;&gt;-->
+                <!--&lt;!&ndash;<div data-src="https://creativeprojectformedarte.files.wordpress.com/2013/01/bianco-e-nero.jpg"></div>&ndash;&gt;-->
+                <!--&lt;!&ndash;<div data-src="https://creativeprojectformedarte.files.wordpress.com/2013/01/bianco-e-nero.jpg"></div>&ndash;&gt;-->
+                <!--&lt;!&ndash;<div data-src="https://creativeprojectformedarte.files.wordpress.com/2013/01/bianco-e-nero.jpg"></div>&ndash;&gt;-->
+                <!--&lt;!&ndash;<div data-src="https://creativeprojectformedarte.files.wordpress.com/2013/01/bianco-e-nero.jpg"></div>&ndash;&gt;-->
+                <!--&lt;!&ndash;<div data-src="https://creativeprojectformedarte.files.wordpress.com/2013/01/bianco-e-nero.jpg"></div>&ndash;&gt;-->
+                <!--&lt;!&ndash;<div data-src="https://creativeprojectformedarte.files.wordpress.com/2013/01/bianco-e-nero.jpg"></div>&ndash;&gt;-->
+            <!--</div>-->
+        <!--</div>-->
 
-            </div>
-        </div>
-
-        <base-ajax-json-alasql-datalet data-url="{{dataUrl}}" data="{{data}}" title="{{title}}" description="{{description}}" export_menu="{{export_menu}}" disable_my_space="{{disable_my_space}}"></base-ajax-json-alasql-datalet>
+        <base-ajax-json-alasql-datalet id="baseAjaxJsonAlasqlDatalet" data-url="{{dataUrl}}" data="{{data}}" datalettitle="{{datalettitle}}" description="{{description}}" export_menu="{{export_menu}}" disable_my_space="{{disable_my_space}}"></base-ajax-json-alasql-datalet>
     </template>
     <script>
 
@@ -94,8 +93,10 @@
             presentData: function() {
                 if(!this.data || this.data[0] == undefined) return;
 
+                /*if selectedFields ... come timeslider*/
+
                 var pagination = true;
-                if(this.data[0].data.length > 16)
+                if(this.data[0].data.length > 16) /*if second rowwwwwwwwwwwwwwwwwwwwwww*/
                     pagination = false;
 
                 var html = '';
@@ -119,11 +120,22 @@
                 }
 
                     //random name?
-                $(this._component.$.camera_wrap).html(html);
+                var h = $(this._component).parent().height();
+                h = Math.max(h, 482);
+                h -= 82;
+                var w = 0;
+                if(pagination)
+                    w = (h - 60) * 2;
+                else
+                    w = h * 2;
 
-                $(this._component.$.camera_wrap).camera({
+
+                html = '<div id="camera_wrap" style="width: ' + w + 'px;">' + html + '</div>'
+                $(this._component.$.baseAjaxJsonAlasqlDatalet.$.baseDatalet.$.datalet_container).html(html);
+
+                $(this._component).find('#camera_wrap').camera({
 //                    autoAdvance: false,
-                    height: '75%',
+                    height: '50%',
                     loader: 'none',
                     playPause: false,
                     pagination: pagination

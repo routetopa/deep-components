@@ -51,16 +51,16 @@ Example:
 <dom-module name="leafletjs-datalet">
     <template>
         <link rel="stylesheet" href="leafletsjs/leaflet.css" />
-        <style>
-            #leafletjs {
-                height: calc(100% - 82px);
-                min-height: 400px;
-                z-index: 0;
-            }
-        </style>
+        <!--<style>-->
+            <!--#leafletjs {-->
+                <!--height: calc(100% - 82px);-->
+                <!--min-height: 400px;-->
+                <!--z-index: 0;-->
+            <!--}-->
+        <!--</style>-->
 
-        <div id="leafletjs"></div>
-        <base-ajax-json-alasql-datalet data-url="{{dataUrl}}" fields="{{fields}}" data="{{data}}" title="{{title}}" description="{{description}}" export_menu="{{export_menu}}" disable_my_space="{{disable_my_space}}"></base-ajax-json-alasql-datalet>
+        <!--<div id="leafletjs"></div>-->
+        <base-ajax-json-alasql-datalet id="baseAjaxJsonAlasqlDatalet" data-url="{{dataUrl}}" fields="{{fields}}" data="{{data}}" datalettitle="{{datalettitle}}" description="{{description}}" export_menu="{{export_menu}}" disable_my_space="{{disable_my_space}}"></base-ajax-json-alasql-datalet>
 
     </template>
 
@@ -84,7 +84,8 @@ Example:
 
                 var t = this;
                 try{
-                    this._component.map = L.map(this._component.$.leafletjs).setView([0, 0], 13, {reset:true});
+//                    this._component.map = L.map(this._component.$.leafletjs).setView([0, 0], 13, {reset:true});
+                    this._component.map = L.map(this._component.$.baseAjaxJsonAlasqlDatalet.$.baseDatalet.$.datalet_container).setView([0, 0], 13, {reset:true});
                 }catch(e){}
 
 

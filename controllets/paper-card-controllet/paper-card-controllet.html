@@ -29,7 +29,7 @@
                 width: 100%;
                 height: 100%;
 
-                z-index: 1;
+                z-index: 9;
                 background-color: transparent;
             }
 
@@ -163,21 +163,14 @@
                 display: none;
             }
 
-            :host > ::content #container.highcharts-datalet {
+            :host > ::content #datalet_container {
                 min-height: 200px !important;
             }
 
-            /*mediaslider*/
-            :host > ::content #mediaslider_container {
-                min-height: 256px !important;
-                overflow: hidden;
-            }
         </style>
 
 
         <paper-material id="paper_card_container" elevation="3">
-
-
 
             <paper-fab id="card_modify" class="mini modify" icon="create" on-click="_handleModifyClick"></paper-fab>
             <paper-fab id="card_delete" class="mini delete" icon="delete" on-click="_handleDeleteClick"></paper-fab>

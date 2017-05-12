@@ -37,9 +37,9 @@
         <link title="timeline-styles" rel="stylesheet" href="js/timeline.css">
         <script src="js/timeline-min.js"></script>
 
-        <div id='timeline_embed'></div>
+        <!--<div id='timeline_embed'></div>-->
 
-        <base-ajax-json-alasql-datalet data-url="{{dataUrl}}" data="{{data}}" title="{{title}}" description="{{description}}" export_menu="{{export_menu}}" disable_my_space="{{disable_my_space}}"></base-ajax-json-alasql-datalet>
+        <base-ajax-json-alasql-datalet id="baseAjaxJsonAlasqlDatalet" data-url="{{dataUrl}}" data="{{data}}" datalettitle="{{datalettitle}}" description="{{description}}" export_menu="{{export_menu}}" disable_my_space="{{disable_my_space}}"></base-ajax-json-alasql-datalet>
     </template>
     <script>
 
@@ -56,14 +56,54 @@
 
                 if(!this.data || this.data[0] == undefined) return;
 
+                var selectedFields = JSON.parse(this._component.getAttribute("selectedfields"));
+                var inputs = [];
+                if(selectedFields) { /*if deprecated*/
+                    for (var i=0; i < selectedFields.length; i++)
+                        if (selectedFields[i])
+                            inputs.push(selectedFields[i].field);
+                }
+
+                var text_i = inputs.indexOf("EventDescription");
+                var url_i = inputs.indexOf("MediaUrl");
+                var background_i = inputs.indexOf("Background");
+//                console.log(text_i);
+//                console.log(url_i);
+//                console.log(background_i);
+
+//                debugger
                 for(var i = 0; i < this.data[0].data.length; i++){
                     var date = this._toDate(this.data[0].data[i], this.data[1].data[i]);
                     var start_date = date[0];
                     var end_date = date[1];
                     var headline = this.data[2] ? this.data[2].data[i] : '';
-                    var text = this.data[3] ? this.data[3].data[i] : '';
-                    var url = this.data[4] ? this.data[4].data[i] : '';
-                    var background = this.data[5] ? this.data[5].data[i] : '';
+
+                    /*******************/
+
+                    var text = '', url='', background='';
+                    if(text_i > -1) {
+                        text = this.data[3].data[i];
+                    }
+                    if(url_i > -1) {
+                        if(text_i > -1)
+                            url = this.data[4].data[i];
+                        else
+                            url = this.data[3].data[i];
+                    }
+                    if(background_i > -1) {
+                        if(text_i > -1 && url_i > -1)
+                            background = this.data[5].data[i];
+                        else if(text_i > -1 || url_i > -1)
+                            background = this.data[4].data[i];
+                        else
+                            background = this.data[3].data[i];
+                    }
+
+                    /*******************/
+
+//                    var text = this.data[3] ? this.data[3].data[i] : '';
+//                    var url = this.data[4] ? this.data[4].data[i] : '';
+//                    var background = this.data[5] ? this.data[5].data[i] : '';
 
                     if(start_date)
                         events.push({
@@ -87,8 +127,8 @@
                 var _json = {
                     "title": {
                         "text": {
-                            "headline": this._component.title,
-                            "text": this._component.description,
+                            "headline": this._component.datalettitle ? this._component.datalettitle : '',
+                            "text": this._component.description ? this._component.description : ''
                         }
                     },
                     "events": events
@@ -97,7 +137,7 @@
                 var options = {
                 }
 
-                timeline = new TL.Timeline(this._component.$.timeline_embed, _json, options);
+                timeline = new TL.Timeline(this._component.$.baseAjaxJsonAlasqlDatalet.$.baseDatalet.$.datalet_container, _json, options);
             },
 
             _toDate: function(startDateString, endDateString){

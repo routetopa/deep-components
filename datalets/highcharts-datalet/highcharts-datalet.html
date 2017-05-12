@@ -56,16 +56,7 @@ Example :
 <dom-module id="highcharts-datalet">
 
     <template>
-        <div id="container"></div>
-        <style>
-            #container {
-                width: auto;
-                /*height: auto;*/
-                height: calc(100% - 82px);
-                min-height: 400px;
-            }
-        </style>
-        <base-ajax-json-alasql-datalet data-url="{{dataUrl}}" fields="{{fields}}" data="{{data}}" title="{{title}}" description="{{description}}" export_menu="{{export_menu}}" disable_my_space="{{disable_my_space}}"></base-ajax-json-alasql-datalet>
+        <base-ajax-json-alasql-datalet id="baseAjaxJsonAlasqlDatalet" data-url="{{dataUrl}}" fields="{{fields}}" data="{{data}}" datalettitle="{{datalettitle}}" description="{{description}}" export_menu="{{export_menu}}" disable_my_space="{{disable_my_space}}"></base-ajax-json-alasql-datalet>
     </template>
 
     <!--<script src="static/js/highcharts.js"></script>-->
@@ -147,7 +138,7 @@ Example :
             },
 
             redraw: function () {
-                $(this._component.$.charts.$.container).highcharts().reflow();
+                $(this._component.$.charts.$.baseAjaxJsonAlasqlDatalet.$.baseDatalet.$.datalet_container).highcharts().reflow();
             }
 
         };

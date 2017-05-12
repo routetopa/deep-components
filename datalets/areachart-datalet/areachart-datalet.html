@@ -50,7 +50,7 @@ Example:
 
 <dom-module id="areachart-datalet">
     <template>
-        <highcharts-datalet id="charts" data-url="{{dataUrl}}" fields="{{fields}}" title="{{title}}" description="{{description}}" export_menu="{{export_menu}}" disable_my_space="{{disable_my_space}}"></highcharts-datalet>
+        <highcharts-datalet id="charts" data-url="{{dataUrl}}" fields="{{fields}}" datalettitle="{{datalettitle}}" description="{{description}}" export_menu="{{export_menu}}" disable_my_space="{{disable_my_space}}"></highcharts-datalet>
     </template>
     <script>
 
@@ -224,11 +224,11 @@ Example:
 
                 // use stock?
                 if(l > stockLimit) {
-                    Highcharts.stockChart(this._component.$.charts.$.container, options);
+                    Highcharts.stockChart(this._component.$.charts.$.baseAjaxJsonAlasqlDatalet.$.baseDatalet.$.datalet_container, options);
                     $(".highcharts-axis-labels.highcharts-xaxis-labels.highcharts-navigator-xaxis").hide();
                 }
                 else
-                    $(this._component.$.charts.$.container).highcharts(options);
+                    $(this._component.$.charts.$.baseAjaxJsonAlasqlDatalet.$.baseDatalet.$.datalet_container).highcharts(options);
             }
         };
 

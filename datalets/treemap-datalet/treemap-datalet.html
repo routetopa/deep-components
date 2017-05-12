@@ -57,13 +57,13 @@ Example:
                 /*color: red;*/
             /*}*/
 
-            :host ::content #treemap_placeholder {
-                width: 100%;
-                height: 70%;
-                min-height: 400px;
-                background: #bbb;
-                /*position: relative;*/
-            }
+            /*:host ::content #treemap_placeholder {*/
+                /*width: 100%;*/
+                /*height: 70%;*/
+                /*min-height: 400px;*/
+                /*background: #bbb;*/
+                /*!*position: relative;*!*/
+            /*}*/
 
             :host ::content text {
                 pointer-events: none;
@@ -109,8 +109,8 @@ Example:
                 fill: #bbb;
             }
         </style>
-        <div id="treemap_placeholder"></div>
-        <base-ajax-json-alasql-datalet data-url="{{dataUrl}}" fields="{{fields}}" data="{{data}}" title="{{title}}" description="{{description}}" export_menu="{{export_menu}}"></base-ajax-json-alasql-datalet>
+        <!--<div id="treemap_placeholder"></div>-->
+        <base-ajax-json-alasql-datalet id="baseAjaxJsonAlasqlDatalet" data-url="{{dataUrl}}" fields="{{fields}}" data="{{data}}" datalettitle="{{datalettitle}}" description="{{description}}" export_menu="{{export_menu}}"></base-ajax-json-alasql-datalet>
     </template>
 
     <script src="../shared_js/d3.js"></script>
@@ -181,7 +181,7 @@ Example:
 
             presentData: function(){
                 this.map.name = this._component.title;
-                build(this.map, this._component.$.treemap_placeholder);
+                build(this.map, this._component.$.baseAjaxJsonAlasqlDatalet.$.baseDatalet.$.datalet_container);
             }
         };
 
@@ -224,7 +224,7 @@ Example:
             },
 
             refresh : function(){
-                $(this.$.treemap_placeholder).html("");
+                $(this.$.baseAjaxJsonAlasqlDatalet.$.baseDatalet.$.datalet_container).html("");
                 this.behavior.transformData(null);
                 this.behavior.presentData();
             }

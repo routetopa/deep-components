@@ -189,7 +189,7 @@
             <div class="header"><span id="baseInfo"></span></div>
 
             <div class="inputs">
-                <paper-input id="title" maxlength="32" on-change="_addOption"></paper-input>
+                <paper-input id="datalettitle" maxlength="32" on-change="_addOption"></paper-input>
                 <div class="info_button">
                     <paper-icon-button id="base_title_info" icon="info-outline" noink></paper-icon-button>
                 </div>
@@ -438,7 +438,7 @@
                 this.$.inputsTab.innerHTML = ln["inputs_" + ln["localization"]];
                 this.$.optionsTab.innerHTML = ln["options_" + ln["localization"]];
 
-                this.$.title.label = ln["title_" + ln["localization"]];
+                this.$.datalettitle.label = ln["title_" + ln["localization"]];
                 this.$.description.label = ln["description_" + ln["localization"]];
             },
 
@@ -448,7 +448,7 @@
 
                 for (var i = 0; i < ddls.length; i++)
                     if(this.selectedInputs[i]) {
-                        $(ddls[i]).find("paper-menu")[0].select(this.selectedInputs[i].index);
+                        $(ddls[i]).find("paper-menu")[0].select((this.selectedInputs[i].index));
                         var icon = this.$.inputs_list.querySelectorAll("paper-icon-button")[ddls[i].id * 2];
                         icon.setAttribute("icon", "unfold-more"); //wrong
                         icon.removeAttribute("disabled");
@@ -465,9 +465,9 @@
                         selectedOptions[this.options[i].name] = dataletPreset[this.options[i].name];
                     }
                 }
-                if(dataletPreset["title"]) {
-                    this.$.title.value = dataletPreset["title"];
-                    selectedOptions["title"] = dataletPreset["title"];
+                if(dataletPreset["datalettitle"]) {
+                    this.$.datalettitle.value = dataletPreset["datalettitle"];
+                    selectedOptions["datalettitle"] = dataletPreset["datalettitle"];
                 }
                 if(dataletPreset["description"]) {
                     this.$.description.value = dataletPreset["description"];

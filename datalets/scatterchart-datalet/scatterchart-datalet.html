@@ -50,7 +50,7 @@ Example:
 
 <dom-module id="scatterchart-datalet">
     <template>
-        <highcharts-datalet id="charts" data-url="{{dataUrl}}" fields="{{fields}}" title="{{title}}" description="{{description}}" export_menu="{{export_menu}}" disable_my_space="{{disable_my_space}}"></highcharts-datalet>
+        <highcharts-datalet id="charts" data-url="{{dataUrl}}" fields="{{fields}}" datalettitle="{{datalettitle}}" description="{{description}}" export_menu="{{export_menu}}" disable_my_space="{{disable_my_space}}"></highcharts-datalet>
     </template>
     <script>
         var ScatterchartBehavior = {
@@ -159,7 +159,7 @@ Example:
                 if(this._component.theme != "themeBase" && this._component.theme != "")
                     jQuery.extend(true, options, Highcharts[this._component.theme]);
 
-                $(this._component.$.charts.$.container).highcharts(options);
+                $(this._component.$.charts.$.baseAjaxJsonAlasqlDatalet.$.baseDatalet.$.datalet_container).highcharts(options);
             }
         };
 

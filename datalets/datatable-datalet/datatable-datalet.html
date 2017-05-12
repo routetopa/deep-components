@@ -52,9 +52,9 @@ Example:
     <template>
         <link rel="stylesheet" type="text/css" href="js/DataTables/datatables.css"/>
 
-        <div id="container">
-            <table id="datatable" class="stripe row-border" cellspacing="0" style="height: auto; width: auto;"></table>
-        </div>
+        <!--<div id="container">-->
+            <!--<table id="datatable" class="stripe row-border" cellspacing="0" style="height: auto; width: auto;"></table>-->
+        <!--</div>-->
 
         <style>
             #datatable {
@@ -70,7 +70,7 @@ Example:
                 height: calc(100% - 82px);
             }
         </style>
-        <base-ajax-json-alasql-datalet data-url="{{dataUrl}}" fields="{{fields}}" data="{{data}}" title="{{title}}" description="{{description}}" export_menu="{{export_menu}}" disable_my_space="{{disable_my_space}}"></base-ajax-json-alasql-datalet>
+        <base-ajax-json-alasql-datalet data-url="{{dataUrl}}" fields="{{fields}}" data="{{data}}" datalettitle="{{datalettitle}}" description="{{description}}" export_menu="{{export_menu}}" disable_my_space="{{disable_my_space}}"></base-ajax-json-alasql-datalet>
     </template>
 
     <script type="text/javascript" src="js/DataTables/datatables.js"></script>
@@ -101,15 +101,18 @@ Example:
 
                 html += '</table>';
 
-                $(this._component.$.container).html(html);
+                var container = $(this._component).find('#datalet_container');
+
+                container.html(html);
 
 //                var h = $(this._component.$$("#datatable")).height();
-                var h = $(this._component.$.container).height() - 120;
-                h = Math.max(h, 280)
+                var h = $(container).height() - 120;
+                h = Math.max(h, 280);
 
                 //if <10 or seleziono un numero di righe tale che non c'è scrolling elimino paginazione
 
-                $(this._component.$$("#datatable")).DataTable({
+//                $(this._component.$$("#datatable")).DataTable({
+                $(this._component).find('#datatable').DataTable({
                     "order": [],
                     "scrollY": h,
                     "scrollX": true,
