@@ -288,8 +288,10 @@ Example:
              * @method ready
              */
             ready: function(){
+                console.log('barchar prova NO async');
                 this.behavior = $.extend(true, {}, HighchartsComponentBehavior, BarchartBehavior);
-                this.async(function(){this.behavior.init(this)},0);
+//                this.async(function(){this.behavior.init(this)},0);
+                this.behavior.init(this);
             }
         });
     </script>
