@@ -583,6 +583,8 @@ Example :
                 if(bitmask == 0)
                 {
                     this.$.export.style.display = "none";
+                    this.$.fullscreen.style.display = "none";/*remove from here*/
+                    this.$.refresh.style.display = "none";/*remove from here*/
                     return;
                 }
 
@@ -612,7 +614,8 @@ Example :
 
                 html += '<'+parent.is;
                 for(var i=0; i<parent.attributes.length; i++)
-                    html += ' '+parent.attributes[i].name+'=\''+parent.attributes[i].value.replace(/\'/g, "&#39;")+'\'';
+                    if(parent.attributes[i].name != 'data')
+                        html += ' '+parent.attributes[i].name+'=\''+parent.attributes[i].value.replace(/\'/g, "&#39;")+'\'';
                 html += '></'+parent.is+'>';
 
                 var dataletImport = '\<script type="text/javascript" src="https://cdn.jsdelivr.net/webcomponentsjs/0.7.16/webcomponents-lite.min.js"\>\<\/script\>\n' +

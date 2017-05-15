@@ -184,8 +184,10 @@
                         }
                 }
 
-                startDate.display_date = startDateString;
-                endDate.display_date = endDateString;
+                if(startDate)
+                    startDate.display_date = startDateString;
+                if(endDate)
+                    endDate.display_date = endDateString;
 
                 return [startDate, endDate];
             },
@@ -234,6 +236,9 @@
             },
 
             _format: function(str) {
+//                if (!str ||str == "")
+//                    return ["", 1];
+
                 str = (''+str).trim().toUpperCase();
                 var sign = 1;
                 if(str.indexOf('BCE') > -1 || str.indexOf('B.C.E.') > -1 || str.indexOf('BC') > -1 || str.indexOf('B.C.') > -1) {
