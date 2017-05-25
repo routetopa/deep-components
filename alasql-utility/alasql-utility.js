@@ -50,40 +50,64 @@ function _alasql_SELECT (fields) {
 }
 
 function _alasql_WHERE (filters) {
-    //var logicalOperator;
-    //
-    ///*DEPRECATED*/if(filters[0].logicalOperator == undefined) {
-    //    logicalOperator = "AND"
-    //}
-    //else {
-    //    logicalOperator = filters[0].logicalOperator;
-    //    filters = filters.slice(1);
-    //}
+    /* OLD VERSION */
+    if(!filters[0].field) {
+        if (filters.length == 1)
+            return " ";
+
+        var where = " WHERE ";
+        var logicalOperator = filters[0].logicalOperator;
+        filters = filters.slice(1);
+
+        for (var i = 0; i < filters.length; i++) {
+            filters[i]["field"] = _normalizeField(filters[i]["field"]);
+            if (filters[i]["value"] == "")
+                filters[i]["value"] = "\"" + filters[i]["value"] + "\"";
+        }
+
+        for (var i = 0; i < filters.length; i++) {
+            if (filters[i]["operation"] == "contains")
+                where += filters[i]["field"] + " like '%" + filters[i]["value"] + "%' " + logicalOperator + " ";
+            else if (filters[i]["operation"] == "notContains")
+                where += filters[i]["field"] + " not like '%" + filters[i]["value"] + "%' " + logicalOperator + " ";
+            else if (filters[i]["operation"] == "start")
+                where += filters[i]["field"] + " like '" + filters[i]["value"] + "%' " + logicalOperator + " ";
+            else if (filters[i]["operation"] == "ends")
+                where += filters[i]["field"] + " like '%" + filters[i]["value"] + "' " + logicalOperator + " ";
+            else
+                where += filters[i]["field"] + " " + filters[i]["operation"] + " " + filters[i]["value"] + " " + logicalOperator + " ";
+        }
+
+        return where.slice(0, -4);
+    }
+    /* OLD VERSION */
 
     var where = " WHERE ";
-    var logicalOperator = filters[0].logicalOperator;
-    filters = filters.slice(1);
 
-    for (var i=0; i < filters.length; i++) {
+    for (var i = 0; i < filters.length; i++) {
         filters[i]["field"] = _normalizeField(filters[i]["field"]);
-        if(filters[i]["value"] == "")
+        if (filters[i]["value"] == "")
             filters[i]["value"] = "\"" + filters[i]["value"] + "\"";
     }
 
-    for (var i=0; i < filters.length; i++) {
-        if(filters[i]["operation"] == "contains")
-            where += filters[i]["field"] + " like '%" + filters[i]["value"] + "%' " + logicalOperator + " ";
-        else if(filters[i]["operation"] == "notContains")
-            where += filters[i]["field"] + " not like '%" + filters[i]["value"] + "%' " + logicalOperator + " ";
-        else if(filters[i]["operation"] == "start")
-            where += filters[i]["field"] + " like '" + filters[i]["value"] + "%' " + logicalOperator + " ";
-        else if(filters[i]["operation"] == "ends")
-            where += filters[i]["field"] + " like '%" + filters[i]["value"] + "' " + logicalOperator + " ";
+    for (var i = 0; i < filters.length; i++) {
+        where += filters[i]["logicalOperator"] + " " + filters[i]["lp"] + " ";
+
+        if (filters[i]["operation"] == "contains")
+            where += filters[i]["field"] + " like '%" + filters[i]["value"] + "%' ";
+        else if (filters[i]["operation"] == "notContains")
+            where += filters[i]["field"] + " not like '%" + filters[i]["value"] + "%' ";
+        else if (filters[i]["operation"] == "start")
+            where += filters[i]["field"] + " like '" + filters[i]["value"] + "%' ";
+        else if (filters[i]["operation"] == "ends")
+            where += filters[i]["field"] + " like '%" + filters[i]["value"] + "' ";
         else
-            where += filters[i]["field"] + " " + filters[i]["operation"] + " " + filters[i]["value"] + " " + logicalOperator + " ";
+            where += filters[i]["field"] + " " + filters[i]["operation"] + " " + filters[i]["value"] + " ";
+
+        where += filters[i]["rp"] + " ";
     }
 
-    return where.slice(0, -4);
+    return where;
 }
 
 function _alasql_GROUPBY (aggregators) {

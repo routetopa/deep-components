@@ -41,8 +41,7 @@
 
         filters_controllet.setFields(fields);
 
-        filters_controllet.filters = [{logicalOperator: "OR"}, {field: "Lat", operation: "<=", value: "16"}, {field: "Long", operation: "!=", value: "32"}, {field: "Sbiricos", operation: "!=", value: "12AAA32+DAO"}];
-//        filters_controllet.logicalOperator = "or";
+        filters_controllet.filters = [{field: "Lat", operation: "<=", value: "16", logicalOperator: "", "lp": "", "rp": ""}, {field: "Long", operation: "!=", value: "32", logicalOperator: "AND", "lp": "", "rp": ""}, {field: "Sbiricos", operation: "!=", value: "12AAA32+DAO", logicalOperator: "OR", "lp": "", "rp": ""}];
 
         var filters = filters_controllet.getFilters();
 

@@ -144,6 +144,12 @@
                 font-weight: 700;
             }
 
+            .tab {
+                text-align: center;
+                display: inline-block;
+                width: 36px;
+            }
+
             #filters_container .filter {
                 height: 24px;
                 width: calc(75% - 16px);
@@ -154,6 +160,19 @@
                 height: 40px;
                 width: 40px;
                 padding: 4px 8px;
+            }
+
+            input.parentheses {
+                padding: 0 4px;
+                margin: 0 4px;
+                width: 8px;
+                /*width: 16px;*/
+                border: solid 1px #E0E0E0;
+            }
+
+            input.parentheses:focus {
+                outline: none;
+                border-bottom: solid 1px #2196F3;
             }
 
     </style>
@@ -187,22 +206,22 @@
                             <paper-icon-button on-click="_addFilter" icon="add-circle" class="add"></paper-icon-button>
                         </div>
                         <div class="andOr_container">
-                            <paper-button raised on-click="_changeLogicalOperator"><span id="andOr">{{logicalOperator}}</span></paper-button>
+                            <paper-button id="logical_operator" raised on-click="_changeLogicalOperator" disabled="true"><span id="andOr">{{logicalOperator}}</span></paper-button>
                         </div>
                     </div>
                 </div>
 
                 <template is="dom-repeat" items={{filters}}>
-                    <template is="dom-if" if="{{index}}"><!--excludes logicalOperator-->
+                    <!--<template is="dom-if" if="{{index}}">&lt;!&ndash;excludes logicalOperator&ndash;&gt;-->
                         <div class="row2">
                             <div class="filter">
-                                {{item.field}} <span class="highlighted">{{_getOperationlName(item.operation)}}</span> "{{item.value}}" <span class="highlighted">{{_getLogicalOperator(index)}}</span>
+                                <span class="highlighted tab">{{item.logicalOperator}}</span> <input id="lp_{{index}}" class="parentheses" maxlength="1" onkeypress="return event.key == '('" value="{{item.lp}}"> {{item.field}} <span class="highlighted">{{_getOperationlName(item.operation)}}</span> "{{item.value}}" <input maxlength="1" id="rp_{{index}}" class="parentheses" onkeypress="return event.key == ')'" value="{{item.rp}}">
                             </div>
                             <div class="remove_container">
                                 <paper-icon-button on-click="_deleteFilter" icon="cancel" class="cancel"></paper-icon-button>
                             </div>
                         </div>
-                    </template>
+                    <!--</template>-->
                 </template>
 
             <paper-button id="disable_filters" raised on-click="_disableFilters"><iron-icon icon="filter-list"></iron-icon>&nbsp; <span id="disable_enable"></span></paper-button>
@@ -231,7 +250,7 @@
 
                 filters : {
                     type : Array,
-                    value :  [{logicalOperator: "AND"}]
+                    value :  []
                 }
 
             },
@@ -242,6 +261,11 @@
             },
 
             attached : function() {
+                var that = this;
+                $('#filters_container').on('input', '.parentheses', function() {
+                    that.parenthesesAdded(event);
+                });
+
                 this._translate();
             },
 
@@ -255,8 +279,22 @@
 
             setFilters : function(filters) {
                 if(filters && filters.length > 0) {
+                    /* OLD VERSION */
+                    if(!filters[0].field) {
+                        this.logicalOperator = filters[0].logicalOperator;
+                        filters.splice(0, 1);
+                        for (var i = 0; i < filters.length; i++) {
+                            filters[i].logicalOperator = this.logicalOperator;
+                            filters[i].lp = "";
+                            filters[i].rp = "";
+                        }
+                        filters[0].logicalOperator = "";
+                    }
+                    /* OLD VERSION */
+
                     this.filters = this._copy(filters);
-                    this.logicalOperator = this.filters[0].logicalOperator;
+                    this.logicalOperator = "AND";
+                    this.$.logical_operator.disabled = false;
                     this._fire();
                 }
             },
@@ -268,7 +306,7 @@
             reset : function() {
                 this.fields = [];
                 this.selectedFields = [];
-                this.filters = [{logicalOperator: "AND"}];
+                this.filters = [];
             },
 
             _translate : function() {
@@ -287,7 +325,7 @@
                 this.$.disable_enable.innerHTML = ln["disableFilters_" + ln["localization"]];
                 this.$.disable_filters.className = this.$.disable_filters.className.replace(" disabled", "");
 
-                if (this.filters.length > 1)
+                if (this.filters.length > 0)
                     this.fire('filters-controllet_filters', {filters: this.filters});
                 else
                     this.fire('filters-controllet_filters', {filters: []});
@@ -299,12 +337,17 @@
                     var id = this.$.filter_operation.selectedItem.id;
                     var operation = this.operations[id];
                     var value = this.$.filter_value.value;
+                    var logicalOperator = this.logicalOperator;
+                    if(this.filters.length == 0)
+                        logicalOperator = "";
 
-                    this.filters.push({"field": field, "operation": operation, "value": value});
+                    this.filters.push({"field": field, "operation": operation, "value": value, "logicalOperator": logicalOperator, "lp": "", "rp": ""});
 
                     this.$.filter_field_menu.select(-1);
                     this.$.filter_operation_menu.select(-1);
                     this.$.filter_value.value = "";
+
+                    this.$.logical_operator.disabled = false;
 
                     this._fire();
 
@@ -317,9 +360,42 @@
 
                 this.filters.splice(index, 1);
 
+                if(this.filters.length == 0)
+                    this.$.logical_operator.disabled = true;
+                else
+                    this.filters[0].logicalOperator = "";
+
                 this._fire();
 
                 this._renderFilters();
+            },
+
+            parenthesesAdded : function(e) {
+                var t = e.target.id.split("_");
+                if(t[0] == "lp")
+                    this.filters[t[1]].lp = e.target.value;
+                else if(t[0] == "rp")
+                    this.filters[t[1]].rp = e.target.value;
+
+                var count = 0;
+                var flag = true;
+                for(var i=0; i<this.filters.length; i++) {
+                    if (this.filters[i].lp == "(")
+                        count++;
+                    if (this.filters[i].rp == ")")
+                        count--;
+                    if(count < 0) {
+                        flag = false;
+                        break;
+                    }
+                }
+
+                if(count != 0)
+                    flag = false;
+
+                if(flag)
+                    this._fire();
+
             },
 
             _getOperationlName: function(operation) {
@@ -332,11 +408,11 @@
                 else
                     this.logicalOperator = "AND";
 
-                this.filters[0] = {logicalOperator: this.logicalOperator}
+//                this.filters[0] = {logicalOperator: this.logicalOperator}
 
-                this._fire();
+//                this._fire();
 
-                this._renderFilters();
+//                this._renderFilters();
             },
 
             _renderFilters : function() {
