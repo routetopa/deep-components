@@ -27,6 +27,10 @@
 }
 .camera_wrap img {
     max-width: none!important;
+
+    height: 100% !important;
+    width: 100% !important;
+    object-fit: contain;
 }
 .camera_fakehover {
     height: 100%;

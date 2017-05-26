@@ -39,51 +39,6 @@
         <script src="js/jquery.easing.1.3.js"></script>
         <script src="js/jquery.easing.compatibility.js"></script>
 
-        <!--<style>-->
-            <!--#mediaslider_container {-->
-                <!--display: flex;-->
-                <!--align-items: center;-->
-                <!--justify-content: center;-->
-
-                <!--width: 100%;-->
-                <!--min-height: 400px;-->
-                <!--height: calc(100% - 82px);-->
-                <!--overflow-y: auto;-->
-            <!--}-->
-
-            <!--#camera_wrap {-->
-                <!--float: right;-->
-                <!--width: 458px;/*option*/-->
-            <!--}-->
-        <!--</style>-->
-
-        <!--<div id="mediaslider_container">-->
-            <!--<div id='camera_wrap'>-->
-                <!--&lt;!&ndash;<div data-src="http://www.kontrokultura.it/wp-content/uploads/2015/01/Mago-Merlino.jpg">&ndash;&gt;-->
-                    <!--&lt;!&ndash;<div class="camera_caption fadeFromBottom">&ndash;&gt;-->
-                        <!--&lt;!&ndash;The <b style="color: red;">text</b> of your caption<br>&ndash;&gt;-->
-                        <!--&lt;!&ndash;cos&ndash;&gt;-->
-                    <!--&lt;!&ndash;</div>&ndash;&gt;-->
-                <!--&lt;!&ndash;</div>&ndash;&gt;-->
-                <!--&lt;!&ndash;<div data-src="http://www.cinezapping.com/wp-content/uploads/2015/11/Mago-MErlino.jpg"></div>&ndash;&gt;-->
-                <!--&lt;!&ndash;<div data-src="http://blog.crescebene.com/files/2012/08/maga-mag%C3%B2.jpg"></div>&ndash;&gt;-->
-                <!--&lt;!&ndash;<div data-src="https://i.ytimg.com/vi/GArX1mUVP9E/hqdefault.jpg"></div>&ndash;&gt;-->
-
-                <!--&lt;!&ndash;<div data-src="https://creativeprojectformedarte.files.wordpress.com/2013/01/bianco-e-nero.jpg"></div>&ndash;&gt;-->
-                <!--&lt;!&ndash;<div data-src="https://creativeprojectformedarte.files.wordpress.com/2013/01/bianco-e-nero.jpg"></div>&ndash;&gt;-->
-                <!--&lt;!&ndash;<div data-src="https://creativeprojectformedarte.files.wordpress.com/2013/01/bianco-e-nero.jpg"></div>&ndash;&gt;-->
-                <!--&lt;!&ndash;<div data-src="https://creativeprojectformedarte.files.wordpress.com/2013/01/bianco-e-nero.jpg"></div>&ndash;&gt;-->
-                <!--&lt;!&ndash;<div data-src="https://creativeprojectformedarte.files.wordpress.com/2013/01/bianco-e-nero.jpg"></div>&ndash;&gt;-->
-                <!--&lt;!&ndash;<div data-src="https://creativeprojectformedarte.files.wordpress.com/2013/01/bianco-e-nero.jpg"></div>&ndash;&gt;-->
-                <!--&lt;!&ndash;<div data-src="https://creativeprojectformedarte.files.wordpress.com/2013/01/bianco-e-nero.jpg"></div>&ndash;&gt;-->
-                <!--&lt;!&ndash;<div data-src="https://creativeprojectformedarte.files.wordpress.com/2013/01/bianco-e-nero.jpg"></div>&ndash;&gt;-->
-                <!--&lt;!&ndash;<div data-src="https://creativeprojectformedarte.files.wordpress.com/2013/01/bianco-e-nero.jpg"></div>&ndash;&gt;-->
-                <!--&lt;!&ndash;<div data-src="https://creativeprojectformedarte.files.wordpress.com/2013/01/bianco-e-nero.jpg"></div>&ndash;&gt;-->
-                <!--&lt;!&ndash;<div data-src="https://creativeprojectformedarte.files.wordpress.com/2013/01/bianco-e-nero.jpg"></div>&ndash;&gt;-->
-                <!--&lt;!&ndash;<div data-src="https://creativeprojectformedarte.files.wordpress.com/2013/01/bianco-e-nero.jpg"></div>&ndash;&gt;-->
-            <!--</div>-->
-        <!--</div>-->
-
         <base-ajax-json-alasql-datalet id="baseAjaxJsonAlasqlDatalet" data-url="{{dataUrl}}" data="{{data}}" datalettitle="{{datalettitle}}" description="{{description}}" export_menu="{{export_menu}}" disable_my_space="{{disable_my_space}}"></base-ajax-json-alasql-datalet>
     </template>
     <script>
@@ -129,7 +84,9 @@
                 else
                     w = h * 2;
 
+//                w = 50;
 
+//                debugger
                 html = '<div id="camera_wrap" style="width: ' + w + 'px;">' + html + '</div>'
                 $(this._component.$.baseAjaxJsonAlasqlDatalet.$.baseDatalet.$.datalet_container).html(html);
 
@@ -138,7 +95,9 @@
                     height: '50%',
                     loader: 'none',
                     playPause: false,
-                    pagination: pagination
+                    pagination: pagination,
+                    fx: this._component.animation,
+                    slideOn: 'next'
                 });
             }
 
@@ -156,7 +115,10 @@
                     type : Object,
                     value : {}
                 },
-
+                animation : {
+                    type : String,
+                    value : ""
+                },
                 export_menu : {
                     type  : Number,
                     value : 9
