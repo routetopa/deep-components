@@ -412,6 +412,7 @@
                 }
                 if(multi > -1) {
                     var input = inputs[multi];
+                    /*bug*/ if (input.name == "BalloonContent") mandatory++;/*bug*/
                     for (var i = 0; i < this.fields.length - mandatory - 1; i++)
                         inputs.splice(multi, 0, input);
                 }
