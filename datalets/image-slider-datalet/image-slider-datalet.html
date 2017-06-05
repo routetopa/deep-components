@@ -183,7 +183,7 @@
             <neon-animated-pages id="animated_pages" on-neon-animation-finish="_onNeonAnimationFinish" selected="[[selected]]" entry-animation="[[entryAnimation]]" exit-animation="[[exitAnimation]]">
                 <template is="dom-repeat" items="{{images}}">
                     <neon-animatable>
-                        <img class="image" src="[[item]]" />
+                        <!--<img class="image" src="[[item]]" />-->
                     </neon-animatable>
                 </template>
             </neon-animated-pages>
@@ -399,6 +399,7 @@
             _refresh: function(){
                 var img_url = this.images[this.selected].split("/");
                 this.title = img_url[img_url.length -1];
+                $(this.$.animated_pages).find("neon-animatable").eq(this.selected).html("<img style=\"height: 100%;width: 100%;object-fit: contain;\" src=\"" + this.images[this.selected] +"\" \>");
             }
 
         });
