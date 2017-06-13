@@ -102,6 +102,8 @@ Example :
             }
 
             #base_datalet_title_description {
+                display: flex;
+                flex-direction: row;
                 /*max-height: 24px;*/
                 height: 24px;
             }
@@ -249,6 +251,42 @@ Example :
             }
             /* EXPORT TO HTML */
 
+            #twitter
+            {
+                /*position: relative;*/
+                /*left: -24px;*/
+                /*top: 0;*/
+                height: 24px;
+                width: 24px;
+                cursor: pointer;
+
+                background: url("static/images/twitter.svg") no-repeat 2px 2px;
+                background-size: 20px 20px;
+            }
+
+            #twitter:hover {
+                background: url("static/images/twitter_hover.svg") no-repeat 2px 2px;
+                background-size: 20px 20px;
+            }
+
+            #facebook
+            {
+                /*position: relative;*/
+                /*left: 0;*/
+                /*top: 0;*/
+                height: 24px;
+                width: 24px;
+                cursor: pointer;
+
+                background: url("static/images/facebook.svg") no-repeat 4px 4px;
+                background-size: 16px 16px;
+            }
+
+            #facebook:hover {
+                background: url("static/images/facebook_hover.svg") no-repeat 4px 4px;
+                background-size: 16px 16px;
+            }
+
             #refresh
             {
                 position: absolute;
@@ -369,7 +407,7 @@ Example :
         <div id="base_datalet_container">
 
             <div id="base_datalet_title_description">
-                <span id="span_title">{{datalettitle}}</span> <span id="span_description">{{description}}</span>
+                <span id="span_title">{{datalettitle}}</span> <span id="span_description">{{description}}</span><div id="facebook"></div><div id="twitter"></div>
             </div>
 
             <div id="base_datalet_source_link">
