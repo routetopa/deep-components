@@ -321,7 +321,7 @@
                         observer : '_filter'
                     },
 
-                    pezz8 : {
+                    extendedSearch : {
                         type  : Boolean,
                         value : false,
                     }
@@ -422,74 +422,111 @@
                 },
 
                 _filter : function() {
-                    var t = 0;
-                    if(this.pezz8) {
-                        t = 2000;
+                    if(this.extendedSearch) {
 
-                        this.filteredDatasets = [];
-
-                        this.prev = 1;
-                        this.next = this.step;
-                        this.length = 0;
-
-                        this.shownPrev = Math.min(this.prev, this.length);
-                        this.shownNext = Math.min(this.next, this.length);
-
-                        this._showDatasets();
-                    }
-
-                    this.debounce('_filter', function () {
-                        if(this.datasets && this.datasets.length) {
-                            var filter = this.filter.toLowerCase();
-
-                            if(filter == "" && this.pezz8)
-                                this.filteredDatasets = [];
-                            else if(filter == "")
-                                this.filteredDatasets = this.datasets;
-                            else
-                                this.filteredDatasets = this.datasets.filter(function (el) {
-                                    if (el.name.toLowerCase().indexOf(filter) > -1)
-                                        return true;
-                                    else if (el.resources != undefined) {
-//                                        for(var i in el.resources)
-//                                            if(el.resources[i].toLowerCase().indexOf(filter) > -1)
-//                                                return true;
-                                        for(var r of el.resources) {
-                                            if (r.constructor == Array)
-                                                r = r[0];
-                                            if (r.toLowerCase().indexOf(filter) > -1)
-                                                return true;
+                        var that = this;
+                        if(parent.ODE) {
+                            $.ajax({
+                                url: parent.ODE.ode_ultra_clarity_url + "api/" + that.filter,
+                                dataType: "json",
+                                success: function(datasets){
+                                    //mancano i nomi delle risolse, tutto a caso...
+                                    console.log(datasets);
+                                    var d = [];
+                                    var name = "";
+                                    for (var i in datasets.results) {
+                                        var dat = datasets.results[i].p_datasets[0];
+                                        var title = dat.title ? dat.title : dat.name
+                                        if(name != title) {
+                                            name = title;
+                                            d.push({
+                                                id: dat.id,
+                                                name: dat.name,
+                                                p: "ultraclarity",
+                                                p_name: datasets.results[i].p_url,
+                                                resources: [dat.resources.name]
+                                            });
+                                        }
+                                        else {
+                                            d[d.length - 1].resources.push(dat.resources.name);
                                         }
                                     }
-                                    else
-                                        return false;
+//                                    console.log(d);
+//                                    that.setDatasets(d);
 
-//                                    return (el.name.toLowerCase().indexOf(filter) > -1);
-                                });
+                                    that.filteredDatasets = d;
 
-                            this.prev = 1;
-                            this.next = this.step;
-                            this.length = this.filteredDatasets.length;
+                                    that.prev = 1;
+                                    that.next = that.step;
+                                    that.length = that.filteredDatasets.length;
 
-                            this.shownPrev = Math.min(this.prev, this.length);
-                            this.shownNext = Math.min(this.next, this.length);
+                                    that.shownPrev = Math.min(that.prev, that.length);
+                                    that.shownNext = Math.min(that.next, that.length);
+                                    that.shownDatasets = that.filteredDatasets.slice(that.prev-1, that.next);
 
-                            this._showDatasets();
-
-//                            this.shownDatasets = [];
-//                            this.async(function () {
-//                                this.shownDatasets = this.filteredDatasets.slice(this.prev - 1, this.next);
-//                            }, 0);
-//
-//                            $(this.$.list_container).animate({ scrollTop: 0}, 0);
-//                            this.$.menu.selected = -1;
-//
-//                            this.async(function () {
-//                                $(this.$.menu).removeHighlight();
-//                                $(this.$.menu).highlight(this.filter);
-//                            }, 100);
+                                    that._showDatasets();
+                                },
+                                error: function(e){
+                                    console.log(e);
+                                }
+                            });
                         }
-                    }, t);
+
+//                        this.filteredDatasets = [];
+
+                    }
+                    else {
+                        this.debounce('_filter', function () {
+                            if(this.datasets && this.datasets.length) {
+                                var filter = this.filter.toLowerCase();
+
+                                if(filter == "")
+                                    this.filteredDatasets = this.datasets;
+                                else
+                                    this.filteredDatasets = this.datasets.filter(function (el) {
+                                        if (el.name.toLowerCase().indexOf(filter) > -1)
+                                            return true;
+                                        else if (el.resources != undefined) {
+        //                                        for(var i in el.resources)
+        //                                            if(el.resources[i].toLowerCase().indexOf(filter) > -1)
+        //                                                return true;
+                                            for(var r of el.resources) {
+                                                if (r.constructor == Array)
+                                                    r = r[0];
+                                                if (r.toLowerCase().indexOf(filter) > -1)
+                                                    return true;
+                                            }
+                                        }
+                                        else
+                                            return false;
+
+        //                                    return (el.name.toLowerCase().indexOf(filter) > -1);
+                                    });
+
+                                this.prev = 1;
+                                this.next = this.step;
+                                this.length = this.filteredDatasets.length;
+
+                                this.shownPrev = Math.min(this.prev, this.length);
+                                this.shownNext = Math.min(this.next, this.length);
+
+                                this._showDatasets();
+
+        //                            this.shownDatasets = [];
+        //                            this.async(function () {
+        //                                this.shownDatasets = this.filteredDatasets.slice(this.prev - 1, this.next);
+        //                            }, 0);
+        //
+        //                            $(this.$.list_container).animate({ scrollTop: 0}, 0);
+        //                            this.$.menu.selected = -1;
+        //
+        //                            this.async(function () {
+        //                                $(this.$.menu).removeHighlight();
+        //                                $(this.$.menu).highlight(this.filter);
+        //                            }, 100);
+                            }
+                        }, 0);
+                    }
                 },
 
                 _showDatasets : function() {
@@ -550,19 +587,26 @@
                         return;
                     }
 
-                    var p_type = this.shownDatasets[id].p.split("_")[0];
-                    var p_id = this.shownDatasets[id].p.split("_")[1];
+                    if(this.shownDatasets[id].p == "ultraclarity") {
+                        p = {url: this.shownDatasets[id].p_name.slice(0,-1)};
+                        p_type = "CKAN";
+                    }
+                    else {
+                        var p_type = this.shownDatasets[id].p.split("_")[0];
+                        var p_id = this.shownDatasets[id].p.split("_")[1];
 
-
-                    var p = this.providers.filter(function(a) { return a.id == p_id; })[0];
-                    if(p == undefined)
-                        p = {url: 'localhost'};//cocreated datasets
+                        var p = this.providers.filter(function(a) { return a.id == p_id; })[0];
+                        if(p == undefined)
+                            p = {url: 'localhost'};//cocreated datasets
+                    }
 
                     var f = Object.create(providerFactory);
                     var provider = f.getProviderByType(p_type);
 
                     var datasetId = this.shownDatasets[id].id;
                     var datasetUrl = provider.getDatasetUrl(p.url, datasetId);
+//                    console.log('datasetUrl');
+//                    console.log(datasetUrl);
 
                     var that = this;
                     $.ajax({
@@ -579,6 +623,13 @@
                                 resourceUrl = provider.getResourceUrl(p.url, resourceId);
                             }
 
+                            /**/
+//                            for (var j in dataset.result.resources)
+//                                console.log(provider.getResourceUrl(p.url, dataset.result.resources[j].id));
+                            /**/
+
+//                            console.log('resourceUrl');
+//                            console.log(resourceUrl);
                             that.fire("datasets-list-controllet_dataset", { dataset: { url: resourceUrl } });
 
                             var html = provider.getHTMLFormattedMetadata(dataset, resourceIndex);

@@ -308,7 +308,7 @@
             },
 
             _showCurrentDatalet : function() {
-                this.title = this.currentDatalets[this.selected].title;
+                this.title = this.currentDatalets[this.selected].datalettitle;
                 if(this.pages == 1) {
                     this.chevronLeft("invisible");
                     this.chevronRight("invisible");
@@ -426,7 +426,7 @@
                     if(this.currentDatalets)
                     {
                         this.currentDatalets[this.selected].behavior.presentData();
-                        this.title = this.currentDatalets[this.selected].title;
+                        this.title = this.currentDatalets[this.selected].datalettitle;
                     }
                 }, 0);
             }
