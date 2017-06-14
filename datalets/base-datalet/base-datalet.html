@@ -407,7 +407,10 @@ Example :
         <div id="base_datalet_container">
 
             <div id="base_datalet_title_description">
-                <span id="span_title">{{datalettitle}}</span> <span id="span_description">{{description}}</span><div id="facebook"></div><div id="twitter"></div>
+                <span id="span_title">{{datalettitle}}</span>
+                <span id="span_description">{{description}}</span>
+                <div id="facebook" on-click="share_on_facebook"></div>
+                <div id="twitter" on-click="share_on_twitter"></div>
             </div>
 
             <div id="base_datalet_source_link">
@@ -858,8 +861,39 @@ Example :
                 html = '<style>html{height: 100%;} body{height: calc(100% - 16px); margin: 8px;} .export{display: none;} #fullscreen{display: none;}</style>' + html;
 
                 return [dataletImport, dataletLink, html];
+            },
+
+            share_on_facebook: function() {
+
+                var parent = this.parentElement;
+
+                while(!parent.hasAttribute("datalet-id"))
+                    parent = parent.parentElement;
+
+                console.log(parent.attributes["datalet-id"].value);
+
+            },
+
+            share_on_twitter: function() {
+
+                var parent = this.parentElement;
+
+                while(!parent.hasAttribute("datalet-id"))
+                    parent = parent.parentElement;
+
+                console.log(parent.attributes["datalet-id"].value);
+
+                var datalet_id = parent.attributes["datalet-id"].value;
+                var get_url = window.location;
+                var base_url = get_url .protocol + "//" + get_url.host + "/" + get_url.pathname.split('/')[1];
+
+                var twitter_url  = base_url + 'datalet/' + datalet_id;
+                var twitter_text = encodeURI( (this.datalettitle ? (this.datalettitle + ' ') : '') + (this.description ? this.description : '') );
+                var url = 'https://twitter.com/intent/tweet?text=' + twitter_text + '&via=RouteToPA&url=' + twitter_url + '&original_referer=' + base_url;
+                window.open(url, "", "width=800,height=300");
+
             }
 
-         });
+        });
     </script>
 </dom-module>
