@@ -78,6 +78,10 @@
                 border-right: 2px solid #FFFFFF;
             }
 
+            paper-tab[disabled] {
+                opacity: 0.33;
+            }
+
             paper-tab:nth-last-child(1) {
                 border-right: 0;
             }
@@ -178,7 +182,7 @@
             <paper-tabs selected={{tabIndex}} noink no-bar>
                 <paper-tab on-tap="_setProvidersDatasets"><span id="providers_datasets"></span></paper-tab>
                 <paper-tab on-tap="_setLocalDatasets"><span id="spod_users_datasets"></span></paper-tab>
-                <paper-tab on-tap="_setExtendedDatasets"><span id="extended_datasets"></span></paper-tab>
+                <paper-tab id="tab_extended" on-tap="_setExtendedDatasets"><span id="extended_datasets"></span></paper-tab>
             </paper-tabs>
 
             <div id="options">
@@ -317,6 +321,10 @@
                     $(this.$.info).perfectScrollbar();
 
                     this.options = true;
+
+                    if(!parent.ODE || !parent.ODE.ode_ultra_clarity_url) {
+                        $(this.$.tab_extended).attr("disabled", "disabled");
+                    }
                 },
 
                 attached : function() {
@@ -401,7 +409,7 @@
                 },
 
                 _setProvidersDatasets : function() {
-                    this.$.datasets_list.pezz8 = false;
+                    this.$.datasets_list.extendedSearch = false;
 
                     this.$.datasets_list.setDatasets([]);
                     this.async(function () {
@@ -421,7 +429,7 @@
                 },
 
                 _setLocalDatasets : function() {
-                    this.$.datasets_list.pezz8 = false;
+                    this.$.datasets_list.extendedSearch = false;
 
                     if(this.$.ddl_version.selectedItem.id == 0)
                         this._showLast();
@@ -431,27 +439,38 @@
                 },
 
                 _setExtendedDatasets : function() {
-                    //**** RIMUOVI PEZZOTTO pezz8 qui e in dataset-list ****
-                    this.$.datasets_list.pezz8 = true;
-
+                    this.$.datasets_list.extendedSearch = true;
+//                    var that = this;
+//                    var filter =  this.$.datasets_list.filter;
                     this.$.datasets_list.setDatasets([]);
-                    this.async(function () {
-                        var ddl_provider = $(this.$.ddl_provider).find("paper-menu")[0].selectedItem;
-//                        var name = ddl_provider.innerHTML.trim();
-//                        var id = this._getIdByProviderName(name);
-                        var id = ddl_provider.id;
-                        if (id == 0) {
-                            this.$.datasets_list.setDatasets(this.allDatasets);
-                        } else {
-                            var providerDatasets = this.datasets[id]['p_datasets'];
-                            this.$.datasets_list.setDatasets(providerDatasets);
-                        }
+//                    if(parent.ODE) {
+//                        $.ajax({
+//                            url: parent.ODE.ode_ultra_clarity_url + "api/" + filter,
+//                            dataType: "json",
+//                            success: function(datasets){
+//                                console.log(datasets);
+//                                var d = [];
+//                                for (var i in datasets.results) {
+//                                    dat = datasets.results[i].p_datasets[0];
+//                                    d.push({
+//                                        id: dat.id,
+//                                        name: dat.name,
+//                                        p: "ultraclarity",
+//                                        p_name: datasets.results[i].p_url,
+////                                        resources: ["a", "b", "c"]
+//                                    });
+//                                }
+//                                console.log(d);
+//                                that.$.datasets_list.setDatasets(d);
+//                                that._showOptions();
+//                            },
+//                            error: function(e){
+//                                console.log(e);
+//                            }
+//                        });
+//                    }
 
-                        this._showOptions();
-                    }, 0);
-
-//                    this.$.datasets_list.setDatasets([]);//tutto molto bello, clap, clap, clap
-//                    this._showOptions()
+                    this._showOptions();
                 },
 
 //                _getIdByProviderName : function(name) {
