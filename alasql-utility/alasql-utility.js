@@ -101,6 +101,10 @@ function _alasql_WHERE (filters) {
             where += filters[i]["field"] + " like '" + filters[i]["value"] + "%' ";
         else if (filters[i]["operation"] == "ends")
             where += filters[i]["field"] + " like '%" + filters[i]["value"] + "' ";
+        else if (filters[i]["operation"] == "isNotNull")
+            where +=  " (" + filters[i]["field"] + " != '' AND  " + filters[i]["field"] + " != 'null' ) ";
+        else if (filters[i]["operation"] == "isNull")
+            where += " (" + filters[i]["field"] + " = '' OR  " + filters[i]["field"] + " = 'null' ) ";
         else
             where += filters[i]["field"] + " " + filters[i]["operation"] + " " + filters[i]["value"] + " ";
 

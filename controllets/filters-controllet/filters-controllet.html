@@ -175,6 +175,9 @@
                 border-bottom: solid 1px #2196F3;
             }
 
+            span.italic {
+                font-style: italic;
+            }
     </style>
 
         <div id="filters_container">
@@ -215,7 +218,7 @@
                     <!--<template is="dom-if" if="{{index}}">&lt;!&ndash;excludes logicalOperator&ndash;&gt;-->
                         <div class="row2">
                             <div class="filter">
-                                <span class="highlighted tab">{{item.logicalOperator}}</span> <input id="lp_{{index}}" class="parentheses" maxlength="1" onkeypress="return event.key == '('" value="{{item.lp}}"> {{item.field}} <span class="highlighted">{{_getOperationlName(item.operation)}}</span> "{{item.value}}" <input maxlength="1" id="rp_{{index}}" class="parentheses" onkeypress="return event.key == ')'" value="{{item.rp}}">
+                                <span class="highlighted tab">{{item.logicalOperator}}</span> <input id="lp_{{index}}" class="parentheses" maxlength="1" onkeypress="return event.key == '('" value="{{item.lp}}"> {{item.field}} <span class="highlighted">{{_getOperationlName(item.operation)}}</span> <span class="italic">{{item.value}}</span> <input maxlength="1" id="rp_{{index}}" class="parentheses" onkeypress="return event.key == ')'" value="{{item.rp}}">
                             </div>
                             <div class="remove_container">
                                 <paper-icon-button on-click="_deleteFilter" icon="cancel" class="cancel"></paper-icon-button>
@@ -245,7 +248,7 @@
 
                 operations : {
                     type : Array,
-                    value : ["=", "!=", ">", ">=", "<", "<=", "contains", "notContains", "start", "ends"]
+                    value : ["=", "!=", ">", ">=", "<", "<=", "contains", "notContains", "start", "ends", "isNotNull", "isNull"]
                 },
 
                 filters : {
