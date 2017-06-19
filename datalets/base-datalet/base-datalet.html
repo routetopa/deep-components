@@ -420,7 +420,7 @@ Example :
             <div id="base_datalet_title_description">
                 <div id="span_title">{{datalettitle}}</div>
                 <div id="span_description">{{description}}</div>
-                <div id="googleplus" on-click="share_on_twitter"></div>
+                <div id="googleplus" on-click="share_on_gplus"></div>
                 <div id="facebook" on-click="share_on_facebook"></div>
                 <div id="twitter" on-click="share_on_twitter"></div>
             </div>
@@ -909,6 +909,23 @@ Example :
                 var twitter_url  = base_url + 'datalet/' + datalet_id;
                 var twitter_text = encodeURI( (this.datalettitle ? (this.datalettitle + ' ') : '') + (this.description ? this.description : '') );
                 var url = 'https://twitter.com/intent/tweet?text=' + twitter_text + '&via=RouteToPA&url=' + twitter_url + '&original_referer=' + base_url;
+                window.open(url, "", "width=800,height=300");
+
+            },
+
+            share_on_gplus: function() {
+
+                var parent = this.parentElement;
+
+                while(!parent.hasAttribute("datalet-id"))
+                    parent = parent.parentElement;
+
+                var datalet_id = parent.attributes["datalet-id"].value;
+                var get_url = window.location;
+                var base_url = get_url.protocol + "//" + get_url.host + "/" ;
+
+                var twitter_url  = base_url + 'datalet/' + datalet_id;
+                var url = 'https://plus.google.com/share?url=' + twitter_url;
                 window.open(url, "", "width=800,height=300");
 
             }
