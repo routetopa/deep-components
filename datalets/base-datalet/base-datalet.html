@@ -110,11 +110,13 @@ Example :
 
             #span_title{
                 font-weight: 700;
+                padding-right: 8px;
             }
 
             #span_description{
                 /*font-style: italic;*/
                 color: #424242;
+                padding-right: 8px;
             }
 
             /*#span_description:not(:empty):before {
@@ -253,9 +255,6 @@ Example :
 
             #twitter
             {
-                /*position: relative;*/
-                /*left: -24px;*/
-                /*top: 0;*/
                 height: 24px;
                 width: 24px;
                 cursor: pointer;
@@ -271,9 +270,6 @@ Example :
 
             #facebook
             {
-                /*position: relative;*/
-                /*left: 0;*/
-                /*top: 0;*/
                 height: 24px;
                 width: 24px;
                 cursor: pointer;
@@ -285,6 +281,21 @@ Example :
             #facebook:hover {
                 background: url("static/images/facebook_hover.svg") no-repeat 4px 4px;
                 background-size: 16px 16px;
+            }
+
+            #googleplus
+            {
+                height: 24px;
+                width: 24px;
+                cursor: pointer;
+
+                background: url("static/images/googleplus.svg") no-repeat 0 0;
+                background-size: 24px 24px;
+            }
+
+            #googleplus:hover {
+                background: url("static/images/googleplus_hover.svg") no-repeat 0 0;
+                background-size: 24px 24px;
             }
 
             #refresh
@@ -407,8 +418,9 @@ Example :
         <div id="base_datalet_container">
 
             <div id="base_datalet_title_description">
-                <span id="span_title">{{datalettitle}}</span>
-                <span id="span_description">{{description}}</span>
+                <div id="span_title">{{datalettitle}}</div>
+                <div id="span_description">{{description}}</div>
+                <div id="googleplus" on-click="share_on_twitter"></div>
                 <div id="facebook" on-click="share_on_facebook"></div>
                 <div id="twitter" on-click="share_on_twitter"></div>
             </div>
