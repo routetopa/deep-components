@@ -101,6 +101,8 @@ ln["contains_en"] = "contains";
 ln["notContains_en"] = "not contains";
 ln["start_en"] = "start with";
 ln["ends_en"] = "ends with";
+ln["isNotNull_en"] = "is not null";
+ln["isNull_en"] = "is null";
 
 //aggregators
 ln["GROUP BY_en"] = "GROUP BY";
@@ -387,6 +389,8 @@ ln["contains_it"] = "contiene";
 ln["notContains_it"] = "non contiene";
 ln["start_it"] = "inizia con";
 ln["ends_it"] = "termina con";
+ln["isNotNull_it"] = "è nullo";
+ln["isNull_it"] = "non è nullo";
 
 //aggregators
 ln["GROUP BY_it"] = "RAGGRUPPA PER";
@@ -672,6 +676,8 @@ ln["contains_fr"] = "contient";
 ln["notContains_fr"] = "ne contient pas";
 ln["start_fr"] = "commence par";
 ln["ends_fr"] = "se finit par";
+ln["isNotNull_fr"] = "est not nul";
+ln["isNull_fr"] = "est nul";
 
 //aggregators
 ln["GROUP BY_fr"] = "GROUPE PAR";
@@ -957,6 +963,8 @@ ln["contains_nl"] = "contains";
 ln["notContains_nl"] = "not contains";
 ln["start_nl"] = "start with";
 ln["ends_nl"] = "ends with";
+ln["isNotNull_nl"] = "is not null";
+ln["isNull_nl"] = "is null";
 
 //aggregators
 ln["GROUP BY_nl"] = "GROUP BY";
