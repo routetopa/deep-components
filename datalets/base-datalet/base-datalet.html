@@ -870,11 +870,10 @@ Example :
                 while(!parent.hasAttribute("datalet-id"))
                     parent = parent.parentElement;
 
-                console.log(parent.attributes["datalet-id"].value);
-
                 var datalet_id = parent.attributes["datalet-id"].value;
                 var get_url = window.location;
-                var base_url = get_url.protocol + "//" + get_url.host + "/" + get_url.pathname.split('/')[1];
+                //var base_url = get_url.protocol + "//" + get_url.host + "/" + get_url.pathname.split('/')[1];
+                var base_url = get_url.protocol + "//" + get_url.host + "/" ;
 
                 var facebook_url  = base_url + 'datalet/' + datalet_id;
                 var facebook_text = encodeURI( (this.datalettitle ? (this.datalettitle + ' ') : '') + (this.description ? this.description : '') );
@@ -890,11 +889,10 @@ Example :
                 while(!parent.hasAttribute("datalet-id"))
                     parent = parent.parentElement;
 
-                console.log(parent.attributes["datalet-id"].value);
-
                 var datalet_id = parent.attributes["datalet-id"].value;
                 var get_url = window.location;
-                var base_url = get_url.protocol + "//" + get_url.host + "/" + get_url.pathname.split('/')[1];
+                //var base_url = get_url.protocol + "//" + get_url.host + "/" + get_url.pathname.split('/')[1];
+                var base_url = get_url.protocol + "//" + get_url.host + "/" ;
 
                 var twitter_url  = base_url + 'datalet/' + datalet_id;
                 var twitter_text = encodeURI( (this.datalettitle ? (this.datalettitle + ' ') : '') + (this.description ? this.description : '') );
