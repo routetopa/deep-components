@@ -81,7 +81,7 @@ Example:
                     },
 
                     rangeSelector: {
-                        selected: 0,
+                        selected: 4,
                         inputEnabled:false,
 
                         buttons: [
@@ -228,6 +228,7 @@ Example:
                     var chart = Highcharts.stockChart(this._component.$.charts.$.baseAjaxJsonAlasqlDatalet.$.baseDatalet.$.datalet_container, options);
                     $(".highcharts-axis-labels.highcharts-xaxis-labels.highcharts-navigator-xaxis").hide();
                     chart.xAxis[0].setExtremes(0, 0);
+                    chart.rangeSelector.clickButton(4, true);
                 }
                 else
                     $(this._component.$.charts.$.baseAjaxJsonAlasqlDatalet.$.baseDatalet.$.datalet_container).highcharts(options);
