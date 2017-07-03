@@ -102,21 +102,21 @@ Example :
             }
 
             #base_datalet_title_description {
-                display: flex;
-                flex-direction: row;
+                /*display: flex;*/
+                /*flex-direction: row;*/
                 /*max-height: 24px;*/
                 height: 24px;
             }
 
             #span_title{
                 font-weight: 700;
-                padding-right: 8px;
+                /*padding-right: 8px;*/
             }
 
             #span_description{
                 /*font-style: italic;*/
                 color: #424242;
-                padding-right: 8px;
+                /*padding-right: 8px;*/
             }
 
             /*#span_description:not(:empty):before {
@@ -253,51 +253,6 @@ Example :
             }
             /* EXPORT TO HTML */
 
-            #twitter
-            {
-                height: 24px;
-                width: 24px;
-                cursor: pointer;
-
-                background: url("static/images/twitter.svg") no-repeat 2px 2px;
-                background-size: 20px 20px;
-            }
-
-            #twitter:hover {
-                background: url("static/images/twitter_hover.svg") no-repeat 2px 2px;
-                background-size: 20px 20px;
-            }
-
-            #facebook
-            {
-                height: 24px;
-                width: 24px;
-                cursor: pointer;
-
-                background: url("static/images/facebook.svg") no-repeat 4px 4px;
-                background-size: 16px 16px;
-            }
-
-            #facebook:hover {
-                background: url("static/images/facebook_hover.svg") no-repeat 4px 4px;
-                background-size: 16px 16px;
-            }
-
-            #googleplus
-            {
-                height: 24px;
-                width: 24px;
-                cursor: pointer;
-
-                background: url("static/images/googleplus.svg") no-repeat 0 0;
-                background-size: 24px 24px;
-            }
-
-            #googleplus:hover {
-                background: url("static/images/googleplus_hover.svg") no-repeat 0 0;
-                background-size: 24px 24px;
-            }
-
             #refresh
             {
                 position: absolute;
@@ -309,14 +264,40 @@ Example :
             }
 
             #img_refresh {
-                /*position: relative;*/
-                /*top: -1px;*/
                 height: 24px;
                 width: 24px;
-                /*cursor: pointer;*/
-                /*margin-left: 4px;*/
 
-                transition-duration: 4s;
+                /*transition-duration: 4s;*/
+
+                /*-webkit-animation: spin 1s linear infinite;*/
+                /*animation: spin 1s linear infinite;*/
+            }
+
+            #dataLoader {
+                /*display: none;*/
+                /*margin: 8px auto;*/
+                margin: 2px;
+                border: 2px solid #BDBDBD;
+                border-radius: 50%;
+                border-top: 2px solid #F44336;
+                width: 16px;
+                height: 16px;
+                -webkit-animation: spin 1s linear infinite;
+                animation: spin 1s linear infinite;
+            }
+
+            #dataLoader.live {
+                border-top: 2px solid #4CAF50;
+            }
+
+            @-webkit-keyframes spin {
+                0% { -webkit-transform: rotate(0deg); }
+                100% { -webkit-transform: rotate(360deg); }
+            }
+
+            @keyframes spin {
+                0% { transform: rotate(0deg); }
+                100% { transform: rotate(360deg); }
             }
 
             #fullscreen
@@ -403,6 +384,75 @@ Example :
                 justify-content: center;
             }
 
+            /* SOCIAL */
+
+            #social
+            {
+                display: none;
+                position: absolute;
+                right: 0;
+                bottom: 0;
+                height: 24px;
+                width: 80px;
+                cursor: pointer;
+
+                /*display: flex;*/
+                flex-direction: row;
+
+                /*background-color: red;*/
+            }
+
+            #twitter
+            {
+                height: 24px;
+                width: 24px;
+                cursor: pointer;
+
+                background: url("static/images/twitter.svg") no-repeat 2px 2px;
+                background-size: 20px 20px;
+
+                margin-right: 4px;
+            }
+
+            #twitter:hover {
+                background: url("static/images/twitter_hover.svg") no-repeat 2px 2px;
+                background-size: 20px 20px;
+            }
+
+            #facebook
+            {
+                height: 24px;
+                width: 24px;
+                cursor: pointer;
+
+                background: url("static/images/facebook.svg") no-repeat 2px 2px;
+                background-size: 20px 20px;
+
+                margin-right: 4px;
+            }
+
+            #facebook:hover {
+                background: url("static/images/facebook_hover.svg") no-repeat 2px 2px;
+                background-size: 20px 20px;
+            }
+
+            #googleplus
+            {
+                height: 24px;
+                width: 24px;
+                cursor: pointer;
+
+                background: url("static/images/google-plus.svg") no-repeat 2px 2px;
+                background-size: 20px 20px;
+            }
+
+            #googleplus:hover {
+                background: url("static/images/google-plus_hover.svg") no-repeat 2px 2px;
+                background-size: 20px 20px;
+            }
+
+            /* SOCIAL */
+
         </style>
 
         <div id="fullscreen_cover"></div>
@@ -418,11 +468,8 @@ Example :
         <div id="base_datalet_container">
 
             <div id="base_datalet_title_description">
-                <div id="span_title">{{datalettitle}}</div>
-                <div id="span_description">{{description}}</div>
-                <div id="googleplus" on-click="share_on_gplus"></div>
-                <div id="facebook" on-click="share_on_facebook"></div>
-                <div id="twitter" on-click="share_on_twitter"></div>
+                <span id="span_title">{{datalettitle}}</span>
+                <span id="span_description">{{description}}</span>
             </div>
 
             <div id="base_datalet_source_link">
@@ -449,6 +496,12 @@ Example :
                         <div id="export_my_space" on-click="importToMySpace"><span id="import_myspace"></span></div>
                     </div>
                 </div>
+            </div>
+
+            <div id="social">
+                <div id="twitter" on-click="share_on_twitter"></div>
+                <div id="facebook" on-click="share_on_facebook"></div>
+                <div id="googleplus" on-click="share_on_gplus"></div>
             </div>
 
         </div>
@@ -553,6 +606,9 @@ Example :
                 else {
                     this.hideFooter();
                 }
+
+                if(this.datalettitle != "" && this.description != "" && this.datalettitle != undefined && this.description != undefined)
+                    this.$.span_description.innerHTML = "- " + this.description;
             },
 
             /**
@@ -564,6 +620,9 @@ Example :
 
             attached: function(){
               this.translate();
+
+            if(ODE && (ODE.pluginPreview == "newsfeed" || ODE.pluginPreview == "agora"))
+                $(this.$.social).css("display", "flex");
             },
 
             goToDataset: function() {
@@ -588,8 +647,12 @@ Example :
             },
 
             removeRefresh: function() {
-                $(this.$.refresh).css({'transform': 'rotate(' + (720) + 'deg)'});
-                $(this.$.refresh).css({'opacity': 0});
+//                $(this.$.refresh).css({'transform': 'rotate(' + (720) + 'deg)'});
+//                $(this.$.refresh).css({'opacity': 0});
+
+                $(this.$.img_refresh).css({'-webkit-animation': 'spin 1s linear infinite'});
+                $(this.$.img_refresh).css({'animation': 'spin 1s linear infinite'});
+                $(this.$.img_refresh).delay(2000).fadeOut(1000);
             },
 
             removeLoader: function() {
