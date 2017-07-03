@@ -621,6 +621,13 @@ Example :
             attached: function(){
               this.translate();
 
+            try {
+                if (ODE && (ODE.pluginPreview == "newsfeed" || ODE.pluginPreview == "agora"))
+                    $(this.$.social).css("display", "flex");
+//                else if (parent && parent.ODE && (ODE.pluginPreview == "newsfeed" || ODE.pluginPreview == "agora"))
+//                    $(this.$.social).css("display", "flex");
+            }catch (e){}
+
             if(ODE && (ODE.pluginPreview == "newsfeed" || ODE.pluginPreview == "agora"))
                 $(this.$.social).css("display", "flex");
             },
