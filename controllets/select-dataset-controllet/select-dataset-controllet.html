@@ -350,7 +350,7 @@
                         this.providersDatasets = this.suggestedDatasets.concat(this.providersDatasets);
 //
                     $.ajax({
-                        url: "/cocreation/ajax/get-all-dataset",
+                        url: parent.ODE.ow_url_home + "cocreation/ajax/get-all-dataset",
                         dataType: "json",
                         success: function(localDatasets){
                             that.localDatasets = localDatasets;
