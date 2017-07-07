@@ -959,7 +959,7 @@ Example :
                 var facebook_text = encodeURI( (this.datalettitle ? (this.datalettitle + ' ') : '') + (this.description ? this.description : '') );
                 //var url = 'https://www.facebook.com/sharer.php?s=100&p[url]=' + facebook_url + '&p[title]=' + facebook_text;
                 //var url = 'https://www.facebook.com/dialog/share?app_id='+SPODSHOWCASE.app_id+'&display=popup&href='+SPODSHOWCASE.href+'&redirect_uri='+SPODSHOWCASE.redirect_uri;
-                var url = 'https://www.facebook.com/dialog/share?app_id=113151409308739&display=popup&href=' + base_url + '&redirect_uri=' + facebook_url;
+                var url = 'https://www.facebook.com/dialog/share?app_id=113151409308739&display=popup&href=' + facebook_url + '&redirect_uri=' + facebook_url;
                 window.open(url, "", "width=800,height=300");
 
             },
