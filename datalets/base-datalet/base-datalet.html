@@ -621,8 +621,13 @@ Example :
             attached: function(){
               this.translate();
 
-            if(ODE && (ODE.pluginPreview == "newsfeed" || ODE.pluginPreview == "agora"))
-                $(this.$.social).css("display", "flex");
+            try {
+                if (ODE && (ODE.pluginPreview == "newsfeed" || ODE.pluginPreview == "agora"))
+                    $(this.$.social).css("display", "flex");
+//                else if (parent && parent.ODE && (ODE.pluginPreview == "newsfeed" || ODE.pluginPreview == "agora"))
+//                    $(this.$.social).css("display", "flex");
+            } catch (e) {}
+
             },
 
             goToDataset: function() {
