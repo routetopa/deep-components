@@ -31,7 +31,7 @@
 
 <link rel="import" href="../base-datalet/base-datalet.html">
 
-<link rel="stylesheet" type="text/css" href="static/js/silver-decisions.min.css">
+<link rel="stylesheet" type="text/css" href="static/js/silver-decisions.css">
 <link rel="stylesheet" type="text/css" href="static/css/custom.css">
 
 <script type="text/javascript" src="static/js/silver-decisions.min.js"></script>
@@ -59,15 +59,7 @@ Example:
 
 <dom-module id="decision-tree-datalet">
     <template>
-        <style>
-            #app_container {
-                height: 100%;
-                width: 100%;
-            }
-        </style>
-
-        <div id="app_container"></div>
-        <base-datalet data-url="{{dataUrl}}" datalettitle="{{datalettitle}}" description="{{description}}" export_menu="{{export_menu}}"></base-datalet>
+        <base-datalet id="baseDatalet" data-url="{{dataUrl}}" datalettitle="{{datalettitle}}" description="{{description}}" export_menu="{{export_menu}}"></base-datalet>
     </template>
     <script>
 
@@ -82,12 +74,12 @@ Example:
 
             presentData: function(){
                 if(this._component.jsonTree.title)
-                    this._component.title = this._component.jsonTree.title;
+                    this._component.datalettitle = this._component.jsonTree.title;
                 if(this._component.jsonTree.description)
                     this._component.description = this._component.jsonTree.description;
 
                 //var app = new SilverDecisions('app_container', this._component.config, this._component.jsonTree);
-                var app = new SilverDecisions(this._component.$.app_container, this._component.config, this._component.jsonTree);
+                var app = new SilverDecisions(this._component.$.baseDatalet.$.datalet_container, this._component.config, this._component.jsonTree);
             }
         };
 
@@ -120,7 +112,7 @@ Example:
                     }
                 },
 
-                title: {
+                datalettitle: {
                     type: String,
                     value: ""
                 },

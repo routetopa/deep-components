@@ -1,104 +1,236 @@
-<!--
-@license
-    The MIT License (MIT)
-
-    Copyright (c) 2015 Dipartimento di Informatica - Università di Salerno - Italy
-
-    Permission is hereby granted, free of charge, to any person obtaining a copy
-    of this software and associated documentation files (the "Software"), to deal
-    in the Software without restriction, including without limitation the rights
-    to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-    copies of the Software, and to permit persons to whom the Software is
-    furnished to do so, subject to the following conditions:
-
-    The above copyright notice and this permission notice shall be included in
-    all copies or substantial portions of the Software.
-
-    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-    IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-    FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-    AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-    LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-    THE SOFTWARE.
--->
-
-<!--
-* Developed by :
-* ROUTE-TO-PA Project - grant No 645860. - www.routetopa.eu
-*
--->
-
-<link rel="import" href="../base-datalet/base-datalet.html">
-
-<!--
-`preview-datalet` is a datalet that allow user to preview the content of a web page. It creates a thumbnail of the site using the data-url attribute passed as input.
-
-Example:
-
-    <preview-datalet data-url="http://spod.routetopa.eu"
-    </preview-datalet>
-
-
-@element preview-datalet
-@status beta
-@homepage
-@group datalets
--->
+<link rel="import" href="../../bower_components/polymer/polymer.html">
 
 <dom-module id="preview-datalet">
-
     <template>
 
         <style is="custom-style">
-            #preview_datalet_container {
-                height: 432px
+
+            /* fullscreen */
+
+            #fullscreen {
+                position: absolute;
+                top: 3px;
+                right: 0;
+
+                height: 24px;
+                width: 24px;
+                cursor: pointer;
+
+                background: url("images/fullscreen.svg") no-repeat 0 0;
             }
 
-            #preview_datalet_link {
-                padding: 8px 0px 8px 0px;
+            #fullscreen:hover {
+                background: url("images/fullscreen_blue.svg") no-repeat 0 0;
             }
 
-            #preview_datalet_iframe {
-                width: 200%;
-                height: calc((100% - 32px) * 2);
+            #fullscreen_cover{
+                display: none;
 
-                /*zoom:0.75;*/
-                /*width:1280px;*/
-                /*height:800px;*/
-                /*border:none;*/
-                -ms-transform: scale(0.50);
-                -moz-transform: scale(0.50);
-                -o-transform: scale(0.50);
-                -webkit-transform: scale(0.50);
-                transform: scale(0.50);
-                -ms-transform-origin: 0 0;
-                -moz-transform-origin: 0 0;
-                -o-transform-origin: 0 0;
-                -webkit-transform-origin: 0 0;
-                transform-origin: 0 0;
+                position: fixed;
+                top: 0;
+                left: 0;
+                height: 100%;
+                width: 100%;
+
+                background-color: rgba(0, 0, 0, 0.5);
+                z-index: 666;
+            }
+
+            #fullscreen_close {
+                display: none;
+
+                position: fixed;
+                top: 30px;
+                right: 30px;
+                height: 40px;
+                width: 40px;
+                background: url("images/close.svg") no-repeat 0 0;
+
+                background-color: #00BCD4;
+                box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+                transition: all 0.3s cubic-bezier(.25,.8,.25,1);
+
+                border-radius: 50%;
+
+                line-height: 56px;
+                font-size: 32px;
+                color: #212121;
+                text-align: center;
+                cursor: pointer;
+
+                z-index: 668;
+            }
+
+            #fullscreen_close:hover {
+                background-color: #00ACC1;
+            }
+
+            #fullscreen_container {
+                display: none;
+
+                position: fixed;
+                top: 48px;
+                left: 48px;
+                height: calc(100% - 96px);
+                width: calc(100% - 96px);
+
+                background-color: white;
+                z-index: 667;
+            }
+
+            /* fullscreen */
+
+            .base_preview_datalet_container {
+                background-color: #FFFFFF;
+            }
+
+            .img_datalet {
+                width: 400px;
+                height: 168px;
+            }
+
+            #info_datalet {
+                position: relative;
+
+                box-sizing: border-box;
+                height: 32px;
+                padding: 0 8px;
+
+                border-top: 2px solid orange;
+
+                font-family: 'Roboto', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+                font-size: 14px;
+                line-height: 32px;
+                font-weight: 700;
+                color: #212121;
+
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
             }
 
         </style>
 
-        <div id="preview_datalet_container">
+        <div id="fullscreen_cover"></div>
+        <div id="fullscreen_close"></div>
+        <iframe frameborder="0" id="fullscreen_container"></iframe>
 
-            <div id="preview_datalet_link"><b>link:</b> <a href="{{url}}" target="_blank">{{url}}</a></div>
+        <div class="base_preview_datalet_container">
 
-            <iframe id="preview_datalet_iframe" src="{{url}}"></iframe>
+            <template is="dom-if" if={{hasPreview}}>
+                <div class="img_datalet" style="background: url({{imgUrl}}); background-size: 100% auto; background-repeat: no-repeat;"></div>
+            </template>
+
+            <template is="dom-if" if={{!hasPreview}}>
+                <div class="img_datalet" style="background: url({{imgUrl}}) center no-repeat; background-size: 128px auto;"></div>
+            </template>
+
+            <div id="info_datalet">
+                {{datalettitle}}
+                <div id="fullscreen"></div>
+            </div>
 
         </div>
-
-        <base-datalet></base-datalet>
 
     </template>
 
     <script>
+        PreviewDatalet = Polymer({
+            is: 'preview-datalet',
 
-        Polymer({
-            is : 'preview-datalet',
+            properties : {
+
+                dataletId : {
+                    type : String,
+                    value : undefined
+                },
+
+                dataletType : {
+                    type : String,
+                    value : undefined
+                },
+
+                hasPreview : {
+                    type : Boolean,
+                    value : true
+                }
+
+            },
+
+            ready: function(){
+                /* fullscreen */
+
+                var that = this;
+
+                $(this.$.fullscreen).click(function(){
+                    var datalet = that.getHTML()
+
+                    $(that.$.fullscreen_cover).show();
+                    $(that.$.fullscreen_container).show();
+                    $(that.$.fullscreen_close).show();
+
+                    $(that.$.fullscreen_container).attr('srcdoc', ''+datalet[0]+datalet[1]+datalet[2]);
+                });
+
+                $(this.$.fullscreen_cover).click(function(){
+                    $(that.$.fullscreen_close).hide();
+                    $(that.$.fullscreen_container).hide();
+                    $(that.$.fullscreen_cover).hide();
+                });
+
+                $(this.$.fullscreen_close).click(function(){
+                    $(that.$.fullscreen_close).hide();
+                    $(that.$.fullscreen_container).hide();
+                    $(that.$.fullscreen_cover).hide();
+                });
+
+                /* fullscreen */
+            },
+
+            attached: function() {
+                this.imgUrl = ODE.ow_url_home + "ow_plugins/ode/datalet_images/datalet_" + this.dataletId + ".png";
+                if(!this.imageExists() ||  this.dataletType == "decision-tree-datalet") {
+                    this.imgUrl = ODE.deep_components + "datalets/" + this.dataletType + "/" + this.dataletType + ".png";
+                    this.hasPreview = false
+                }
+            },
+
+            imageExists: function() {
+                var http = new XMLHttpRequest();
+
+                http.open('HEAD', this.imgUrl, false);
+                http.send();
+
+                return http.status != 404;
+            },
+
+            getHTML: function () {
+                var component = this.attributes['datalet-type'].value;
+                var html = '';
+
+                html += '<'+component;
+                for(var i=0; i<this.attributes.length; i++)
+                    html += ' '+this.attributes[i].name+'=\''+this.attributes[i].value.replace(/\'/g, "&#39;")+'\'';
+                html += '></'+component+'>';
+
+                var dataletImport = '\<script type="text/javascript" src="https://cdn.jsdelivr.net/webcomponentsjs/0.7.16/webcomponents-lite.min.js"\>\<\/script\>\n' +
+                        '\<script type="text/javascript" src="https://code.jquery.com/jquery-2.1.4.min.js"\>\<\/script\>\n' +
+                        '<!-- REMOVE THE PREVIOUS SCRIPT TAGS IF YOUR PAGE ALREADY USES JQUERY AND POLYFILL LIBRARIES  -->\n';
+
+                var dataletLink = '<link rel="import" href="http://172.16.15.128/Datalet-Ecosystem-Provider/COMPONENTS/datalets/'+component+'/'+component+'.html" /> \n';
+//                var dataletLink = '<link rel="import" href="http://deep.routetopa.eu/deep/COMPONENTS/datalets/'+component+'/'+component+'.html" /> \n';
+
+                var div = document.createElement('div');
+                div.innerHTML = '<div class="overlay" id="overlay">' +
+                        '<div class="modal-content"><span class="button-close" onclick="document.getElementById(\'overlay\').remove(this)"></span>' +
+                        '<span>Copy to clipboard: Ctrl+C, Enter</span>' +
+                        '<textarea class="export_html_textarea">'+dataletImport+dataletLink+html+'</textarea></div></div>';
+
+                html = '<style>html{height: 100%;} body{height: calc(100% - 16px); margin: 8px;} .export{display: none;} #fullscreen{display: none;}</style>' + html;
+
+                return [dataletImport, dataletLink, html];
+            }
+
         });
-
     </script>
 </dom-module>
-

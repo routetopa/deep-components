@@ -255,9 +255,11 @@ Example :
 
             #refresh
             {
-                position: absolute;
-                right: 48px;
-                top: 0;
+                position: relative;
+                left: 4px;
+                /*position: absolute;*/
+                /*right: 48px;*/
+                /*top: 0;*/
                 height: 24px;
                 width: 24px;
                 cursor: pointer;
@@ -474,6 +476,7 @@ Example :
 
             <div id="base_datalet_source_link">
                 <b>Source:&nbsp</b> <a id="base_datalet_source" target="_blank"></a> <span id="base_datalet_link_span">&nbsp(<a id="base_datalet_link" target="_blank">dataset</a>)</span> <span id="ajax_error"></span>
+                <div id="refresh"><img id="img_refresh" src="static/images/refresh.svg"></div>
             </div>
 
             <div id="base_datalet_rtp">
@@ -481,7 +484,7 @@ Example :
                 <div><a href="http://www.routetopa.eu/" target="_blank"><img id="rtpalogo" src="static/images/rtpalogo.png"></a></div>
             </div>
 
-            <div id="refresh"><img id="img_refresh" src="static/images/refresh.svg"></div>
+            <!--<div id="refresh"><img id="img_refresh" src="static/images/refresh.svg"></div>-->
 
             <div id="fullscreen"></div>
 

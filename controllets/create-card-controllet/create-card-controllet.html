@@ -21,6 +21,7 @@
 
         <style is="custom-style">
             #create_card_container {
+                position: relative;
                 display: flex;
                 height: 100%;
                 width: 100%;
@@ -33,6 +34,8 @@
                 height: calc(100% - 16px);
                 width: 50%;
                 margin: 8px 16px 8px 8px;
+
+                overflow-y: auto;
             }
 
             #create_card_content {
@@ -55,9 +58,14 @@
             }
 
             #create_card_text {
-                width: 100%;
-                height: 100%;
+                max-width: 100%;
+                height: calc(100% - 48px - 8px);
+                padding-bottom: 8px;
                 background-color: #FFFFCC;
+
+                word-break: break-all;
+
+                overflow-y: auto;
             }
 
             #create_card_title {
@@ -80,8 +88,8 @@
 
             paper-button {
                 position: absolute;
-                bottom: 16px;
-                right: 11px;
+                bottom: 28px;
+                right: calc(50% + 33px);
 
                 height: 48px;
                 width: 172px;
@@ -134,7 +142,6 @@
 
                 </template>
 
-                <paper-button id="add_button" raised on-click="_addCard">SAVE</paper-button>
             </paper-material>
 
             <paper-material id="create_card_content" elevation="5">
@@ -158,6 +165,8 @@
                 </template>
 
             </paper-material>
+
+            <paper-button id="add_button" raised on-click="_addCard">SAVE</paper-button>
 
         </div>
 
@@ -196,8 +205,8 @@
             },
 
             ready : function() {
-                $(this.$.create_card_info).perfectScrollbar();
-                $(this.$.create_card_content).perfectScrollbar();
+//                $(this.$.create_card_info).perfectScrollbar();
+//                $(this.$.create_card_content).perfectScrollbar();
 
                 var that = this;
                 window.addEventListener("resize", function() { that._resize(); });

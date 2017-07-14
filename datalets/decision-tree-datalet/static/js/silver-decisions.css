@@ -51,6 +51,8 @@
       border-bottom: 1px solid rgba(255, 255, 255, 0.3); }
 
 #silver-decisions {
+  width: 100%;
+  height: 100%;
   /* form starting stylings ------------------------------- */ }
   #silver-decisions .input-group {
     position: relative;
@@ -395,6 +397,7 @@
             #silver-decisions #main-region #sidebar #object-properties .content .children-properties .child-object .child-header {
               font-size: 13px;
               text-align: center; }
+
   #silver-decisions #tree-designer-container {
     border: 1px solid #bfbfbf;
     border-radius: 2px;
