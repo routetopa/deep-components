@@ -8,6 +8,7 @@
 <script src="../shared_js/json-stat.js"></script>
 <script src="eurostat.js"></script>
 <script src="istat.js"></script>
+<script src="OData.js"></script>
 <script src="spod.js"></script>
 
 <script>
@@ -21,6 +22,8 @@
                 return new eurostat_Provider();
             else if (dataUrl.indexOf("datiopen.istat.it") > -1 )
                 return new istat_Provider();
+            else if (dataUrl.indexOf("ODataApi") > -1 )
+                return new OData_Provider();
             else
                 return new generic_Provider();//dkan and mysir --> ckan like
         },
