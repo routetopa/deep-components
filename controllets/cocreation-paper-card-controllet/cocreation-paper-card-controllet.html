@@ -4,6 +4,7 @@
 <link rel="import" href="../../bower_components/paper-icon-button/paper-icon-button.html"/>
 <link rel="import" href="../../bower_components/paper-button/paper-button.html"/>
 <link rel="import" href="../../bower_components/iron-icon/iron-icon.html"/>
+<link rel="import" href="../../bower_components/iron-icon/image-icons.html"/>
 <link rel="import" href="../../bower_components/paper-tooltip/paper-tooltip.html">
 
 <script src="../../locales/cocreation_paper_card_ln.js"></script>
@@ -156,7 +157,8 @@
             }
 
             paper-fab.assessment,
-            paper-fab.description {
+            paper-fab.description,
+            paper-fab.collections{
                 bottom: -20px;
                 right: 12px;
                 cursor: auto;
@@ -168,6 +170,10 @@
 
             paper-fab.assessment {
                 background: #4CAF50;
+            }
+
+            paper-fab.collections {
+                background: #FF9800;
             }
 
         </style>
@@ -187,11 +193,14 @@
                             <iron-icon class="icon-to" icon="alarm-off"></iron-icon>&nbsp; {{to}}
                         </div>
                     </div>
-                    <template is="dom-if" if="{{!_checkRoomType(roomType)}}">
+                    <template is="dom-if" if="{{_checkDataRoom(roomType)}}">
                         <paper-fab mini icon="assessment" class="assessment" noink></paper-fab>
                     </template>
-                    <template is="dom-if" if="{{_checkRoomType(roomType)}}">
+                    <template is="dom-if" if="{{_checkKnowledgeRoom(roomType)}}">
                         <paper-fab mini icon="description" class="description" noink></paper-fab>
+                    </template>
+                    <template is="dom-if" if="{{_checkMediaRoom(roomType)}}">
+                        <paper-fab mini icon="image:collections" class="collections" noink></paper-fab>
                     </template>
                 </div>
                 <div class="card-actions" style$="border-color: {{color}};">
@@ -264,6 +273,8 @@
                 var color = "#4CAF50";
                 if(this.roomType == "knowledge")
                     color = "#2196F3";
+                if(this.roomType == "media")
+                    color = "#FF9800";
                 this.color = color;
             },
 
@@ -283,8 +294,16 @@
                 window.location = this.roomUrl;
             },
 
-            _checkRoomType: function(type){
-               return (type == "knowledge") ? true : false;
+            _checkMediaRoom: function(type){
+                return type == "media";
+            },
+
+            _checkDataRoom: function(type){
+                return type == "data";
+            },
+
+            _checkKnowledgeRoom: function(type){
+                return type == "knowledge";
             }
         })
     </script>
