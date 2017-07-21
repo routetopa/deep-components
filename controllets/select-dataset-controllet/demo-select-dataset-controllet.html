@@ -210,44 +210,6 @@
                     </paper-tooltip>
                 </div>
 
-                <!--<div id="view_option" class="header_block">-->
-                    <!--{{_getLocalization('view')}}:&nbsp;-->
-                    <!--<paper-dropdown-menu id="ddl_view" label="" no-label-float>-->
-                        <!--<paper-menu id="menu_view" class="dropdown-content">-->
-                            <!--<paper-item id="0" on-tap=""><span id="list"></span></paper-item>-->
-                            <!--<paper-item id="1" on-tap="" disabled><span id="tree"></span></paper-item>-->
-                        <!--</paper-menu>-->
-                    <!--</paper-dropdown-menu>-->
-                    <!--<paper-icon-button id="info_view" icon="info-outline" noink></paper-icon-button>-->
-                    <!--<paper-tooltip id="tooltip_view" for="info_view" offset="8">-->
-                        <!--<p>-->
-                            <!--<span class="option">{{_getLocalization('list')}}</span><br>-->
-                            <!--<span class="description">{{_getLocalization('listDescription')}}</span><br>-->
-                            <!--<span class="option">{{_getLocalization('tree')}}</span><br>-->
-                            <!--<span class="description">{{_getLocalization('treeDescription')}}</span><br>-->
-                        <!--</p>-->
-                    <!--</paper-tooltip>-->
-                <!--</div>-->
-
-                <!--<div id="search_option" class="header_block">-->
-                    <!--{{_getLocalization('search')}}:&nbsp;-->
-                    <!--<paper-dropdown-menu id="ddl_search" label="" no-label-float>-->
-                        <!--<paper-menu id="menu_search" class="dropdown-content">-->
-                            <!--<paper-item><span id="standard"></span></paper-item>-->
-                            <!--<paper-item disabled><span id="extended"></span></paper-item>-->
-                        <!--</paper-menu>-->
-                    <!--</paper-dropdown-menu>-->
-                    <!--<paper-icon-button id="info_search" icon="info-outline" noink></paper-icon-button>-->
-                    <!--<paper-tooltip id="tooltip_search" for="info_search" offset="8">-->
-                        <!--<p>-->
-                            <!--<span class="option">{{_getLocalization('standard')}}</span><br>-->
-                            <!--<span class="description">{{_getLocalization('standardDescription')}}</span><br>-->
-                            <!--<span class="option">{{_getLocalization('extended')}}</span><br>-->
-                            <!--<span class="description">{{_getLocalization('extendedDescription')}}</span><br>-->
-                        <!--</p>-->
-                    <!--</paper-tooltip>-->
-                <!--</div>-->
-
                 <div id="version_option" class="header_block">
                     {{_getLocalization('version')}}:&nbsp;
                     <paper-dropdown-menu id="ddl_version" label="" no-label-float>
@@ -266,8 +228,6 @@
                         </p>
                     </paper-tooltip>
                 </div>
-
-                <!--<paper-icon-button icon="settings" on-click="_optionsMenu"></paper-icon-button>-->
 
             </div>
 
@@ -348,31 +308,9 @@
 
                     if(this.suggestedDatasets)
                         this.providersDatasets = this.suggestedDatasets.concat(this.providersDatasets);
-//
-                    $.ajax({
-                        url: parent.ODE.ow_url_home + "cocreation/ajax/get-all-dataset",
-                        dataType: "json",
-                        success: function(localDatasets){
-                            that.localDatasets = localDatasets;
-                            that.lastLocalDatasets = [];
-                            var name = "";
-//                            for(var i in localDatasets)
-//                                if(localDatasets[i].name != name) {
-//                                    that.lastLocalDatasets.push(localDatasets[i]);
-//                                    name = localDatasets[i].name;
-//                                }
-                            var version = 0;
-                            for(var d of localDatasets) {
-                                if (parseInt(d.version) >= version)
-                                    that.lastLocalDatasets.push(d);
-                                version = parseInt(d.version);
-                            }
-                        },
-                        error: function(){
-                            that.localDatasets = [];
-                            that.lastLocalDatasets = [];
-                        }
-                    });
+
+                    this.localDatasets = [];
+                    this.lastLocalDatasets = [];
 
                     //this._setProvidersDatasets();
                     this.$.datasets_list.setDatasets(this.providersDatasets);
