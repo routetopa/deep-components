@@ -10,7 +10,31 @@
 
 <script type="text/javascript">
     $(document).ready(function () {
-        var datasets = { "1": { "p_name": "ROUTE-TO-PA", "p_url": "http://ckan.routetopa.eu", "p_datasets": [ { "name": "pratowifi", "id": "fcf0e3e3-7dce-43cf-9865-0f341b4511c6", "p": "CKAN_1", "resources": [ "Prato: Wi-Fi free", "risorsa 2" ] }, { "name": "prato-consuntivo-uscite-2013", "id": "d651109f-b96e-4ad3-8a78-f02e65b28a82", "p": "CKAN_1" } ] } };
+
+        var datasets = {
+            "1": {
+                "p_name": "ROUTE-TO-PA",
+                "p_url": "http://ckan.routetopa.eu",
+                "p_datasets": [
+                    {
+                        "name": "SPOD SUPER HEROES",
+                        "id": "642ceea8-711e-4124-b450-0d23010c44e6",
+                        "p": "CKAN_1"
+                    },
+                    {
+                        "name": "Wonders of the World",
+                        "id": "1d9c8e62-47ab-40d5-8943-b4c3bca14b50",
+                        "p": "CKAN_1"
+                    },
+                    {
+                        "name": "Animal Sounds",
+                        "id": "0937845d-c398-4416-a229-993f64e1d71d",
+                        "p": "CKAN_1"
+                    }
+                ]
+            }
+        };
+
         var controllet = document.getElementById("controllet");
         controllet.setAttribute("datasets", JSON.stringify(datasets));
 
