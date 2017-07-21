@@ -10,14 +10,7 @@
 
 <script type="text/javascript">
     $(document).ready(function () {
-        var datasets = {"result":{
-            "providers":{"1":{"title":"CKAN","api_url":"http://ckan.routetopa.eu","image_hash":"11","id":"1"}},
-            "datasets":[
-                {"w":1,"provider_name":"p:1","organization_name":"SPOD","package_name":"isislab","resource_name":"SPOD SUPER HEROES","url":"http:\/\/ckan.routetopa.eu\/\/api/action\/datastore_search?resource_id=642ceea8-711e-4124-b450-0d23010c44e6","metas":"{\"organization\":\"SPOD\",\"description\":\"This is a test datasets.\",\"format\":\"CSV\"}"},
-                {"w":1,"provider_name":"p:1","organization_name":"SPOD","package_name":"isislab","resource_name":"Wonders of the World","url":"http:\/\/ckan.routetopa.eu\/\/api\/action\/datastore_search?resource_id=1d9c8e62-47ab-40d5-8943-b4c3bca14b50","metas":"{\"organization\":\"SPOD\",\"description\":\"This is a test datasets.\",\"format\":\"CSV\"}"},
-                {"w":1,"provider_name":"p:1","organization_name":"SPOD","package_name":"isislab","resource_name":"Animal Sounds","url":"http:\/\/ckan.routetopa.eu\/\/api\/action\/datastore_search?resource_id=0937845d-c398-4416-a229-993f64e1d71d","metas":"{\"organization\":\"SPOD\",\"description\":\"This is a test datasets.\",\"format\":\"CSV\"}"}
-            ]}};
-
+        var datasets = { "1": { "p_name": "ROUTE-TO-PA", "p_url": "http://ckan.routetopa.eu", "p_datasets": [ { "name": "pratowifi", "id": "fcf0e3e3-7dce-43cf-9865-0f341b4511c6", "p": "CKAN_1", "resources": [ "Prato: Wi-Fi free", "risorsa 2" ] }, { "name": "prato-consuntivo-uscite-2013", "id": "d651109f-b96e-4ad3-8a78-f02e65b28a82", "p": "CKAN_1" } ] } };
         var controllet = document.getElementById("controllet");
         controllet.setAttribute("datasets", JSON.stringify(datasets));
 
@@ -29,8 +22,8 @@
 </script>
 
 <demo-data-sevc-controllet id="controllet"
-                        deep-url="http://deep.routetopa.eu/deep_1_11/DEEP/"
-                        datalets-list-url="http://deep.routetopa.eu/deep_1_11/DEEP/datalets-list"
+                        deep-url="http://deep.routetopa.eu/deep_1_17/DEEP/"
+                        datalets-list-url="http://deep.routetopa.eu/deep_1_17/DEEP/datalets-list"
                         >
 </demo-data-sevc-controllet>
 
