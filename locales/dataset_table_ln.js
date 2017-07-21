@@ -96,7 +96,7 @@ ln["download_docs_nl"] = "Download docs";
 /******** es_Es ********/
 
 //data-table
-ln["selectedData_es"] = "DATASET";
+ln["selectedData_es-ES"] = "DATASET";
 ln["rows_es"] = "filas";
 ln["type_es"] = "TIPO";
 ln["warning_es"] = "ADVERTENCIA";

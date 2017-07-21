@@ -25,7 +25,7 @@ base_datalet_ln["export_RTF_nl"]     = "Export to RTF";
 base_datalet_ln["import_myspace_nl"] = "Import in My Space";
 
 /*es-ES*/
-base_datalet_ln["export_HTML_es"]    = "Exportar a HTML";
-base_datalet_ln["export_PNG_es"]     = "Exportar a PNG";
-base_datalet_ln["export_RTF_es"]     = "Exportar a RTF";
-base_datalet_ln["import_myspace_es"] = "Importar en Mi Espacio";
+base_datalet_ln["export_HTML_es-ES"]    = "Exportar a HTML";
+base_datalet_ln["export_PNG_es-ES"]     = "Exportar a PNG";
+base_datalet_ln["export_RTF_es-ES"]     = "Exportar a RTF";
+base_datalet_ln["import_myspace_es-ES"] = "Importar en Mi Espacio";

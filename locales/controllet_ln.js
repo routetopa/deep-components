@@ -1161,282 +1161,284 @@ ln["donutDescription_nl"] = "Pie will become Donut! :) (or viceversa).";
 
 //PAGE SLIDER
 
-ln["slide1Title_es"] = "SELECIONA DATASET";
-ln["slide1Subtitle_es"] = "Selecciona un dataset de la lista o copia y pega la url del dataset.";
-ln["slide2Title_es"] = "SELECCIONA DATOS";
-ln["slide2Subtitle_es"] = "Selecciona los campos de la izquierda. La tabla mostrará los valores relacionados con los campos seleccionados.";
-ln["slide3Title_es"] = "SELECCIONA VISUALIZACIÓN";
-ln["slide3Subtitle_es"] = "Selecciona una visualización, llene entradas y opciones.";
-ln["back_es"] = "ATRAS";
-ln["forward_es"] = "ADELANTE";
+ln["slide1Title_es-ES"] = "SELECIONA DATASET";
+ln["slide1Subtitle_es-ES"] = "Selecciona un dataset de la lista o copia y pega la url del dataset.";
+ln["slide2Title_es-ES"] = "SELECCIONA DATOS";
+ln["slide2Subtitle_es-ES"] = "Selecciona los campos de la izquierda. La tabla mostrará los valores relacionados con los campos seleccionados.";
+ln["slide3Title_es-ES"] = "SELECCIONA VISUALIZACIÓN";
+ln["slide3Subtitle_es-ES"] = "Selecciona una visualización, llene entradas y opciones.";
+ln["back_es-ES"] = "ATRAS";
+ln["forward_es-ES"] = "ADELANTE";
 
 //SELECT DATASET
 
-ln["selectedUrl_es"] = "Url seleccionada";
-ln["wrongUrl_es"] = "Url o proveedor de datos no soportado todavía.";
+ln["selectedUrl_es-ES"] = "Url seleccionada";
+ln["wrongUrl_es-ES"] = "Url o proveedor de datos no soportado todavía.";
 
-ln["providersDatasets_es"] = "DESDE PROVEEDORES";
-ln["spodUsersDatasets_es"] = "DESDE COCREADOS";
-ln["extendedDatasets_es"] = "DESDE BÚSQUEDA";
-ln["datasets_es"] = "LISTA DE DATASETS";
+ln["providersDatasets_es-ES"] = "DESDE PROVEEDORES";
+ln["spodUsersDatasets_es-ES"] = "DESDE COCREADOS";
+ln["extendedDatasets_es-ES"] = "DESDE BÚSQUEDA";
+ln["datasets_es-ES"] = "LISTA DE DATASETS";
 
-ln["provider_es"] = "Proveedor";
-ln["all_es"] = "Todos";
-ln["allDescription_es"] = "Muestra los conjuntos de datos de todos los proveedores asociados.";
-ln["providerName_es"] = "Proveedor";
-ln["providerNameDescription_es"] = "Muestra sólo los datasets del proveedor seleccionado.";
+ln["provider_es-ES"] = "Proveedor";
+ln["all_es-ES"] = "Todos";
+ln["allDescription_es-ES"] = "Muestra los conjuntos de datos de todos los proveedores asociados.";
+ln["providerName_es-ES"] = "Proveedor";
+ln["providerNameDescription_es-ES"] = "Muestra sólo los datasets del proveedor seleccionado.";
 
 
-ln["version_es"] = "Versión";
-ln["showLast_es"] = "Mostrar último";
-ln["showLastDescription_es"] = "Muestra sólo la última versión de los dataset.";
-ln["showAll_es"] = "Mostrar todos";
-ln["showAllDescription_es"] = "Muestra todas las versiones de los datasets.";
+ln["version_es-ES"] = "Versión";
+ln["showLast_es-ES"] = "Mostrar último";
+ln["showLastDescription_es-ES"] = "Muestra sólo la última versión de los dataset.";
+ln["showAll_es-ES"] = "Mostrar todos";
+ln["showAllDescription_es-ES"] = "Muestra todas las versiones de los datasets.";
 
 //select-dataset-controllet
-ln["datasetsInfo_es"] = "Información del DATASET";
-ln["showing_es"] = "Mostrando";
-ln["to_es"] = "a";
-ln["of_es"] = "de";
-ln["datasetsRows_es"] = "datasets";
-ln["search_es"] = "Búsqueda";
+ln["datasetsInfo_es-ES"] = "Información del DATASET";
+ln["showing_es-ES"] = "Mostrando";
+ln["to_es-ES"] = "a";
+ln["of_es-ES"] = "de";
+ln["datasetsRows_es-ES"] = "datasets";
+ln["search_es-ES"] = "Búsqueda";
 
 //metadata
-ln["room_es"] = "Sala";
-ln["resourceName_es"] = "Nombre del Recurso";
-ln["resourceDescription_es"] = "Descripción del Recurso";
-ln["users_es"] = "Usuarios";
+ln["room_es-ES"] = "Sala";
+ln["resourceName_es-ES"] = "Nombre del Recurso";
+ln["resourceDescription_es-ES"] = "Descripción del Recurso";
+ln["users_es-ES"] = "Usuarios";
 
 //SELECT DATA
 
 //select-fields
-ln["fields_es"] = "CAMPOS";
+ln["fields_es-ES"] = "CAMPOS";
 
 //data-table
-ln["selectedData_es"] = "DATOS SELECCIONADOS";
-ln["showing_es"] = "Mostrando";
-ln["to_es"] = "a";
-ln["of_es"] = "de";
-ln["rows_es"] = "filas";
-ln["type_es"] = "TIPO";
-ln["warning_es"] = "ADVERTENCIA";
+ln["selectedData_es-ES"] = "DATOS SELECCIONADOS";
+ln["showing_es-ES"] = "Mostrando";
+ln["to_es-ES"] = "a";
+ln["of_es-ES"] = "de";
+ln["rows_es-ES"] = "filas";
+ln["type_es-ES"] = "TIPO";
+ln["warning_es-ES"] = "ADVERTENCIA";
 
 //expert
-ln["expert_es"] = "MODO EXPERTO";
-ln["filters_es"] = "FILTROS";
-ln["groupBy_es"] = "AGRUPAR POR";
-ln["query_es"] = "CONSULTA";
+ln["expert_es-ES"] = "MODO EXPERTO";
+ln["filters_es-ES"] = "FILTROS";
+ln["groupBy_es-ES"] = "AGRUPAR POR";
+ln["query_es-ES"] = "CONSULTA";
 
 //filters
-ln["filterField_es"] = "CAMPO";
-ln["filterOperation_es"] = "Operación";
-ln["filterValue_es"] = "Valor";
+ln["filterField_es-ES"] = "CAMPO";
+ln["filterOperation_es-ES"] = "Operación";
+ln["filterValue_es-ES"] = "Valor";
 
-ln["disableFilters_es"] = "DESHABILITAR LOS FILTROS";
-ln["enableFilters_es"] = "HABILITAR FILTROS";
+ln["disableFilters_es-ES"] = "DESHABILITAR LOS FILTROS";
+ln["enableFilters_es-ES"] = "HABILITAR FILTROS";
 
-ln["=_es"] = "=";   //es igual a
-ln["!=_es"] = "not =";  //no es igual a
-ln[">_es"] = ">";   //es mayor que
-ln[">=_es"] = ">="; //es mayor que o igual a
-ln["<_es"] = "<";   //es menos que
-ln["<=_es"] = "<="; //es menos que o igual a
-ln["contains_es"] = "contiene";
-ln["notContains_es"] = "no contiene";
-ln["start_es"] = "empieza con";
-ln["ends_es"] = "termina con";
+ln["=_es-ES"] = "=";   //es igual a
+ln["!=_es-ES"] = "not =";  //no es igual a
+ln[">_es-ES"] = ">";   //es mayor que
+ln[">=_es-ES"] = ">="; //es mayor que o igual a
+ln["<_es-ES"] = "<";   //es menos que
+ln["<=_es-ES"] = "<="; //es menos que o igual a
+ln["contains_es-ES"] = "contiene";
+ln["notContains_es-ES"] = "no contiene";
+ln["start_es-ES"] = "empieza con";
+ln["ends_es-ES"] = "termina con";
 
 //aggregators
-ln["GROUP BY_es"] = "AGRUPAR POR";
-ln["CALCULATE_es"] = "CALCULAR";
-ln["Calculate_es"] = "Calcular";
-ln["aggregatorField_es"] = "Campo";
+ln["GROUP BY_es-ES"] = "AGRUPAR POR";
+ln["CALCULATE_es-ES"] = "CALCULAR";
+ln["Calculate_es-ES"] = "Calcular";
+ln["aggregatorField_es-ES"] = "Campo";
 
-ln["disableGroupBy_es"] = "DESHABILITAR GRUPO POR";
-ln["enableGroupBy_es"] = "HABILITAR GRUPO POR";
+ln["disableGroupBy_es-ES"] = "DESHABILITAR GRUPO POR";
+ln["enableGroupBy_es-ES"] = "HABILITAR GRUPO POR";
 
-ln["COUNT_es"] = "CUENTA de";
-ln["SUM_es"] = "SUMA de";
-ln["MIN_es"] = "MIN de";
-ln["MAX_es"] = "MAX de";
-ln["AVG_es"] = "PROMEDIO de";
-ln["FIRST_es"] = "PRIMERO de";
-ln["LAST_es"] = "ÚLTIMO de";
+ln["COUNT_es-ES"] = "CUENTA de";
+ln["SUM_es-ES"] = "SUMA de";
+ln["MIN_es-ES"] = "MIN de";
+ln["MAX_es-ES"] = "MAX de";
+ln["AVG_es-ES"] = "PROMEDIO de";
+ln["FIRST_es-ES"] = "PRIMERO de";
+ln["LAST_es-ES"] = "ÚLTIMO de";
 
 //SELECT VISUALIZATION
 
-ln["addDatalet_es"] = "AÑADIR";
-ln["modifyDatalet_es"] = "MODIFICAR";
+ln["addDatalet_es-ES"] = "AÑADIR";
+ln["modifyDatalet_es-ES"] = "MODIFICAR";
 
 //datalet-preview
-ln["previewTab_es"] = "VISTA PREVIA DEL DATALET";
-ln["infoTab_es"] = "DATALET INFO";
+ln["previewTab_es-ES"] = "VISTA PREVIA DEL DATALET";
+ln["infoTab_es-ES"] = "DATALET INFO";
 
 //select-inputs
-ln["baseInfo_es"] = "INFORMACIÓN BASE";
-ln["inputs_es"] = "INPUTS";
-ln["options_es"] = "OPCIONES";
+ln["baseInfo_es-ES"] = "INFORMACIÓN BASE";
+ln["inputs_es-ES"] = "INPUTS";
+ln["options_es-ES"] = "OPCIONES";
 
 //vslider
-ln["search_es"] = "BUSCAR";
+ln["search_es-ES"] = "BUSCAR";
 
-ln["datatable_es"] = "Tabla";
-ln["barchart_es"] = "Gráfico de barras";
-ln["columnchart_es"] = "Gráfico de columnas";
-ln["areachart_es"] = "Gráfico de área";
-ln["linechart_es"] = "Gráfico de línea";
-ln["heatmap_es"] = "Mapa de calor";
-ln["piechart_es"] = "Gráfico circular";
-ln["scatterchart_es"] = "Gráfico de dispersión";
-ln["bubblechart_es"] = "Gráfico de burbujas";
-ln["treemap_es"] = "Mapa del árbol";
-ln["timeline_es"] = "Línea de tiempo";
-ln["mediaslider_es"] = "Deslizador de medios";
-ln["leafletjs_es"] = "Mapa";
-ln["leafletjs-geojson_es"] = "Mapa Geojson";
+ln["datatable_es-ES"] = "Tabla";
+ln["barchart_es-ES"] = "Gráfico de barras";
+ln["columnchart_es-ES"] = "Gráfico de columnas";
+ln["areachart_es-ES"] = "Gráfico de área";
+ln["linechart_es-ES"] = "Gráfico de línea";
+ln["heatmap_es-ES"] = "Mapa de calor";
+ln["piechart_es-ES"] = "Gráfico circular";
+ln["scatterchart_es-ES"] = "Gráfico de dispersión";
+ln["bubblechart_es-ES"] = "Gráfico de burbujas";
+ln["treemap_es-ES"] = "Mapa del árbol";
+ln["timeline_es-ES"] = "Línea de tiempo";
+ln["mediaslider_es-ES"] = "Deslizador de medios";
+ln["leafletjs_es-ES"] = "Mapa";
+ln["leafletjs-geojson_es-ES"] = "Mapa Geojson";
 
-ln["datatableDescription_es"] = "Una tabla es un medio de organizar datos en filas y columnas.";
-ln["barchartDescription_es"] = "Un gráfico de barras es un gráfico que presenta los datos agrupados con barras rectangulares trazadas horizontalmente con longitudes proporcionales a los valores que representan.";
-ln["columnchartDescription_es"] = "Un gráfico de columnas es un gráfico que presenta los datos agrupados con barras rectangulares trazadas verticalmente con longitudes proporcionales a los valores que representan.";
-ln["areachartDescription_es"] = "Un gráfico de área es un gráfico que muestra gráficamente datos cuantitativos. El área entre el eje y la línea se enfatiza con colores y texturas. Comúnmente uno compara con el gráfico de área dos o más cantidades.";
-ln["linechartDescription_es"] = "Un gráfico de líneas es un gráfico que muestra información como una serie de puntos de datos llamados marcadores conectados por segmentos de línea recta. Un gráfico de línea a menudo se utiliza para visualizar una tendencia en los datos a lo largo de intervalos de tiempo.";
-ln["heatmapDescription_es"] = "Un mapa de calor es una representación gráfica de datos donde los valores individuales contenidos en una matriz se representan como colores.";
-ln["piechartDescription_es"] = "Un gráfico de sectores es un gráfico estadístico circular, que se divide en porciones para ilustrar proporción numérica. En el gráfico circular, la longitud de arco de cada porción, y consecuentemente su ángulo central y área, es proporcional a la cantidad que representa.";
-ln["scatterchartDescription_es"] = "Un gráfico de dispersión es un tipo de diagrama o diagrama matemático que usa coordenadas cartesianas para mostrar valores para dos variables típicas para un dataset. Los datos se muestran como una colección de puntos, teniendo cada uno el valor de una variable que determina la posición en el eje horizontal y el valor de la otra variable que determina la posición en el eje vertical.";
-ln["bubblechartDescription_es"] = "Un gráfico de búrbujas es un tipo de gráfico que muestra tres dimensiones de datos. Cada entidad con su triplete (v1, v2, v3) de datos asociados se representa como un disco que expresa dos de los valores vi a través de la ubicación xy del disco y el tercero a través de su tamaño.";
-ln["treemapDescription_es"] = "Un mapa de árbol es un gráfico para mostrar datos jerárquicos usando rectángulos anidados.";
-ln["timelineDescription_es"] = "La línea de tiempo es un gráfico de visualización interactivo para visualizar los datos en el tiempo. Los elementos de datos pueden tener lugar en una única fecha o tener una fecha de inicio y finalización (un rango). Puede moverse libremente y ampliar la línea de tiempo. La escala de tiempo en el eje se ajusta automáticamente y admite escalas que van desde milisegundos a años.";
-ln["mediasliderDescription_es"] = "El mediaslider es un control deslizante de los medios.";
-ln["leafletjsDescription_es"] = "";
-ln["leafletjs-geojsonDescription_es"] = "";
+ln["datatableDescription_es-ES"] = "Una tabla es un medio de organizar datos en filas y columnas.";
+ln["barchartDescription_es-ES"] = "Un gráfico de barras es un gráfico que presenta los datos agrupados con barras rectangulares trazadas horizontalmente con longitudes proporcionales a los valores que representan.";
+ln["columnchartDescription_es-ES"] = "Un gráfico de columnas es un gráfico que presenta los datos agrupados con barras rectangulares trazadas verticalmente con longitudes proporcionales a los valores que representan.";
+ln["areachartDescription_es-ES"] = "Un gráfico de área es un gráfico que muestra gráficamente datos cuantitativos. El área entre el eje y la línea se enfatiza con colores y texturas. Comúnmente uno compara con el gráfico de área dos o más cantidades.";
+ln["linechartDescription_es-ES"] = "Un gráfico de líneas es un gráfico que muestra información como una serie de puntos de datos llamados marcadores conectados por segmentos de línea recta. Un gráfico de línea a menudo se utiliza para visualizar una tendencia en los datos a lo largo de intervalos de tiempo.";
+ln["heatmapDescription_es-ES"] = "Un mapa de calor es una representación gráfica de datos donde los valores individuales contenidos en una matriz se representan como colores.";
+ln["piechartDescription_es-ES"] = "Un gráfico de sectores es un gráfico estadístico circular, que se divide en porciones para ilustrar proporción numérica. En el gráfico circular, la longitud de arco de cada porción, y consecuentemente su ángulo central y área, es proporcional a la cantidad que representa.";
+ln["scatterchartDescription_es-ES"] = "Un gráfico de dispersión es un tipo de diagrama o diagrama matemático que usa coordenadas cartesianas para mostrar valores para dos variables típicas para un dataset. Los datos se muestran como una colección de puntos, teniendo cada uno el valor de una variable que determina la posición en el eje horizontal y el valor de la otra variable que determina la posición en el eje vertical.";
+ln["bubblechartDescription_es-ES"] = "Un gráfico de búrbujas es un tipo de gráfico que muestra tres dimensiones de datos. Cada entidad con su triplete (v1, v2, v3) de datos asociados se representa como un disco que expresa dos de los valores vi a través de la ubicación xy del disco y el tercero a través de su tamaño.";
+ln["treemapDescription_es-ES"] = "Un mapa de árbol es un gráfico para mostrar datos jerárquicos usando rectángulos anidados.";
+ln["timelineDescription_es-ES"] = "La línea de tiempo es un gráfico de visualización interactivo para visualizar los datos en el tiempo. Los elementos de datos pueden tener lugar en una única fecha o tener una fecha de inicio y finalización (un rango). Puede moverse libremente y ampliar la línea de tiempo. La escala de tiempo en el eje se ajusta automáticamente y admite escalas que van desde milisegundos a años.";
+ln["mediasliderDescription_es-ES"] = "El mediaslider es un control deslizante de los medios.";
+ln["leafletjsDescription_es-ES"] = "";
+ln["leafletjs-geojsonDescription_es-ES"] = "";
 
 //inputs
-ln["title_es"] = "Título"
-ln["description_es"] = "Descripción";
+ln["title_es-ES"] = "Título"
+ln["description_es-ES"] = "Descripción";
 
-ln["sortAscending_es"] = "ORDENADO ASCENDENTEMENTE";
-ln["sortDescending_es"] = "ORDENADO DESCENDENTEMENTE";
-ln["unsort_es"] = "SIN ORDENAR";
+ln["sortAscending_es-ES"] = "ORDENADO ASCENDENTEMENTE";
+ln["sortDescending_es-ES"] = "ORDENADO DESCENDENTEMENTE";
+ln["unsort_es-ES"] = "SIN ORDENAR";
 
 //--> "_" not allowed!
-ln["TITLE_es"] = "TÍTULO";
-ln["DESCRIPTION_es"] = "DESCRIPCIÓN";
-ln["XAxis_es"] = "EJE-X";
-ln["YAxis_es"] = "EJE-Y";
-ln["NumericXAxis_es"] = "EJE-X";
-ln["NumericYAxis_es"] = "EJE-Y";
-ln["Column_es"] = "COLUMNA";
-ln["Level_es"] = "NIVEL";
-ln["SliceLabels_es"] = "NIVEL";
-ln["SliceSizes_es"] = "TAMAÑO";
-ln["StartDate_es"] = "FECHA DE INICIO";
-ln["EndDate_es"] = "FECHA FINAL";
-ln["EventTitle_es"] = "TITULO DEL EVENTO";
-ln["EventDescription_es"] = "DESCRIPCIÓN DEL EVENTO";
-ln["MediaUrl_es"] = "URL DEL MEDIO";
-ln["Background_es"] = "ANTECEDENTES";
-ln["MediaTitle_es"] = "TÍTULO DEL MEDIO";
-ln["MediaDescription_es"] = "DESCRIPCIÓN DEL MEDIO";
-ln["Latitude_es"] = "LATITUD";
-ln["Longitude_es"] = "LONGITUD";
-ln["BalloonContent_es"] = "CONTENIDO DEL GLOBO";
-ln["GEOJSON_es"] = "GEOJSON";
-ln["GEOJSONContent_es"] = "CONTENIDO DEL GEOJSON";
-ln["BubbleContent_es"] = "CONTENIDO DE LA BURBUJA";
-ln["BubbleSize_es"] = "TAMAÑO DE LA BURBUJA";
-ln["Categories_es"] = "CATEGORÍA";
+ln["TITLE_es-ES"] = "TÍTULO";
+ln["DESCRIPTION_es-ES"] = "DESCRIPCIÓN";
+ln["XAxis_es-ES"] = "EJE-X";
+ln["YAxis_es-ES"] = "EJE-Y";
+ln["NumericXAxis_es-ES"] = "EJE-X";
+ln["NumericYAxis_es-ES"] = "EJE-Y";
+ln["Column_es-ES"] = "COLUMNA";
+ln["Level_es-ES"] = "NIVEL";
+ln["SliceLabels_es-ES"] = "NIVEL";
+ln["SliceSizes_es-ES"] = "TAMAÑO";
+ln["StartDate_es-ES"] = "FECHA DE INICIO";
+ln["EndDate_es-ES"] = "FECHA FINAL";
+ln["EventTitle_es-ES"] = "TITULO DEL EVENTO";
+ln["EventDescription_es-ES"] = "DESCRIPCIÓN DEL EVENTO";
+ln["MediaUrl_es-ES"] = "URL DEL MEDIO";
+ln["Background_es-ES"] = "ANTECEDENTES";
+ln["MediaTitle_es-ES"] = "TÍTULO DEL MEDIO";
+ln["MediaDescription_es-ES"] = "DESCRIPCIÓN DEL MEDIO";
+ln["Latitude_es-ES"] = "LATITUD";
+ln["Longitude_es-ES"] = "LONGITUD";
+ln["BalloonContent_es-ES"] = "CONTENIDO DEL GLOBO";
+ln["GEOJSON_es-ES"] = "GEOJSON";
+ln["GEOJSONContent_es-ES"] = "CONTENIDO DEL GEOJSON";
+ln["BubbleContent_es-ES"] = "CONTENIDO DE LA BURBUJA";
+ln["BubbleSize_es-ES"] = "TAMAÑO DE LA BURBUJA";
+ln["Categories_es-ES"] = "CATEGORÍA";
 
-ln["TITLEDescription_es"] = "El título del datalet.";
-ln["DESCRIPTIONDescription_es"] = "La descripción del datalet.";
-ln["XAxisDescription_es"] = "El eje-x.";
-ln["YAxisDescription_es"] = "El eje-y.";
-ln["NumericXAxisDescription_es"] = "El eje-x.";
-ln["NumericYAxisDescription_es"] = "El eje-y.";
-ln["ColumnDescription_es"] = "La columna de la tabla.";
-ln["LevelDescription_es"] = "El nivel del mapa de árbol.";
-ln["SliceLabelsDescription_es"] = "La etiqueta de las porciones.";
-ln["SliceSizesDescription_es"] = "El tamaño de las porciones.";
-ln["StartDateDescription_es"] = "La fecha de inicio del evento. Una cadena que representa una fecha RFC2822 o ISO 8601 (por ejemplo, 2015-03-25, 25/03/2015, 25 de marzo de 2015, 25 de marzo de 2015, miércoles 25 de marzo de 2015) o un número único que representa el año (por ejemplo, 2017, 7, 150) o un número romano representando siglos usando 'd. C', 'a. C.', para discernir antes de Cristo (por ejemplo, IV, X a. C.). Se pueden usar otros formatos, pero los resultados pueden ser inesperados.";
-ln["EndDateDescription_es"] = "La fecha de finalización del evento (ver fecha de inicio).";
-ln["EventTitleDescription_es"] = "El título del evento.";
-ln["EventDescriptionDescription_es"] = "La descripción del evento.";
-ln["MediaUrlDescription_es"] = "La url de los medios.";
-ln["BackgroundDescription_es"] = "La URL completa que apunta a una imagen que se utilizará como fondo o un color CSS, en hexadecimal (por ejemplo, # 0f9bd1) o una palabra clave de color CSS válida.";
-ln["MediaTitleDescription_es"] = "El título de los medios.";
-ln["MediaDescriptionDescription_es"] = "La descripción del medio.";
-ln["LatitudeDescription_es"] = "La latitud de las ubicaciones.";
-ln["LongitudeDescription_es"] = "La longitud de las ubicaciones.";
-ln["BalloonContentDescription_es"] = "El contenido de los globos.";
-ln["GEOJSONDescription_es"] = "Los datos GeoJSON.";
-ln["GEOJSONContentDescription_es"] = "El contenido de GeoJSON.";
-ln["BubbleContentDescription_es"] = "El contenido de las burbujas.";
-ln["BubbleSizeDescription_es"] = "El tamaño de las burbujas.";
-ln["CategoriesDescription_es"] = "Categoría que divide los valores del eje-x. Si es seleccionado, sólo el primer eje-y elejido será considerado..";
+ln["TITLEDescription_es-ES"] = "El título del datalet.";
+ln["DESCRIPTIONDescription_es-ES"] = "La descripción del datalet.";
+ln["XAxisDescription_es-ES"] = "El eje-x.";
+ln["YAxisDescription_es-ES"] = "El eje-y.";
+ln["NumericXAxisDescription_es-ES"] = "El eje-x.";
+ln["NumericYAxisDescription_es-ES"] = "El eje-y.";
+ln["ColumnDescription_es-ES"] = "La columna de la tabla.";
+ln["LevelDescription_es-ES"] = "El nivel del mapa de árbol.";
+ln["SliceLabelsDescription_es-ES"] = "La etiqueta de las porciones.";
+ln["SliceSizesDescription_es-ES"] = "El tamaño de las porciones.";
+ln["StartDateDescription_es-ES"] = "La fecha de inicio del evento. Una cadena que representa una fecha RFC2822 o ISO 8601 (por ejemplo, 2015-03-25, 25/03/2015, 25 de marzo de 2015, 25 de marzo de 2015, miércoles 25 de marzo de 2015) o un número único que representa el año (por ejemplo, 2017, 7, 150) o un número romano representando siglos usando 'd. C', 'a. C.', para discernir antes de Cristo (por ejemplo, IV, X a. C.). Se pueden usar otros formatos, pero los resultados pueden ser inesperados.";
+ln["EndDateDescription_es-ES"] = "La fecha de finalización del evento (ver fecha de inicio).";
+ln["EventTitleDescription_es-ES"] = "El título del evento.";
+ln["EventDescriptionDescription_es-ES"] = "La descripción del evento.";
+ln["MediaUrlDescription_es-ES"] = "La url de los medios.";
+ln["BackgroundDescription_es-ES"] = "La URL completa que apunta a una imagen que se utilizará como fondo o un color CSS, en hexadecimal (por ejemplo, # 0f9bd1) o una palabra clave de color CSS válida.";
+ln["MediaTitleDescription_es-ES"] = "El título de los medios.";
+ln["MediaDescriptionDescription_es-ES"] = "La descripción del medio.";
+ln["LatitudeDescription_es-ES"] = "La latitud de las ubicaciones.";
+ln["LongitudeDescription_es-ES"] = "La longitud de las ubicaciones.";
+ln["BalloonContentDescription_es-ES"] = "El contenido de los globos.";
+ln["GEOJSONDescription_es-ES"] = "Los datos GeoJSON.";
+ln["GEOJSONContentDescription_es-ES"] = "El contenido de GeoJSON.";
+ln["BubbleContentDescription_es-ES"] = "El contenido de las burbujas.";
+ln["BubbleSizeDescription_es-ES"] = "El tamaño de las burbujas.";
+ln["CategoriesDescription_es-ES"] = "Categoría que divide los valores del eje-x. Si es seleccionado, sólo el primer eje-y elejido será considerado..";
 
 //options
-ln["x-axis-label_es"] = "Etiqueta del eje-x";
-ln["y-axis-label_es"] = "Etiqueta del eje-y";
-ln["suffix_es"] = "Sufijo de descripción de herramientas";
-ln["legend_es"] = "Leyenda";
-ln["data-labels_es"] = "Muestra las etiquitas de los datos";
-ln["stack_es"] = "Apilar";
-ln["theme_es"] = "Tema";
-ln["donut_es"] = "Dona";
-ln["animation_es"] = "Animación";
+ln["x-axis-label_es-ES"] = "Etiqueta del eje-x";
+ln["y-axis-label_es-ES"] = "Etiqueta del eje-y";
+ln["suffix_es-ES"] = "Sufijo de descripción de herramientas";
+ln["legend_es-ES"] = "Leyenda";
+ln["data-labels_es-ES"] = "Muestra las etiquitas de los datos";
+ln["stack_es-ES"] = "Apilar";
+ln["theme_es-ES"] = "Tema";
+ln["donut_es-ES"] = "Dona";
+ln["animation_es-ES"] = "Animación";
 
-ln["true_es"] = "Sí";
-ln["false_es"] = "No";
-ln["bottom_es"] = "Sí: Abajo";
-ln["topRight_es"] = "Sí: arriba a la derecha";
-ln["normal_es"] = "Sí: Normal";
-ln["percent_es"] = "Sí: Porcentaje";
-ln["themeBase_es"] = "Base";
-ln["themeDarkGreen_es"] = "Verde oscuro";
-ln["themeDarkBlue_es"] = "Azul oscuro";
-ln["themeDarkUnica_es"] = "Unika oscuro";
-ln["themeGray_es"] = "Gris";
-ln["themeGrid_es"] = "Cuadrícula";
-ln["themeGridLight_es"] = "Cuadrícula clara";
-ln["themeSandSignika_es"] = "Signika arena";
-ln["themeSkies_es"] = "Cielos";
-ln["random_es"] = "Aleatorio";
-ln["simpleFade_es"] = "Esfumado sencillo";
-ln["curtainTopLeft_es"] = "Cortina Superior Izquierda";
-ln["curtainTopRight_es"] = "Cortina Superior Derecha";
-ln["curtainBottomLeft_es"] = "Cortina inferior izquierda";
-ln["curtainBottomRight_es"] = "Cortina inferior derecha";
-ln["curtainSliceLeft_es"] = "Porción de cortina izquierda";
-ln["curtainSliceRight_es"] = "Porción de cortina derecha";
-ln["blindCurtainTopLeft_es"] = "Cortina oscurecedora superior izquierda";
-ln["blindCurtainTopRight_es"] = "Cortina oscurecedora superior derecha";
-ln["blindCurtainBottomLeft_es"] = "Cortina oscurecedora inferior izquierda";
-ln["blindCurtainBottomRight_es"] = "Cortina oscurecedora inferior derecha";
-ln["blindCurtainSliceBottom_es"] = "Cortina oscurecedora porción inferior";
-ln["blindCurtainSliceTop_es"] = "Cortina oscurecedora porción superior";
-ln["stampede_es"] = "Estampida";
-ln["mosaic_es"] = "Mosaico";
-ln["mosaicReverse_es"] = "Mosaico Invertido";
-ln["mosaicRandom_es"] = "Mosaico Aleatorio";
-ln["mosaicSpiral_es"] = "Mosaico Espiral";
-ln["mosaicSpiralReverse_es"] = "Mosaico Espiral Invertido";
-ln["topLeftBottomRight_es"] = "Arriba a la Izquierda, Abajo a la Derecha";
-ln["bottomRightTopLeft_es"] = "Abajo a la Derecha, Arriba a la Izquierda";
-ln["bottomLeftTopRight_es"] = "Abajo a la Izquierda, Arriba a la Derecha";
-ln["bottomLeftTopRight_es"] = "Abajo a la Izquierda, Arriba a la Derecha";
-ln["scrollLeft_es"] = "Desplazamiento hacia la Izquierda";
-ln["scrollRight_es"] = "Desplazamiento hacia la Derecha";
-ln["scrollHorz_es"] = "Desplazamiento Horz";
-ln["scrollBottom_es"] = "Desplazamiento hacia Abajo";
-ln["scrollTop_es"] = "Desplazamiento hacia arriba";
+ln["true_es-ES"] = "Sí";
+ln["false_es-ES"] = "No";
+ln["bottom_es-ES"] = "Sí: Abajo";
+ln["topRight_es-ES"] = "Sí: arriba a la derecha";
+ln["normal_es-ES"] = "Sí: Normal";
+ln["percent_es-ES"] = "Sí: Porcentaje";
+ln["themeBase_es-ES"] = "Base";
+ln["themeDarkGreen_es-ES"] = "Verde oscuro";
+ln["themeDarkBlue_es-ES"] = "Azul oscuro";
+ln["themeDarkUnica_es-ES"] = "Unika oscuro";
+ln["themeGray_es-ES"] = "Gris";
+ln["themeGrid_es-ES"] = "Cuadrícula";
+ln["themeGridLight_es-ES"] = "Cuadrícula clara";
+ln["themeSandSignika_es-ES"] = "Signika arena";
+ln["themeSkies_es-ES"] = "Cielos";
+ln["random_es-ES"] = "Aleatorio";
+ln["simpleFade_es-ES"] = "Esfumado sencillo";
+ln["curtainTopLeft_es-ES"] = "Cortina Superior Izquierda";
+ln["curtainTopRight_es-ES"] = "Cortina Superior Derecha";
+ln["curtainBottomLeft_es-ES"] = "Cortina inferior izquierda";
+ln["curtainBottomRight_es-ES"] = "Cortina inferior derecha";
+ln["curtainSliceLeft_es-ES"] = "Porción de cortina izquierda";
+ln["curtainSliceRight_es-ES"] = "Porción de cortina derecha";
+ln["blindCurtainTopLeft_es-ES"] = "Cortina oscurecedora superior izquierda";
+ln["blindCurtainTopRight_es-ES"] = "Cortina oscurecedora superior derecha";
+ln["blindCurtainBottomLeft_es-ES"] = "Cortina oscurecedora inferior izquierda";
+ln["blindCurtainBottomRight_es-ES"] = "Cortina oscurecedora inferior derecha";
+ln["blindCurtainSliceBottom_es-ES"] = "Cortina oscurecedora porción inferior";
+ln["blindCurtainSliceTop_es-ES"] = "Cortina oscurecedora porción superior";
+ln["stampede_es-ES"] = "Estampida";
+ln["mosaic_es-ES"] = "Mosaico";
+ln["mosaicReverse_es-ES"] = "Mosaico Invertido";
+ln["mosaicRandom_es-ES"] = "Mosaico Aleatorio";
+ln["mosaicSpiral_es-ES"] = "Mosaico Espiral";
+ln["mosaicSpiralReverse_es-ES"] = "Mosaico Espiral Invertido";
+ln["topLeftBottomRight_es-ES"] = "Arriba a la Izquierda, Abajo a la Derecha";
+ln["bottomRightTopLeft_es-ES"] = "Abajo a la Derecha, Arriba a la Izquierda";
+ln["bottomLeftTopRight_es-ES"] = "Abajo a la Izquierda, Arriba a la Derecha";
+ln["bottomLeftTopRight_es-ES"] = "Abajo a la Izquierda, Arriba a la Derecha";
+ln["scrollLeft_es-ES"] = "Desplazamiento hacia la Izquierda";
+ln["scrollRight_es-ES"] = "Desplazamiento hacia la Derecha";
+ln["scrollHorz_es-ES"] = "Desplazamiento Horz";
+ln["scrollBottom_es-ES"] = "Desplazamiento hacia Abajo";
+ln["scrollTop_es-ES"] = "Desplazamiento hacia arriba";
 
-ln["x-axis-labelDescription_es"] = "La etiqueta del eje-x.";
-ln["y-axis-labelDescription_es"] = "La etiqueta del eje-y.";
-ln["suffixDescription_es"] = "El sufijo agregado a las etiquetas de datos en la información de herramientas.";
-ln["legendDescription_es"] = "La posición de la leyenda.";
-ln["data-labelsDescription_es"] = "Mostrar/ocultar etiquetas de datos.";
-ln["themeDescription_es"] = "El tema afecta la apariencia y los colores del gráfico.";
-ln["stackDescription_es"] = "El tipo de pila.";
-ln["donutDescription_es"] = "¡El pay se convertirá en dona! :) (o viceversa).";
+ln["x-axis-labelDescription_es-ES"] = "La etiqueta del eje-x.";
+ln["y-axis-labelDescription_es-ES"] = "La etiqueta del eje-y.";
+ln["suffixDescription_es-ES"] = "El sufijo agregado a las etiquetas de datos en la información de herramientas.";
+ln["legendDescription_es-ES"] = "La posición de la leyenda.";
+ln["data-labelsDescription_es-ES"] = "Mostrar/ocultar etiquetas de datos.";
+ln["themeDescription_es-ES"] = "El tema afecta la apariencia y los colores del gráfico.";
+ln["stackDescription_es-ES"] = "El tipo de pila.";
+ln["donutDescription_es-ES"] = "¡El pay se convertirá en dona! :) (o viceversa).";
+
+
 
 
 

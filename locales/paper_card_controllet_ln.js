@@ -16,3 +16,6 @@ paper_ln["modify_nl"] = "Wijzigen card";
 paper_ln["delete_nl"] = "Wissen card";
 paper_ln["open_nl"]   = "Open preview";
 
+paper_ln["modify_es-ES"] = "Modificar tarjeta";
+paper_ln["delete_es-ES"] = "Borrar tarjeta";
+paper_ln["open_es-ES"]   = "Abrir tarjeta";

@@ -23,6 +23,6 @@ dataletslider_ln["back_nl"] = "BACK";
 dataletslider_ln["forward_nl"] = "FORWARD";
 
 /*es_ES*/
-dataletslider_ln["noDatalet_es"] = "There are no datalets to show";
-dataletslider_ln["back_es"] = "BACK";
-dataletslider_ln["forward_es"] = "FORWARD";
+dataletslider_ln["noDatalet_es-ES"] = "There are no datalets to show";
+dataletslider_ln["back_es-ES"] = "BACK";
+dataletslider_ln["forward_es-ES"] = "FORWARD";

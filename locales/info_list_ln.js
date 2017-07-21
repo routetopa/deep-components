@@ -73,6 +73,6 @@ info_ln["invitationText_es"] = "Texto de la invitación";
 info_ln["period_es"] = "Periodo";
 info_ln["members_es"] = "Miembros";
 
-info_ln["joined_es"] = "Curso";
-info_ln["pending_es"] = "PENDIENTE";
-info_ln["owner_es"] = "PROPIETARIO";
+info_ln["joined_es-ES"] = "Curso";
+info_ln["pending_es-ES"] = "PENDIENTE";
+info_ln["owner_es-ES"] = "PROPIETARIO";

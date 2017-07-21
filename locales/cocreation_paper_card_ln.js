@@ -17,5 +17,5 @@ cocreation_room_ln["explore_nl"] = "EXPLORE";
 cocreation_room_ln["goal_nl"] = "GOAL";
 
 /*es-ES*/
-cocreation_room_ln["explore_es"] = "EXPLORAR";
-cocreation_room_ln["goal_es"] = "META";
+cocreation_room_ln["explore_es-ES"] = "EXPLORAR";
+cocreation_room_ln["goal_es-ES"] = "META";
