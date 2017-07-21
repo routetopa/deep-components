@@ -92,3 +92,26 @@ ln["open_nl"] = "Open";
 ln["download_csv_nl"] = "Download as CSV";
 ln["copy_link_nl"] = "Copy link";
 ln["download_docs_nl"] = "Download docs";
+
+/******** es_Es ********/
+
+//data-table
+ln["selectedData_es"] = "DATASET";
+ln["rows_es"] = "filas";
+ln["type_es"] = "TIPO";
+ln["warning_es"] = "ADVERTENCIA";
+ln["showing_es"] = "Mostrando";
+ln["to_es"] = "a";
+ln["of_es"] = "de";
+ln["search_es"] = "Buscar";
+ln["VER_es"] = "VER";
+ln["USER_es"] = "USUARIO";
+ln["NAME_es"] = "NOMBRE";
+ln["DATA_es"] = "DATOS";
+ln["DESCRIPTION_es"] = "DESCRIPCIÓN";
+ln["TOOLS_es"] = "HERRAMIENTAS";
+ln["last_version_es"] = "Última versión";
+ln["open_es"] = "Open";
+ln["download_csv_es"] = "Descarga como CSV";
+ln["copy_link_es"] = "Copia enlace";
+ln["download_docs_es"] = "Descarga documentos";

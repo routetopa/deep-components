@@ -15,3 +15,7 @@ datasetexplorer_ln["path_fr"] = "Path: ";
 /*NL*/
 datasetexplorer_ln["ode+back_nl"] = "<< Click to navigate back to the top level.";
 datasetexplorer_ln["path_nl"] = "Path: ";
+
+/*es_Es*/
+datasetexplorer_ln["ode+back_es"] = "<< Haga clic para volver al nivel superior.";
+datasetexplorer_ln["path_es"] = "Curso: ";

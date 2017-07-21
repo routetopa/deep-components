@@ -23,3 +23,9 @@ base_datalet_ln["export_HTML_nl"]    = "Export to HTML";
 base_datalet_ln["export_PNG_nl"]     = "Export to PNG";
 base_datalet_ln["export_RTF_nl"]     = "Export to RTF";
 base_datalet_ln["import_myspace_nl"] = "Import in My Space";
+
+/*es-ES*/
+base_datalet_ln["export_HTML_es"]    = "Exportar a HTML";
+base_datalet_ln["export_PNG_es"]     = "Exportar a PNG";
+base_datalet_ln["export_RTF_es"]     = "Exportar a RTF";
+base_datalet_ln["import_myspace_es"] = "Importar en Mi Espacio";

@@ -410,3 +410,105 @@ metadata_ln["release_date_description_nl"] = "release_date";
 //11
 metadata_ln["system_of_records_nl"] = "system_of_records";
 metadata_ln["system_of_records_description_nl"] = "system_of_records";
+
+/******** es_ES ********/
+
+metadata_ln["metadata_es"] = "METADATA";
+
+metadata_ln["CC_RF_es"] = "\"Common Core\" Required Fields";
+metadata_ln["CC_RAF_es"] = "\"Common Core\" Required if Applicable Fields";
+metadata_ln["EF_es"] = "Expanded Fields";
+
+//CC_RF
+//1
+metadata_ln["title_es"] = "Title";
+metadata_ln["title_description_es"] = "Human-readable name of the asset. Should be in plain English and include sufficient detail to facilitate search and discovery.";
+//2
+metadata_ln["description_es"] = "Description";
+metadata_ln["description_description_es"] = "Human-readable description (e.g., an abstract) with sufficient detail to enable a user to quickly understand whether the asset is of interest.";
+//3
+metadata_ln["tags_es"] = "Tags";
+metadata_ln["tags_description_es"] = "Tags (or keywords) help users discover your dataset; please include terms that would be used by technical and non-technical users.";
+//4
+metadata_ln["last_update_es"] = "Last Update";
+metadata_ln["last_update_description_es"] = "Most recent date on which the dataset was changed, updated or modified.";
+//5
+metadata_ln["publisher_es"] = "Publisher";
+metadata_ln["publisher_description_es"] = "The publishing entity and optionally their parent organization(s).";
+//6
+metadata_ln["contact_name_es"] = "Contact Name";
+metadata_ln["contact_name_description_es"] = "Contact person's name for the asset.";
+//7
+metadata_ln["contact_email_es"] = "Contact Email";
+metadata_ln["contact_email_description_es"] = "Contact person's email address.";
+//8
+metadata_ln["unique_identifier_es"] = "Unique Identifier";
+metadata_ln["unique_identifier_description_es"] = "A unique identifier for the dataset or API as maintained within an Agency catalog or database.";
+//9
+metadata_ln["public_access_level_es"] = "Public Access Level";
+metadata_ln["public_access_level_description_es"] = "The degree to which this dataset could be made publicly-available, regardless of whether it has been made available. Choices: public (Data asset is or could be made publicly available to all without restrictions), restricted public (Data asset is available under certain use restrictions), or non-public (Data asset is not available to members of the public).";
+
+//CC_RAF
+//1
+metadata_ln["bureau_code_es"] = "Bureau Code";
+metadata_ln["bureau_code_description_es"] = "Federal agencies, combined agency and bureau code from OMB Circular A-11, Appendix C in the format of 015:11.";
+//2
+metadata_ln["program_code_es"] = "Program Code";
+metadata_ln["program_code_description_es"] = "Federal agencies, list the primary program related to this data asset, from the Federal Program Inventory. Use the format of 015:001.";
+//3
+metadata_ln["access_level_comment_es"] = "Access Level Comment";
+metadata_ln["access_level_comment_description_es"] = "An explanation for the selected.";
+//4
+metadata_ln["download_url_es"] = "Download URL";
+metadata_ln["download_url_description_es"] = "URL providing direct access to the downloadable distribution of a dataset.";
+//5
+metadata_ln["endpoint_es"] = "Endpoint";
+metadata_ln["endpoint_description_es"] = "Endpoint of web service to access dataset.";
+//6
+metadata_ln["format_es"] = "Format";
+metadata_ln["format_description_es"] = "The file format or API type of the distribution.";
+//7
+metadata_ln["license_es"] = "License";
+metadata_ln["license_description_es"] = "The license with which the dataset or API is published. See Open Licenses for more information.";
+//8
+metadata_ln["spatial_es"] = "Spatial";
+metadata_ln["spatial_description_es"] = "The range of spatial applicability of a dataset. Could include a spatial region like a bounding box or a named place.";
+//9
+metadata_ln["temporal_es"] = "Temporal";
+metadata_ln["temporal_description_es"] = "The range of temporal applicability of a dataset (i.e., a start and end date of applicability for the data).";
+
+//EF
+//1
+metadata_ln["category_es"] = "Category";
+metadata_ln["category_description_es"] = "Main thematic category of the dataset.";
+//2
+metadata_ln["data_dictionary_es"] = "Data Dictionary";
+metadata_ln["data_dictionary_description_es"] = "URL to the data dictionary for the dataset or API. Note that documentation other than a data dictionary can be referenced using Related Documents as shown in the expanded fields.";
+//3
+metadata_ln["data_quality_es"] = "Data Quality";
+metadata_ln["data_quality_description_es"] = "Whether the dataset meets the agency\'s Information Quality Guidelines (true/false).";
+//4
+metadata_ln["distribution_es"] = "Distribution";
+metadata_ln["distribution_description_es"] = "Holds multiple download URLs for datasets composed of multiple files and/or file types.";
+//5
+metadata_ln["frequency_es"] = "Frequency";
+metadata_ln["frequency_description_es"] = "Frequency with which dataset is published.";
+//6
+metadata_ln["homepage_url_es"] = "Homepage URL";
+metadata_ln["homepage_url_description_es"] = "Alternative landing page used to redirect user to a contextual, Agency-hosted.";
+//7
+metadata_ln["language_es"] = "Language";
+metadata_ln["language_description_es"] = "The language of the dataset.";
+//8
+metadata_ln["primary_IT_investment_UII_es"] = "Primary IT investment UII";
+metadata_ln["primary_IT_investment_UII_description_es"] = "For linking a dataset with an IT Unique Investment Identifier (UII).";
+//9
+metadata_ln["related_documents_es"] = "Related Documents";
+metadata_ln["related_documents_description_es"] = "Related documents such as technical information about a dataset, developer documentation, etc.";
+//10
+metadata_ln["release_date_es"] = "Release_Date";
+metadata_ln["release_date_description_es"] = "Date of formal issuance.";
+//11
+metadata_ln["system_of_records_es"] = "System of Records";
+metadata_ln["system_of_records_description_es"] = "If the systems is designated as a system of records under the Privacy Act of 1974, provide the URL to the System of Records Notice related to this dataset.";
+

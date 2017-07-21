@@ -47,3 +47,15 @@ room_ln["views_nl"] = "views";
 room_ln["comments_nl"] = "comments";
 room_ln["datasets_nl"] = "datasets";
 room_ln["and_nl"] = "and";
+
+/*es_ES*/
+
+room_ln["thisRoom_es"] = "Esta sala";
+room_ln["createdBy_es"] = "creada por";
+room_ln["has_es"] = "tiene";
+room_ln["many_es"] = "muchas";
+room_ln["few_es"] = "pocas";
+room_ln["views_es"] = "visualizaciones";
+room_ln["comments_es"] = "comentarios";
+room_ln["datasets_es"] = "datasets";
+room_ln["and_es"] = "y";

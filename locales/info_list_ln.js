@@ -61,3 +61,18 @@ info_ln["members_nl"] = "Members";
 info_ln["joined_nl"] = "JOINED";
 info_ln["pending_nl"] = "PENDING";
 info_ln["owner_nl"] = "OWNER";
+
+/*es_Es*/
+info_ln["info_title_es"] = "INFO";
+
+info_ln["name_es"] = "Nombre";
+info_ln["subject_es"] = "Tema";
+info_ln["description_es"] = "Descripción";
+info_ln["goal_es"] = "Meta";
+info_ln["invitationText_es"] = "Texto de la invitación";
+info_ln["period_es"] = "Periodo";
+info_ln["members_es"] = "Miembros";
+
+info_ln["joined_es"] = "Curso";
+info_ln["pending_es"] = "PENDIENTE";
+info_ln["owner_es"] = "PROPIETARIO";
