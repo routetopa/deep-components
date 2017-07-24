@@ -67,11 +67,7 @@
                 var text_i = inputs.indexOf("EventDescription");
                 var url_i = inputs.indexOf("MediaUrl");
                 var background_i = inputs.indexOf("Background");
-//                console.log(text_i);
-//                console.log(url_i);
-//                console.log(background_i);
 
-//                debugger
                 for(var i = 0; i < this.data[0].data.length; i++){
                     var date = this._toDate(this.data[0].data[i], this.data[1].data[i]);
                     var start_date = date[0];
@@ -193,6 +189,8 @@
             },
 
             _dateStringToObject : function(dateString) {
+                dateString = dateString.trim();
+
                 if(dateString == "")
                     return null;
 
@@ -210,18 +208,34 @@
                 }
                 else {
                     try {
-                        date = new Date(dateString); //https://www.w3schools.com/js/js_date_formats.asp
+                        if(this._component.dateFormat == "DMY"){
+                            var dateParts = dateString.split("/");
+                            if(dateParts.length != 3)
+                                dateParts = dateString.split("-");
+                            if(dateParts[1] > 12)
+                                date = null
+                            else
+                                date = new Date(dateParts[2], dateParts[1] - 1, dateParts[0]); // month is 0-based
+                        }
+                        else
+                            date = new Date(dateString); //https://www.w3schools.com/js/js_date_formats.asp
                         if(isNaN(date.getFullYear()))
                             return null;
                         date = {
                             "year": date.getFullYear(),
                             "month": date.getUTCMonth() + 1,
-                            "day": date.getUTCDate(),
+                            "day": date.getUTCDate() + 1,
                             "hour": date.getHours(),
                             "minute": date.getUTCMinutes(),
                             "second": date.getUTCSeconds(),
                             "millisecond": date.getUTCMilliseconds(),
                         }
+
+//                        if(this._component.dateFormat == "DMY"){
+//                            let day = date.day
+//                            date.day = date.month;
+//                            date.month = day;
+//                        }
                     }
                     catch(e) {
                         date = null
@@ -279,7 +293,10 @@
                     type : Object,
                     value : {}
                 },
-
+                dateFormat : {
+                    type  : String,
+                    value : ""
+                },
                 export_menu : {
                     type  : Number,
                     value : 9
