@@ -69,7 +69,7 @@ info_ln["name_es-ES"] = "Nombre";
 info_ln["subject_es-ES"] = "Tema";
 info_ln["description_es-ES"] = "Descripción";
 info_ln["goal_es-ES"] = "Meta";
-info_ln["invitationText_es"] = "Texto de la invitación";
+info_ln["invitationText_es-ES"] = "Texto de la invitación";
 info_ln["period_es-ES"] = "Periodo";
 info_ln["members_es-ES"] = "Miembros";
 
