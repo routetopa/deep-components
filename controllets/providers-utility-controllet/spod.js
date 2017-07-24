@@ -44,7 +44,7 @@ SPOD_Provider.prototype.getHTMLFormattedMetadata = function(dataset, resourceInd
 };
 
 SPOD_Provider.prototype.getDatasetUrl = function(providerUrl, datasetId) {
-    return '/cocreation/ajax/get-dataset-by-id?id=' + datasetId;
+    return parent.ODE.ow_url_home + 'cocreation/ajax/get-dataset-by-id?id=' + datasetId;
 };
 
 SPOD_Provider.prototype.getResourceUrl = function(providerUrl, resourceId) {
