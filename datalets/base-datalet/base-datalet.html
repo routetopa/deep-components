@@ -954,9 +954,10 @@ Example :
                     parent = parent.parentElement;
 
                 var datalet_id = parent.attributes["datalet-id"].value;
-                var get_url = window.location;
+                //var get_url = window.location;
                 //var base_url = get_url.protocol + "//" + get_url.host + "/" + get_url.pathname.split('/')[1];
-                var base_url = get_url.protocol + "//" + get_url.host + "/" ;
+                //var base_url = get_url.protocol + "//" + get_url.host + "/" ;
+                var base_url = ODE.ow_url_home;
 
                 var facebook_url  = base_url + 'datalet/' + datalet_id;
                 //var facebook_text = encodeURI( (this.datalettitle ? (this.datalettitle + ' ') : '') + (this.description ? this.description : '') );
@@ -974,9 +975,10 @@ Example :
                     parent = parent.parentElement;
 
                 var datalet_id = parent.attributes["datalet-id"].value;
-                var get_url = window.location;
+                //var get_url = window.location;
                 //var base_url = get_url.protocol + "//" + get_url.host + "/" + get_url.pathname.split('/')[1];
-                var base_url = get_url.protocol + "//" + get_url.host + "/" ;
+                //var base_url = get_url.protocol + "//" + get_url.host + "/" ;
+                var base_url = ODE.ow_url_home;
 
                 var twitter_url  = base_url + 'datalet/' + datalet_id;
                 var twitter_text = encodeURI( (this.datalettitle ? (this.datalettitle + ' ') : '') + (this.description ? this.description : '') );
