@@ -468,8 +468,8 @@
             },
 
             _onCopyDatasetClick: function(e) {
-                var base_url = window.location.origin;
-                window.prompt("Copy to clipboard: Ctrl+C, Enter", base_url + '/cocreation/ajax/get-dataset-by-room-id-and-version/?room_id=' +  e.target.parentElement.attributes['room_id'].value + '&version=' +  e.target.parentElement.attributes['version'].value);
+                var base_url = ODE.ow_url_home;
+                window.prompt("Copy to clipboard: Ctrl+C, Enter", base_url + 'cocreation/ajax/get-dataset-by-room-id-and-version/?room_id=' +  e.target.parentElement.attributes['room_id'].value + '&version=' +  e.target.parentElement.attributes['version'].value);
             },
 
             _onDownloadDatasetClick: function(e) {
