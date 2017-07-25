@@ -49,14 +49,6 @@
                 flex-direction: row-reverse;
             }
 
-            /*#slider_container .chevron-left{*/
-                /*/!*float: left;*!/*/
-            /*}*/
-
-            /*#slider_container .chevron-right{*/
-                /*/!*float: right;*!/*/
-            /*}*/
-
             #slider_container .box{
                 height: 48px;
                 width: calc(100% - 96px);
@@ -302,7 +294,7 @@
 
             _showEmpty : function() {
                 this.setTitle(dataletslider_ln["noDatalet_" + dataletslider_ln["ln"]]);
-                this.setAvatar("!");
+                this.setAvatar("0");
                 this.chevronLeft("invisible");
                 this.chevronRight("invisible");
             },
