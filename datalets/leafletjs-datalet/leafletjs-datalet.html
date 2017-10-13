@@ -101,7 +101,7 @@ Example:
                 var coordinates_index  = 0;
                 var isArray = t.data[0].data[0].constructor === Array;
                 var geo;
-                var markers_cluster = L.markerClusterGroup();
+                var markers_cluster = L.markerClusterGroup({ disableClusteringAtZoom: 17 });
 
                 for(var i=0; i<t.data[0].data.length; i++)
                 {

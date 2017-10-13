@@ -84,7 +84,9 @@
                             if (textStatus == 'success') {
                                 self.fire('LayerLoadError', {
                                     title: self.title, url: self.url,
-                                    error: 'Too few parameters', wms: this._getLayers(capabilities)
+                                    error: 'Too few parameters',
+                                    wmsLayers: this._getLayers(capabilities),
+                                    wmsInfo: this._getInfo(capabilities)
                                 });
                             } else {
                                 self.fire('LayerLoadError', {title: self.title, url: self.url, error: errorThrown});
@@ -176,6 +178,12 @@
                         or = goog.uri.utils.removeParam(or, 'version');
                         return or
                     }
+                }
+            },
+            _getInfo: function (capabilities) {
+                return {
+                    Service: capabilities.Service,
+                    Version: capabilities.version
                 }
             },
             _getLayers: function (capabilities, layername) {

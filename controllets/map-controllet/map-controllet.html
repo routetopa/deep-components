@@ -1,6 +1,7 @@
-<script src="../shared_js/perfect-scrollbar/js/min/perfect-scrollbar.jquery.min.js"></script>
+<script src="../shared_js/perfect-scrollbar/js/perfect-scrollbar.jquery.js"></script>
 <link rel="stylesheet" href="../shared_js/perfect-scrollbar/css/perfect-scrollbar.min.css">
 
+<script src="../../locales/controllet_ln.js"></script>
 <script src="controllet_ln.js"></script>
 
 <link rel="import" href="../../bower_components/polymer/polymer.html">
@@ -18,103 +19,123 @@
 <link rel="import" href="../../bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="../../bower_components/paper-dialog/paper-dialog.html">
 <link rel="import" href="../../bower_components/paper-slider/paper-slider.html">
-<link rel="import" href="../../bower_components/paper-color-picker/paper-color-input.html">
 <link rel="import" href="../../bower_components/paper-spinner/paper-spinner.html">
 <link rel="import" href="../../bower_components/paper-checkbox/paper-checkbox.html">
 <link rel="import" href="../../bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="../../bower_components/paper-checkbox/paper-checkbox.html">
+<link rel="import" href="../../bower_components/paper-tooltip/paper-tooltip.html">
 
-<link rel="import" href="layers-list-controllet.html"/>
-<link rel="import" href="layers-add-controllet.html"/>
-<link rel="import" href="map-preview-controllet.html"/>
+<link rel="import" href="../page-slider-controllet/page-slider-controllet.html">
+
+<link rel="import" href="../select-dataset-controllet/select-dataset-controllet.html">
+<link rel="import" href="select-layers-controllet.html"/>
+<!--<link rel="import" href="../select-visualization-controllet/select-visualization-controllet.html" />-->
+
+<script src="wms.js"></script>
+<script src="kml.js"></script>
+<script src="geojson.js"></script>
+<script src="providers-override.js"></script>
 
 <script>
     getTranslatedText = function (key) {
-        var path = ['mc'].concat(key,ln["localization"]).join('.');
+        var path = ['mc'].concat(key, ln["localization"]).join('.');
         return ln[path] || path.toString();
     }
 </script>
 
 <dom-module id="map-controllet">
     <style>
-        :host {
+        neon-animatable {
+            height: calc(100% - 72px);
+        }
+
+        paper-tooltip {
+            --paper-tooltip-background: black;
+        }
+
+        paper-tooltip p {
             font-family: 'Roboto', 'Helvetica Neue', Helvetica, Arial, sans-serif;
             font-size: 16px;
-            /*line-height: 24px;*/
+            line-height: 24px;
+            margin: 0;
+            padding: 0;
         }
 
-        DIV#spinner_container {
-            position: absolute;
-            /* border: 1px solid red; */
-            width: 100%;
-            height: 100%;
-            background: #000;
+        paper-button {
+            background-color: #00BCD4;
+            color: white;
+            font-weight: 700;
+            padding: 16px;
+            text-transform: uppercase;
             z-index: 1;
-            opacity: 0.3;
         }
 
-        paper-spinner {
-            height: 64px;
-            width: 64px;
-            --paper-spinner-stroke-width: 8px;
-            --paper-spinner-layer-1-color: #2196F3;
-            --paper-spinner-layer-2-color: #F44336;
-            --paper-spinner-layer-3-color: #FFEB3B;
-            --paper-spinner-layer-4-color: #4CAF50;
-            left: calc(50% - 32px);
-            top: calc(50% - 32px);
+        paper-button:hover {
+            background-color: #00AABF;
+
+            box-shadow: 0px 8px 12px #888;
+            -webkit-box-shadow: 0px 8px 12px #888;
+            -moz-box-shadow: 0px 8px 12px #888;
         }
 
-        #container {
-            height: 100%;
-            width: 100%;
+        paper-button[disabled] {
+            background-color: #B6B6B6;
+        }
+
+        paper-button#addDatasetButton {
+            float: right;
+        }
+
+        paper-button#addDataletButton {
+            float: right;
+        }
+
+        .buttonsBar {
             position: absolute;
+            top: 0px;
+            right: 0px;
+            width: 50%;
+            height: 80px;
+            margin: 15px 3px;
         }
-
-        #container .left {
-            float: left;
-            height: 100%;
-            width: 60%;
-            min-width: 192px;
-            overflow: hidden;
-        }
-
-        #container .right {
-            float: left;
-            height: 100%;
-            width: calc(40% - 24px);
-            margin-left: 24px;
-        }
-
-        neon-animated-pages {
-            height: 100%;
-        }
-
-        ::content paper-material{
-            height: 100%;
-        }
-
     </style>
-    <template>
-        <div id="container">
 
-            <div class="left">
-                <neon-animated-pages id="pages" selected="[[selected]]" entry-animation="[[entryAnimation]]"
-                                     exit-animation="[[exitAnimation]]">
-                    <neon-animatable>
-                        <layers-list-controllet></layers-list-controllet>
-                    </neon-animatable>
-                    <neon-animatable>
-                        <div id="spinner_container" hidden>
-                            <paper-spinner id="layer_add_url_spinner"></paper-spinner>
-                        </div>
-                        <layers-add-controllet></layers-add-controllet>
-                    </neon-animatable>
-                </neon-animated-pages>
-            </div>
-            <div class="right">
-                <map-preview-controllet></map-preview-controllet>
-            </div>
+    <template>
+
+        <div class="buttonsBar">
+            <paper-button id="addDataletButton" raised on-click="_onAddDatalet"
+                          disabled={{addDataletButtonState.disabled}} hidden={{addDataletButtonState.hidden}}>
+                {{_translate('addDataletButton')}}
+            </paper-button>
+            <paper-button id="addDatasetButton" raised on-click="_onAddDataset"
+                          disabled={{addDatasetButtonState.disabled}} hidden={{addDatasetButtonState.hidden}}>
+                {{_translate('addDatasetButton')}}
+            </paper-button>
+            <div style="clear: both;"></div>
         </div>
+
+        <page-slider-controllet id="slider">
+
+            <neon-animatable>
+
+                <select-dataset-controllet id="select_dataset" datasets={{datasets}}
+                                           suggested-datasets={{suggestedDatasets}}></select-dataset-controllet>
+
+            </neon-animatable>
+
+            <neon-animatable>
+
+                <select-layers-controllet id="select_layers"></select-layers-controllet>
+
+            </neon-animatable>
+
+            <neon-animatable>
+
+                <!--<select-visualization-controllet id="select_visualization" deep-url={{deepUrl}} datalets-list-url={{dataletsListUrl}}></select-visualization-controllet>-->
+
+            </neon-animatable>
+
+        </page-slider-controllet>
 
     </template>
 
@@ -125,68 +146,349 @@
             is: 'map-controllet',
 
             listeners: {
-                'layers-load-start': '_onLayerLoad',
-                'layers-load-end': '_onLayerLoad'
+                'page-slider-controllet_selected': '_updateSlider',
+                'select-dataset-controllet_data-url': '_selectDataUrl',
+//                'select-fields-controllet_selected-fields': '_allowThirdStep',
+//                'filters-controllet_filters': '_allowThirdStep',
+//                'aggregators-controllet_aggregators': '_allowThirdStep',
+//                'data-ready': '_dataReady',
+                'layers-ready': '_onLayersReady',
+//                'datasets-list-controllet_dataset': '_selectDataUrl',
+                'datasets-list-controllet_ogc_selected': '_onOgcServiceSelected',
+                'map-ready': '_onMapReady',
+                'layers-list-controllet_checked-layer': '_onLayerChecked'
             },
 
             properties: {
+
+                datasets: {
+                    type: Object,
+                    //value : undefined
+                },
+
+                suggestedDatasets: {
+                    type: Array,
+                    value: undefined
+                },
+
                 deepUrl: {
                     type: String,
                     value: undefined
                 },
+
+//                dataletsListUrl: {
+//                    type: String,
+//                    value: undefined
+//                },
 
                 localization: {
                     type: String,
                     value: "en"
                 },
 
-                selected: {type: Number, value: 0},
-                entryAnimation: {type: String, value: ''},
-                exitAnimation: {type: String, value: ''},
-
+                addDatasetButtonState: {type: Object, value: {disabled: false, hidden: true}},
+                addDataletButtonState: {type: Object, value: {disabled: true, hidden: true}}
             },
 
             ready: function () {
                 ln["localization"] = this.localization;
+                this._override_DatasetList();
             },
-            _onLayerLoad: function (e) {
-                var state = (e.type === 'layers-load-start') ? true : false;
-                this.$.spinner_container.hidden = !state;
-                this.$.layer_add_url_spinner.active = state;
+
+            _translate: function (key) {
+                return getTranslatedText([this.localName, key]);
             },
-            updateLayerList: function () {
-                var layers = this.querySelector('map-preview-controllet').getLayers();
-                this.querySelector('layers-list-controllet').layers = layers;
-                this.updateAddButtonState();
+
+            _override_DatasetList: function () {
+                extendTimer = setInterval(function () {
+                    var sd = this.$.select_dataset;
+                    var dsl = sd.$ && this.$.select_dataset.$.datasets_list;
+                    var scr = this.$.slider.$ && this.$.slider.$.slider_chevron_right;
+                    if (sd && dsl && scr) {
+                        sd._show_info = dsl._show_info.bind(dsl);
+                        sd._loadDatasetInfo = dsl._loadDatasetInfo.bind(dsl);
+                        dsl._selectDataset = this._customSelectDataset;
+                        this.listen(scr, 'tap', '_onSlideNext');
+                        clearInterval(extendTimer)
+                    }
+                }.bind(this), 5)
             },
-            updateAddButtonState: function () {
-                this.querySelector('map-preview-controllet').addButtonState = {
-                    hidden: (this.selected != 0),
-                    disabled: (this.querySelector('layers-list-controllet').layers.length == 0)
+
+            _onMapReady: function (e) {
+                this.map = e.detail.map;
+            },
+
+            _onSlideNext: function (e) {
+                this.selectedDataset && this.$.select_layers.addDataset(this.selectedDataset);
+            },
+
+            _updateSlider: function (e) {
+                switch (e.detail.selected) {
+                    case 0:
+                        this.$.slider.setTitle(this._translate("slide1_title"), this._translate("slide1_subtitle"));
+
+                        this.$.slider.chevronLeft("invisible");
+                        this.$.slider.chevronRight(false);
+
+                        if (this.$.slider.getPrevSelected() == 1)
+                            this.$.slider.chevronRight(true);
+
+                        this.set('addDatasetButtonState', {disabled: false, hidden: true});
+                        this.set('addDataletButtonState', {disabled: true, hidden: true});
+
+                        break;
+                    case 1:
+                        this.$.slider.setTitle(this._translate("slide2_title"), this._translate("slide2_subtitle"));
+
+                        this.$.slider.chevronLeft(true);
+                        this.$.slider.chevronRight(false);
+
+                        if (this.$.slider.getPrevSelected() == 2)
+                            this.$.slider.chevronRight(true);
+
+                        this.$.slider.chevronRight("invisible");
+
+                        this.set('addDatasetButtonState', {disabled: false, hidden: false});
+                        this.set('addDataletButtonState', {
+                            disabled: this.$.select_layers.getCheckedLayers().length == 0,
+                            hidden: false
+                        });
+
+                        this.map.updateSize();
+
+                        break;
+//                    case 2:
+//                        this.$.slider.setTitle(ln["slide3Title_" + this.localization], ln["slide3Subtitle_" + this.localization]);
+//
+//                        this.$.slider.chevronLeft(true);
+//                        this.$.slider.chevronRight("invisible");
                 }
             },
-            slideToAddLayer: function (layer) {
-                var current_page = this.selected;
-                var total_pages = this.$.pages.children.length - 1;
-                this.entryAnimation = 'slide-from-right-animation';
-                this.exitAnimation = 'slide-left-animation';
-                this.querySelector('layers-add-controllet').set('edit',layer ? true: false);
-                layer && this.querySelector('layers-add-controllet').set('layer',layer);
-                layer && this.querySelector('map-preview-controllet').zoomToLayer(layer);
-                this.selected = current_page === (pages.length - 1) ? current_page : (current_page + 1);
-                this.updateAddButtonState();
-            },
-            slideToLayerList: function () {
-                this.updateLayerList();
-                var current_page = this.selected;
-                var total_pages = this.$.pages.children.length - 1;
-                this.entryAnimation = 'slide-from-left-animation';
-                this.exitAnimation = 'slide-right-animation';
-                this.selected = current_page === 0 ? 0 : (current_page - 1);
-                this.querySelector('map-preview-controllet').zoomToLayers();
-                this.updateAddButtonState();
-            }
 
+            _onLayersReady: function (e) {
+                if (e.detail.ready) {
+                    this.$.slider.chevronRight(true);
+                    this.$.select_dataset.$.selected_url.invalid = false;
+                }
+                else
+                    this.$.select_dataset.$.selected_url.invalid = true;
+            },
+
+            _onAddDatalet: function () {
+                var d = this.$.select_layers.$.map_preview.getDatalet();
+                this.fire('data-sevc-controllet.dataletCreated', {data: d});
+            },
+            _onAddDataset: function () {
+                this.$.slider._onPrevClick();
+            },
+
+            _onInputUrl: function (e) {
+                var dsl = e.srcElement.$.datasets_list;
+//                e.detail = {dataset: {url: e.detail.url}}
+//                this._selectDataUrl.call(dsl, e);
+//                this.debounce('onInputUrl', function () {
+//                    this.fire("datasets-list-controllet_dataset", {dataset: {url: e.detail.url}});
+//                }.bind(dsl),500);
+            },
+
+            _onLayerChecked: function (e) {
+                var b = e.detail.layers.filter(function (layer) {
+                            return layer.checked
+                        }).length == 0;
+                this.set('addDataletButtonState', {disabled: b, hidden: false});
+            },
+
+            _customSelectDataset: function (e) {
+                //se non ci sono tutti le risorse resourceIndex Ã¨ sbagliato
+
+                var id = this.$.menu.selectedItem.id;
+                var resourceIndex = 0;
+                if (e.target.id.indexOf('resource') > -1)
+                    resourceIndex = e.target.id.split('_')[1];
+                else if ($("#submenu_" + id)[0] != undefined)
+                    resourceIndex = $("#submenu_" + id)[0].selected;
+
+                //$(e.srcElement).parents("[id^='submenu_']")
+
+                if (resourceIndex == undefined)
+                    return
+
+                if (id == this.datasetIndex && resourceIndex == this.resourceIndex)
+                    return;
+
+                this.datasetIndex = id;
+                this.resourceIndex = resourceIndex;
+
+                this._loadDatasetInfo();
+
+                var p_type = this.shownDatasets[id].p.split("_")[0];
+                var p_id = this.shownDatasets[id].p.split("_")[1];
+                var dsTitle = this.shownDatasets[id].name;
+
+                var that = this;
+                var pf = Object.create(providerFactory);
+                var provider = pf.getProviderByType(p_type);
+
+                //suggested
+                if (this.shownDatasets[id].p == 'suggested') {
+                    this.fire("select-dataset-controllet_data-url", {
+                        dataset: {url: this.shownDatasets[id].url, dsTitle: dsTitle},
+                        provider: provider
+                    });
+                    return;
+                }
+
+                if (this.shownDatasets[id].p == "ultraclarity") {
+                    p = {url: this.shownDatasets[id].p_name.slice(0, -1)};
+                    p_type = "CKAN";
+                }
+                else {
+
+                    var p = this.providers.filter(function (a) {
+                        return a.id == p_id;
+                    })[0];
+                    if (p == undefined)
+                        p = {url: 'localhost'};//cocreated datasets
+                }
+
+
+                if (!provider) {
+                    this.fire("select-dataset-controllet_data-url", {dataset: {url: p.url}});
+//                    this._show_info('');
+//                    this.showDatasetInfo();
+                } else if (provider.isOGC) {
+                    this.fire("select-dataset-controllet_data-url", {
+                        dataset: {url: p.url, dsTitle: dsTitle},
+                        provider: provider
+                    });
+                } else {
+
+                    var datasetId = this.shownDatasets[id].id;
+                    var datasetUrl = provider.getDatasetUrl(p.url, datasetId);
+
+                    $.ajax({
+                        url: datasetUrl,
+                        dataType: "json",
+                        success: function (dataset) {
+                            var resource;
+                            var resourceId;
+                            var resourceUrl;
+                            if (dataset.resourceUrl) {
+                                resourceUrl = dataset.resourceUrl;
+                            } else {
+                                resource = dataset.result ? dataset.result.resources[resourceIndex] : null;
+                                resourceId = resource ? resource.id : datasetId;
+                                resourceUrl = provider.getResourceUrl(p.url, resourceId);
+                            }
+
+                            that.fire("select-dataset-controllet_data-url", {
+                                dataset: {
+                                    url: (resource && resource.url) || resourceUrl,
+                                    dsTitle: dataset.result.title,
+                                    rsTitle: (resource && resource.name)
+                                },
+                                provider: (resource && pf.getProviderByType(resource.format))
+                            });
+
+//                            var html = provider.getHTMLFormattedMetadata(dataset, resourceIndex);
+//                            that._show_info(html);
+//                            that.showDatasetInfo();
+                        },
+                        error: function (e) {
+//                            that.fire('layers-ready', {ready : false});
+                            console.log(e);
+                        }
+                    });
+                }
+
+            },
+
+            _selectDataUrl: function (e) {
+                var ds = e.detail.dataset = e.detail.dataset || {url: e.detail.url};
+                var provider = e.detail.provider = e.detail.provider || Object.create(providerFactory).getProvider(ds.url);
+                var src = e.srcElement;
+                var html = '';
+
+                this.selectedDataset = null;
+                this.$.slider.chevronRight(false);
+
+                if (ds && provider && provider.isOGC) {
+                    var mpc = document.querySelector('map-preview-controllet');
+
+                    src._loadDatasetInfo();
+
+                    mpc.addLayer({
+                        title: '',
+                        format: provider.Format,
+                        url: provider.getDatasetUrl(ds.url),
+                        callback: function (evt) {
+                            var layer = evt.srcElement;
+                            if (evt.type === 'LayerAdded') {
+                                e.detail.info = {
+                                    featuresCount: layer.featuresCount,
+                                    geometryType: layer.geometryType,
+                                    propertiesName: layer.propertiesName
+                                };
+                            } else if (evt.detail.wmsLayers) {
+                                e.detail.wmsLayers = evt.detail.wmsLayers;
+                                e.detail.wmsInfo = evt.detail.wmsInfo;
+                            } else if (evt.type === 'LayerLoadError') {
+                                e.detail.error = evt.detail.error;
+                            } else {
+                            }
+                            mpc.removeLayer(layer)
+                            this._allowSecondStep(e);
+                        }.bind(this)
+                    });
+                } else {
+                    this._allowSecondStep(e);
+                }
+            },
+
+            _allowSecondStep: function (e) {
+                var dataset = e.detail.dataset;
+                var provider = e.detail.provider;
+                var error = e.detail.error;
+                var src = e.srcElement;
+                var html = '';
+
+                if (!dataset || !dataset.url) return;
+
+                var isValid = dataset && provider && provider.isOGC && !error;
+                if (isValid) {
+                    html = provider.getHTMLFormattedMetadata(e.detail);
+
+                    var ds = {title: dataset.dsTitle, url: dataset.url, format: provider.Format, layers: []}
+
+                    if (provider.isWMS) {
+                        var ln = provider.parsedUrl.params.LAYERS ? (/(?:\w+:)?(\w+)/gi).exec(provider.parsedUrl.params.LAYERS)[1] : null;
+                        for (i in e.detail.wmsLayers) {
+                            var l = e.detail.wmsLayers[i];
+                            if (ln && ln != l.Name) continue
+                            ds.layers.push({title: l.Title, format: provider.Format, url: l.Url});
+                        }
+                    } else {
+                        ds.layers.push({
+                            title: dataset.rsTitle || dataset.dsTitle,
+                            format: provider.Format,
+                            url: dataset.url
+                        });
+                    }
+
+                    this.selectedDataset = ds;
+                } else if (error) {
+                    html = ['<p align="center">', '<b>Error: </b>', '<b style="color: #F44336;">', error, '</b>', '</p>'].join('');
+                } else {
+                    html = ['<p align="center">', '<b>NO GIS DATA</b>', '</p>'].join('');
+                }
+
+                isValid = isValid || (this.$.select_layers.get('datasets').length != 0);
+
+                this.fire('layers-ready', {ready: isValid});
+
+                src._show_info(html);
+                src.showDatasetInfo();
+            }
 
         });
 

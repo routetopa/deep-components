@@ -68,7 +68,8 @@
 
             },
             removeLayer: function (layer) {
-                var container = layer.parentNode;
+                var container = Polymer.dom(layer.parentNode);
+
                 container.removeChild(layer);
                 layer = null;
             },
@@ -132,7 +133,7 @@
                 vectorLayer.setAttribute('url', params.url);
                 vectorLayer.setAttribute('format', params.format);
 
-                this._addLayerStyle(vectorLayer, params);
+                this._addLayerStyle(Polymer.dom(vectorLayer), params);
 
                 return container.appendChild(vectorLayer);
             },
@@ -201,7 +202,7 @@
                  */
                 params: {
                     type: Object,
-                    value: {}, // { proxy_url: 'http://172.18.13.3/miniProxy.php/',layers: [] }
+                    value: {}, // { proxy_url: 'http://172.18.13.9/miniProxy.php/',layers: [] }
                     observer: '_onParamsChange'
                 },
                 /**
