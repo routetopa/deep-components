@@ -42,7 +42,13 @@ DataTypeConverter.SUBTYPES = {
 
     PERCENTAGE      :   { value: 1100, name: "PERCENTAGE" },
     LATITUDE        :   { value: 1101, name: "LATITUDE" },
-    LONGITUDE       :   { value: 1102, name: "LONGITUDE" }
+    LONGITUDE       :   { value: 1102, name: "LONGITUDE" },
+
+    DATETIMEYM     :   { value:  1200, name: "DATETIMEYM"},
+    DATETIMEYMD    :   { value:  1201, name: "DATETIMEYMD"},
+    DATETIMEDMY    :   { value:  1202, name: "DATETIMEDMY"},
+    DATETIMEMDY    :   { value:  1203, name: "DATETIMEMDY"},
+    DATETIMEXXY    :   { value:  1203, name: "DATETIMEXXY"}
 
     /*CODE        : { value: 2000, name: "CODE"},*/
 };
@@ -157,6 +163,17 @@ DataTypeConverter.prototype = (function () {
             var max = ArrayUtils.FindMinMax(field._inferredSubTypes, function (curval, lastval) {
                 return curval > lastval;
             });
+
+            //SUBTYPE: special case with date format - when the system selects the XXY subtype.
+            if (typeof max !== 'undefined' && max != null &&
+                typeof max.first !== 'undefined' && max.first != null && max.first.key === DataTypeConverter.SUBTYPES.DATETIMEXXY.name &&
+                typeof max.second !== 'undefined' && max.second != null) {
+                //Swaps first and second.
+                var temp = max.first;
+                max.first = max.second;
+                max.second = temp;
+            }
+
             field.subtype = null;
             if (max != null && max.first != null) {
                 field.subtype = max.first.key;
@@ -223,9 +240,8 @@ DataTypeConverter.prototype = (function () {
             return DataTypeConverter.TYPES.NUMBER;
         }
 
-        var _date = DataTypesUtils.FilterDateTime(value);
-        if (isNaN(_date) == false && _date != null)
-            return DataTypeConverter.TYPES.DATETIME;
+        var _datetype = DataTypesUtils.FilterDateTime(value);
+        if (_datetype != null) return _datetype;
 
         return DataTypeConverter.TYPES.TEXT;
     };//EndFunction.
@@ -452,8 +468,12 @@ DataTypeConverter.prototype = (function () {
         /**
          * It parses the json and infers the data types.
          * @param json
-         * @param path Array of field keys/names.
-         * @param options Infer Data Type options, in particular the threshold value for the confidence.
+         * @param The json (it is mainly a treee) can be very big and one would not analyse it as whole
+         * but only a part of it. One can decide to analyse only a part of the json by indicating the path
+         * within the tree to analyse. The parameter fieldKeys is an array with keys within the json to analyse.
+         * @param options to use during the Infer Data Type process, in particular
+         *     - threshold value for the confidence;
+         *     - language of messages.
          */
         inferJsonDataType: function (json, fieldKeys, options) {
 
@@ -463,10 +483,17 @@ DataTypeConverter.prototype = (function () {
             if (options.hasOwnProperty("thresholdConfidence") == false)
                 options.thresholdConfidence = 1;
 
+            if (options.hasOwnProperty("filterOnThresholdConfidence") == false)
+                options.filterOnThresholdConfidence = true;
+
+
             if (options.hasOwnProperty("language") == false)
                 options.language = DataTypeConverter.LANGS.EN.name;
             else
                 options.language = options.language.toUpperCase();
+
+            if (options.hasOwnProperty('trackCellsForEachType') == false)
+                options.trackCellsForEachType = false;
 
             var stack = [];
             var fieldsType = {};
@@ -482,8 +509,9 @@ DataTypeConverter.prototype = (function () {
             while (stack.length > 0) {
                 var stackTask = stack.pop();
                 var item = stackTask.item;
-                var fieldKeyIndex = stackTask.fieldKeyIndex;
-                var fieldKey = fieldKeys[fieldKeyIndex];
+
+                var fieldKeyIndex = stackTask.fieldKeyIndex; //Index within the fieldKeys.
+                var fieldKey = fieldKeys[fieldKeyIndex]; //Value within the filedKeys corresponding to the fieldKeyIndex.
 
                 //Test fieldKey Value.
                 //This if is executed when the fieldKey is * and the dataset it is NOT an ARRAY.
@@ -493,17 +521,39 @@ DataTypeConverter.prototype = (function () {
 
                     ArrayUtils.IteratorOverKeys(item, function (item, key) {
                         var curKey = sProcessedKeys + ((sProcessedKeys.length == 0) ? "" : ",") + key;
-                        var fieldType = ArrayUtils.TestAndInitializeKey(fieldsType, curKey, { name: curKey, _inferredTypes: [], _inferredSubTypes: [], _inferredValues: [], numOfItems: 0 });
+
+                        var _label = curKey;
+                        if (typeof json !== 'undefined' && json.hasOwnProperty('fields')) {
+                            if (typeof json.fields[key] !== 'undefined') _label = json.fields[key].label;
+                            else {
+                                for (var iField=0,field; iField < json.fields.length && (field=json.fields[iField]); iField++) {
+                                    if (field.hasOwnProperty('name') && field.name === key && field.hasOwnProperty('label'))
+                                        _label = field.label;
+                                }//EndFor.
+                            }
+                        }
+
+                        var fieldType = ArrayUtils.TestAndInitializeKey(fieldsType, curKey, { name: curKey, label: _label, _inferredTypes: [], _inferredSubTypes: [], _inferredValues: [], numOfItems: 0 });
                         fieldType.numOfItems++;
 
                         ///TYPE
-                        var inferredType = _processInferType(item);
+                        var compundTypeSubtype = _processInferType(item);
+
+                        var inferredType = compundTypeSubtype;
+                        if (compundTypeSubtype.hasOwnProperty("type")) inferredType = compundTypeSubtype.type;
+
                         ArrayUtils.TestAndIncrement(fieldType._inferredTypes, inferredType.name);
                         if (inferredType === DataTypeConverter.TYPES.TEXT)
                             ArrayUtils.TestAndIncrement(fieldType._inferredValues, item);
 
+                        ///Tracks for each type X the cells in the dataset of that type.
+                        if (options.trackCellsForEachType) {
+                            var listCells = ArrayUtils.TestAndInitializeKey(fieldType._inferredTypes, inferredType.name + "_cells", []);
+                            listCells.push({ columnKey: key, rowIndex: numOfRows });
+                        }
+
                         ///SUBTYPE
-                        var inferredSubType = _processInferSubType(item);
+                        var inferredSubType = compundTypeSubtype.hasOwnProperty("subtype") ? compundTypeSubtype.subtype : _processInferSubType(item);
                         if (inferredSubType != null && typeof inferredSubType !== 'undefined') {
                             ArrayUtils.TestAndIncrement(fieldType._inferredSubTypes, inferredSubType.name);
                             /*if (inferredSubType === DataTypeConverter.TYPES.LATITUDE)
@@ -527,10 +577,12 @@ DataTypeConverter.prototype = (function () {
                     continue;
                 }
 
-                //This is executed when the fieldKey is not *
-                var jsonSubtree = item[fieldKey];
-                if (Array.isArray(jsonSubtree)) { //It is an array.
-                    for (var j=0; j<jsonSubtree.length; j++) {
+                //This is executed when the fieldKey is not '*'.
+                var jsonSubtree = item[fieldKey]; //Takes the json subtree.
+                if (Array.isArray(jsonSubtree)) { //It is an array, hence loops through the array and takes its items.
+                    //Note: it is better to push items in reverse order in the stack, to conserve the processing sort.
+                    //for (var j=0; j<jsonSubtree.length; j++) {
+                    for (var j=jsonSubtree.length-1; j>=0; j--) {
                         var jsonItem = jsonSubtree[j];
                         stack.push({ item: jsonItem, fieldKeyIndex: fieldKeyIndex+1 });
                     }//EndForJ.
@@ -630,17 +682,45 @@ DataTypeConverter.prototype = (function () {
                             description += " and has " + numNulls + " EMPTY values, ";
                     }*/
 
-                    var incorrect = fieldType.numOfItems - fieldType.totalNullValues - fieldType._inferredTypes[fieldType.type];
+                    //var incorrect = fieldType.numOfItems - fieldType.totalNullValues - fieldType._inferredTypes[fieldType.type];
+                    var incorrect = fieldType.numOfItems - fieldType._inferredTypes[fieldType.type];
                     if (incorrect > 0) {
                         var _descr1 = _capitalizeFirstLetter(JDC_LNG['key_declaretype'][options.language]) + ".";
                         var _descr2 = _capitalizeFirstLetter(JDC_LNG['key_notoftype_singular'][options.language]) + ".";
                         if (incorrect > 1)
                             _descr2 = _capitalizeFirstLetter(JDC_LNG['key_notoftype_plural'][options.language]) + ".";
 
-                        var descr = _descr1 + " " + _descr2;
-                        descr = descr.replace(/%COL_NAME/g, fieldType.name);
+                        var _descr3 = ""; var _LISTWRONGROS = "";
+
+                        if (options.trackCellsForEachType) {
+                            _descr3 = _capitalizeFirstLetter(JDC_LNG['key_seewrongrows'][options.language]) + ".";
+
+                            var keysWrongTypes =  Object.keys(fieldType._inferredTypes).filter(function(typekey) {
+                                return (typekey.indexOf("_cells") <0) && (fieldType._inferredTypes[typekey] > 0)
+                                    && (typekey !== fieldType.type);
+                            });
+
+                            for (var iKeyType=0; iKeyType<keysWrongTypes.length; iKeyType++) {
+                                var _keytype = keysWrongTypes[iKeyType];
+                                var _cells = fieldType._inferredTypes[_keytype + "_cells"];
+                                if (typeof _cells === 'undefined') continue;
+
+                                for (var icell = 0; icell < _cells.length; icell++) {
+                                    var _cell = _cells[icell];
+                                    _LISTWRONGROS += (_cell.rowIndex + 1) + "(" + _keytype + ")" +
+                                        (icell == _cells.length - 2 ? ", and " : "") +
+                                        (icell < _cells.length - 2 ? ", " : "");
+                                }
+                            }//EndForInfTypes.
+                        }
+                        debugger;
+
+
+                        var descr = _descr1 + " " + _descr2 + " " + _descr3;
+                        descr = descr.replace(/%COL_NAME/g, fieldType.label);
                         descr = descr.replace(/%COL_TYPE/g, fieldType.type);
                         descr = descr.replace(/%COL_ERRORS/g, incorrect);
+                        descr = descr.replace(/%LIST_WRONG_ROWS/g, _LISTWRONGROS);
 
                         description += descr;
 
@@ -656,7 +736,7 @@ DataTypeConverter.prototype = (function () {
                 else if (fieldType.totalNullValues > 1 )
                     descr = _capitalizeFirstLetter(JDC_LNG['key_emptyvalue_plural'][options.language]) + ".";
 
-                descr = descr.replace(/%COL_NAME/g, fieldType.name);
+                descr = descr.replace(/%COL_NAME/g, fieldType.label);
                 descr = descr.replace(/%COL_TYPE/g, fieldType.type);
                 descr = descr.replace(/%COL_NULLVALUES/g, fieldType.totalNullValues);
                 description = description + " " + descr;
@@ -677,7 +757,8 @@ DataTypeConverter.prototype = (function () {
 
             var metadata = { dataset: json, fieldKeys: fieldKeys, types: fieldsType, qualityIndex: quality, warningsTextual: warningsTextual };
 
-            _filterBasedOnThreshold(metadata, options.thresholdConfidence);
+            if (options.filterOnThresholdConfidence == true)
+                _filterBasedOnThreshold(metadata, options.thresholdConfidence);
 
             return metadata;
         },//EndFunction.
@@ -709,3 +790,5 @@ DataTypeConverter.prototype = (function () {
 
     };
 })();
+
+

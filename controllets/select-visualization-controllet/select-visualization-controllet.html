@@ -333,7 +333,10 @@
 
                 this.$.preview.loadDatalet(dataletParams);
 
-                this.$.add_button.removeAttribute("disabled");
+                if(this.$.inputs.$.datalettitle.value != "")
+                    this.$.add_button.removeAttribute("disabled");
+                else
+                    this.$.add_button.setAttribute("disabled", "disabled");
             },
 
             _addDatalet : function(){

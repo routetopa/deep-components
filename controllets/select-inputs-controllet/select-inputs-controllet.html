@@ -189,7 +189,7 @@
             <div class="header"><span id="baseInfo"></span></div>
 
             <div class="inputs">
-                <paper-input id="datalettitle" maxlength="64" on-change="_addOption"></paper-input>
+                <paper-input id="datalettitle" maxlength="64" on-keyup="_addOption" invalid error-message=""></paper-input>
                 <div class="info_button">
                     <paper-icon-button id="base_title_info" icon="info-outline" noink></paper-icon-button>
                 </div>
@@ -432,6 +432,8 @@
                     else
                         this.selectedOptions[options[i].name] = options[i].list.item[0];
                 }
+                this.selectedOptions["datalettitle"] = this.$.datalettitle.value;
+                this.selectedOptions["description"] = this.$.description.value;
             },
 
             _translate : function(){
@@ -441,6 +443,8 @@
 
                 this.$.datalettitle.label = ln["title_" + ln["localization"]];
                 this.$.description.label = ln["description_" + ln["localization"]];
+
+                this.$.datalettitle.errorMessage = ln["required_" + ln["localization"]];
             },
 
             _preselectInputs : function(dataletPreset) {
@@ -546,15 +550,25 @@
             },
 
             _addOption : function(e) {
-                if(e.target.nodeName == "PAPER-ITEM") {
-                    var optionIndex = $(e.target).parents("paper-dropdown-menu")[0].id;
-                    this.selectedOptions[this.options[optionIndex].name] = e.target.id;
-                }
-                else if(e.target.nodeName == "INPUT") {
-                    var option = $(e.target).parents("paper-input")[0].id;
-                    this.selectedOptions[option] = e.target.value;
-                }
-                this._fire();
+                this.debounce('_addOption', function(){
+                    if(e.target.nodeName == "PAPER-ITEM") {
+                        var optionIndex = $(e.target).parents("paper-dropdown-menu")[0].id;
+                        this.selectedOptions[this.options[optionIndex].name] = e.target.id;
+                    }
+                    else if(e.target.nodeName == "INPUT") {
+                        var option = $(e.target).parents("paper-input")[0].id;
+                        this.selectedOptions[option] = e.target.value;
+
+                        if(option == "datalettitle") {
+                            if(e.target.value != "")
+                                $($(e.target).parents("paper-input")[0]).removeAttr("invalid");
+                            else
+                                $($(e.target).parents("paper-input")[0]).attr("invalid", "invalid");
+                        }
+                    }
+                    this._fire();
+
+                }, 500);
             },
 
             _fire : function() {
@@ -573,7 +587,7 @@
                         fire = false;
                 }
 
-                if(this.inputs[0].name == "Latitude" || this.inputs[0].name == "GEOJSON")//wrong
+                if(this.inputs.length && (this.inputs[0].name == "Latitude" || this.inputs[0].name == "GEOJSON"))//wrong
                     return true;
 
                 if(!fire)

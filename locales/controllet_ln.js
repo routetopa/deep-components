@@ -172,6 +172,8 @@ ln["leafletjs-geojsonDescription_en"] = "";
 ln["title_en"] = "Title"
 ln["description_en"] = "Description";
 
+ln["required_en"] = "Required";
+
 ln["sortAscending_en"] = "SORTED ASCENDING";
 ln["sortDescending_en"] = "SORTED DESCENDING";
 ln["unsort_en"] = "UNSORTED";
@@ -463,6 +465,8 @@ ln["leafletjs-geojsonDescription_it"] = "";
 ln["title_it"] = "Titolo";
 ln["description_it"] = "Descrizione";
 
+ln["required_it"] = "Campo obbligatorio";
+
 ln["sortAscending_it"] = "ORDINE CRESCENTE";
 ln["sortDescending_it"] = "ORDINE DECRESCENTE";
 ln["unsort_it"] = "NON ORDINATI";
@@ -752,6 +756,8 @@ ln["leafletjs-geojsonDescription_fr"] = "";
 //inputs
 ln["title_fr"] = "Titre";
 ln["description_fr"] = "Description";
+
+ln["required_fr"] = "Champ obligatoire";
 
 ln["sortAscending_fr"] = "CLASSÉ DE MANIÈRE ASCENDANTE";
 ln["sortDescending_fr"] = "CLASSÉ DE MANIÈRE DESCENDANTE";
@@ -1043,6 +1049,8 @@ ln["leafletjs-geojsonDescription_nl"] = "";
 ln["title_nl"] = "Title"
 ln["description_nl"] = "Description";
 
+ln["required_nl"] = "Verplicht veld";
+
 ln["sortAscending_nl"] = "SORTED ASCENDING";
 ln["sortDescending_nl"] = "SORTED DESCENDING";
 ln["unsort_nl"] = "UNSORTED";
@@ -1325,6 +1333,8 @@ ln["leafletjs-geojsonDescription_es-ES"] = "";
 //inputs
 ln["title_es-ES"] = "Título"
 ln["description_es-ES"] = "Descripción";
+
+ln["required_es-ES"] = "Campo obligatorio";
 
 ln["sortAscending_es-ES"] = "ORDENADO ASCENDENTEMENTE";
 ln["sortDescending_es-ES"] = "ORDENADO DESCENDENTEMENTE";
