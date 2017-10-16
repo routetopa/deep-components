@@ -19,7 +19,7 @@
             padding: 12px;
             text-align: center;
             font-weight: 700;
-            cursor: pointer;
+            /*cursor: pointer;*/
         }
 
         #datalet_placeholder {
@@ -28,52 +28,51 @@
             width: 100%;
         }
 
-        paper-button {
+        paper-icon-button {
+            z-index: 10;
+            padding: 0px;
+            width: 24px;
+            height: 24px;
+        }
+
+        paper-icon-button#zoomLayersButton {
             position: absolute;
-            bottom: 16px;
-            right: 11px;
-
-            height: 48px;
-            width: 172px;
-            background-color: #00BCD4;
-            color: white;
-            font-weight: 700;
-            padding: 16px;
+            right: 10px;
+            /*color: #00BCD4;*/
         }
 
-        paper-button:hover {
-            background-color: #00AABF;
-
-            box-shadow: 0px 8px 12px #888;
-            -webkit-box-shadow: 0px 8px 12px #888;
-            -moz-box-shadow: 0px 8px 12px #888;
+        paper-tooltip {
+            --paper-tooltip-background: black;
         }
 
-        paper-button[disabled] {
-            background-color: #B6B6B6;
+        paper-tooltip p {
+            font-family: 'Roboto', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            font-size: 16px;
+            line-height: 24px;
+            margin: 0;
+            padding: 0;
         }
+
     </style>
 
     <template>
 
         <paper-material elevation="5">
-            <div id="header">[[_translate('title')]]</div>
+            <div id="header">
+                <span>[[_translate('title')]]</span>
+                <paper-icon-button id="zoomLayersButton" icon="search" on-tap="zoomToLayers"></paper-icon-button>
+            </div>
             <div id="datalet_placeholder">
-                <!-- "proxyUrl":"http://172.18.13.3/miniProxy.php/"-->
                 <openlayers-datalet id="mapPreview"
                                     params={"layerSwitcher":true,"zoomOnLayerAdd":false}></openlayers-datalet>
-                <paper-button id="add_button" disabled={{addButtonState.disabled}} hidden={{addButtonState.hidden}}
-                              raised on-click="_addDatalet">{{_translate('add-datalet')}}
-                </paper-button>
+                <!--<paper-button id="add_button" disabled={{addButtonState.disabled}} hidden={{addButtonState.hidden}}-->
+                <!--raised on-click="_addDatalet">{{_translate('add-datalet')}}-->
+                <!--</paper-button>-->
             </div>
         </paper-material>
 
-        <paper-dialog id="modaldialog" modal>
-            <p class="message" style="overflow: auto;"></p>
-            <div class="buttons">
-                <paper-button dialog-confirm autofocus>close</paper-button>
-            </div>
-        </paper-dialog>
+        <paper-tooltip for="zoomLayersButton" position="left" offset="0"><p>
+            <span>[[_translate('zoomLayersButton')]]</span></p></paper-tooltip>
 
     </template>
 
@@ -83,7 +82,6 @@
             is: 'map-preview-controllet',
 
             properties: {
-                addButtonState: {type: Object, value: {disabled: false, hidden: true}}
             },
 
             listeners: {},
@@ -92,19 +90,43 @@
                 $(this.$.menu_container).perfectScrollbar();
             },
 
+            attached : function(){
+                this._resize();
+                var that = this;
+                window.addEventListener("resize", function() { that._resize(); });
+            },
+
+            _resize : function(){
+                var h = Math.max(document.documentElement.clientHeight, window.innerHeight || 0) - 88 - 96 - 24;
+                $("#datalet_placeholder").height(h);
+            },
+
+            resize_for_layout : function (flag) {
+                if(flag){
+                    var h = Math.max(document.documentElement.clientHeight, window.innerHeight || 0) - 88 - 96;
+                    h = h/2 - 12;
+                    $("#datalet_placeholder").height(h);
+                }else{
+                    var h = Math.max(document.documentElement.clientHeight, window.innerHeight || 0) - 88 - 96 - 24;
+                    $("#datalet_placeholder").height(h);
+                }
+            },
+
             _translate: function (key) {
                 return getTranslatedText([this.localName, key]);
             },
 
-            _addDatalet: function () {
+            getDatalet: function () {
                 var dataletParams = this.$.mapPreview.behavior.getParams();
-                this.$.modaldialog.querySelector('.message').innerHTML = JSON.stringify(dataletParams);
-                this.$.modaldialog.open();
 
                 console.log(dataletParams);
 
-                var data = {datalet:"openlayers-datalet", staticData:"", fields:[], params:{params:JSON.stringify(dataletParams), "zoom-on-layer-add":true}};
-                this.fire('data-sevc-controllet.dataletCreated', {data : data});
+                return {
+                    datalet: "openlayers-datalet",
+                    staticData: "",
+                    fields: [],
+                    params: {params: JSON.stringify(dataletParams), "zoom-on-layer-add": true}
+                };
             },
 
             getLayers: function () {
@@ -152,6 +174,9 @@
             },
             zoomToLayers: function () {
                 this.$.mapPreview.behavior.zoomToLayers();
+            },
+            updateSize: function () {
+//                this.$.mapPreview
             }
 
         });

@@ -5,7 +5,9 @@
         <link rel="stylesheet" href="ol-v3.17.1/ol3-layerswitcher.css"/>
 
         <style>
-            #mapContainer{height: 100%}
+            #mapContainer {
+                height: 100%
+            }
         </style>
 
         <div id="mapContainer"></div>
@@ -81,7 +83,7 @@
             },
             domReady: function () {
                 var LayerSwitcher = new ol.control.LayerSwitcher();
-
+                var self = this;
                 var map = this.map = new ol.Map({
                     projection: ol.proj.get('EPSG:3857'),
                     layers: [
@@ -142,7 +144,7 @@
                 this.proxy && this.map.set('proxy', this.proxy);
                 this.layerSwitcher && map.addControl(LayerSwitcher);
 
-                this.fire('map-ready');
+                this.fire('map-ready', {map: map});
 
                 map.on('moveend', function (e) {
                     this._ignoreViewChange = true;

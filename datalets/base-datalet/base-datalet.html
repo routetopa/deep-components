@@ -573,7 +573,11 @@ Example :
                     this.$.base_datalet_source.innerHTML = urlSource;
                     this.$.base_datalet_source.setAttribute("href", urlSource);
 
-                    if(this.dataUrl.indexOf("/records/") > -1 )
+                    if(this.dataUrl.indexOf("/cocreation/") > -1 )
+                    {
+                        this.$.base_datalet_link.setAttribute("href", urlSource + "/cocreation/data-room-list");
+                    }
+                    else if(this.dataUrl.indexOf("/records/") > -1 )
                     {
                         var i;
                         if(this.dataUrl.indexOf("&") > -1)

@@ -1,0 +1,202 @@
+<link rel="import" href="layers-list-controllet.html"/>
+<link rel="import" href="map-preview-controllet.html"/>
+<link rel="import" href="layer-layout-controllet.html"/>
+
+<dom-module id="select-layers-controllet">
+
+    <style>
+        #container {
+            display: flex;
+            flex-direction: row;
+            margin-top: 8px;
+            padding-bottom: 8px;
+        }
+
+        #container * {
+            font-family: 'Roboto', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            font-size: 16px;
+            line-height: 24px;
+        }
+
+        #container #layers_container {
+            /*height: 100%;*/
+            width: 20%;
+            min-width: 192px;
+        }
+
+        #container #right_container {
+            /*height: 100%;*/
+            width: calc(80% - 24px);
+            margin-left: 24px;
+        }
+
+        #container #preview_container {
+            height: calc(100% - 72px);
+            width: 100%;
+            overflow: hidden;
+        }
+
+        #container #layout_container {
+            height: 48px;
+            width: 100%;
+            margin-top: 24px;
+        }
+    </style>
+
+    <template>
+
+
+        <paper-material id="container" elevation="5">
+            <div id="layers_container">
+                <layers-list-controllet id="layers_list"></layers-list-controllet>
+            </div>
+            <div id="right_container">
+                <div id="preview_container">
+                    <map-preview-controllet id="map_preview"></map-preview-controllet>
+                </div>
+                <div id="layout_container">
+                    <layer-layout-controllet id="layer_layout"></layer-layout-controllet>
+                </div>
+            </div>
+        </paper-material>
+
+        <paper-dialog id="modaldialog" modal>
+            <p class="message"></p>
+            <div class="buttons">
+                <paper-button dialog-confirm autofocus>close</paper-button>
+            </div>
+        </paper-dialog>
+
+        </paper-material>
+
+    </template>
+
+    <script>
+        Polymer({
+
+            is: 'select-layers-controllet',
+
+            properties: {
+
+                datasets: {
+                    type: Array,
+                    value: []
+                },
+
+            },
+            observers: [
+                '_onDatasetsChange(datasets.splices)'
+            ],
+
+            listeners: {
+                'layers-list-controllet_selected-layer': '_onLayerSeleted',
+                'layers-list-controllet_checked-layer': '_onLayerChecked',
+                'layer-layout-controllet_toggle': '_onResizeLayout',
+                'map-ready': '_onMapReady',
+            },
+
+            ready: function () {
+                $(this.$.container).perfectScrollbar();
+            },
+
+            attached : function(){
+                this._resize();
+                var that = this;
+                window.addEventListener("resize", function() { that._resize(); });
+            },
+
+            _resize : function(){
+                var h = Math.max(document.documentElement.clientHeight, window.innerHeight || 0) - 16;
+                h = h - 64 - 8; //height with page scroller + margin-top
+                $("#container").height(h);
+            },
+
+            _onMapReady: function (e) {
+                this.map = e.detail.map;
+            },
+
+            addDataset: function (dataset) {
+                if (this.alreadyInDataset(dataset))return;
+//                this.push('datasets', dataset);
+                this.splice('datasets', this.datasets.length, 0, dataset);
+
+            },
+
+            alreadyInDataset: function (dataset) {
+                for (i in this.datasets) {
+                    var d = this.datasets[i];
+                    if (d.url == dataset.url)return true
+                }
+                return false;
+            },
+
+            _onDatasetsChange: function (changes) {
+                if (!changes) return;
+                for (c in changes.indexSplices) {
+                    var s = changes.indexSplices[c];
+                    var ds = s.object[s.index];
+                    for (l in ds.layers) {
+                        var l = ds.layers[l];
+                        this.$.layers_list.push('layers', $.extend({dataset: ds.title}, l, {checked: false}));
+                    }
+                }
+            },
+
+            _onLayerSeleted: function (e) {
+                var l = e.detail.olLayer;
+                if (l) {
+                    this.$.layer_layout.set('layer', e.detail.olLayer);
+                } else {
+                    this.$.layer_layout.set('layer', null);
+                    this.fire('layer-layout-controllet_toggle', false);
+                }
+            },
+
+            _onLayerChecked: function (e) {
+                var layer = e.detail.layer;
+                var mpc = document.querySelector('map-preview-controllet');
+
+                if (layer.checked) {
+                    mpc.addLayer({
+                        title: layer.title,
+                        format: layer.format,
+                        url: layer.url,
+                        callback: function (evt) {
+                            if (evt.type === 'LayerAdded') {
+                                layer.olLayer = evt.srcElement;
+                                this.$.layer_layout.set('layer', layer.olLayer);
+                            } else if (evt.type === 'LayerLoadError') {
+                                alert(evt.detail.error);
+                            }
+
+                        }.bind(this)
+                    });
+                } else if (layer.olLayer) {
+                    mpc.removeLayer(layer.olLayer)
+                    layer.olLayer = null;
+                }
+            },
+
+            _onResizeLayout: function (e) {
+                if (e.detail) {
+                    this.$.preview_container.style.height = "calc(50% - 12px)";
+                    this.$.layout_container.style.height = "calc(50% - 12px)";
+                    this.$.map_preview.resize_for_layout(true);
+                }
+                else {
+                    this.$.preview_container.style.height = "calc(100% - 72px)";
+                    this.$.layout_container.style.height = "48px";
+                    this.$.map_preview.resize_for_layout(false);
+                }
+
+                this.map.updateSize();
+            },
+
+            getCheckedLayers: function () {
+                return this.$.layers_list.getCheckedLayers();
+            }
+        });
+
+    </script>
+
+</dom-module>

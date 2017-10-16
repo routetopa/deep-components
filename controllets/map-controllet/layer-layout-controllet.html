@@ -1,4 +1,4 @@
-<dom-module id="layer-add-style-controllet">
+<dom-module id="layer-layout-controllet">
 
     <style>
         :host {
@@ -14,6 +14,19 @@
             --paper-menu-focused-item-after: {
                 background: none;
             };
+        }
+
+        #header {
+            background: #B6B6B6;
+            height: 24px;
+            padding: 12px;
+            text-align: center;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        #header:hover {
+            color: #2196F3;
         }
 
         paper-dropdown-menu {
@@ -41,6 +54,9 @@
             height: 30px;
             position: relative;
             top: 12px;
+            display: -webkit-inline-flex;
+            display: -ms-inline-flexbox;
+            display: inline-flex;
         }
 
         paper-slider.red {
@@ -62,21 +78,28 @@
             --paper-slider-knob-color: #BBB;
             --paper-slider-active-color: #BBB;
         }
+
         #Styles paper-menu {
             padding: 0px;
             cursor: pointer;
         }
+
         #Styles paper-item {
             padding: 2px 0px;
             border-bottom: 1px #eee solid;
+            min-height: 30px;
+            font-size: 13px;
         }
+
         #Styles paper-item:hover {
             font-style: italic;
             border-bottom: 2px #eee solid;
             background-color: #f7f7f7;
         }
+
         .row {
             height: 60px;
+            position: relative;
         }
 
         .row-group {
@@ -102,114 +125,139 @@
             position: absolute;
             margin-left: 15px;
             margin-top: 10px;
+            display: -webkit-inline-flex;
+            display: -ms-inline-flexbox;
+            display: inline-flex;
         }
 
+        #layer_layout_controllet_container {
+            height: 100%;
+        }
+
+        #layout_container {
+            height: calc( 100% - 48px );
+            width: 100%;
+            position: relative;
+        }
     </style>
 
     <template>
-        <div id="Stroke" class="row-group" hidden="true">
-            <div class="group-header">{{_translate('stroke-style')}}</div>
 
-            <div id="StrokeWidth" class="row">
-                <label>{{_translate('stroke-width')}}</label>
-                <paper-slider value={{stroke_width}} max="10" pin></paper-slider>
+        <paper-material id="layer_layout_controllet_container" elevation="5">
+
+            <div id="header" on-click="_onLayoutToggle"><span>[[_translate('title')]] {{_getLayerTitle(layer)}}</span>
             </div>
+            <div id="layout_container" style="display: none;">
 
-            <div id="StrokeColor" class="row">
-                <label>{{_translate('stroke-color-red')}}</label>
-                <paper-slider class="red" value={{stroke_color.red}} max="255" pin></paper-slider>
-                <label>{{_translate('stroke-color-green')}}</label>
-                <paper-slider class="green" value={{stroke_color.green}} max="255" pin></paper-slider>
-                <label>{{_translate('stroke-color-blue')}}</label>
-                <paper-slider class="blue" value={{stroke_color.blue}} max="255" pin></paper-slider>
-                <label>{{_translate('stroke-color-alpha')}}</label>
-                <paper-slider class="alpha" value={{stroke_color.alpha}} max="1" step="0.1" pin></paper-slider>
-            </div>
-        </div>
+                <div id="Stroke" class="row-group" hidden="true">
+                    <div class="group-header">[[_translate('stroke-style')]]</div>
 
-        <div id="Fill" class="row-group" hidden="true">
-            <div class="group-header">{{_translate('fill-style')}}</div>
+                    <div id="StrokeWidth" class="row">
+                        <label>{{_translate('stroke-width')}}</label>
+                        <paper-slider value={{stroke_width}} max="10" pin></paper-slider>
+                    </div>
 
-            <div id="FillColor" class="row">
-                <label>{{_translate('fill-color-red')}}</label>
-                <paper-slider class="red" value={{fill_color.red}} max="255" pin></paper-slider>
-                <label>{{_translate('fill-color-green')}}</label>
-                <paper-slider class="green" value={{fill_color.green}} max="255" pin></paper-slider>
-                <label>{{_translate('fill-color-blue')}}</label>
-                <paper-slider class="blue" value={{fill_color.blue}} max="255" pin></paper-slider>
-                <label>{{_translate('fill-color-alpha')}}</label>
-                <paper-slider class="alpha" value={{fill_color.alpha}} max="1" step="0.1" pin></paper-slider>
-            </div>
-        </div>
+                    <div id="StrokeColor" class="row">
+                        <label>{{_translate('stroke-color-red')}}</label>
+                        <paper-slider class="red" value={{stroke_color.red}} max="255" pin></paper-slider>
+                        <label>{{_translate('stroke-color-green')}}</label>
+                        <paper-slider class="green" value={{stroke_color.green}} max="255" pin></paper-slider>
+                        <label>{{_translate('stroke-color-blue')}}</label>
+                        <paper-slider class="blue" value={{stroke_color.blue}} max="255" pin></paper-slider>
+                        <label>{{_translate('stroke-color-alpha')}}</label>
+                        <paper-slider class="alpha" value={{stroke_color.alpha}} max="1" step="0.1" pin></paper-slider>
+                    </div>
+                </div>
 
-        <div id="Icon" class="row-group" hidden="true">
-            <div class="group-header">{{_translate('point-style')}}</div>
+                <div id="Fill" class="row-group" hidden="true">
+                    <div class="group-header">{{_translate('fill-style')}}</div>
 
-            <div id="IconColor" class="row">
-                <label>{{_translate('icon-color-red')}}</label>
-                <paper-slider class="red" value={{icon_color.red}} max="255" pin></paper-slider>
-                <label>{{_translate('icon-color-green')}}</label>
-                <paper-slider class="green" value={{icon_color.green}} max="255" pin></paper-slider>
-                <label>{{_translate('icon-color-blue')}}</label>
-                <paper-slider class="blue" value={{icon_color.blue}} max="255" pin></paper-slider>
-                <label>{{_translate('icon-color-alpha')}}</label>
-                <paper-slider class="alpha" value={{icon_color.alpha}} max="1" step="0.1" pin></paper-slider>
-            </div>
-        </div>
+                    <div id="FillColor" class="row">
+                        <label>{{_translate('fill-color-red')}}</label>
+                        <paper-slider class="red" value={{fill_color.red}} max="255" pin></paper-slider>
+                        <label>{{_translate('fill-color-green')}}</label>
+                        <paper-slider class="green" value={{fill_color.green}} max="255" pin></paper-slider>
+                        <label>{{_translate('fill-color-blue')}}</label>
+                        <paper-slider class="blue" value={{fill_color.blue}} max="255" pin></paper-slider>
+                        <label>{{_translate('fill-color-alpha')}}</label>
+                        <paper-slider class="alpha" value={{fill_color.alpha}} max="1" step="0.1" pin></paper-slider>
+                    </div>
+                </div>
 
-        <div id="Text" class="row-group" hidden="true">
-            <div class="group-header">
-                <paper-checkbox id="TextStyleCheck" on-change="_onTextStyleChecked">{{_translate('label-style')}}
-                </paper-checkbox>
-            </div>
+                <div id="Icon" class="row-group" hidden="true">
+                    <div class="group-header">{{_translate('point-style')}}</div>
 
-            <div class="row">
-                <paper-dropdown-menu label="{{_translate('property-name')}}" required>
-                    <paper-menu class="dropdown-content" selected="{{text_field.Selected}}">
-                        <template is="dom-repeat" items={{text_field.Accepted}}>
-                            <paper-item>{{item}}</paper-item>
+                    <div id="IconColor" class="row">
+                        <label>{{_translate('icon-color-red')}}</label>
+                        <paper-slider class="red" value={{icon_color.red}} max="255" pin></paper-slider>
+                        <label>{{_translate('icon-color-green')}}</label>
+                        <paper-slider class="green" value={{icon_color.green}} max="255" pin></paper-slider>
+                        <label>{{_translate('icon-color-blue')}}</label>
+                        <paper-slider class="blue" value={{icon_color.blue}} max="255" pin></paper-slider>
+                        <label>{{_translate('icon-color-alpha')}}</label>
+                        <paper-slider class="alpha" value={{icon_color.alpha}} max="1" step="0.1" pin></paper-slider>
+                    </div>
+                </div>
+
+                <div id="Text" class="row-group" hidden="true">
+                    <div class="group-header">
+                        <paper-checkbox id="TextStyleCheck" on-change="_onTextStyleChecked">
+                            {{_translate('label-style')}}
+                        </paper-checkbox>
+                    </div>
+
+                    <div class="row">
+                        <paper-dropdown-menu label="{{_translate('property-name')}}" required>
+                            <paper-menu class="dropdown-content" selected="{{text_field.Selected}}">
+                                <template is="dom-repeat" items={{text_field.Accepted}}>
+                                    <paper-item>{{item}}</paper-item>
+                                </template>
+                            </paper-menu>
+                        </paper-dropdown-menu>
+                        <paper-dropdown-menu label="{{_translate('font-name')}}">
+                            <paper-menu class="dropdown-content" selected="{{text_font.Selected}}">
+                                <template is="dom-repeat" items={{text_font.Accepted}}>
+                                    <paper-item>{{item}}</paper-item>
+                                </template>
+                            </paper-menu>
+                        </paper-dropdown-menu>
+
+                        <label>{{_translate('font-size')}}</label>
+                        <paper-slider value={{text_size}} min="8" max="20" pin></paper-slider>
+                    </div>
+                    <div class="row">
+                        <label>{{_translate('text-color-red')}}</label>
+                        <paper-slider class="red" value={{text_fill_color.red}} max="255" pin></paper-slider>
+                        <label>{{_translate('text-color-green')}}</label>
+                        <paper-slider class="green" value={{text_fill_color.green}} max="255" pin></paper-slider>
+                        <label>{{_translate('text-color-blue')}}</label>
+                        <paper-slider class="blue" value={{text_fill_color.blue}} max="255" pin></paper-slider>
+                        <label>{{_translate('text-color-alpha')}}</label>
+                        <paper-slider class="alpha" value={{text_fill_color.alpha}} max="1" step="0.1"
+                                      pin></paper-slider>
+                    </div>
+
+                </div>
+
+                <div id="Styles" class="row-group" hidden="false">
+                    <paper-menu class="dropdown-content" selected="{{styles.Selected}}">
+                        <template is="dom-repeat" items={{styles.List}} as="style">
+                            <paper-item><img src="{{style.LegendUrl}}">{{style.Title}}
+                            </paper-item>
                         </template>
                     </paper-menu>
-                </paper-dropdown-menu>
-                <paper-dropdown-menu label="{{_translate('font-name')}}">
-                    <paper-menu class="dropdown-content" selected="{{text_font.Selected}}">
-                        <template is="dom-repeat" items={{text_font.Accepted}}>
-                            <paper-item>{{item}}</paper-item>
-                        </template>
-                    </paper-menu>
-                </paper-dropdown-menu>
+                </div>
 
-                <label>{{_translate('font-size')}}</label>
-                <paper-slider value={{text_size}} min="8" max="20" pin></paper-slider>
-            </div>
-            <div class="row">
-                <label>{{_translate('text-color-red')}}</label>
-                <paper-slider class="red" value={{text_fill_color.red}} max="255" pin></paper-slider>
-                <label>{{_translate('text-color-green')}}</label>
-                <paper-slider class="green" value={{text_fill_color.green}} max="255" pin></paper-slider>
-                <label>{{_translate('text-color-blue')}}</label>
-                <paper-slider class="blue" value={{text_fill_color.blue}} max="255" pin></paper-slider>
-                <label>{{_translate('text-color-alpha')}}</label>
-                <paper-slider class="alpha" value={{text_fill_color.alpha}} max="1" step="0.1" pin></paper-slider>
             </div>
 
-        </div>
-
-        <div id="Styles" class="row-group" hidden="false">
-            <paper-menu class="dropdown-content" selected="{{styles.Selected}}">
-                <template is="dom-repeat" items={{styles.List}} as="style">
-                    <paper-item><img src="{{style.LegendUrl}}">{{style.Title}}
-                    </paper-item>
-                </template>
-            </paper-menu>
-        </div>
+        </paper-material>
 
     </template>
 
     <script>
         Polymer({
 
-            is: 'layer-add-style-controllet',
+            is: 'layer-layout-controllet',
 
             properties: {
                 layer: {
@@ -266,7 +314,10 @@
             ],
 
             attached: function () {
-                $('paper-material.dropdown-content,paper-material.dropdown-content').perfectScrollbar();
+                //$('paper-material.dropdown-content,paper-material.dropdown-content').perfectScrollbar();
+            },
+            ready: function () {
+                $(this.$.layout_container).perfectScrollbar();
             },
             isValid: function (callback) {
                 callback({valid: true});
@@ -388,15 +439,19 @@
                         this.$.Styles.hidden = false;
                         this.styles = layer.getStyles();
                     } else this.$.Styles.hidden = true;
-                }
+                } else
+                    this._onLayoutToggle();
             },
 
-            _translate: function (key) {
-                return getTranslatedText([this.localName, key]);
-            },
-            _reset: function () {
+            _onLayoutToggle: function () {
+                var d = !this.layer ? false : this.$.layout_container.style.display == 'none';
+                this.$.layout_container.style.display = d ? '' : 'none';
+                this.fire('layer-layout-controllet_toggle', d);
             },
 
+            _getLayerTitle: function (layer) {
+                return layer ? ' : ' + layer.title : '';
+            }
         });
 
     </script>

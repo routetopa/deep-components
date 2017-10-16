@@ -1,109 +1,175 @@
 <dom-module id="layers-list-controllet">
 
-    <style>
-        :host {
-            background: #FFF;
-            --paper-item-focused-before: {
-                background: none;
-            };
-            --paper-menu-focused-item-after: {
-                background: none;
-            };
+    <style is="custom-style">
+
+        #layers_list_controllet_container {
+            height: 100%;
+            width: 100%;
         }
 
-        #header {
+        #layers_list_controllet_container * {
+            font-family: 'Roboto', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            font-size: 16px;
+            line-height: 24px;
+        }
+
+        #layers_list_controllet_container #header {
             background: #B6B6B6;
             height: 24px;
             padding: 12px;
             text-align: center;
             font-weight: 700;
-            cursor: pointer;
+            /*cursor: pointer;*/
         }
 
-        #container {
+        /*#layers_list_controllet_container #header:hover {*/
+        /*color: #2196F3;*/
+        /*}*/
+
+        #layers_list_controllet_container #menu_container {
             position: relative;
-            height: calc(100% - 48px);
+            height: calc(100% - 96px);
             width: 100%;
         }
 
-        DIV.item {
-            border-bottom: 1px #eee solid;
-            padding: 6px 5px;
+        paper-menu {
+            padding: 0px;
+        }
+
+        paper-item {
+            cursor: pointer;
+            color: #000000;
+            background: #FFFFFF;
+            margin: 4px;
+            padding: 0 12px;
+            /*background: rgba(0, 0, 0, 0.12);*/
+            border-radius: 2px;
+            border: 1px solid #B6B6B6;
+
+            /*background: #E0E0E0;*/
+        }
+
+        paper-item span {
+            width: 100%;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            display: block;
+        }
+
+        paper-item em {
+            font-size: 10px !Important;
+            line-height: 10px !Important;
+        }
+
+        paper-item.iron-selected {
+            background: #2196F3;
+            color: #FFFFFF;
+        }
+
+        paper-item:focus:before {
+            opacity: 0 !important;
+            background: white;
+        }
+
+        paper-item:focus:after {
+            opacity: 0 !important;
+            background: white;
+        }
+
+        paper-item:hover:not(.iron-selected) {
+            background-color: #BBDEFB;
         }
 
         paper-icon-button {
             z-index: 10;
             padding: 0px;
-            width: 30px;
-            height: 30px;
+            width: 24px;
+            height: 24px;
         }
 
-        paper-button#add_layer_button {
+        paper-icon-button#checkedLayersButton {
             position: absolute;
-            bottom: 16px;
-            right: 11px;
-            height: 48px;
-            width: 172px;
+            right: 8px;
+            /*color: #00BCD4;*/
+        }
+        paper-icon-button#checkedLayersButton.selected {
+            color: #00A000;
+        }
+        paper-icon-button#zoomLayerButton {
+            position: absolute;
+            right: 30px;
+            /*color: #00BCD4;*/
         }
 
-        paper-button {
-            background-color: #00BCD4;
-            color: white;
-            font-weight: 700;
-            padding: 16px;
+        paper-icon-button.clear {
+            width: 24px;
+            height: 24px;
+            padding: 0 4px;
+            color: #F44336;
+            --paper-icon-button-ink-color: #FFFFFF;
         }
 
-        paper-button {
-            background-color: #00AABF;
-            box-shadow: 0px 8px 12px #888;
-            -webkit-box-shadow: 0px 8px 12px #888;
-            -moz-box-shadow: 0px 8px 12px #888;
+        paper-tooltip {
+            --paper-tooltip-background: black;
         }
 
-        paper-button[disabled] {
-            background-color: #B6B6B6;
+        paper-tooltip p {
+            font-family: 'Roboto', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            font-size: 16px;
+            line-height: 24px;
+            margin: 0;
+            padding: 0;
+        }
+
+        #menu, #menu_container {
+            background-color: #E0E0E0;
+        }
+
+        .footer {
+            /*width: 100%;*/
+            height: 40px;
+            padding: 4px 8px;
+            text-align: left;
+            background: #B6B6B6;
         }
 
     </style>
 
     <template>
 
-        <paper-material elevation="5">
+        <paper-material id="layers_list_controllet_container" elevation="5">
+
             <div id="header">
-                <paper-icon-button icon="search" on-tap="_onZoomLayersClick"></paper-icon-button>
                 <span id="layers">[[_translate('title')]]</span>
+                <paper-icon-button id="checkedLayersButton" icon="check" on-tap="_onFilterCheckedLayersClick"></paper-icon-button>
+                <paper-icon-button id="zoomLayerButton" icon="search" on-tap="_onZoomLayerClick"></paper-icon-button>
             </div>
-            <div id="container">
-
-                <!--
-                                <paper-menu id="menu">
-                                    <paper-menu id="menu">
-                                        <template is="dom-repeat" items="{{layers}}">
-                                            <paper-item on-tap="_onLayerSelected">
-                                                <paper-icon-button icon="create" on-tap="_onEditLayerClick"></paper-icon-button>
-                                                <paper-icon-button icon="delete" on-tap="_onDeleteLayerClick"></paper-icon-button>
-                                                {{item.title}}
-                                            </paper-item>
-                                        </template>
-                                    </paper-menu>
-                                </paper-menu>
-                -->
-
-                <template is="dom-repeat" items="{{layers}}">
-                    <div class="item">
-                        <paper-icon-button icon="create" on-tap="_onEditLayerClick"></paper-icon-button>
-                        <paper-icon-button icon="search" on-tap="_onZoomLayerClick"></paper-icon-button>
-                        <paper-icon-button icon="delete" on-tap="_onDeleteLayerClick"></paper-icon-button>
-                        {{item.title}}
-                    </div>
-                </template>
-
-
+            <div id="menu_container">
+                <paper-menu id="menu">
+                    <template is="dom-repeat" items="{{layers}}">
+                        <paper-item title="{{item.title}} ({{item.dataset}})">
+                            <paper-checkbox checked="{{item.checked}}"></paper-checkbox>
+                            <span>{{item.title}}<br><em>{{_getDatasetTitle(item)}}</em></span>
+                        </paper-item>
+                    </template>
+                </paper-menu>
             </div>
-            <paper-button id="add_layer_button" raised on-click="_onAddLayerClick">[[_translate('add-layer')]]
-            </paper-button>
+            <div class="footer">
+                <paper-input id="filter" value={{filter}} no-label-float label="Search">
+                    <iron-icon class="search" icon="search" prefix></iron-icon>
+                    <paper-icon-button class="clear" suffix on-click="_clearInput" icon="clear"></paper-icon-button>
+                </paper-input>
+            </div>
+
         </paper-material>
 
+        <paper-tooltip for="checkedLayersButton" position="right" offset="0">
+            <p><span>[[_translate('checkedLayersButton')]]</span></p>
+        </paper-tooltip>
+        <paper-tooltip for="zoomLayerButton" position="right" offset="0">
+            <p><span>[[_translate('zoomLayerButton')]]</span></p>
+        </paper-tooltip>
     </template>
 
     <script>
@@ -114,42 +180,100 @@
             properties: {
                 layers: {
                     type: Array,
-                    value: []
-                }
+                    value: function () {
+                        return [];
+                    }
+                },
+                filter: {
+                    type: String,
+                    value: "",
+                    observer: '_filter'
+                },
             },
-
-            listeners: {},
-
+            listeners: {
+                'iron-activate': '_fireSelectedLayers',
+                'dom-change': '_menuChanged'
+            },
+            observers: [
+                '_onLayersChange(layers.*)'
+            ],
             ready: function () {
-                $(this.$.container).perfectScrollbar();
+                $(this.$.menu_container).perfectScrollbar();
             },
-
             _translate: function (key) {
                 return getTranslatedText([this.localName, key]);
             },
-//            _onLayerSelected: function (e) {
-//
-//            },
-            _onZoomLayersClick: function (e) {
-                this.domHost.querySelector('map-preview-controllet').zoomToLayers();
+            _getDatasetTitle:function(item){
+                return item.dataset ? '('+item.dataset+')' : '';
             },
-            _onAddLayerClick: function (e) {
-                this.domHost.slideToAddLayer();
+
+            _onLayersChange: function (o) {
+                var reChecked = /layers\.#(\d+)\.checked/g;
+                var matches = reChecked.exec(o.path)
+
+                if (o && o.path == 'layers') {
+                } else if (o && o.path == 'layers.length') {
+                    this.debounce('layersChange', function () {
+                        this.originalLayers = this.layers;
+                    }.bind(this));
+                } else if (o && matches) {
+                    var layer = o.base[matches[1]];
+                    this.fire('layers-list-controllet_checked-layer', {layer: layer, layers: this.layers});
+                    this._filterCheckedLayers();
+                }
             },
-            _onEditLayerClick: function (e) {
-                var layer = e.model.get('item');
-                this.domHost.slideToAddLayer(layer.element);
+            _fireSelectedLayers: function (e, s) {
+//                var selected = {
+//                    index: s.selected,
+//                    layer: this.layers[s.selected],
+//                    item: s.item
+//                }
+                this.fire('layers-list-controllet_selected-layer', this.layers[s.selected]);
+            },
+            _menuChanged: function () {
+                $(this.$.menu_container).perfectScrollbar('update');
+            },
+            _onFilterCheckedLayersClick: function () {
+                this.filterChecked = !this.filterChecked;
+                this._filterCheckedLayers();
             },
             _onZoomLayerClick: function (e) {
-                var layer = e.model.get('item');
-                this.domHost.querySelector('map-preview-controllet').zoomToLayer(layer.element);
+                var s = this.$.menu.selected;
+                if (s >= 0) {
+                    var l = this.layers[s].olLayer;
+                    l && this.domHost.querySelector('map-preview-controllet').zoomToLayer(l);
+                }
             },
-            _onDeleteLayerClick: function (e) {
-                var layer = e.model.get('item');
-                this.domHost.querySelector('map-preview-controllet').removeLayer(layer.element);
-                this.domHost.updateLayerList();
-            }
+            _filter: function () {
+                if (this.filter.length > 0)
+                    this.debounce('filter', function () {
+                        this.layers = this.originalLayers.filter(function (layer) {
+                            return layer.title.toLowerCase().indexOf(this.filter.toLowerCase()) != -1;
+                        }.bind(this));
+                    }, 500);
+                else if (this.originalLayers)
+                    this.layers = this.originalLayers;
+            },
+            _filterCheckedLayers: function () {
+                if (this.filterChecked) {
+                    this.layers = this.originalLayers.filter(function (layer) {
+                        return layer.checked == this.filterChecked;
+                    }.bind(this));
+                    $('#checkedLayersButton').addClass('selected');
+                } else if (this.originalLayers) {
+                    this.layers = this.originalLayers;
+                    $('#checkedLayersButton').removeClass('selected');
+                }
+            },
 
+            _clearInput: function () {
+                this.$.filter.value = "";
+            },
+            getCheckedLayers: function(){
+                return this.originalLayers ? this.originalLayers.filter(function (layer) {
+                    return layer.checked == true;
+                }.bind(this)) : [];
+            }
         });
 
     </script>
