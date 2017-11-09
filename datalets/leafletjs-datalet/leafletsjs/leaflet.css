@@ -622,3 +622,19 @@
 	margin-left: -12px;
 	border-right-color: #fff;
 	}
+
+/*LEGEND*/
+
+.leaflet-control.info.legend {
+	background-color: #FAFAFA;
+
+	/*color: #555;*/
+}
+.leaflet-control.info.legend img{
+	height: 24px;
+}
+.leaflet-control.info.legend div {
+	height: 24px;
+	line-height: 24px;
+	margin: 4px 8px;
+}

@@ -64,7 +64,7 @@ Example:
 
     </template>
 
-    <script src="leafletsjs/leaflet.js"></script>
+    <script id="sciao" src="leafletsjs/leaflet.js"></script>
 
     <link rel="stylesheet" href="leafletsjs/marker_cluster/dist/MarkerCluster.css" />
     <link rel="stylesheet" href="leafletsjs/marker_cluster/dist/MarkerCluster.Default.css" />
@@ -81,8 +81,147 @@ Example:
              * @method transformData
              */
             presentData: function(){
-
                 var t = this;
+
+//                L.Icon.Default.imagePath = 'http://172.16.15.128/Datalet-Ecosystem-Provider/COMPONENTS/datalets/leafletjs-datalet/leafletsjs/images/';
+                L.Icon.Default.imagePath = 'http://deep.routetopa.eu/deep/COMPONENTS/datalets/leafletjs-datalet/leafletsjs/images/';
+
+
+                var blueIcon = new L.Icon({
+                    iconUrl: L.Icon.Default.imagePath + 'marker-icon-2x-blue.png',
+                    shadowUrl: L.Icon.Default.imagePath + 'marker-shadow.png',
+                    iconSize: [25, 41],
+                    iconAnchor: [12, 41],
+                    popupAnchor: [1, -34],
+                    shadowSize: [41, 41]
+                });
+
+                var redIcon = new L.Icon({
+                    iconUrl: L.Icon.Default.imagePath + 'marker-icon-2x-red.png',
+                    shadowUrl: L.Icon.Default.imagePath + 'marker-shadow.png',
+                    iconSize: [25, 41],
+                    iconAnchor: [12, 41],
+                    popupAnchor: [1, -34],
+                    shadowSize: [41, 41]
+                });
+
+                var greenIcon = new L.Icon({
+                    iconUrl: L.Icon.Default.imagePath + 'marker-icon-2x-green.png',
+                    shadowUrl: L.Icon.Default.imagePath + 'marker-shadow.png',
+                    iconSize: [25, 41],
+                    iconAnchor: [12, 41],
+                    popupAnchor: [1, -34],
+                    shadowSize: [41, 41]
+                });
+
+                var orangeIcon = new L.Icon({
+                    iconUrl: L.Icon.Default.imagePath + 'marker-icon-2x-orange.png',
+                    shadowUrl: L.Icon.Default.imagePath + 'marker-shadow.png',
+                    iconSize: [25, 41],
+                    iconAnchor: [12, 41],
+                    popupAnchor: [1, -34],
+                    shadowSize: [41, 41]
+                });
+
+                var yellowIcon = new L.Icon({
+                    iconUrl: L.Icon.Default.imagePath + 'marker-icon-2x-yellow.png',
+                    shadowUrl: L.Icon.Default.imagePath + 'marker-shadow.png',
+                    iconSize: [25, 41],
+                    iconAnchor: [12, 41],
+                    popupAnchor: [1, -34],
+                    shadowSize: [41, 41]
+                });
+
+                var violetIcon = new L.Icon({
+                    iconUrl: L.Icon.Default.imagePath + 'marker-icon-2x-violet.png',
+                    shadowUrl: L.Icon.Default.imagePath + 'marker-shadow.png',
+                    iconSize: [25, 41],
+                    iconAnchor: [12, 41],
+                    popupAnchor: [1, -34],
+                    shadowSize: [41, 41]
+                });
+
+                var greyIcon = new L.Icon({
+                    iconUrl: L.Icon.Default.imagePath + 'marker-icon-2x-grey.png',
+                    shadowUrl: L.Icon.Default.imagePath + 'marker-shadow.png',
+                    iconSize: [25, 41],
+                    iconAnchor: [12, 41],
+                    popupAnchor: [1, -34],
+                    shadowSize: [41, 41]
+                });
+
+                var blackIcon = new L.Icon({
+                    iconUrl: L.Icon.Default.imagePath + 'marker-icon-2x-black.png',
+                    shadowUrl: L.Icon.Default.imagePath + 'marker-shadow.png',
+                    iconSize: [25, 41],
+                    iconAnchor: [12, 41],
+                    popupAnchor: [1, -34],
+                    shadowSize: [41, 41]
+                });
+
+                var icons = [blueIcon, redIcon, greenIcon, orangeIcon, yellowIcon, violetIcon, greyIcon, blackIcon];
+
+                var selectedFields = JSON.parse(this._component.getAttribute("selectedfields"));
+
+                var inputs = [];
+                for (var i=0; i < selectedFields.length; i++)
+                    if (selectedFields[i])
+                        inputs.push(selectedFields[i].field);
+
+                var cat_index = inputs.indexOf("Categories");
+
+//                var categories = null;
+//                if(cat_index > -1) {
+//                    categories = [];
+//                    var cat, catIndex;
+//                    for(var i=0; i<t.data[cat_index].data.length; i++){
+//                        cat = t.data[cat_index].data[i];
+//                        catIndex = categories.indexOf(cat);
+//                        if (catIndex == -1) {
+//                            categories.push(cat);
+//                            t.data[cat_index].data[i] = categories.length - 1;
+//                        }
+//                        else {
+//                            t.data[cat_index].data[i] = catIndex;
+//                        }
+//                        if(categories.length > 8) {
+//                            categories = null;
+//                            break;
+//                        }
+//                    }
+//                }
+
+                if(cat_index > -1) {
+                    var categories   = [];
+                    var cat, catIndex;
+                    for(var i=0; i<t.data[cat_index].data.length; i++){
+                        cat = t.data[cat_index].data[i];
+                        catIndex = categories.findIndex(i => i.name === cat);
+                        if (catIndex == -1) {
+                            categories.push({name: cat, frequency: 1});
+                        }
+                        else {
+                            categories[catIndex].frequency++;
+                        }
+                    }
+
+                    categories.sort(function(a,b) {return (a.frequency < b.frequency) ? 1 : ((b.frequency < a.frequency) ? -1 : 0);} );
+
+                    for(var i=0; i<t.data[cat_index].data.length; i++){
+                        cat = t.data[cat_index].data[i];
+                        catIndex = categories.findIndex(i => i.name === cat);
+                        if (catIndex >= 8) {
+                            t.data[cat_index].data[i] = 7;
+                        }
+                        else {
+                            t.data[cat_index].data[i] = catIndex;
+                        }
+                    }
+
+                    if(categories.length > 8)
+                        categories[7].name = '...';
+                }
+
                 try{
 //                    this._component.map = L.map(this._component.$.leafletjs).setView([0, 0], 13, {reset:true});
                     this._component.map = L.map(this._component.$.baseAjaxJsonAlasqlDatalet.$.baseDatalet.$.datalet_container).setView([0, 0], 13, {reset:true});
@@ -93,9 +232,6 @@ Example:
                     maxZoom: 18,
                     attribution: 'Map data © <a href="http://openstreetmap.org">OpenStreetMap</a> contributors'
                 }).addTo(this._component.map);
-
-
-                L.Icon.Default.imagePath = 'http://services.routetopa.eu/DEEalerProvider/COMPONENTS/datalets/leafletjs-datalet/leafletsjs/images/';
 
                 t._component.coordinates = [];
                 var coordinates_index  = 0;
@@ -109,7 +245,7 @@ Example:
                     {
                         if(!isNaN(t.data[0].data[i][0]) && !isNaN(t.data[0].data[i][1])) {
                             t._component.coordinates.push([parseFloat(t.data[0].data[i][0]), parseFloat(t.data[0].data[i][1])]);
-                            geo = L.marker([t._component.coordinates[coordinates_index][0], t._component.coordinates[coordinates_index][1]]);//.addTo(t._component.map);
+                            geo = L.marker([t._component.coordinates[coordinates_index][0], t._component.coordinates[coordinates_index][1]], {icon: categories ? icons[t.data[cat_index].data[i]] : icons[0]});//.addTo(t._component.map);
                             markers_cluster.addLayer(geo);
                             coordinates_index++;
                         }
@@ -129,7 +265,7 @@ Example:
                         var coords = t.data[0].data[i].split(",");
                         if(!isNaN(coords[0]) && !isNaN(coords[1])) {
                             t._component.coordinates.push([parseFloat(coords[0]), parseFloat(coords[1])]);
-                            geo = L.marker([t._component.coordinates[coordinates_index][0], t._component.coordinates[coordinates_index][1]]);//.addTo(t._component.map);
+                            geo = L.marker([t._component.coordinates[coordinates_index][0], t._component.coordinates[coordinates_index][1]], {icon: categories ? icons[t.data[cat_index].data[i]] : icons[0]});//.addTo(t._component.map);
                             markers_cluster.addLayer(geo);
                             coordinates_index++;
                         }else
@@ -139,17 +275,22 @@ Example:
                     {
                         if( (!isNaN(t.data[0].data[i]) && !isNaN(t.data[1].data[i])) && (t.data[0].data[i] && t.data[1].data[i]) ) {
                             t._component.coordinates.push([parseFloat(t.data[0].data[i]), parseFloat(t.data[1].data[i])]);
-                            geo = L.marker([t._component.coordinates[coordinates_index][0], t._component.coordinates[coordinates_index][1]]);//.addTo(t._component.map);
+                            geo = L.marker([t._component.coordinates[coordinates_index][0], t._component.coordinates[coordinates_index][1]], {icon: categories ? icons[t.data[cat_index].data[i]] : icons[0]});//.addTo(t._component.map);
                             markers_cluster.addLayer(geo);
                             coordinates_index++;
                         }else
                             continue;
                     }
 
-                    if(t.data.length > 2)
+
+                    var l = t.data.length;
+                    if(cat_index >-1) l--;
+
+                    if(l > 2)
                     {
                         var popupText = "";
-                        for(var j=2; j<t.data.length; j++)
+
+                        for(var j=2; j<l; j++) /* -1 IF CAT INDEX*/
                         {
                             if(typeof t.data[j] != 'undefined' && typeof t.data[j].data[i] != 'undefined')
                             {
@@ -165,6 +306,23 @@ Example:
                         var popup = L.popup().setContent(popupText);
                         geo.bindPopup(popup);
                     }
+                }
+
+                if(cat_index > -1) {
+                    var legend = L.control({position: 'bottomright'});
+
+                    legend.onAdd = function (map) {
+
+                        var div = L.DomUtil.create('div', 'info legend');
+
+                        for (var i = 0; i < Math.min(categories.length, 8); i++) {
+                            div.innerHTML += '<div> <img src=' + icons[i].options.iconUrl + '> ' + categories[i].name + '</div>';
+                        }
+
+                        return div;
+                    };
+
+                    legend.addTo(t._component.map);
                 }
 
                 try
