@@ -154,13 +154,14 @@ Example:
 
                 var selectedFields = JSON.parse(this._component.getAttribute("selectedfields"));
 
-                var cat_index = 0;
+                var cat_index = -1;
+                var cat_counter = 0;
                 for (var i=0; i < selectedFields.length; i++)
                 {
                     if (selectedFields[i]) {
                         if(selectedFields[i].field == "Categories")
-                            break;
-                        cat_index++;
+                            cat_index = cat_counter;
+                        cat_counter++;
                     }
                 }
 
@@ -282,7 +283,7 @@ Example:
 
 
                     var l = t.data.length;
-                    if(cat_index >-1) l--;
+                    if(cat_index > -1) l--;
 
                     if(l > 2)
                     {
