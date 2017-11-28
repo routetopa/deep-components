@@ -632,6 +632,8 @@
 }
 .leaflet-control.info.legend img{
 	height: 24px;
+	vertical-align: middle;
+	margin-right: 4px;
 }
 .leaflet-control.info.legend div {
 	height: 24px;

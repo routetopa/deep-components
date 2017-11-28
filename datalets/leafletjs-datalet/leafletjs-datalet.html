@@ -51,20 +51,11 @@ Example:
 <dom-module name="leafletjs-datalet">
     <template>
         <link rel="stylesheet" href="leafletsjs/leaflet.css" />
-        <!--<style>-->
-            <!--#leafletjs {-->
-                <!--height: calc(100% - 82px);-->
-                <!--min-height: 400px;-->
-                <!--z-index: 0;-->
-            <!--}-->
-        <!--</style>-->
-
-        <!--<div id="leafletjs"></div>-->
         <base-ajax-json-alasql-datalet id="baseAjaxJsonAlasqlDatalet" data-url="{{dataUrl}}" fields="{{fields}}" data="{{data}}" datalettitle="{{datalettitle}}" description="{{description}}" export_menu="{{export_menu}}" disable_my_space="{{disable_my_space}}"></base-ajax-json-alasql-datalet>
 
     </template>
 
-    <script id="sciao" src="leafletsjs/leaflet.js"></script>
+    <script src="leafletsjs/leaflet.js"></script>
 
     <link rel="stylesheet" href="leafletsjs/marker_cluster/dist/MarkerCluster.css" />
     <link rel="stylesheet" href="leafletsjs/marker_cluster/dist/MarkerCluster.Default.css" />
@@ -163,53 +154,61 @@ Example:
 
                 var selectedFields = JSON.parse(this._component.getAttribute("selectedfields"));
 
-                var inputs = [];
+                var cat_index = -1;
+                var cat_counter = 0;
                 for (var i=0; i < selectedFields.length; i++)
-                    if (selectedFields[i])
-                        inputs.push(selectedFields[i].field);
-
-                var cat_index = inputs.indexOf("Categories");
-
-//                var categories = null;
-//                if(cat_index > -1) {
-//                    categories = [];
-//                    var cat, catIndex;
-//                    for(var i=0; i<t.data[cat_index].data.length; i++){
-//                        cat = t.data[cat_index].data[i];
-//                        catIndex = categories.indexOf(cat);
-//                        if (catIndex == -1) {
-//                            categories.push(cat);
-//                            t.data[cat_index].data[i] = categories.length - 1;
-//                        }
-//                        else {
-//                            t.data[cat_index].data[i] = catIndex;
-//                        }
-//                        if(categories.length > 8) {
-//                            categories = null;
-//                            break;
-//                        }
-//                    }
-//                }
+                {
+                    if (selectedFields[i]) {
+                        if(selectedFields[i].field == "Categories")
+                            cat_index = cat_counter;
+                        cat_counter++;
+                    }
+                }
 
                 if(cat_index > -1) {
                     var categories   = [];
                     var cat, catIndex;
-                    for(var i=0; i<t.data[cat_index].data.length; i++){
+
+                    for(var i=0; i<t.data[cat_index].data.length; i++)
+                    {
                         cat = t.data[cat_index].data[i];
-                        catIndex = categories.findIndex(i => i.name === cat);
-                        if (catIndex == -1) {
+                        catIndex = -1;
+
+                        for(var j=0; j<categories.length; j++)
+                        {
+                            if(categories[j].name == cat)
+                            {
+                                catIndex = j;
+                                break;
+                            }
+                        }
+
+                        if (catIndex == -1)
+                        {
                             categories.push({name: cat, frequency: 1});
                         }
-                        else {
+                        else
+                        {
                             categories[catIndex].frequency++;
                         }
+
                     }
 
                     categories.sort(function(a,b) {return (a.frequency < b.frequency) ? 1 : ((b.frequency < a.frequency) ? -1 : 0);} );
 
-                    for(var i=0; i<t.data[cat_index].data.length; i++){
+                    for(var i=0; i<t.data[cat_index].data.length; i++)
+                    {
                         cat = t.data[cat_index].data[i];
-                        catIndex = categories.findIndex(i => i.name === cat);
+
+                        catIndex = -1;
+                        for(var j=0; j<categories.length; j++)
+                        {
+                            if(categories[j].name == cat)
+                            {
+                                catIndex = j;
+                                break;
+                            }
+                        }
                         if (catIndex >= 8) {
                             t.data[cat_index].data[i] = 7;
                         }
@@ -220,10 +219,10 @@ Example:
 
                     if(categories.length > 8)
                         categories[7].name = '...';
+
                 }
 
                 try{
-//                    this._component.map = L.map(this._component.$.leafletjs).setView([0, 0], 13, {reset:true});
                     this._component.map = L.map(this._component.$.baseAjaxJsonAlasqlDatalet.$.baseDatalet.$.datalet_container).setView([0, 0], 13, {reset:true});
                 }catch(e){}
 
@@ -252,7 +251,7 @@ Example:
                         else
                              continue;
                     }
-                    else if(typeof t.data[0].data[i] == 'string' && t.data[0].data[i].startsWith('{"type":"'))
+                    else if(typeof t.data[0].data[i] == 'string' && t.data[0].data[i].indexOf('{"type":"') === 0)
                     {
                         try
                         {
@@ -284,7 +283,7 @@ Example:
 
 
                     var l = t.data.length;
-                    if(cat_index >-1) l--;
+                    if(cat_index > -1) l--;
 
                     if(l > 2)
                     {
