@@ -115,7 +115,7 @@
             <div id="metadata_list">
 
                 <!--CC_RF-->
-                <div class="title_container"><span class="title" id="CC_RF"></span></div>
+                <div id="title_CC_RF" class="title_container"><span class="title" id="CC_RF"></span></div>
 
                 <template is="dom-repeat" items={{_toArray(CC_RF)}}>
 
@@ -131,8 +131,8 @@
 
                 </template>
 
-                <!--CC_RF-->
-                <div class="title_container"><span class="title" id="CC_RAF"></span></div>
+                <!--CC_RAF-->
+                <div id="title_CC_RAF" class="title_container"><span class="title" id="CC_RAF"></span></div>
 
                 <template is="dom-repeat" items={{_toArray(CC_RAF)}}>
 
@@ -149,7 +149,7 @@
                 </template>
 
                 <!--EF-->
-                <div class="title_container"><span class="title" id="EF"></span></div>
+                <div id="title_EF" class="title_container"><span class="title" id="EF"></span></div>
 
                 <template is="dom-repeat" items={{_toArray(EF)}}>
 
@@ -200,7 +200,7 @@
             },
 
             attached : function() {
-                 this._translate();
+                this._translate();
 
                 this.fire("metadata-list-controllet_attached");
             },
@@ -228,6 +228,13 @@
                 this.CC_RF = this.metadata["CC_RF"];
                 this.CC_RAF = this.metadata["CC_RAF"];
                 this.EF = this.metadata["EF"];
+
+                if(Object.keys(this.CC_RF).length == 0)
+                    $(this.$.title_CC_RF).hide();
+                if(this.CC_RAF == null || Object.keys(this.CC_RAF).length == 0)
+                    $(this.$.title_CC_RAF).hide();
+                if(this.EF == null || Object.keys(this.EF).length == 0)
+                    $(this.$.title_EF).hide();
             },
 
             getMetadata : function() {
@@ -251,6 +258,12 @@
                         this.EF[name] = value;
                 }
 
+                var metadata = {"CC_RF":this.CC_RF, "CC_RAF":this.CC_RAF, "EF":this.EF};
+                this.metadata = JSON.stringify(metadata);
+                this.fire('metadata-list-controllet_update-metadata', {metadata : this.metadata});
+            },
+
+            _forceUpdateMetadata : function() {
                 var metadata = {"CC_RF":this.CC_RF, "CC_RAF":this.CC_RAF, "EF":this.EF};
                 this.metadata = JSON.stringify(metadata);
                 this.fire('metadata-list-controllet_update-metadata', {metadata : this.metadata});
