@@ -100,7 +100,9 @@ ln["<=_en"] = "<="; //is less than or equal to
 ln["contains_en"] = "contains";
 ln["notContains_en"] = "not contains";
 ln["start_en"] = "start with";
+ln["notStart_en"] = "does not start with";
 ln["ends_en"] = "ends with";
+ln["notEnds_en"] = "does not ends with";
 ln["isNotNull_en"] = "is not null";
 ln["isNull_en"] = "is null";
 
@@ -150,6 +152,7 @@ ln["bubblechart_en"] = "Bubble Chart";
 ln["treemap_en"] = "Tree Map";
 ln["timeline_en"] = "Timeline";
 ln["mediaslider_en"] = "Media Slider";
+ln["audioslider_en"] = "Audio Slider";
 ln["leafletjs_en"] = "Map";
 ln["leafletjs-geojson_en"] = "Geojson Map";
 
@@ -393,7 +396,9 @@ ln["<=_it"] = "<="; //is less than or equal to
 ln["contains_it"] = "contiene";
 ln["notContains_it"] = "non contiene";
 ln["start_it"] = "inizia con";
+ln["notStart_it"] = "non inizia con";
 ln["ends_it"] = "termina con";
+ln["notEnds_it"] = "non termina con";
 ln["isNotNull_it"] = "è nullo";
 ln["isNull_it"] = "non è nullo";
 
@@ -685,7 +690,9 @@ ln["<=_fr"] = "<="; //est inférieur ou égal à
 ln["contains_fr"] = "contient";
 ln["notContains_fr"] = "ne contient pas";
 ln["start_fr"] = "commence par";
+ln["notStart_fr"] = "ne commence pas par";
 ln["ends_fr"] = "se finit par";
+ln["notEnds_fr"] = "ne se finit pas par";
 ln["isNotNull_fr"] = "est not nul";
 ln["isNull_fr"] = "est nul";
 
@@ -977,7 +984,9 @@ ln["<=_nl"] = "<="; //is less than or equal to
 ln["contains_nl"] = "contains";
 ln["notContains_nl"] = "not contains";
 ln["start_nl"] = "start with";
+ln["notStart_nl"] = "does not start with";
 ln["ends_nl"] = "ends with";
+ln["notEnds_nl"] = "does not ends with";
 ln["isNotNull_nl"] = "is not null";
 ln["isNull_nl"] = "is null";
 
@@ -1264,7 +1273,11 @@ ln["<=_es-ES"] = "<="; //es menos que o igual a
 ln["contains_es-ES"] = "contiene";
 ln["notContains_es-ES"] = "no contiene";
 ln["start_es-ES"] = "empieza con";
+ln["notStart_es-ES"] = "no empieza con";
 ln["ends_es-ES"] = "termina con";
+ln["notEnds_es-ES"] = "no termina con";
+ln["isNotNull_es-ES"] = "no es nulo";
+ln["isNull_es-ES"] = "es nulo";
 
 //aggregators
 ln["GROUP BY_es-ES"] = "AGRUPAR POR";

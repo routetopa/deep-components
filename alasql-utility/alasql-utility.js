@@ -72,8 +72,12 @@ function _alasql_WHERE (filters) {
                 where += filters[i]["field"] + " not like '%" + filters[i]["value"] + "%' " + logicalOperator + " ";
             else if (filters[i]["operation"] == "start")
                 where += filters[i]["field"] + " like '" + filters[i]["value"] + "%' " + logicalOperator + " ";
+            else if (filters[i]["operation"] == "notStart")
+                where += filters[i]["field"] + " not like '" + filters[i]["value"] + "%' " + logicalOperator + " ";
             else if (filters[i]["operation"] == "ends")
                 where += filters[i]["field"] + " like '%" + filters[i]["value"] + "' " + logicalOperator + " ";
+            else if (filters[i]["operation"] == "notEnds")
+                where += filters[i]["field"] + " not like '%" + filters[i]["value"] + "' " + logicalOperator + " ";
             else
                 where += filters[i]["field"] + " " + filters[i]["operation"] + " " + filters[i]["value"] + " " + logicalOperator + " ";
         }
@@ -99,8 +103,12 @@ function _alasql_WHERE (filters) {
             where += filters[i]["field"] + " not like '%" + filters[i]["value"] + "%' ";
         else if (filters[i]["operation"] == "start")
             where += filters[i]["field"] + " like '" + filters[i]["value"] + "%' ";
+        else if (filters[i]["operation"] == "notStart")
+            where += filters[i]["field"] + " not like '" + filters[i]["value"] + "%' ";
         else if (filters[i]["operation"] == "ends")
             where += filters[i]["field"] + " like '%" + filters[i]["value"] + "' ";
+        else if (filters[i]["operation"] == "notEnds")
+            where += filters[i]["field"] + " not like '%" + filters[i]["value"] + "' ";
         else if (filters[i]["operation"] == "isNotNull")
             where +=  " (" + filters[i]["field"] + " != '' AND  " + filters[i]["field"] + " != 'null' ) ";
         else if (filters[i]["operation"] == "isNull")
