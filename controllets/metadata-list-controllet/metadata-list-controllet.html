@@ -108,11 +108,58 @@
                 max-height: 96px;
             }
 
+            select {
+                width: calc(100% - 6px - 56px);
+                margin-left: 56px;
+                background: transparent;
+                border: 1px solid #A9A9A9;
+                height: 30px;
+                padding: 2px;
+            }
+
         </style>
 
         <div id="metadata_container">
             <div class="header"><span id="metadata"></span></div>
             <div id="metadata_list">
+
+                <!--MANDATORY-->
+                <template is="dom-repeat" items={{_toArray(MANDATORY)}}>
+
+                    <div class="box">
+                        <div class="avatar">{{item.index}}</div>
+                        <div class="text">
+                            <div class="name" title="{{_getName(item.name)}}">{{_getName(item.name)}} *</div>
+                            <div class="description" title="{{_getDescription(item.name)}}">{{_getDescription(item.name)}}</div>
+                        </div>
+                    </div>
+
+                    <template is="dom-if" if="{{_checkType(item.name, 'license')}}">
+                        <select id="MANDATORY+{{item.name}}" on-change="_updateMetadata">
+                            <option value="notspecified">License not specified</option>
+                            <option value="cc-by">Creative Commons Attribution</option>
+                            <option value="cc-by-sa">Creative Commons Attribution Share-Alike</option>
+                            <option value="cc-zero">Creative Commons CCZero</option>
+                            <option value="cc-nc">Creative Commons Non-Commercial (Any)</option>
+                            <option value="gfdl">GNU Free Documentation License</option>
+                            <option value="odc-by">Open Data Commons Attribution License</option>
+                            <option value="odc-odbl">Open Data Commons Open Database License (ODbL)</option>
+                            <option value="odc-pddl">Open Data Commons Public Domain Dedication and License (PDDL)</option>
+                            <option value="other-at">Other (Attribution)</option>
+                            <option value="other-nc">Other (Non-Commercial)</option>
+                            <option value="other-closed">Other (Not Open)</option>
+                            <option value="other-open">Other (Open)</option>
+                            <option value="other-pd">Other (Public Domain)</option>
+                            <option value="uk-ogl">UK Open Government Licence (OGL)</option>
+                        </select>
+                    </template>
+
+                    <template is="dom-if" if="{{!_checkType(item.name, 'license')}}">
+                        <iron-autogrow-textarea id="MANDATORY+{{item.name}}" value="{{item.value}}" on-change="_updateMetadata"></iron-autogrow-textarea>
+                    </template>
+
+
+                </template>
 
                 <!--CC_RF-->
                 <div id="title_CC_RF" class="title_container"><span class="title" id="CC_RF"></span></div>
@@ -225,6 +272,7 @@
 
             setMetadata : function(metadata) {
                 this.metadata = JSON.parse(metadata);
+                this.MANDATORY = this.metadata["MANDATORY"];
                 this.CC_RF = this.metadata["CC_RF"];
                 this.CC_RAF = this.metadata["CC_RAF"];
                 this.EF = this.metadata["EF"];
@@ -242,12 +290,24 @@
             },
 
             _updateMetadata : function(e) {
-                var splitted = ($(e.target).parents("iron-autogrow-textarea")[0].id).split("+");
-                var category = splitted[0];
-                var name = splitted[1];
-                var value = e.target.value;
+                var splitted, category, name, value;
+                if(e.target.type.indexOf("select") > -1) {
+                    var t = e.target;
+                    splitted = e.target.id.split("+");
+                    value = t.options[t.selectedIndex].text;
+                }
+                else {
+                    splitted = ($(e.target).parents("iron-autogrow-textarea")[0].id).split("+");
+                    value = e.target.value;
+                }
+
+                category = splitted[0];
+                name = splitted[1];
 
                 switch (category) {
+                    case "MANDATORY":
+                        this.MANDATORY[name] = value;
+                        break;
                     case "CC_RF":
                         this.CC_RF[name] = value;
                         break;
@@ -258,15 +318,19 @@
                         this.EF[name] = value;
                 }
 
-                var metadata = {"CC_RF":this.CC_RF, "CC_RAF":this.CC_RAF, "EF":this.EF};
+                var metadata = {"MANDATORY":this.MANDATORY, "CC_RF":this.CC_RF, "CC_RAF":this.CC_RAF, "EF":this.EF};
                 this.metadata = JSON.stringify(metadata);
                 this.fire('metadata-list-controllet_update-metadata', {metadata : this.metadata});
             },
 
             _forceUpdateMetadata : function() {
-                var metadata = {"CC_RF":this.CC_RF, "CC_RAF":this.CC_RAF, "EF":this.EF};
+                var metadata = {"MANDATORY":this.MANDATORY, "CC_RF":this.CC_RF, "CC_RAF":this.CC_RAF, "EF":this.EF};
                 this.metadata = JSON.stringify(metadata);
                 this.fire('metadata-list-controllet_update-metadata', {metadata : this.metadata});
+            },
+
+            _checkType: function(type, check){
+                return (type == check);
             },
 
             _toArray: function(obj) {
