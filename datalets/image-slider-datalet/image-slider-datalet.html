@@ -162,6 +162,15 @@
                 /*box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);*/
             }
 
+            #slider_container .footer{
+                position: relative;
+                height: 48px;
+                width: 100%;
+                background: #B6B6B6;
+                display: flex;
+                flex-direction: row-reverse;
+            }
+
         </style>
 
         <div id="slider_container">
@@ -187,6 +196,11 @@
                     </neon-animatable>
                 </template>
             </neon-animated-pages>
+
+            <div class="footer">
+                <paper-fab icon="delete"on-click="_delete"></paper-fab>
+            </div>
+
         </div>
 
     </template>
@@ -400,7 +414,11 @@
                 var img_url = this.images[this.selected].split("/");
                 this.title = img_url[img_url.length -1];
                 $(this.$.animated_pages).find("neon-animatable").eq(this.selected).html("<img style=\"height: 100%;width: 100%;object-fit: contain;\" src=\"" + this.images[this.selected] +"\" \>");
-            }
+            },
+
+            _delete : function() {
+                this.fire('image-slider-datalet_delete', {image : this.images[this.selected]});
+            },
 
         });
 
