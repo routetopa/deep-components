@@ -189,7 +189,7 @@
 
             attached: function() {
                 this.imgUrl = ODE.ow_url_home + "ow_plugins/ode/datalet_images/datalet_" + this.dataletId + ".png";
-                if(!this.imageExists() ||  this.dataletType == "decision-tree-datalet") {
+                if(!this.imageExists() ||  this.dataletType == "decision-tree-datalet" || this.dataletType == "openlayers-datalet") {
                     this.imgUrl = ODE.deep_components + "datalets/" + this.dataletType + "/" + this.dataletType + ".png";
                     this.hasPreview = false
                 }

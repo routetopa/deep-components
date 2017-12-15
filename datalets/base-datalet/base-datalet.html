@@ -629,7 +629,7 @@ Example :
               this.translate();
 
             try {
-                if (ODE && (ODE.pluginPreview == "newsfeed" || ODE.pluginPreview == "agora"))
+                if (ODE && (ODE.pluginPreview == "newsfeed" || ODE.pluginPreview == "agora") && ODE.fb_app_id != "")
                     $(this.$.social).css("display", "flex");
 //                else if (parent && parent.ODE && (ODE.pluginPreview == "newsfeed" || ODE.pluginPreview == "agora"))
 //                    $(this.$.social).css("display", "flex");
