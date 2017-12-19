@@ -31,17 +31,12 @@
 
 <link rel="import" href="../base-datalet/base-datalet.html">
 
-<link type="text/css" rel="stylesheet" href="static/js/silver-decisions-vendor.min.css"/>
 <link rel="stylesheet" type="text/css" href="static/js/silver-decisions.css">
 <link rel="stylesheet" type="text/css" href="static/css/custom.css">
 
-<script type="text/javascript" src="static/js/es6-promise.auto.min.js"></script>
-
 <script type="text/javascript" src="static/js/silver-decisions.min.js"></script>
 
-<script src="static/js/silver-decisions-vendor.js"></script>
-<script src="static/js/silver-decisions-core.js"></script>
-<script src="static/js/silver-decisions.js"></script>
+
 
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
@@ -84,7 +79,7 @@ Example:
                     this._component.description = this._component.jsonTree.description;
 
                 //var app = new SilverDecisions('app_container', this._component.config, this._component.jsonTree);
-                var app = new SilverDecisions.App(this._component.$.baseDatalet.$.datalet_container, this._component.config, this._component.jsonTree);
+                var app = new SilverDecisions(this._component.$.baseDatalet.$.datalet_container, this._component.config, this._component.jsonTree);
             }
         };
 
