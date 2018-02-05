@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<language_manager_list>
+	<language_manager>
+		itLanguageManager
+	</language_manager>
+	<language_manager>
+		enLanguageManager
+	</language_manager>
+	<language_manager>
+		frLanguageManager
+	</language_manager>
+</language_manager_list>

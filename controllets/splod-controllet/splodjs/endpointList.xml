@@ -1,0 +1,104 @@
+<?xml version="1.0"?>
+<endpoint_list>
+	<endpoint_item>
+		<endpoint_name>DBPEDIA</endpoint_name>
+		<endpoint_description>
+			DBpedia (from "DB" for "database") is a project aiming to extract structured content from the information created in the Wikipedia project. This structured information is made available on the World Wide Web. DBpedia allows users to semantically query relationships and properties of Wikipedia resources, including links to other related datasets. Tim Berners-Lee described DBpedia as one of the most famous parts of the decentralized Linked Data effort.
+		</endpoint_description>
+		<query_executor>dbpediaLike</query_executor>
+		<endpoint>http://dbpedia.org/sparql</endpoint>
+		<graph>http://dbpedia.org</graph>
+	</endpoint_item>
+
+	<endpoint_item>
+		<endpoint_name>PERSEE</endpoint_name>
+		<endpoint_description>
+			À Persée, nous avons des articles, des illustrations, des collections, des auteurs… qui ont tous été décrits sous forme de triplets. Toutes les informations concernant chacun de ces “objets” sont stockées dans le triplestore de Persée et sont désormais interrogeables. Les schémas suivants montrent quelles informations sont disponibles pour chaque sorte d’entité et comment elles sont reliées entre elles.
+		</endpoint_description>
+		<query_executor>dbpediaLike</query_executor>
+		<endpoint>http://data.persee.fr/sparql</endpoint>
+		<graph>null</graph>
+	</endpoint_item>
+
+	<endpoint_item>
+		<endpoint_name>National library of Chile</endpoint_name>
+		<endpoint_description>
+			La Biblioteca del Congreso Nacional de Chile, en su interés permanente de mejorar sus procesos y servicios al Congreso y a los ciudadanos, inició su proyecto de Web Semántica con el fin de incorporar innovación en su acervo y poner nuevas herramientas a disposición de la comunidad.
+			En los inicios del proyecto Linked Open Data de la Biblioteca del Congreso Nacional de Chile trabajó el grupo de investigación WESO de la Universidad de Oviedo, obteniendo como resultado una implementación preliminar, un método de desarrollo y una arquitectura que puede ser replicada en otros espacios similares, y que ha sido publicada en la conferencia internacional I-Semantics 2011.
+		</endpoint_description>
+		<query_executor>dbpediaLike</query_executor>
+		<endpoint>http://datos.bcn.cl/sparql</endpoint>
+		<graph>null</graph>
+	</endpoint_item>
+
+	<endpoint_item>
+		<endpoint_name>Live DBPEDIA</endpoint_name>
+		<endpoint_description>
+			DBpedia is Wikipedia content represented as a Semantic Web. The original DBpedia representation was generated from a static dump of WIkipedia content, in a process that took roughly 6 months from Wikipedia dump to DBpedia publication. To update DBpedia, new Wikipedia dumps have been taken periodically (roughly every 6-12 months) since then and processed in the same way. DBpedia content has thus always been 6-18 months behind updates applied to WIkipedia content.
+			As the use of DBpedia, and the dynamism of Wikipedia content, have increased, the need for DBpedia to update constantly by processing the Wikipedia "firehose" changelog became apparent. DBpedia-Live is the current fruit of that effort.
+		</endpoint_description>
+		<query_executor>livedbpediaLike</query_executor>
+		<endpoint>http://live.dbpedia.org/sparql</endpoint>
+		<graph>null</graph>
+	</endpoint_item>
+
+	<endpoint_item>
+		<endpoint_name>Beni culturali</endpoint_name>
+		<endpoint_description>
+			dati.beniculturali.it è la piattaforma in cui il MiBACT pubblica il proprio patrimonio informativo secondo la logica dei linked open data (LOD).
+			I primi LOD pubblicati rappresentano il frutto di un processo di cooperazione tra gli Istituti centrali e le Direzioni generali del Mibact e collegano tra loro dataset provenienti da fonti diverse: banca dati dei Luoghi della cultura; anagrafiche di Archivi e Biblioteche; banca dati del Catalogo dei beni culturali; altre banche dati documentali e fotografiche.
+			Tutti i dataset in formato open data e linked open data del MiBACT sono descritti nella pagina del Catalogo, sulla base delle specifiche dell’Agenzia per l’Italia Digitale (AGID).
+		</endpoint_description>
+		<query_executor>dbpediaLike</query_executor>
+		<endpoint>http://dati.beniculturali.it/sparql</endpoint>
+		<graph>null</graph>
+	</endpoint_item>
+	
+	<!--
+	<endpoint_item>
+		<endpoint_name>Lavanderia a gettoni</endpoint_name>
+		<endpoint_description>
+			...
+		</endpoint_description>
+		<query_executor>dbpediaLike</query_executor>
+		<endpoint>http://lodlaundromat.org/sparql/</endpoint>
+		<graph>null</graph>
+	</endpoint_item>-->
+
+	<!--
+	<endpoint_item>
+		<endpoint_name>Cultura Italia</endpoint_name>
+		<endpoint_description>
+			Il progetto pilota dati.culturaitalia.it contiene set di open data aggregati in CulturaItalia e rilasciati dai partner del progetto con licenza CC0 1.0 Universal Public Domain Dedication.
+			Attualmente dati.culturaitalia.it rende accessibili i dati di: Accademia S. Cecilia, Progetto ArtPast, Digibess, ICCU, Internet Culturale, Michael Italia, Polo Museale Fiorentino, Regione Marche e Anagrafe delle Biblioteche Italiane (i set sono descritti all'interno della pagina fonte dati), oltre al Thesaurus PICO.
+		</endpoint_description>
+		<query_executor>dbpediaLike</query_executor>
+		<endpoint>http://dati.culturaitalia.it/sparql/</endpoint>
+		<graph>null</graph>
+	</endpoint_item>
+	-->
+	<!--
+	<endpoint_item>
+		<endpoint_name>OpenLink Software</endpoint_name>
+		<endpoint_description>
+			OpenLink Software is an acclaimed technology innovator and leading vendor of industry standards compliant data access, integration, and management technology.
+			Our data access drivers for Linked Data, ODBC, JDBC, ADO.NET, OLE DB and XMLA, ensure that your data assets are yours to exploit, in whatever manner best supports the agility of your organization.
+		</endpoint_description>
+		<query_executor>dbpediaLike</query_executor>
+		<endpoint>http://lod.openlinksw.com/sparql/</endpoint>
+		<graph>null</graph>
+	</endpoint_item>
+	-->
+	<!--
+	<endpoint_item>
+		<endpoint_name>hwujekdkwf</endpoint_name>
+		<endpoint_description>
+			...
+		</endpoint_description>
+		<query_executor>dbpediaLike</query_executor>
+		<endpoint>http://data.europa.eu/euodp/sparqlep</endpoint>
+		<graph>null</graph>
+	</endpoint_item>
+-->
+
+</endpoint_list>
