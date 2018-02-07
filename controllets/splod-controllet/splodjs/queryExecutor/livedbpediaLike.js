@@ -23,6 +23,7 @@ var resultLimit;
 var defaultResultLimit = 100;
 
 var cachedUserQuery;
+var cachedUserQueryUrl;
 
 var livedbpediaLike = function (selectedEndpoint, selectedGraph) {
 	if(livedbpediaLike.prototype._singletonInstance){
@@ -803,6 +804,7 @@ livedbpediaLike.prototype.executeUserQuery = function(querySPARQL){
 		queryViewer.renderUserQuery(cachedUserQuery);
 		
 	   	queryUrl = endpoint+"?query="+ encodeURIComponent(query) +"&format=json";
+		cachedUserQueryUrl = queryUrl;
 	    var xhr = $.ajax({
 	        url: queryUrl,
 	        method:'post',
@@ -827,6 +829,10 @@ livedbpediaLike.prototype.executeUserQuery = function(querySPARQL){
 
 livedbpediaLike.prototype.getUserQuery = function(){
 	return cachedUserQuery;
+}
+
+livedbpediaLike.prototype.getUserQueryUrl = function(){
+	return cachedUserQueryUrl;
 }
 
 livedbpediaLike.prototype.executeMapElementsLabelQuery = function(querySPARQL, callback){

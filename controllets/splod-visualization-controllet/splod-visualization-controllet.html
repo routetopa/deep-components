@@ -136,7 +136,8 @@
 				
                 this.$.select_data.init();
                 //this.$.select_visualization.dataUrl = dataUrl;
-				this.$.select_visualization.dataUrl = e.detail.endpoint;
+				//this.$.select_visualization.dataUrl = e.detail.endpoint;
+                this.$.select_visualization.dataUrl = e.detail.dataUrl;
                 this.$.select_visualization.init();
 				this.fire('data-ready', {ready: true});
             },

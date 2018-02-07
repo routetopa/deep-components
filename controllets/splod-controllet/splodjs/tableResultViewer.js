@@ -159,7 +159,7 @@ function createTable(select, results){
 	var thead = $("<thead/>");
 
 	var tr = $("<tr/>");
-	var previewTr = $("<tr/>");	
+	var previewTr = $("<tr/>");
 	for(field in labels){
 		var th = $("<th/>")
 			.attr('class', labels[field].className)
@@ -181,7 +181,7 @@ function createTable(select, results){
 
 	resultsToConvert.records = [];
 	var recordsObj = [];
-	
+
 	$.each(results, function(index){
 		var element = results[index];
 		var tr = $("<tr/>");
@@ -191,7 +191,9 @@ function createTable(select, results){
 
 		for(var i=0; i<select.length; i++) {
 			var field = select[i].substring(1);
-			
+
+            let labelUrl = field.replace('_', ' ');
+
 			if(field in element){
 				var td = $("<td/>")
 					.text(element[field].value)
@@ -201,7 +203,7 @@ function createTable(select, results){
 				var previewTd = $("<td/>")
 					.html("<hr>")
 					.appendTo(previewTr);
-					
+
 				if(element[field].type == 'uri'){
 					td.attr('title', element[field].url);
 					if(isImage(element[field].url)){
@@ -225,15 +227,15 @@ function createTable(select, results){
 					}
 				}
 
-				newElement[labels[i].label] = element[field].value;
+				newElement[labelUrl] = element[field].value;
 				if('url' in element[field]){
 					if(!isImage(element[field].url))
-						newElement[labels[i].label+' url'] = element[field].url;
+						newElement[labelUrl+' url'] = element[field].url;
 					else
-						newElement[labels[i].label] = element[field].url;
+						newElement[labelUrl] = element[field].url;
 				}
 				if('xml:lang' in element[field]){
-					newElement[labels[i].label+' lang'] = element[field]['xml:lang'];
+					newElement[labelUrl+' lang'] = element[field]['xml:lang'];
 				}
 
 
@@ -246,7 +248,7 @@ function createTable(select, results){
 					.text("")
 					.appendTo(previewTr);
 
-				newElement[labels[i].label] = null;
+				newElement[labelUrl] = null;
 			}
 		}
 
@@ -261,6 +263,7 @@ function createTable(select, results){
 	tbody.appendTo(resultsTable);
 	previewTbody.appendTo(previewTable);
 
+	resultsToConvert.querySPARQL = cachedUserQueryUrl;
 	resultsToConvert.records = recordsObj;
 	//addFieldsToJSON();
 
@@ -274,7 +277,7 @@ function createTable(select, results){
 	$('#tableResultsSpinner').hide();
 	$('#tableResultsProgress').hide();
 	$('#resultsTable').show();
-	
+
 	var resultPreviewNumber = results.length;
 	/*if(resultPreviewNumber>=1000)
 		resultPreviewNumber = '999+';
@@ -295,7 +298,7 @@ function createTable(select, results){
 	$('#resultsPreviewBadge').show();
 
 	//<link href='Materialize/css/materialize.min.css' rel='stylesheet'><link href='splod_style.css' rel='stylesheet'> table, tr,th {border: 1px black solid;}
-	
+
 	//"<html><head><link href='Materialize/css/materialize.min.css' rel='stylesheet'><style>hr{border-style: solid;border-width: 8px !important;}</style></head><body><div style='-webkit-transform:scale(1,0.05);-webkit-transform-origin:0 0'>"+previewTable[0].outerHTML+"</div></body></html>"
 	//$('#previewTableResult').html(previewTable[0].outerHTML );
 	//$('#previewTableResult').attr('src', '#resultsTable');
@@ -315,9 +318,11 @@ function addFieldsToJSON(){
 		var tempField = {};
 		tempField.id = field;
 
+        let labelUrl = field.replace('_', ' ');
+
 		var simpleLabels = [];
 		for(var i = 0; i < labels.length; i++){
-			simpleLabels.push(labels[i].label);
+			simpleLabels.push(labelUrl);
 		}
 		var index = $.inArray(field, simpleLabels);
 
@@ -366,7 +371,7 @@ function addFieldsToJSON(){
 
 
 function createJson(){
-	//add other fields
+	/*
 	var query = "";
 	$.each(cachedUserQuery, function(index){
 		if($.type(cachedUserQuery[index]) === 'object')
@@ -374,8 +379,7 @@ function createJson(){
 		else
 			query += cachedUserQuery[index] + " ";
 	});
-
-	resultsToConvert.querySPARQL = query;
+	*/
 	resultsToConvert.queryNaturalLanguage = $('#queryNaturalLanguage')[0].textContent;
 
 	resultsToConvert.map = {map: queryLogicMap, focus: elementOnFocus, roots: rootListQueryLogicMap};
@@ -386,7 +390,7 @@ function createJson(){
 //console.log(resultsToConvert);
 	
 	//var jsonObj = JSON.stringify(resultsToConvert);
-
+console.log(resultsToConvert);
 	window.dispatchEvent(new CustomEvent("splodEvent", {"detail": resultsToConvert}));
 }
 

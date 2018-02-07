@@ -22,6 +22,7 @@ var resultLimit;
 var defaultResultLimit = 100;
 
 var cachedUserQuery;
+var cachedUserQueryUrl;
 
 var dbpediaLike = function (selectedEndpoint, selectedGraph) {
 	if(dbpediaLike.prototype._singletonInstance){
@@ -787,7 +788,7 @@ dbpediaLike.prototype.executeUserQuery = function(querySPARQL){
 		queryViewer.renderUserQuery(cachedUserQuery);
 		
 	   	queryUrl = endpoint+"?query="+ encodeURIComponent(query) +"&format=json";
-
+		cachedUserQueryUrl = queryUrl;
 	    var xhr = $.ajax({
 	        url: queryUrl,
 	        method:'post',
@@ -811,6 +812,10 @@ dbpediaLike.prototype.executeUserQuery = function(querySPARQL){
 
 dbpediaLike.prototype.getUserQuery = function(){
 	return cachedUserQuery;
+}
+
+dbpediaLike.prototype.getUserQueryUrl = function(){
+	return cachedUserQueryUrl;
 }
 
 dbpediaLike.prototype.executeMapElementsLabelQuery = function(querySPARQL, callback){

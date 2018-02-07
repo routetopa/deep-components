@@ -536,24 +536,27 @@
 			
 			allowSecondStep : function(e, detail){
 			console.log(resultsToConvert);
-				this.fire('select-dataset-controllet_data-url', {data: resultsToConvert.records, endpoint: resultsToConvert.queryExecutor.endpoint});
+				//this.fire('select-dataset-controllet_data-url', {data: resultsToConvert.records, endpoint: resultsToConvert.queryExecutor.endpoint});
+				this.fire('select-dataset-controllet_data-url', {data: resultsToConvert.records, dataUrl: resultsToConvert.querySPARQL});
 			},
 			
 			denySecondStep : function(e, detail){
 				this.fire('remove-dataset-controllet_data-url', {data: {}});
 			},
 			
-            ready: function(){  
-			
+            ready: function(){
+
+                console.log(parent.ODE.deep_url);
+
 				$.ajax({
-					url: "http://192.168.137.128/DEEalerProvider/COMPONENTS/controllets/splod-controllet/splodjs/languageManagerList.xml",
+					url: parent.ODE.deep_components + "controllets/splod-controllet/splodjs/languageManagerList.xml",
 					dataType: "xml",
 					success: function(data) {
 						var languageManagers = $(data).find('language_manager');
 
 						var doc = $('#content-splod-controllet');
 						for(var i=0; i<languageManagers.length; i++){
-							$('<script/>').attr('src', 'http://192.168.137.128/DEEalerProvider/COMPONENTS/controllets/splod-controllet/splodjs/languageManager/'+languageManagers[i].textContent+'.js').appendTo(doc);
+							$('<script/>').attr('src', parent.ODE.deep_components + 'controllets/splod-controllet/splodjs/languageManager/'+languageManagers[i].textContent+'.js').appendTo(doc);
 							
 							var languageManagerName = languageManagers[i].textContent.trim();
 							systemLangList.push({langCode : languageManagerName.split("LanguageManager")[0]});
@@ -571,7 +574,7 @@
 				 });
 			
 				$.ajax({
-					url: "http://192.168.137.128/DEEalerProvider/COMPONENTS/controllets/splod-controllet/splodjs/endpointList.xml",
+					url: parent.ODE.deep_components + "controllets/splod-controllet/splodjs/endpointList.xml",
 					dataType: "xml",
 					success: function(data) {processData(data);}
 				 });
