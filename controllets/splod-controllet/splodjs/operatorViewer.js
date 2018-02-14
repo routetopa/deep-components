@@ -74,7 +74,7 @@ function renderOperatorList(operators){
 			if(datatypeOperatorList[j] == 'repeat'){
 				//change with language  manager function
 				var paramsString =JSON.stringify([datatypeOperators.repeatParameters[0],datatypeOperators.repeatParameters[1]]);
-				li.html(datatypeOperators.repeatParameters[0] + ' ' + datatypeOperators.repeatParameters[2])
+				li.html(languageManager.getOperatorLabelVerbalization(datatypeOperators.repeatParameters[0]) + ' ' + datatypeOperators.repeatParameters[2])
 					.attr('meta-params', paramsString);
 			}else{
 				li.html(languageManager.getOperatorLabelVerbalization(datatypeOperatorList[j]));
@@ -388,68 +388,69 @@ function renderReusableResultList(reusableResults, onClickButtonFunction, onClic
 	var expandableIcon;
 
 	for(var resultsIndex = 0; resultsIndex<reusableResults.results.length; resultsIndex++){
-
-		var li = $("<li/>")
-		.attr('class', 'collection-item withMargin reusableResultTitle')
-		.appendTo(reusableResultList)
-		.on('click', function(e){
-			e.stopPropagation();
-			if($(this).next().is(':visible')){
-				$(this).next().hide();
-				$(this).children()[0].innerHTML = 'expand_more';
-			}
-			else{
-				$(this).next().show();
-				$(this).children()[0].innerHTML = 'expand_less';
-			}
-		});
-
-		expandableIcon = $("<i/>")
-			.attr('class', 'tiny material-icons grey-text expandIcon')
-			.html('expand_more')
-			.appendTo(li);
-
-		var span = $("<span/>")
-			.attr('class', 'liContent')
-			.html(languageManager.getReusableResultListTitle(resultsIndex))
-			.css('margin-left', '0.5em')
-			.appendTo(li);
-		
-		collapsibleBody = $("<div/>")
-			.attr('class', 'myCollapsibleBody')
-			.appendTo(reusableResultList);
-
-		collapsibleBody.hide();
-
-		$.each(reusableResults.results[resultsIndex], function(index){
-			var element = reusableResults.results[resultsIndex][index];
-
+		if(reusableResults.results[resultsIndex] && reusableResults.results[resultsIndex].length>0){
 			var li = $("<li/>")
-			.attr('class', 'collection-item addToQuery')
-			.attr('meta-label', element.value)
-			.attr('meta-value', element.value)
-			.attr('meta-penninculo', element.penninculo);
+			.attr('class', 'collection-item withMargin reusableResultTitle')
+			.appendTo(reusableResultList)
+			.on('click', function(e){
+				e.stopPropagation();
+				if($(this).next().is(':visible')){
+					$(this).next().hide();
+					$(this).children()[0].innerHTML = 'expand_more';
+				}
+				else{
+					$(this).next().show();
+					$(this).children()[0].innerHTML = 'expand_less';
+				}
+			});
+
+			expandableIcon = $("<i/>")
+				.attr('class', 'tiny material-icons grey-text expandIcon')
+				.html('expand_more')
+				.appendTo(li);
 
 			var span = $("<span/>")
 				.attr('class', 'liContent')
-				.text(element.value)
+				.html(languageManager.getReusableResultListTitle(resultsIndex))
+				.css('margin-left', '0.5em')
 				.appendTo(li);
+			
+			collapsibleBody = $("<div/>")
+				.attr('class', 'myCollapsibleBody')
+				.appendTo(reusableResultList);
 
-			if('url' in element){
-				li.attr('meta-url', element.url)
-					.attr('meta-value', element.url)
-					.attr('title', element.url);
-			}
-//alert(element.occurrences);
-			var badge = $("<span/>")
-				.attr('class', 'new badge')
-				.attr('data-badge-caption', '')
-				.text(element.occurrences)
-				.appendTo(li);
+			collapsibleBody.hide();
 
-			li.appendTo(collapsibleBody)
-				.on('click', onClickLiFunction);
-		});
+			$.each(reusableResults.results[resultsIndex], function(index){
+				var element = reusableResults.results[resultsIndex][index];
+
+				var li = $("<li/>")
+				.attr('class', 'collection-item addToQuery')
+				.attr('meta-label', element.value)
+				.attr('meta-value', element.value)
+				.attr('meta-penninculo', element.penninculo);
+
+				var span = $("<span/>")
+					.attr('class', 'liContent')
+					.text(element.value)
+					.appendTo(li);
+
+				if('url' in element){
+					li.attr('meta-url', element.url)
+						.attr('meta-value', element.url)
+						.attr('title', element.url);
+				}
+
+				var badge = $("<span/>")
+					.attr('class', 'new badge')
+					.attr('data-badge-caption', '')
+					.text(element.occurrences)
+					.appendTo(li);
+
+				li.appendTo(collapsibleBody)
+					.on('click', onClickLiFunction);
+			});
+		}
 	}
 
 	collapsibleBody.show();
