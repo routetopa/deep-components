@@ -293,7 +293,7 @@ Example:
                         {
                             if(typeof t.data[j] != 'undefined' && typeof t.data[j].data[i] != 'undefined')
                             {
-                                if (t.data[j].data[i].toString().match(new RegExp("(https?:\/\/.*\.(?:png|jpg|jpeg|gif))")))
+                                if (t.data[j].data[i].toString().match(new RegExp("(https?:\/\/.*\.(?:png|jpg|jpeg|gif))", 'i')))
                                     popupText += '<image height="100" width="100" src="' + t.data[j].data[i] + '" /><br/>';
                                 else if (t.data[j].data[i].toString().match(new RegExp("^(http[s]?:\\/\\/(www\\.)?|ftp:\\/\\/(www\\.)?|www\\.){1}([0-9A-Za-z-\\.@:%_\+~#=]+)+((\\.[0-9a-zA-Z]{1,3})+)(/(.)*)?(\\?(.)*)?")))
                                     popupText += 'link : <a href="' + t.data[j].data[i] + '">' + t.data[j].name + '</a><br/>'

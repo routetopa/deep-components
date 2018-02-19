@@ -10,6 +10,7 @@
 <script src="istat.js"></script>
 <script src="OData.js"></script>
 <script src="spod.js"></script>
+<script src="sparql.js"></script>
 
 <script>
     var providerFactory = {
@@ -24,6 +25,8 @@
                 return new istat_Provider();
             else if (dataUrl.indexOf("ODataApi") > -1 )
                 return new OData_Provider();
+            else if (dataUrl.indexOf("sparql?") > -1 )
+                return new SPARQL_Provider();
             else
                 return new generic_Provider();//dkan and mysir --> ckan like
         },

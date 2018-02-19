@@ -1,0 +1,445 @@
+<HTML>
+	<body>
+	 <div id="controlet">	
+		<!--<div class="container">-->
+		<div class="row flex" id="firstrow">
+			<!--end query natural language box--> 
+		    <div id="queryBox" class="col s12 flex"> 
+		     <div class="card">
+		      <div id="queryNaturalLanguage" class="card-content">
+		      </div>
+		      <div id="queryNaturalLanguageFocus" class="card-action valign-wrapper firstrowAction">
+
+		       <span class="col s12"> 
+		       		<span id="focusLabel"> </span> 
+		       		<span id="focus"></span>
+		       </span>
+
+		      <!-- <span class="col s1 " >
+					<i class="small material-icons right" id="removeButton" 
+	                   title="Remove all the highlighted"
+	                   onmouseover="highlightElementsToRemove();" 
+	                   onmouseleave="removeHighlightElementsToRemove();" 
+	                   onclick="removeHighlightElements(decodeURIComponent($('.highlighted').attr('meta-removereference')))">highlight_off</i>
+				</span>-->
+                  
+		      </div>
+		     </div>
+		    </div>
+		    <!--buttons-->
+		    <a class="btn-floating waves-effect waves-light blue" id="openSparqlQuery"><i class="material-icons"  onclick="showUserQueryBox();">compare</i></a>
+
+		    <a class="btn-floating waves-effect waves-light blue" id="saveTable"><i class="material-icons" onclick="createJson();">save</i></a>
+
+		    <a class="btn-floating waves-effect waves-light red darken-1" id="removeButtonA"><i class="small material-icons right" id="removeButton" 
+	                   onmouseover="highlightElementsToRemove();" 
+	                   onmouseleave="removeHighlightElementsToRemove();" 
+	                   onclick="removeHighlightElements(decodeURIComponent($('.highlighted').attr('meta-removereference')))">clear</i></a>
+
+		    <!--end buttons-->
+		    <!--end query natural language box--> 
+
+		    <!--start query sparql box--> 
+		    <div id="sparqlVsNl" class="modal s12">
+			    <div class="modal-content">
+			      <div id="modalNaturalLanguage" class="col s5"></div>
+			      <div id="modalSparql" class="col s7"></div>
+			    </div>
+			</div>
+		    <!--end query sparql box--> 
+	    </div>
+	    <!--end first row-->
+
+	    <!--start second row-->
+		<div class="row">
+
+			<!--start navBar-->
+			<div class="col s12 m12 l12" id="navBar">
+		      <ul id="myTabs" class="tabs tabs-fixed-width black-text">
+		   		<!--start concepts-->
+		        <li class="tab" id="conceptsTab">	
+		        	<a href="#conceptsBox">
+		        		<span id="conceptsTabTitle" class="myTabTitle"></span> 
+			        	<div id="conceptsSpinner" class="preloader-wrapper mySpinner active">
+						    <div class="spinner-layer spinner-blue-only">
+						      <div class="circle-clipper left">
+						        <div class="circle"></div>
+						      </div><div class="gap-patch">
+						        <div class="circle"></div>
+						      </div><div class="circle-clipper right">
+						        <div class="circle"></div>
+						      </div>
+						    </div>
+						</div>
+					</a>
+		        </li>
+		        <!--end concepts-->
+		        <!--start predicates-->
+		        <li class="tab" id="predicatesTab">
+		        	<a href="#predicatesBox">
+		        		<span id="predicatesTabTitle" class="myTabTitle"></span>
+		        		<div id="predicatesSpinner" class="preloader-wrapper mySpinner active">
+						    <div class="spinner-layer spinner-blue-only">
+						      <div class="circle-clipper left">
+						        <div class="circle"></div>
+						      </div><div class="gap-patch">
+						        <div class="circle"></div>
+						      </div><div class="circle-clipper right">
+						        <div class="circle"></div>
+						      </div>
+						    </div>
+						</div>
+		        	</a>
+		        </li>
+		        <!--end predicates-->
+		        <!--start operators-->
+		        <li class="tab" id="operatorsTab">
+		        	<a href="#operatorsBox">
+		        		<span id="operatorsTabTitle" class="myTabTitle"></span>
+		        		<div id="operatorsSpinner" class="preloader-wrapper mySpinner active">
+						    <div class="spinner-layer spinner-blue-only">
+						      <div class="circle-clipper left">
+						        <div class="circle"></div>
+						      </div><div class="gap-patch">
+						        <div class="circle"></div>
+						      </div><div class="circle-clipper right">
+						        <div class="circle"></div>
+						      </div>
+						    </div>
+						</div>
+		        	</a>
+		        </li>
+		        <!--end operators-->
+		        <!--start result table-->
+		        <li class="tab" id="tableResultTab">
+	           		<a href="#tableResultBox">
+	           			<span id="tableResultTabTitle" class="myTabTitle"></span>
+	           			<span id="resultsPreviewBadge" class="new badge" data-badge-caption 
+	           				onmouseenter="if(this.innerHTML != '0')$('#tableToast').show();" 
+	           				onmouseleave="$('#tableToast').hide()"></span>
+	           			<div id="tableResultsSpinner" class="preloader-wrapper mySpinner active">
+		          			<div class="spinner-layer spinner-blue-only">
+		            			<div class="circle-clipper left">
+		              				<div class="circle"></div>
+		            			</div>
+			            		<div class="gap-patch">
+			              			<div class="circle"></div>
+			            		</div>
+			            		<div class="circle-clipper right">
+			              			<div class="circle"></div>
+			            		</div>
+			          		</div>
+		      			</div>
+	           		</a>
+		    	</li>
+		        <!--end result table-->
+
+		        <!--start settings-->
+		        <li class="tab" id="settingsTab">
+		        	<a href="#settingsBox">
+		        		<span id="settingsTabTitle" class="myTabTitle"></span>
+		     		</a>
+		        </li>
+		        <!--end settings-->
+		        
+		        <!--start help-->
+		        <li class="tab" id="helpTab">
+		        	<a href="#helpBox">
+		        		<span id="helpTabTitle" class="myTabTitle"></span>
+		     		</a>
+		        </li>
+		        <!--end help-->
+		      </ul>
+		    </div>
+
+		    <div id="tableToast" class="col s12 m12 l12" style="display:none">
+			
+				<table id="previewTableResult">
+				</table>
+			
+			</div>
+			<!--end navBar-->
+		   
+		   <!--start content-->
+		    <div class="col s12 m12 l12">
+		        <div class="col s12 m12 l12 no-padding">
+
+		        	<!--start concepts content-->
+		        	<div id="conceptsBox" class="card">
+			            <div class="card-content ">
+			              	
+		              		<a href="#" id="hierarchySpan" class='dropdown-button btn-floating waves-effect waves-light right'><i class="material-icons"">list</i></a>
+		              		<!--search-->
+		              	  	<div class="card searchBarPositioning col s6 m6 l6">
+	            				<div class=" valign-wrapper ">
+				            		<span class="input-field col s10 m10 l10 mySearch">
+						              	<input type="search" id="searchConceptsBox" 
+											onkeyup="filter('searchConceptsBox', 'conceptsList')" >
+									</span>
+									<span class="col s2 m2 l2 right">
+										<i class="material-icons"> search</i>
+									</span>
+								</div>
+						  	</div>
+						  	<!--end search-->
+
+						  	<div class="progress" id="conceptsProgress">
+							    <div class="indeterminate"></div>
+							</div>
+						 
+						 	<!--Concepts list-->
+							<div id="conceptsListBox">
+								<ul id="conceptsList" class="collection"></ul>
+							</div>
+							<!--end concepts list-->
+			            </div>
+			        </div>
+			        <!--end concepts content-->
+
+			        <!--start predicates content-->
+			        <div id="predicatesBox" class="card">
+			            <div class="card-content ">
+			              	<!--search-->
+		              	  	<div class="card searchBarPositioning col s6 m6 l6">
+	            				<div class=" valign-wrapper ">
+	            					<span class="input-field col s11 m11 l11 mySearch">
+						              	<input type="search" id="searchPredicatesBox" 
+											onkeyup="filter('searchPredicatesBox', 'directPredicatesList');filter('searchPredicatesBox', 'reversePredicatesList');" >
+									</span>
+									<span class="col s2 m2 l2 right">
+										<i class="material-icons"> search</i>
+									</span>
+								</div>
+						  	</div>
+			              	<!--end search-->
+						  	<ul class="tabs tabs-fixed-width" id="predicatesTabBox">
+						  		<li class="tab">
+						  			<a class="active" href="#direct">
+						  				<span id="directPredicateTabTitle"></span>
+						  			</a>
+						  		</li>
+				        		<li class="tab">
+				        			<a href="#reverse">
+				        				<span id="reversePredicateTabTitle">
+				        				</span>
+				        			</a>
+				        		</li>
+						  	</ul>
+						</div>
+						<!--direct predicate-->
+			            <div id="direct">
+			            	<div class="progress" id="directPredicatesProgress">
+							    <div class="indeterminate"></div>
+							</div>
+
+					      	<div id="predicatesListBox">
+					      		<ul id="directPredicatesList" class="collection"></ul>
+					      	</div> 
+					    </div>
+					    <!--reverse predicate-->
+					    <div id="reverse">
+					    	<div class="progress" id="reversePredicatesProgress">
+							    <div class="indeterminate"></div>
+							</div>
+
+					      	<div id="predicatesListBox">
+					      		<ul id="reversePredicatesList" class="collection"></ul>
+					      	</div>
+					    </div>
+			        </div>
+			        <!--end predicates content-->
+
+					<!--start operators content-->
+					<div id="operatorsBox" class="card">
+			            <div class="card-content">
+			              <span class="card-title col s6 m6 l6"></span>
+			              <span class="col s6 m6 l6" id="pendingQuerySpan"></span>
+			              <!--search-->
+		              	  	<div class="card col s6 m6 l6" id="searchReusableResultCard">
+	            				<div class=" valign-wrapper ">
+	            					<span class="input-field col s11 m11 l11 mySearch">
+					              		<input type="search" id="searchReusableResultBox" 
+											onkeyup="filter('searchReusableResultBox', 'reusableResultList')">
+									</span>
+									<span class="col s2 m2 l2 right">
+										<i class="material-icons"> search</i>
+									</span>
+								</div>
+						  	</div>
+						  	<!--end search-->
+			              <div id="contentOperatorBox">
+							  <div class="progress" id="operatorsProgress">
+								  <div class="indeterminate"></div>
+							  </div>
+
+				              <ul id="operatorList" class="collection"></ul>
+				              <ul id="reusableResultList" class="collection"></ul>
+				          </div>
+			            </div>
+			        </div>
+			        <!--end operators content-->
+
+			        <!--start table result content-->
+			        <div id="tableResultBox" class="card no-padding">
+			            <div class="card-content no-padding">
+
+			            	<div class="fixed-action-btn horizontal" id="moreTableSettings">
+						    <a class="btn-floating btn-large blue">
+						      <i class="large material-icons">more_vert</i>
+						    </a>
+						    <ul>
+						      <li>
+						      	<a id="visibleFieldsButton" 
+						      	class='dropdown-button btn-floating waves-effect waves-light blue' data-activates='fieldsCollection' ><i class="material-icons">remove_red_eye</i></a>
+						      </li>
+			            	  <li>
+			            		<a id="orderTable" class='dropdown-button btn-floating waves-effect waves-light blue' onclick="orderTableResult();"><i class="material-icons">sort_by_alpha</i></a>
+			            	  </li>
+			            	  <!--<li>
+			            		<a id="collapseTable" class='dropdown-button btn-floating waves-effect waves-light blue' onclick="collapseTableResult();" ><i class="material-icons">vertical_align_center</i></a>
+			            	  </li>-->
+			 				</ul>
+						  </div>		            		
+
+			              	<div class="row col s12 no-padding">
+			              		<div class="progress" id="tableResultsProgress">
+								    <div class="indeterminate"></div>
+								</div>
+
+								<div id="resultsTableBox" class=" col s12 m12 l12 scrollableTableContent no-padding">
+									<table id="resultsTable" class="striped centered"></table>
+								</div>
+							</div>
+						</div>
+			        </div>
+			        <ul id="fieldsCollection" class="collection dropdown-content"></ul>
+			          
+			        <!--end table result content-->
+
+			        <!--start settings content-->
+			        <div id="settingsBox" class="card">
+			            <div class="card-content ">
+			              	<div class="row">
+
+				              	<!--<div class="input-field col s6 m6 l6">
+				              		<span id="labelLangSelectLabel" class="label"></span>
+								    <select id="labelLangSelect" onChange="changeLabelLanguage()">
+								    </select>
+								    
+								</div>-->
+
+								<div class="input-field col s6 m6 l6">
+									<span id="systemLangSelectLabel" class="label"></span>
+								    <select id="systemLangSelect" onChange="changeSystemLanguage()">
+								    </select>
+								</div>
+				          	
+				          	</div>
+				          	<div class="row">
+
+						        <div class="input-field col s6 m6 l6">
+						        	<span id ="numConceptsLabel" class="label"></span>
+						          	<input id="numConcepts" type="number" min="1" onChange="setLimit('concept')">
+						        </div>
+						        <!--<div class="col s1">
+						          <i class="small material-icons blue-text" onClick="setLimit('concept')">check_circle</i>
+						        </div>-->
+
+						        <div class="input-field col s6 m6 l6">
+						        	<span id="numPredicatesLabel" class="label"></span>
+						        	<input id="numPredicates" type="number" min="1" onChange="setLimit('predicate')">
+						        </div>
+						        <!--<div class="col s1">  
+						          <i class="small material-icons blue-text" onClick="setLimit('predicate')">check_circle</i>
+						        </div>-->
+					       </div>
+					       <div class="row">
+				              	<div class="col s12 m12 l12">
+								    <input type="checkbox" id="defaultOrderTable" onChange="setDefaultOrderTable($(this))" />
+	      							<label for="defaultOrderTable" id="defaultOrderTableLabel"></label>
+								</div>
+			            	</div>
+			        	</div>
+					</div>
+					<!--end settings content-->
+					<!--start help content-->
+			        <div id="helpBox" class="card">
+			            <div class="card-content ">
+			              <div class="row">
+
+			              	<ul id="helpUl" class="collapsible" data-collapsible="accordion">
+							    <!--<li>
+							      <div class="collapsible-header"><i class="material-icons">filter_drama</i>First</div>
+							      <div class="collapsible-body"><span>Lorem ipsum dolor sit amet.</span></div>
+							    </li>
+							    <li>
+							      <div class="collapsible-header"><i class="material-icons">place</i>Second</div>
+							      <div class="collapsible-body"><span>Lorem ipsum dolor sit amet.</span></div>
+							    </li>
+							    <li>
+							      <div class="collapsible-header"><i class="material-icons">whatshot</i>Third</div>
+							      <div class="collapsible-body"><span>Lorem ipsum dolor sit amet.</span></div>
+							    </li>-->
+							  </ul>
+
+					       </div>
+			            </div>
+			        </div>
+		        	<!--end help content-->
+	      		</div>
+				<!--end content-->
+			</div>
+	    </div>
+	   	<!--end second row-->
+	   	
+	 </div>
+	 <!--end controlet-->	
+	</body>
+
+	<script>
+		
+		$("#av_toolbar_regdiv").remove();
+		$("#av_toolbar_iframe").remove();
+
+
+		$(document).ready(function(){
+
+		    $('ul.tabs').tabs({onShow: function(tab) {
+		    	if(tab[0].id == "predicatesBox"){
+		    		$('ul#predicatesTabBox').tabs();
+
+		    		if($('#direct ul li').length == 0){
+						$('ul#predicatesTabBox').tabs('select_tab', 'reverse');
+					}else{
+						$('ul#predicatesTabBox').tabs('select_tab', 'direct');
+					}
+		    	}}
+		    });
+
+		    $('.modal').modal({
+		    	startingTop: '5%',
+		    	endingTop: '5%'
+		    });
+
+		    $('#content-splod-controllet').addEventListener("splodEvent", function (e) {
+				/*var obj = (e.detail);
+				restartBoxViewer();
+				restartQueryViewer();
+				restartOperatorViewer();
+				restartTableResultViewer();
+
+				beginFromMap(obj.root, obj.map, obj.focus);*/
+				
+				console.log(e.detail);
+
+			});
+			
+			initBoxViewer();
+			initQueryViewer();
+			initOperatorViewer();
+			initTableResultViewer();
+		});
+
+	</script>
+
+</HTML>

@@ -1,0 +1,181 @@
+<script src="../../locales/controllet_ln.js"></script>
+
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+
+<link rel="import" href="../page-slider-controllet/page-slider-controllet.html">
+
+<!--<link rel="import" href="../select-dataset-controllet/select-dataset-controllet.html">-->
+<link rel="import" href="../splod-controllet/splod-controllet.html" />
+<link rel="import" href="../select-data-controllet/select-data-controllet.html" />
+<link rel="import" href="../select-visualization-controllet/select-visualization-controllet.html" />
+
+<script src="../shared_js/perfect-scrollbar/js/min/perfect-scrollbar.jquery.min.js"></script>
+<link rel="stylesheet" href="../shared_js/perfect-scrollbar/css/perfect-scrollbar.min.css">
+
+<dom-module id="splod-visualization-controllet" name="splod-visualization-controllet">
+
+    <template>
+
+        <page-slider-controllet id="slider">
+
+            <neon-animatable>
+
+				<!--id="select_dataset"-->
+                <splod-controllet id="splod_controllet"></splod-controllet>
+
+            </neon-animatable>
+
+            <neon-animatable>
+
+                <select-data-controllet id="select_data"></select-data-controllet>
+
+            </neon-animatable>
+
+            <neon-animatable>
+
+                <select-visualization-controllet id="select_visualization" deep-url={{deepUrl}} datalets-list-url={{dataletsListUrl}}></select-visualization-controllet>
+
+            </neon-animatable>
+
+        </page-slider-controllet>
+
+    </template>
+
+    <script>
+
+        Polymer({
+
+            is : 'splod-visualization-controllet',
+
+            listeners : {
+                'page-slider-controllet_selected' : '_updateSlider',
+                'select-dataset-controllet_data-url' : '_allowSecondStep',
+                'select-fields-controllet_selected-fields' : '_allowThirdStep',
+                'filters-controllet_filters': '_allowThirdStep',
+                'aggregators-controllet_aggregators': '_allowThirdStep',
+                'data-ready': '_dataReady',
+				'remove-dataset-controllet_data-url': '_denySecondStep'			
+            },
+
+            properties : {
+
+                datasets : {
+                    type : Object,
+                    value : undefined
+                },
+
+                suggestedDatasets : {
+                    type : Array,
+                    value : undefined
+                },
+
+                deepUrl : {
+                    type : String,
+                    value : undefined
+                },
+
+                dataletsListUrl : {
+                    type : String ,
+                    value : undefined
+                },
+
+                localization : {
+                    type : String,
+                    value : "en"
+                }
+
+            },
+
+            ready : function(){
+                ln["localization"] = this.localization;
+            },
+
+            _updateSlider : function(e){
+                switch (e.detail.selected) {
+                    case 0:
+                        //this.$.slider.setTitle(ln["slide1Title_" + this.localization], ln["slide1Subtitle_" + this.localization]);
+						this.$.slider.setTitle('CREATE DATASET', 'Select an endpoint and create your dataset.');
+
+                        this.$.slider.chevronLeft("invisible");
+                        this.$.slider.chevronRight(false);
+
+                        if(this.$.slider.getPrevSelected() == 1)
+                            this.$.slider.chevronRight(true);
+                        break;
+                    case 1:
+                        this.$.slider.setTitle(ln["slide2Title_" + this.localization], ln["slide2Subtitle_" + this.localization]);
+
+                        this.$.slider.chevronLeft(true);
+                        this.$.slider.chevronRight(false);
+
+                        if(this.$.slider.getPrevSelected() == 2)
+                            this.$.slider.chevronRight(true);
+                        break;
+                    case 2:
+                        this.$.slider.setTitle(ln["slide3Title_" + this.localization], ln["slide3Subtitle_" + this.localization]);
+
+                        this.$.slider.chevronLeft(true);
+                        this.$.slider.chevronRight("invisible");
+                }
+            },
+
+            _allowSecondStep : function(e){
+			console.log(e.detail);
+                this.$.slider.chevronRight(false);
+
+                /*
+				var f = Object.create(providerFactory);
+                var provider = f.getProvider(e.detail.url);
+                var dataUrl = provider.addLimit(e.detail.url);
+				*/
+                //this.$.select_data.dataUrl = dataUrl;
+				
+				//SPLOD : add
+				//this.$.select_data.dataUrl = e.detail.endpoint;
+				this.$.select_data.data = e.detail.data;
+				
+                this.$.select_data.init();
+                //this.$.select_visualization.dataUrl = dataUrl;
+				//this.$.select_visualization.dataUrl = e.detail.endpoint;
+                this.$.select_visualization.dataUrl = e.detail.dataUrl;
+                this.$.select_visualization.init();
+				this.fire('data-ready', {ready: true});
+            },
+
+			_denySecondStep : function(e){
+				this.$.slider.chevronRight(false);
+			},
+			
+            _dataReady : function(e){
+                if(e.detail.ready) {
+                    this.$.slider.chevronRight(true);
+                    //this.$.select_dataset.$.selected_url.invalid = false;
+                }
+                /*else
+                    this.$.select_dataset.$.selected_url.invalid = true;
+				*/
+
+                //this.$.select_dataset.showDatasetInfo();
+            },
+
+            _allowThirdStep : function(){
+                this.$.slider.chevronRight(false);
+                var selectedFields = this.$.select_data.getSelectedFields();
+                var filters = this.$.select_data.getFilters();
+                var aggregators = this.$.select_data.getAggregators();
+                var data = this.$.select_data.getData();
+                if(selectedFields.length > 0) {
+                    this.$.select_visualization.init();
+                    this.$.select_visualization.setSelectedFields(selectedFields);
+                    this.$.select_visualization.setFilters(filters);
+                    this.$.select_visualization.setAggregators(aggregators);
+                    this.$.select_visualization.setData(data);
+                    this.$.slider.chevronRight(true);
+                }
+            }
+
+        });
+
+    </script>
+
+</dom-module>
