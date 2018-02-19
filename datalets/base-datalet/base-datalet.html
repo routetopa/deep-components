@@ -599,6 +599,18 @@ Example :
 //                            }
 //                        });
                     }
+                    // dkan and mysir --> ckan like
+                    else if(this.dataUrl.indexOf("datastore/search.json?resource_id") > -1 )
+                    {
+//                        var comp = this;
+//                        $.ajax({
+//                            url: this.dataUrl.replace("datastore_search?resource_id", "resource_show?id"),
+//                            dataType: "json",
+//                            success: function(e){
+//                                comp.$.base_datalet_link.setAttribute("href", e.result.url.substring(0, e.result.url.indexOf("/download")));
+//                            }
+//                        });
+                    }
                     else
                     {
                         this.$.base_datalet_link_span.style.display = 'none';
@@ -638,9 +650,10 @@ Example :
             },
 
             goToDataset: function() {
+                debugger
                 if(this.dataUrl != undefined) {
 
-                    if(this.dataUrl.indexOf("datastore_search?resource_id") > -1 )
+                    if(this.dataUrl.indexOf("datastore_search?resource_id") > -1)
                     {
                         var urlSource = this.dataUrl.split("/")[0] + "//" + this.dataUrl.split("/")[2];
 
@@ -660,6 +673,31 @@ Example :
                                 }
                             }
                         });
+                    }
+                    else if(this.dataUrl.indexOf("datastore/search.json?resource_id") > -1)
+                    {
+                        var urlSource = this.dataUrl.split("/")[0] + "//" + this.dataUrl.split("/")[2];
+
+                        this.$.base_datalet_link.setAttribute("href", urlSource);
+                        window.open(this.dataUrl, '_blank');
+
+                        //???????????????????????????????????
+//                        var comp = this;
+//                        $.ajax({
+//                            url: this.dataUrl.replace("datastore/search.json?resource_id", "datastore/search.json?resource_show?id"),
+//                            dataType: "json",
+//                            async: false,
+//                            success: function(e){
+//                                if(e.result.package_id) {
+//                                    comp.$.base_datalet_link.setAttribute("href", urlSource + "/dataset/" + e.result.package_id + "/resource/" + e.result.id);
+//                                    window.open(urlSource + "/dataset/" + e.result.package_id + "/resource/" + e.result.id, '_blank');
+//                                }
+//                                else {
+//                                    comp.$.base_datalet_link.setAttribute("href", e.result.url.substring(0, e.result.url.indexOf("/download")));
+//                                    window.open(e.result.url.substring(0, e.result.url.indexOf("/download")), '_blank');
+//                                }
+//                            }
+//                        });
                     }
                 }
             },
