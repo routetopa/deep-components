@@ -749,7 +749,8 @@ Example :
                 html += '<'+parent.is;
                 for(var i=0; i<parent.attributes.length; i++)
                     if(parent.attributes[i].name != 'data')
-                        html += ' '+parent.attributes[i].name+'=\''+parent.attributes[i].value.replace(/\'/g, "&#39;")+'\'';
+                        html += ' '+parent.attributes[i].name+'=\''+parent.attributes[i].value.replace(/'/g, "&#39;")+'\'';
+                        //html += ' '+parent.attributes[i].name+'=\''+parent.attributes[i].value+'\'';
                 html += '></'+parent.is+'>';
 
                 var dataletImport = '\<script type="text/javascript" src="https://cdn.jsdelivr.net/webcomponentsjs/0.7.16/webcomponents-lite.min.js"\>\<\/script\>\n' +
@@ -762,9 +763,12 @@ Example :
                 div.innerHTML = '<div class="overlay" id="overlay">' +
                         '<div class="modal-content"><span class="button-close" onclick="document.getElementById(\'overlay\').remove(this)"></span>' +
                         '<span>Copy to clipboard: Ctrl+C, Enter</span>' +
-                        '<textarea class="export_html_textarea">'+dataletImport+dataletLink+html+'</textarea></div></div>';
+                        '<textarea class="export_html_textarea"></textarea></div></div>';
 
                 Polymer.dom(this.root).appendChild(div);
+
+                $(".export_html_textarea").val(dataletImport+dataletLink+html);
+
                 //window.prompt("Copy to clipboard: Ctrl+A, Ctrl+C", dataletImport+dataletLink+html);
             },
 
