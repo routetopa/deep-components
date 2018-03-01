@@ -136,21 +136,9 @@
 
                     <template is="dom-if" if="{{_checkType(item.name, 'license')}}">
                         <select id="MANDATORY+{{item.name}}" on-change="_updateMetadata">
-                            <option value="notspecified">License not specified</option>
-                            <option value="cc-by">Creative Commons Attribution</option>
-                            <option value="cc-by-sa">Creative Commons Attribution Share-Alike</option>
-                            <option value="cc-zero">Creative Commons CCZero</option>
-                            <option value="cc-nc">Creative Commons Non-Commercial (Any)</option>
-                            <option value="gfdl">GNU Free Documentation License</option>
-                            <option value="odc-by">Open Data Commons Attribution License</option>
-                            <option value="odc-odbl">Open Data Commons Open Database License (ODbL)</option>
-                            <option value="odc-pddl">Open Data Commons Public Domain Dedication and License (PDDL)</option>
-                            <option value="other-at">Other (Attribution)</option>
-                            <option value="other-nc">Other (Non-Commercial)</option>
-                            <option value="other-closed">Other (Not Open)</option>
-                            <option value="other-open">Other (Open)</option>
-                            <option value="other-pd">Other (Public Domain)</option>
-                            <option value="uk-ogl">UK Open Government Licence (OGL)</option>
+                            <template is="dom-repeat" items="{{licenses}}">
+                                <option value="{{item.value}}" selected="{{item.selected}}">{{item.label}}</option>
+                            </template>
                         </select>
                     </template>
 
@@ -229,11 +217,38 @@
                 metadata : {
                     type  : Object,
                     value : undefined
+                },
+
+                licenses : {
+                    type  : Array,
+                    value : [
+                        { value: "notspecified", label: "License not specified", selected: true},
+                        { value: "cc-by", label: "Creative Commons Attribution", selected: false},
+                        { value: "cc-by-sa", label: "Creative Commons CCZero", selected: false},
+                        { value: "cc-nc", label: "Creative Commons Non-Commercial (Any)", selected: false},
+                        { value: "gfdl", label: "GNU Free Documentation License", selected: false},
+                        { value: "odc-by", label: "Open Data Commons Attribution License", selected: false},
+                        { value: "odc-odbl", label: "Open Data Commons Open Database License (ODbL)", selected: false},
+                        { value: "odc-pddl", label: "Open Data Commons Public Domain Dedication and License (PDDL)", selected: false},
+                        { value: "other-at", label: "Other (Attribution)", selected: false},
+                        { value: "other-nc", label: "Other (Non-Commercial)", selected: false},
+                        { value: "other-closed", label: "Other (Not Open)", selected: false},
+                        { value: "other-open", label: "Other (Open)", selected: false},
+                        { value: "other-pd", label: "Other (Public Domain)", selected: false},
+                        { value: "uk-ogl", label: "UK Open Government Licence (OGL)", selected: false}  
+                    ]
                 }
 
             },
 
             ready : function() {
+
+                /*this.licenses = [
+                    { value: "notspecified", label: "License not specified", selected: false},
+                    { value: "cc-by", label: "Creative Commons Attribution", selected: false},
+                    { value: "cc-by-sa", label: "Creative Commons Attribution Share-Alike", selected: false}
+                ];*/
+
                 try
                 {
                     metadata_ln["ln"] = ODE.user_language;
@@ -272,6 +287,16 @@
 
             setMetadata : function(metadata) {
                 this.metadata = JSON.parse(metadata);
+
+                this.mandatory_list = this.metadata["MANDATORY"];
+                this.metadata["MANDATORY"] = {};
+
+                var that = this;
+                this.mandatory_list.forEach(function(element) {
+                    that.metadata["MANDATORY"][element.name] = that.metadata[element.type][element.name];
+                    delete that.metadata[element.type][element.name];
+                });
+
                 this.MANDATORY = this.metadata["MANDATORY"];
                 this.CC_RF = this.metadata["CC_RF"];
                 this.CC_RAF = this.metadata["CC_RAF"];
@@ -283,6 +308,12 @@
                     $(this.$.title_CC_RAF).hide();
                 if(this.EF == null || Object.keys(this.EF).length == 0)
                     $(this.$.title_EF).hide();
+
+                const actualLicenseLabel = this.MANDATORY["license"];
+                this.licenses.forEach(function(item) { item.selected = (actualLicenseLabel === item.label); });
+
+
+//                this.$$("#MANDATORY+license")[0].value = 'gfdl';
             },
 
             getMetadata : function() {
@@ -318,15 +349,26 @@
                         this.EF[name] = value;
                 }
 
-                var metadata = {"MANDATORY":this.MANDATORY, "CC_RF":this.CC_RF, "CC_RAF":this.CC_RAF, "EF":this.EF};
-                this.metadata = JSON.stringify(metadata);
-                this.fire('metadata-list-controllet_update-metadata', {metadata : this.metadata});
+                var that = this;
+                this.mandatory_list.forEach(function(element) {
+                    that.metadata[element.type][element.name] = that.metadata["MANDATORY"][element.name];
+                });
+
+                var metadata = {"CC_RF":this.CC_RF, "CC_RAF":this.CC_RAF, "EF":this.EF};
+//                this.metadata = JSON.stringify(metadata);
+                this.fire('metadata-list-controllet_update-metadata', {metadata : JSON.stringify(metadata)});
             },
 
             _forceUpdateMetadata : function() {
-                var metadata = {"MANDATORY":this.MANDATORY, "CC_RF":this.CC_RF, "CC_RAF":this.CC_RAF, "EF":this.EF};
-                this.metadata = JSON.stringify(metadata);
-                this.fire('metadata-list-controllet_update-metadata', {metadata : this.metadata});
+
+                var that = this;
+                this.mandatory_list.forEach(function(element) {
+                    that.metadata[element.type][element.name] = that.metadata["MANDATORY"][element.name];
+                });
+
+                var metadata = {"CC_RF":this.CC_RF, "CC_RAF":this.CC_RAF, "EF":this.EF};
+//                this.metadata = JSON.stringify(metadata);
+                this.fire('metadata-list-controllet_update-metadata', {metadata : JSON.stringify(metadata)});
             },
 
             _checkType: function(type, check){

@@ -37,14 +37,10 @@
 
     var metadata = [];
 
-    var MANDATORY = {
+    var MANDATORY = [{ name: "title", type: "CC_RF"}, { name: "description", type: "CC_RF"}, { name: "license", type: "CC_RAF"}];
+    var CC_RF = {
         title:"The Best Dataset (O' Megl Dataset)",
         description:"Breve descrizione del meglio datasetto mai fatto!!! Bla bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla bla",
-        license:""
-    };
-    var CC_RF = {
-//        title:"The Best Dataset (O' Megl Dataset)",
-//        description:"Breve descrizione del meglio datasetto mai fatto!!! Bla bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla bla",
         tags:"#fanasy #postilla #dcol #anip #cos #sbiricuda #fotocos",
         last_update:"",
         publisher:"",
@@ -60,7 +56,7 @@
         download_url:"",
         endpoint:"",
         format:"",
-//        license:"",
+        license:"",
         spatial:"",
         temporal:""
     };
@@ -78,7 +74,7 @@
         system_of_records:""
     };
 
-        metadata = {"MANDATORY":MANDATORY, "CC_RF":CC_RF, "CC_RAF":CC_RAF, "EF":EF};
+    metadata = {"MANDATORY":MANDATORY, "CC_RF":CC_RF, "CC_RAF":CC_RAF, "EF":EF};
     metadata = JSON.stringify(metadata);
 
     var metadata_list = document.getElementById('metadata_list');
