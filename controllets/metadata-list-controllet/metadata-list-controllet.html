@@ -218,13 +218,13 @@
                     type  : Object,
                     value : undefined
                 },
-
                 licenses : {
                     type  : Array,
                     value : [
                         { value: "notspecified", label: "License not specified", selected: true},
                         { value: "cc-by", label: "Creative Commons Attribution", selected: false},
-                        { value: "cc-by-sa", label: "Creative Commons CCZero", selected: false},
+                        { value: "cc-by-sa", label: "Creative Commons Attribution Share-Alike", selected: false},
+                        { value: "cc-zero", label: "Creative Commons CCZero", selected: false},
                         { value: "cc-nc", label: "Creative Commons Non-Commercial (Any)", selected: false},
                         { value: "gfdl", label: "GNU Free Documentation License", selected: false},
                         { value: "odc-by", label: "Open Data Commons Attribution License", selected: false},
@@ -238,17 +238,9 @@
                         { value: "uk-ogl", label: "UK Open Government Licence (OGL)", selected: false}
                     ]
                 }
-
             },
 
             ready : function() {
-
-                /*this.licenses = [
-                    { value: "notspecified", label: "License not specified", selected: false},
-                    { value: "cc-by", label: "Creative Commons Attribution", selected: false},
-                    { value: "cc-by-sa", label: "Creative Commons Attribution Share-Alike", selected: false}
-                ];*/
-
                 try
                 {
                     metadata_ln["ln"] = ODE.user_language;
@@ -318,7 +310,7 @@
                 this.mandatory_list.forEach(function(element) {
                     that.metadata[element.type][element.name] = that.metadata["MANDATORY"][element.name];
                 });
-                
+
                 var metadata = {"CC_RF":this.CC_RF, "CC_RAF":this.CC_RAF, "EF":this.EF};
 
                 return JSON.stringify(metadata);
