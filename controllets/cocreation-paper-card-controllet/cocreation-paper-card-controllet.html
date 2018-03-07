@@ -183,7 +183,12 @@
                     <template is="dom-if" if="{{isOwner}}">
                         <paper-fab id="card_delete" class="delete" mini icon="delete" on-click="_handleDeleteClick"></paper-fab>
                     </template>
-                    <div class="name" style$="color: {{color}};">{{name}}</div>
+                    <div id="c_name" class="name" style$="color: {{color}};">{{name}}</div>
+                    <paper-tooltip for="c_name" position="bottom" offset="-8">
+                        <p>
+                            <span class="title" style$="color: {{color}};">{{name}}</span>
+                        </p>
+                    </paper-tooltip>
                     <div class="owner">{{owner}}</div>
                     <div class="time">
                         <div class="from">
