@@ -270,4 +270,4 @@ ln["mc.openlayers-map.osm-humanitarian-map.es-ES"] = "OSM Humanitarian";
 ln["mc.openlayers-map.osm-landscape-map.es-ES"] = "OSM Landscape";
 ln["mc.openlayers-map.osm-transport-map.es-ES"] = "OSM Transporte";
 ln["mc.openlayers-map.osm-cycle-map.es-ES"] = "OSM Cycle";
-ln["mc.openlayers-map.osm-standard-map.es-ES"] = "OSM Standard";
+ln["mc.openlayers-map.osm-standard-map.es-ES"] = "OSM Standard"; 
