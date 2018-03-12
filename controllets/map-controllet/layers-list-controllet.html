@@ -156,7 +156,7 @@
                 </paper-menu>
             </div>
             <div class="footer">
-                <paper-input id="filter" value={{filter}} no-label-float label="Search">
+                <paper-input id="filter" value={{filter}} no-label-float>
                     <iron-icon class="search" icon="search" prefix></iron-icon>
                     <paper-icon-button class="clear" suffix on-click="_clearInput" icon="clear"></paper-icon-button>
                 </paper-input>
@@ -164,11 +164,11 @@
 
         </paper-material>
 
-        <paper-tooltip for="checkedLayersButton" position="right" offset="0">
-            <p><span>[[_translate('checkedLayersButton')]]</span></p>
+        <paper-tooltip  for="checkedLayersButton" position="right" offset="0">
+            <p><span id = "checkedLayersButtonTlp" >[[_translate('checkedLayersButton')]]</span></p>
         </paper-tooltip>
-        <paper-tooltip for="zoomLayerButton" position="right" offset="0">
-            <p><span>[[_translate('zoomLayerButton')]]</span></p>
+        <paper-tooltip  for="zoomLayerButton" position="right" offset="0">
+            <p><span id = "zoomLayerButtonTlp">[[_translate('zoomLayerButton')]]</span></p>
         </paper-tooltip>
     </template>
 
@@ -210,6 +210,11 @@
             _onLayersChange: function (o) {
                 var reChecked = /layers\.#(\d+)\.checked/g;
                 var matches = reChecked.exec(o.path)
+
+                this.$.layers.innerHTML = this._translate("title");
+                this.$.zoomLayerButtonTlp.innerHTML = this._translate("zoomLayerButton");
+                this.$.checkedLayersButtonTlp.innerHTML = this._translate("checkedLayersButton");
+                this.$.filter.setAttribute("label", this._translate("search"));
 
                 if (o && o.path == 'layers') {
                 } else if (o && o.path == 'layers.length') {

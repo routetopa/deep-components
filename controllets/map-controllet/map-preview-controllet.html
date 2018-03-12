@@ -1,3 +1,4 @@
+<script src="controllet_ln.js"></script>
 <link rel="import" href="../../bower_components/polymer/polymer.html"/>
 
 <link rel="import" href="../../bower_components/paper-material/paper-material.html"/>
@@ -5,6 +6,7 @@
 <link rel="import" href="../../bower_components/paper-item/paper-item.html">
 
 <link rel="import" href="../../datalets/openlayers-datalet/openlayers-datalet.html">
+<link rel="import" href="map-controllet.html">
 
 <dom-module id="map-preview-controllet">
 
@@ -59,7 +61,7 @@
 
         <paper-material elevation="5">
             <div id="header">
-                <span>[[_translate('title')]]</span>
+                <span id = "title">[[_translate('title')]]</span>
                 <paper-icon-button id="zoomLayersButton" icon="search" on-tap="zoomToLayers"></paper-icon-button>
             </div>
             <div id="datalet_placeholder">
@@ -72,7 +74,7 @@
         </paper-material>
 
         <paper-tooltip for="zoomLayersButton" position="left" offset="0"><p>
-            <span>[[_translate('zoomLayersButton')]]</span></p></paper-tooltip>
+            <span id = "zoomLayersButtonTlp" >[[_translate('zoomLayersButton')]]</span></p></paper-tooltip>
 
     </template>
 
@@ -119,7 +121,6 @@
             getDatalet: function () {
                 var dataletParams = this.$.mapPreview.behavior.getParams();
 
-                console.log(dataletParams);
 
                 return {
                     datalet: "openlayers-datalet",
@@ -142,7 +143,7 @@
                 return layers;
             },
             addLayer: function (params) {
-                params = $.extend(true, params, {group: 'User layers'});
+                params = $.extend(true, params, {group: this._translate("user-layers")});
                 if ($.inArray(params.format, ['GeoJSON', 'KML']) != -1) {
                     params = $.extend(true, {
                         stroke: {'width': 1, 'color': [51, 153, 204, 1], 'linedash': []},
@@ -164,7 +165,10 @@
                 if ($.inArray(params.format, ['WMS']) != -1) {
                     params = $.extend(true, params, {requireCapabilities: true});
                 }
-                this.$.mapPreview.behavior.addLayer(params)
+                this.$.mapPreview.behavior.addLayer(params);
+                this.$.title.innerHTML = this._translate("title");
+                this.$.zoomLayersButtonTlp.innerHTML = this._translate("zoomLayersButton");
+
             },
             removeLayer: function (layer) {
                 this.$.mapPreview.behavior.removeLayer(layer);

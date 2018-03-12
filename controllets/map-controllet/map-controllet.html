@@ -38,7 +38,8 @@
 
 <script>
     getTranslatedText = function (key) {
-        var path = ['mc'].concat(key, ln["localization"]).join('.');
+       // var ln = [];
+        var path = ['mc'].concat(key,parent.ODE.user_language).join('.');
         return ln[path] || path.toString();
     }
 </script>
@@ -180,7 +181,6 @@
 //                    type: String,
 //                    value: undefined
 //                },
-
                 localization: {
                     type: String,
                     value: "en"
@@ -253,6 +253,8 @@
                             disabled: this.$.select_layers.getCheckedLayers().length == 0,
                             hidden: false
                         });
+                        this.$.addDatasetButton.innerHTML = this._translate("addDatasetButton");
+                        this.$.addDataletButton.innerHTML = this._translate("addDataletButton");
 
                         this.map.updateSize();
 
@@ -275,6 +277,7 @@
             },
 
             _onAddDatalet: function () {
+                this.$.slider.setTitle("addDataletButton", "addDataletButton");
                 var d = this.$.select_layers.$.map_preview.getDatalet();
                 this.fire('data-sevc-controllet.dataletCreated', {data: d});
             },
