@@ -58,11 +58,10 @@
 
                 var selectedFields = JSON.parse(this._component.getAttribute("selectedfields"));
                 var inputs = [];
-                if(selectedFields) { /*if deprecated*/
-                    for (var i=0; i < selectedFields.length; i++)
-                        if (selectedFields[i])
-                            inputs.push(selectedFields[i].field);
-                }
+
+                for (var i=0; i < selectedFields.length; i++)
+                    if (selectedFields[i])
+                        inputs.push(selectedFields[i].field);
 
                 var text_i = inputs.indexOf("EventDescription");
                 var url_i = inputs.indexOf("MediaUrl");
@@ -77,23 +76,43 @@
                     /*******************/
 
                     var text = '', url='', background='';
+                    var j = 3;
+
                     if(text_i > -1) {
-                        text = this.data[3].data[i];
+                        while (inputs[j] == "EventDescription") {
+                            text += "<p><b>" + this.data[j].name + "</b></p>" +
+                                    "<p>" + this.data[j].data[i] + "</p>";
+                            j++;
+                        }
                     }
+
                     if(url_i > -1) {
-                        if(text_i > -1)
-                            url = this.data[4].data[i];
-                        else
-                            url = this.data[3].data[i];
+                        url = this.data[j].data[i];
+                        j++;
+
+//                        if(text_i > -1)
+//                            url = this.data[4].data[i];
+//                        else
+//                        url = this.data[3].data[i];
                     }
                     if(background_i > -1) {
-                        if(text_i > -1 && url_i > -1)
-                            background = this.data[5].data[i];
-                        else if(text_i > -1 || url_i > -1)
-                            background = this.data[4].data[i];
-                        else
-                            background = this.data[3].data[i];
+                        background = this.data[j].data[i];
+//                        if(url_i > -1)
+//                            background = this.data[4].data[i];
+//                        else
+//                            background = this.data[3].data[i];
+
+//                        j++;
+
+//                        if(text_i > -1 && url_i > -1)
+//                            background = this.data[5].data[i];
+//                        else if(text_i > -1 || url_i > -1)
+//                            background = this.data[4].data[i];
+//                        else
+//                            background = this.data[3].data[i];
                     }
+
+
 
                     /*******************/
 

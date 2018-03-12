@@ -465,7 +465,11 @@ MapCreator.prototype.selectedOperator = function(pendingQuery){
 
 			var elementOnFocusNode = queryLogicMap[elementOnFocus];
 			var elementOnFocusOperatorSiblings = [];
-			var elementOnFocusAllSiblings = queryLogicMap[elementOnFocusNode.parent].children;
+			var elementOnFocusAllSiblings;
+			if(elementOnFocusNode.parent)
+				elementOnFocusAllSiblings = queryLogicMap[elementOnFocusNode.parent].children;
+			else
+				elementOnFocusAllSiblings = rootListQueryLogicMap;
 			for(var i = 1; i < elementOnFocusAllSiblings.length; i = i+2){
 				elementOnFocusOperatorSiblings.push(elementOnFocusAllSiblings[i]);
 			}
@@ -491,8 +495,13 @@ MapCreator.prototype.selectedOperator = function(pendingQuery){
 									   parent:elementOnFocusNode.parent, children: []};
 				queryLogicMap[conjunctionKey] = conjunctionLogicElement;
 
-				var index = $.inArray(elementOnFocusOperatorSiblings[i], queryLogicMap[elementOnFocusNode.parent].children);
-				queryLogicMap[elementOnFocusNode.parent].children[index] = conjunctionKey;
+				if(elementOnFocusNode.parent){
+					var index = $.inArray(elementOnFocusOperatorSiblings[i], queryLogicMap[elementOnFocusNode.parent].children);
+					queryLogicMap[elementOnFocusNode.parent].children[index] = conjunctionKey;
+				}else{
+					var index = $.inArray(elementOnFocusOperatorSiblings[i], rootListQueryLogicMap);
+					rootListQueryLogicMap[index] = conjunctionKey;
+				}
 			
 				decreaseIndexIfIAmLast(queryLogicMap[elementOnFocusOperatorSiblings[i]]);
 				delete queryLogicMap[elementOnFocusOperatorSiblings[i]];
@@ -921,8 +930,9 @@ MapCreator.prototype.getSiblingConjunctionByKey = function(key){
 		if(parentNode.type=='operator' && (parentNode.subtype=='not' || parentNode.subtype=='optional'))
 			parentNode = queryLogicMap[parentNode.parent]; //it should not be NULL
 
-		if(parentNode.children.length>1)
+		if(parentNode.children.length>1){
 			conjunction.push(queryLogicMap[parentNode.children[1]].subtype);
+		}
 		else{
 			conjunction.push('and');
 			//conjunction.push('or');
