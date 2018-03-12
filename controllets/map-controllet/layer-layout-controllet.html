@@ -1,3 +1,5 @@
+<script src="controllet_ln.js"></script>
+
 <dom-module id="layer-layout-controllet">
 
     <style>
@@ -129,7 +131,6 @@
             display: -ms-inline-flexbox;
             display: inline-flex;
         }
-
         #layer_layout_controllet_container {
             height: 100%;
         }
@@ -150,36 +151,39 @@
             <div id="layout_container" style="display: none;">
 
                 <div id="Stroke" class="row-group" hidden="true">
-                    <div class="group-header">[[_translate('stroke-style')]]</div>
-
-                    <div id="StrokeWidth" class="row">
-                        <label>{{_translate('stroke-width')}}</label>
-                        <paper-slider value={{stroke_width}} max="10" pin></paper-slider>
+                    <div id="StrokeStyle" class="group-header">
+                        [[_translate('stroke-style')]]
                     </div>
 
-                    <div id="StrokeColor" class="row">
-                        <label>{{_translate('stroke-color-red')}}</label>
-                        <paper-slider class="red" value={{stroke_color.red}} max="255" pin></paper-slider>
-                        <label>{{_translate('stroke-color-green')}}</label>
-                        <paper-slider class="green" value={{stroke_color.green}} max="255" pin></paper-slider>
-                        <label>{{_translate('stroke-color-blue')}}</label>
+
+                    <div id="StrokeWidth" class="row">
+                        <label id="StrokeWithLabel">{{_translate('stroke-width')}}</label>
+                        <paper-slider  value={{stroke_width}} max="10" pin></paper-slider>
+                    </div>
+
+                    <div id="StrokeColorRed" class="row">
+                        <label id="StrokeColorLabelRed">{{_translate('stroke-color-red')}}</label>
+                        <paper-slider   class="red"   value={{stroke_color.red}}  max="255" pin></paper-slider>
+                        <label id="StrokeColorLabelGreen">{{_translate('stroke-color-green')}}</label>
+                        <paper-slider  class="green" value={{stroke_color.green}} max="255" pin></paper-slider>
+                        <label id="StrokeColorLabelBlue">{{_translate('stroke-color-blue')}}</label>
                         <paper-slider class="blue" value={{stroke_color.blue}} max="255" pin></paper-slider>
-                        <label>{{_translate('stroke-color-alpha')}}</label>
-                        <paper-slider class="alpha" value={{stroke_color.alpha}} max="1" step="0.1" pin></paper-slider>
+                        <label = id="StrokeColorLabelAlpha">{{_translate('stroke-color-alpha')}}</label>
+                        <paper-slider  class="alpha" value={{stroke_color.alpha}} max="1" step="0.1" pin></paper-slider>
                     </div>
                 </div>
 
                 <div id="Fill" class="row-group" hidden="true">
-                    <div class="group-header">{{_translate('fill-style')}}</div>
+                    <div id= "FillStyle" class="group-header">{{_translate('fill-style')}}</div>
 
                     <div id="FillColor" class="row">
-                        <label>{{_translate('fill-color-red')}}</label>
+                        <label id="FillColorLabelRed">{{_translate('fill-color-red')}}</label>
                         <paper-slider class="red" value={{fill_color.red}} max="255" pin></paper-slider>
-                        <label>{{_translate('fill-color-green')}}</label>
+                        <label id="FillColorLabelGreen">{{_translate('fill-color-green')}}</label>
                         <paper-slider class="green" value={{fill_color.green}} max="255" pin></paper-slider>
-                        <label>{{_translate('fill-color-blue')}}</label>
+                        <label id="FillColorLabelBlue" >{{_translate('fill-color-blue')}}</label>
                         <paper-slider class="blue" value={{fill_color.blue}} max="255" pin></paper-slider>
-                        <label>{{_translate('fill-color-alpha')}}</label>
+                        <label id="FillColorLabelAlpha">{{_translate('fill-color-alpha')}}</label>
                         <paper-slider class="alpha" value={{fill_color.alpha}} max="1" step="0.1" pin></paper-slider>
                     </div>
                 </div>
@@ -188,33 +192,35 @@
                     <div class="group-header">{{_translate('point-style')}}</div>
 
                     <div id="IconColor" class="row">
-                        <label>{{_translate('icon-color-red')}}</label>
+                        <label id="IconColorRed">{{_translate('icon-color-red')}}</label>
                         <paper-slider class="red" value={{icon_color.red}} max="255" pin></paper-slider>
-                        <label>{{_translate('icon-color-green')}}</label>
+                        <label id="IconColorGreen">{{_translate('icon-color-green')}}</label>
                         <paper-slider class="green" value={{icon_color.green}} max="255" pin></paper-slider>
-                        <label>{{_translate('icon-color-blue')}}</label>
+                        <label id="IconColorBlue">{{_translate('icon-color-blue')}}</label>
                         <paper-slider class="blue" value={{icon_color.blue}} max="255" pin></paper-slider>
-                        <label>{{_translate('icon-color-alpha')}}</label>
+                        <label id="IconColorAlpha">{{_translate('icon-color-alpha')}}</label>
                         <paper-slider class="alpha" value={{icon_color.alpha}} max="1" step="0.1" pin></paper-slider>
                     </div>
                 </div>
 
                 <div id="Text" class="row-group" hidden="true">
                     <div class="group-header">
-                        <paper-checkbox id="TextStyleCheck" on-change="_onTextStyleChecked">
-                            {{_translate('label-style')}}
+                        <paper-checkbox checked id="TextStyleCheck"  on-change="_onTextStyleChecked">
+                           <label id = "LabelStyleLbl">{{_translate('label-style')}}</label>
                         </paper-checkbox>
                     </div>
 
                     <div class="row">
-                        <paper-dropdown-menu label="{{_translate('property-name')}}" required>
+                        <label id = "PropertyNameLbl">{{_translate('property-name')}}</label>
+                        <paper-dropdown-menu id ="TextFieldSelected" required>
                             <paper-menu class="dropdown-content" selected="{{text_field.Selected}}">
                                 <template is="dom-repeat" items={{text_field.Accepted}}>
                                     <paper-item>{{item}}</paper-item>
                                 </template>
                             </paper-menu>
                         </paper-dropdown-menu>
-                        <paper-dropdown-menu label="{{_translate('font-name')}}">
+                        <label id = "FontNameLbl">{{_translate('font-name')}}</label>
+                        <paper-dropdown-menu id = "dropdownLabel" >
                             <paper-menu class="dropdown-content" selected="{{text_font.Selected}}">
                                 <template is="dom-repeat" items={{text_font.Accepted}}>
                                     <paper-item>{{item}}</paper-item>
@@ -222,17 +228,17 @@
                             </paper-menu>
                         </paper-dropdown-menu>
 
-                        <label>{{_translate('font-size')}}</label>
+                        <label id = "fontSizeLabel">{{_translate('font-size')}}</label>
                         <paper-slider value={{text_size}} min="8" max="20" pin></paper-slider>
                     </div>
                     <div class="row">
-                        <label>{{_translate('text-color-red')}}</label>
+                        <label id = "textColorRedLbl" >{{_translate('text-color-red')}}</label>
                         <paper-slider class="red" value={{text_fill_color.red}} max="255" pin></paper-slider>
-                        <label>{{_translate('text-color-green')}}</label>
+                        <label id = "textColorGreenLbl">{{_translate('text-color-green')}}</label>
                         <paper-slider class="green" value={{text_fill_color.green}} max="255" pin></paper-slider>
-                        <label>{{_translate('text-color-blue')}}</label>
+                        <label id = "textColorBlueLbl">{{_translate('text-color-blue')}}</label>
                         <paper-slider class="blue" value={{text_fill_color.blue}} max="255" pin></paper-slider>
-                        <label>{{_translate('text-color-alpha')}}</label>
+                        <label id = "textColorAlphaLbl">{{_translate('text-color-alpha')}}</label>
                         <paper-slider class="alpha" value={{text_fill_color.alpha}} max="1" step="0.1"
                                       pin></paper-slider>
                     </div>
@@ -317,10 +323,15 @@
                 //$('paper-material.dropdown-content,paper-material.dropdown-content').perfectScrollbar();
             },
             ready: function () {
+                ln["localization"] = this.localization;
                 $(this.$.layout_container).perfectScrollbar();
             },
             isValid: function (callback) {
                 callback({valid: true});
+            },
+            localization: {
+                type: String,
+                value: "en"
             },
             _translate: function (key) {
                 return getTranslatedText([this.localName, key]);
@@ -441,6 +452,37 @@
                     } else this.$.Styles.hidden = true;
                 } else
                     this._onLayoutToggle();
+
+                this.$.header.innerHTML = this._translate("title"); //Layout
+                this.$.StrokeStyle.innerHTML = this._translate("stroke-style");
+                this.$.StrokeWithLabel.innerHTML = this._translate("stroke-width");
+
+                this.$.StrokeColorLabelRed.innerHTML = this._translate("stroke-color-red");
+                this.$.StrokeColorLabelGreen.innerHTML = this._translate("stroke-color-green");
+                this.$.StrokeColorLabelBlue.innerHTML = this._translate("stroke-color-blue");
+                this.$.StrokeColorLabelAlpha.innerHTML = this._translate("stroke-color-alpha");
+
+                this.$.FillStyle.innerHTML = this._translate("fill-style"); //Stile spessore
+                this.$.FillColorLabelRed.innerHTML = this._translate("fill-color-red");
+                this.$.FillColorLabelGreen.innerHTML = this._translate("fill-color-green");
+                this.$.FillColorLabelBlue.innerHTML = this._translate("fill-color-blue");
+                this.$.FillColorLabelAlpha.innerHTML = this._translate("fill-color-alpha");
+
+                this.$.Icon.innerHTML = this._translate("point-style");
+                this.$.IconColorRed.innerHTML = this._translate("icon-color-red");
+                this.$.IconColorGreen.innerHTML = this._translate("icon-color-green");
+                this.$.IconColorBlue.innerHTML = this._translate("icon-color-blue");
+                this.$.IconColorAlpha.innerHTML = this._translate("icon-color-alpha");
+
+                this.$.LabelStyleLbl.innerHTML = this._translate("label-style");
+                this.$.FontNameLbl.innerHTML = this._translate("font-name");
+                this.$.PropertyNameLbl.innerHTML = this._translate("property-name");
+                this.$.fontSizeLabel.innerHTML = this._translate("font-size");
+
+                this.$.textColorRedLbl.innerHTML = this._translate("text-color-red");
+                this.$.textColorGreenLbl.innerHTML = this._translate("text-color-green");
+                this.$.textColorBlueLbl.innerHTML = this._translate("text-color-blue");
+                this.$.textColorAlphaLbl.innerHTML = this._translate("text-color-alpha");
             },
 
             _onLayoutToggle: function () {
