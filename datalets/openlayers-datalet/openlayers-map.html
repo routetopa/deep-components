@@ -1,3 +1,4 @@
+
 <dom-module name="openlayers-map">
     <template>
         <link rel="stylesheet" href="ol-v3.17.1/ol.css"/>
@@ -18,6 +19,8 @@
     <!--<script src="ol-v3.17.1/ol.js"></script>-->
     <script src="ol-v3.17.1/ol-extend.js"></script>
     <script src="ol-v3.17.1/ol3-layerswitcher.js"></script>
+
+    <link rel="import" href="../../controllets/map-controllet/map-controllet.html">
 
     <script>
 
@@ -63,6 +66,10 @@
                     type: String,
                     value: ''
                 },
+                localization: {
+                    type: String,
+                    value: "en"
+                }
             },
 
             listeners: {
@@ -78,6 +85,10 @@
                     me.domReady()
                 }, 250);
             },
+            localization: {
+                type: String,
+                value: "en"
+            },
             detached: function () {
                 this._mutationObserver.disconnect();
             },
@@ -88,26 +99,26 @@
                     projection: ol.proj.get('EPSG:3857'),
                     layers: [
                         new ol.layer.Group({
-                            'title': 'Base map',
+                            'title': this._translate("base-map"),
                             layers: [
                                 new ol.layer.Tile({
-                                    title: 'OSM Humanitarian', type: 'base', visible: false,
+                                    title: this._translate("osm-humanitarian-map"), type: 'base', visible: false,
                                     source: new ol.source.OSM({url: 'https://tile-{a-c}.openstreetmap.fr/hot/{z}/{x}/{y}.png'})
                                 }),
                                 new ol.layer.Tile({
-                                    title: 'OSM Landscape', type: 'base', visible: false,
+                                    title: this._translate("osm-landscape-map"), type: 'base', visible: false,
                                     source: new ol.source.OSM({url: 'https://{a-c}.tile.thunderforest.com/landscape/{z}/{x}/{y}.png'})
                                 }),
                                 new ol.layer.Tile({
-                                    title: 'OSM Transport', type: 'base', visible: false,
+                                    title: this._translate("osm-transport-map"), type: 'base', visible: false,
                                     source: new ol.source.OSM({url: 'https://{a-c}.tile.thunderforest.com/transport/{z}/{x}/{y}.png'})
                                 }),
                                 new ol.layer.Tile({
-                                    title: 'OSM Cycle', type: 'base', visible: false,
+                                    title: this._translate("osm-cycle-map"), type: 'base', visible: false,
                                     source: new ol.source.OSM({url: 'https://{a-c}.tile.thunderforest.com/cycle/{z}/{x}/{y}.png'})
                                 }),
                                 new ol.layer.Tile({
-                                    title: 'OSM Standard', type: 'base', visible: true,
+                                    title: this._translate("osm-standard-map"), type: 'base', visible: true,
                                     source: new ol.source.OSM({url: 'https://{a-c}.tile.openstreetmap.org/{z}/{x}/{y}.png'})
                                 })
                             ]
@@ -115,7 +126,11 @@
                     ],
                     target: this.$.mapContainer,
                     controls: [
-                        new ol.control.Zoom(),
+                        new ol.control.Zoom({
+                            zoomInTipLabel: this._translate("zoom-in"),
+                            zoomOutTipLabel: this._translate("zoom-out"),
+                            className: 'ol-zoom custom-zoom-control'
+                        }),
                         new ol.control.Attribution({
                             collapsible: false
                         }),
@@ -237,7 +252,10 @@
             },
             _onLayerEvents: function (evt, params) {
 //                this.fire('layer-events', $.extend({type: evt.type}, params));
-            }
+            },
+            _translate: function (key) {
+                return getTranslatedText([this.localName, key]);
+            },
 
         });
 
