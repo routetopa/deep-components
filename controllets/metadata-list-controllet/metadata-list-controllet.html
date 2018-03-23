@@ -326,6 +326,9 @@
 
                 const actualLicenseLabel = this.MANDATORY["license"];
                 this.licenses.forEach(function(item) { item.selected = (actualLicenseLabel === item.label); });
+
+                const actualLanguageLabel = this.MANDATORY["language"];
+                this.languages.forEach(function(item) { item.selected = (actualLanguageLabel === item.label); });
             },
 
             getMetadata : function() {
