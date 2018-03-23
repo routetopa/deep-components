@@ -37,7 +37,7 @@
 
     var metadata = [];
 
-    var MANDATORY = [{ name: "title", type: "CC_RF"}, { name: "description", type: "CC_RF"}, { name: "license", type: "CC_RAF"}];
+    var MANDATORY = [{ name: "title", type: "CC_RF" }, { name: "description", type: "CC_RF" }, { name: "license", type: "CC_RAF" }, { name: "language", type: "EF" }];
     var CC_RF = {
         title:"The Best Dataset (O' Megl Dataset)",
         description:"Breve descrizione del meglio datasetto mai fatto!!! Bla bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla  bla bla",
@@ -90,7 +90,7 @@
 
     metadata_list.addEventListener("metadata-list-controllet_attached", function (e) {
         metadata_list.setMetadata(metadata);
-        console.log("we");
+//        console.log("we");
     });
 
     metadata_list.addEventListener("metadata-list-controllet_update-metadata", function (e) {

@@ -142,8 +142,18 @@
                         </select>
                     </template>
 
-                    <template is="dom-if" if="{{!_checkType(item.name, 'license')}}">
+                    <template is="dom-if" if="{{_checkType(item.name, 'language')}}">
+                        <select id="MANDATORY+{{item.name}}" on-change="_updateMetadata">
+                            <template is="dom-repeat" items="{{languages}}">
+                                <option value="{{item.value}}" selected="{{item.selected}}">{{item.label}}</option>
+                            </template>
+                        </select>
+                    </template>
+
+                    <!--<template is="dom-if" if="{{!_checkType(item.name, 'license')}}">-->
+                    <template is="dom-if" if="{{_checkSelect(item.name)}}">
                         <iron-autogrow-textarea id="MANDATORY+{{item.name}}" value="{{item.value}}" on-change="_updateMetadata"></iron-autogrow-textarea>
+                    <!--</template>-->
                     </template>
 
 
@@ -236,6 +246,18 @@
                         { value: "other-open", label: "Other (Open)", selected: false},
                         { value: "other-pd", label: "Other (Public Domain)", selected: false},
                         { value: "uk-ogl", label: "UK Open Government Licence (OGL)", selected: false}
+                    ]
+                },
+                languages : {
+                    type  : Array,
+                    value : [
+                        { value: "it", label: "Italiano", selected: true},
+                        { value: "en", label: "English", selected: false},
+                        { value: "es", label: "Español", selected: false},
+                        { value: "fr", label: "Français", selected: false},
+                        { value: "de", label: "Deutsch", selected: false},
+                        { value: "pl", label: "Polski", selected: false},
+                        { value: "nl", label: "Nederlands", selected: false}
                     ]
                 }
             },
@@ -369,6 +391,11 @@
 
             _checkType: function(type, check){
                 return (type == check);
+            },
+
+            _checkSelect: function(type){
+                console.log(type);
+                return !(type == 'license' || type == 'language');
             },
 
             _toArray: function(obj) {
