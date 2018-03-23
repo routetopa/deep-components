@@ -103,6 +103,11 @@ metadata_ln["release_date_description_en"] = "Date of formal issuance.";
 metadata_ln["system_of_records_en"] = "System of Records";
 metadata_ln["system_of_records_description_en"] = "If the systems is designated as a system of records under the Privacy Act of 1974, provide the URL to the System of Records Notice related to this dataset.";
 
+//MORE
+//1
+metadata_ln["version_en"] = "Version";
+metadata_ln["version_description_en"] = "Dataset Version.";
+
 /******** IT ********/
 
 metadata_ln["metadata_it"] = "METADATA";
@@ -203,6 +208,11 @@ metadata_ln["release_date_description_it"] = "Data formale di rilascio.";
 //11
 metadata_ln["system_of_records_it"] = "Sistema di records";
 metadata_ln["system_of_records_description_it"] = "Se il sistema è strutturato come un sistema di records secondo il Privacy Act del 1974, fornire un URL al sistema di Record collegato a questo dataset.";
+
+//MORE
+//1
+metadata_ln["version_it"] = "Versione";
+metadata_ln["version_description_it"] = "Versione del dataset.";
 
 /******** FR ********/
 
@@ -310,6 +320,11 @@ metadata_ln["release_date_description_fr"] = "date de publication";
 metadata_ln["system_of_records_fr"] = "Référetiel des données";
 metadata_ln["system_of_records_description_fr"] = "référetiel des données";
 
+//MORE
+//1
+metadata_ln["version_fr"] = "Version";
+metadata_ln["version_description_fr"] = "Dataset Version.";
+
 /******** NL ********/
 
 metadata_ln["metadata_nl"] = "METADATA";
@@ -411,6 +426,11 @@ metadata_ln["release_date_description_nl"] = "release_date";
 metadata_ln["system_of_records_nl"] = "system_of_records";
 metadata_ln["system_of_records_description_nl"] = "system_of_records";
 
+//MORE
+//1
+metadata_ln["version_nl"] = "Version";
+metadata_ln["version_description_nl"] = "Dataset Version.";
+
 /******** es_ES ********/
 
 metadata_ln["metadata_es-ES"] = "METADATA";
@@ -511,3 +531,8 @@ metadata_ln["release_date_description_es-ES"] = "Date of formal issuance.";
 //11
 metadata_ln["system_of_records_es-ES"] = "System of Records";
 metadata_ln["system_of_records_description_es-ES"] = "If the systems is designated as a system of records under the Privacy Act of 1974, provide the URL to the System of Records Notice related to this dataset.";
+
+//MORE
+//1
+metadata_ln["version_es-ES"] = "Version";
+metadata_ln["version_description_es-ES"] = "Dataset Version.";
