@@ -108,11 +108,11 @@ metadata_ln["system_of_records_description_en"] = "If the systems is designated 
 metadata_ln["version_en"] = "Version";
 metadata_ln["version_description_en"] = "Dataset Version.";
 //2
-metadata_ln["mantainer_en"] = "Mantainer";
-metadata_ln["mantainer_description_en"] = "Mantainer.";
+metadata_ln["maintainer_en"] = "Maintainer";
+metadata_ln["maintainer_description_en"] = "Maintainer.";
 //3
-metadata_ln["mantainer_email_en"] = "Mantainer e-mail";
-metadata_ln["mantainer_email_description_en"] = "Mantainer e-mail.";
+metadata_ln["maintainer_email_en"] = "Maintainer e-mail";
+metadata_ln["maintainer_email_description_en"] = "Maintainer e-mail.";
 //4
 metadata_ln["author_en"] = "Author";
 metadata_ln["author_description_en"] = "Dataset Author.";
@@ -227,11 +227,11 @@ metadata_ln["system_of_records_description_it"] = "Se il sistema è strutturato 
 metadata_ln["version_it"] = "Versione";
 metadata_ln["version_description_it"] = "Versione del dataset.";
 //2
-metadata_ln["mantainer_it"] = "Manutentore";
-metadata_ln["mantainer_description_it"] = "Manutentore.";
+metadata_ln["maintainer_it"] = "Manutentore";
+metadata_ln["maintainer_description_it"] = "Manutentore.";
 //3
-metadata_ln["mantainer_email_it"] = "E-mail del Manutentore";
-metadata_ln["mantainer_email_description_it"] = "E-mail del Manutentore.";
+metadata_ln["maintainer_email_it"] = "E-mail del Manutentore";
+metadata_ln["maintainer_email_description_it"] = "E-mail del Manutentore.";
 //4
 metadata_ln["author_it"] = "Autore";
 metadata_ln["author_description_it"] = "Autore del dataset.";
@@ -350,11 +350,11 @@ metadata_ln["system_of_records_description_fr"] = "référetiel des données";
 metadata_ln["version_fr"] = "Version";
 metadata_ln["version_description_fr"] = "Dataset Version.";
 //2
-metadata_ln["mantainer_fr"] = "Mantainer";
-metadata_ln["mantainer_description_fr"] = "Mantainer.";
+metadata_ln["maintainer_fr"] = "Maintainer";
+metadata_ln["maintainer_description_fr"] = "Maintainer.";
 //3
-metadata_ln["mantainer_email_fr"] = "Mantainer e-mail";
-metadata_ln["mantainer_email_description_fr"] = "Mantainer e-mail.";
+metadata_ln["maintainer_email_fr"] = "Maintainer e-mail";
+metadata_ln["maintainer_email_description_fr"] = "Maintainer e-mail.";
 //4
 metadata_ln["author_fr"] = "Author";
 metadata_ln["author_description_fr"] = "Dataset Author.";
@@ -468,11 +468,11 @@ metadata_ln["system_of_records_description_nl"] = "system_of_records";
 metadata_ln["version_nl"] = "Version";
 metadata_ln["version_description_nl"] = "Dataset Version.";
 //2
-metadata_ln["mantainer_nl"] = "Mantainer";
-metadata_ln["mantainer_description_nl"] = "Mantainer.";
+metadata_ln["maintainer_nl"] = "Maintainer";
+metadata_ln["maintainer_description_nl"] = "Maintainer.";
 //3
-metadata_ln["mantainer_email_nl"] = "Mantainer e-mail";
-metadata_ln["mantainer_email_description_nl"] = "Mantainer e-mail.";
+metadata_ln["maintainer_email_nl"] = "Maintainer e-mail";
+metadata_ln["maintainer_email_description_nl"] = "Maintainer e-mail.";
 //4
 metadata_ln["author_nl"] = "Author";
 metadata_ln["author_description_nl"] = "Dataset Author.";
@@ -586,11 +586,11 @@ metadata_ln["system_of_records_description_es-ES"] = "If the systems is designat
 metadata_ln["version_es-ES"] = "Version";
 metadata_ln["version_description_es-ES"] = "Dataset Version.";
 //2
-metadata_ln["mantainer_es-ES"] = "Mantainer";
-metadata_ln["mantainer_description_es-ES"] = "Mantainer.";
+metadata_ln["maintainer_es-ES"] = "Maintainer";
+metadata_ln["maintainer_description_es-ES"] = "Maintainer.";
 //3
-metadata_ln["mantainer_email_es-ES"] = "Mantainer e-mail";
-metadata_ln["mantainer_email_description_es-ES"] = "Mantainer e-mail.";
+metadata_ln["maintainer_email_es-ES"] = "Maintainer e-mail";
+metadata_ln["maintainer_email_description_es-ES"] = "Maintainer e-mail.";
 //4
 metadata_ln["author_es-ES"] = "Author";
 metadata_ln["author_description_es-ES"] = "Dataset Author.";
