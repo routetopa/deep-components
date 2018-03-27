@@ -575,7 +575,7 @@ metadata_ln["primary_IT_investment_UII_description_es-ES"] = "For linking a data
 metadata_ln["related_documents_es-ES"] = "Related Documents";
 metadata_ln["related_documents_description_es-ES"] = "Related documents such as technical information about a dataset, developer documentation, etc.";
 //10
-metadata_ln["release_date_es-ES"] = "Release_Date";
+metadata_ln["release_date_es-ES"] = "Release Date";
 metadata_ln["release_date_description_es-ES"] = "Date of formal issuance.";
 //11
 metadata_ln["system_of_records_es-ES"] = "System of Records";

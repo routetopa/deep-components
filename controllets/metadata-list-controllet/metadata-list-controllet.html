@@ -152,7 +152,7 @@
 
                     <!--<template is="dom-if" if="{{!_checkType(item.name, 'license')}}">-->
                     <template is="dom-if" if="{{_checkSelect(item.name)}}">
-                        <iron-autogrow-textarea id="MANDATORY+{{item.name}}" value="{{item.value}}" on-change="_updateMetadata"></iron-autogrow-textarea>
+                        <iron-autogrow-textarea id="MANDATORY+{{item.name}}" value="{{item.value}}" on-keyup="_updateMetadata"></iron-autogrow-textarea>
                     <!--</template>-->
                     </template>
 
@@ -172,7 +172,7 @@
                         </div>
                     </div>
 
-                    <iron-autogrow-textarea id="CC_RF+{{item.name}}" value="{{item.value}}" on-change="_updateMetadata"></iron-autogrow-textarea>
+                    <iron-autogrow-textarea id="CC_RF+{{item.name}}" value="{{item.value}}" on-keyup="_updateMetadata"></iron-autogrow-textarea>
 
                 </template>
 
@@ -189,7 +189,7 @@
                         </div>
                     </div>
 
-                    <iron-autogrow-textarea id="CC_RAF+{{item.name}}" value="{{item.value}}" on-change="_updateMetadata"></iron-autogrow-textarea>
+                    <iron-autogrow-textarea id="CC_RAF+{{item.name}}" value="{{item.value}}" on-keyup="_updateMetadata"></iron-autogrow-textarea>
 
                 </template>
 
@@ -206,7 +206,7 @@
                         </div>
                     </div>
 
-                    <iron-autogrow-textarea id="EF+{{item.name}}" value="{{item.value}}" on-change="_updateMetadata"></iron-autogrow-textarea>
+                    <iron-autogrow-textarea id="EF+{{item.name}}" value="{{item.value}}" on-keyup="_updateMetadata"></iron-autogrow-textarea>
 
                 </template>
 
@@ -327,8 +327,12 @@
                 const actualLicenseLabel = this.MANDATORY["license"];
                 this.licenses.forEach(function(item) { item.selected = (actualLicenseLabel === item.label); });
 
+                this.licenses = JSON.parse(JSON.stringify(this.licenses));
+
                 const actualLanguageLabel = this.MANDATORY["language"];
                 this.languages.forEach(function(item) { item.selected = (actualLanguageLabel === item.label); });
+
+                this.languages = JSON.parse(JSON.stringify(this.languages));
             },
 
             getMetadata : function() {
@@ -343,42 +347,44 @@
             },
 
             _updateMetadata : function(e) {
-                var splitted, category, name, value;
-                if(e.target.type.indexOf("select") > -1) {
-                    var t = e.target;
-                    splitted = e.target.id.split("+");
-                    value = t.options[t.selectedIndex].text;
-                }
-                else {
-                    splitted = ($(e.target).parents("iron-autogrow-textarea")[0].id).split("+");
-                    value = e.target.value;
-                }
+                this.debounce('_filter', function () {
+                    var splitted, category, name, value;
+                    if(e.target.type.indexOf("select") > -1) {
+                        var t = e.target;
+                        splitted = e.target.id.split("+");
+                        value = t.options[t.selectedIndex].text;
+                    }
+                    else {
+                        splitted = ($(e.target).parents("iron-autogrow-textarea")[0].id).split("+");
+                        value = e.target.value;
+                    }
 
-                category = splitted[0];
-                name = splitted[1];
+                    category = splitted[0];
+                    name = splitted[1];
 
-                switch (category) {
-                    case "MANDATORY":
-                        this.MANDATORY[name] = value;
-                        break;
-                    case "CC_RF":
-                        this.CC_RF[name] = value;
-                        break;
-                    case "CC_RAF":
-                        this.CC_RAF[name] = value;
-                        break;
-                    case "EF":
-                        this.EF[name] = value;
-                }
+                    switch (category) {
+                        case "MANDATORY":
+                            this.MANDATORY[name] = value;
+                            break;
+                        case "CC_RF":
+                            this.CC_RF[name] = value;
+                            break;
+                        case "CC_RAF":
+                            this.CC_RAF[name] = value;
+                            break;
+                        case "EF":
+                            this.EF[name] = value;
+                    }
 
-                var that = this;
-                this.mandatory_list.forEach(function(element) {
-                    that.metadata[element.type][element.name] = that.metadata["MANDATORY"][element.name];
-                });
+                    var that = this;
+                    this.mandatory_list.forEach(function(element) {
+                        that.metadata[element.type][element.name] = that.metadata["MANDATORY"][element.name];
+                    });
 
-                var metadata = {"CC_RF":this.CC_RF, "CC_RAF":this.CC_RAF, "EF":this.EF};
-//                this.metadata = JSON.stringify(metadata);
-                this.fire('metadata-list-controllet_update-metadata', {metadata : JSON.stringify(metadata)});
+                    var metadata = {"CC_RF":this.CC_RF, "CC_RAF":this.CC_RAF, "EF":this.EF};
+    //                this.metadata = JSON.stringify(metadata);
+                    this.fire('metadata-list-controllet_update-metadata', {metadata : JSON.stringify(metadata)});
+                }, 300);
             },
 
             _forceUpdateMetadata : function() {
@@ -398,7 +404,7 @@
             },
 
             _checkSelect: function(type){
-                console.log(type);
+//                console.log(type);
                 return !(type == 'license' || type == 'language');
             },
 
