@@ -1,0 +1,373 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html" />
+
+<link rel="import" href="../../bower_components/iron-autogrow-textarea/iron-autogrow-textarea.html">
+
+<script src="../../locales/metadata_list_ln.js"></script>
+
+
+<dom-module id="metadata-view-controllet">
+
+    <template>
+
+        <style is="custom-style">
+            #metadata_container {
+                height: 100%;
+                width: 100%;
+                overflow: hidden;
+            }
+
+            #metadata_container * {
+                font-family: 'Roboto', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+                font-size: 16px;
+                line-height: 24px;
+            }
+
+            #metadata_container .header{
+                height: 24px;
+                padding: 12px;
+                text-align: center;
+                font-weight: 700;
+                background-color: #FF5722;
+                color: #FFFFFF;
+            }
+
+            #metadata_container #metadata_list{
+                position: relative;
+                height: calc(100% - 48px - 32px);
+                width: calc(100% - 32px);
+                padding: 16px;
+                overflow-y: scroll;
+            }
+
+            #metadata_container .title_container {
+                margin-top: 32px;
+                height: 40px;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+            }
+
+            #metadata_container .title_container:first-child {
+                margin-top: 16px;
+            }
+
+            #metadata_container .title {
+                font-size: 24px;
+            }
+
+            #metadata_container .box{
+                margin: 16px 0 8px 0;
+                display: flex;
+                flex-direction: row;
+            }
+
+            #metadata_container .avatar {
+                height: 40px;
+                width: 40px;
+                min-width: 40px;
+                border-radius: 50%;
+                background: #FF5722;
+                color: #FFFFFF;
+                line-height: 40px;
+                font-size: 32px;
+                vertical-align: middle;
+                text-align: center;
+                margin: 4px 0;
+            }
+
+            #metadata_container .text {
+                height: 64px;
+                width: calc(100% - 56px);
+                padding-left: 16px;
+                /*background: blue;*/
+            }
+
+            #metadata_container .name {
+                color: #FF5722;
+                font-weight: 700;
+            }
+
+            #metadata_container .description {
+                height: 40px;
+                width: 100%;
+                /*color: #616161;*/
+
+                font-size: 14px;
+                line-height: 20px;
+
+                display: -webkit-box;
+                -webkit-line-clamp: 2;
+                -webkit-box-orient: vertical;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+
+            iron-autogrow-textarea {
+                width: calc(100% - 6px - 56px);
+                margin-left: 56px;
+                max-height: 96px;
+            }
+
+            select {
+                width: calc(100% - 6px - 56px);
+                margin-left: 56px;
+                background: transparent;
+                border: 1px solid #A9A9A9;
+                height: 30px;
+                padding: 2px;
+            }
+
+        </style>
+
+        <div id="metadata_container">
+            <div class="header"><span id="metadata"></span></div>
+            <div id="metadata_list">
+
+                <!--MANDATORY-->
+                <template is="dom-repeat" items={{_toArray(MANDATORY)}}>
+
+
+                        <div class="box">
+                            <div class="avatar">{{item.index}}</div>
+                            <div class="text">
+                                <div class="name" title="{{_getName(item.name)}}">{{_getName(item.name)}} *</div>
+                                <template is="dom-if" if="{{!item.value}}">
+                                    <!--<div class="missing" style="color: #F44336; font-weight: 700">MISSING</div>-->
+                                    <div class="missing" style="background-color: #FFF9C4; width: calc(100% - 16px); font-weight: 700; padding-left: 16px">?</div>
+                                </template>
+                                <template is="dom-if" if="{{item.value}}">
+                                    <div class="description" title="{{_getDescription(item.name)}}">{{item.value}}</div>
+                                </template>
+                            </div>
+                        </div>
+
+                </template>
+
+                <!--CC_RF-->
+                <div id="title_CC_RF" class="title_container"><span class="title" id="CC_RF"></span></div>
+
+                <template is="dom-repeat" items={{_toArray(CC_RF)}}>
+
+                        <div class="box">
+                            <div class="avatar">{{item.index}}</div>
+                            <div class="text">
+                                <div class="name" title="{{_getName(item.name)}}">{{_getName(item.name)}} *</div>
+                                <div class="description" title="{{_getDescription(item.name)}}">{{item.value}}</div>
+                            </div>
+                        </div>
+
+                </template>
+
+                <!--CC_RAF-->
+                <div id="title_CC_RAF" class="title_container"><span class="title" id="CC_RAF"></span></div>
+
+                <template is="dom-repeat" items={{_toArray(CC_RAF)}}>
+
+                        <div class="box">
+                            <div class="avatar">{{item.index}}</div>
+                            <div class="text">
+                                <div class="name" title="{{_getName(item.name)}}">{{_getName(item.name)}} *</div>
+                                <div class="description" title="{{_getDescription(item.name)}}">{{item.value}}</div>
+                            </div>
+                        </div>
+
+                </template>
+
+                <!--EF-->
+                <div id="title_EF" class="title_container"><span class="title" id="EF"></span></div>
+
+                <template is="dom-repeat" items={{_toArray(EF)}}>
+
+                        <div class="box">
+                            <div class="avatar">{{item.index}}</div>
+                            <div class="text">
+                                <div class="name" title="{{_getName(item.name)}}">{{_getName(item.name)}} *</div>
+                                <div class="description" title="{{_getDescription(item.name)}}">{{item.value}}</div>
+                            </div>
+                        </div>
+
+                </template>
+
+
+            </div>
+        </div>
+
+    </template>
+
+    <script>
+
+        Polymer({
+
+            is : 'metadata-view-controllet',
+
+            properties : {
+
+                metadata : {
+                    type  : Object,
+                    value : undefined
+                }
+            },
+
+            ready : function() {
+                try
+                {
+                    metadata_ln["ln"] = ODE.user_language;
+                }
+                catch(ex){
+                    console.log(ex);
+                }
+//                metadata_ln["ln"] = "it";
+
+                $(this.$.metadata_list).perfectScrollbar();
+            },
+
+            attached : function() {
+                this._translate();
+
+                this.fire("metadata-view-controllet_attached");
+            },
+
+            _translate : function() {
+                this.$.metadata.innerHTML = metadata_ln["metadata_" + metadata_ln["ln"]];
+
+                this.$.CC_RF.innerHTML = metadata_ln["CC_RF_" + metadata_ln["ln"]];
+                this.$.CC_RAF.innerHTML = metadata_ln["CC_RAF_" + metadata_ln["ln"]];
+                this.$.EF.innerHTML = metadata_ln["EF_" + metadata_ln["ln"]];
+            },
+
+            _getName : function(name) {
+//                console.log('Test = ' + name);
+                return metadata_ln[name + "_" +     metadata_ln["ln"]];
+            },
+
+            _getDescription : function(name) {
+                return metadata_ln[name + "_description_" + metadata_ln["ln"]];
+            },
+
+
+            setMetadata : function(metadata) {
+                this.metadata = JSON.parse(metadata);
+
+                this.mandatory_list = this.metadata["MANDATORY"];
+                this.metadata["MANDATORY"] = {};
+
+                var that = this;
+                this.mandatory_list.forEach(function(element) {
+                    that.metadata["MANDATORY"][element.name] = that.metadata[element.type][element.name];
+                    delete that.metadata[element.type][element.name];
+                });
+
+                for (var k in this.metadata["CC_RF"])
+                    if (this.metadata["CC_RF"][k] == "")
+                        delete this.metadata["CC_RF"][k];
+
+                for (var k in this.metadata["CC_RAF"])
+                    if (this.metadata["CC_RAF"][k] == "")
+                        delete this.metadata["CC_RAF"][k];
+
+                for (var k in this.metadata["EF"])
+                    if (this.metadata["EF"][k] == "")
+                        delete this.metadata["EF"][k];
+
+                this.MANDATORY = this.metadata["MANDATORY"];
+                this.CC_RF = this.metadata["CC_RF"];
+                this.CC_RAF = this.metadata["CC_RAF"];
+                this.EF = this.metadata["EF"];
+
+                if(Object.keys(this.CC_RF).length == 0)
+                    $(this.$.title_CC_RF).hide();
+                if(this.CC_RAF == null || Object.keys(this.CC_RAF).length == 0)
+                    $(this.$.title_CC_RAF).hide();
+                if(this.EF == null || Object.keys(this.EF).length == 0)
+                    $(this.$.title_EF).hide();
+            },
+
+            getMetadata : function() {
+                var that = this;
+                this.mandatory_list.forEach(function(element) {
+                    that.metadata[element.type][element.name] = that.metadata["MANDATORY"][element.name];
+                });
+
+                var metadata = {"CC_RF":this.CC_RF, "CC_RAF":this.CC_RAF, "EF":this.EF};
+
+                return JSON.stringify(metadata);
+            },
+
+            _updateMetadata : function(e) {
+                this.debounce('_filter', function () {
+                    var splitted, category, name, value;
+                    if(e.target.type.indexOf("select") > -1) {
+                        var t = e.target;
+                        splitted = e.target.id.split("+");
+                        value = t.options[t.selectedIndex].text;
+                    }
+                    else {
+                        splitted = ($(e.target).parents("iron-autogrow-textarea")[0].id).split("+");
+                        value = e.target.value;
+                    }
+
+                    category = splitted[0];
+                    name = splitted[1];
+
+                    switch (category) {
+                        case "MANDATORY":
+                            this.MANDATORY[name] = value;
+                            break;
+                        case "CC_RF":
+                            this.CC_RF[name] = value;
+                            break;
+                        case "CC_RAF":
+                            this.CC_RAF[name] = value;
+                            break;
+                        case "EF":
+                            this.EF[name] = value;
+                    }
+
+                    var that = this;
+                    this.mandatory_list.forEach(function(element) {
+                        that.metadata[element.type][element.name] = that.metadata["MANDATORY"][element.name];
+                    });
+
+                    var metadata = {"CC_RF":this.CC_RF, "CC_RAF":this.CC_RAF, "EF":this.EF};
+    //                this.metadata = JSON.stringify(metadata);
+                    this.fire('metadata-view-controllet_update-metadata', {metadata : JSON.stringify(metadata)});
+                }, 300);
+            },
+
+            _forceUpdateMetadata : function() {
+
+                var that = this;
+                this.mandatory_list.forEach(function(element) {
+                    that.metadata[element.type][element.name] = that.metadata["MANDATORY"][element.name];
+                });
+
+                var metadata = {"CC_RF":this.CC_RF, "CC_RAF":this.CC_RAF, "EF":this.EF};
+//                this.metadata = JSON.stringify(metadata);
+                this.fire('metadata-view-controllet_update-metadata', {metadata : JSON.stringify(metadata)});
+            },
+
+            _checkType: function(type, check){
+                return (type == check);
+            },
+
+            _checkSelect: function(type){
+//                console.log(type);
+                return !(type == 'license' || type == 'language');
+            },
+
+            _toArray: function(obj) {
+                var index = 0;
+                return Object.keys(obj).map(function(key) {
+                    return {
+                        index: ++index,
+                        name: key,
+                        value: obj[key]
+                    };
+                });
+            },
+
+        });
+
+    </script>
+
+</dom-module>

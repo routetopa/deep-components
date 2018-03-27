@@ -10,6 +10,7 @@
     <script src="../../../bower_components/webcomponentsjs/webcomponents-lite.min.js"></script>
 
     <link rel="import" href="../metadata-list-controllet.html" />
+    <link rel="import" href="../metadata-view-controllet.html" />
 
     <link rel="import" href="../../../bower_components/paper-material/paper-material.html" />
 </head>
@@ -29,7 +30,8 @@
 
 <paper-material id="container" elevation="5">
 
-    <metadata-list-controllet id="metadata_list"></metadata-list-controllet>
+    <!--<metadata-list-controllet id="metadata_list"></metadata-list-controllet>-->
+    <metadata-view-controllet id="metadata_list"></metadata-view-controllet>
 
 </paper-material>
 
@@ -88,12 +90,12 @@
 //    }, 1000);
 
 
-    metadata_list.addEventListener("metadata-list-controllet_attached", function (e) {
+    metadata_list.addEventListener("metadata-view-controllet_attached", function (e) {
         metadata_list.setMetadata(metadata);
 //        console.log("we");
     });
 
-    metadata_list.addEventListener("metadata-list-controllet_update-metadata", function (e) {
+    metadata_list.addEventListener("metadata-view-controllet_update-metadata", function (e) {
         console.log(e.detail.metadata);
         console.log(JSON.parse(e.detail.metadata));
     });
