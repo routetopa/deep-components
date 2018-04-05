@@ -134,20 +134,22 @@
                     },
 
                     tooltip: {
+                        useHTML: true,
+                        shared: true,
                         formatter: function() {
-
-//                            var index = pointsInfo[0].data.indexOf(this.point["name"]);
                             var name = this.point["name"];
                             var index = pointsInfo[0].data.findIndex(x => x.trim().toLowerCase() === name.trim().toLowerCase());
 
                             var s = "";
-                            for (var i=0; i < pointsInfo.length; i++)
-                                s += '<span  style="color: #7cb5ec;">\u25CF</span> ' + pointsInfo[i].name + ': <b>' +  pointsInfo[i].data[index] + ' ' + (i==1 ? suffix : '') + '</b><br>';
-
+                            for (var i=0; i < pointsInfo.length; i++) {
+                                if (pointsInfo[i].data[index].toString().match(new RegExp("(https?:\/\/.*\.(?:png|jpg|jpeg|gif))", 'i')))
+                                    s += '<image height="124" width="124" style="object-fit: contain;" src="' + pointsInfo[i].data[index] + '" /><br>';
+                                else
+                                    s += '<span  style="color: #7cb5ec;">\u25CF</span> ' + pointsInfo[i].name + ': <b>' + pointsInfo[i].data[index] + ' ' + (i == 1 ? suffix : '') + '</b><br>';
+                            }
 //                            var s = '<span  style="color: #7cb5ec;">\u25CF</span> ' + this.point.name + ': <b>' +  this.point.value + ' ' + suffix + '</b>';
                             return s;
-                        },
-                        shared: true
+                        }
                     },
 
                     credits: {
