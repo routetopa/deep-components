@@ -31,45 +31,19 @@
 
 <link rel="import" href="../base-ajax-json-alasql-datalet/base-ajax-json-alasql-datalet.html">
 
-<!--
-The `highcharts-datalet` uses the base-ajax-json-jsonpath-datalet as data retriving and selection mechanism. It defines the common properties
-for all the highchart datalets : categories, series and series_type. Overmore override the transformData method
-to create and populate categories and series array. Every specific highchart chart implementation (eg linechart, barchart, columnchart ...)
-will use highcharts-datalet properties to create the appropriate chart.
-
-Example :
-
-    <dom-module id="highcarts-chart-datalet">
-        <template>
-            ...
-            <highcharts-datalet id="charts" data-url="{{dataUrl}}" fields="{{fields}}"></highcharts-datalet>
-            ...
-        </template>
-    </dom-module>
-
-@element highcharts-datalet
-@status v0.1
-@homepage
-@group datalets
--->
-
-<dom-module id="highcharts-datalet">
+<dom-module id="highmaps-datalet">
 
     <template>
         <base-ajax-json-alasql-datalet id="baseAjaxJsonAlasqlDatalet" data-url="{{dataUrl}}" fields="{{fields}}" data="{{data}}" datalettitle="{{datalettitle}}" description="{{description}}" export_menu="{{export_menu}}" disable_my_space="{{disable_my_space}}"></base-ajax-json-alasql-datalet>
     </template>
 
-    <!--<script src="static/js/highcharts.js"></script>-->
-    <!--<script src="static/js/highcharts-more.js"></script>-->
-
-    <!--<script src="https://code.highcharts.com/stock/highstock.js"></script>-->
-    <script src="static/js/Highstock-5.0.10/code/highstock.js"></script>
+    <script src="../highcharts-datalet/static/js/Highstock-6.0.7/code/highstock.js"></script>
+    <script src="static/js/map.js"></script>
 
     <script src="static/themes/themes.js"></script>
-    <!--tutti i temi nuovi e delete old folder themes!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!-->
 
     <script>
-        var HighchartsBehavior = {
+        var HighmapsBehavior = {
 
             properties: {
                 categories: {
@@ -83,70 +57,36 @@ Example :
             },
 
             transformData: function () {
+
                 if(this.data.length == 0)
                     return;
 
-                var selectedFields = JSON.parse(this._component.getAttribute("selectedfields"));
+//                var data = [];
+//                for (var i=0; i < this.data[0].data.length; i++)
+//                    data[i] = [this.data[0].data[i], this.data[1].data[i]];
 
-                var inputs = [];
-                if(selectedFields) { /*if deprecated*/
-                    for (var i=0; i < selectedFields.length; i++)
-                        if (selectedFields[i])
-                            inputs.push(selectedFields[i].field);
+                var data = [], arr = [];
+                for (var j = 0; j < this.data[0].data.length; j++) {
+                    arr = [];
+                    for (var i=0; i < this.data.length; i++)
+                        arr.push(this.data[i].data[j]);
+                    data.push(arr);
                 }
 
-                var cat_index = inputs.indexOf("Categories");
-
-                if(cat_index == -1) {
-                    categories = this.data[0].data;
-                    series = [];
-                    for (var i = 1; i < this.data.length; i++)
-                        series.push(this.data[i]);
-
-                    this.properties.categories.value = categories;
-                    this.properties.series.value = series;
-                }
-                else {
-                    var x = this.data[0]["data"];
-                    var y = this.data[1]["data"];
-                    var cat = this.data[cat_index]["data"];
-
-                    var categories = x.filter(function(item, pos) {
-                        return x.indexOf(item) == pos;
-                    });
-
-                    var s = cat.filter(function(item, pos) {
-                        return cat.indexOf(item) == pos;
-                    });
-
-                    var series = [];
-                    for(var i = 0; i < s.length; i++) {
-                        series.push({name: s[i], data: new Array(categories.length+1).join('0').split('').map(parseFloat)});
-                    }
-
-                    for(var i = 0; i < y.length; i++){
-                        var index = categories.indexOf(x[i]);
-                        var s = series.filter(function( obj ) {
-                            return obj.name == cat[i];
-                        });
-                        s[0]["data"][index] = y[i];
-                    }
-
-                    this.properties.categories.value = categories;
-                    this.properties.series.value = series;
-                }
+                this.properties.series.value = data;
             },
 
             redraw: function () {
-                $(this._component.$.charts.$.baseAjaxJsonAlasqlDatalet.$.baseDatalet.$.datalet_container).highcharts().reflow();
+                console.log("implement Highmaps redraw");
+//                $(this._component.$.charts.$.baseAjaxJsonAlasqlDatalet.$.baseDatalet.$.datalet_container).highcharts().reflow();
             }
 
         };
 
-        var HighchartsComponentBehavior = $.extend(true, {}, BaseDataletBehavior, WorkcycleBehavior, AjaxJsonAlasqlBehavior, HighchartsBehavior);
+        var HighmapsComponentBehavior = $.extend(true, {}, BaseDataletBehavior, WorkcycleBehavior, AjaxJsonAlasqlBehavior, HighmapsBehavior);
 
-        HighchartsDatalet = Polymer({
-            is : 'highcharts-datalet'
+        HighmapsDatalet = Polymer({
+            is : 'highmaps-datalet'
         });
     </script>
 

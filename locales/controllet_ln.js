@@ -152,9 +152,10 @@ ln["bubblechart_en"] = "Bubble Chart";
 ln["treemap_en"] = "Tree Map";
 ln["timeline_en"] = "Timeline";
 ln["mediaslider_en"] = "Media Slider";
-ln["audioslider_en"] = "Audio Slider";
 ln["leafletjs_en"] = "Map";
 ln["leafletjs-geojson_en"] = "Geojson Map";
+ln["audioslider_en"] = "Audio Slider";
+ln["italymap_en"] = "Italy Map";
 
 ln["datatableDescription_en"] = "A table is a means of arranging data in rows and columns.";
 ln["barchartDescription_en"] = "A bar chart is a chart that presents grouped data with rectangular bars plotted horizontally with lengths proportional to the values that they represent.";
@@ -170,6 +171,9 @@ ln["timelineDescription_en"] = "The timeline is an interactive visualization cha
 ln["mediasliderDescription_en"] = "The mediaslider is a slider of media.";
 ln["leafletjsDescription_en"] = "";
 ln["leafletjs-geojsonDescription_en"] = "";
+ln["italymapDescription_en"] = "";
+ln["audiosliderDescription_en"] = "";
+ln["italymapDescription_en"] = "";
 
 //inputs
 ln["title_en"] = "Title"
@@ -208,6 +212,13 @@ ln["GEOJSONContent_en"] = "GEOJSON CONTENT";
 ln["BubbleContent_en"] = "BUBBLE CONTENT";
 ln["BubbleSize_en"] = "BUBBLE SIZE";
 ln["Categories_en"] = "CATEGORY";
+ln["AudioUrl_en"] = "AUDIO URL";
+ln["AudioTiming_en"] = "AUDIO TIMING";
+ln["ImageUrl_en"] = "IMAGE URL";
+ln["AudioDescription_en"] = "AUDIO DESCRIPTION";
+ln["Area_en"] = "AREA";
+ln["Value_en"] = "VALUE";
+ln["TooltipContent_en"] = "TOOLTIP CONTENT";
 
 ln["TITLEDescription_en"] = "The datalet title.";
 ln["DESCRIPTIONDescription_en"] = "The datalet description.";
@@ -235,6 +246,13 @@ ln["GEOJSONContentDescription_en"] = "The content of GeoJSON.";
 ln["BubbleContentDescription_en"] = "The content of bubbles.";
 ln["BubbleSizeDescription_en"] = "The size of bubbles.";
 ln["CategoriesDescription_en"] = "The category that splits the y-axis values. If selected only the first selected y-axis will be considered.";
+ln["AudioUrlDescription_en"] = "";
+ln["AudioTimingDescription_en"] = "";
+ln["ImageUrlDescription_en"] = "";
+ln["AudioDescriptionDescription_en"] = "";
+ln["AreaDescription_en"] = "";
+ln["ValueDescription_en"] = "";
+ln["TooltipContentDescription_en"] = "";
 
 //options
 ln["x-axis-label_en"] = "X Axis Label";
@@ -247,6 +265,12 @@ ln["theme_en"] = "Theme";
 ln["donut_en"] = "Donut";
 ln["date-format_en"] = "Date Format";
 ln["animation_en"] = "Animation";
+
+ln["map_en"] = "Map";
+ln["1_italyRegion_en"] = "Italy - Regions";
+ln["2_italyProvince_en"] = "Italy - Province";
+ln["3_campaniaProvince_en"] = "Campania - Province";
+ln["4_campaniaMunicipality_en"] = "Campania - Municipality";
 
 ln["true_en"] = "Yes";
 ln["false_en"] = "No";
@@ -303,6 +327,8 @@ ln["data-labelsDescription_en"] = "Show/hide data labels.";
 ln["themeDescription_en"] = "The theme affects the appearance and colors of the chart.";
 ln["stackDescription_en"] = "The stack type.";
 ln["donutDescription_en"] = "Pie will become Donut! :) (or viceversa).";
+ln["mapDescription_en"] = "";
+
 
 /******** IT ********/
 
@@ -450,6 +476,8 @@ ln["timeline_it"] = "Timeline";
 ln["mediaslider_it"] = "Media Slider";
 ln["leafletjs_it"] = "Mappa";
 ln["leafletjs-geojson_it"] = "Mappa Geojson";
+ln["audioslider_it"] = "Audio Slider";
+ln["italymap_it"] = "Italy Map";
 
 ln["datatableDescription_it"] = "Una tabella è un mezzo per organizzare i dati in righe e colonne.";
 ln["barchartDescription_it"] = "Un grafico a barre è un grafico che presenta dati raggruppati in barre rettangolari impostate orizzontalmente con la lunghezza proporzionale al valore rappresentato.";
@@ -465,6 +493,8 @@ ln["timelineDescription_it"] = "The timeline is an interactive visualization cha
 ln["mediasliderDescription_it"] = "The mediaslider is a slider of media.";
 ln["leafletjsDescription_it"] = "";
 ln["leafletjs-geojsonDescription_it"] = "";
+ln["audiosliderDescription_it"] = "";
+ln["italymapDescription_it"] = "";
 
 //inputs
 ln["title_it"] = "Titolo";
@@ -502,6 +532,13 @@ ln["GEOJSONContent_it"] = "CONTENUTO DEL GEOJSON";
 ln["BubbleContent_it"] = "CONTENUTO DELLA BOLLA";
 ln["BubbleSize_it"] = "DIMENSIONE DELLA BOLLA";
 ln["Categories_it"] = "CATEGORIA";
+ln["AudioUrl_it"] = "AUDIO URL";
+ln["AudioTiming_it"] = "AUDIO TIMING";
+ln["ImageUrl_it"] = "IMAGE URL";
+ln["AudioDescription_it"] = "AUDIO DESCRIPTION";
+ln["Area_it"] = "AREA";
+ln["Value_it"] = "VALUE";
+ln["TooltipContent_it"] = "TOOLTIP CONTENT";
 
 ln["TITLEDescription_it"] = "Titolo  datalet";
 ln["DESCRIPTIONDescription_it"] = "Descrizione datalet";
@@ -529,6 +566,13 @@ ln["GEOJSONContentDescription_it"] = "Contenuto del GeoJSON.";
 ln["BubbleContentDescription_it"] = "Contenuto delle bolle.";
 ln["BubbleSizeDescription_it"] = "Dimensione delle bolle.";
 ln["CategoriesDescription_it"] = "Categoria che separa l'asse y. Se selezionata, solo l'asse y scelta per prima sarà considerata.";
+ln["AudioUrlDescription_it"] = "";
+ln["AudioTimingDescription_it"] = "";
+ln["ImageUrlDescription_it"] = "";
+ln["AudioDescriptionDescription_it"] = "";
+ln["AreaDescription_it"] = "";
+ln["ValueDescription_it"] = "";
+ln["TooltipContentDescription_it"] = "";
 
 //options
 ln["x-axis-label_it"] = "Etichetta asse X";
@@ -541,6 +585,12 @@ ln["theme_it"] = "Tema";
 ln["donut_it"] = "Ciambella";
 ln["date-format_it"] = "Formato data";
 ln["animation_it"] = "Animazione";
+
+ln["map_it"] = "Map";
+ln["1_italyRegion_it"] = "Italy - Regions";
+ln["2_italyProvince_it"] = "Italy - Province";
+ln["3_campaniaProvince_it"] = "Campania - Province";
+ln["4_campaniaMunicipality_it"] = "Campania - Municipality";
 
 ln["true_it"] = "Si";
 ln["false_it"] = "No";
@@ -597,6 +647,7 @@ ln["data-labelsDescription_it"] = "Mostra/Nascondi etichette dati";
 ln["themeDescription_it"] = "Il tema influenza l'aspetto e i colori del grafico.";
 ln["stackDescription_it"] = "Tipologia di pila";
 ln["donutDescription_it"] = "La torta si trasforma in ciambella! :) (o viceversa).";
+ln["mapDescription_it"] = "";
 
 /******** FR ********/
 
@@ -744,6 +795,8 @@ ln["timeline_fr"] = "Timeline";
 ln["mediaslider_fr"] = "Media Slider";
 ln["leafletjs_fr"] = "Carte";
 ln["leafletjs-geojson_fr"] = "Carte Geojson";
+ln["audioslider_fr"] = "Audio Slider";
+ln["italymap_fr"] = "Italy Map";
 
 ln["datatableDescription_fr"] = "Un tableau est un moyen d'organiser les données dans des rangées et des colonnes.";
 ln["barchartDescription_fr"] = "Un diagramme à barres est un graphique qui représente des données groupées au moyen de barres rectangulaires disposées horizontallement avec des longueurs proportionnelles aux valeurs qu'elles représentent.";
@@ -759,6 +812,8 @@ ln["timelineDescription_fr"] = "The timeline is an interactive visualization cha
 ln["mediasliderDescription_fr"] = "The mediaslider is a slider of media.";
 ln["leafletjsDescription_fr"] = "";
 ln["leafletjs-geojsonDescription_fr"] = "";
+ln["audiosliderDescription_fr"] = "";
+ln["italymapDescription_fr"] = "";
 
 //inputs
 ln["title_fr"] = "Titre";
@@ -796,6 +851,13 @@ ln["GEOJSONContent_fr"] = "CONTENU GEOJSON";
 ln["BubbleContent_fr"] = "CONTENU DE LA BULLE";
 ln["BubbleSize_fr"] = "TAILLE DE LA BULLE";
 ln["Categories_fr"] = "CATÉGORIE";
+ln["AudioUrl_fr"] = "AUDIO URL";
+ln["AudioTiming_fr"] = "AUDIO TIMING";
+ln["ImageUrl_fr"] = "IMAGE URL";
+ln["AudioDescription_fr"] = "AUDIO DESCRIPTION";
+ln["Area_fr"] = "AREA";
+ln["Value_fr"] = "VALUE";
+ln["TooltipContent_fr"] = "TOOLTIP CONTENT";
 
 ln["TITLEDescription_fr"] = "Titre du datalet.";
 ln["DESCRIPTIONDescription_fr"] = "Description du datalet.";
@@ -823,6 +885,13 @@ ln["GEOJSONContentDescription_fr"] = "Le contenu de GeoJSON.";
 ln["BubbleContentDescription_fr"] = "Le contenu des bulles.";
 ln["BubbleSizeDescription_fr"] = "La taille des bulles.";
 ln["CategoriesDescription_fr"] = "La catégorie qui sépare les valeurs de l'axe des x. Si sélectionné, seulement le premier axe des y sera considéré.";
+ln["AudioUrlDescription_fr"] = "";
+ln["AudioTimingDescription_fr"] = "";
+ln["ImageUrlDescription_fr"] = "";
+ln["AudioDescriptionDescription_fr"] = "";
+ln["AreaDescription_fr"] = "";
+ln["ValueDescription_fr"] = "";
+ln["TooltipContentDescription_fr"] = "";
 
 //options
 ln["x-axis-label_fr"] = "Label de l'Axe des X";
@@ -835,6 +904,12 @@ ln["theme_fr"] = "Thème";
 ln["donut_fr"] = "Donut";
 ln["date-format_fr"] = "DATE FORMAT";
 ln["animation_fr"] = "Animation";
+
+ln["map_fr"] = "Map";
+ln["1_italyRegion_fr"] = "Italy - Regions";
+ln["2_italyProvince_fr"] = "Italy - Province";
+ln["3_campaniaProvince_fr"] = "Campania - Province";
+ln["4_campaniaMunicipality_fr"] = "Campania - Municipality";
 
 ln["true_fr"] = "Oui";
 ln["false_fr"] = "Non";
@@ -891,6 +966,7 @@ ln["data-labelsDescription_fr"] = "Montrer/cacher les labels de données.";
 ln["themeDescription_fr"] = "Le thème affecte l'apparence des couleurs du graphique.";
 ln["stackDescription_fr"] = "Le type de regroupement.";
 ln["donutDescription_fr"] = "La Tarte va devenir un Donut! :) (ou vice versa).";
+ln["mapDescription_fr"] = "";
 
 /******** NL ********/
 
@@ -1038,6 +1114,8 @@ ln["timeline_nl"] = "Timeline";
 ln["mediaslider_nl"] = "Media Slider";
 ln["leafletjs_nl"] = "Map";
 ln["leafletjs-geojson_nl"] = "Geojson Map";
+ln["audioslider_nl"] = "Audio Slider";
+ln["italymap_nl"] = "Italy Map";
 
 ln["datatableDescription_nl"] = "A table is a means of arranging data in rows and columns.";
 ln["barchartDescription_nl"] = "A bar chart is a chart that presents grouped data with rectangular bars plotted horizontally with lengths proportional to the values that they represent.";
@@ -1053,6 +1131,8 @@ ln["timelineDescription_nl"] = "The timeline is an interactive visualization cha
 ln["mediasliderDescription_nl"] = "The mediaslider is a slider of media.";
 ln["leafletjsDescription_nl"] = "";
 ln["leafletjs-geojsonDescription_nl"] = "";
+ln["audiosliderDescription_nl"] = "";
+ln["italymapDescription_nl"] = "";
 
 //inputs
 ln["title_nl"] = "Title"
@@ -1090,6 +1170,13 @@ ln["GEOJSONContent_nl"] = "GEOJSON CONTENT";
 ln["BubbleContent_nl"] = "BUBBLE CONTENT";
 ln["BubbleSize_nl"] = "BUBBLE SIZE";
 ln["Categories_nl"] = "CATEGORY";
+ln["AudioUrl_nl"] = "AUDIO URL";
+ln["AudioTiming_nl"] = "AUDIO TIMING";
+ln["ImageUrl_nl"] = "IMAGE URL";
+ln["AudioDescription_nl"] = "AUDIO DESCRIPTION";
+ln["Area_nl"] = "AREA";
+ln["Value_nl"] = "VALUE";
+ln["TooltipContent_nl"] = "TOOLTIP CONTENT";
 
 ln["TITLEDescription_nl"] = "The datalet title.";
 ln["DESCRIPTIONDescription_nl"] = "The datalet description.";
@@ -1117,6 +1204,13 @@ ln["GEOJSONContentDescription_nl"] = "The content of GeoJSON.";
 ln["BubbleContentDescription_nl"] = "The content of bubbles.";
 ln["BubbleSizeDescription_nl"] = "The size of bubbles.";
 ln["CategoriesDescription_nl"] = "The category that splits the y-axis values. If selected only the first selected y-axis will be considered.";
+ln["AudioUrlDescription_nl"] = "";
+ln["AudioTimingDescription_nl"] = "";
+ln["ImageUrlDescription_nl"] = "";
+ln["AudioDescriptionDescription_nl"] = "";
+ln["AreaDescription_nl"] = "";
+ln["ValueDescription_nl"] = "";
+ln["TooltipContentDescription_nl"] = "";
 
 //options
 ln["x-axis-label_nl"] = "X Axis Label";
@@ -1129,6 +1223,12 @@ ln["theme_nl"] = "Theme";
 ln["donut_nl"] = "Donut";
 ln["date-format_nl"] = "DATE FORMAT";
 ln["animation_nl"] = "Animatie";
+
+ln["map_nl"] = "Map";
+ln["1_italyRegion_nl"] = "Italy - Regions";
+ln["2_italyProvince_nl"] = "Italy - Province";
+ln["3_campaniaProvince_nl"] = "Campania - Province";
+ln["4_campaniaMunicipality_nl"] = "Campania - Municipality";
 
 ln["true_nl"] = "Yes";
 ln["false_nl"] = "No";
@@ -1185,6 +1285,7 @@ ln["data-labelsDescription_nl"] = "Show/hide data labels.";
 ln["themeDescription_nl"] = "The theme affects the appearance and colors of the chart.";
 ln["stackDescription_nl"] = "The stack type.";
 ln["donutDescription_nl"] = "Pie will become Donut! :) (or viceversa).";
+ln["mapDescription_nl"] = "";
 
 /******** ES-es ********/
 
@@ -1327,6 +1428,8 @@ ln["timeline_es-ES"] = "Línea de tiempo";
 ln["mediaslider_es-ES"] = "Deslizador de medios";
 ln["leafletjs_es-ES"] = "Mapa";
 ln["leafletjs-geojson_es-ES"] = "Mapa Geojson";
+ln["audioslider_es-ES"] = "Audio Slider";
+ln["italymap_es-ES"] = "Italy Map";
 
 ln["datatableDescription_es-ES"] = "Una tabla es un medio de organizar datos en filas y columnas.";
 ln["barchartDescription_es-ES"] = "Un gráfico de barras es un gráfico que presenta los datos agrupados con barras rectangulares trazadas horizontalmente con longitudes proporcionales a los valores que representan.";
@@ -1342,6 +1445,8 @@ ln["timelineDescription_es-ES"] = "La línea de tiempo es un gráfico de visuali
 ln["mediasliderDescription_es-ES"] = "El mediaslider es un control deslizante de los medios.";
 ln["leafletjsDescription_es-ES"] = "";
 ln["leafletjs-geojsonDescription_es-ES"] = "";
+ln["audiosliderDescription_es-ES"] = "";
+ln["italymapDescription_es-ES"] = "";
 
 //inputs
 ln["title_es-ES"] = "Título"
@@ -1380,6 +1485,13 @@ ln["GEOJSONContent_es-ES"] = "CONTENIDO DEL GEOJSON";
 ln["BubbleContent_es-ES"] = "CONTENIDO DE LA BURBUJA";
 ln["BubbleSize_es-ES"] = "TAMAÑO DE LA BURBUJA";
 ln["Categories_es-ES"] = "CATEGORÍA";
+ln["AudioUrl_es-ES"] = "AUDIO URL";
+ln["AudioTiming_es-ES"] = "AUDIO TIMING";
+ln["ImageUrl_es-ES"] = "IMAGE URL";
+ln["AudioDescription_es-ES"] = "AUDIO DESCRIPTION";
+ln["Area_es-ES"] = "AREA";
+ln["Value_es-ES"] = "VALUE";
+ln["TooltipContent_es-ES"] = "TOOLTIP CONTENT";
 
 ln["TITLEDescription_es-ES"] = "El título del datalet.";
 ln["DESCRIPTIONDescription_es-ES"] = "La descripción del datalet.";
@@ -1407,6 +1519,13 @@ ln["GEOJSONContentDescription_es-ES"] = "El contenido de GeoJSON.";
 ln["BubbleContentDescription_es-ES"] = "El contenido de las burbujas.";
 ln["BubbleSizeDescription_es-ES"] = "El tamaño de las burbujas.";
 ln["CategoriesDescription_es-ES"] = "Categoría que divide los valores del eje-x. Si es seleccionado, sólo el primer eje-y elejido será considerado..";
+ln["AudioUrlDescription_es-ES"] = "";
+ln["AudioTimingDescription_es-ES"] = "";
+ln["ImageUrlDescription_es-ES"] = "";
+ln["AudioDescriptionDescription_es-ES"] = "";
+ln["AreaDescription_es-ES"] = "";
+ln["ValueDescription_es-ES"] = "";
+ln["TooltipContentDescription_es-ES"] = "";
 
 //options
 ln["x-axis-label_es-ES"] = "Etiqueta del eje-x";
@@ -1419,6 +1538,12 @@ ln["theme_es-ES"] = "Tema";
 ln["donut_es-ES"] = "Dona";
 ln["date-format_es-ES"] = "DATE FORMAT";
 ln["animation_es-ES"] = "Animación";
+
+ln["map_es-ES"] = "Map";
+ln["1_italyRegion_es-ES"] = "Italy - Regions";
+ln["2_italyProvince_es-ES"] = "Italy - Province";
+ln["3_campaniaProvince_es-ES"] = "Campania - Province";
+ln["4_campaniaMunicipality_es-ES"] = "Campania - Municipality";
 
 ln["true_es-ES"] = "Sí";
 ln["false_es-ES"] = "No";
@@ -1475,8 +1600,4 @@ ln["data-labelsDescription_es-ES"] = "Mostrar/ocultar etiquetas de datos.";
 ln["themeDescription_es-ES"] = "El tema afecta la apariencia y los colores del gráfico.";
 ln["stackDescription_es-ES"] = "El tipo de pila.";
 ln["donutDescription_es-ES"] = "¡El pay se convertirá en dona! :) (o viceversa).";
-
-
-
-
-
+ln["mapDescription_es-ES"] = "";

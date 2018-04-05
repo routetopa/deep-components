@@ -1,0 +1,234 @@
+<!--
+@license
+    The MIT License (MIT)
+
+    Copyright (c) 2015 Dipartimento di Informatica - Universit� di Salerno - Italy
+
+    Permission is hereby granted, free of charge, to any person obtaining a copy
+    of this software and associated documentation files (the "Software"), to deal
+    in the Software without restriction, including without limitation the rights
+    to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+    copies of the Software, and to permit persons to whom the Software is
+    furnished to do so, subject to the following conditions:
+
+    The above copyright notice and this permission notice shall be included in
+    all copies or substantial portions of the Software.
+
+    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+    IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+    FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+    AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+    LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+    THE SOFTWARE.
+-->
+
+<!--
+* Developed by :
+* ROUTE-TO-PA Project - grant No 645860. - www.routetopa.eu
+*
+-->
+
+<link rel="import" href="../highmaps-datalet/highmaps-datalet.html">
+
+<dom-module name="italymap-datalet">
+    <template>
+        <highmaps-datalet id="charts" data-url="{{dataUrl}}" fields="{{fields}}" datalettitle="{{datalettitle}}" description="{{description}}" export_menu="{{export_menu}}" disable_my_space="{{disable_my_space}}"></highmaps-datalet>
+    </template>
+
+    <script src="maps/it-all.js"></script>
+    <!--<script src="maps/it-region.js"></script>-->
+    <script src="maps/cos.js"></script>
+    <script src="maps/it-campania-province.js"></script>
+    <script src="maps/it-campania-municipality.js"></script>
+
+    <script>
+
+        var ItalymapBehavior = {
+
+            /**
+             * Bluid Highchart object
+             *
+             * @method transformData
+             */
+            presentData: function(){
+                var mapIndex = this._component.map.split("_")[0];
+                var map;
+                switch (mapIndex) {
+                    case "1":
+                        map ="countries/it/it-region";
+                        break;
+                    case "2":
+                        map = "countries/it/it-all";//it-province
+                        break;
+                    case "3":
+                        map = "countries/it/it-campania-province";
+                        break;
+                    case "4":
+                        map = "countries/it/it-campania-municipality";
+                        break;
+                }
+
+                const that = this;
+                var arrayMap = Highcharts.maps[map].features;
+                var obj;
+                for (var i=0; i < this.properties.series.value.length; i++) {
+                    obj =  arrayMap.find(x => x.properties["name"].toLowerCase() === that.properties.series.value[i][0].trim().toLowerCase());
+                    if(obj)
+                        this.properties.series.value[i][0] =  obj.properties["hc-key"];
+                    else
+                        this.properties.series.value[i] = undefined;
+                }
+
+                this.properties.series.value = this.properties.series.value.filter(function(n){ return n != undefined });
+//                const series = JSON.parse(JSON.stringify(this.properties.series.value));
+                const pointsInfo = JSON.parse(JSON.stringify(this.data));
+
+                var min = 0, max = 0;
+                for (var i in this.properties.series.value) {
+                    min = Math.min(this.properties.series.value[i][1], min);
+                    max = Math.max(this.properties.series.value[i][1], max);
+                }
+
+                var stops = false;
+                if (min < 0) {
+                    stops = [[0, '#F44336'], [1, '#2196F3']];
+                    min = -Math.max(Math.abs(min), Math.abs(max));
+                    max = Math.max(Math.abs(min), Math.abs(max));
+                }
+                else
+                    stops = [[0, '#FFFFFF'], [1, Highcharts.getOptions().colors[0]]];
+
+                var suffix = this._component.suffix;
+
+                options = {
+                    chart: {
+                        map: map
+                    },
+
+                    title: false,
+
+                    exporting: {
+                        enabled: false
+                    },
+
+                    mapNavigation: {
+                        enabled: true,
+                        buttonOptions: {
+                            verticalAlign: 'bottom'
+                        }
+                    },
+
+                    series: [{
+                        data: this.properties.series.value,
+                        dataLabels: {
+                            enabled:  this._component.dataLabels,
+                            format: '{point.name}'
+                        }
+                    }],
+
+                    colorAxis: {
+                        stops: stops,
+                        min: min,
+                        max: max,
+                    },
+
+                    tooltip: {
+                        formatter: function() {
+
+//                            var index = pointsInfo[0].data.indexOf(this.point["name"]);
+                            var name = this.point["name"];
+                            var index = pointsInfo[0].data.findIndex(x => x.trim().toLowerCase() === name.trim().toLowerCase());
+
+                            var s = "";
+                            for (var i=0; i < pointsInfo.length; i++)
+                                s += '<span  style="color: #7cb5ec;">\u25CF</span> ' + pointsInfo[i].name + ': <b>' +  pointsInfo[i].data[index] + ' ' + (i==1 ? suffix : '') + '</b><br>';
+
+//                            var s = '<span  style="color: #7cb5ec;">\u25CF</span> ' + this.point.name + ': <b>' +  this.point.value + ' ' + suffix + '</b>';
+                            return s;
+                        },
+                        shared: true
+                    },
+
+                    credits: {
+                        enabled: false
+                    }
+                };
+
+                if(this._component.legend == "topRight")
+                    options.legend = {
+                        layout: 'vertical',
+                        verticalAlign: 'top',
+                        align: 'right',
+                        margin: 8,
+                        y: 28,
+                        symbolHeight: 280,
+                        backgroundColor: (Highcharts.theme && Highcharts.theme.legendBackgroundColor) || 'rgba(255, 255, 255, 0.85)'
+                    };
+                else if(this._component.legend == "bottom")
+                    options.legend = {
+                        enabled: true,
+                        backgroundColor: (Highcharts.theme && Highcharts.theme.legendBackgroundColor) || 'rgba(255, 255, 255, 0.85)',
+                    };
+                else
+                    options.legend ={
+                        enabled: false
+                    };
+
+                if(this._component.theme != "themeBase" && this._component.theme != "")
+                    jQuery.extend(true, options, Highcharts[this._component.theme]);
+
+                $(this._component.$.charts.$.baseAjaxJsonAlasqlDatalet.$.baseDatalet.$.datalet_container).highcharts('Map', options);
+
+            }
+        };
+
+        ItalymapDatalet = Polymer({
+            is: 'italymap-datalet',
+
+            properties: {
+                data: {
+                    type: Array,
+                    value: undefined
+                },
+                map: {
+                    type: String,
+                    value: ""
+                },
+                suffix : {
+                    type : String,
+                    value : ""
+                },
+                legend : {
+                    type : Object,
+                    value : "topRight"
+                },
+                dataLabels : {
+                    type : Object,
+                    value : true
+                },
+                theme : {
+                    type : String,
+                    value : ""
+                },
+                behavior : {
+                    type : Object,
+                    value : {}
+                },
+                export_menu : {
+                    type  : Number,
+                    value : 15 // xxxx BITMASK. FROM RIGHT : HTML, PNG, RTF, MY SPACE (eg. 1111 show all, 0000 hide all)
+                },
+                disable_my_space : {
+                    type  : Boolean,
+                    value : false // BITMASK -8
+                }
+            },
+
+            ready: function(){
+                this.behavior = $.extend(true, {}, HighmapsComponentBehavior, ItalymapBehavior);
+                this.behavior.init(this);
+            }
+        });
+    </script>
+</dom-module>
