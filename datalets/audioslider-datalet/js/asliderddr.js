@@ -83,7 +83,8 @@ var aslider = {
                 }, parseInt(duration) * 1000, sliderIndex, slides);
                 sliderObject.currentSlide = slides[0];
 
-                aslider._playAudio(sliderIndex);
+                // aslider._playAudio(sliderIndex);
+                aslider.toggleState(sliderIndex);
             }
 
             /*ddr*/
@@ -133,7 +134,9 @@ var aslider = {
         aslider.sliders[sliderIndex].currentSlide = nextSlide;
 
         // Play new audio
-        aslider._playAudio(sliderIndex);
+        var pauseButton = slider.querySelector('.'+aslider.pauseButtonClass);
+        if (pauseButton.getAttribute('data-state') === 'play')
+            aslider._playAudio(sliderIndex);
 
         //slider.clientHeight($(nextSlide).height());
 
@@ -166,7 +169,9 @@ var aslider = {
         aslider.sliders[sliderIndex].currentSlide = nextSlide;
 
         // Play new audio
-        aslider._playAudio(sliderIndex);
+        var pauseButton = slider.querySelector('.'+aslider.pauseButtonClass);
+        if (pauseButton.getAttribute('data-state') === 'play')
+            aslider._playAudio(sliderIndex);
 
         //slider.clientHeight($(nextSlide).height());
 
@@ -296,10 +301,10 @@ var aslider = {
         // }
     },
 
-    init2: function () {
+    init2: function (sliders) {
         'use strict';
-        var sliders = document.querySelectorAll('.aslider');
-        aslider.stop();
+        // var sliders = document.querySelectorAll('.aslider');
+        // aslider.stop();
         aslider.initAsliders(sliders);
     },
 
@@ -329,9 +334,9 @@ var aslider = {
      */
 
     /* Configuration */
-    slideFade: "display: block; opacity: 1; top: 0; position: absolute; left: 0; overflow: hidden; transition: opacity 1s ease-in-out; -moz-transition: opacity 1s ease-in-out; -webkit-transition: opacity 1s ease-in-out;",
+    slideFade: "display: block; opacity: 1; top: 0; position: absolute; left: 0; overflow: hidden; transition: opacity 1s ease-in-out; -moz-transition: opacity 1s ease-in-out; -webkit-transition: opacity 1s ease-in-out;  height: 100%; width: 100%; background-color: #000000;",
     slideFadeOut: "opacity: 0",
-    slideFadeIn: "opacity: 1",
+    slideFadeIn: "opacity: 1;",
     slideSlide: "",
     slideSlideOut: "",
     slideSlideIn: "",
