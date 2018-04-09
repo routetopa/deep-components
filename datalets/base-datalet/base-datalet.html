@@ -493,6 +493,7 @@ Example :
                 <paper-icon-button class="export" on-click="showHideExportMenu" icon="more-horiz"></paper-icon-button>
                 <div class="highcharts-contextmenu" id="highcharts-contextmenu">
                     <div class="highcharts-contextmenu-container">
+                        <div id="link_lp"         on-click="link_lp"><span id="link_lp"></span></div>
                         <div id="export_html"     on-click="exportToHTML"><span id="export_to_html"></span></div>
                         <div id="export_png"      on-click="exportToIMG"><span id="export_to_png"></span></div>
                         <div id="export_rtf"      on-click="exportRTF"><span id="export_to_rtf"></span></div>
@@ -733,6 +734,7 @@ Example :
                         ln = parent.ODE.user_language;
                 }catch (e){}
 
+                this.$.link_lp.innerHTML = 'Datalet Link';
                 this.$.export_to_html.innerHTML = base_datalet_ln["export_HTML_" + ln];
                 this.$.export_to_png.innerHTML = base_datalet_ln["export_PNG_" + ln];
                 this.$.export_to_rtf.innerHTML = base_datalet_ln["export_RTF_" + ln];
@@ -743,16 +745,16 @@ Example :
             setExportMenu: function()
             {
                 // xxxx BITMASK. FROM RIGHT : HTML, PNG, RTF, MY SPACE (eg. 1111 show all, 0000 hide all)
-                var bitmask = this.export_menu;
+                let bitmask = this.export_menu;
 
                 if(this.disable_my_space)
                     bitmask -= 8;
 
-                var menu = ["export_html", "export_png", "export_rtf", "export_my_space"];
+                let menu = ["export_html", "export_png", "export_rtf", "export_my_space"];
 
-                if(bitmask == 15) return;
+                if(bitmask === 15) return;
 
-                if(bitmask == 0)
+                if(bitmask === 0)
                 {
                     this.$.export.style.display = "none";
                     this.$.fullscreen.style.display = "none";/*remove from here*/
@@ -761,9 +763,9 @@ Example :
                 }
 
                 //var max_i = Math.floor(Math.log2(this.export_menu))+1;
-                for(var i=0; i<menu.length; i++)
+                for(let i=0; i<menu.length; i++)
                 {
-                    if(bitmask % 2 == 0)
+                    if(bitmask % 2 === 0)
                         this.$[menu[i]].style.display = "none";
 
                     bitmask = Math.floor(bitmask/2);
@@ -1055,6 +1057,29 @@ Example :
                 var url = 'https://plus.google.com/share?url=' + twitter_url;
                 window.open(url, "", "width=350,height=500");
 
+            },
+
+            link_lp: function()
+            {
+                let parent = this.parentElement;
+
+                while(!parent.hasAttribute("datalet-id"))
+                    parent = parent.parentElement;
+
+                let datalet_id = parent.attributes["datalet-id"].value;
+                let base_url = ODE.ow_url_home;
+
+                let landing_page_url  = base_url + 'datalet/' + datalet_id;
+
+                let div = document.createElement('div');
+                div.innerHTML = '<div class="overlay" id="overlay">' +
+                    '<div class="modal-content"><span class="button-close" onclick="document.getElementById(\'overlay\').remove(this)"></span>' +
+                    '<span>Copy to clipboard: Ctrl+C, Enter</span>' +
+                    '<textarea class="export_html_textarea"></textarea></div></div>';
+
+                Polymer.dom(this.root).appendChild(div);
+
+                $(".export_html_textarea").val(landing_page_url);
             }
 
         });
