@@ -96,7 +96,6 @@ function _alasql_WHERE (filters) {
 
     for (var i = 0; i < filters.length; i++) {
         where += filters[i]["logicalOperator"] + " " + filters[i]["lp"] + " ";
-
         if (filters[i]["operation"] == "contains")
             where += filters[i]["field"] + " like '%" + filters[i]["value"] + "%' ";
         else if (filters[i]["operation"] == "notContains")
@@ -110,9 +109,9 @@ function _alasql_WHERE (filters) {
         else if (filters[i]["operation"] == "notEnds")
             where += filters[i]["field"] + " not like '%" + filters[i]["value"] + "' ";
         else if (filters[i]["operation"] == "isNotNull")
-            where +=  " (" + filters[i]["field"] + " != '' AND  " + filters[i]["field"] + " != 'null' ) ";
+            where +=  " (" + filters[i]["field"] + " != '' AND  " + filters[i]["field"] + " != 'null' AND " + filters[i]["field"] + " != null AND " + filters[i]["field"] + " != undefined AND " + filters[i]["field"] + " != 'undefined') ";
         else if (filters[i]["operation"] == "isNull")
-            where += " (" + filters[i]["field"] + " = '' OR  " + filters[i]["field"] + " = 'null' ) ";
+            where +=  " (" + filters[i]["field"] + " == '' OR  " + filters[i]["field"] + " == 'null' OR " + filters[i]["field"] + " == null OR " + filters[i]["field"] + " == undefined OR " + filters[i]["field"] + " == 'undefined') ";
         else
             where += filters[i]["field"] + " " + filters[i]["operation"] + " " + filters[i]["value"] + " ";
 

@@ -9,6 +9,8 @@ providerFactory.getProvider = function (dataUrl) {
         return new istat_Provider();
     else if (dataUrl.indexOf("ODataApi") > -1)
         return new OData_Provider();
+    else if (dataUrl.indexOf("sparql?") > -1 )
+        return new SPARQL_Provider();
     else if (dataUrl.search(/\Wwms\W?/gi) > -1)
         return new WMS_Provider();
     else if (dataUrl.search(/\Wkml\W?/gi) > -1)
