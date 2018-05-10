@@ -745,16 +745,16 @@ Example :
             setExportMenu: function()
             {
                 // xxxx BITMASK. FROM RIGHT : HTML, PNG, RTF, MY SPACE (eg. 1111 show all, 0000 hide all)
-                let bitmask = this.export_menu;
+                var bitmask = this.export_menu;
 
                 if(this.disable_my_space)
                     bitmask -= 8;
 
-                let menu = ["export_html", "export_png", "export_rtf", "export_my_space"];
+                var menu = ["export_html", "export_png", "export_rtf", "export_my_space"];
 
-                if(bitmask === 15) return;
+                if(bitmask == 15) return;
 
-                if(bitmask === 0)
+                if(bitmask == 0)
                 {
                     this.$.export.style.display = "none";
                     this.$.fullscreen.style.display = "none";/*remove from here*/
@@ -763,9 +763,9 @@ Example :
                 }
 
                 //var max_i = Math.floor(Math.log2(this.export_menu))+1;
-                for(let i=0; i<menu.length; i++)
+                for(var i=0; i<menu.length; i++)
                 {
-                    if(bitmask % 2 === 0)
+                    if(bitmask % 2 == 0)
                         this.$[menu[i]].style.display = "none";
 
                     bitmask = Math.floor(bitmask/2);
@@ -1061,17 +1061,17 @@ Example :
 
             link_lp: function()
             {
-                let parent = this.parentElement;
+                var parent = this.parentElement;
 
                 while(!parent.hasAttribute("datalet-id"))
                     parent = parent.parentElement;
 
-                let datalet_id = parent.attributes["datalet-id"].value;
-                let base_url = ODE.ow_url_home;
+                var datalet_id = parent.attributes["datalet-id"].value;
+                var base_url = ODE.ow_url_home;
 
-                let landing_page_url  = base_url + 'datalet/' + datalet_id;
+                var landing_page_url  = base_url + 'datalet/' + datalet_id;
 
-                let div = document.createElement('div');
+                var div = document.createElement('div');
                 div.innerHTML = '<div class="overlay" id="overlay">' +
                     '<div class="modal-content"><span class="button-close" onclick="document.getElementById(\'overlay\').remove(this)"></span>' +
                     '<span>Copy to clipboard: Ctrl+C, Enter</span>' +
