@@ -147,8 +147,10 @@ function updateBoxesFromConcept(conceptUrl){
 	$('#directPredicatesProgress').show();
 	$('#reversePredicatesProgress').show();
 
-	boxFiller.updateConceptsFromConcept(conceptUrl, conceptsLimit, renderConcept);
-	boxFiller.updatePredicatesFromConcept(conceptUrl, predicatesLimit, renderPredicates);
+	//boxFiller.updateConceptsFromConcept(conceptUrl, conceptsLimit, renderConcept);
+	//boxFiller.updatePredicatesFromConcept(conceptUrl, predicatesLimit, renderPredicates);
+	boxFiller.updateConcepts(renderConcept);
+	boxFiller.updatePredicates(renderPredicates);
 }
 
 function renderConcept(rootMap, map){
@@ -366,8 +368,10 @@ function updateBoxesFromDirectPredicate(predicateUrl){
 	$('#directPredicatesProgress').show();
 	$('#reversePredicatesProgress').show();
 
-	boxFiller.updateConceptsFromDirectPredicate(predicateUrl, conceptsLimit, renderConcept);
-	boxFiller.updatePredicatesFromDirectPredicate(predicateUrl, predicatesLimit, renderPredicates);
+	//boxFiller.updateConceptsFromDirectPredicate(predicateUrl, conceptsLimit, renderConcept);
+	//boxFiller.updatePredicatesFromDirectPredicate(predicateUrl, predicatesLimit, renderPredicates);
+	boxFiller.updateConcepts(renderConcept);
+	boxFiller.updatePredicates(renderPredicates);
 }
 
 function updateBoxesFromReversePredicate(){
@@ -536,8 +540,10 @@ function updateBoxesFromSomething(predicateUrl){
 	$('#directPredicatesProgress').show();
 	$('#reversePredicatesProgress').show();
 	
-	boxFiller.updateConceptsFromSomething(predicateUrl, conceptsLimit, renderConcept);
-	boxFiller.updatePredicatesFromSomething(predicateUrl, predicatesLimit, renderPredicates);	
+	//boxFiller.updateConceptsFromSomething(predicateUrl, conceptsLimit, renderConcept);
+	//boxFiller.updatePredicatesFromSomething(predicateUrl, predicatesLimit, renderPredicates);	
+	boxFiller.updateConcepts(renderConcept);
+	boxFiller.updatePredicates(renderPredicates);
 }
 
 //manage update boxes when focus is on an operator
@@ -573,7 +579,8 @@ function updateBoxesFromResult(resultUrl, resultDatatype, resultLang, resultPenn
 	$('#directPredicatesProgress').show();
 	$('#reversePredicatesProgress').show();
 
-	boxFiller.updatePredicatesFromResult(resultUrl, resultDatatype, resultLang, resultPenninculo, predicatesLimit, renderPredicates);
+	//boxFiller.updatePredicatesFromResult(resultUrl, resultDatatype, resultLang, resultPenninculo, predicatesLimit, renderPredicates);
+	boxFiller.updatePredicates(renderPredicates);
 }
 
 //manage settings

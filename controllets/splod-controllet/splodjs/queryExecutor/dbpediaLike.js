@@ -56,6 +56,90 @@ var dbpediaLike = function (selectedEndpoint, selectedGraph) {
 	dbpediaLike.prototype._singletonInstance = this;
 };
 
+dbpediaLike.prototype.executeGetConcepts = function(querySPARQL, callback) {
+	
+	var where = querySPARQL.where.join(' ');
+	
+	query = " prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> " +
+			" SELECT DISTINCT " + querySPARQL.select.join(' ') +
+			" WHERE { "; 
+				if(graph) 
+					query +=" GRAPH " + graph + " { ";
+				query += where;
+				if(graph) 
+					query +=" } ";
+			query += " } ";
+		
+	query += "LIMIT " + conceptsLimit; 
+
+   	queryUrl = endpoint+"?query="+ encodeURIComponent(query) +"&format=json";
+
+   	var xhr = $.ajax({
+        url: queryUrl,
+        method:'post',
+        success: function(data, textStatus, jqXHR ) {
+        	var arrayData = data.results.bindings;
+		    //var subMap = getResultMap(arrayData);
+		    var subMap = manageResultMap(arrayData);
+			var mapRoots = getMapRoots(subMap);
+		    callback(mapRoots, subMap);	
+		      
+        },
+		error: function(jqXHR, textStatus, errorThrown){
+			console.log(textStatus);
+			//callback([], {});
+		},
+		complete: function(jqXHR){
+			var index = $.inArray(jqXHR, activeAjaxRequest);
+        	if(index != -1)
+        		activeAjaxRequest.splice(index, 1);
+		}
+    });	
+
+    activeAjaxRequest.push(xhr);
+
+}
+
+dbpediaLike.prototype.executeGetPredicates = function(querySPARQL, callback) {
+	
+	var where = querySPARQL.where.join(' ');
+	
+	query = " prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> " +
+			" SELECT DISTINCT " + querySPARQL.select.join(' ') +
+			" WHERE { "; 
+				if(graph) 
+					query +=" GRAPH " + graph + " { ";
+				query += where;
+				if(graph) 
+					query +=" } ";
+			query += " } ";
+		
+	query += "LIMIT " + predicatesLimit; 
+
+   	queryUrl = endpoint+"?query="+ encodeURIComponent(query) +"&format=json";
+
+   	 var xhr = $.ajax({
+        url: queryUrl,
+        method:'post',
+        success: function( data, textStatus, jqXHR ) {
+        	//it builds map with url, label and stats
+			var arrayData = data.results.bindings;
+	        callback(manageResultMap(arrayData));
+        },
+		error: function(jqXHR, textStatus, errorThrown){
+			console.log(textStatus);
+			//callback([]);
+		},
+		complete: function(jqXHR){
+			var index = $.inArray(jqXHR, activeAjaxRequest);
+        	if(index != -1)
+        		activeAjaxRequest.splice(index, 1);
+		}
+    });	
+
+    activeAjaxRequest.push(xhr);
+
+}
 //concepts
 dbpediaLike.prototype.getAllEntities = function(limit, callback) {
 	if(systemLang in language_classHierarchyMap){
