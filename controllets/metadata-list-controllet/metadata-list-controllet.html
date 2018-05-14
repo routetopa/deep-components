@@ -417,6 +417,11 @@
             },
 
             _saveMetadata : function() {
+                var that = this;
+                this.mandatory_list.forEach(function(element) {
+                    that.metadata[element.type][element.name] = that.metadata["MANDATORY"][element.name];
+                });
+
                 var metadata = {"CC_RF":this.CC_RF, "CC_RAF":this.CC_RAF, "EF":this.EF};
                 this.fire('metadata-list-controllet_update-metadata', {metadata : JSON.stringify(metadata)});
             },
