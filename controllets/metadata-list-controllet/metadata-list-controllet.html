@@ -117,6 +117,35 @@
                 padding: 2px;
             }
 
+            #save {
+                position: absolute;
+                bottom: 24px;
+                right: 24px;
+
+                height: 40px;
+                width: 160px;
+
+                background-color: #00BCD4;
+                box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+                transition: all 0.3s cubic-bezier(.25,.8,.25,1);
+
+                border-radius: 5px;
+
+                line-height: 40px !important;
+                font-size: 16px !important;;
+                color: #212121;
+                text-align: center;
+                cursor: pointer;
+
+                z-index: 10;
+            }
+
+            #save:hover {
+                box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+                background-color: #00ACC1;
+                color: #FFFFFF;
+            }
+
         </style>
 
         <div id="metadata_container">
@@ -210,8 +239,9 @@
 
                 </template>
 
-
             </div>
+
+            <div id="save" on-click="_saveMetadata">SAVE</div>
         </div>
 
     </template>
@@ -381,10 +411,14 @@
                         that.metadata[element.type][element.name] = that.metadata["MANDATORY"][element.name];
                     });
 
-                    var metadata = {"CC_RF":this.CC_RF, "CC_RAF":this.CC_RAF, "EF":this.EF};
-    //                this.metadata = JSON.stringify(metadata);
-                    this.fire('metadata-list-controllet_update-metadata', {metadata : JSON.stringify(metadata)});
-                }, 300);
+//                    var metadata = {"CC_RF":this.CC_RF, "CC_RAF":this.CC_RAF, "EF":this.EF};
+//                    this.fire('metadata-list-controllet_update-metadata', {metadata : JSON.stringify(metadata)});
+                }, 1000);
+            },
+
+            _saveMetadata : function() {
+                var metadata = {"CC_RF":this.CC_RF, "CC_RAF":this.CC_RAF, "EF":this.EF};
+                this.fire('metadata-list-controllet_update-metadata', {metadata : JSON.stringify(metadata)});
             },
 
             _forceUpdateMetadata : function() {
