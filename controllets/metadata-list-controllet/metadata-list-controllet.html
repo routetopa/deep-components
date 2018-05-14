@@ -241,7 +241,7 @@
 
             </div>
 
-            <div id="save" on-click="_saveMetadata">SAVE</div>
+            <div id="save" on-click="_forceUpdateMetadata">SAVE</div>
         </div>
 
     </template>
@@ -377,7 +377,7 @@
             },
 
             _updateMetadata : function(e) {
-                this.debounce('_filter', function () {
+//                this.debounce('_filter', function () {
                     var splitted, category, name, value;
                     if(e.target.type.indexOf("select") > -1) {
                         var t = e.target;
@@ -413,17 +413,7 @@
 
 //                    var metadata = {"CC_RF":this.CC_RF, "CC_RAF":this.CC_RAF, "EF":this.EF};
 //                    this.fire('metadata-list-controllet_update-metadata', {metadata : JSON.stringify(metadata)});
-                }, 1000);
-            },
-
-            _saveMetadata : function() {
-                var that = this;
-                this.mandatory_list.forEach(function(element) {
-                    that.metadata[element.type][element.name] = that.metadata["MANDATORY"][element.name];
-                });
-
-                var metadata = {"CC_RF":this.CC_RF, "CC_RAF":this.CC_RAF, "EF":this.EF};
-                this.fire('metadata-list-controllet_update-metadata', {metadata : JSON.stringify(metadata)});
+//                }, 300);
             },
 
             _forceUpdateMetadata : function() {
