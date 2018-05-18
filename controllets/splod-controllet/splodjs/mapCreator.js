@@ -97,7 +97,7 @@ MapCreator.prototype.selectedConcept = function(selectedUrl, selectedLabel) {
 			//update map
 			var indexSomething = $.inArray(precLogicElement.key, queryLogicMap[precLogicElement.parent].children);
 			queryLogicMap[precLogicElement.parent].children[indexSomething] = newLogicElement.key;
-			removeMeAndMyDescendents(queryLogicMap[precLogicElement.key])	
+			removeMeAndMyDescendents(queryLogicMap[precLogicElement.key], queryLogicMap);
 
 		}else{ // concept refining parent node
 
@@ -257,8 +257,8 @@ MapCreator.prototype.selectedPredicate = function(selectedUrl, selectedLabel, pr
 		else{
 			indexMap['something'] += 1;
 		}
-		var somethingKey = 'something' + "_" + indexMap['something'];
 		var somethingIndex = indexMap['something'];
+		var somethingKey = 'something' + "_" + somethingIndex;
 
 		var somethingLogic = {key: somethingKey, index: somethingIndex,
 							  //url: somethingKey, label:'thing', 
@@ -279,6 +279,9 @@ MapCreator.prototype.selectedPredicate = function(selectedUrl, selectedLabel, pr
 		elementOnFocus = key;
 
 	} 
+
+		//console.log(queryLogicMap);
+
 	
 	updateAndNotifyFocus(elementOnFocus);
 
@@ -290,7 +293,6 @@ MapCreator.prototype.selectedPredicate = function(selectedUrl, selectedLabel, pr
 		queryBuilder = new QueryBuilder;
 	queryBuilder.updateQuery(rootListQueryLogicMap, queryLogicMap);
 
-	//console.log(queryLogicMap);
 }
 
 //pendingQuery : array of elements to add to map
@@ -465,11 +467,7 @@ MapCreator.prototype.selectedOperator = function(pendingQuery){
 
 			var elementOnFocusNode = queryLogicMap[elementOnFocus];
 			var elementOnFocusOperatorSiblings = [];
-			var elementOnFocusAllSiblings;
-			if(elementOnFocusNode.parent)
-				elementOnFocusAllSiblings = queryLogicMap[elementOnFocusNode.parent].children;
-			else
-				elementOnFocusAllSiblings = rootListQueryLogicMap;
+			var elementOnFocusAllSiblings = queryLogicMap[elementOnFocusNode.parent].children;
 			for(var i = 1; i < elementOnFocusAllSiblings.length; i = i+2){
 				elementOnFocusOperatorSiblings.push(elementOnFocusAllSiblings[i]);
 			}
@@ -495,13 +493,8 @@ MapCreator.prototype.selectedOperator = function(pendingQuery){
 									   parent:elementOnFocusNode.parent, children: []};
 				queryLogicMap[conjunctionKey] = conjunctionLogicElement;
 
-				if(elementOnFocusNode.parent){
-					var index = $.inArray(elementOnFocusOperatorSiblings[i], queryLogicMap[elementOnFocusNode.parent].children);
-					queryLogicMap[elementOnFocusNode.parent].children[index] = conjunctionKey;
-				}else{
-					var index = $.inArray(elementOnFocusOperatorSiblings[i], rootListQueryLogicMap);
-					rootListQueryLogicMap[index] = conjunctionKey;
-				}
+				var index = $.inArray(elementOnFocusOperatorSiblings[i], queryLogicMap[elementOnFocusNode.parent].children);
+				queryLogicMap[elementOnFocusNode.parent].children[index] = conjunctionKey;
 			
 				decreaseIndexIfIAmLast(queryLogicMap[elementOnFocusOperatorSiblings[i]]);
 				delete queryLogicMap[elementOnFocusOperatorSiblings[i]];
@@ -662,7 +655,7 @@ MapCreator.prototype.selectedResult = function(result){
 	var indexInParent = $.inArray(elementOnFocus, queryLogicMap[elementOnFocusNode.parent].children);
 	queryLogicMap[elementOnFocusNode.parent].children[indexInParent] = key;
 		
-	removeMeAndMyDescendents(elementOnFocusNode);
+	removeMeAndMyDescendents(elementOnFocusNode, queryLogicMap);
 
 	updateAndNotifyFocus(key);
 
@@ -695,7 +688,7 @@ MapCreator.prototype.removeElement = function(key){
 	else{
 
 		elementOnFocus = node.parent;
-		removeMeAndMyDescendents(node);
+		removeMeAndMyDescendents(node, queryLogicMap);
 
 		// update parent's children list
 		if(node.parent!=null){
@@ -740,7 +733,7 @@ MapCreator.prototype.removeElement = function(key){
 				}
 			}else if(queryLogicMap[node.parent].type == 'operator'){//should be 'not' or 'optional' 
 				var operatorNode = queryLogicMap[node.parent];
-				removeMeAndMyDescendents(operatorNode);
+				removeMeAndMyDescendents(operatorNode, queryLogicMap);
 				cleanMyParentList(operatorNode);
 				elementOnFocus = operatorNode.parent;
 			}
@@ -930,9 +923,8 @@ MapCreator.prototype.getSiblingConjunctionByKey = function(key){
 		if(parentNode.type=='operator' && (parentNode.subtype=='not' || parentNode.subtype=='optional'))
 			parentNode = queryLogicMap[parentNode.parent]; //it should not be NULL
 
-		if(parentNode.children.length>1){
+		if(parentNode.children.length>1)
 			conjunction.push(queryLogicMap[parentNode.children[1]].subtype);
-		}
 		else{
 			conjunction.push('and');
 			//conjunction.push('or');
@@ -963,6 +955,196 @@ MapCreator.prototype.getConjunctionKeysByConjunction = function(key){
 
 	return conjunction;
 
+}
+
+MapCreator.prototype.addFictionalConcept = function(callback){
+
+	var mapWithFictionalConcept = $.extend(true, {}, queryLogicMap);
+
+	var key = 'SPLODFictionalConcept';
+	var index = 1;
+
+	// new element in logic map
+	var newLogicElement = {key: key, index: index,
+						   url: key, label: key, 
+						   type:'concept', direction: false, 
+						   parent:null, children: [],
+						   mySameAsReferences : [], 
+						   fictional:''};
+	mapWithFictionalConcept[key] = newLogicElement;
+
+	var precLogicElement = mapWithFictionalConcept[elementOnFocus];
+
+	if(precLogicElement.type=='something'){ // replace something
+		
+		//update newLogicElement
+		//newLogicElement.children = precLogicElement.children;
+		newLogicElement.parent = precLogicElement.parent;
+
+		//update map
+		var indexSomething = $.inArray(precLogicElement.key, mapWithFictionalConcept[precLogicElement.parent].children);
+		mapWithFictionalConcept[precLogicElement.parent].children[indexSomething] = newLogicElement.key;
+		fictionalRemoveMeAndMyDescendents(mapWithFictionalConcept[precLogicElement.key], mapWithFictionalConcept);	
+
+	}else{ // concept refining parent node
+
+		if(precLogicElement.children.length>0){
+			var operator;
+			if(precLogicElement.children.length>1)//new operator has to be the same type of operator
+				operator = mapWithFictionalConcept[precLogicElement.children[1]].subtype;
+			else//default conjunction
+				operator = 'and';
+			 
+			var newOperatorVerbalization = languageManager.verbalizeOperator(operator);
+
+			var newOperatorIndex = 1;
+			if(operator in indexMap){
+				newOperatorIndex = indexMap[operator] + 1;
+			}
+			
+			var newOperatorKey = operator + "_" + newOperatorIndex;
+
+			var newOperatorLogicElement = {key: newOperatorKey, index: newOperatorIndex,
+								   url: operator, label: languageManager.getOperatorLabelVerbalization(operator), 
+								   type:'operator', subtype: operator, direction: false, 
+								   verbalization: newOperatorVerbalization, 
+								   parent:precLogicElement.key, children: []};
+			mapWithFictionalConcept[newOperatorKey] = newOperatorLogicElement;
+
+			precLogicElement.children.push(newOperatorKey);
+			
+		}
+		newLogicElement.parent = precLogicElement.key;
+		precLogicElement.children.push(newLogicElement.key);	
+
+	} 
+
+	if(queryBuilder == null)
+		queryBuilder = new QueryBuilder;
+	queryBuilder.getConcepts(rootListQueryLogicMap, mapWithFictionalConcept, callback);
+}
+
+/*
+	var resultObj = {
+			directArray: directData,
+			reverseArray: reverseData
+		};
+*/
+MapCreator.prototype.addFictionalDirectPredicate = function(callback){
+
+	var mapWithFictionalPredicate = $.extend(true, {}, queryLogicMap);
+
+	var key = 'SPLODFictionalDirectPredicate';
+	var index = 1;
+
+	var newLogicElement = {key: key, index: index,
+						   url: key, label: key, 
+						   type:'predicate', direction: 'direct', 
+						   parent:null, children: [],
+						   mySameAsReferences : [], 
+						   fictional:''};
+	mapWithFictionalPredicate[key] = newLogicElement;
+
+
+	var precLogicElement = mapWithFictionalPredicate[elementOnFocus];
+		
+	//if i have sibling i put and before me
+	if(precLogicElement.children.length>0){
+		var operator;
+		if(precLogicElement.children.length>1)//new operator has to be the same type of operator
+			operator = mapWithFictionalPredicate[precLogicElement.children[1]].subtype;
+		else//default conjunction
+			operator = 'and';
+		 
+		var newOperatorVerbalization = languageManager.verbalizeOperator(operator);
+
+		var newOperatorIndex = 1;
+
+		if(operator in indexMap){
+			newOperatorIndex = indexMap[operator] + 1;
+		}
+
+		var newOperatorKey = operator + "_" + newOperatorIndex;
+
+		var newOperatorLogicElement = {key: newOperatorKey, index: newOperatorIndex,
+							   url: operator, label: languageManager.getOperatorLabelVerbalization(operator), 
+							   type:'operator', subtype: operator, direction: false, 
+							   verbalization: newOperatorVerbalization, 
+							   parent:precLogicElement.key, children: []};
+		mapWithFictionalPredicate[newOperatorKey] = newOperatorLogicElement;
+
+		precLogicElement.children.push(newOperatorKey);
+	}
+
+	// add me to parent's children list
+	precLogicElement.children.push(key);
+	newLogicElement.parent = precLogicElement.key;
+	
+	if(queryBuilder == null)
+		queryBuilder = new QueryBuilder;
+	queryBuilder.getDirectPredicates(rootListQueryLogicMap, mapWithFictionalPredicate, callback);
+
+}
+
+MapCreator.prototype.addFictionalReversePredicate = function(callback){
+
+	var mapWithFictionalPredicate = $.extend(true, {}, queryLogicMap);
+
+	var key = 'SPLODFictionalReversePredicate';
+	var index = 1;
+
+	var newLogicElement = {key: key, index: index,
+						   url: key, label: key, 
+						   type:'predicate', direction: 'reverse', 
+						   parent:null, children: [],
+						   mySameAsReferences : [], 
+						   fictional:''};
+	mapWithFictionalPredicate[key] = newLogicElement;
+
+
+	var precLogicElement = mapWithFictionalPredicate[elementOnFocus];
+		
+	//if i have sibling i put and before me
+	if(precLogicElement.children.length>0){
+		var operator;
+		if(precLogicElement.children.length>1)//new operator has to be the same type of operator
+			operator = mapWithFictionalPredicate[precLogicElement.children[1]].subtype;
+		else//default conjunction
+			operator = 'and';
+		 
+		var newOperatorVerbalization = languageManager.verbalizeOperator(operator);
+
+		var newOperatorIndex = 1;
+
+		if(operator in indexMap){
+			newOperatorIndex = indexMap[operator] + 1;
+		}
+
+		var newOperatorKey = operator + "_" + newOperatorIndex;
+
+		var newOperatorLogicElement = {key: newOperatorKey, index: newOperatorIndex,
+							   url: operator, label: languageManager.getOperatorLabelVerbalization(operator), 
+							   type:'operator', subtype: operator, direction: false, 
+							   verbalization: newOperatorVerbalization, 
+							   parent:precLogicElement.key, children: []};
+		mapWithFictionalPredicate[newOperatorKey] = newOperatorLogicElement;
+
+		precLogicElement.children.push(newOperatorKey);
+	}
+
+	// add me to parent's children list
+	precLogicElement.children.push(key);
+	newLogicElement.parent = precLogicElement.key;
+
+	if(queryBuilder == null)
+		queryBuilder = new QueryBuilder;
+	queryBuilder.getReversePredicates(rootListQueryLogicMap, mapWithFictionalPredicate, callback);
+}
+
+MapCreator.prototype.focusHasNotAsParent = function(){
+	return queryLogicMap[elementOnFocus].parent!=null &&
+		queryLogicMap[queryLogicMap[elementOnFocus].parent].type == 'operator' 
+		&& queryLogicMap[queryLogicMap[elementOnFocus].parent].subtype == 'not';
 }
 
 function initializeMap(){
@@ -1047,7 +1229,7 @@ function substituteMeWithSomethingNode(key){
 	return somethingKey;
 }
 
-function removeMeAndMyDescendents(node){
+function removeMeAndMyDescendents(node, map){
 	// remove node and his children 
 	var visitStack = [];
 	visitStack.push(node);
@@ -1056,11 +1238,27 @@ function removeMeAndMyDescendents(node){
 		var currentNode = visitStack.pop();
 
 		for(var i = currentNode.children.length-1; i>=0; i--){
-			visitStack.push(queryLogicMap[currentNode.children[i]]);
+			visitStack.push(map[currentNode.children[i]]);
 		}
 
 		decreaseIndexIfIAmLast(currentNode);
-		delete queryLogicMap[currentNode.key];
+		delete map[currentNode.key];
+	}
+}
+
+function fictionalRemoveMeAndMyDescendents(node, map){
+	// remove node and his children 
+	var visitStack = [];
+	visitStack.push(node);
+
+	while(visitStack.length != 0){
+		var currentNode = visitStack.pop();
+
+		for(var i = currentNode.children.length-1; i>=0; i--){
+			visitStack.push(map[currentNode.children[i]]);
+		}
+
+		delete map[currentNode.key];
 	}
 }
 
@@ -1113,7 +1311,7 @@ function removeOperator(node){
 			if(parentNode.type == 'operator' && parentNode.subtype == 'not')
 				nodeToRemove = parentNode;
 
-			removeMeAndMyDescendents(nodeToRemove);
+			removeMeAndMyDescendents(nodeToRemove, queryLogicMap);
 			cleanMyParentList(nodeToRemove);
 			updateAndNotifyFocus(nodeToRemove.parent);
 

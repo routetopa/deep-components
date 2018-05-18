@@ -554,22 +554,23 @@
 					success: function(data) {
 						var languageManagers = $(data).find('language_manager');
 
-						var doc = $('#content-splod-controllet');
-						for(var i=0; i<languageManagers.length; i++){
-							$('<script/>').attr('src', parent.ODE.deep_components + 'controllets/splod-controllet/splodjs/languageManager/'+languageManagers[i].textContent+'.js').appendTo(doc);
-							
-							var languageManagerName = languageManagers[i].textContent.trim();
-							systemLangList.push({langCode : languageManagerName.split("LanguageManager")[0]});
-						}
-		
-						languageManager = new LanguageManager();
-						languageManager = languageManager._singletonInstance;
-
-						$('#endpointSelectionTitle').html(languageManager.getFieldTitle('selected endpoint'));
-						$('#selectedEndpoint').html(selectedEndpointName);
-
-						fillStartSettings();
+					    var doc = $('#content-splod-controllet');
+					    for(var i=0; i<languageManagers.length; i++){
+						   $('<script/>').attr('src', parent.ODE.deep_components + 'controllets/splod-controllet/splodjs/languageManager/'+languageManagers[i].textContent+'.js').appendTo(doc));
+						   
+						  	var languageManagerName = languageManagers[i].textContent.trim();
+						   	systemLangList.push({langCode : languageManagerName.split("LanguageManager")[0]});
+					    }
 						
+						$('#content-splod-controllet').ready(function(){
+							languageManager = new LanguageManager();
+							languageManager = languageManager._singletonInstance;
+
+							$('#endpointSelectionTitle').html(languageManager.getFieldTitle('selected endpoint'));
+							$('#selectedEndpoint').html(selectedEndpointName);
+
+							fillStartSettings();
+						}
 					}
 				 });
 			

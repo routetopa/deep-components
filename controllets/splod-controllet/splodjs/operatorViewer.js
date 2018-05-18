@@ -74,7 +74,7 @@ function renderOperatorList(operators){
 			if(datatypeOperatorList[j] == 'repeat'){
 				//change with language  manager function
 				var paramsString =JSON.stringify([datatypeOperators.repeatParameters[0],datatypeOperators.repeatParameters[1]]);
-				li.html(languageManager.getOperatorLabelVerbalization(datatypeOperators.repeatParameters[0]) + ' ' + datatypeOperators.repeatParameters[2])
+				li.html(datatypeOperators.repeatParameters[0] + ' ' + datatypeOperators.repeatParameters[2])
 					.attr('meta-params', paramsString);
 			}else{
 				li.html(languageManager.getOperatorLabelVerbalization(datatypeOperatorList[j]));
@@ -363,7 +363,6 @@ function renderReusableResultList(reusableResults, onClickButtonFunction, onClic
 		$('.datepicker').pickadate({
 			selectMonths: true,
 			selectYears: 100,
-			max: 'Today',
 			today: 'Today',
 			clear: 'Clear',
 			close: 'OK',

@@ -2,10 +2,10 @@ var resultDatatype;
 var operatorMap;
 var parameterNumberOperator;
 
-var savedResult;
-var literalLang;
-var resultLiteralLang;
-var cachedResult;
+var savedResult; //updated results, query by query
+var literalLang; //languages linked to literal results
+var resultLiteralLang; //results linked to results
+var cachedResult; //cached results to return OldResults
 
 var mapCreator;
 
@@ -28,13 +28,10 @@ var OperatorManager = function () {
 
 	parameterNumberOperator = {
 		'and' : 1, 
-		//'or' : 1, or che aggrega tuple, che chiamavamo or inclusivo
 		'or' : 1,
 		'not' : 1,
 		'optional' : 1,
 
-		//'repeat' : 1,
-		
 		'<' : 2,
 		'<=' : 2,
 		'>' : 2,
@@ -77,7 +74,6 @@ var OperatorManager = function () {
 		'img' : [],
 
 		'and' : ['or'],
-		//'or' : ['and', 'xor'],
 		'or' : ['and'],
 
 		'<' : ['not', 'optional'],
@@ -97,10 +93,6 @@ var OperatorManager = function () {
 		'before': ['not', 'optional'],
 		'after': ['not', 'optional'],
 		'range date': ['not', 'optional'],
-
-		//'not' :[],
-		//'optional':[]
-
 	};
 
 	OperatorManager.prototype._singletonInstance = this;
@@ -121,7 +113,6 @@ OperatorManager.prototype.changedFocus = function(newOnFocus, userChangeFocus){
 	}
 }
 
-//queryExecutor notify that results are ready
 OperatorManager.prototype.queryResult = function(select, labelSelect, keySelect, results){
 	var result = results[0];
 
@@ -274,7 +265,6 @@ OperatorManager.prototype.queryResult = function(select, labelSelect, keySelect,
 		manageUpdateOperatorViewer();
 }
 
-//user selects a operator to filter elementOnFocus
 OperatorManager.prototype.selectedOperator = function(operator, datatype){
 	pendingQuery = [];
 	pendingQuery.push({value: operator, datatype: datatype});
@@ -289,13 +279,11 @@ OperatorManager.prototype.selectedOperator = function(operator, datatype){
 	return isComplete;
 }
 
-//user selects repeat operator
 OperatorManager.prototype.selectedRepeat = function(repeatParameters){ // operator and value to repeat
 	mapCreator.selectedRepeatOperator($.parseJSON(repeatParameters));
 	return true;
 }
 
-//return result list to complete selected operator
 OperatorManager.prototype.getResultToCompleteOperator = function(){
 	var operator = pendingQuery[0];
 	var operatorField = onFocusOperator;
@@ -316,7 +304,6 @@ OperatorManager.prototype.getResultToCompleteOperator = function(){
 	return {type:type, results: [oldresults, newresults]};
 }
 
-//user selects a reusable result to complete an operator
 OperatorManager.prototype.selectedReusableResult = function(result, fromInput){
 	var operator = pendingQuery[0];
 
@@ -378,7 +365,6 @@ OperatorManager.prototype.selectedReusableResult = function(result, fromInput){
 	return isComplete;
 }
 
-//user changes result to complete an operator
 OperatorManager.prototype.changedReusableResult = function(result, fromInput){
 
 	var onFocusNode = mapCreator.getNodeByKey(onFocusOperator); 
@@ -430,7 +416,6 @@ OperatorManager.prototype.changedReusableResult = function(result, fromInput){
 	cachedResult[newKey] = cachedResultList;
 }
 
-//peding query fields to visualize it
 OperatorManager.prototype.getPendingQueryFields = function(){
 	var pendingQueryFields = [];
 	
@@ -600,9 +585,13 @@ function manageUpdateOperatorViewer(){
 		var operatorNode = mapCreator.getNodeByKey(node.parent);
 		var operator = operatorNode.subtype;
 		var operatorField = node.relatedTo;
-		
+
 		var oldresults;
-		var newresults = savedResult[operatorField][node.datatype];
+		var newresults;
+		if(operator=='lang')
+			newresults = literalLang[operatorField];
+		else
+		 	newresults = savedResult[operatorField][node.datatype];
 
 		if(operatorField in resultDatatype){ 
 			oldresults = cachedResult[node.key];

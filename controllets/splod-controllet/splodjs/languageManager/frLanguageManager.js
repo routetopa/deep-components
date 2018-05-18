@@ -406,8 +406,8 @@ frLanguageManager.prototype.getInputPlaceholder = function(inputType){
 
 	switch(inputType){
 		case 'concept' : placeholder = 'Chercher un concept'; break;
-		case 'predicate' : placeholder = 'Chercher un pr&eacute;dicat'; break;
-		case 'result' : placeholder = 'Chercher un r&eacute;sultat'; break;
+		case 'predicate' : placeholder = 'Chercher un prédicat'; break;
+		case 'result' : placeholder = 'Chercher un résultat'; break;
 	}
 
 	return placeholder;
@@ -613,21 +613,21 @@ frLanguageManager.prototype.getFieldTitle = function(select){
 
 frLanguageManager.prototype.getHelpGuide = function(){
 	var headers = [];
-s
+
 	var overviewObj = {title : 'Vue', content : []};
 	overviewObj.content.push('<b>SPLOD </b> vous aidera &agrave; utiliser LOD (Linked Open Data) et afficher les r&eacute;sultats sous forme de tableau. Il n\'est pas n&eacute;cessaire de conna&icirc;tre SPARQL ou la structure des donn&eacute;es sous-jacente pour l\'utiliser: SPLOD cachera la complexit&eacute; sous-jacente et vous guidera &agrave; travers le contenu des box et des feedbacks continus.');
 	headers.push(overviewObj);
 
 	var boxesObj = {title : 'Qu\'est-ce qu\'il y a dans chaque box?', content : []};
-	boxesObj.content.push('<b> L\'onglet concept </b> contient initialement tous les concepts <i> statements </i> accessibles &agrave; partir du l\'endpoint que vous avez s&eacute;lectionn&eacute; &agrave; la premi&egrave;re &eacute;tape. D&egrave;s la premi&egrave;re interaction, SPLOD recuperera tous les concepts utilis&eacute;s, en quittant peut\-&ecirc;tre l\'endpoint s&eacute;lectionn&eacute;e s\'il est connect&eacute; &agrave; d\'autres vocabulaires ou vice versa. Nous appelons <b>\'concepts\'</b> des classes li&eacute;es &agrave; <i> subject </i> ou <i> object </i> dans les donn&eacute;es en format RDF. <img width="100%" src="http://localhost/splod/DEEP/deep-components/controllets/splod-controllet/splodjs/img/en_concept.png"/>');
-	boxesObj.content.push('<b> L\'onglet pr&eacute;dicat </b> contient tous les pr&eacute;dicats <i> utilis&eacute;s </i> et accessibles &agrave; partir du l\'endpoint que vous avez s&eacute;lectionn&eacute; &agrave; la premi&egrave;re &eacute;tape. Dans l\'image vous pouvez voir que le pr&eacute;dicat <i> dbo:birthPlace </i> est utilis&eacute; comme pr&eacute;dicat direct et dans l\'autre cas il est utilis&eacute; comme pr&eacute;dicat inverse, cela d&eacute;pend de la position de l\'&eacute;l&eacute;ment qui vous int&eacute;resse: s\'il appara&igrave;t comme sujet, le pr&eacute;dicat est direct, sinon c\'est l\'inverse. <img width="100%" src="http://localhost/splod/DEEP/deep-components/controllets/splod-controllet/splodjs/img/en_predicate.png"/>');
+	boxesObj.content.push('<b> L\'onglet concept </b> contient initialement tous les concepts <i> statements </i> accessibles &agrave; partir du l\'endpoint que vous avez s&eacute;lectionn&eacute; &agrave; la premi&egrave;re &eacute;tape. D&egrave;s la premi&egrave;re interaction, SPLOD recuperera tous les concepts utilis&eacute;s, en quittant peut\-&ecirc;tre l\'endpoint s&eacute;lectionn&eacute;e s\'il est connect&eacute; &agrave; d\'autres vocabulaires ou vice versa. Nous appelons <b>\'concepts\'</b> des classes li&eacute;es &agrave; <i> subject </i> ou <i> object </i> dans les donn&eacute;es en format RDF. <img width="100%" src="./splodjs/img/en_concept.png"/>');
+	boxesObj.content.push('<b> L\'onglet pr&eacute;dicat </b> contient tous les pr&eacute;dicats <i> utilis&eacute;s </i> et accessibles &agrave; partir du l\'endpoint que vous avez s&eacute;lectionn&eacute; &agrave; la premi&egrave;re &eacute;tape. Dans l\'image vous pouvez voir que le pr&eacute;dicat <i> dbo:birthPlace </i> est utilis&eacute; comme pr&eacute;dicat direct et dans l\'autre cas il est utilis&eacute; comme pr&eacute;dicat inverse, cela d&eacute;pend de la position de l\'&eacute;l&eacute;ment qui vous int&eacute;resse: s\'il appara&igrave;t comme sujet, le pr&eacute;dicat est direct, sinon c\'est l\'inverse. <img width="100%" src="./splodjs/img/en_predicate.png"/>');
 	boxesObj.content.push('<b> L\'onglet op&eacute;rateur </b> vous permet de filtrer les donn&eacute;es ou d\'appliquer des op&eacute;rateurs au niveau de la demande. Les op&eacute;rateurs d&eacute;pendent du type de donn&eacute;es de l\'élément sur lequel le focus est plac&eacute;. Si l\'op&eacute;rateur doit compl&eacute;ter un ou plusieurs r&eacute;sultats, vous les trouverez dans ce box apr&egrave;s avoir s&eacute;lectionn&eacute; l\'op&eacute;rateur.');
-	boxesObj.content.push('<b> L\'onglet de la table des r&eacute;sultats </b> vous montre les r&eacute;sultats de la demande en format de tableau. Vous pouvez cacher des champs ou ranger la table. En posant le curseur sur le badge indiquant le nombre de la dimension du tableau vous pouvez en voir un aperçu.<img width="100%" src="http://localhost/splod/DEEP/deep-components/controllets/splod-controllet/splodjs/img/en_resultsTable.png"/>');
+	boxesObj.content.push('<b> L\'onglet de la table des r&eacute;sultats </b> vous montre les r&eacute;sultats de la demande en format de tableau. Vous pouvez cacher des champs ou ranger la table. En posant le curseur sur le badge indiquant le nombre de la dimension du tableau vous pouvez en voir un aperçu.<img width="100%" src="./splodjs/img/en_resultsTable.png"/>');
 	boxesObj.content.push('<b> L\'onglet des param&egrave;tres </b> vous donne l\'option de <ul> <li> changer le nombre des concepts affich&eacute;s, </ li> <li> changer le nombre des prédicats affich&eacute;s, </ li> <li> changer la langue du syst&egrave;me, </li> <li> demander des r&eacute;sultats toujours rang&eacute;. </li> </ul>');
 	headers.push(boxesObj);
 
 	var queryNLObj = {title : 'Demande en langage naturel', content : []};
-	queryNLObj.content.push('<b>SPLOD</b> essaie de verbaliser vos interactions en cr&eacute;ant la m&ecirc;me requ&ecirc;te que vous auriez faite &agrave; une autre personne. <br> Les couleurs vous guideront vers une compréhension agr&eacute;able de la demande. <br> <img width="100%" src="http://localhost/splod/DEEP/deep-components/controllets/splod-controllet/splodjs/img/en_NLquery.png"/> <br> ATTENTION: si vous voyez les cha&icirc;nes de caract&egrave;re barr&egrave;es, il est posible que vos interactions n\'ont pas produit une demande valide. Dans l\'example les demandes sont diff&eacute;rentes: la première signifie "Donne-moi des savantes sans lieu de naissance", la deuxi&egrave;me "Donne-moi des savantes qui ne sont pas n&eacute;s dans une &icirc;le". <br> <img width="100%" src="http://localhost/splod/DEEP/deep-components/controllets/splod-controllet/splodjs/img/en_not.png"/> <br>');
+	queryNLObj.content.push('<b>SPLOD</b> essaie de verbaliser vos interactions en cr&eacute;ant la m&ecirc;me requ&ecirc;te que vous auriez faite &agrave; une autre personne. <br> Les couleurs vous guideront vers une compréhension agr&eacute;able de la demande. <br> <img width="100%" src="./splodjs/img/en_NLquery.png"/> <br> ATTENTION: si vous voyez les cha&icirc;nes de caract&egrave;re barr&egrave;es, il est posible que vos interactions n\'ont pas produit une demande valide. Dans l\'example les demandes sont diff&eacute;rentes: la première signifie "Donne-moi des savantes sans lieu de naissance", la deuxi&egrave;me "Donne-moi des savantes qui ne sont pas n&eacute;s dans une &icirc;le". <br> <img width="100%" src="./splodjs/img/en_not.png"/> <br>');
 	headers.push(queryNLObj);
 
 	var focusObj = {title : 'Focus : comment ça marche', content : []};
