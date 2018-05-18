@@ -556,7 +556,7 @@
 
 					    var doc = $('#content-splod-controllet');
 					    for(var i=0; i<languageManagers.length; i++){
-						   $('<script/>').attr('src', parent.ODE.deep_components + 'controllets/splod-controllet/splodjs/languageManager/'+languageManagers[i].textContent+'.js').appendTo(doc));
+						   $('<script/>').attr('src', parent.ODE.deep_components + 'controllets/splod-controllet/splodjs/languageManager/'+languageManagers[i].textContent+'.js').appendTo(doc);
 						   
 						  	var languageManagerName = languageManagers[i].textContent.trim();
 						   	systemLangList.push({langCode : languageManagerName.split("LanguageManager")[0]});
