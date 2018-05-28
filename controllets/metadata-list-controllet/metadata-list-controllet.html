@@ -174,8 +174,8 @@
             /* AAA */
 
             .auction > span {
-                top: -19px;
-                left: 33px;
+                top: -6px;
+                left: 32px;
             }
 
             :hover.auction > span {
@@ -183,31 +183,31 @@
             }
 
             .auction  > span {
+                display: none;
                 position: absolute;
-                height: 73px;
+                width: 40vw;
+                min-width: 640px;
+                padding: 8px;
+                border-radius: 4px;
+                z-index: 999;
+
+                background-color: rgba(0, 0, 0, 0.666);
                 font-size: 14px;
                 font-family: 'Roboto', 'Helvetica Neue', Helvetica, Arial, sans-serif;
-                width: 180px;
+                line-height: 20px !important;
                 color: #FFFFFF;
-                background-color: rgba(0, 0, 0, 0.8);
-                line-height: 30px;
-                text-align: center;
-                border-radius: 5px;
-                z-index: 999;
-                display: none;
             }
 
             .auction > span:after {
-                top: calc(50% - 8px);
+                top: 10px;
                 left: -16px;
                 border: 8px solid transparent;
-                border-right: 8px solid rgba(0, 0, 0, 0.8);
+                border-right: 8px solid rgba(0, 0, 0, 0.666);
                 content: '';
                 position: absolute;
                 width: 0;
                 height: 0;
             }
-
 
         </style>
 
@@ -223,13 +223,40 @@
                     <div class="box">
                         <div class="avatar">{{item.index}}</div>
                         <div class="text">
-                            <div class="name" title="{{_getName(item.name)}}" data-code$="{{item.name}}">
+                            <div class="name" data-code$="{{item.name}}">
                                 <div>{{_getName(item.name)}} *</div>
                                 <template is="dom-if" if="{{_isGueassable(item.name)}}">
                                     <div on-click="_guessMetadata" class="icon magic"></div>
                                 </template>
                                 <div class="icon auction">
-                                    <span>Prova Prova Prova Prova Prova Prova Prova Prova Prova Prova</span>
+                                    <span>
+                                        Ciao perche di manoaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+                                        Ciao perche di manoaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+                                        Ciao perche di manoaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+                                        Ciao perche di manoaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+                                        Ciao perche di manoaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+                                        Ciao perche di manoaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+                                        Ciao perche di manoaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+                                        Ciao perche di manoaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+                                        Ciao perche di manoaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+                                        Ciao perche di manoaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+                                        Ciao perche di manoaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+                                        Ciao perche di manoaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+                                        Ciao perche di manoaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+                                        Ciao perche di manoaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+                                        Ciao perche di manoaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+                                        Ciao perche di manoaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+                                        Ciao perche di manoaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+                                        Ciao perche di manoaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+                                        Ciao perche di manoaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+                                        Ciao perche di manoaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+                                        Ciao perche di manoaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+                                        Ciao perche di manoaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+                                        Ciao perche di manoaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+                                        Ciao perche di manoaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+                                        Ciao perche di manoaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+                                        Ciao perche di manoaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+                                    </span>
                                 </div>
                             </div>
                             <div class="description" title="{{_getDescription(item.name)}}">{{_getDescription(item.name)}}</div>
