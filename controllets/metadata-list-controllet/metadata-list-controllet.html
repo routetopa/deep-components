@@ -85,6 +85,8 @@
             #metadata_container .name {
                 color: #FF5722;
                 font-weight: 700;
+                display: flex;
+                flex-direction: row;
             }
 
             #metadata_container .description {
@@ -146,6 +148,67 @@
                 color: #FFFFFF;
             }
 
+            .icon
+            {
+                height: 24px;
+                width: 24px;
+                background-size: 16px 16px;
+                background-repeat: no-repeat;
+                background-position: 4px 4px;
+                cursor: pointer;
+            }
+
+            .icon.magic
+            {
+                background-image: url("./icons/magic-wand.svg");
+                margin-left: 24px;
+            }
+
+            .icon.auction
+            {
+                position: relative;
+                background-image: url("./icons/auction.svg");
+                margin-left: 8px;
+            }
+
+            /* AAA */
+
+            .auction > span {
+                top: -19px;
+                left: 33px;
+            }
+
+            :hover.auction > span {
+                display: inline;
+            }
+
+            .auction  > span {
+                position: absolute;
+                height: 73px;
+                font-size: 14px;
+                font-family: 'Roboto', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+                width: 180px;
+                color: #FFFFFF;
+                background-color: rgba(0, 0, 0, 0.8);
+                line-height: 30px;
+                text-align: center;
+                border-radius: 5px;
+                z-index: 999;
+                display: none;
+            }
+
+            .auction > span:after {
+                top: calc(50% - 8px);
+                left: -16px;
+                border: 8px solid transparent;
+                border-right: 8px solid rgba(0, 0, 0, 0.8);
+                content: '';
+                position: absolute;
+                width: 0;
+                height: 0;
+            }
+
+
         </style>
 
         <div id="metadata_container">
@@ -155,10 +218,20 @@
                 <!--MANDATORY-->
                 <template is="dom-repeat" items={{_toArray(MANDATORY)}}>
 
+                    <div>
+
                     <div class="box">
                         <div class="avatar">{{item.index}}</div>
                         <div class="text">
-                            <div class="name" title="{{_getName(item.name)}}">{{_getName(item.name)}} *</div>
+                            <div class="name" title="{{_getName(item.name)}}" data-code$="{{item.name}}">
+                                <div>{{_getName(item.name)}} *</div>
+                                <template is="dom-if" if="{{_isGueassable(item.name)}}">
+                                    <div on-click="_guessMetadata" class="icon magic"></div>
+                                </template>
+                                <div class="icon auction">
+                                    <span>Prova Prova Prova Prova Prova Prova Prova Prova Prova Prova</span>
+                                </div>
+                            </div>
                             <div class="description" title="{{_getDescription(item.name)}}">{{_getDescription(item.name)}}</div>
                         </div>
                     </div>
@@ -185,6 +258,7 @@
                     <!--</template>-->
                     </template>
 
+                    </div>
 
                 </template>
 
@@ -290,6 +364,15 @@
                         { value: "pl", label: "Polski", selected: false},
                         { value: "nl", label: "Nederlands", selected: false}
                     ]
+                },
+
+                guessableMetadata : {
+                  type : Array,
+                  value : ['title', 'description', 'license', 'language', 'contact_name', 'contact_email', 'maintainer', 'maintainer_email']
+                },
+                roomInfo : {
+                    type  : Object,
+                    value : undefined
                 }
             },
 
@@ -304,6 +387,7 @@
 //                metadata_ln["ln"] = "it";
 
                 $(this.$.metadata_list).perfectScrollbar();
+                this.roomInfo = JSON.parse(COCREATION.info);
             },
 
             attached : function() {
@@ -447,6 +531,29 @@
                     };
                 });
             },
+
+            _isGueassable: function(metadata_name)
+            {
+                return (this.guessableMetadata.indexOf(metadata_name) > -1)
+            },
+
+            _guessMetadata: function(e)
+            {
+                let field = e.target.parentElement.getAttribute('data-code');
+
+                switch (field)
+                {
+                    case 'title'            : $(e.currentTarget).parents().eq(3).find('iron-autogrow-textarea').val(this.roomInfo.name); break;
+                    case 'description'      : $(e.currentTarget).parents().eq(3).find('iron-autogrow-textarea').val(this.roomInfo.description); break;
+                    case 'license'          : $(e.currentTarget).parents().eq(3).find('select option:eq(1)').attr('selected', 'true'); break;
+                    case 'language'         : $(e.currentTarget).parents().eq(3).find('select option:eq(1)').attr('selected', 'true'); break;
+                    case 'contact_name'     : $(e.currentTarget).parents().eq(3).find('iron-autogrow-textarea').val(COCREATION.user_info.username); break;
+                    case 'contact_email'    : $(e.currentTarget).parents().eq(3).find('iron-autogrow-textarea').val(COCREATION.user_info.mail); break;
+                    case 'maintainer'       : $(e.currentTarget).parents().eq(3).find('iron-autogrow-textarea').val(COCREATION.owner.username); break;
+                    case 'maintainer_email' : $(e.currentTarget).parents().eq(3).find('iron-autogrow-textarea').val(COCREATION.owner.mail); break;
+                    default                 : break;
+                }
+            }
 
         });
 
