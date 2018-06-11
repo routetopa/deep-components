@@ -443,7 +443,7 @@
             setMetadata : function(metadata) {
                 this.metadata = JSON.parse(metadata);
 
-                this.mandatory_list = this.metadata["MANDATORY"];
+                this.mandatory_list = [{"name":"title","type":"CC_RF"},{"name":"description","type":"CC_RF"},{"name":"license","type":"CC_RAF"},{"name":"language","type":"EF"}];//this.metadata["MANDATORY"];
                 this.metadata["MANDATORY"] = {};
 
                 var that = this;
