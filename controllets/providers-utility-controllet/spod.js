@@ -1,6 +1,13 @@
 function SPOD_Provider () {
 }
 
+SPOD_Provider.prototype.selectData = function(data) {
+    return data.records;
+};
+
+SPOD_Provider.prototype.addLimit = function(url) {
+    return url;
+};
 
 SPOD_Provider.prototype.getHTMLFormattedMetadata = function(dataset, resourceIndex) {
     var html = '';

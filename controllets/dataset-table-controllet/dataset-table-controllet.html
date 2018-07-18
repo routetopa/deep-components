@@ -93,7 +93,7 @@
                 line-height: 24px;
             }
 
-            #data_table_container #header {
+            #data_table_container .header, #metadata_paper_dialog .header {
                 background: #B6B6B6;
                 height: 24px;
                 padding: 12px;
@@ -281,11 +281,18 @@
                 width: 56px;
             }
 
+            #metadata_container
+            {
+                height: calc(100% - 48px);
+                overflow-y: scroll;
+                margin-left: 4px;
+            }
+
         </style>
 
         <paper-material id="data_table_container" elevation="5">
 
-            <div id="header">
+            <div class="header">
                 <span id="selected_data"></span>
                 <!--<div style="float: right; right: 10px">-->
                     <!--<paper-checkbox checked on-change="showAll"><span id="suggested_datasets">{{_tr("last_version")}}</span></paper-checkbox>-->
@@ -337,6 +344,7 @@
                             <paper-icon-button title='{{_tr("download_csv")}}'  room_id$="{{item.ID}}" version$="{{item.VER}}" class="tools" icon="file-download" on-click="_onDownloadDatasetClick"></paper-icon-button>
                             <paper-icon-button title='{{_tr("copy_link")}}'     room_id$="{{item.ID}}" version$="{{item.VER}}" class="tools" icon="content-copy" on-click="_onCopyDatasetClick"></paper-icon-button>
                             <paper-icon-button title='{{_tr("download_docs")}}' room_id$="{{item.ID}}" version$="{{item.VER}}" class="tools" icon="description" on-click="_onDownloadInfoClick"></paper-icon-button>
+                            <paper-icon-button title='Metadata'                 room_id$="{{item.ID}}" version$="{{item.VER}}" class="tools" icon="info-outline" on-click="_onMetadataClick"></paper-icon-button>
                         </td>
                     </tr>
                 </template>
@@ -379,6 +387,17 @@
 
         <paper-dialog modal id="paper_dialog">
             <data-table-controllet id="data_table_controllet"></data-table-controllet>
+            <div class="buttons buttons_position">
+                <paper-icon-button dialog-confirm icon="close" class="preview-close"></paper-icon-button>
+            </div>
+        </paper-dialog>
+
+
+        <paper-dialog modal id="metadata_paper_dialog">
+            <div class="header" class="data-table-controllet">
+                <span id="selected_data" class="style-scope data-table-controllet">METADATA</span>
+            </div>
+            <div id="metadata_container"></div>
             <div class="buttons buttons_position">
                 <paper-icon-button dialog-confirm icon="close" class="preview-close"></paper-icon-button>
             </div>
@@ -539,8 +558,8 @@
             },
 
 
-            _onOpenDatasetClick : function(e) {
-
+            _onOpenDatasetClick : function(e)
+            {
                 var t = this;
 
                 $.ajax({
@@ -551,8 +570,36 @@
                         t.$.paper_dialog.open();
 
                         t.async(function() {
-                            t.$.data_table_controllet.setData(e);
+                            t.$.data_table_controllet.setData(e.records);
                         }, 100);
+                    }
+                });
+            },
+
+            _onMetadataClick: function(e)
+            {
+                var t = this;
+
+                $.ajax({
+                    url: ODE.ajax_coocreation_get_dataset,
+                    data: {room_id : e.target.parentElement.attributes["room_id"].value, version : e.target.parentElement.attributes["version"].value},
+                    dataType: "json",
+                    success: function(e)
+                    {
+                        t.$.metadata_paper_dialog.open();
+
+                        for(let prop in e.metadata)
+                        {
+                            if (e.metadata.hasOwnProperty(prop) && typeof e.metadata[prop] === 'string')
+                            {
+                                let e_b = document.createElement("B");
+                                let b_t = document.createTextNode(prop);
+                                e_b.appendChild(b_t);
+                                t.$.metadata_container.appendChild(e_b);
+                                t.$.metadata_container.append(' : ' + e.metadata[prop]);
+                                t.$.metadata_container.appendChild(document.createElement('br'));
+                            }
+                        }
                     }
                 });
             },
