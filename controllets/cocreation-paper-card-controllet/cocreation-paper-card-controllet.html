@@ -158,6 +158,7 @@
 
             paper-fab.assessment,
             paper-fab.description,
+            paper-fab.chrome-reader-mode,
             paper-fab.collections{
                 bottom: -20px;
                 right: 12px;
@@ -174,6 +175,10 @@
 
             paper-fab.collections {
                 background: #FF9800;
+            }
+
+            paper-fab.chrome-reader-mode{
+                background: #FF0206;
             }
 
         </style>
@@ -206,6 +211,9 @@
                     </template>
                     <template is="dom-if" if="{{_checkMediaRoom(roomType)}}">
                         <paper-fab mini icon="image:collections" class="collections" noink></paper-fab>
+                    </template>
+                    <template is="dom-if" if="{{_checkCommentariumRoom(roomType)}}">
+                        <paper-fab mini icon="chrome-reader-mode" class="chrome-reader-mode" noink></paper-fab>
                     </template>
                 </div>
                 <div class="card-actions" style$="border-color: {{color}};">
@@ -276,10 +284,12 @@
 
             ready: function() {
                 var color = "#4CAF50";
-                if(this.roomType == "knowledge")
+                if(this.roomType === "knowledge")
                     color = "#2196F3";
-                if(this.roomType == "media")
+                if(this.roomType === "media")
                     color = "#FF9800";
+                if(this.roomType === "commentarium")
+                    color = "#FF0206";
                 this.color = color;
             },
 
@@ -300,15 +310,19 @@
             },
 
             _checkMediaRoom: function(type){
-                return type == "media";
+                return type === "media";
             },
 
             _checkDataRoom: function(type){
-                return type == "data";
+                return type === "data";
             },
 
             _checkKnowledgeRoom: function(type){
-                return type == "knowledge";
+                return type === "knowledge";
+            },
+
+            _checkCommentariumRoom: function(type){
+                return type === "commentarium";
             }
         })
     </script>
