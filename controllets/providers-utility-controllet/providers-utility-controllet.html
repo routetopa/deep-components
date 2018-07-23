@@ -27,6 +27,8 @@
                 return new OData_Provider();
             else if (dataUrl.indexOf("sparql?") > -1 )
                 return new SPARQL_Provider();
+            else if (dataUrl.indexOf("get-dataset-by-room-id-and-version") > -1 )
+                return new SPOD_Provider();
             else
                 return new generic_Provider();//dkan and mysir --> ckan like
         },
