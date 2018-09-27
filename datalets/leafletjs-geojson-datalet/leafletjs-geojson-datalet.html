@@ -146,7 +146,7 @@ Example:
                         var popupText = "";
                         for(var j=1; j<t.data.length; j++)
                         {
-                            if(typeof t.data[j] != 'undefined' && t.data[j].data[i] && typeof t.data[j].data[i] != 'undefined')
+                            if(typeof t.data[j] != 'undefined' && t.data[j].data[i] && typeof t.data[j].data[i] != 'undefined' && t.data[j].data[i] != null)
                             {
                                 if (t.data[j].data[i].toString().match(new RegExp("(https?:\/\/.*\.(?:png|jpg|jpeg|gif))", 'i')))
                                     popupText += '<image height="100" width="100" src="' + t.data[j].data[i] + '" /><br/>';

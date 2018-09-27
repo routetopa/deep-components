@@ -291,7 +291,7 @@ Example:
 
                         for(var j=2; j<l; j++) /* -1 IF CAT INDEX*/
                         {
-                            if(typeof t.data[j] != 'undefined' && typeof t.data[j].data[i] != 'undefined')
+                            if(typeof t.data[j] != 'undefined' && typeof t.data[j].data[i] != 'undefined' && t.data[j].data[i] != null)
                             {
                                 if (t.data[j].data[i].toString().match(new RegExp("(https?:\/\/.*\.(?:png|jpg|jpeg|gif))", 'i')))
                                     popupText += '<image height="100" width="100" src="' + t.data[j].data[i] + '" /><br/>';
