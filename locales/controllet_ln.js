@@ -425,8 +425,8 @@ ln["start_it"] = "inizia con";
 ln["notStart_it"] = "non inizia con";
 ln["ends_it"] = "termina con";
 ln["notEnds_it"] = "non termina con";
-ln["isNotNull_it"] = "è nullo";
-ln["isNull_it"] = "non è nullo";
+ln["isNotNull_it"] = "non è nullo";
+ln["isNull_it"] = "è nullo";
 
 //aggregators
 ln["GROUP BY_it"] = "RAGGRUPPA PER";
