@@ -167,7 +167,6 @@ DataTypeConverter.SUBTYPES = {
     CONST           :   { value: 1003, name: "CONST" },
     CATEGORY        :   { value: 1004, name: "CATEGORY" },
 
-    PERCENTAGE      :   { value: 1100, name: "PERCENTAGE" },
     LATITUDE        :   { value: 1101, name: "LATITUDE" },
     LONGITUDE       :   { value: 1102, name: "LONGITUDE" },
 
@@ -177,8 +176,9 @@ DataTypeConverter.SUBTYPES = {
     DATETIMEMDY     :   { value:  1203, name: "DATETIMEMDY" },
     DATETIMEXXY     :   { value:  1203, name: "DATETIMEXXY" },
 
-    NUMINTEGER      :   { value:  1300, name: "NUMINTEGER" },
-    NUMREAL         :   { value:  1300, name: "NUMREAL" }
+    NUMINTEGER      :   { value:  1300, name: "INTEGER" },
+    NUMREAL         :   { value:  1300, name: "REAL" },
+    PERCENTAGE      :   { value:  1400, name: "PERCENTAGE" },
 
     /*CODE        : { value: 2000, name: "CODE"},*/
 };
@@ -386,7 +386,12 @@ DataTypeConverter.prototype = (function () {
             return DataTypeConverter.TYPES.NUMBER;
         }
 
+        //Tries to indentify whether the value is a data and/or time.
         var _datetype = DataTypesUtils.FilterDateTime(value);
+        if (_datetype != null) return _datetype;
+
+        //Tries to identify whether the value is a percentage.
+        var _datetype = DataTypesUtils.FilterPercentage(value);
         if (_datetype != null) return _datetype;
 
         return DataTypeConverter.TYPES.TEXT;
@@ -596,6 +601,18 @@ DataTypeConverter.prototype = (function () {
                 //var isCast = !(options.castIfNull == false && inferredType.totalNullValues > 0);
                 var isCast = inferredType.typeConfidence >= options.castThresholdConfidence;
                 if (inferredType.type == DataTypeConverter.TYPES.NUMBER.name && isCast) {
+                    //It is a number but I need to check also the subtype to see whether it is a percentage.
+                    if (inferredType.subtype === DataTypeConverter.SUBTYPES.PERCENTAGE.name) {
+                        if (value == null || typeof value == 'undefined' || (value + "").length == 0) {
+                            //datasetErrors++;
+                        } else {
+                            var dt = DataTypesUtils.FilterPercentage(value);
+                            if (typeof dt !== 'undefined' && 'type' in dt)
+                                return dt.value;
+                        }
+                    }
+
+                    //--- It is a number (not a pecentage)
                     if (isNaN(DataTypesUtils.FilterNumber(value)) == false && typeof value === "string")
                         value = value.replace(',', '.');
 
@@ -1143,6 +1160,23 @@ DataTypesUtils.FilterFloat = function (value) {
     return NaN;
 };//EndFunction.
 
+DataTypesUtils.FilterPercentage = function (value) {
+    value = value.trim();
+    var index = value.indexOf("%");
+    if (index < 0) //Percentage symbol not found.
+        return null;
+
+    if (index != value.length - 1)
+        return null;
+
+    var _number = value.split('%')[0].trim();
+    var number = DataTypesUtils.FilterNumber(_number);
+    if (isNaN(number))
+        return null;
+
+    return { type: DataTypeConverter.TYPES.NUMBER, subtype: DataTypeConverter.SUBTYPES.PERCENTAGE, value: number};
+};//EndFunction.
+
 DataTypesUtils.FilterNumber = function (value) {
     //Check immediatly if it is a classical number.
     var valnum = DataTypesUtils.FilterFloat(value);
@@ -1262,6 +1296,9 @@ DataTypeHierarchy.HIERARCHY[DataTypeConverter.TYPES.NUMBER.name] = [ DataTypeCon
 DataTypeHierarchy.HIERARCHY[DataTypeConverter.TYPES.DATETIME.name] = [ DataTypeConverter.TYPES.DATETIME.name, DataTypeConverter.TYPES.TEXT.name ];
 
 DataTypeHierarchy.HIERARCHY[DataTypeConverter.SUBTYPES.GEOCOORDINATE.name] = [ DataTypeConverter.SUBTYPES.GEOCOORDINATE.name,
+    DataTypeConverter.TYPES.NUMBER.name, DataTypeConverter.TYPES.TEXT.name];
+
+DataTypeHierarchy.HIERARCHY[DataTypeConverter.SUBTYPES.PERCENTAGE.name] = [DataTypeConverter.SUBTYPES.PERCENTAGE.name,
     DataTypeConverter.TYPES.NUMBER.name, DataTypeConverter.TYPES.TEXT.name];
 
 DataTypeHierarchy.canConvert = function (fromType, toType) {
@@ -1473,6 +1510,34 @@ var JDC_LNG = {
         "IT": "D?M/D?M/YYYY",
         "FR": "D?M/D?M/YYYY",
         "NL": "D?M/D?M/YYYY"
+    },
+
+    "key_subtypenuminteger": {
+        "EN": "integer number",
+        "IT": "numero intero",
+        "FR": "integer number",
+        "NL": "integer number"
+    },
+
+    "key_subtypenumreal": {
+        "EN": "real number",
+        "IT": "numero reale",
+        "FR": "real number",
+        "NL": "real number"
+    },
+
+    "key_subtypeinteger": {
+        "EN": "integer number",
+        "IT": "numero intero",
+        "FR": "integer number",
+        "NL": "integer number"
+    },
+
+    "key_subtypereal": {
+        "EN": "real number",
+        "IT": "numero reale",
+        "FR": "real number",
+        "NL": "real number"
     },
 
     "key_dateformatunknown": {

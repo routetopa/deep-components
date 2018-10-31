@@ -1,6 +1,6 @@
 {
   "name": "jsdatachecker",
-  "version": "0.1.10",
+  "version": "0.1.14",
   "homepage": "https://github.com/donpir/jsdatachecker",
   "authors": [
     "'Donato Pirozzi <'donatopirozzi@gmail.com'>"
@@ -22,11 +22,11 @@
     "polywc-data-table": "https://github.com/donpir/polywc-data-table.git#master"
   },
   "private": false,
-  "_release": "0.1.10",
+  "_release": "0.1.14",
   "_resolution": {
     "type": "version",
-    "tag": "v0.1.10",
-    "commit": "7e73946e9429d20ebbcaa9a8b785c16420401301"
+    "tag": "v0.1.14",
+    "commit": "82cf22a0ba88c84d30919f4f0e4c0753b272fab3"
   },
   "_source": "https://github.com/donpir/JSDataChecker.git",
   "_target": "~0.1.2",
