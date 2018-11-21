@@ -504,8 +504,6 @@ MapCreator.prototype.selectedOperator = function(pendingQuery){
 			break;
 	}
 
-	//console.log(queryLogicMap);
-
 	if(queryVerbalizator == null)
 		queryVerbalizator = new QueryVerbalizator;
 	queryVerbalizator.updateQuery(rootListQueryLogicMap, queryLogicMap, elementOnFocus);
@@ -957,7 +955,7 @@ MapCreator.prototype.getConjunctionKeysByConjunction = function(key){
 
 }
 
-MapCreator.prototype.addFictionalConcept = function(callback){
+MapCreator.prototype.addFictionalConcept = function(keyword, callback){
 
 	var mapWithFictionalConcept = $.extend(true, {}, queryLogicMap);
 
@@ -970,7 +968,7 @@ MapCreator.prototype.addFictionalConcept = function(callback){
 						   type:'concept', direction: false, 
 						   parent:null, children: [],
 						   mySameAsReferences : [], 
-						   fictional:''};
+						   fictional:'', keyword:keyword};
 	mapWithFictionalConcept[key] = newLogicElement;
 
 	var precLogicElement = mapWithFictionalConcept[elementOnFocus];
@@ -1030,7 +1028,7 @@ MapCreator.prototype.addFictionalConcept = function(callback){
 			reverseArray: reverseData
 		};
 */
-MapCreator.prototype.addFictionalDirectPredicate = function(callback){
+MapCreator.prototype.addFictionalDirectPredicate = function(keyword, callback){
 
 	var mapWithFictionalPredicate = $.extend(true, {}, queryLogicMap);
 
@@ -1042,7 +1040,7 @@ MapCreator.prototype.addFictionalDirectPredicate = function(callback){
 						   type:'predicate', direction: 'direct', 
 						   parent:null, children: [],
 						   mySameAsReferences : [], 
-						   fictional:''};
+						   fictional:'', keyword: keyword};
 	mapWithFictionalPredicate[key] = newLogicElement;
 
 
@@ -1086,7 +1084,7 @@ MapCreator.prototype.addFictionalDirectPredicate = function(callback){
 
 }
 
-MapCreator.prototype.addFictionalReversePredicate = function(callback){
+MapCreator.prototype.addFictionalReversePredicate = function(keyword, callback){
 
 	var mapWithFictionalPredicate = $.extend(true, {}, queryLogicMap);
 
@@ -1098,7 +1096,7 @@ MapCreator.prototype.addFictionalReversePredicate = function(callback){
 						   type:'predicate', direction: 'reverse', 
 						   parent:null, children: [],
 						   mySameAsReferences : [], 
-						   fictional:''};
+						   fictional:'', keyword:keyword};
 	mapWithFictionalPredicate[key] = newLogicElement;
 
 

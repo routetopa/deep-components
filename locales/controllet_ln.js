@@ -14,6 +14,9 @@ ln["slide3Title_en"] = "SELECT VISUALIZATION";
 ln["slide3Subtitle_en"] = "Select a visualization, fill out inputs and options.";
 ln["back_en"] = "BACK";
 ln["forward_en"] = "FORWARD";
+//splod
+ln["SPLODslide1Title_en"] = "CREATE DATASET";
+ln["SPLODslide1Subtitle_en"] = "Select an endpoint and create your dataset.";
 
 //SELECT DATASET
 
@@ -342,6 +345,9 @@ ln["slide3Title_it"] = "SELEZIONA LA VISUALIZZAZIONE";
 ln["slide3Subtitle_it"] = "Seleziona una visualizzazione, compila i campi e le opzioni.";
 ln["back_it"] = "INDIETRO";
 ln["forward_it"] = "AVANTI";
+//splod
+ln["SPLODslide1Title_it"] = "CREA UN DATASET";
+ln["SPLODslide1Subtitle_it"] = "Seleziona un endpoint e crea il tuo dataset.";
 
 //SELECT DATASET
 
@@ -661,6 +667,9 @@ ln["slide3Title_fr"] = "SÉLECTIONNER UN MODE DE VISUALISATION";
 ln["slide3Subtitle_fr"] = "Sélectionner une visualisation, compléter les données et les options.";
 ln["back_fr"] = "BACK";
 ln["forward_fr"] = "AVANT";
+//splod
+ln["SPLODslide1Title_fr"] = "CRÉER UN JEU DE DONNÉES";
+ln["SPLODslide1Subtitle_fr"] = "Sélectionnez un endpoint et créez votre jeu de données.";
 
 //SELECT DATASET
 
@@ -980,6 +989,9 @@ ln["slide3Title_nl"] = "SELECT VISUALIZATION";
 ln["slide3Subtitle_nl"] = "Select a visualization, fill out inputs and options.";
 ln["back_nl"] = "BACK";
 ln["forward_nl"] = "FORWARD";
+//SPLOD
+ln["SPLODslide1Title_nl"] = "CREATE DATASET";
+ln["SPLODslide1Subtitle_nl"] = "Select an endpoint and create your dataset.";
 
 //SELECT DATASET
 
@@ -1299,6 +1311,9 @@ ln["slide3Title_es-ES"] = "SELECCIONA VISUALIZACIÓN";
 ln["slide3Subtitle_es-ES"] = "Selecciona una visualización, llene entradas y opciones.";
 ln["back_es-ES"] = "ATRAS";
 ln["forward_es-ES"] = "ADELANTE";
+//SPLOD
+ln["SPLODslide1Title_es-ES"] = "CREAR EL DATASET";
+ln["SPLODslide1Subtitle_es-ES"] = "Seleccione un endpoint y cree su dataset.";
 
 //SELECT DATASET
 

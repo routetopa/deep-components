@@ -188,11 +188,12 @@ function createTable(select, results){
 		var previewTr = $("<tr/>");
 
 		var newElement = {};
+		var labelUrl;
 
 		for(var i=0; i<select.length; i++) {
 			var field = select[i].substring(1);
 
-            let labelUrl = field.replace('_', ' ');
+            labelUrl = field.replace('_', ' ');
 
 			if(field in element){
 				var td = $("<td/>")
@@ -279,9 +280,7 @@ function createTable(select, results){
 	$('#resultsTable').show();
 
 	var resultPreviewNumber = results.length;
-	/*if(resultPreviewNumber>=1000)
-		resultPreviewNumber = '999+';
-	*/
+
 	$("#visibleFieldsButton").removeClass('disabled');
 
 	if(resultPreviewNumber == 0){
@@ -296,13 +295,6 @@ function createTable(select, results){
 
 	$('#resultsPreviewBadge').text(resultPreviewNumber);
 	$('#resultsPreviewBadge').show();
-
-	//<link href='Materialize/css/materialize.min.css' rel='stylesheet'><link href='splod_style.css' rel='stylesheet'> table, tr,th {border: 1px black solid;}
-
-	//"<html><head><link href='Materialize/css/materialize.min.css' rel='stylesheet'><style>hr{border-style: solid;border-width: 8px !important;}</style></head><body><div style='-webkit-transform:scale(1,0.05);-webkit-transform-origin:0 0'>"+previewTable[0].outerHTML+"</div></body></html>"
-	//$('#previewTableResult').html(previewTable[0].outerHTML );
-	//$('#previewTableResult').attr('src', '#resultsTable');
-	//console.log($('#previewTableResult'));
 }
 
 function saveDatatype(keySelect, datatype){
@@ -365,8 +357,6 @@ function addFieldsToJSON(){
 		}
 		resultsToConvert.fields.push(tempField);
 	}
-
-	//console.log(resultsToConvert);
 }
 
 
@@ -387,16 +377,9 @@ function createJson(){
 	//resultsToConvert.queryExecutor = {endpoint: systemEndpoint, graph: systemGraph, executor: systemQueryExecutor};
 	
 	resultsToConvert.systemLanguage = systemLang;
-//console.log(resultsToConvert);
-	
-	//var jsonObj = JSON.stringify(resultsToConvert);
-console.log(resultsToConvert);
+
 	window.dispatchEvent(new CustomEvent("splodEvent", {"detail": resultsToConvert}));
 }
-
-/*function allowSecondStep(){
-	window.dispatchEvent(new CustomEvent('secondStep',{"detail" : {"data": resultsToConvert.records}}));
-}*/
 
 function orderTableResult(){
 	$('#resultsPreviewBadge').hide();

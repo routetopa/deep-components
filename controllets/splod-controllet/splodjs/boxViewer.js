@@ -151,6 +151,16 @@ function updateBoxesFromConcept(conceptUrl){
 	//boxFiller.updatePredicatesFromConcept(conceptUrl, predicatesLimit, renderPredicates);
 	boxFiller.updateConcepts(renderConcept);
 	boxFiller.updatePredicates(renderPredicates);
+
+	/*
+	console.log(JSON.stringify(queryLogicMap));
+	console.log(rootListQueryLogicMap);
+	console.log(elementOnFocus);
+	console.log(systemEndpoint);
+	console.log(systemGraph);
+	console.log(systemQueryExecutor);
+	console.log(systemLang);
+	*/
 }
 
 function renderConcept(rootMap, map){
@@ -173,6 +183,9 @@ function renderConcept(rootMap, map){
 	$('#conceptsSpinner').hide();
 	$('#conceptsProgress').hide();
 	$('#conceptsListBox').show();
+
+	if($('#searchConceptsBox').val()!=null)
+		filter('searchConceptsBox', 'conceptsList', false);
 }
 
 function renderConceptsList(roots, concepts){
@@ -410,6 +423,9 @@ function renderPredicates(predicates){
 	renderReversePredicates(reverseArray);
 
 	$('#predicatesSpinner').hide();	
+
+	filter('searchPredicatesBox', 'directPredicatesList', false);
+	filter('searchPredicatesBox', 'reversePredicatesList', false);
 }
 
 function renderDirectPredicates(directMap){
@@ -753,4 +769,26 @@ function setDefaultOrderTable(value){
 	if(value[0].checked)
 		toOrder = true;
 	else toOrder = false;
+}
+
+function fillBoxByKeyword(boxName, keyword){
+	switch(boxName){
+		case 'searchConceptsBox':
+			$('#conceptsListBox').hide();
+			$('#conceptsSpinner').show();
+			$('#conceptsProgress').show();
+
+			boxFiller.updateConceptsByKeyword(keyword, renderConcept);
+			break;
+		case 'searchPredicatesBox': 
+			$("#directPredicatesList").hide();
+			$("#reversePredicatesList").hide();
+			$('#predicatesSpinner').show();
+			$('#directPredicatesProgress').show();
+			$('#reversePredicatesProgress').show();
+
+			boxFiller.updatePredicatesByKeyword(keyword, renderPredicates);
+			break;
+		default: break;
+	}
 }
