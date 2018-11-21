@@ -1,0 +1,219 @@
+<script src="../../locales/controllet_ln.js"></script>
+
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+
+<link rel="import" href="../page-slider-controllet/page-slider-controllet.html">
+
+<!--<link rel="import" href="../select-dataset-controllet/select-dataset-controllet.html">-->
+<link rel="import" href="../splod-controllet/splod-controllet.html" />
+<link rel="import" href="../select-data-controllet/select-data-controllet.html" />
+<link rel="import" href="../select-visualization-controllet/select-visualization-controllet.html" />
+
+<script src="../shared_js/perfect-scrollbar/js/min/perfect-scrollbar.jquery.min.js"></script>
+<link rel="stylesheet" href="../shared_js/perfect-scrollbar/css/perfect-scrollbar.min.css">
+
+<dom-module id="splod-modification-controllet" name="splod-modification-controllet">
+
+    <template>
+
+        <page-slider-controllet id="slider">
+
+            <neon-animatable>
+
+				<!--id="select_dataset"-->
+                <splod-controllet id="splod_controllet"></splod-controllet>
+
+            </neon-animatable>
+
+            <neon-animatable>
+
+                <select-data-controllet id="select_data"></select-data-controllet>
+
+            </neon-animatable>
+
+            <neon-animatable>
+
+                <select-visualization-controllet id="select_visualization" 
+                deep-url={{deepUrl}} datalets-list-url={{dataletsListUrl}} data-url={{dataUrl}} preselected-datalet={{selectedDatalet}} datalet-preset={{dataletPreset}}></select-visualization-controllet>
+
+            </neon-animatable>
+
+        </page-slider-controllet>
+
+    </template>
+
+    <script>
+
+        Polymer({
+
+            is : 'splod-modification-controllet',
+
+            listeners : {
+                'data-ready': '_preload',
+                'select-dataset-controllet_data-url' : '_enableDataReload',
+
+                'page-slider-controllet_selected' : '_updateSlider',
+                'select-fields-controllet_selected-fields' : '_allowThirdStep',
+                'filters-controllet_filters': '_allowThirdStep',
+                'aggregators-controllet_aggregators': '_allowThirdStep',
+				'remove-dataset-controllet_data-url': '_denySecondStep',
+            },
+
+            properties : {
+
+                datasets : {
+                    type : Object,
+                    value : undefined
+                },
+
+                suggestedDatasets : {
+                    type : Array,
+                    value : undefined
+                },
+
+                deepUrl : {
+                    type : String,
+                    value : undefined
+                },
+
+                dataletsListUrl : {
+                    type : String ,
+                    value : undefined
+                },
+
+                localization : {
+                    type : String,
+                    value : "en"
+                },
+
+                dataletPreset : {
+                    type  : Object,
+                    value : []
+                },
+
+                dataUrl : {
+                    type  : String,
+                    value : undefined
+                },
+
+                selectedDatalet : {
+                    type  : String,
+                    value : undefined
+                },
+
+                selectedFields : {
+                    type  : Array,
+                    value : []
+                },
+
+
+            },
+
+            ready : function(){
+                ln["localization"] = this.localization;
+
+                this.$.select_data.dataUrl = this.dataletPreset["data-url"];
+                this.$.select_data.init();
+
+                this.$.select_visualization.dataUrl = this.dataletPreset["data-url"];
+                this.$.select_visualization.init();
+
+            },
+
+            _preload : function(){
+                this.$.select_data.setSelectedFields(this.dataletPreset["selectedfields"]);
+                this.$.select_data.setFilters(JSON.parse(this.dataletPreset["filters"]));
+                this.$.select_data.setAggregators(JSON.parse(this.dataletPreset["aggregators"]));     
+
+                this.unlisten(this, 'data-ready', '_preload');
+                this.listen(this, 'data-ready', '_dataReady');
+            },
+
+            _enableDataReload : function(){
+                this.unlisten(this, 'select-dataset-controllet_data-url', '_enableDataReload');
+                this.listen(this, 'select-dataset-controllet_data-url', '_allowSecondStep');
+            },
+            
+            _dataReady : function(e){
+                if(e.detail.ready) {
+                    this.$.slider.chevronRight(true);
+                }
+            },
+
+            _updateSlider : function(e){
+                switch (e.detail.selected) {
+                    case 0:
+						this.$.slider.setTitle(ln["SPLODslide1Title_" + this.localization], ln["SPLODslide1Subtitle_" + this.localization]);
+
+                        this.$.slider.chevronLeft("invisible");
+                        this.$.slider.chevronRight(false);
+
+                        if(this.$.slider.getPrevSelected() == 1)
+                            this.$.slider.chevronRight(true);
+                        break;
+                    case 1:
+                        this.$.slider.setTitle(ln["slide2Title_" + this.localization], ln["slide2Subtitle_" + this.localization]);
+
+                        this.$.slider.chevronLeft(true);
+                        this.$.slider.chevronRight(true);
+
+                        if(this.$.slider.getPrevSelected() == 2)
+                            this.$.slider.chevronRight(true);
+
+                        this.$.select_data.$.data_table._resize();
+                        break;
+                    case 2:
+                        this.$.slider.setTitle(ln["slide3Title_" + this.localization], ln["slide3Subtitle_" + this.localization]);
+
+                        this.$.slider.chevronLeft(true);
+                        this.$.slider.chevronRight("invisible");
+
+                        this.$.select_visualization.preselect();
+                }
+            },
+			
+            
+            _allowSecondStep : function(e){               
+                this.$.slider.chevronRight(false);
+
+                this.$.select_data.dataUrl = e.detail.dataUrl;
+                this.$.select_data.data = e.detail.data;
+                this.$.select_data.init();
+                
+                this.$.select_visualization.dataUrl = e.detail.dataUrl;
+                this.$.select_visualization.init();
+
+                this.fire('data-ready', {ready: true});
+                
+            },
+            
+            _denySecondStep : function(e){
+                this.$.slider.chevronRight(false);
+            },
+
+            _allowThirdStep : function(){
+                this.$.slider.chevronRight(false);
+                var selectedFields = this.$.select_data.getSelectedFields();
+                var filters = this.$.select_data.getFilters();
+                var aggregators = this.$.select_data.getAggregators();
+                var data = this.$.select_data.getData();
+                if(selectedFields.length > 0) {
+                    this.$.select_visualization.init();
+                    this.$.select_visualization.setSelectedFields(selectedFields);
+                    this.$.select_visualization.setFilters(filters);
+                    this.$.select_visualization.setAggregators(aggregators);
+                    this.$.select_visualization.setData(data);
+                    this.$.slider.chevronRight(true);
+                }
+
+                this.listen(this, 'select-fields-controllet_selected-fields', '_emptyDataVisualization');
+            },
+
+            _emptyDataVisualization : function(){
+                this.$.select_visualization.dataUrl = null;
+            },
+        });
+
+    </script>
+
+</dom-module>
