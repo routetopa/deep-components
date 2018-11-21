@@ -779,33 +779,36 @@ Example :
             },
 
             exportToHTML: function () {
-                var parent = this.parentElement;
-                var html = '';
+                let parent = this.parentElement;
+                let html = '';
                 while(!parent.hasAttribute("data-url"))
                     parent = parent.parentElement;
 
                 html += '<'+parent.is;
-                for(var i=0; i<parent.attributes.length; i++)
+                for(let i=0; i<parent.attributes.length; i++)
                     if(parent.attributes[i].name != 'data')
                         html += ' '+parent.attributes[i].name+'=\''+parent.attributes[i].value.replace(/'/g, "&#39;")+'\'';
                         //html += ' '+parent.attributes[i].name+'=\''+parent.attributes[i].value+'\'';
                 html += '></'+parent.is+'>';
 
-                var dataletImport = '\<script type="text/javascript" src="https://cdn.jsdelivr.net/webcomponentsjs/0.7.16/webcomponents-lite.min.js"\>\<\/script\>\n' +
+                let dataletImport = '\<script type="text/javascript" src="https://cdn.jsdelivr.net/webcomponentsjs/0.7.16/webcomponents-lite.min.js"\>\<\/script\>\n' +
                         '\<script type="text/javascript" src="https://code.jquery.com/jquery-2.1.4.min.js"\>\<\/script\>\n' +
                         '<!-- REMOVE THE PREVIOUS SCRIPT TAGS IF YOUR PAGE ALREADY USES JQUERY AND POLYFILL LIBRARIES  -->\n';
 
-                var dataletLink = '<link rel="import" href="http://deep.routetopa.eu/deep/COMPONENTS/datalets/'+parent.is+'/'+parent.is+'.html" /> \n';
+                let dataletLink = '<link rel="import" href="http://deep.routetopa.eu/deep_1_25/COMPONENTS/datalets/'+parent.is+'/'+parent.is+'.html" /> \n';
 
-                var div = document.createElement('div');
+                let div = document.createElement('div');
                 div.innerHTML = '<div class="overlay" id="overlay">' +
                         '<div class="modal-content"><span class="button-close" onclick="document.getElementById(\'overlay\').remove(this)"></span>' +
                         '<span>Copy to clipboard: Ctrl+C, Enter</span>' +
                         '<textarea class="export_html_textarea"></textarea></div></div>';
 
+                let datalet = (dataletImport+dataletLink+html).replace(new RegExp("'", 'g'), "&#39;");
+                let iframe_container = `<iframe style="width: 100%; height: 498px; padding: 0; margin: 0; border: 0;" frameborder="0" scrolling="no" srcdoc='${datalet}'></iframe>`;
+
                 Polymer.dom(this.root).appendChild(div);
 
-                $(".export_html_textarea").val(dataletImport+dataletLink+html);
+                $(".export_html_textarea").val(iframe_container);
 
                 //window.prompt("Copy to clipboard: Ctrl+A, Ctrl+C", dataletImport+dataletLink+html);
             },
