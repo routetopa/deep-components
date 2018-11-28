@@ -26,3 +26,8 @@ dataletslider_ln["forward_nl"] = "FORWARD";
 dataletslider_ln["noDatalet_es-ES"] = "There are no datalets to show";
 dataletslider_ln["back_es-ES"] = "BACK";
 dataletslider_ln["forward_es-ES"] = "FORWARD";
+
+/*(Simplified) CN*/
+dataletslider_ln["noDatalet_cn"] = "没有要显示的数据集";
+dataletslider_ln["back_cn"] = "返回";
+dataletslider_ln["forward_cn"] = "前往";
