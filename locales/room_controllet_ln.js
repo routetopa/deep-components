@@ -59,3 +59,15 @@ room_ln["views_es-ES"] = "visualizaciones";
 room_ln["comments_es-ES"] = "comentarios";
 room_ln["datasets_es-ES"] = "datasets";
 room_ln["and_es-ES"] = "y";
+
+/* (Simplified)CN */
+
+room_ln["thisRoom_cn"] = "这个空间";
+room_ln["createdBy_cn"] = "被创造";
+room_ln["has_en"] = "已经";
+room_ln["many_en"] = "很多";
+room_ln["few_cn"] = "很少";
+room_ln["views_cn"] = "观点";
+room_ln["comments_cn"] = "评论";
+room_ln["datasets_cn"] = "数据集";
+room_ln["and_cn"] = "和";
