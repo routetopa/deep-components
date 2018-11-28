@@ -19,3 +19,7 @@ cocreation_room_ln["goal_nl"] = "GOAL";
 /*es-ES*/
 cocreation_room_ln["explore_es-ES"] = "EXPLORAR";
 cocreation_room_ln["goal_es-ES"] = "META";
+
+/*(Simplified) CN*/
+cocreation_room_ln["explore_cn"] =	"发现";
+cocreation_room_ln["goal_cn"]	= "目标";
