@@ -29,3 +29,9 @@ base_datalet_ln["export_HTML_es-ES"]    = "Exportar a HTML";
 base_datalet_ln["export_PNG_es-ES"]     = "Exportar a PNG";
 base_datalet_ln["export_RTF_es-ES"]     = "Exportar a RTF";
 base_datalet_ln["import_myspace_es-ES"] = "Importar en Mi Espacio";
+
+/* (Simplified) CN*/
+base_datalet_ln["export_HTML_cn"]       = "输出为HTML";
+base_datalet_ln["export_PNG_cn"]        = "输出为PNG";
+base_datalet_ln["export_RTF_cn"]        = "输出为 RTF";
+base_datalet_ln["import_myspace_cn"]	= "输入到我的空间";
