@@ -1106,7 +1106,9 @@ function visitSPARQL(key){
 					}
 
 					if(node.children.length==1){
-						nodeWhere = nodeWhere.concat([{relatedTo: childWhere[0][0].relatedTo.concat(node.key), content:childWhere[0][0].content}]);
+						for(var j=0; j<childWhere[0].length; j++){
+							nodeWhere = nodeWhere.concat([{relatedTo: childWhere[0][j].relatedTo.concat(node.key), content:childWhere[0][j].content}]);
+						}
 					}else{
 						console.log('OPTIONAL - Are you sure that I can have more than one child or zero?');
 					}
@@ -1258,40 +1260,41 @@ function buildConceptsQuery(queryLogicStructureRootList, queryLogicStructure, ca
 
 		}else if(queryLogicStructureRootList.length>1){
 			sameLevelOperator = queryLogicStructure[queryLogicStructureRootList[1]].subtype;
-		}
 
-		var child = [];
-		for(var i = 1; i<queryLogicStructureRootList.length; i = i+2)
-			child.push(queryLogicStructureRootList[i]);
+			/*
+			var child = [];
+			for(var i = 1; i<queryLogicStructureRootList.length; i = i+2)
+				child.push(queryLogicStructureRootList[i]);
+			*/
 
-		switch(sameLevelOperator){
-			case 'and':
+			switch(sameLevelOperator){
+				case 'and':
 
-				for(var i = 0; i < childWhere.length; i = i+2){
-					for(var j=0; j<childWhere[i].length; j++)
-						nodeWhere = nodeWhere.concat([childWhere[i][j]]);
-				}
-				break;
-			case 'or':
-				for(var i = 0; i < childWhere.length; i = i+2){
-					nodeWhere = nodeWhere.concat(['{']);
+					for(var i = 0; i < childWhere.length; i = i+2){
+						for(var j=0; j<childWhere[i].length; j++)
+							nodeWhere = nodeWhere.concat([childWhere[i][j]]);
+					}
+					break;
+				case 'or':
+					for(var i = 0; i < childWhere.length; i = i+2){
+						nodeWhere = nodeWhere.concat(['{']);
 
-					for(var j=0; j<childWhere[i].length; j++)
-						nodeWhere = nodeWhere.concat([childWhere[i][j]]);
+						for(var j=0; j<childWhere[i].length; j++)
+							nodeWhere = nodeWhere.concat([childWhere[i][j]]);
 
-					if(i == childWhere.length-1)
-						nodeWhere = nodeWhere.concat(['}']);
-					else
-						nodeWhere = nodeWhere.concat(['} UNION']);
+						if(i == childWhere.length-1)
+							nodeWhere = nodeWhere.concat(['}']);
+						else
+							nodeWhere = nodeWhere.concat(['} UNION']);
 
-				}
-				break;
+					}
+					break;
+			}
 		}
 
 		queryGetConcepts = {select:nodeSelect, where:nodeWhere};
 
 	}
-
 	executor.executeGetConcepts(queryGetConcepts, callback);
 }
 
@@ -1418,8 +1421,12 @@ function visitGetConcepts(key, queryLogicStructure){
 			if(!addNot){
 				if(!(node.children.length>1 && queryLogicStructure[node.children[1]].type=='operator' && queryLogicStructure[node.children[1]].subtype=='or')){
 					if('fictional' in node){
+						if(node.keyword.length>0)
+							askForSpecificKeyword = "FILTER(CONTAINS(lcase(?label), '"+node.keyword+"'))";
+						else 
+							askForSpecificKeyword = "";
 						nodeWhere.push(node.variable+' a '+ fictionalVariable+'.');
-						nodeWhere.push("OPTIONAL {"+fictionalVariable+" rdfs:label ?label. FILTER (lang(?label) = '" + systemLang + "')}");
+						nodeWhere.push("OPTIONAL {"+fictionalVariable+" rdfs:label ?label. " + askForSpecificKeyword + " FILTER (lang(?label) = '" + systemLang + "')}");
 					}
 					else
 						nodeWhere.push(node.variable+' a'+' <'+node.url+'>.');
@@ -2032,7 +2039,9 @@ function visitGetConcepts(key, queryLogicStructure){
 					}
 
 					if(node.children.length==1){
-						nodeWhere = nodeWhere.concat([childWhere[0][0]]);
+						for(var j=0; j<childWhere[0].length; j++){
+							nodeWhere = nodeWhere.concat([childWhere[0][j]]);
+						}
 					}else{
 						console.log('OPTIONAL - Are you sure that I can have more than one child or zero?');
 					}
@@ -2108,7 +2117,6 @@ QueryBuilder.prototype.getReversePredicates = function(queryLogicRootList, query
 }
 
 function buildPredicatesQuery(queryLogicStructureRootList, queryLogicStructure, callback){
-
 	var	queryGetPredicates = {select:[], where:[]}; //add other field
 
 	if(queryLogicStructureRootList.length != 0){
@@ -2137,38 +2145,38 @@ function buildPredicatesQuery(queryLogicStructureRootList, queryLogicStructure, 
 
 		}else if(queryLogicStructureRootList.length>1){
 			sameLevelOperator = queryLogicStructure[queryLogicStructureRootList[1]].subtype;
+
+			/*
+			var child = [];
+			for(var i = 1; i<queryLogicStructureRootList.length; i = i+2)
+				child.push(queryLogicStructureRootList[i]);
+			*/
+			switch(sameLevelOperator){
+				case 'and':
+
+					for(var i = 0; i < childWhere.length; i = i+2){
+						for(var j=0; j<childWhere[i].length; j++)
+							nodeWhere = nodeWhere.concat([childWhere[i][j]]);
+					}
+					break;
+				case 'or':
+					for(var i = 0; i < childWhere.length; i = i+2){
+						nodeWhere = nodeWhere.concat(['{']);
+
+						for(var j=0; j<childWhere[i].length; j++)
+							nodeWhere = nodeWhere.concat([childWhere[i][j]]);
+
+						if(i == childWhere.length-1)
+							nodeWhere = nodeWhere.concat(['}']);
+						else
+							nodeWhere = nodeWhere.concat(['} UNION']);
+
+					}
+					break;
+			}
 		}
-
-		var child = [];
-		for(var i = 1; i<queryLogicStructureRootList.length; i = i+2)
-			child.push(queryLogicStructureRootList[i]);
-
-		switch(sameLevelOperator){
-			case 'and':
-
-				for(var i = 0; i < childWhere.length; i = i+2){
-					for(var j=0; j<childWhere[i].length; j++)
-						nodeWhere = nodeWhere.concat([childWhere[i][j]]);
-				}
-				break;
-			case 'or':
-				for(var i = 0; i < childWhere.length; i = i+2){
-					nodeWhere = nodeWhere.concat(['{']);
-
-					for(var j=0; j<childWhere[i].length; j++)
-						nodeWhere = nodeWhere.concat([childWhere[i][j]]);
-
-					if(i == childWhere.length-1)
-						nodeWhere = nodeWhere.concat(['}']);
-					else
-						nodeWhere = nodeWhere.concat(['} UNION']);
-
-				}
-				break;
-		}
-
+		
 		queryGetPredicates = {select:nodeSelect, where:nodeWhere};
-
 	}
 
 	executor.executeGetPredicates(queryGetPredicates, callback);
@@ -2377,8 +2385,12 @@ function visitGetPredicates(key, queryLogicStructure){
 				}
 				else{
 					if('fictional' in node){
+						if(node.keyword.length>0)
+							askForSpecificKeyword = "FILTER(CONTAINS(lcase(?label), '"+node.keyword+"'))";
+						else 
+							askForSpecificKeyword = "";
 						nodeWhere.push(parentVariable+" "+fictionalVariable+" ?o.");						
-						nodeWhere.push("OPTIONAL {"+fictionalVariable+" rdfs:label ?label. FILTER (lang(?label) = '" + systemLang + "')}");
+						nodeWhere.push("OPTIONAL {"+fictionalVariable+" rdfs:label ?label. "+askForSpecificKeyword+ "FILTER (lang(?label) = '" + systemLang + "')}");
 					}
 					else if(!(node.children.length>1 && queryLogicStructure[node.children[1]].type=='operator' && queryLogicStructure[node.children[1]].subtype=='or')){
 						nodeWhere = nodeWhere.concat([parentVariable+ ' <'+node.url+'> '+ node.variable+'.']);
@@ -2457,8 +2469,13 @@ function visitGetPredicates(key, queryLogicStructure){
 					}
 				}else{
 					if('fictional' in node){
+						if(node.keyword.length>0)
+							askForSpecificKeyword = "FILTER(CONTAINS(lcase(?label), '"+node.keyword+"'))";
+						else 
+							askForSpecificKeyword = "";
+
 						nodeWhere.push('?o '+fictionalVariable+' '+ parentVariable+'.');
-						nodeWhere.push("OPTIONAL {"+fictionalVariable+" rdfs:label ?label. FILTER (lang(?label) = '" + systemLang + "')}");
+						nodeWhere.push("OPTIONAL {"+fictionalVariable+" rdfs:label ?label. "+askForSpecificKeyword+"FILTER (lang(?label) = '" + systemLang + "')}");
 					}else{
 						nodeWhere = nodeWhere.concat([node.variable+ ' <'+node.url+'> '+ parentVariable+'.']);
 					
@@ -2913,7 +2930,9 @@ function visitGetPredicates(key, queryLogicStructure){
 					}
 
 					if(node.children.length==1){
-						nodeWhere = nodeWhere.concat([childWhere[0][0]]);
+						for(var j=0; j<childWhere[0].length; j++){
+							nodeWhere = nodeWhere.concat([childWhere[0][j]]);
+						}
 					}else{
 						console.log('OPTIONAL - Are you sure that I can have more than one child or zero?');
 					}

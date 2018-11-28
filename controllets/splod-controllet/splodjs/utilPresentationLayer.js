@@ -22,10 +22,15 @@ function removeHighlightElementsToRemove(){
 	});
 }
 
-function filter(inputName, boxName) {
+jQuery.expr[':'].Contains = function(a, i, m) {
+  return jQuery(a).text().toUpperCase()
+      .indexOf(m[3].toUpperCase()) >= 0;
+};
+
+function filter(inputName, boxName, extraSearch) {
     var filter, li, liContent, text;
 
-    filter = $('#'+inputName).val().toLowerCase();
+    filter = $('#'+inputName).val();
     li = $('#'+boxName+" li");
     liContent = $('#'+boxName+" .liContent");
 
@@ -37,17 +42,15 @@ function filter(inputName, boxName) {
             li[i].style.display = "none";
         }
     }
+
+    if(extraSearch){
+        if($('#'+boxName+" li:visible").length == 0){
+            fillBoxByKeyword(inputName, filter);   
+        }
+    }
+
 }
 
 function isImage(url){
     return ((url.toLowerCase()).match(/^https?:\/\/(?:[a-z\-]+\.)+[a-z]{2,6}(?:\/[^\/#?]+)+\.(?:jpe?g|gif|png|svg)/)!=null);
 }
-
-
-/*function showHint(hint){
-    $('#hintBoxContent').html(hint);
-
-    $('#hintBox').show();
-        
-    setTimeout(function(){ $('#hintBox').hide() }, 10000);
-}*/

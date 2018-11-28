@@ -2,17 +2,27 @@ function manageResultMap(arrayData){
 	var resultMap = {};
 	var element;
 	var label;
-	
-	for(i=0; i<arrayData.length; i++){
+ 
+ 	for(i=0; i<arrayData.length; i++){
 		element = arrayData[i];
-		if(element.label == undefined){
-			label = createLabel(element.url.value);
-			element.label = {value:label};
+		if(!isEmpty(element)){
+			if(element.label == undefined){
+				label = createLabel(element.url.value);
+				element.label = {value:label};
+			}
+			resultMap[element.url.value] = {url:element.url.value, label:element.label.value, numberOfInstances: 0, parent: [], children: []};
 		}
-		resultMap[element.url.value] = {url:element.url.value, label:element.label.value, numberOfInstances: 0, parent: [], children: []};
 	}
 
 	return resultMap;
+}
+
+function isEmpty(obj) {
+    for(var key in obj) {
+        if(obj.hasOwnProperty(key))
+            return false;
+    }
+    return true;
 }
 
 function manageClassHierarchy(data){

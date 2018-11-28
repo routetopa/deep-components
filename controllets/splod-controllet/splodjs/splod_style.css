@@ -1,819 +1,819 @@
 #content-splod-controllet {
-			background-color: #f5f5f5;
-			font-family: 'Roboto', sans-serif;
-		}
-
-		#content-splod-controllet .splod_new, #content-splod-controllet .splod_badge{
-			background-color: #2196f3 !important;
-		}
-
-		#content-splod-controllet .row{
-			margin-bottom:0 !important;
-		}
-
-		#content-splod-controllet .no-padding{
-			padding:0 !important;
-		}
-
-		#content-splod-controllet .searchBarPositioning{
-			display:inline-block;
-			float: right !important;
-			margin:0;
-		}
-
-		#content-splod-controllet #conceptsListBox{
-			margin-top:3.5em;
-		}
-
-		#content-splod-controllet #predicatesTabBox{
-			width: 50%;
-			margin: 0;
-			overflow: hidden;
-		}
-
-		#content-splod-controllet #openSparqlQuery{
-			position: fixed;
-			top: 6.5em;
-			right: 2em;
-		}
-
-		#content-splod-controllet #saveTable{
-			position: fixed;
-			top: 6.5em;
-			right: 5em;
-		}
-
-		#content-splod-controllet #removeButtonA{
-			position: fixed;
-			top: 6.5em;
-			right: 9em;
-		}
-
-		#content-splod-controllet .card-title{
-			margin:0;
-		}
-
-
-		/*Toasts*/
-		#content-splod-controllet #tableToast{
-			position: fixed;
-			background-color: #2196f3;
-			opacity: 0.9;
-			z-index: 2;
-			width: 8em;
-			height: fit-content;
-			top: 12.5em;
-			left: calc((100vw/6)*4 + 2em);
-		}
-
-		/*Cursor*/
-		#content-splod-controllet .addToQuery:hover{
-			font-weight: bold;
-			cursor:pointer;
-		}
-
-		#content-splod-controllet span.focusable{
-			cursor:pointer;
-		}
-
-		#content-splod-controllet .endpointLi:hover{
-			font-weight: bold;
-			cursor:pointer;
-		}
-
-		/*Search bar*/
-
-		#content-splod-controllet span.mySearch input {
-			border-bottom: none!important;
-			box-shadow: none!important;
-			margin: 0 !important;
-		}
-
-		#content-splod-controllet span.mySearch {
-			margin: 0 !important;
-		}
-
-		#content-splod-controllet .input-field label:not(.label-icon).active{
-			transform: translateY(-4px) scale(0.8);
-		}
-
-		#content-splod-controllet .flex {
-			display:flex;
-		}
-
-		#content-splod-controllet #firstrow{
-			align-items: stretch;
-		}
-
-		#content-splod-controllet #firstrow .card{
-			display:grid;
-			flex-grow:1;
-			position: relative !important;
-			width: 100%;
-			margin-bottom: 10px;
-			height: auto !important;
-		}
-
-		#content-splod-controllet #firstrow .firstrowAction{
-			align-self: flex-end;
-			margin-bottom: 0 !important;
-		}
-
-		#content-splod-controllet #querySparql.card-content{
-			overflow:auto;
-		}
-
-		/*Natural language query*/
-
-		#content-splod-controllet div#queryBox{
-			margin-top: 0.5em;
-		}
-
-		#content-splod-controllet span.highlighted {
-			background-color: #fff59d   ;
-			border-radius: 4px;
-		}
-
-		#content-splod-controllet span.highlightRemove {
-			text-decoration: line-through;
-			text-decoration-color: #d32f2f;
-		}
-
-		#content-splod-controllet #limit input[type=number]::-webkit-inner-spin-button, 
-		#content-splod-controllet #limit input[type=number]::-webkit-outer-spin-button {  
-		   opacity: 1;
-		}
-
-		#content-splod-controllet #limitInput{
-			width: 60px;
-			margin-bottom: 0;
-			border-bottom: none;
-			height: auto;
-		}
-
-		#content-splod-controllet #limitInput:not(.browser-default):focus:not([readonly]){
-			box-shadow: none;
-		}
-
-		#content-splod-controllet span.everything {
-			font-weight: bold;
-		}
-
-		#content-splod-controllet span.concept {
-			color: #1de9ae;
-			font-weight: bold;
-		}
-
-		#content-splod-controllet span.predicate {
-			color: #e91e63;
-			font-weight: bold;
-		}
-
-		#content-splod-controllet span.something {
-			font-weight: bold;
-		}
-
-		#content-splod-controllet span.operator {
-			border-bottom: 3px dashed #bdbdbd;
-			font-weight: bold;
-			/*text-decoration-line: underline;
-			text-decoration-color: #bdbdbd;
-			text-decoration-style: dashed;*/
-		}
-
-		#content-splod-controllet span.result {
-			color: grey;
-			font-weight: bold;
-		}
-
-		#content-splod-controllet span.barred {
-			text-decoration-line: line-through;
-		}
-
-		#content-splod-controllet span.optionalBlock{
-			font-style: italic;
-		}
-
-		#content-splod-controllet #queryNaturalLanguage, #content-splod-controllet #queryNaturalLanguageFocus{
-			overflow-x: auto;
-		}
-
-		#content-splod-controllet #queryNaturalLanguageFocus span{
-			width: calc(100vw - 13em);
-			margin-left: 0;
-		}
-
-		#content-splod-controllet #queryNaturalLanguage{
-			padding-bottom:8px;
-			padding-top:8px;
-			height: 100px;
-			font-size:14px;
-		}
-
-		#content-splod-controllet #queryNaturalLanguage ul, #content-splod-controllet #sparqlVsNl ul{
-			padding-left: 0.8em;
-			margin: 0;
-		}
-
-		#content-splod-controllet #modalSparql{
-			border-left-style: groove;
-		}
-
-		#content-splod-controllet #removeButton {
-			margin:0;
-		}
-
-		#content-splod-controllet #removeButton:hover{
-			cursor: pointer;
-		}
-
-		#content-splod-controllet #queryNaturalLanguage span {
-			/*padding:3px !important; to fix highlighting with ul*/
-		}
-
-		/*SPARQL query*/
-
-		#content-splod-controllet div#querySparqlBox{
-			margin-top: 30px;
-		}
-
-		#content-splod-controllet div#querySparqlText{
-			 white-space: pre;
-			 display:none;
-			 overflow: auto;
-		}
-
-		#content-splod-controllet div#modalSparql .SPARQLhighlighted{
-			background-color: #e6e6e6;
-			border-radius: 4px;
-		}
-
-		#content-splod-controllet div#modalSparql, #content-splod-controllet div#modalNaturalLanguage{
-			height: -webkit-fill-available;
-			overflow-y: auto; 
-		}
-
-		#content-splod-controllet .modal{
-			width: 90% !important;
-			height: 90% !important;
-		}
-
-		#content-splod-controllet #sparqlVsNl .modal-content{
-			overflow:hidden;
-			padding-right: 0px;
-			padding-bottom: 14px;
-		}
-
-		/*Left bar*/
-
-		/*#myTabs {
-			display: table-cell;
-			border-right: 4px solid #1de9ae;
-		}
-
-		*/
-		#content-splod-controllet #myTabs {
-			overflow:hidden;
-		}
-
-		#content-splod-controllet #myTabs li.disabled{
-			opacity: 0.3;
-		}
-
-
-		#content-splod-controllet #myTabs .myTabTitle{
-			float:left;
-		}
-
-		#content-splod-controllet #myTabs>li.indicator{
-			display:none;
-		}
-
-		#content-splod-controllet #myTabs li .mySpinner{
-			height: 1em;
-			width: 1em;
-			/*top:1em;*/
-		}
-
-		#content-splod-controllet #myTabs .myTabIcon{
-			top: 1.2em;
-			position: relative;
-		}
-
-		#content-splod-controllet #myTabs li #conceptsSpinner .spinner-layer{
-			border-color: #039c87;
-		}
-
-		#content-splod-controllet #myTabs li #predicatesSpinner .spinner-layer{
-			border-color: #880e4f;
-		} 
-
-		#content-splod-controllet #myTabs li #operatorsSpinner .spinner-layer{
-			border-color: #757575;
-		} 
-
-		#content-splod-controllet #myTabs li #resultsSpinner .spinner-layer{
-			border-color: #01579b;
-		} 
-
-		#content-splod-controllet #conceptsProgress {
-			background-color: #9ff1d9;
-			top: 3em;
-			width:60%;
-			margin:auto;
-		}
-
-		#content-splod-controllet #conceptsProgress .indeterminate{
-			background-color: #1de9ae;
-		}
-
-		#content-splod-controllet #directPredicatesProgress, #content-splod-controllet #reversePredicatesProgress{
-			background-color: #f5a0bd;
-			top: 3em;
-			width:60%;
-			margin:auto;
-		}
-
-		#content-splod-controllet #directPredicatesProgress .indeterminate, #content-splod-controllet #reversePredicatesProgress .indeterminate{
-			background-color: #e91e63;
-		}
-
-		#content-splod-controllet #operatorsProgress {
-			background-color: #e4e4e4;
-			top: 3em;
-			width:60%;
-			margin:auto;
-		}
-
-		#content-splod-controllet #operatorsProgress .indeterminate{
-			background-color: #bdbdbd;
-		}
-
-		#content-splod-controllet #tableResultsProgress {
-			background-color: #aecee6;
-			top: 3em;
-			width:60%;
-			margin:auto;
-		}
-
-		#content-splod-controllet #tableResultsProgress .indeterminate{
-			background-color: #2196f3;
-		}
-		   
-
-		#content-splod-controllet .tabs #conceptsTab a:hover,
-		#content-splod-controllet .tabs #conceptsTab a.active{
-			background-color: #1de9ae;
-			color: white;
-		}
-
-		#content-splod-controllet .tabs #conceptsTab a{
-			color:#1de9ae;
-		}
-
-		#content-splod-controllet .tabs #predicatesTab a:hover,
-		#content-splod-controllet .tabs #predicatesTab a.active{
-			background-color: #e91e63 ;
-			color: white;
-		}
-
-		#content-splod-controllet .tabs #predicatesTab a{
-			color:#e91e63;
-		}
-
-		#content-splod-controllet .tabs #operatorsTab a:hover,
-		#content-splod-controllet .tabs #operatorsTab a.active{
-			background-color: #bdbdbd;
-			color: white;
-		}
-
-		#content-splod-controllet .tabs #operatorsTab a{
-			color:#bdbdbd;
-		}
-
-		#content-splod-controllet .tabs #tableResultTab a:hover,
-		#content-splod-controllet .tabs #tableResultTab a.active{
-			background-color: #2196f3;
-			color: white;
-		}
-
-		#content-splod-controllet .tabs #tableResultTab a{
-			color:#2196f3;
-		}
-
-		#content-splod-controllet .tabs #settingsTab a:hover,
-		#content-splod-controllet .tabs #settingsTab a.active{
-			background-color: #2196f3;
-			color: white;
-		}
-
-		#content-splod-controllet .tabs #settingsTab a,
-		#content-splod-controllet .tabs #settingsTab a i{
-			color:#2196f3;
-		}
-
-		#content-splod-controllet .tabs #settingsTab a:hover i,
-		#content-splod-controllet .tabs #settingsTab a.active i{
-			color: white;
-		}
-
-		#content-splod-controllet .tabs #helpTab a:hover,
-		#content-splod-controllet .tabs #helpTab a.active{
-			background-color: #2196f3;
-			color: white;
-		}
-
-		#content-splod-controllet .tabs #helpTab a,
-		#content-splod-controllet .tabs #helpTab a i{
-			color:#2196f3;
-		}
-
-		#content-splod-controllet .tabs #helpTab a:hover i,
-		#content-splod-controllet .tabs #helpTab a.active i{
-			color: white;
-		}
-
-		/*#navBar{
-			padding-left: 0;
-			padding-right: 0;
-			background-color: white;
-			-webkit-box-shadow: 0 2px 2px 0 rgba(0,0,0,0.14), 0 1px 5px 0 rgba(0,0,0,0.12), 0 3px 1px -2px rgba(0,0,0,0.2);
-			box-shadow: 0 2px 2px 0 rgba(0,0,0,0.14), 0 1px 5px 0 rgba(0,0,0,0.12), 0 3px 1px -2px rgba(0,0,0,0.2);
-		} */
-		#content-splod-controllet #fieldsCollectionNavBar{
-			padding-left: 0;
-			padding-right: 0;
-			background-color: white;
-		}
-
-		#content-splod-controllet #fieldsCollection:empty{
-			display: none;
-		}
-
-		#content-splod-controllet #previewTableResult td, #content-splod-controllet #previewTableResult th{
-			padding:0;
-		}
-
-		#content-splod-controllet #previewTableResult hr{
-			margin:0;
-			border-width: 0.5px;
-		}
-
-		#content-splod-controllet #previewTableResult tr{
-			height: 2px;
-		}
-
-		#content-splod-controllet #previewTableResult th{
-			font-size: 4px;
-			text-align: -webkit-center;
-			color:grey;
-		}
-
-		#content-splod-controllet #resultsPreviewBadge{
-			float: left;
-			position: relative;
-			top: 1em;
-		}
-
-		/*Concepts box*/
-		#content-splod-controllet div#conceptsBox{
-			margin:0;
-			overflow: auto;
-			height: calc(100vh - 16.5em);
-		}
-
-		#content-splod-controllet div#conceptsListBox {
-			border-radius:2px;
-			/*background-color:#f5f5f5; */
-		}
-
-		#content-splod-controllet #conceptsBox .card-title{
-			color: #69f0ae;
-		}
-
-		#content-splod-controllet #conceptsListBox ul{
-			margin:auto;
-		}
-
-		#content-splod-controllet .conceptsListBoxHierarchy{
-			border : none;
-		}
-
-		#content-splod-controllet .conceptsListBoxHierarchy .withMargin{
-			margin-right : 0.1em;
-		}
-
-		#content-splod-controllet #conceptsBox li.withMargin {
-			margin-top:0.2em !important;
-
-			-webkit-box-shadow: 0 0px 0.5px 0 rgba(0,0,0,0.14), 0 1px 5px 0 rgba(0,0,0,0.12), 0 1px 0px -0.2px rgba(0,0,0,0.2);
-			box-shadow: 0 0px 0.5px 0 rgba(0,0,0,0.14), 0 1px 5px 0 rgba(0,0,0,0.12), 0 1px 0px -0.2px rgba(0,0,0,0.2);
-		}
-
-		#content-splod-controllet #conceptsBox .collection .collection-item:last-child{
-			border-bottom: 1px solid #e0e0e0;
-			margin-bottom: 1px;
-		}
-
-		#content-splod-controllet i.conceptInfo{
-			color: #1de9ae;
-			cursor: pointer;
-			z-index:1;
-		}
-
-		#content-splod-controllet #hierarchySpan{
-			background-color: #1de9ae;
-			position:absolute;
-			left: 0.5em;
-			top: 1em;
-		}
-
-		#content-splod-controllet .expandIcon{
-			z-index: 1;
-		}
-
-
-
-		/*Predicates box*/
-		#content-splod-controllet div#predicatesBox{
-			margin:0;
-			overflow: auto;
-			height: calc(100vh - 16.5em);
-		}
-
-		#content-splod-controllet div#predicatesListBox {
-			overflow: auto;
-			padding: 1em;
-		}
-
-		#content-splod-controllet #predicatesBox .tabs .tab a, #content-splod-controllet #predicatesBox .tabs .tab a:hover, #content-splod-controllet #predicatesBox .tabs .tab a.active{
-			color: #e91e63;
-		}
-
-		#content-splod-controllet #predicatesBox .indicator{
-			background-color: #e91e63;
-		}
-
-		#content-splod-controllet #predicatesBox .card-title{
-			color: #e91e63;
-		}
-
-		#content-splod-controllet i.predicateInfo{
-			color: #e91e63;
-			cursor: pointer;
-			z-index:1;
-		}
-
-		/*Operators box*/
-		#content-splod-controllet div#operatorsBox{
-			margin:0;
-			overflow: auto;
-			height: calc(100vh - 16.5em);
-		}
-
-		#content-splod-controllet div#contentOperatorBox{
-			
-		 }
-
-		#content-splod-controllet #operatorsBox .card-title{
-			color: #bdbdbd;
-		}
-
-		#content-splod-controllet li.datatypeTitle{
-			color: white;
-			background-color:#bdbdbd !important;
-		}
-
-		#content-splod-controllet li.reusableResultTitle{
-			color: white !important;
-			background-color:#bdbdbd !important;
-			text-transform: uppercase; 
-			cursor: pointer;
-		}
-
-		#content-splod-controllet li.reusableResultTitle i{
-			color: white !important;
-		}
-
-		#content-splod-controllet #pendingQuerySpan .active{
-			color: #2196f3; 
-			font-weight: bold;
-		}
-
-		#content-splod-controllet input.userValue{
-			border-bottom: 1px solid #9e9e9e !important;
-		}
-
-		#content-splod-controllet #rowUserValue{
-			margin-bottom: 0;
-		}
-
-		#content-splod-controllet i#userValueButton{
-			margin-top: 2rem;
-			cursor: pointer;
-		}
-
-		#content-splod-controllet div#operatorsBox ul:empty{
-			display: none;
-		}
-
-		#content-splod-controllet li.operatorListSeparator{
-			border-bottom-color: #9e9e9e !important;
-		}
-
-
-
-		/*Table results*/
-
-		#content-splod-controllet #tableResultBox{
-			overflow: hidden;
-			margin-top: 0;
-			margin-bottom:0;
-			height: calc(100vh - 16.5em);
-		}
-
-		#content-splod-controllet #moreTableSettings{
-			position:absolute;
-			/*left: 0.5em;*/
-			top: 0.5em;
-		}
-
-		#content-splod-controllet .fixed-action-btn.horizontal ul{
-			width: 200px !important;
-			height: 40%;
-			position: absolute;
-			top: 20%;
-		}
-
-		#content-splod-controllet ul#fieldsCollection {
-			overflow:hidden;
-			width: 6em;
-			/*il fit content non consente un posizionamento decente*/
-			height: fit-content !important;
-			/*top: 6em !important;*/
-			position: absolute!important;
-			/*margin-top: 2.1em;*/
-			/*left: -7em !important;*/
-
-		}
-
-		#content-splod-controllet ul#fieldsCollection li {
-			display: block; 
-			margin: unset; 
-		}
-		/*
-		#visibleFieldsButton{
-			background-color: #2196f3;
-			position:absolute;
-			left: 0.5em;
-			top: 1em;
-		}
-
-		#orderTable{
-			position:absolute;
-			left: 3.5em;
-			top: 1em;
-		}
-
-		#collapseTable{
-			position:absolute;
-			left: 6.5em;
-			top: 1em;
-		}*/
-
-		#content-splod-controllet img.imgResult {
-			height: 10px;
-		}
-
-		#content-splod-controllet .scrollableTableContent thead tr:after{
-			display : block;
-			width:100%;
-			overflow-y: scroll;
-			visibility:hidden;
-			height:0;
-		}
-		#content-splod-controllet .scrollableTableContent thead th{
-			flex:1;
-			display:block;
-		}
-		#content-splod-controllet .scrollableTableContent tbody{
-			display : block;
-			height: calc(100vh - 18em);
-			overflow-y: auto;
-			width:100%;
-		}
-		#content-splod-controllet .scrollableTableContent tr{
-			width:100%;
-			display:flex;	
-		}
-		#content-splod-controllet .scrollableTableContent td{
-			flex:1;
-		}
-
-		/*Settings Box*/
-		#content-splod-controllet div#settingsBox{
-			margin:0;
-			overflow: auto;
-			height: calc(100vh - 16.5em);
-		}
-
-		#content-splod-controllet #settingsBox .label{
-			margin:0;
-			color: #9e9e9e;
-		}
-
-		/*Help Box*/
-		#content-splod-controllet div#helpBox{
-			margin:0;
-			overflow: auto;
-			height: calc(100vh - 16.5em);
-		}
-
-		#content-splod-controllet #helpBox .carousel-slider{
-			height: 190px !important;
-		}
-
-		#content-splod-controllet #helpBox .carousel-item{
-			background-color: white;
-		}
-		#content-splod-controllet #helpBox .left-align, #content-splod-controllet #helpBox .right-align{
-			cursor: pointer;
-			top: 0;
-		}
-
-		#content-splod-controllet #helpBox .right-align{
-			margin-left: 50%;
-		}
-		/*
-		.carousel .indicators .indicator-item.active{
-			background-color: #2196f3;
-		}
-
-		.carousel .indicators .indicator-item{
-			background-color: rgba(33,150,243,0.5);
-		}
-
-		.carousel .indicators{
-		}*/
-
-		#content-splod-controllet .carousel.carousel-slider .carousel-item{
-			padding-left:9%;
-			padding-right:9%;
-			width: 100%;
-			height: 10em;
-		}
-
-		/*
-
-		#overlay{
-			height: -webkit-fill-available;
-			width: -webkit-fill-available;
-			background-color: black;
-			z-index: 10;
-			position: fixed;
-			opacity: 0.3;
-		}*/
-
-		/*Endpoint selection*/
-		#content-splod-controllet #endpointSelectionNav{
-			background-color:#2196f3;
-		}
-
-		#content-splod-controllet #endpointSelectionTitle{
-			margin-left:3em;
-		}
-
-		#content-splod-controllet #endpointSelected{
-			cursor: pointer;
-			margin-right: 1em;
-		}
-
-		#content-splod-controllet .settingsLi{
-			color: white !important;
-			background-color:#bdbdbd !important;
-			text-transform: uppercase; 
-			cursor: pointer;
-		}
-
-		#content-splod-controllet .settingsLi i{
-			color:white !important;
-		}
-
-		#content-splod-controllet #settingsCollapsibleContent{
-			margin:0;
-			overflow: visible !important;
-		}
-
-		#content-splod-controllet #settingsCollapsibleContent .dropdown-content{
-			max-height: 200px !important;
-		}
-
-		#content-splod-controllet #endpointList .myCollapsibleBody{
-			background-color: white;
-			padding: 1em 4em;
-		}
-
-		#content-splod-controllet #settingsCollapsibleContent .label{
-			margin:0;
-			color: #9e9e9e;
-		}
+	background-color: #f5f5f5;
+	font-family: 'Roboto', sans-serif;
+}
+
+#content-splod-controllet .splod_new, #content-splod-controllet .splod_badge{
+	background-color: #2196f3 !important;
+}
+
+#content-splod-controllet .row{
+	margin-bottom:0 !important;
+}
+
+#content-splod-controllet .no-padding{
+	padding:0 !important;
+}
+
+#content-splod-controllet .searchBarPositioning{
+	display:inline-block;
+	float: right !important;
+	margin:0;
+}
+
+#content-splod-controllet #conceptsListBox{
+	margin-top:3.5em;
+}
+
+#content-splod-controllet #predicatesTabBox{
+	width: 50%;
+	margin: 0;
+	overflow: hidden;
+}
+
+#content-splod-controllet #openSparqlQuery{
+	position: fixed;
+	top: 6.5em;
+	right: 2em;
+}
+
+#content-splod-controllet #saveTable{
+	position: fixed;
+	top: 6.5em;
+	right: 5em;
+}
+
+#content-splod-controllet #removeButtonA{
+	position: fixed;
+	top: 6.5em;
+	right: 9em;
+}
+
+#content-splod-controllet .card-title{
+	margin:0;
+}
+
+
+/*Toasts*/
+#content-splod-controllet #tableToast{
+	position: fixed;
+	background-color: #2196f3;
+	opacity: 0.9;
+	z-index: 2;
+	width: 8em;
+	height: fit-content;
+	top: 12.5em;
+	left: calc((100vw/6)*4 + 2em);
+}
+
+/*Cursor*/
+#content-splod-controllet .addToQuery:hover{
+	font-weight: bold;
+	cursor:pointer;
+}
+
+#content-splod-controllet span.focusable{
+	cursor:pointer;
+}
+
+#content-splod-controllet .endpointLi:hover{
+	font-weight: bold;
+	cursor:pointer;
+}
+
+/*Search bar*/
+
+#content-splod-controllet span.mySearch input {
+	border-bottom: none!important;
+	box-shadow: none!important;
+	margin: 0 !important;
+}
+
+#content-splod-controllet span.mySearch {
+	margin: 0 !important;
+}
+
+#content-splod-controllet .input-field label:not(.label-icon).active{
+	transform: translateY(-4px) scale(0.8);
+}
+
+#content-splod-controllet .flex {
+	display:flex;
+}
+
+#content-splod-controllet #firstrow{
+	align-items: stretch;
+}
+
+#content-splod-controllet #firstrow .card{
+	display:grid;
+	flex-grow:1;
+	position: relative !important;
+	width: 100%;
+	margin-bottom: 10px;
+	height: auto !important;
+}
+
+#content-splod-controllet #firstrow .firstrowAction{
+	align-self: flex-end;
+	margin-bottom: 0 !important;
+}
+
+#content-splod-controllet #querySparql.card-content{
+	overflow:auto;
+}
+
+/*Natural language query*/
+
+#content-splod-controllet div#queryBox{
+	margin-top: 0.5em;
+}
+
+#content-splod-controllet span.highlighted {
+	background-color: #fff59d   ;
+	border-radius: 4px;
+}
+
+#content-splod-controllet span.highlightRemove {
+	text-decoration: line-through;
+	text-decoration-color: #d32f2f;
+}
+
+#content-splod-controllet #limit input[type=number]::-webkit-inner-spin-button, 
+#content-splod-controllet #limit input[type=number]::-webkit-outer-spin-button {  
+   opacity: 1;
+}
+
+#content-splod-controllet #limitInput{
+	width: 60px;
+	margin-bottom: 0;
+	border-bottom: none;
+	height: auto;
+}
+
+#content-splod-controllet #limitInput:not(.browser-default):focus:not([readonly]){
+	box-shadow: none;
+}
+
+#content-splod-controllet span.everything {
+	font-weight: bold;
+}
+
+#content-splod-controllet span.concept {
+	color: #1de9ae;
+	font-weight: bold;
+}
+
+#content-splod-controllet span.predicate {
+	color: #e91e63;
+	font-weight: bold;
+}
+
+#content-splod-controllet span.something {
+	font-weight: bold;
+}
+
+#content-splod-controllet span.operator {
+	border-bottom: 3px dashed #bdbdbd;
+	font-weight: bold;
+	/*text-decoration-line: underline;
+	text-decoration-color: #bdbdbd;
+	text-decoration-style: dashed;*/
+}
+
+#content-splod-controllet span.result {
+	color: grey;
+	font-weight: bold;
+}
+
+#content-splod-controllet span.barred {
+	text-decoration-line: line-through;
+}
+
+#content-splod-controllet span.optionalBlock{
+	font-style: italic;
+}
+
+#content-splod-controllet #queryNaturalLanguage, #content-splod-controllet #queryNaturalLanguageFocus{
+	overflow-x: auto;
+}
+
+#content-splod-controllet #queryNaturalLanguageFocus span{
+	width: calc(100vw - 13em);
+	margin-left: 0;
+}
+
+#content-splod-controllet #queryNaturalLanguage{
+	padding-bottom:8px;
+	padding-top:8px;
+	height: 100px;
+	font-size:14px;
+}
+
+#content-splod-controllet #queryNaturalLanguage ul, #content-splod-controllet #sparqlVsNl ul{
+	padding-left: 0.8em;
+	margin: 0;
+}
+
+#content-splod-controllet #modalSparql{
+	border-left-style: groove;
+}
+
+#content-splod-controllet #removeButton {
+	margin:0;
+}
+
+#content-splod-controllet #removeButton:hover{
+	cursor: pointer;
+}
+
+#content-splod-controllet #queryNaturalLanguage span {
+	/*padding:3px !important; to fix highlighting with ul*/
+}
+
+/*SPARQL query*/
+
+#content-splod-controllet div#querySparqlBox{
+	margin-top: 30px;
+}
+
+#content-splod-controllet div#querySparqlText{
+	 white-space: pre;
+	 display:none;
+	 overflow: auto;
+}
+
+#content-splod-controllet div#modalSparql .SPARQLhighlighted{
+	background-color: #e6e6e6;
+	border-radius: 4px;
+}
+
+#content-splod-controllet div#modalSparql, #content-splod-controllet div#modalNaturalLanguage{
+	height: -webkit-fill-available;
+	overflow-y: auto; 
+}
+
+#content-splod-controllet .modal{
+	width: 90% !important;
+	height: 90% !important;
+}
+
+#content-splod-controllet #sparqlVsNl .modal-content{
+	overflow:hidden;
+	padding-right: 0px;
+	padding-bottom: 14px;
+}
+
+/*Left bar*/
+
+/*#myTabs {
+	display: table-cell;
+	border-right: 4px solid #1de9ae;
+}
+
+*/
+#content-splod-controllet #myTabs {
+	overflow:hidden;
+}
+
+#content-splod-controllet #myTabs li.disabled{
+	opacity: 0.3;
+}
+
+
+#content-splod-controllet #myTabs .myTabTitle{
+	float:left;
+}
+
+#content-splod-controllet #myTabs>li.indicator{
+	display:none;
+}
+
+#content-splod-controllet #myTabs li .mySpinner{
+	height: 1em;
+	width: 1em;
+	/*top:1em;*/
+}
+
+#content-splod-controllet #myTabs .myTabIcon{
+	top: 1.2em;
+	position: relative;
+}
+
+#content-splod-controllet #myTabs li #conceptsSpinner .spinner-layer{
+	border-color: #039c87;
+}
+
+#content-splod-controllet #myTabs li #predicatesSpinner .spinner-layer{
+	border-color: #880e4f;
+} 
+
+#content-splod-controllet #myTabs li #operatorsSpinner .spinner-layer{
+	border-color: #757575;
+} 
+
+#content-splod-controllet #myTabs li #resultsSpinner .spinner-layer{
+	border-color: #01579b;
+} 
+
+#content-splod-controllet #conceptsProgress {
+	background-color: #9ff1d9;
+	top: 3em;
+	width:60%;
+	margin:auto;
+}
+
+#content-splod-controllet #conceptsProgress .indeterminate{
+	background-color: #1de9ae;
+}
+
+#content-splod-controllet #directPredicatesProgress, #content-splod-controllet #reversePredicatesProgress{
+	background-color: #f5a0bd;
+	top: 3em;
+	width:60%;
+	margin:auto;
+}
+
+#content-splod-controllet #directPredicatesProgress .indeterminate, #content-splod-controllet #reversePredicatesProgress .indeterminate{
+	background-color: #e91e63;
+}
+
+#content-splod-controllet #operatorsProgress {
+	background-color: #e4e4e4;
+	top: 3em;
+	width:60%;
+	margin:auto;
+}
+
+#content-splod-controllet #operatorsProgress .indeterminate{
+	background-color: #bdbdbd;
+}
+
+#content-splod-controllet #tableResultsProgress {
+	background-color: #aecee6;
+	top: 3em;
+	width:60%;
+	margin:auto;
+}
+
+#content-splod-controllet #tableResultsProgress .indeterminate{
+	background-color: #2196f3;
+}
+   
+
+#content-splod-controllet .tabs #conceptsTab a:hover,
+#content-splod-controllet .tabs #conceptsTab a.active{
+	background-color: #1de9ae;
+	color: white;
+}
+
+#content-splod-controllet .tabs #conceptsTab a{
+	color:#1de9ae;
+}
+
+#content-splod-controllet .tabs #predicatesTab a:hover,
+#content-splod-controllet .tabs #predicatesTab a.active{
+	background-color: #e91e63 ;
+	color: white;
+}
+
+#content-splod-controllet .tabs #predicatesTab a{
+	color:#e91e63;
+}
+
+#content-splod-controllet .tabs #operatorsTab a:hover,
+#content-splod-controllet .tabs #operatorsTab a.active{
+	background-color: #bdbdbd;
+	color: white;
+}
+
+#content-splod-controllet .tabs #operatorsTab a{
+	color:#bdbdbd;
+}
+
+#content-splod-controllet .tabs #tableResultTab a:hover,
+#content-splod-controllet .tabs #tableResultTab a.active{
+	background-color: #2196f3;
+	color: white;
+}
+
+#content-splod-controllet .tabs #tableResultTab a{
+	color:#2196f3;
+}
+
+#content-splod-controllet .tabs #settingsTab a:hover,
+#content-splod-controllet .tabs #settingsTab a.active{
+	background-color: #2196f3;
+	color: white;
+}
+
+#content-splod-controllet .tabs #settingsTab a,
+#content-splod-controllet .tabs #settingsTab a i{
+	color:#2196f3;
+}
+
+#content-splod-controllet .tabs #settingsTab a:hover i,
+#content-splod-controllet .tabs #settingsTab a.active i{
+	color: white;
+}
+
+#content-splod-controllet .tabs #helpTab a:hover,
+#content-splod-controllet .tabs #helpTab a.active{
+	background-color: #2196f3;
+	color: white;
+}
+
+#content-splod-controllet .tabs #helpTab a,
+#content-splod-controllet .tabs #helpTab a i{
+	color:#2196f3;
+}
+
+#content-splod-controllet .tabs #helpTab a:hover i,
+#content-splod-controllet .tabs #helpTab a.active i{
+	color: white;
+}
+
+/*#navBar{
+	padding-left: 0;
+	padding-right: 0;
+	background-color: white;
+	-webkit-box-shadow: 0 2px 2px 0 rgba(0,0,0,0.14), 0 1px 5px 0 rgba(0,0,0,0.12), 0 3px 1px -2px rgba(0,0,0,0.2);
+	box-shadow: 0 2px 2px 0 rgba(0,0,0,0.14), 0 1px 5px 0 rgba(0,0,0,0.12), 0 3px 1px -2px rgba(0,0,0,0.2);
+} */
+#content-splod-controllet #fieldsCollectionNavBar{
+	padding-left: 0;
+	padding-right: 0;
+	background-color: white;
+}
+
+#content-splod-controllet #fieldsCollection:empty{
+	display: none;
+}
+
+#content-splod-controllet #previewTableResult td, #content-splod-controllet #previewTableResult th{
+	padding:0;
+}
+
+#content-splod-controllet #previewTableResult hr{
+	margin:0;
+	border-width: 0.5px;
+}
+
+#content-splod-controllet #previewTableResult tr{
+	height: 2px;
+}
+
+#content-splod-controllet #previewTableResult th{
+	font-size: 4px;
+	text-align: -webkit-center;
+	color:grey;
+}
+
+#content-splod-controllet #resultsPreviewBadge{
+	float: left;
+	position: relative;
+	top: 1em;
+}
+
+/*Concepts box*/
+#content-splod-controllet div#conceptsBox{
+	margin:0;
+	overflow: auto;
+	height: calc(100vh - 16.5em);
+}
+
+#content-splod-controllet div#conceptsListBox {
+	border-radius:2px;
+	/*background-color:#f5f5f5; */
+}
+
+#content-splod-controllet #conceptsBox .card-title{
+	color: #69f0ae;
+}
+
+#content-splod-controllet #conceptsListBox ul{
+	margin:auto;
+}
+
+#content-splod-controllet .conceptsListBoxHierarchy{
+	border : none;
+}
+
+#content-splod-controllet .conceptsListBoxHierarchy .withMargin{
+	margin-right : 0.1em;
+}
+
+#content-splod-controllet #conceptsBox li.withMargin {
+	margin-top:0.2em !important;
+
+	-webkit-box-shadow: 0 0px 0.5px 0 rgba(0,0,0,0.14), 0 1px 5px 0 rgba(0,0,0,0.12), 0 1px 0px -0.2px rgba(0,0,0,0.2);
+	box-shadow: 0 0px 0.5px 0 rgba(0,0,0,0.14), 0 1px 5px 0 rgba(0,0,0,0.12), 0 1px 0px -0.2px rgba(0,0,0,0.2);
+}
+
+#content-splod-controllet #conceptsBox .collection .collection-item:last-child{
+	border-bottom: 1px solid #e0e0e0;
+	margin-bottom: 1px;
+}
+
+#content-splod-controllet i.conceptInfo{
+	color: #1de9ae;
+	cursor: pointer;
+	z-index:1;
+}
+
+#content-splod-controllet #hierarchySpan{
+	background-color: #1de9ae;
+	position:absolute;
+	left: 0.5em;
+	top: 1em;
+}
+
+#content-splod-controllet .expandIcon{
+	z-index: 1;
+}
+
+
+
+/*Predicates box*/
+#content-splod-controllet div#predicatesBox{
+	margin:0;
+	overflow: auto;
+	height: calc(100vh - 16.5em);
+}
+
+#content-splod-controllet div#predicatesListBox {
+	overflow: auto;
+	padding: 1em;
+}
+
+#content-splod-controllet #predicatesBox .tabs .tab a, #content-splod-controllet #predicatesBox .tabs .tab a:hover, #content-splod-controllet #predicatesBox .tabs .tab a.active{
+	color: #e91e63;
+}
+
+#content-splod-controllet #predicatesBox .indicator{
+	background-color: #e91e63;
+}
+
+#content-splod-controllet #predicatesBox .card-title{
+	color: #e91e63;
+}
+
+#content-splod-controllet i.predicateInfo{
+	color: #e91e63;
+	cursor: pointer;
+	z-index:1;
+}
+
+/*Operators box*/
+#content-splod-controllet div#operatorsBox{
+	margin:0;
+	overflow: auto;
+	height: calc(100vh - 16.5em);
+}
+
+#content-splod-controllet div#contentOperatorBox{
+	
+ }
+
+#content-splod-controllet #operatorsBox .card-title{
+	color: #bdbdbd;
+}
+
+#content-splod-controllet li.datatypeTitle{
+	color: white;
+	background-color:#bdbdbd !important;
+}
+
+#content-splod-controllet li.reusableResultTitle{
+	color: white !important;
+	background-color:#bdbdbd !important;
+	text-transform: uppercase; 
+	cursor: pointer;
+}
+
+#content-splod-controllet li.reusableResultTitle i{
+	color: white !important;
+}
+
+#content-splod-controllet #pendingQuerySpan .active{
+	color: #2196f3; 
+	font-weight: bold;
+}
+
+#content-splod-controllet input.userValue{
+	border-bottom: 1px solid #9e9e9e !important;
+}
+
+#content-splod-controllet #rowUserValue{
+	margin-bottom: 0;
+}
+
+#content-splod-controllet i#userValueButton{
+	margin-top: 2rem;
+	cursor: pointer;
+}
+
+#content-splod-controllet div#operatorsBox ul:empty{
+	display: none;
+}
+
+#content-splod-controllet li.operatorListSeparator{
+	border-bottom-color: #9e9e9e !important;
+}
+
+
+
+/*Table results*/
+
+#content-splod-controllet #tableResultBox{
+	overflow: hidden;
+	margin-top: 0;
+	margin-bottom:0;
+	height: calc(100vh - 16.5em);
+}
+
+#content-splod-controllet #moreTableSettings{
+	position:absolute;
+	/*left: 0.5em;*/
+	top: 0.5em;
+}
+
+#content-splod-controllet .fixed-action-btn.horizontal ul{
+	width: 200px !important;
+	height: 40%;
+	position: absolute;
+	top: 20%;
+}
+
+#content-splod-controllet ul#fieldsCollection {
+	overflow:hidden;
+	width: 6em;
+	/*il fit content non consente un posizionamento decente*/
+	height: fit-content !important;
+	/*top: 6em !important;*/
+	position: absolute!important;
+	/*margin-top: 2.1em;*/
+	/*left: -7em !important;*/
+
+}
+
+#content-splod-controllet ul#fieldsCollection li {
+	display: block; 
+	margin: unset; 
+}
+/*
+#visibleFieldsButton{
+	background-color: #2196f3;
+	position:absolute;
+	left: 0.5em;
+	top: 1em;
+}
+
+#orderTable{
+	position:absolute;
+	left: 3.5em;
+	top: 1em;
+}
+
+#collapseTable{
+	position:absolute;
+	left: 6.5em;
+	top: 1em;
+}*/
+
+#content-splod-controllet img.imgResult {
+	height: 10px;
+}
+
+#content-splod-controllet .scrollableTableContent thead tr:after{
+	display : block;
+	width:100%;
+	overflow-y: scroll;
+	visibility:hidden;
+	height:0;
+}
+#content-splod-controllet .scrollableTableContent thead th{
+	flex:1;
+	display:block;
+}
+#content-splod-controllet .scrollableTableContent tbody{
+	display : block;
+	height: calc(100vh - 18em);
+	overflow-y: auto;
+	width:100%;
+}
+#content-splod-controllet .scrollableTableContent tr{
+	width:100%;
+	display:flex;	
+}
+#content-splod-controllet .scrollableTableContent td{
+	flex:1;
+}
+
+/*Settings Box*/
+#content-splod-controllet div#settingsBox{
+	margin:0;
+	overflow: auto;
+	height: calc(100vh - 16.5em);
+}
+
+#content-splod-controllet #settingsBox .label{
+	margin:0;
+	color: #9e9e9e;
+}
+
+/*Help Box*/
+#content-splod-controllet div#helpBox{
+	margin:0;
+	overflow: auto;
+	height: calc(100vh - 16.5em);
+}
+
+#content-splod-controllet #helpBox .carousel-slider{
+	height: 190px !important;
+}
+
+#content-splod-controllet #helpBox .carousel-item{
+	background-color: white;
+}
+#content-splod-controllet #helpBox .left-align, #content-splod-controllet #helpBox .right-align{
+	cursor: pointer;
+	top: 0;
+}
+
+#content-splod-controllet #helpBox .right-align{
+	margin-left: 50%;
+}
+/*
+.carousel .indicators .indicator-item.active{
+	background-color: #2196f3;
+}
+
+.carousel .indicators .indicator-item{
+	background-color: rgba(33,150,243,0.5);
+}
+
+.carousel .indicators{
+}*/
+
+#content-splod-controllet .carousel.carousel-slider .carousel-item{
+	padding-left:9%;
+	padding-right:9%;
+	width: 100%;
+	height: 10em;
+}
+
+/*
+
+#overlay{
+	height: -webkit-fill-available;
+	width: -webkit-fill-available;
+	background-color: black;
+	z-index: 10;
+	position: fixed;
+	opacity: 0.3;
+}*/
+
+/*Endpoint selection*/
+#content-splod-controllet #endpointSelectionNav{
+	background-color:#2196f3;
+}
+
+#content-splod-controllet #endpointSelectionTitle{
+	margin-left:3em;
+}
+
+#content-splod-controllet #endpointSelected{
+	cursor: pointer;
+	margin-right: 1em;
+}
+
+#content-splod-controllet .settingsLi{
+	color: white !important;
+	background-color:#bdbdbd !important;
+	text-transform: uppercase; 
+	cursor: pointer;
+}
+
+#content-splod-controllet .settingsLi i{
+	color:white !important;
+}
+
+#content-splod-controllet #settingsCollapsibleContent{
+	margin:0;
+	overflow: visible !important;
+}
+
+#content-splod-controllet #settingsCollapsibleContent .dropdown-content{
+	max-height: 200px !important;
+}
+
+#content-splod-controllet #endpointList .myCollapsibleBody{
+	background-color: white;
+	padding: 1em 4em;
+}
+
+#content-splod-controllet #settingsCollapsibleContent .label{
+	margin:0;
+	color: #9e9e9e;
+}

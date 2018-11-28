@@ -68,7 +68,7 @@
 		    <!--buttons-->
 		    <a class="btn-floating waves-effect waves-light blue" id="openSparqlQuery"><i class="material-icons"  onclick="showUserQueryBox();">compare</i></a>
 
-		    <a class="btn-floating waves-effect waves-light blue" id="saveTable"><i class="material-icons" onclick="createJson()">save</i></a>
+		    <!--<a class="btn-floating waves-effect waves-light blue" id="saveTable"><i class="material-icons" onclick="createJson()">save</i></a>-->
 			
 			<!--
 				<a class="btn-floating waves-effect waves-light blue" id="secondStep"><i class="material-icons" on-click="allowSecondStep">arrow_forward</i></a>
@@ -259,7 +259,7 @@
 			              	<!--end search-->
 						  	<ul class="tabs tabs-fixed-width" id="predicatesTabBox">
 						  		<li class="tab">
-						  			<a class="active" href="#direct">
+						  			<a href="#direct" class="active">
 						  				<span id="directPredicateTabTitle"></span>
 						  			</a>
 						  		</li>
@@ -514,8 +514,6 @@
 		<script src="splodjs/utilPresentationLayer.js"></script>
 
 		<script src="splodjs/languageManager.js"></script>
-		<!--<script src="enLanguageManager.js"></script>
-		<script src="itLanguageManager.js"></script>-->
 
 		<!--<script src="splodjs/Materialize/js/materialize.min.js"></script>-->
 		<link href="splodjs/Materialize/fonts/roboto/Roboto-Regular.woff" rel="application/x-font-woff">	
@@ -530,6 +528,7 @@
 
 		var selectedEndpointName = 'DBPEDIA';
 		var languageManager;
+		var scriptsToLoad = [];
 	
         Polymer({
             is : 'splod-controllet',
@@ -543,45 +542,32 @@
 			denySecondStep : function(e, detail){
 				this.fire('remove-dataset-controllet_data-url', {data: {}});
 			},
-			
+
             ready: function(){
 
-                console.log(parent.ODE.deep_url);
-
-				$.ajax({
+            	$.ajax({
 					url: parent.ODE.deep_components + "controllets/splod-controllet/splodjs/languageManagerList.xml",
 					dataType: "xml",
+					async:false,
 					success: function(data) {
 						var languageManagers = $(data).find('language_manager');
 
 					    var doc = $('#content-splod-controllet');
+
 					    for(var i=0; i<languageManagers.length; i++){
-						   $('<script/>').attr('src', parent.ODE.deep_components + 'controllets/splod-controllet/splodjs/languageManager/'+languageManagers[i].textContent+'.js').appendTo(doc);
-						   
+					    	
+					    	scriptsToLoad.push(parent.ODE.deep_components + 'controllets/splod-controllet/splodjs/languageManager/'+languageManagers[i].textContent+'.js');
+						
 						  	var languageManagerName = languageManagers[i].textContent.trim();
 						   	systemLangList.push({langCode : languageManagerName.split("LanguageManager")[0]});
 					    }
+					    
+					    loadAllScripts();
 						
-						$('#content-splod-controllet').ready(function(){
-							languageManager = new LanguageManager();
-							languageManager = languageManager._singletonInstance;
-
-							$('#endpointSelectionTitle').html(languageManager.getFieldTitle('selected endpoint'));
-							$('#selectedEndpoint').html(selectedEndpointName);
-
-							fillStartSettings();
-						});
 					}
 				 });
-			
-				$.ajax({
-					url: parent.ODE.deep_components + "controllets/splod-controllet/splodjs/endpointList.xml",
-					dataType: "xml",
-					success: function(data) {processData(data);}
-				 });
-				 
-				
-				window.addEventListener("allowForward", function(e){
+
+               	window.addEventListener("allowForward", function(e){
 						document.querySelector('splod-controllet').allowSecondStep();
 					}
 				);
@@ -591,6 +577,7 @@
 					}
 				);
 				
+				/*
 				window.addEventListener("splodEvent", function (e) {
 				
 					console.log('restart');
@@ -630,12 +617,98 @@
 					beginFromMap(details.map.roots, details.map.map, details.map.focus);
 					
 				});
-				
+				*/
 				
 			
 			}        
 		});
 		
+        function loadAllScripts(){
+        	if(scriptsToLoad.length!=0){
+        		loadScript(scriptsToLoad.pop(), loadAllScripts);
+        	}else{
+        		startSPLOD();
+        	}
+        }
+
+        function loadScript(url, callback){
+		    // adding the script tag to the head as suggested before
+		   var head = document.getElementsByTagName('head')[0];
+		   var script = document.createElement('script');
+		   script.type = 'text/javascript';
+		   script.src = url;
+
+		   // then bind the event to the callback function 
+		   // there are several events for cross browser compatibility
+		   script.onreadystatechange = callback;
+		   script.onload = callback;
+
+		   // fire the loading
+		   head.appendChild(script);
+		}
+
+		function startSPLOD(){
+			languageManager = new LanguageManager();
+			languageManager = languageManager._singletonInstance;
+
+			$('#endpointSelectionTitle').html(languageManager.getFieldTitle('selected endpoint'));
+			$('#selectedEndpoint').html(selectedEndpointName);
+
+			fillStartSettings();
+
+			if($("splod-modification-controllet").attr('datalet-preset')){
+
+            	var datalet_parameters = JSON.parse($("splod-modification-controllet").attr('datalet-preset'));
+
+            	if(datalet_parameters.querylogicmap){
+
+					systemGraph = datalet_parameters.systemgraph;
+					systemEndpoint = datalet_parameters.systemendpoint;
+					systemQueryExecutor = datalet_parameters.systemqueryexecutor;
+              		
+              		languageManager = new LanguageManager(datalet_parameters.systemlang);
+
+					$('#endpointSelectionContent').css('display','none');
+					$('#splodCore').css('display', 'block');
+					
+					$('ul.tabs').tabs({onShow: function(tab) {
+						
+						if(tab[0].id == "predicatesBox"){
+							$('ul#predicatesTabBox').tabs();
+
+							if($('#direct ul li').length == 0){
+
+								$('ul#predicatesTabBox').tabs({ active: 'reverse' });
+							}else{
+								$('ul#predicatesTabBox').tabs({ active: 'direct' });
+							}
+							
+						}}
+					});
+
+					$('.modal').modal({
+						startingTop: '5%',
+						endingTop: '5%'
+					});
+		
+					restartBoxViewer();
+					restartQueryViewer();
+					restartOperatorViewer();
+					restartTableResultViewer();
+					
+					beginFromMap(JSON.parse(datalet_parameters.rootlistquerylogicmap), JSON.parse(datalet_parameters.querylogicmap), datalet_parameters.elementonfocus);
+
+				}     
+			}         
+            else{
+				$.ajax({
+					url: parent.ODE.deep_components + "controllets/splod-controllet/splodjs/endpointList.xml",
+					dataType: "xml",
+					success: function(data) {processData(data);}
+				 });
+			}
+		}
+
 		function processData(data) {
 		    var endpointsName = $(data).find('endpoint_name');
 		    var endpointsDescription = $(data).find('endpoint_description');
