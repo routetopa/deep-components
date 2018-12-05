@@ -612,27 +612,12 @@
                     $.ajax({
                         url: datasetUrl,
                         dataType: "json",
-                        success: function(dataset){
-
-                            var resourceUrl;
-                            if (dataset.resourceUrl) {
-                                resourceUrl = dataset.resourceUrl;
-                            }
-                            else {
-                                var resourceId = (dataset.result) ? dataset.result.resources[resourceIndex].id : datasetId;
-                                resourceUrl = provider.getResourceUrl(p.url, resourceId);
-                            }
-
-                            /**/
-//                            for (var j in dataset.result.resources)
-//                                console.log(provider.getResourceUrl(p.url, dataset.result.resources[j].id));
-                            /**/
-
-//                            console.log('resourceUrl');
-//                            console.log(resourceUrl);
+                        success: function(dataset)
+                        {
+                            let resourceUrl = provider.getResourceUrl(p.url, dataset, resourceIndex, datasetId);
                             that.fire("datasets-list-controllet_dataset", { dataset: { url: resourceUrl } });
 
-                            var html = provider.getHTMLFormattedMetadata(dataset, resourceIndex);
+                            var html = provider.getHTMLFormattedMetadata(dataset, resourceIndex, datasetId);
                             that._show_info(html);
                         },
                         error: function(e){

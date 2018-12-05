@@ -43,6 +43,10 @@ openDataSoft_Provider.prototype.getDatasetUrl = function(providerUrl, datasetId)
     return providerUrl + '/api/datasets/1.0/' + datasetId;
 };
 
-openDataSoft_Provider.prototype.getResourceUrl = function(providerUrl, datasetId) {
+openDataSoft_Provider.prototype.getResourceUrl = function(providerUrl, dataset, resourceIndex, datasetId)
+{
+    if (dataset.resourceUrl)
+        return dataset.resourceUrl;
+
     return providerUrl + '/api/records/1.0/search?dataset=' + datasetId;
 };

@@ -110,6 +110,9 @@
 
                         if(this.$.slider.getPrevSelected() == 2)
                             this.$.slider.chevronRight(true);
+
+                        this._setContext();
+
                         break;
                     case 2:
                         this.$.slider.setTitle(ln["slide3Title_" + this.localization], ln["slide3Subtitle_" + this.localization]);
@@ -117,6 +120,17 @@
                         this.$.slider.chevronLeft(true);
                         this.$.slider.chevronRight("invisible");
                 }
+            },
+
+            _setContext : function()
+            {
+                this.$.select_visualization.context = {'querylogicmap':queryLogicMap,
+                                                       'rootlistquerylogicmap':rootListQueryLogicMap,
+                                                       'elementonfocus':elementOnFocus,
+                                                       'systemendpoint':systemEndpoint,
+                                                       'systemgraph':systemGraph,
+                                                       'systemqueryexecutor':systemQueryExecutor,
+                                                       'systemlang':systemLang};
             },
 
             _allowSecondStep : function(e){

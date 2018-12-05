@@ -1,6 +1,8 @@
 providerFactory.getProvider = function (dataUrl) {
     if (dataUrl.indexOf("datastore_search?resource_id") > -1)
         return new ckan_Provider();
+    else if (dataUrl.indexOf("search.json&resource_id") > -1)
+        return new dkan_Provider();
     else if (dataUrl.indexOf("search?dataset") > -1 || dataUrl.indexOf("search/?dataset") > -1)
         return new openDataSoft_Provider();
     else if (dataUrl.indexOf("eurostat") > -1)
@@ -26,6 +28,8 @@ providerFactory.getProvider = function (dataUrl) {
 providerFactory.getProviderByType = function (provider_type) {
     if (provider_type == "CKAN")
         return new ckan_Provider();
+    else if (provider_type == "DKAN")
+        return new dkan_Provider();
     else if (provider_type == "ODS")
         return new openDataSoft_Provider();
     else if (provider_type == "SPOD")

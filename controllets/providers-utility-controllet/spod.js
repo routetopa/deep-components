@@ -54,8 +54,13 @@ SPOD_Provider.prototype.getDatasetUrl = function(providerUrl, datasetId) {
     return parent.ODE.ow_url_home + 'cocreation/ajax/get-dataset-by-id?id=' + datasetId;
 };
 
-SPOD_Provider.prototype.getResourceUrl = function(providerUrl, resourceId) {
+SPOD_Provider.prototype.getResourceUrl = function(providerUrl, dataset, resourceIndex, datasetId)
+{
     // "http://172.16.15.128/cocreation/ajax/get-dataset-by-room-id-and-version/?room_id=7&version=3"
    // return '/cocreation/ajax/get-dataset-by-room-id-and-version/?room_id=' + roomId + '&version=' + version;
+
+    if (dataset.resourceUrl)
+        return dataset.resourceUrl;
+
     return;
 };

@@ -30,7 +30,7 @@ ckan_Provider.prototype.getHTMLFormattedMetadata = function(dataset, resourceInd
 
     filters = ["id", "creator_user_id", "license_id", "owner_org", "revision_id", "name", "title", "notes", "num_resources", "num_tags", "state", "type"];
 
-    var orderedKeys = Object.keys(dataset).sort()
+    var orderedKeys = Object.keys(dataset).sort();
 
     for(var i in orderedKeys) {
         var key = orderedKeys[i];
@@ -46,24 +46,12 @@ ckan_Provider.prototype.getDatasetUrl = function(providerUrl, datasetId) {
     return providerUrl + '/api/3/action/package_show?id=' + datasetId;
 };
 
-ckan_Provider.prototype.getResourceUrl = function(providerUrl, resourceId) {
+ckan_Provider.prototype.getResourceUrl = function(providerUrl, dataset, resourceIndex, datasetId)
+{
+    if (dataset.resourceUrl)
+        return dataset.resourceUrl;
+
+    var resourceId = (dataset.result) ? dataset.result.resources[resourceIndex].id : datasetId;
     return providerUrl + '/api/3/action/datastore_search?resource_id=' + resourceId;
+
 };
-
-//    var fields = [];
-//    for (var key in data.result.records[0])
-//        fields.push(key);
-//    return fields;
-//};
-
-//ckan_Provider.prototype.requestData = function() {
-//    var that = this;
-//
-//    $.ajax({
-//        url: this.dataUrl,
-//        dataType: "json",
-//        success: function(data){
-//            that.data = data.result.records;
-//        }
-//    });
-//};

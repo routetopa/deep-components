@@ -155,12 +155,19 @@
                         this.$.slider.setTitle(ln["slide2Title_" + this.localization], ln["slide2Subtitle_" + this.localization]);
 
                         this.$.slider.chevronLeft(true);
-                        this.$.slider.chevronRight(true);
+
+                        if(this.$.select_data.$.data_table.data.length > 0)
+                            this.$.slider.chevronRight(true);
+                        else
+                            this.$.slider.chevronRight(false);
 
                         if(this.$.slider.getPrevSelected() == 2)
                             this.$.slider.chevronRight(true);
 
                         this.$.select_data.$.data_table._resize();
+
+                        this._setContext();
+
                         break;
                     case 2:
                         this.$.slider.setTitle(ln["slide3Title_" + this.localization], ln["slide3Subtitle_" + this.localization]);
@@ -171,7 +178,17 @@
                         this.$.select_visualization.preselect();
                 }
             },
-			
+
+            _setContext : function()
+            {
+                this.$.select_visualization.context = {'querylogicmap':JSON.stringify(queryLogicMap),
+                    'rootlistquerylogicmap':JSON.stringify(rootListQueryLogicMap),
+                    'elementonfocus':elementOnFocus,
+                    'systemendpoint':systemEndpoint,
+                    'systemgraph':systemGraph,
+                    'systemqueryexecutor':systemQueryExecutor,
+                    'systemlang':systemLang};
+            },
             
             _allowSecondStep : function(e){               
                 this.$.slider.chevronRight(false);
@@ -210,8 +227,9 @@
             },
 
             _emptyDataVisualization : function(){
-                this.$.select_visualization.dataUrl = null;
-            },
+                this.$.select_visualization.reset()
+            }
+
         });
 
     </script>

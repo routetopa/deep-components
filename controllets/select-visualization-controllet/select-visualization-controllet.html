@@ -184,6 +184,11 @@
                 dataletPreset : {
                     type  : Object,
                     value : []
+                },
+
+                context : {
+                    type  : Object,
+                    value : []
                 }
 
             },
@@ -290,8 +295,6 @@
 
                 this.params = {'data-url' : this.dataUrl};/*???*/
 
-//                this.selectedFields = ["pippi", "baudo"];
-
                 this.params["selectedfields"] = JSON.stringify(this.$.inputs.getSelectedInputs());
                 this.params["filters"] = JSON.stringify(this.filters);
                 this.params["aggregators"] = JSON.stringify(this.aggregators);
@@ -350,8 +353,9 @@
                     datalet: this.selectedDatalet+"-datalet",
                     fields: this.selectedFields,
                     params: this.params,
-                    staticData: staticData
-                }
+                    staticData: staticData,
+                    context: this.context
+                };
 
                 this.fire('data-sevc-controllet.dataletCreated', {data : data});
             },
@@ -373,7 +377,17 @@
                 $("#items_vslider_container").height(h);
                 $("#select_inputs_container").height(h);
                 $("#datalet_preview_container").height(h);
-            }
+            },
+
+            reset : function(){
+                this.$.preview.eraseDatalet();
+                this.$.preview.eraseInfo();
+
+                this.dataletType = undefined;
+                this.$.inputs._reset();
+
+                this.preselectedDatalet = null;
+            },
 
         });
 
